@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat</label>
+      <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat of Liquid</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareLiquidSpecificHeat(), 'error': warnings.specificHeatWarning !== null, 'invalid': lossesForm.controls.avgSpecificHeat.invalid}">
         <input [readonly]="!baselineSelected" name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="avgSpecificHeat" id="{{'avgSpecificHeat'+idString}}" onfocus="this.select();" (input)="save()"
@@ -18,7 +18,12 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatWarning !== null">{{warnings.specificHeatWarning}}</span>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.avgSpecificHeat.invalid && !lossesForm.controls.avgSpecificHeat.pristine">
+      <span *ngIf="lossesForm.controls.avgSpecificHeat.errors.required">Value required.</span>
+      <span *ngIf="lossesForm.controls.avgSpecificHeat.errors.min">Value can't be less than
+        {{lossesForm.controls.avgSpecificHeat.errors.min.min}}.</span>
+    </span>
     </div>
 
     <div class="form-group">
@@ -30,7 +35,12 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/L</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.densityLiquidWarning !== null">{{warnings.densityLiquidWarning}}</span>
+      <span class="alert-danger pull-right small"
+              *ngIf="lossesForm.controls.density.invalid && !lossesForm.controls.density.pristine">
+              <span *ngIf="lossesForm.controls.density.errors.required">Value required.</span>
+              <span *ngIf="lossesForm.controls.density.errors.min">Value can't be less than
+                {{lossesForm.controls.density.errors.min.min}}.</span>
+            </span>
     </div>
 
     <div class="form-group">
@@ -42,7 +52,12 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.liquidFlowWarning !== null">{{warnings.liquidFlowWarning}}</span>
+      <span class="alert-danger pull-right small"
+              *ngIf="lossesForm.controls.liquidFlow.invalid && !lossesForm.controls.liquidFlow.pristine">
+              <span *ngIf="lossesForm.controls.liquidFlow.errors.required">Value required.</span>
+              <span *ngIf="lossesForm.controls.liquidFlow.errors.min">Value can't be less than
+                {{lossesForm.controls.liquidFlow.errors.min.min}}.</span>
+            </span>
     </div>
 
     <div class="form-group">
@@ -54,6 +69,10 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+            *ngIf="lossesForm.controls.inletTemp.invalid && !lossesForm.controls.inletTemp.pristine">
+            <span *ngIf="lossesForm.controls.inletTemp.errors.required">Value required.</span>
+          </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
@@ -66,6 +85,10 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+            *ngIf="lossesForm.controls.outletTemp.invalid && !lossesForm.controls.outletTemp.pristine">
+            <span *ngIf="lossesForm.controls.outletTemp.errors.required">Value required.</span>
+          </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
@@ -74,6 +97,10 @@
       <input [readonly]="!baselineSelected" name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control"
         formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="save()"
         (focus)="focusField('correctionFactor')"  [ngClass]="{'indicate-different': compareLiquidCorrectionFactor(), 'invalid': lossesForm.controls.correctionFactor.invalid}">
-    </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="lossesForm.controls.correctionFactor.invalid && !lossesForm.controls.correctionFactor.pristine">
+        <span *ngIf="lossesForm.controls.correctionFactor.errors.required">Value required.</span>
+      </span>
+      </div>
   </div>
 </form>

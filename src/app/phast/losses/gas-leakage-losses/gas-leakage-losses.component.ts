@@ -3,9 +3,9 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
-import { GasLeakageLossesService } from './gas-leakage-losses.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { LeakageFormService } from '../../../calculator/furnaces/leakage/leakage-form.service';
 
 @Component({
   selector: 'app-gas-leakage-losses',
@@ -40,7 +40,7 @@ export class GasLeakageLossesComponent implements OnInit {
   resultsUnit: string;
   showError: boolean = false;
   total: number;
-  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
+  constructor(private leakageFormService: LeakageFormService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -74,7 +74,7 @@ export class GasLeakageLossesComponent implements OnInit {
       let lossIndex = 1;
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
-          form: this.gasLeakageLossesService.initFormFromLoss(loss),
+          form: this.leakageFormService.initFormFromLoss(loss),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -93,7 +93,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
   addLoss() {
     this._leakageLosses.push({
-      form: this.gasLeakageLossesService.initForm(this._leakageLosses.length + 1),
+      form: this.leakageFormService.initForm(this._leakageLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -116,7 +116,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
   calculate(loss: GasLeakageObj) {
     if (loss.form.status === 'VALID') {
-      let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+      let tmpLeakageLoss = this.leakageFormService.initLossFromForm(loss.form);
       loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
     }
     else {
@@ -135,7 +135,7 @@ export class GasLeakageLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+      let tmpLeakageLoss = this.leakageFormService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
     });

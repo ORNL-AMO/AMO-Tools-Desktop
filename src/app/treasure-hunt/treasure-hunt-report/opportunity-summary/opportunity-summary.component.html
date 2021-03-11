@@ -27,8 +27,15 @@
       </td>
       <td></td>
       <td (click)="setSortBy('costSavings')" [ngClass]="{ active: sortBy == 'costSavings' }">
-        Cost Savings
+        Utility Cost Savings
         <span *ngIf="sortBy == 'costSavings'">
+          <span class="fa"
+            [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+        </span>
+      </td>
+      <td (click)="setSortBy('additionalSavings')" [ngClass]="{ active: sortBy == 'additionalSavings' }">
+        Other Savings
+        <span *ngIf="sortBy == 'additionalSavings'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
         </span>
@@ -58,7 +65,7 @@
       </td>
       <td (click)="setSortBy('opportunityCost.otherCosts')"
         [ngClass]="{ active: sortBy == 'opportunityCost.otherCosts' }">
-        Other Cost
+        Other Costs/Rebates
         <span *ngIf="sortBy == 'opportunityCost.otherCosts'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
@@ -167,6 +174,10 @@
         <span *ngFor="let result of opportunity.mixedIndividualResults">
           {{ result.costSavings | currency: "USD":"symbol":"1.0-0" }}<br />
         </span>
+      </td>
+      <!--additional savings-->
+      <td>
+        {{ getAdditionalSavings(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0" }}
       </td>
       <!--material cost-->
       <td>

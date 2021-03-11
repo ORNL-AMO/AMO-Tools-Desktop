@@ -19,11 +19,13 @@ export class HelpAndResultsPanelComponent implements OnInit {
 
   ngOnInit() {
     this.stepTabSub = this.fanAnalysisService.stepTab.subscribe(tab => {
-        this.stepTab = tab;
-        if (this.stepTab == 'gas-density') {
-          this.tabSelect = 'results';
-        }
-      });
+      this.stepTab = tab;
+      if (this.stepTab == 'gas-density') {
+        this.tabSelect = 'results';
+      } else if (this.tabSelect == 'results') {
+        this.tabSelect = 'help';
+      }
+    });
   }
 
   setTab(str: string) {
@@ -33,6 +35,6 @@ export class HelpAndResultsPanelComponent implements OnInit {
   ngOnDestroy() {
     this.stepTabSub.unsubscribe();
   }
-  
+
 
 }

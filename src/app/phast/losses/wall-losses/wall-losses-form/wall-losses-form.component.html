@@ -29,6 +29,10 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+      *ngIf="wallLossesForm.controls.ambientTemp.invalid && !wallLossesForm.controls.ambientTemp.pristine">
+      <span *ngIf="wallLossesForm.controls.ambientTemp.errors.required">Value required.</span>
+    </span>
     </div>
 
     <div class="form-group">
@@ -118,6 +122,10 @@
       <input [readonly]="!baselineSelected" name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control"
         formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="save()"
         (focus)="focusField('correctionFactor')"  [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': wallLossesForm.controls.correctionFactor.invalid}">
+        <span class="alert-danger pull-right small"
+        *ngIf="wallLossesForm.controls.correctionFactor.invalid && !wallLossesForm.controls.correctionFactor.pristine">
+        <span *ngIf="wallLossesForm.controls.correctionFactor.errors.required">Value required.</span>
+      </span>
     </div>
   </div>
 

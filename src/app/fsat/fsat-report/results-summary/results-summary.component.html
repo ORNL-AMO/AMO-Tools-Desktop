@@ -113,10 +113,10 @@
       <tr>
         <td>Motor current (amps)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorCurrent | number:'1.0-1'}}</td>
+          {{fsat.outputs.motorCurrent | number:'1.0-0'}}</td>
         <td *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorCurrent
-          | number:'1.0-1'}}</td>
+          | number:'1.0-0'}}</td>
       </tr>
       <tr>
         <td>Motor power (kW)</td>

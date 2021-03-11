@@ -254,7 +254,7 @@ export class PhastResultsService {
   getMinElectricityInputRequirement(phast: PHAST, settings: Settings): number {
     if (phast.losses) {
       let results: PhastResults = this.getResults(phast, settings);
-      return results.totalExhaustGasEAF * (-1);
+      return results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
     } else {
       return undefined;
     }

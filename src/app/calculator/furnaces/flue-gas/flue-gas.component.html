@@ -3,8 +3,8 @@
 	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
-		  <div class="text-center">
-			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size2 flue-gas-icon">
+		  <div class="col-md-auto">
+			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size2 px-2">
 		  </div>
 		  <div class="pl-2">
 			<h3>Flue Gas</h3>
@@ -34,6 +34,7 @@
 			  <h3>Baseline</h3>
 			</div>
 			<div class="d-flex flex-column mx-2 mb-4">
+				<app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
 				<div class="form-group">
 					<label class="small" for="method">Type of fuel</label>
 					<select class="form-control" id="method" [(ngModel)]="method" [disabled]="!baselineSelected"
@@ -57,7 +58,7 @@
 				  <div *ngIf="!output.baseline.availableHeat" class="text-center bold small">
 					&mdash; &mdash;
 				  </div>
-				  <span class="alert-warning pull-right small" *ngIf="output.baseline.availableHeatError">{{output.availableHeatError}}</span>
+				  <span class="alert-warning pull-right small" *ngIf="output.baseline.availableHeatError">{{output.baseline.availableHeatError}}</span>
 				</div>
 				<div class="form-group m-0">
 				  <label class="bold">Flue Gas Losses</label>
@@ -94,6 +95,7 @@
 			</div>
 			<!-- forms -->
 			<div class="d-flex flex-column ml-2 mr-2 mb-4">
+				<app-energy-form [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
 				<div class="form-group">
 					<label class="small" for="method">Type of fuel</label>
 					<select class="form-control" id="method" [(ngModel)]="method" [disabled]="baselineSelected"
@@ -149,7 +151,7 @@
   
 		<!-- help panel -->
 		<div class="col-4 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
 			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
 				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"

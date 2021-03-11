@@ -3,6 +3,7 @@ import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-boiler-summary',
@@ -33,8 +34,8 @@ export class BoilerSummaryComponent implements OnInit {
   deaeratorPressureDiff: Array<boolean>;
   approachTemperatureDiff: Array<boolean>;
 
-  solidLiquidFuelTypes: any;
-  gasFuelTypes: any;
+  solidLiquidFuelTypes: Array<SolidLiquidFlueGasMaterial>;
+  gasFuelTypes: Array<FlueGasMaterial>;
   constructor(private cd: ChangeDetectorRef, private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {

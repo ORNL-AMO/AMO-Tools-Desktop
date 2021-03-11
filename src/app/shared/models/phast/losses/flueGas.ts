@@ -6,10 +6,7 @@ export interface FlueGas {
 }
 
 export interface FlueGasByMass {
-    hoursPerYear?: number;
-    energySourceType?: string;
     gasTypeId?: number;
-    fuelCost?: number;
     flueGasTemperature?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
@@ -30,10 +27,7 @@ export interface FlueGasByMass {
 }
 
 export interface FlueGasByVolume {
-    hoursPerYear?: number;
-    energySourceType?: string;
     gasTypeId?: number;
-    fuelCost?: number;
     flueGasTemperature?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
@@ -52,6 +46,30 @@ export interface FlueGasByVolume {
     SO2?: number;
     O2?: number;
     heatInput?: number;
+}
+
+export interface MaterialInputProperties {
+    CH4?: number,
+    C2H6?: number,
+    N2?: number,
+    H2?: number,
+    C3H8?: number,
+    C4H10_CnH2n?: number,
+    H2O?: number,
+    CO?: number,
+    CO2?: number,
+    SO2?: number,
+    O2?: number,
+    carbon?: number,
+    hydrogen?: number,
+    sulphur?: number,
+    inertAsh?: number,
+    o2?: number,
+    moisture?: number,
+    nitrogen?: number,
+    o2InFlueGas?: number,
+    excessAir?: number,
+    moistureInAirCombustion?: number
 }
 
 

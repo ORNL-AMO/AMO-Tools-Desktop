@@ -47,6 +47,11 @@ export class FanAnalysisResultsComponent implements OnInit {
 
     if (planeDataDone && basicsDone && gasDone && shaftPowerDone) {
       this.results = this.convertFanAnalysisService.fan203(this.fanAnalysisService.inputData, this.settings);
+      this.fanAnalysisService.fanShaftPowerResults.next(
+        {
+          power: this.results.power,
+          powerCorrected: this.results.powerCorrected
+        });
     }
   }
 }

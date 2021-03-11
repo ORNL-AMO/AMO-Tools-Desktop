@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
-import { OpeningLossesService, OpeningLossWarnings } from '../opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
+import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
+import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -35,11 +36,13 @@ export class OpeningLossesFormComponent implements OnInit {
   isBaseline: boolean;
 
   totalArea: number = 0.0;
-  warnings: OpeningLossWarnings;
   idString: string;
+  canCalculateViewFactor: boolean;
+  calculateVFWarning: string;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
-    private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+    private openingFormService: OpeningFormService,
+    private openingLossesService: OpeningService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -48,11 +51,12 @@ export class OpeningLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.checkWarnings();
     this.getArea(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkCanCalculateViewFactor();
+    this.checkWarnings();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -76,30 +80,6 @@ export class OpeningLossesFormComponent implements OnInit {
     this.openingLossesForm.controls.openingType.enable();
   }
 
-  checkWarnings() {
-    let tmpLoss: OpeningLoss = this.openingLossesService.getLossFromForm(this.openingLossesForm);
-    this.warnings = this.openingLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.openingLossesService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
-  }
-
-  calculateViewFactor() {
-    this.save();
-    if (this.warnings.numOpeningsWarning !== null || this.warnings.lengthWarning !== null || this.warnings.heightWarning !== null) {
-      this.totalArea = 0;
-      return;
-    }
-    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
-    this.openingLossesForm.patchValue({
-      viewFactor: this.roundVal(viewFactor, 3)
-    });
-  }
-
-  roundVal(val: number, digits: number): number {
-    return Number(val.toFixed(digits));
-  }
-
   getArea(dontSave?: boolean) {
     if (!dontSave) {
       this.save();
@@ -112,17 +92,15 @@ export class OpeningLossesFormComponent implements OnInit {
       largeUnit = 'm';
     }
 
-    if (this.warnings.numOpeningsWarning !== null || this.warnings.lengthWarning !== null || this.warnings.heightWarning !== null) {
+    if (this.openingLossesForm.controls.numberOfOpenings.invalid || this.openingLossesForm.controls.lengthOfOpening.invalid || this.openingLossesForm.controls.heightOfOpening.invalid) {
       this.totalArea = 0;
       return;
     }
     if (this.openingLossesForm.controls.openingType.value === 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status === "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
-        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
-        //let radiusFeet = (radiusInches * .08333333) / 2;
-
-        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
+        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value / 2;
+        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit);
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
       }
     } else if (this.openingLossesForm.controls.openingType.value === 'Rectangular (or Square)') {
@@ -148,8 +126,46 @@ export class OpeningLossesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkCanCalculateViewFactor() {
+    if (this.openingLossesForm.controls.openingType.value == 'Round' 
+      && (this.openingLossesForm.controls.numberOfOpenings.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
+      || this.openingLossesForm.controls.heightOfOpening.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else {
+      this.canCalculateViewFactor = true;
+    }
+  }
+
+  calculateViewFactor() {
+    if (!this.canCalculateViewFactor) {
+      this.totalArea = 0.0;
+      return;
+    }
+    let vfInputs: ViewFactorInput = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let calculatedViewFactor: number = this.openingLossesService.getViewFactor(vfInputs, this.settings);
+    this.openingLossesForm.patchValue({
+      viewFactor: this.openingFormService.roundVal(calculatedViewFactor, 3)
+    });
+    this.save();
+  }
+
+  checkWarnings() {
+    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let calculatedViewFactor = this.openingLossesService.getViewFactor(vfInputs, this.settings);
+    this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm.controls.viewFactor.value, calculatedViewFactor);
+  }
+
   save() {
-    this.checkWarnings();
+    this.openingFormService.setValidators(this.openingLossesForm);
+    this.checkCanCalculateViewFactor();
+    if (this.canCalculateViewFactor) {
+      this.checkWarnings();
+    }
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }

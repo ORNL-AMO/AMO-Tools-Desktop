@@ -23,12 +23,19 @@ export class DesignedEnergyComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   results: DesignedEnergyResults = {
-    designedEnergyUsed: 0,
-    designedEnergyIntensity: 0,
-    designedElectricityUsed: 0,
-    calculatedFuelEnergyUsed: 0,
-    calculatedEnergyIntensity: 0,
-    calculatedElectricityUsed: 0
+    designed: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      hourlyElectricity: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    },
+      byPhast: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    }
   };
 
   tabSelect: string = 'results';
@@ -111,7 +118,7 @@ export class DesignedEnergyComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings, false);
+    this.results = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
   }
 
   setTab(str: string) {

@@ -1,7 +1,8 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { WallLoss, WallLossOutput } from '../../../shared/models/phast/losses/wallLoss';
+import { OperatingHours } from '../../../shared/models/operations';
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
 import { WallService } from './wall.service';
 
@@ -16,6 +17,8 @@ export class WallComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -26,15 +29,15 @@ export class WallComponent implements OnInit {
     }, 100);
   }
   containerHeight: number;
+  columnHeight: number;
   isModalOpen: boolean;
+  isEditingName: boolean;
+  
+  baselineData: Array<WallLoss>;
+  modificationData: Array<WallLoss>;
   modalSubscription: Subscription;
-
-  baselineData: WallLoss;
-  modificationData: WallLoss;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
-  output: WallLossOutput;
 
   tabSelect: string = 'results';
   baselineSelected = true;
@@ -66,7 +69,6 @@ export class WallComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
   }
 
   initSubscriptions() {
@@ -74,18 +76,22 @@ export class WallComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.wallService.baselineData.subscribe(value => {
+      this.baselineData = value;
       this.wallService.calculate(this.settings);
     })
     this.modificationDataSub = this.wallService.modificationData.subscribe(value => {
+      this.modificationData = value;
       this.wallService.calculate(this.settings);
     })
-    this.outputSubscription = this.wallService.output.subscribe(val => {
-      this.output = val;
-    });
   }
   
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  addLoss() {
+    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    this.wallService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {
@@ -95,14 +101,14 @@ export class WallComponent implements OnInit {
    }
 
    btnResetData() {
-    this.modificationExists = false;
-    this.wallService.initDefaultEmptyInputs();
-    this.wallService.resetData.next(true);
+     this.wallService.resetData.next(true);
+     this.wallService.initDefaultEmptyInputs();
+     this.modificationExists = false;
   }
 
   btnGenerateExample() {
-    this.wallService.generateExampleData(this.settings);
     this.modificationExists = true;
+    this.wallService.generateExampleData(this.settings);
   }
 
   setBaselineSelected() {

@@ -118,6 +118,7 @@ export interface Plane {
   staticPressure?: number;
   pitotTubeCoefficient?: number;
   traverseData?: Array<Array<number>>;
+  staticPressureData?: Array<Array<number>>;
   pitotTubeType?: string;
   numTraverseHoles?: number;
   numInsertionPoints?: number;
@@ -236,6 +237,17 @@ export interface PlaneResults {
   FlowTraverse: PlaneResult;
   InletMstPlane: PlaneResult;
   OutletMstPlane: PlaneResult;
+}
+
+export interface VelocityResults { 
+  pv3: number,
+  percent75Rule: number,
+  traverseVelocity?: number 
+}
+
+export interface FanShaftPowerResults {
+  power: number;
+  powerCorrected: number;
 }
 
 export interface PlaneResult {

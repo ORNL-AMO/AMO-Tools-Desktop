@@ -1,0 +1,42 @@
+<div class="d-flex flex-column mt-3 mb-2">
+    <div class="form-group m-0">
+      <label class="bold">Heat Required</label>
+      <div *ngIf="lossResult.netHeatLoss" class="text-center bold small">
+      {{lossResult.netHeatLoss | sigFigs:'6'}}
+      <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.netHeatLoss" class="text-center bold small">
+      &mdash; &mdash;
+      </div>
+    </div>
+    <div class="form-group m-0">
+      <label class="bold">Reaction Heat</label>
+      <div *ngIf="lossResult.endoExoHeat" class="text-center bold small">
+        {{lossResult.endoExoHeat | sigFigs:'6'}}
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.endoExoHeat" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+      </div>
+      <div class="form-group m-0">
+      <label class="bold">Total Heat Required</label>
+      <div *ngIf="lossResult.heatRequired" class="text-center bold small">
+        {{lossResult.heatRequired | sigFigs:'6'}}
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.heatRequired" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+      </div>
+      <div class="form-group m-0">
+      <label class="bold">Gross Loss</label>
+      <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+        {{lossResult.grossLoss | sigFigs:'6'}} 
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+    </div>
