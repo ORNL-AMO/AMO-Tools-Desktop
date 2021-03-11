@@ -46,7 +46,7 @@ import { PipeInsulationReductionComponent } from '../calculator/steam/pipe-insul
 import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
-import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
+import { WaterReductionComponent } from '../calculator/waste-water/water-reduction/water-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
