@@ -28,8 +28,14 @@
         <td [ngClass]="{'indicate-report-field-different': pumpDiff == true}">{{getPumpType(psat.inputs.pump_style)}}
         </td>
         <td *ngFor="let modification of psat.modifications"
-          [ngClass]="{'indicate-report-field-different': modification.psat.inputs.pump_style != psat.inputs.pump_style}">
-          {{getPumpType(modification.psat.inputs.pump_style)}}</td>
+        [ngClass]="{'indicate-report-field-different': modification.psat.inputs.pump_style != psat.inputs.pump_style}">
+        <span *ngIf="modification.psat.inputs.pump_style == 11">
+          &mdash; &mdash;
+        </span>
+        <span *ngIf="modification.psat.inputs.pump_style != 11">
+          {{getPumpType(modification.psat.inputs.pump_style)}}
+        </span>
+      </td>
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': pumpRpmDiff == true}">Pump (RPM)</td>
@@ -205,7 +211,8 @@
           {{getLoadMethod(psat.inputs.load_estimation_method)}}</td>
         <td *ngFor="let modification of psat.modifications"
           [ngClass]="{'indicate-report-field-different': modification.psat.inputs.load_estimation_method != psat.inputs.load_estimation_method}">
-          {{getLoadMethod(modification.psat.inputs.load_estimation_method)}}</td>
+          &mdash; &mdash;
+        </td>
       </tr>
 
       <tr *ngIf="psat.inputs.load_estimation_method == 1">
@@ -213,7 +220,8 @@
         <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">{{psat.inputs.motor_field_current | number:'1.0-0'}}</td>
         <td *ngFor="let modification of psat.modifications"
           [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_current != psat.inputs.motor_field_current}">
-          {{modification.psat.inputs.motor_field_current}}</td>
+          &mdash; &mdash;
+        </td>
       </tr>
 
       <tr *ngIf="psat.inputs.load_estimation_method == 0">
@@ -221,7 +229,8 @@
         <td [ngClass]="{'indicate-report-field-different': kwDiff == true}">{{psat.inputs.motor_field_power}}</td>
         <td *ngFor="let modification of psat.modifications"
           [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_power != psat.inputs.motor_field_power}">
-          {{modification.psat.inputs.motor_field_power}}</td>
+          &mdash; &mdash;
+        </td>
       </tr>
 
       <tr>
