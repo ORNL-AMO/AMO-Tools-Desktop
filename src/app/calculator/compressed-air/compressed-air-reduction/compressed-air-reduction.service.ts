@@ -270,6 +270,7 @@ export class CompressedAirReductionService {
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
     // overwrite estimated energyUse value originally set in suite results
     results.modificationAggregateResults.energyUse = results.baselineAggregateResults.energyUse - results.annualEnergySavings;
+    results.modificationAggregateResults.energyCost = results.baselineAggregateResults.energyCost - results.annualCostSavings;
     this.compressedAirResults.next(results);
   }
 
