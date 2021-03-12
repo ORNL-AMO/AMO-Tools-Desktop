@@ -6,7 +6,7 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
-import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
+import { WaterReductionService } from '../../calculator/waste-water/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { PipeInsulationReductionService } from '../../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.service';
