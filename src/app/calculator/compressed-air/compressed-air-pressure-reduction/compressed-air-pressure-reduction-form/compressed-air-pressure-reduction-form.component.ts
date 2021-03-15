@@ -58,12 +58,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
     }
     else {
       this.idString = 'modification_' + this.index;
-      if (!this.isBaseline) {
-        this.data.compressorPower = this.compressorPower;
-        this.data.pressure = this.pressure;
-      }
     }
-
     this.form = this.compressedAirPressureReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (!this.isBaseline) {
       this.form.controls.compressorPower.disable();
@@ -85,7 +80,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
       this.form.controls.pressure.patchValue(this.data.pressure);
       this.calculate();
     }
-    
+
     if (!this.isBaseline && changes.atmosphericPressure && !changes.atmosphericPressure.firstChange) {
       this.data.atmosphericPressure = this.atmosphericPressure;
       this.form.controls.atmosphericPressure.patchValue(this.data.atmosphericPressure);

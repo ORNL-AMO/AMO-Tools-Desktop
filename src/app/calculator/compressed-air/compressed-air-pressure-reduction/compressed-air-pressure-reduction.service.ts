@@ -135,7 +135,7 @@ export class CompressedAirPressureReductionService {
       for (let i = 0; i < inputArray.length; i++) {
         //TODO CONVERT 
         inputArray[i].pressureRated = this.convertUnitsService.value(inputArray[i].pressureRated).from('barg').to('psig');
-        inputArray[i].atmosphericPressure = this.convertUnitsService.value(inputArray[i].pressureRated).from('bara').to('psia');
+        inputArray[i].atmosphericPressure = this.convertUnitsService.value(inputArray[i].atmosphericPressure).from('bara').to('psia');
         inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from('barg').to('psig');
         inputArray[i].proposedPressure = this.convertUnitsService.value(inputArray[i].proposedPressure).from('barg').to('psig');
       }
