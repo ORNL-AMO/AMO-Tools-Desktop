@@ -9,7 +9,6 @@ import { Settings } from '../shared/models/settings';
 import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
-import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
 
 
 declare var fanAddon: any;
@@ -26,7 +25,7 @@ export class FsatService {
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
   calculatorTab: BehaviorSubject<string>;
-  constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
+  constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
     this.initData();
   }
 
@@ -35,7 +34,7 @@ export class FsatService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calculatorTab = new BehaviorSubject<string>('fan-analysis');
+    this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -48,36 +47,27 @@ export class FsatService {
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy.FanShaftPower.sumSEF = inputCpy.PlaneData.inletSEF + inputCpy.PlaneData.outletSEF;
     let results: Fan203Results = fanAddon.fan203(inputCpy);
-    results = this.convertFanAnalysisService.convertFan203Results(results, settings);
     return results;
   }
 
   getPsychrometricDewPoint(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
-    inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityDewPoint(inputs);
-    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
     return psychrometricResults;
   }
 
   getPsychrometricRelativeHumidity(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
-    inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
-    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
     return psychrometricResults;
   }
 
   getPsychrometricWetBulb(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
-    inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityWetBulb(inputs);
-    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
     return psychrometricResults;
   }
 
   getVelocityPressureData(inputs: Plane, settings: Settings): VelocityResults {
-    inputs = this.convertFanAnalysisService.convertPlaneForCalculations(inputs, settings);
     let results: VelocityResults = fanAddon.getVelocityPressureData(inputs);
     if (settings.fanPressureMeasurement !== 'inH2o') {
       results.pv3 = this.convertUnitsService.value(results.pv3).from('inH2o').to(settings.fanPressureMeasurement);
@@ -87,9 +77,7 @@ export class FsatService {
 
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
     let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
     return results;
   }
 

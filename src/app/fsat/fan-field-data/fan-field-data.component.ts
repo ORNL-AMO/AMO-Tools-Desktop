@@ -66,6 +66,8 @@ export class FanFieldDataComponent implements OnInit {
   outletPressureCopy: OutletPressureData;
   idString: string;
   disableApplyData: boolean = false;
+  compareError: boolean = false;
+  
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -433,4 +435,12 @@ export class FanFieldDataComponent implements OnInit {
   //     return false;
   //   }
   // }
+  
+  compareValues() {
+     var inletPressureValue = this.fieldDataForm.controls.inletPressure.value;
+     var outletPressureValue = this.fieldDataForm.controls.outletPressure.value;
+    if(inletPressureValue > outletPressureValue) {
+       this.compareError = true;
+     }
+  }
 }

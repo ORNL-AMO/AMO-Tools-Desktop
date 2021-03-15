@@ -69,9 +69,6 @@
 </div>
 
 <ul class="tabs subtabs fsat" *ngIf="mainTab == 'calculators'">
-  <li [ngClass]="{'active': calcTab == 'fan-analysis'}">
-    <a (click)="changeCalcTab('fan-analysis')">Fan Traverse Analysis</a>
-  </li>
   <li [ngClass]="{'active': calcTab == 'fan-efficiency'}">
     <a (click)="changeCalcTab('fan-efficiency')">Optimal Fan Efficiency</a>
   </li>
