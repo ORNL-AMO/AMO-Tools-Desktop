@@ -39,8 +39,8 @@ export class HeatCascadingFormComponent implements OnInit {
   
   showPriOpHoursModal: boolean = false;
   showSecOpHoursModal: boolean = false;
-  showSecFlueGasModal: boolean;
-  showPriFlueGasModal: boolean;
+  showSecFlueGasModal: boolean = false;
+  showPriFlueGasModal: boolean = false;
 
   constructor(private suiteDbService: SuiteDbService,
               private heatCascadingService: HeatCascadingService, 

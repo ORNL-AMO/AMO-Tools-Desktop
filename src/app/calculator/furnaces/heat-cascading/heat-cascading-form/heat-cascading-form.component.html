@@ -42,7 +42,6 @@
             (input)="calculate()" (focus)="focusField('fuelHV')" >
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MJ/m<sup>3</sup>
-              <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValueVolume | sigFigs:'6'}} kJ/Nm<sup>3</sup></span> -->
             </span>
         </div>
         <span class="alert-danger pull-right small"

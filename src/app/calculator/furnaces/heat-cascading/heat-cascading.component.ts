@@ -20,7 +20,7 @@ export class HeatCascadingComponent implements OnInit {
     this.resizeTabs();
   }
   
-  airFlowConversionInputSub: Subscription;
+  heatCascadingInputSub: Subscription;
   modalSubscription: Subscription;
   
   headerHeight: number;
@@ -43,7 +43,7 @@ export class HeatCascadingComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.airFlowConversionInputSub.unsubscribe();
+    this.heatCascadingInputSub.unsubscribe();
     this.modalSubscription.unsubscribe();
   }
 
@@ -54,7 +54,7 @@ export class HeatCascadingComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.airFlowConversionInputSub = this.heatCascadingService.heatCascadingInput.subscribe(value => {
+    this.heatCascadingInputSub = this.heatCascadingService.heatCascadingInput.subscribe(value => {
       this.calculate();
     });
     this.modalSubscription = this.heatCascadingService.modalOpen.subscribe(modalOpen => {

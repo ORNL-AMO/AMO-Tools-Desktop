@@ -15,10 +15,10 @@ export class HeatCascadingResultsComponent implements OnInit {
   outputSubscription: Subscription;
   output: HeatCascadingOutput;
   
-  constructor(private airHeatingService: HeatCascadingService) { }
+  constructor(private heatCascadingService: HeatCascadingService) { }
 
   ngOnInit(): void {
-    this.outputSubscription = this.airHeatingService.heatCascadingOutput.subscribe(val => {
+    this.outputSubscription = this.heatCascadingService.heatCascadingOutput.subscribe(val => {
       this.output = val;
     })
   }

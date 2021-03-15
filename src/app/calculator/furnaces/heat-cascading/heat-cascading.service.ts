@@ -126,21 +126,6 @@ export class HeatCascadingService {
       CO2: .4,
       SO2: 0,
       O2: .1,
-
-      // suite example
-      // materialTypeId: undefined,
-      // substance: 'Gas',
-      // CH4: 94,
-      // C2H6: 2.07,
-      // N2: 1.41,
-      // H2: .01,
-      // C3H8: .42,
-      // C4H10_CnH2n: 0.28,
-      // H2O: 0,
-      // CO: 1.0,
-      // CO2: .71,
-      // SO2: 0,
-      // O2: 0,
     };
 
 
