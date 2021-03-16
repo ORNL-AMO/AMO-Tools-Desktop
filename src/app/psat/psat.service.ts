@@ -10,6 +10,7 @@ import { FieldDataService } from './field-data/field-data.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import * as _ from 'lodash';
 import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from './psatConstants';
+import { PSAT } from '../shared/models/psat';
 
 @Injectable()
 export class PsatService {
@@ -625,5 +626,27 @@ export class PsatService {
       motorValid: tmpMotorForm.valid,
       fieldDataValid: tmpFieldDataForm.valid
     }
+  }
+
+  convertExistingData(psat: PSAT, oldSettings: Settings, settings: Settings, mod?): PSAT {
+    if (psat.inputs.flow_rate) {
+      psat.inputs.flow_rate = this.convertUnitsService.value(psat.inputs.flow_rate).from(oldSettings.flowMeasurement).to(settings.flowMeasurement);
+      psat.inputs.flow_rate = this.convertUnitsService.roundVal(psat.inputs.flow_rate, 2);
+    }
+    if (psat.inputs.head) {
+      psat.inputs.head = this.convertUnitsService.value(psat.inputs.head).from(oldSettings.distanceMeasurement).to(settings.distanceMeasurement);
+      psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
+    }
+    if (psat.inputs.motor_rated_power) {
+      psat.inputs.motor_rated_power = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(oldSettings.powerMeasurement).to(settings.powerMeasurement);
+      psat.inputs.motor_rated_power = this.convertUnitsService.roundVal(psat.inputs.motor_rated_power, 2)
+    }
+    if (psat.inputs.fluidTemperature) {
+      if (settings.temperatureMeasurement && oldSettings.temperatureMeasurement) {
+        psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(oldSettings.temperatureMeasurement).to(settings.temperatureMeasurement);
+        psat.inputs.fluidTemperature = this.convertUnitsService.roundVal(psat.inputs.fluidTemperature, 2);
+      }
+    }
+    return psat;
   }
 }

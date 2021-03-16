@@ -41,3 +41,7 @@ a:not([href]):not([tabindex]).no-data-link:hover{
     color: green;
     font-size: small;
 }
+
+.alert-warning {
+  width: 90%;
+}

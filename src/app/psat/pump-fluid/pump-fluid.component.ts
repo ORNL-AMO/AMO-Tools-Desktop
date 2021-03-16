@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { PsatService } from '../psat.service';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -18,8 +18,12 @@ import { PumpFluidService } from './pump-fluid.service';
 export class PumpFluidComponent implements OnInit {
   @Input()
   psat: PSAT;
+  // @Output('saved')
+  // saved = new EventEmitter<boolean>();
+  @Input()
+  psatInputs: PsatInputs;
   @Output('saved')
-  saved = new EventEmitter<boolean>();
+  saved = new EventEmitter<PsatInputs>();
   @Input()
   selected: boolean;
   @Input()
@@ -41,7 +45,12 @@ export class PumpFluidComponent implements OnInit {
   psatForm: FormGroup;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
+  constructor(private psatService: PsatService, 
+              private psatWarningService: PsatWarningService, 
+              private compareService: CompareService, 
+              private helpPanelService: HelpPanelService, 
+              private convertUnitsService: ConvertUnitsService, 
+              private pumpFluidService: PumpFluidService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -71,12 +80,17 @@ export class PumpFluidComponent implements OnInit {
         this.enableForm();
       }
     }
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+    if ((changes.psatInputs && !changes.psatInputs.firstChange)|| (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
       this.initForm();
     }
+    // if ((changes.psat)|| (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
+    //   console.log('init form after changes')
+    //   this.initForm();
+    // }
   }
 
   initForm() {
+    // this.psatForm = this.pumpFluidService.getFormFromObj(this.psatInputs);
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }
@@ -187,14 +201,24 @@ export class PumpFluidComponent implements OnInit {
   }
 
 
+  // save() {
+  //   //update object values from form values
+  //   this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
+  //   //check warnings
+  //   this.checkWarnings();
+  //   //save
+  //   this.saved.emit(this.selected);
+  // }
+
   save() {
     //update object values from form values
     this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     //check warnings
     this.checkWarnings();
     //save
-    this.saved.emit(this.selected);
+    this.saved.emit(this.psat.inputs);
   }
+
 
   checkWarnings() {
     this.pumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);

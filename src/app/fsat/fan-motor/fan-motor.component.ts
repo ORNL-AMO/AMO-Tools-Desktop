@@ -77,7 +77,8 @@ export class FanMotorComponent implements OnInit {
         this.disableForm();
       }
     }
-    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+    if ((changes.fsat && !changes.fsat.firstChange) 
+    || (changes.modificationIndex && !changes.modificationIndex.firstChange)) {
       this.init();
     }
   }

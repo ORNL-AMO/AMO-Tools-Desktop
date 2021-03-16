@@ -15,14 +15,17 @@
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
-        [(psat)]="_psat" (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()"
+        (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
         (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        <!-- remove two way binding on psat and adding psatInputs -->
+      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [psat]="_psat" [psatInputs]="_psat.inputs" (saved)="savePsatInputs($event)" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
+        <!-- <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid> -->
+      <!-- <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
+        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data> -->
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
@@ -171,5 +174,5 @@
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
 
-<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+    if ((changes.headerInput) || (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
       this.initForms();
     }
   }

@@ -17,6 +17,7 @@ export interface FSAT {
   outputs?: FsatOutput;
   valid?: FsatValid;
   tempFsatCopy?: FSAT;
+  existingDataUnits?: string;
 }
 
 export interface FsatValid {

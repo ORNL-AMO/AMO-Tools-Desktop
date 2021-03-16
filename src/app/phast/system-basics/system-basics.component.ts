@@ -7,6 +7,9 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import * as _ from 'lodash';
+
+
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -42,7 +45,7 @@ export class SystemBasicsComponent implements OnInit {
     }
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (this.phast.lossDataUnits && this.phast.lossDataUnits != this.oldSettings.unitsOfMeasure) {
-      this.oldSettings.unitsOfMeasure = this.phast.lossDataUnits;
+      this.oldSettings = this.getExistingDataSettings();
       this.showUpdateDataReminder = true;
     }
     this.lossesExist = this.lossExists(this.phast);
@@ -83,6 +86,13 @@ export class SystemBasicsComponent implements OnInit {
         this.updateSettings.emit(true);
       });
     });
+  }
+
+  getExistingDataSettings(): Settings {
+    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    existingSettingsForm.patchValue({unitsOfMeasure: this.phast.lossDataUnits});
+    let existingSettings = this.settingsService.setUnits(existingSettingsForm);
+    return this.settingsService.getSettingsFromForm(existingSettings);
   }
 
   updateData(showSuccess?: boolean) {
