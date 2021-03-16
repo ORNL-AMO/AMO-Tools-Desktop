@@ -59,7 +59,7 @@ export class FsatFluidService {
       specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
     if (obj.inputType === 'relativeHumidity') {
-      relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
+      relativeHumidityValidators = [Validators.min(0), Validators.max(100), Validators.required];
     }
     if (obj.inputType === 'dewPoint') {
       dewPointValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];

@@ -120,8 +120,7 @@
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="gasDensityForm.controls.relativeHumidity.invalid && !gasDensityForm.controls.relativeHumidity.pristine">
-          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.greaterThan == 0">
-            Value must be greater than 0 %.</span>
+          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than 0</span>
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value
             Required</span>
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than

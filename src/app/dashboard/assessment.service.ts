@@ -84,8 +84,8 @@ export class AssessmentService {
       stages: 1,
       fixed_speed: 0,
       line_frequency: 60,
-      motor_rated_power: 200,
-      motor_rated_speed: 1780,
+      motor_rated_power: null,
+      motor_rated_speed: null,
       efficiency_class: 1,
       efficiency: 95,
       motor_rated_voltage: 460,
@@ -173,7 +173,7 @@ export class AssessmentService {
       fanMotor: {
         lineFrequency: 60,
         motorRatedPower: null,
-        motorRpm: 1785,
+        motorRpm: null,
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,
@@ -181,21 +181,21 @@ export class AssessmentService {
       },
       fanSetup: {
         fanType: 0,
-        fanSpeed: 1180,
+        fanSpeed: null,
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: null,
-        staticPressure: null,
+        dryBulbTemp: 68,
+        staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: 0.0749,
         gasType: 'AIR',
         //Mark Additions
-        inputType: 'custom',
+        inputType: 'relativeHumidity',
         //Method 2 variables
         specificGravity: 1,
         wetBulbTemp: 119,
-        relativeHumidity: 0,
+        relativeHumidity: .001,
         dewPoint: 0,
         specificHeatGas: .24
       },
