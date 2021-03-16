@@ -133,7 +133,6 @@ export class CompressedAirPressureReductionService {
   convertInputs(inputArray: Array<CompressedAirPressureReductionData>, settings: Settings): Array<CompressedAirPressureReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
-        //TODO CONVERT 
         inputArray[i].pressureRated = this.convertUnitsService.value(inputArray[i].pressureRated).from('barg').to('psig');
         inputArray[i].atmosphericPressure = this.convertUnitsService.value(inputArray[i].atmosphericPressure).from('bara').to('psia');
         inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from('barg').to('psig');
