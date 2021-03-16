@@ -452,7 +452,9 @@ export interface CompressedAirPressureReductionData {
   electricityCost: number,
   compressorPower: number,
   pressure: number,
-  proposedPressure: number
+  proposedPressure: number,
+  pressureRated: number,
+  atmosphericPressure: number
 };
 
 export interface CompressedAirPressureReductionResults {

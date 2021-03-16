@@ -127,6 +127,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   createModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.modificationData.forEach(modification => {
+      modification.isBaseline = false;
+    });
     this.getResults();
     this.modificationExists = true;
     this.setModificationSelected();
@@ -150,9 +153,13 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     dataArray[index].compressorPower = data.compressorPower;
     dataArray[index].pressure = data.pressure;
     dataArray[index].proposedPressure = data.proposedPressure;
+    dataArray[index].atmosphericPressure = data.atmosphericPressure;
+    dataArray[index].pressureRated = data.pressureRated;
     if (data.isBaseline && this.modificationExists) {
       this.modificationData[index].compressorPower = data.compressorPower;
       this.modificationData[index].pressure = data.pressure;
+      this.modificationData[index].pressureRated = data.pressureRated;
+      this.modificationData[index].atmosphericPressure = data.atmosphericPressure;
     }
   }
 
