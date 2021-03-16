@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -66,8 +66,6 @@ export class FanFieldDataComponent implements OnInit {
   outletPressureCopy: OutletPressureData;
   idString: string;
   disableApplyData: boolean = false;
-  compareError: boolean = false;
-  
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -160,6 +158,7 @@ export class FanFieldDataComponent implements OnInit {
     if (!this.userDefinedCompressibilityFactor) {
       this.getCompressibilityFactor();
     }
+    this.updateOutletPressureValidation();
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     let tmpPlaneData: PlaneData = this.fieldData.planeData;
@@ -308,6 +307,11 @@ export class FanFieldDataComponent implements OnInit {
     this.fsat.tempFsatCopy = modalFsat;
   }
 
+  updateOutletPressureValidation() {
+    this.fieldDataForm.controls.outletPressure.setValidators([Validators.required, Validators.min(this.fieldDataForm.controls.inletPressure.value)]);
+    this.fieldDataForm.controls.outletPressure.updateValueAndValidity();
+  }
+
   setCalcInvalid(isCalcValid: boolean) {
     this.disableApplyData = isCalcValid;
   }
@@ -435,12 +439,4 @@ export class FanFieldDataComponent implements OnInit {
   //     return false;
   //   }
   // }
-  
-  compareValues() {
-     var inletPressureValue = this.fieldDataForm.controls.inletPressure.value;
-     var outletPressureValue = this.fieldDataForm.controls.outletPressure.value;
-    if(inletPressureValue > outletPressureValue) {
-       this.compareError = true;
-     }
-  }
 }

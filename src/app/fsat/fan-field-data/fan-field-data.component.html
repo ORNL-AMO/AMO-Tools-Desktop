@@ -50,7 +50,7 @@
     </div>
 
     <div class="form-group"
-      [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid}">
+      [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid, 'error': warnings.inletPressureError !== null}">
       <label for="{{'inletPressure_'+idString}}">
         Inlet Pressure
         <a class="form-text small click-link" (click)="showInletPressureModal()"
@@ -68,15 +68,15 @@
         <span *ngIf="fieldDataForm.controls.inletPressure.errors.required">Value Required</span>
       </span>
       <span class="alert-warning pull-right small"
-      *ngIf="fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
-      <span *ngIf="fieldDataForm.controls.inletPressure.errors.max">
-      Inlet Pressure is usually not greater than zero
+      *ngIf="warnings.inletPressureError !== null && fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
+      <span>
+      {{ warnings.inletPressureError }}
       </span>
     </span>
     </div>
 
     <div class="form-group"
-      [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null, 'invalid': fieldDataForm.controls.outletPressure.invalid}">
+      [ngClass]="{'indicate-different': isOutletPressureDifferent(), 'invalid': fieldDataForm.controls.outletPressure.invalid, 'error': warnings.outletPressureError !== null}">
       <label for="{{'outletPressure_'+idString}}">
         Outlet Pressure
         <a class="form-text small click-link" (click)="showOutletPressureModal()"
@@ -86,20 +86,18 @@
       <div class="input-group">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control"
           formControlName="outletPressure" id="{{'outletPressure_'+idString}}" (input)="save()"
-          (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected" (input)="compareValues()">
+          (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
+      <span class="alert-warning pull-right small"
+      *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine">
+      <span> {{ warnings.outletPressureError }} </span>
+    </span>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
-        <div *ngIf="compareError">
-        <span>Outlet Pressure cannot be less than Inlet Pressure</span>    
-      </div>
-      </span>
-        <span class="alert-warning pull-right small"
-        *ngIf="!fieldDataForm.controls.outletPressure.pristine && fieldDataForm.controls.outletPressure.invalid">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">
-          Outlet Pressure is usually not less than zero
+          Outlet Pressure cannot be less than Inlet Pressure
         </span>
       </span>
     </div>
@@ -112,19 +110,15 @@
           Flow Rate and Pressures</a>
       </label>
       <div class="input-group">
-        <input name="flowRate" type="number" min="0.1" step="any" class="form-control" formControlName="flowRate"
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate"
           id="{{'flowRate_'+idString}}" (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();"
           [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.greaterThan == 0">Flow Rate must be greater than zero</span>
         <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
-        <div *ngIf="fieldDataForm.controls.flowRate.errors.min">
-        <span>
-            Flow Rate must be greater than zero
-          </span>
-        </div>
       </span>
     </div>
 
