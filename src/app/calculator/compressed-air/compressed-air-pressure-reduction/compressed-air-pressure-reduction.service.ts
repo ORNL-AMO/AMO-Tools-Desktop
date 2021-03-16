@@ -147,9 +147,8 @@ export class CompressedAirPressureReductionService {
     let proposedPressure: number = 90;
     let pressure: number = 100;
 
-    //TODO: DEFAULTS
-    let pressureRated: number = 0;
-    let atmosphericPressure: number = 0;
+    let pressureRated: number = 100;
+    let atmosphericPressure: number = 14.7;
 
     if(settings.unitsOfMeasure != 'Imperial'){
       proposedPressure = this.convertUnitsService.value(proposedPressure).from('psig').to('barg');

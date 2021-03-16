@@ -1261,9 +1261,8 @@ export const MockTreasureHunt: Assessment = {
                 "compressorPower": 300,
                 "pressure": 120,
                 "proposedPressure": 0,
-                //TODO UPDATE EXAMPLE
-                "pressureRated": 0,
-                "atmosphericPressure": 0
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "modification": [{
                 "name": "Equipment #1",
@@ -1273,9 +1272,8 @@ export const MockTreasureHunt: Assessment = {
                 "compressorPower": 300,
                 "pressure": 120,
                 "proposedPressure": 110,
-                //TODO UPDATE EXAMPLE
-                "pressureRated": 0,
-                "atmosphericPressure": 0
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "opportunitySheet": {
                 "name": "CA Pressure Reduction",
