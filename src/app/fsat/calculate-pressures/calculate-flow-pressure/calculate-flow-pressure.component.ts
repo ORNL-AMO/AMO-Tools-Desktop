@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-analysis.service';
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { Subscription } from 'rxjs';
-import { FSAT, PlaneResults } from '../../../shared/models/fans';
+import { FieldData, FSAT, PlaneResults } from '../../../shared/models/fans';
 import { FanInfoFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/fan-info-form/fan-info-form.service';
 import { PlaneDataFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/plane-data-form/plane-data-form.service';
 
@@ -19,8 +19,8 @@ export class CalculateFlowPressureComponent implements OnInit {
   bodyHeight: number;
   @Input()
   fsat: FSAT;
-  @Output('updateFsatCopy')
-  updateFsatCopy = new EventEmitter<FSAT>();
+  @Output('updateFieldData')
+  updateFieldData = new EventEmitter<FieldData>();
   @Output('emitInvalid')
   emitInvalid = new EventEmitter<boolean>();
 
@@ -38,8 +38,14 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.fanAnalysisService.inputData = this.fanAnalysisService.getExampleData();
     this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
 
+    if (this.fsat.baseGasDensity) {
+      this.fanAnalysisService.inputData.BaseGasDensity = this.fsat.baseGasDensity;
+    }
     if (this.fsat.fieldData.fanRatedInfo) {
       this.fanAnalysisService.inputData.FanRatedInfo = this.fsat.fieldData.fanRatedInfo;
+      this.fanAnalysisService.inputData.FanRatedInfo.fanSpeedCorrected = this.fsat.fieldData.fanRatedInfo.fanSpeed
+      this.fanAnalysisService.inputData.FanRatedInfo.pressureBarometricCorrected = this.fsat.fieldData.fanRatedInfo.globalBarometricPressure;
+      this.fanAnalysisService.inputData.FanRatedInfo.densityCorrected = this.fsat.baseGasDensity.gasDensity;
     }
     if (this.fsat.fieldData.planeData) {
       this.fanAnalysisService.inputData.PlaneData = this.fsat.fieldData.planeData;
@@ -87,6 +93,6 @@ export class CalculateFlowPressureComponent implements OnInit {
     } else {
       this.emitInvalid.emit(true);
     }
-    this.updateFsatCopy.emit(this.fsat);
+    this.updateFieldData.emit(this.fsat.fieldData);
   }
 }
