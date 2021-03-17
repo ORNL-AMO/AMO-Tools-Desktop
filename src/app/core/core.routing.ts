@@ -94,6 +94,7 @@ import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-l
 import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
 import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
 import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
+import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 
 export const coreRoutes: Routes = [
   {
@@ -345,6 +346,10 @@ export const coreRoutes: Routes = [
           {
             path: 'opening',
             component: OpeningComponent
+          },
+          {
+            path: 'heat-cascading',
+            component: HeatCascadingComponent
           },
           {
             path: 'flue-gas',

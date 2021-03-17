@@ -1,0 +1,69 @@
+<div *ngIf="output" class="d-flex flex-column my-2">
+    <div class="form-group mt-1">
+      <label class="bold">Volume of Flue Gases (Primary Process)</label>
+      <div *ngIf="output.priFlueVolume" class="text-center bold small">
+        {{output.priFlueVolume | number:'1.0-0'}}
+        <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFH</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/hr</span>
+        </span>
+      </div>
+      <div *ngIf="!output.priFlueVolume" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+    <div class="form-group mt-1">
+      <label class="bold">Heat Transferred - Recovered in the Secondary Process</label>
+      <div *ngIf="output.hxEnergyRate" class="text-center bold small">
+        {{output.hxEnergyRate | number:'1.0-2'}} 
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+      </div>
+      <div *ngIf="!output.hxEnergyRate" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+
+    <div class="form-group mt-1">
+        <label class="bold">Equivalent Heat Input for Secondary Process</label>
+        <div *ngIf="output.eqEnergySupply" class="text-center bold small">
+          {{output.eqEnergySupply | number:'1.0-2'}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+        </div>
+        <div *ngIf="!output.eqEnergySupply" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+
+      <div class="form-group mt-1">
+        <label class="bold">Number of Effective Operating Hours</label>
+        <div *ngIf="output.effOpHours" class="text-center bold small">
+          {{output.effOpHours | number:'1.0-0'}} hrs/yr
+        </div>
+        <div *ngIf="!output.effOpHours" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+    <div class="form-group mt-1">
+        <label class="bold">Energy Savings in Secondary Process</label>
+        <div *ngIf="output.energySavings" class="text-center bold small">
+          {{output.energySavings | number:'1.0-0'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        </div>
+        <div *ngIf="!output.energySavings" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+
+      <div class="form-group mt-1">
+        <label class="bold">Cost Savings in Secondary Process</label>
+        <div *ngIf="output.costSavings" class="text-center bold small">
+          {{output.costSavings | currency: 'USD': 'symbol' : '1.0-0'}}
+        </div>
+        <div *ngIf="!output.costSavings" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+  </div>
