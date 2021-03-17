@@ -22,14 +22,14 @@ export class CalculateOutletPressureComponent implements OnInit {
   ngOnInit() {
     if (!this.outletPressureData) {
       this.outletPressureData = {
-        outletSystemEffectLoss: 0,
-        outletDamperLoss: 0,
-        airTreatmentLoss: 0,
-        systemDamperLoss: 0,
-        outletDuctworkLoss: 0,
-        processRequirementsFixed: 0,
-        processRequirements: 0,
-        calculatedOutletPressure: 0
+        outletSystemEffectLoss: undefined,
+        outletDamperLoss: undefined,
+        airTreatmentLoss: undefined,
+        systemDamperLoss: undefined,
+        outletDuctworkLoss: undefined,
+        processRequirementsFixed: undefined,
+        processRequirements: undefined,
+        calculatedOutletPressure: undefined
       };
     }
   }

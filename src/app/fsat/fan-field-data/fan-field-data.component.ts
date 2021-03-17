@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -65,7 +65,7 @@ export class FanFieldDataComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string;
-  disableApplyData: boolean = false;
+  disableApplyData: boolean = true;
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -158,6 +158,7 @@ export class FanFieldDataComponent implements OnInit {
     if (!this.userDefinedCompressibilityFactor) {
       this.getCompressibilityFactor();
     }
+    this.updateOutletPressureValidation();
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     let tmpPlaneData: PlaneData = this.fieldData.planeData;
@@ -243,10 +244,9 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   showAmcaModal() {
-    if (this.fsat.tempFsatCopy) {
-      this.modalFsatCopy = this.fsat.tempFsatCopy;
-    } else {
-      this.modalFsatCopy = JSON.parse(JSON.stringify(this.fsat));
+    this.modalFsatCopy = JSON.parse(JSON.stringify(this.fsat));
+    if (this.fsat.modalFieldData) {
+      this.modalFsatCopy.fieldData = this.fsat.modalFieldData;
     }
     this.pressureCalcType = 'flow';
     this.fsatService.modalOpen.next(true);
@@ -260,7 +260,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   resetModalData() {
-    this.fsat.tempFsatCopy = undefined;
+    this.fsat.modalFieldData = undefined;
     this.disableApplyData = false;
     this.hidePressureModal();
   }
@@ -288,12 +288,12 @@ export class FanFieldDataComponent implements OnInit {
     this.inletPressureCopy = inletPressureData;
   }
 
-  saveFlowAndPressure(fsat: FSAT) {
-    this.fieldData.inletPressure = fsat.fieldData.inletPressure;
-    this.fieldData.outletPressure = fsat.fieldData.outletPressure;
-    this.fieldData.flowRate = fsat.fieldData.flowRate;
-    this.fieldData.fanRatedInfo = fsat.fieldData.fanRatedInfo;
-    this.fieldData.planeData = fsat.fieldData.planeData;
+  saveFlowAndPressure(fieldData: FieldData) {
+    this.fieldData.inletPressure = fieldData.inletPressure;
+    this.fieldData.outletPressure = fieldData.outletPressure;
+    this.fieldData.flowRate = fieldData.flowRate;
+    this.fieldData.fanRatedInfo = fieldData.fanRatedInfo;
+    this.fieldData.planeData = fieldData.planeData;
     this.fieldDataForm.patchValue({
       inletPressure: this.fieldData.inletPressure,
       outletPressure: this.fieldData.outletPressure,
@@ -302,8 +302,13 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-  updateTempFsatCopy(modalFsat: FSAT) {
-    this.fsat.tempFsatCopy = modalFsat;
+  updateFsatWithModalData(modalFieldData: FieldData) {
+    this.fsat.modalFieldData = JSON.parse(JSON.stringify(modalFieldData));
+  }
+
+  updateOutletPressureValidation() {
+    this.fieldDataForm.controls.outletPressure.setValidators([Validators.required, Validators.min(this.fieldDataForm.controls.inletPressure.value)]);
+    this.fieldDataForm.controls.outletPressure.updateValueAndValidity();
   }
 
   setCalcInvalid(isCalcValid: boolean) {
@@ -312,8 +317,8 @@ export class FanFieldDataComponent implements OnInit {
 
   applyModalData() {
     if (this.pressureCalcType === 'flow') {
-      this.saveFlowAndPressure(this.fsat.tempFsatCopy);
-      this.fsat.tempFsatCopy = undefined;
+      this.saveFlowAndPressure(this.fsat.modalFieldData);
+      this.fsat.modalFieldData = undefined;
     } else if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
     } else if (this.pressureCalcType === 'outlet') {

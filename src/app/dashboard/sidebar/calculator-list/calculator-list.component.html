@@ -1,5 +1,79 @@
+<!-- place it in an alphabetical order when adding new calculator details -->
 <span [routerLink]="['/calculators/calculators-list']" routerLinkActive="selected" class="sidebar-item">All
   Calculators</span>
+  <!--general-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/general-list']" routerLinkActive="selected">General</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/pre-assessment']" routerLinkActive="selected" class="sidebar-item">Pre-Assessment
+      Screening</span>
+    <span [routerLink]="['/calculators/unit-converter']" routerLinkActive="selected" class="sidebar-item">Unit
+      Converter</span>
+    <span [routerLink]="['/calculators/combined-heat-power']" routerLinkActive="selected" class="sidebar-item">Combined
+      Heat and Power</span>
+    <span [routerLink]="['/calculators/cash-flow']" routerLinkActive="selected" class="sidebar-item">Cash Flow</span>
+    <span [routerLink]="['/calculators/power-factor-correction']" routerLinkActive="selected" class="sidebar-item">Power
+      Factor Correction</span>
+    <span [routerLink]="['/calculators/co2-savings']" routerLinkActive="selected" class="sidebar-item">CO<sub>2</sub>
+      Savings</span>
+    <span [routerLink]="['/calculators/electricity-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Electricity Reduction</span>
+    <span [routerLink]="['/calculators/natural-gas-reduction']" routerLinkActive="selected" class="sidebar-item">Natural
+      Gas Reduction</span>
+  </div>
+</div>
+<!--compressed air-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/compressed-air-list']" routerLinkActive="selected">Compressed
+    Air</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/compressed-air-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Compressed Air
+      Reduction</span>
+    <span [routerLink]="['/calculators/compressed-air-pressure-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Compressed Air
+      Pressure Reduction</span>
+    <span [routerLink]="['/calculators/air-flow-conversion']" routerLinkActive="selected" class="sidebar-item">Actual to
+      Standard Airflow</span>
+    <span [routerLink]="['/calculators/bag-method']" routerLinkActive="selected" class="sidebar-item">Leak Loss
+      Estimator - Bag Method</span>
+    <span [routerLink]="['/calculators/pneumatic-air']" routerLinkActive="selected" class="sidebar-item">Pneumatic Air
+      Requirement</span>
+    <span [routerLink]="['/calculators/receiver-tank']" routerLinkActive="selected" class="sidebar-item">Receiver Tank
+      Sizing</span>
+    <span [routerLink]="['/calculators/receiver-tank-usable-air']" routerLinkActive="selected"
+      class="sidebar-item">Usable Air Capacity</span>
+    <span [routerLink]="['/calculators/pipe-sizing']" routerLinkActive="selected" class="sidebar-item">Pipe
+      Sizing</span>
+    <span [routerLink]="['/calculators/air-velocity']" routerLinkActive="selected" class="sidebar-item">Velocity in the
+      Piping</span>
+    <span [routerLink]="['/calculators/system-capacity']" routerLinkActive="selected" class="sidebar-item">System
+      Capacity</span>
+    <span [routerLink]="['/calculators/operating-cost']" routerLinkActive="selected" class="sidebar-item">Operating
+      Costs</span>
+    <span [routerLink]="['/calculators/air-leak']" routerLinkActive="selected" class="sidebar-item">Air Leak
+      Survey</span>
+  </div>
+</div>
+<!--FANS-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/fans-list']" routerLinkActive="selected">Fans</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/fan-analysis']" routerLinkActive="selected" class="sidebar-item">Fan Traverse
+      Analysis</span>
+    <span [routerLink]="['/calculators/fan-curve']" routerLinkActive="selected" class="sidebar-item">Fan Curve</span>
+    <span [routerLink]="['/calculators/fan-efficiency']" routerLinkActive="selected" class="sidebar-item">Achievable
+      Efficiency</span>
+  </div>
+</div>
+<!--lighting-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/lighting-list']" routerLinkActive="selected">Lighting</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/lighting-replacement']" routerLinkActive="selected" class="sidebar-item">Lighting
+      Replacement</span>
+  </div>
+</div>
 <!--MOTORS-->
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/motors-list']" routerLinkActive="selected">Motors</span>
@@ -24,30 +98,8 @@
   <div class="directory-item">
     <span [routerLink]="['/calculators/cooling-tower']" routerLinkActive="selected" class="sidebar-item">Cooling Tower
       Makeup Water</span>
-  </div>
-</div>
-<!--pumps-->
-<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/pumps-list']" routerLinkActive="selected">Pumps</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/head-tool']" routerLinkActive="selected" class="sidebar-item">Pump Head
-      Tool</span>
-    <span [routerLink]="['/calculators/specific-speed']" routerLinkActive="selected" class="sidebar-item">Specific
-      Speed</span>
-    <span [routerLink]="['/calculators/achievable-efficiency']" routerLinkActive="selected" class="sidebar-item">Pump
-      Achievable Efficiency</span>
-    <span [routerLink]="['/calculators/pump-curve']" routerLinkActive="selected" class="sidebar-item">Pump Curve</span>
-  </div>
-</div>
-<!--FANS-->
-<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/fans-list']" routerLinkActive="selected">Fans</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/fan-analysis']" routerLinkActive="selected" class="sidebar-item">Fan Traverse
-      Analysis</span>
-    <span [routerLink]="['/calculators/fan-curve']" routerLinkActive="selected" class="sidebar-item">Fan Curve</span>
-    <span [routerLink]="['/calculators/fan-efficiency']" routerLinkActive="selected" class="sidebar-item">Achievable
-      Efficiency</span>
+      <span [routerLink]="['/calculators/fan-psychrometric']" routerLinkActive="selected"
+      class="sidebar-item">Psychrometric Calculator</span>
   </div>
 </div>
 <!--Process heating-->
@@ -57,6 +109,7 @@
   <div class="directory-item">
     <span [routerLink]="['/calculators/air-heating']" routerLinkActive="selected" class="sidebar-item">Air Heating</span>
     <span [routerLink]="['/calculators/flue-gas']" routerLinkActive="selected" class="sidebar-item">Flue Gas</span>
+    <span [routerLink]="['/calculators/heat-cascading']" routerLinkActive="selected" class="sidebar-item">Heat Cascading</span>
     <span [routerLink]="['/calculators/atmosphere']" routerLinkActive="selected" class="sidebar-item">Atmosphere</span>
     <span [routerLink]="['/calculators/cooling']" routerLinkActive="selected" class="sidebar-item">Cooling</span>
     <span [routerLink]="['/calculators/wall-loss']" routerLinkActive="selected" class="sidebar-item">Wall Loss</span>
@@ -73,6 +126,19 @@
       Equivalency</span>
     <span [routerLink]="['/calculators/energy-use']" routerLinkActive="selected" class="sidebar-item">Flow and Energy
       Used</span>
+  </div>
+</div>
+<!--pumps-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/pumps-list']" routerLinkActive="selected">Pumps</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/head-tool']" routerLinkActive="selected" class="sidebar-item">Pump Head
+      Tool</span>
+    <span [routerLink]="['/calculators/specific-speed']" routerLinkActive="selected" class="sidebar-item">Specific
+      Speed</span>
+    <span [routerLink]="['/calculators/achievable-efficiency']" routerLinkActive="selected" class="sidebar-item">Pump
+      Achievable Efficiency</span>
+    <span [routerLink]="['/calculators/pump-curve']" routerLinkActive="selected" class="sidebar-item">Pump Curve</span>
   </div>
 </div>
 <!--steam-->
@@ -143,38 +209,14 @@
       Replacement</span>
   </div>
 </div>
-<!--lighting-->
+<!--WASTEWATER-->
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/waste-water-list']" routerLinkActive="selected">Waste
     Water</span>
   <div class="directory-item">
     <span [routerLink]="['/calculators/o2-utilization-rate']" routerLinkActive="selected"
       class="sidebar-item">O<sub>2</sub> Utilization Rate</span>
-  </div>
-</div>
-<!--general-->
-<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/general-list']" routerLinkActive="selected">General</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/pre-assessment']" routerLinkActive="selected" class="sidebar-item">Pre-Assessment
-      Screening</span>
-    <span [routerLink]="['/calculators/unit-converter']" routerLinkActive="selected" class="sidebar-item">Unit
-      Converter</span>
-    <span [routerLink]="['/calculators/combined-heat-power']" routerLinkActive="selected" class="sidebar-item">Combined
-      Heat and Power</span>
-    <span [routerLink]="['/calculators/cash-flow']" routerLinkActive="selected" class="sidebar-item">Cash Flow</span>
-    <span [routerLink]="['/calculators/power-factor-correction']" routerLinkActive="selected" class="sidebar-item">Power
-      Factor Correction</span>
-    <span [routerLink]="['/calculators/co2-savings']" routerLinkActive="selected" class="sidebar-item">CO<sub>2</sub>
-      Savings</span>
-    <span [routerLink]="['/calculators/electricity-reduction']" routerLinkActive="selected"
-      class="sidebar-item">Electricity Reduction</span>
-    <span [routerLink]="['/calculators/natural-gas-reduction']" routerLinkActive="selected" class="sidebar-item">Natural
-      Gas Reduction</span>
-    <span [routerLink]="['/calculators/water-reduction']" routerLinkActive="selected" class="sidebar-item">Water
-      Reduction</span>
-
-    <span [routerLink]="['/calculators/fan-psychrometric']" routerLinkActive="selected"
-      class="sidebar-item">Psychrometric Calculator</span>
+      <span [routerLink]="['/calculators/water-reduction']" routerLinkActive="selected" class="sidebar-item">Water
+        Reduction</span>
   </div>
 </div>

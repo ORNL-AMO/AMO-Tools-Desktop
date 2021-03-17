@@ -50,7 +50,7 @@
     </div>
 
     <div class="form-group"
-      [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid}">
+      [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid, 'error': warnings.inletPressureError !== null}">
       <label for="{{'inletPressure_'+idString}}">
         Inlet Pressure
         <a class="form-text small click-link" (click)="showInletPressureModal()"
@@ -58,22 +58,23 @@
           Inlet Pressure</a>
       </label>
       <div class="input-group">
-        <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure"
-          id="{{'inletPressure_'+idString}}" (input)="save()" (focus)="focusField('inletPressure')"
-          onfocus="this.select();" [readonly]="!selected">
+        <input name="inletPressure" type="number" max="0" step="any" class="form-control"
+          formControlName="inletPressure" id="{{'inletPressure_'+idString}}" (input)="save()"
+          (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.inletPressure.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.inletPressure.errors.max">Value can't be greater than
-          {{fieldDataForm.controls.inletPressure.errors.max.max}} <span
-            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="warnings.inletPressureError !== null && !fieldDataForm.controls.inletPressure.pristine">
+        {{ warnings.inletPressureError }}
       </span>
     </div>
 
     <div class="form-group"
-      [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null, 'invalid': fieldDataForm.controls.outletPressure.invalid}">
+      [ngClass]="{'indicate-different': isOutletPressureDifferent(), 'invalid': fieldDataForm.controls.outletPressure.invalid, 'error': warnings.outletPressureError !== null}">
       <label for="{{'outletPressure_'+idString}}">
         Outlet Pressure
         <a class="form-text small click-link" (click)="showOutletPressureModal()"
@@ -81,21 +82,22 @@
           Outlet Pressure</a>
       </label>
       <div class="input-group">
-        <input name="outletPressure" type="number" min="0.1" step="any" class="form-control"
+        <input name="outletPressure" type="number" min="0" step="any" class="form-control"
           formControlName="outletPressure" id="{{'outletPressure_'+idString}}" (input)="save()"
           (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
+      <span class="alert-warning pull-right small"
+        *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine">
+        {{ warnings.outletPressureError }}
+      </span>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">Value can't be less than
-          {{fieldDataForm.controls.outletPressure.errors.min.min}} <span
-            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
+        <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">
+          Outlet Pressure cannot be less than the Inlet Pressure
+        </span>
       </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine && !fieldDataForm.controls.outletPressure.invalid">{{warnings.outletPressureError}}
-        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
     </div>
 
     <div class="form-group"
@@ -113,10 +115,8 @@
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.greaterThan == 0">Flow Rate must be greater than zero</span>
         <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{fieldDataForm.controls.cost.errors.min.min}} <span
-            [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
       </span>
     </div>
 
@@ -233,15 +233,17 @@
           [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
           [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
-          (emitInvalid)="setCalcInvalid($event)" (updateFsatCopy)="updateTempFsatCopy($event)">
+          (emitInvalid)="setCalcInvalid($event)" (updateFieldData)="updateFsatWithModalData($event)">
         </app-calculate-flow-pressure>
       </div>
       <div class="modal-footer fsat justify-content-between">
         <button class="btn btn-default pull-left" (click)="resetModalData()">Cancel</button>
         <span>
-          <button [disabled]="disableApplyData != true" class="btn btn-primary" (click)="hidePressureModal()">Save and Exit</button>
-          <button [disabled]="disableApplyData == true" class="ml-2 btn btn-primary" (click)="applyModalData()">Apply Data</button>
-          </span>
+          <button [disabled]="disableApplyData != true" class="btn btn-primary" (click)="hidePressureModal()">Save and
+            Exit</button>
+          <button [disabled]="disableApplyData == true" class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
+            Data</button>
+        </span>
       </div>
     </div>
   </div>

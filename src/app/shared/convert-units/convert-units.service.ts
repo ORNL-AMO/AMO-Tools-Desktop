@@ -48,6 +48,7 @@ import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
+import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {

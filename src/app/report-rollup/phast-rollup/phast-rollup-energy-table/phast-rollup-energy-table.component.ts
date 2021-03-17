@@ -7,8 +7,8 @@ import { PhastResults, PHAST } from '../../../shared/models/phast/phast';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PhastResultsData } from '../../report-rollup-models';
-import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
+import { PhastReportRollupService } from '../../phast-report-rollup.service';
 
 @Component({
   selector: 'app-phast-rollup-energy-table',
