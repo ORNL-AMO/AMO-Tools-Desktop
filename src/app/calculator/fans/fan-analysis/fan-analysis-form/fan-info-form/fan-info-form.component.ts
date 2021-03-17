@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 export class FanInfoFormComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inModal: boolean;
 
   ratedInfoForm: FormGroup;
 
