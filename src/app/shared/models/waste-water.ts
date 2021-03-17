@@ -22,6 +22,7 @@ export interface WasteWaterData {
     outputs?: WasteWaterResults,
     valid?: WasteWaterValid,
     exploreAeratorPerformance?: SavingsOpportunity,
+    exploreAeratorUpgrade?: SavingsOpportunity,
     exploreReduceOxygen?: SavingsOpportunity,
     exploreMLSS?: SavingsOpportunity,
     exploreVOLR?: SavingsOpportunity,

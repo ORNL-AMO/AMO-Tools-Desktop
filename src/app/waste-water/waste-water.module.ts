@@ -36,6 +36,7 @@ import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explo
 import { ExploreAeratorFormComponent } from './explore-opportunities/explore-opportunities-form/explore-aerator-form/explore-aerator-form.component';
 import { WasteWaterDiagramComponent } from './waste-water-diagram/waste-water-diagram.component';
 import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/explore-opportunities-form/explore-activated-sludge-form/explore-activated-sludge-form.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/exp
     PercentGraphModule,
     WasteWaterReportModule,
     WasteWaterAnalysisModule,
-    TabsTooltipModule
+    TabsTooltipModule,
+    SharedPipesModule
   ],
   providers: [
     WasteWaterService,
