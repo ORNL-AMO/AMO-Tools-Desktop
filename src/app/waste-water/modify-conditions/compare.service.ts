@@ -138,8 +138,8 @@ export interface AeratorPerformanceDifferent {
   Aeration: boolean,
   Elevation: boolean,
   OperatingTime: boolean,
-  Aerator: boolean,
   TypeAerators: boolean,
+  Aerator: boolean,
   Speed: boolean,
   EnergyCostUnit: boolean,
   AnoxicZoneCondition: boolean

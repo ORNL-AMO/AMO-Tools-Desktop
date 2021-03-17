@@ -153,8 +153,7 @@
         </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup"
-            [ngClass]="{'indicate-different': modificationWarnings.Speed,'invalid':modificationForm.controls.Speed.invalid }">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationForm.controls.Speed.invalid }">
             <label for="modificationSpeed" class="mod-value-label">Modification Aerator Speed</label>
             <div class="input-group mod-max-width">
                 <input name="modificationSpeed" type="number" step="0.01" min="0" max="100" id="modificationSpeed"
@@ -178,3 +177,124 @@
     </form>
 </li>
 <!-- END Modify Aerator Performance -->
+
+
+
+<!--Upgrade Aerayor-->
+<div class="checkbox">
+    <label class="group-label" for="exploreAeratorUpgrade">
+        <input type="checkbox" id="exploreAeratorUpgrade" (focus)="focusField('exploreAeratorUpgrade')"
+            (change)="setExploreUpgradeAerator()" [(ngModel)]="modificationData.exploreAeratorUpgrade.hasOpportunity" />
+        {{ modificationData.exploreAeratorUpgrade.display }}
+    </label>
+</div>
+
+<!--Aerator-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.Aerator.invalid}">
+            <label for="baselineAerator" class="baseline-value-label">Baseline Aerator</label>
+            <div class="text-muted baseline-value-input">
+                {{ baselineForm.controls.Aerator.value }}
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid': modificationForm.controls.Aerator.invalid}">
+            <label for="modificationAerator" class="mod-value-label">Modification Aerator</label>
+            <div class="input-group mod-max-width">
+                <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
+                    (focus)="focusField('aerator')" id="modificationAerator">
+                    <optgroup label="Diffused Air Systems">
+                        <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">
+                            {{aerator.label}}
+                        </option>
+                    </optgroup>
+                    <optgroup label="Mechanical Aerators">
+                        <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">
+                            {{aerator.label}}</option>
+                    </optgroup>
+                    <optgroup label="Hybrid Aerators">
+                        <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">
+                            {{aerator.label}}
+                        </option>
+                    </optgroup>
+                    <option [ngValue]="'Other'">Other</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</li>
+
+<!--SOTR-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.Speed.invalid}">
+            <label for="baselineSOTR" class="baseline-value-label">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.SOTR.value }}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+                    O<sub>2</sub>/(kWh)</span>
+
+            </div>
+            <span *ngIf="baselineForm.controls.SOTR.invalid && !baselineForm.controls.SOTR.pristine">
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.SOTR.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.SOTR.errors.min">Value can't be
+                    less than {{baselineForm.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.SOTR.invalid }">
+            <label for="modificationSOTR" class="mod-value-label">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
+            <div class="input-group mod-max-width">
+                <input type="number" name="SOTR" class="form-control number-input-field" id="modificationSOTR"
+                    (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kg
+                    O<sub>2</sub>/(kWh)</span>
+            </div>
+            <span *ngIf="modificationForm.controls.SOTR.invalid && !modificationForm.controls.SOTR.pristine">
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.SOTR.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.SOTR.errors.min">Value
+                    can't be less than {{modificationForm.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
+            </span>
+        </div>
+    </form>
+</li>
+
+<!--Type of Aerator-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="baselineTypeAerators" class="baseline-value-label">Type of Aerator</label>
+            <div class="text-muted baseline-value-input">
+                {{ baselineForm.controls.TypeAerators.value | wasteWaterOptionsDisplay }}
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="modificationTypeAerators" class="mod-value-label">Type of Aerator</label>
+            <div class="input-group mod-max-width">
+                <select class="form-control" formControlName="TypeAerators" (change)="save()"
+                    (focus)="focusField('TypeAerators')" id="modificationTypeAerators">
+                    <option *ngFor="let aeratorType of aeratorTypes" [ngValue]="aeratorType.value">
+                        {{aeratorType.display}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </form>
+</li>
