@@ -280,7 +280,7 @@
         <div class="form-group explore-opps-formgroup">
             <label for="baselineTypeAerators" class="baseline-value-label">Type of Aerator</label>
             <div class="text-muted baseline-value-input">
-                {{ baselineForm.controls.TypeAerators.value }}
+                {{ baselineForm.controls.TypeAerators.value | wasteWaterOptionsDisplay }}
             </div>
         </div>
     </form>
