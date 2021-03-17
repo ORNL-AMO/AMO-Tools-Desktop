@@ -11,7 +11,6 @@ import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
-import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
 
 @NgModule({
     declarations: [
@@ -33,7 +32,6 @@ import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.mo
         CashFlowModule,
         UnitConverterModule,
         RouterModule,
-        FanPsychrometricModule
     ]
 })
 
