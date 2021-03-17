@@ -232,8 +232,8 @@
           [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)"
           [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
-          [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" (emitInvalid)="setCalcInvalid($event)"
-          (updateFsatCopy)="updateTempFsatCopy($event)">
+          [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
+          (emitInvalid)="setCalcInvalid($event)" (updateFieldData)="updateFsatWithModalData($event)">
         </app-calculate-flow-pressure>
       </div>
       <div class="modal-footer fsat justify-content-between">
