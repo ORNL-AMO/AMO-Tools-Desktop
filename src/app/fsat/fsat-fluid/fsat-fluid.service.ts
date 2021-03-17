@@ -24,7 +24,7 @@ export class FsatFluidService {
       dryBulbTemp: [obj.dryBulbTemp, gasDensityValidators.dryBulbTempValidators],
       staticPressure: [obj.staticPressure, gasDensityValidators.staticPressureValidators],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(barometricMin), Validators.max(barometricMax)]],
-      specificGravity: [obj.specificGravity, gasDensityValidators.specificGravityValidators],
+      specificGravity: [1, gasDensityValidators.specificGravityValidators],
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
@@ -133,7 +133,8 @@ export class FsatFluidService {
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,
       barometricPressure: form.controls.barometricPressure.value,
-      specificGravity: form.controls.specificGravity.value,
+      //hard coded from issue 4332
+      specificGravity:1,
       wetBulbTemp: form.controls.wetBulbTemp.value,
       relativeHumidity: form.controls.relativeHumidity.value,
       dewPoint: form.controls.dewPoint.value,
