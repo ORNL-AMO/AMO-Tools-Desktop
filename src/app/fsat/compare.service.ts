@@ -47,7 +47,8 @@ export class CompareService {
         this.isGasDensityDifferent(baseline, modification) ||
         this.isGasTypeDifferent(baseline, modification) ||
         // this.isConditionLocationDifferent(baseline, modification) ||
-        this.isSpecificGravityDifferent(baseline, modification) ||
+        //removed issue 4332, coming back eventually.
+        // this.isSpecificGravityDifferent(baseline, modification) ||
         this.isInputTypeDifferent(baseline, modification) ||
         this.isDewPointDifferent(baseline, modification) ||
         this.isRelativeHumidityDifferent(baseline, modification) ||

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Plane, VelocityResults } from '../../../../../../shared/models/fans';
@@ -28,6 +28,7 @@ export class TraversePlanesComponent implements OnInit {
   getResultsSub: Subscription;
 
   constructor(private fanAnalysisService: FanAnalysisService,
+              private cd: ChangeDetectorRef,
              private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit(): void {
@@ -61,6 +62,7 @@ export class TraversePlanesComponent implements OnInit {
   initForm() {
     let planeData = this.fanAnalysisService.getPlane(this.planeStep);
     this.fanDataForm = this.planeDataFormService.getPlaneFormFromObj(planeData, this.settings, this.planeNumber);
+    this.cd.detectChanges();
   }
 
   focusField(str: string) {
