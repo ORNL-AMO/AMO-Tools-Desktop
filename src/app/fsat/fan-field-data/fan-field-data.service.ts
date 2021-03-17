@@ -15,9 +15,9 @@ export class FanFieldDataService {
     }
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
+      flowRate: [obj.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
-      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(0)]],
+      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(obj.inletPressure)]],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
