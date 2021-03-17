@@ -57,7 +57,7 @@
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value Required</span>
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than
             {{gasDensityForm.controls.relativeHumidity.errors.max.max}}.</span>
-            <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.greaterThan == 0">Value must be greater than 0.</span>
+            <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than 0.</span>
         </span>
       </div>
       <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
