@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../../../shared/models/waste-water';
 import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from '../../../aerator-performance-form/aerator-performance-form.service';
+import { aerationRanges, AerationRanges, getSOTRDefaults, aeratorTypes } from '../../../waste-water-defaults';
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
@@ -22,9 +23,15 @@ export class ExploreAeratorFormComponent implements OnInit {
   modificationWarnings: AeratorPerformanceWarnings;
   selectedModificationId: string;
   settings: Settings;
+
+  aerationRanges: AerationRanges;
+  SOTRDefaults: Array<{ label: string, value: number }>;
+  aeratorTypes: Array<{ value: number, display: string }>;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService) { }
 
   ngOnInit(): void {
+    this.aerationRanges = aerationRanges;
+    this.SOTRDefaults = getSOTRDefaults();
     this.settings = this.wasteWaterService.settings.getValue();
     this.baselineData = this.wasteWaterService.wasteWater.getValue().baselineData;
     this.baselineForm = this.aeratorPerformanceFormService.getFormFromObj(this.baselineData.aeratorPerformanceData);
@@ -37,6 +44,8 @@ export class ExploreAeratorFormComponent implements OnInit {
         this.modificationWarnings = this.aeratorPerformanceFormService.checkWarnings(this.modificationData.aeratorPerformanceData);
         this.initExploreAearatorPerformance();
         this.initExploreReduceOxygen();
+        this.initExploreAeratorUpgrade();
+        this.setDefaultSOTR();
       }
     });
   }
@@ -57,6 +66,14 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.modificationData.exploreReduceOxygen = { display: ' Reduce Supplied O<sub>2</sub>', hasOpportunity: hasOpportunity }
   }
 
+
+  initExploreAeratorUpgrade() {
+    let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.Aerator != this.baselineData.aeratorPerformanceData.Aerator ||
+      this.modificationData.aeratorPerformanceData.SOTR != this.baselineData.aeratorPerformanceData.SOTR ||
+      this.modificationData.aeratorPerformanceData.TypeAerators != this.baselineData.aeratorPerformanceData.TypeAerators);
+    this.modificationData.exploreAeratorUpgrade = { display: 'Upgrade Aerator', hasOpportunity: hasOpportunity };
+  }
+
   setExploreAeratorPerformance() {
     if (this.modificationData.exploreAeratorPerformance.hasOpportunity == false) {
       this.modificationForm.controls.OperatingTime.patchValue(this.modificationForm.controls.OperatingTime.value);
@@ -73,6 +90,16 @@ export class ExploreAeratorFormComponent implements OnInit {
     }
   }
 
+  setExploreUpgradeAerator(){
+    if(this.modificationData.exploreAeratorUpgrade.hasOpportunity == false){
+      this.modificationForm.controls.Aerator.patchValue(this.modificationForm.controls.Aerator.value);
+      this.modificationForm.controls.TypeAerators.patchValue(this.modificationForm.controls.TypeAerators.value);
+      this.modificationForm.controls.SOTR.patchValue(this.modificationForm.controls.SOTR.value);
+      this.save();
+    }
+  }
+
+
   focusField(str: string) {
     this.wasteWaterService.modifyConditionsTab.next('aerator-performance');
     this.wasteWaterService.focusedField.next(str);
@@ -88,7 +115,7 @@ export class ExploreAeratorFormComponent implements OnInit {
   }
 
 
-  calculateDO(){
+  calculateDO() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalDo: number = this.wasteWaterService.calculateModDo(modificationIndex);
@@ -96,19 +123,61 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.save();
   }
 
-  calculateOperatingTime(){
+  calculateOperatingTime() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalOperatingTime: number = this.wasteWaterService.calculateModOperatingTime(modificationIndex);
     this.modificationForm.controls.OperatingTime.patchValue(optimalOperatingTime);
     this.save();
   }
-  calculateSpeed(){
+  calculateSpeed() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalSpeed: number = this.wasteWaterService.calculateModSpeed(modificationIndex);
     this.modificationForm.controls.Speed.patchValue(optimalSpeed);
     this.save();
   }
+
+  setDefaultSOTR() {
+    if (this.modificationForm.controls.Aerator.value != 'Other') {
+      let SOTRDefault: number = this.SOTRDefaults.find(SOTRValue => SOTRValue.label == this.modificationForm.controls.Aerator.value).value;
+      this.modificationForm.patchValue({
+        SOTR: SOTRDefault
+      });
+    } else {
+      this.modificationForm.patchValue({
+        SOTR: undefined
+      });
+    }
+    this.setAeratorTypeStatus();
+    this.save();
+  }
+
+  setAeratorTypeStatus() {
+    let defaultAeratorTypes: Array<{ value: number, display: string }> = JSON.parse(JSON.stringify(aeratorTypes));
+    let isDiffuserAerator: boolean = this.aerationRanges.diffusers.some(aerationRange => aerationRange.label == this.modificationForm.controls.Aerator.value);
+    this.modificationForm.controls.TypeAerators.enable();
+
+    if (this.modificationForm.controls.Aerator.value == 'Other') {
+      this.aeratorTypes = defaultAeratorTypes;
+    } else if (isDiffuserAerator) {
+      // Mechanical is removed. set to next option.
+      if (this.modificationForm.controls.TypeAerators.value == 1) {
+        this.modificationForm.patchValue({
+          TypeAerators: defaultAeratorTypes[1].value
+        });
+      }
+      this.aeratorTypes = defaultAeratorTypes.filter(aerator => aerator.value != 1);
+    } else {
+      this.aeratorTypes = defaultAeratorTypes;
+      this.modificationForm.patchValue({
+        TypeAerators: defaultAeratorTypes[0].value
+      });
+      this.modificationForm.controls.TypeAerators.disable();
+    }
+  }
+
+
+
 
 }
