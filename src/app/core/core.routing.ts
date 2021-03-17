@@ -95,6 +95,7 @@ import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.compone
 import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
 import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
+import { WasteWaterComponent } from '../waste-water/waste-water.component';
 
 export const coreRoutes: Routes = [
   {
@@ -496,4 +497,8 @@ export const coreRoutes: Routes = [
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
   },
+  {
+    component: WasteWaterComponent,
+    path: 'waste-water/:id',
+  }
 ];

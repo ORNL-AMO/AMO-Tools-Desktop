@@ -1,0 +1,94 @@
+<table class="table" *ngIf="setupDone">
+    <tr>
+        <td class="bold no-border-top" colspan="2">Baseline Data:</td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Use:
+        </td>
+        <td>
+            {{baselineResults.AeEnergyAnnual | number:'2.0-0'}} MWh/yr
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Costs:
+        </td>
+        <td>
+            {{baselineResults.AeCost | currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+    <tr>
+        <td class="bold" colspan="2">
+            Modification Data:
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Number of Modifications:
+        </td>
+        <td>
+            {{numMods}}
+        </td>
+    </tr>
+    <tr *ngIf="numMods != 0">
+        <td>
+            Max Energy Savings:
+        </td>
+        <td>
+            {{modificationResults.energySavings | number:'2.0-0'}} MWh/yr
+        </td>
+    </tr>
+    <tr *ngIf="numMods != 0">
+        <td>
+            Max Cost Savings:
+        </td>
+        <td>
+            {{modificationResults.costSavings | currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+</table>
+<table class="table" *ngIf="setupDone">
+    <tr>
+        <td class="bold" colspan="2">
+            Actions:
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a (click)="goToAssessment('system-setup')">System Setup</a>
+        </td>
+        <td>
+            <a (click)="goToAssessment('assessment')">Assessment</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a (click)="goToAssessment('report')">Assessment Report</a>
+        </td>
+        <td>
+            <a (click)="showReportModal()">Quick Report</a>
+        </td>
+    </tr>
+</table>
+<div class="no-card-data" *ngIf="!setupDone">
+    <p>This assessment is incomplete. Complete assessment to view results.</p>
+    <a (click)="goToAssessment('system-setup')">Finish Setup</a>
+</div>
+
+<div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <button class="close pull-right" (click)="hideReportModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body scroll-item" *ngIf="showReport">
+                <app-waste-water-report [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
+            </div>
+        </div>
+    </div>
+</div>

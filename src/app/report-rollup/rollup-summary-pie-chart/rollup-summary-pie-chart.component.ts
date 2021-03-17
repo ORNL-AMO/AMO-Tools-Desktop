@@ -32,6 +32,9 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   ngOnChanges() {
+    if(this.rollupSummaryPieChart){
+      Plotly.purge(this.rollupSummaryPieChart.nativeElement);
+    }
     if (this.rollupSummaryPieChart && !this.printView) {
       // this.setHeight();
       this.drawPlot();
@@ -87,7 +90,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -132,7 +135,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.react(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 }
 

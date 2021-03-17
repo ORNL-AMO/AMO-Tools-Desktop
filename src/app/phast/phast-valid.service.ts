@@ -156,7 +156,7 @@ export class PhastValidService {
 
   checkChargeMaterialValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.chargeMaterials) {
+    if (phast.losses && phast.losses.chargeMaterials) {
       let chargeMaterialForm: FormGroup;
       phast.losses.chargeMaterials.forEach(loss => {
         if (loss.chargeMaterialType === 'Gas') {

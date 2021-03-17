@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { SsmtValid } from '../../../shared/models/steam/ssmt';
+import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-energy-summary',
@@ -27,11 +27,11 @@ export class EnergySummaryComponent implements OnInit {
 
   numberOfHeaders: number;
   selectedModificationIndex: number;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit() {
     if (this.inRollup) {
-      this.reportRollupService.selectedSsmt.forEach(val => {
+      this.ssmtReportRollupService.selectedSsmt.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -45,6 +45,6 @@ export class EnergySummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedSsmt({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+    this.ssmtReportRollupService.updateSelectedSsmt({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
   }
 }

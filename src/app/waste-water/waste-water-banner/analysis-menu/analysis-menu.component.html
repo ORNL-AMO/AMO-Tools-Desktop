@@ -1,0 +1,79 @@
+<div class="navbar assessment-bar tabs subtabs waste-water">
+    <div class="d-flex">
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'graphs'}">
+            <a (click)="changeTab('graphs')">Graphs
+            </a>
+        </div>
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'tables'}">
+            <a class="middle-tab" (click)="changeTab('tables')">SRT Data Tables
+            </a>
+        </div>
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'energy-analysis'}">
+            <a (click)="changeTab('energy-analysis')">Energy Analysis
+            </a>
+        </div>
+    </div>
+    <div *ngIf="analysisTab == 'graphs'" class="d-flex align-items-center ml-auto br-color-white">
+        <div class="p-1">
+            <div class="nav-item dropdown">
+                <button type="button" class="btn btn-primary w-100" (click)="toggleGraphDropdown()">
+                    <a class="dropdown-toggle">
+                        Select Graphs
+                    </a>
+                </button>
+                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showGraphDropdown == true}">
+                    <div class="list-group">
+                        <a *ngFor="let analysisGraphItem of analysisGraphItems"
+                            class="list-group-item list-group-item-action" (click)="toggleSelected(analysisGraphItem)"
+                            [ngClass]="{'active': analysisGraphItem.selected}">
+                            <span [innerHTML]="analysisGraphItem.title"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-1">
+            <div class="nav-item dropdown">
+                <button type="button" class="btn btn-primary w-100" (click)="toggleXAxisDropdown()">
+                    <a class="dropdown-toggle">
+                        Select X Axis
+                    </a>
+                </button>
+                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showXAxisDropdown == true}">
+                    <div class="list-group">
+                        <a *ngFor="let analysisXAxisVariable of analysisXAxisVariables"
+                            class="list-group-item list-group-item-action" (click)="toggleSelectedXAxis(analysisXAxisVariable)"
+                            [ngClass]="{'active': analysisXAxisVariable.selected}">
+                            <span [innerHTML]="analysisXAxisVariable.label"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="analysisTab == 'tables'" class="d-flex align-items-center ml-auto br-color-white">
+        <div class="p-1">
+            <div class="nav-item dropdown">
+                <button type="button" class="btn btn-primary w-100" (click)="toggleTableDropdown()">
+                    <a class="dropdown-toggle">
+                        Select Scenario: {{selectedTableData.name}}
+                    </a>
+                </button>
+                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showTableDropdown == true}">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-action"
+                            (click)="selectTableData('Baseline', baselineResults)"
+                            [ngClass]="{'active': selectedTableData.name == 'Baseline'}">Baseline
+                        </a>
+                        <a *ngFor="let modificationsResult of modificationsResultsArr"
+                            class="list-group-item list-group-item-action"
+                            (click)="selectTableData(modificationsResult.name, modificationsResult.results)"
+                            [ngClass]="{'active': selectedTableData.name == modificationsResult.name}">{{modificationsResult.name}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
