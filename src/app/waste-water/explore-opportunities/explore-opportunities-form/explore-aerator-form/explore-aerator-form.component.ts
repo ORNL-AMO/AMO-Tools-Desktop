@@ -22,6 +22,9 @@ export class ExploreAeratorFormComponent implements OnInit {
   modificationWarnings: AeratorPerformanceWarnings;
   selectedModificationId: string;
   settings: Settings;
+  showDOAlert: boolean = false;
+  showOperatingTimeAlert: boolean = false;
+  showSpeedAlert: boolean = false;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService) { }
 
   ngOnInit(): void {
@@ -88,27 +91,48 @@ export class ExploreAeratorFormComponent implements OnInit {
   }
 
 
-  calculateDO(){
+  calculateDO() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalDo: number = this.wasteWaterService.calculateModDo(modificationIndex);
-    this.modificationForm.controls.OperatingDO.patchValue(optimalDo);
-    this.save();
+    if (optimalDo == this.modificationForm.controls.OperatingDO.value) {
+      this.showDOAlert = true;
+      setTimeout(() => {
+        this.showDOAlert = false;
+      }, 1500);
+    } else {
+      this.modificationForm.controls.OperatingDO.patchValue(optimalDo);
+      this.save();
+    }
   }
 
-  calculateOperatingTime(){
+  calculateOperatingTime() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalOperatingTime: number = this.wasteWaterService.calculateModOperatingTime(modificationIndex);
-    this.modificationForm.controls.OperatingTime.patchValue(optimalOperatingTime);
-    this.save();
+    if (optimalOperatingTime == this.modificationForm.controls.OperatingTime.value) {
+      this.showOperatingTimeAlert = true;
+      setTimeout(() => {
+        this.showOperatingTimeAlert = false;
+      }, 1500);
+    } else {
+      this.modificationForm.controls.OperatingTime.patchValue(optimalOperatingTime);
+      this.save();
+    }
   }
-  calculateSpeed(){
+  calculateSpeed() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     let optimalSpeed: number = this.wasteWaterService.calculateModSpeed(modificationIndex);
-    this.modificationForm.controls.Speed.patchValue(optimalSpeed);
-    this.save();
+    if (optimalSpeed == this.modificationForm.controls.Speed.value) {
+      this.showSpeedAlert = true;
+      setTimeout(() => {
+        this.showSpeedAlert = false;
+      }, 1500);
+    } else {
+      this.modificationForm.controls.Speed.patchValue(optimalSpeed);
+      this.save();
+    }
   }
 
 }

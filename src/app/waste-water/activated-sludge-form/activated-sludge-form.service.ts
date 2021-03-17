@@ -37,6 +37,11 @@ export class ActivatedSludgeFormService {
       CalculateGivenSRT: [obj.CalculateGivenSRT, [Validators.required]],
       DefinedSRT: [obj.DefinedSRT, DefinedSRTValidators]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
