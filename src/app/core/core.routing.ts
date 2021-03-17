@@ -80,7 +80,7 @@ import { SteamReductionComponent } from '../calculator/steam/steam-reduction/ste
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
-import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { FanPsychrometricComponent } from '../calculator/process-cooling/fan-psychrometric/fan-psychrometric.component';
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 import { WallComponent } from '../calculator/furnaces/wall/wall.component';
