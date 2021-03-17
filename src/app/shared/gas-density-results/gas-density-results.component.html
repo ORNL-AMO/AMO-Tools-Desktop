@@ -7,6 +7,18 @@
         <td class="text-center bold">Baseline</td>
         <td class="text-center bold" *ngIf="modificationName">{{modificationName}}</td>
       </tr>
+      <!-- Dry Bulb-->
+      <tr>
+        <td>Dry Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.dryBulbTemp | number:'1.0-4' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+          *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.dryBulbTemp | number:'1.0-4' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
+        </td>
+      </tr>
       <!--relative humidity-->
       <tr>
         <td>Relative Humidity (%)</td>
@@ -16,6 +28,18 @@
         </td>
         <td *ngIf="modificationName"><span
           *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.relativeHumidity | number:'1.0-1' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
+        </td>
+      </tr>
+       <!-- Wet Bulb-->
+       <tr>
+        <td>Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.wetBulbTemp | number:'1.0-1' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+          *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.wetBulbTemp | number:'1.0-1' }}</span>
           <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
         </td>
       </tr>
@@ -70,6 +94,18 @@
         </td>
         <td *ngIf="modificationName"><span
           *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.specificVolume | number:'1.0-2' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
+        </td>
+      </tr>
+      <!--absolute pressure-->
+      <tr>
+        <td>Barometric Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.barometricPressure | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.barometricPressure | number:'1.0-3' }}</span>
           <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
         </td>
       </tr>
@@ -131,18 +167,6 @@
         </td>
         <td *ngIf="modificationName"><span
             *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.humidityRatio | number:'1.0-4'}}</span>
-          <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
-        </td>
-      </tr>
-      <!--Wet Bulb Temp-->
-      <tr>
-        <td>Wet Bulb Temperature (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.wetBulbTemp | number:'1.0-1' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modPsychrometricResults">{{ modPsychrometricResults.wetBulbTemp | number:'1.0-1'}}</span>
           <span *ngIf="isModificationTypeCustom || !modPsychrometricResults">&mdash;</span>
         </td>
       </tr>
