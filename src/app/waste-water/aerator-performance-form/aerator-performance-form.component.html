@@ -12,6 +12,7 @@
             <label for="{{'OperatingDO_'+idString}}">Operating Dissolved O<sub>2</sub> (DO)
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateDO()"
                     [ngClass]="{'disabled-link':!selected}">Calculate DO</a>
+
             </label>
             <div class="input-group">
                 <input type="number" name="OperatingDO" class="form-control number-input-field"
@@ -26,7 +27,9 @@
                     less than {{form.controls.OperatingDO.errors.min.min}} &#8451;</span>
             </span>
         </div>
-
+        <div class="alert alert-info small text-center" *ngIf="showDOAlert">
+            Value cannot be optimized further.
+        </div>
         <!-- Alpha -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Alpha, 'invalid': form.controls.Alpha.invalid}">
@@ -164,9 +167,12 @@
                     be greater than {{form.controls.OperatingTime.errors.max.max}} hr/day</span>
             </span>
             <span class="alert-warning pull-right small"
-                *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.invalid && !form.controls.OperatingTime.pristine">
+                *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.pristine">
                 {{aeratorPerformanceWarnings.OperatingTime}}</span>
-
+        </div>
+        
+        <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
+            Value cannot be optimized further.
         </div>
         <!-- TypeAerators -->
         <div class="form-group"
@@ -198,7 +204,10 @@
                     be greater than {{form.controls.Speed.errors.max.max}} %</span>
             </span>
             <span class="alert-warning pull-right small"
-                *ngIf="aeratorPerformanceWarnings.Speed !== null && !form.controls.Speed.invalid && !form.controls.Speed.pristine">{{aeratorPerformanceWarnings.Speed}}</span>
+                *ngIf="aeratorPerformanceWarnings.Speed !== null && !form.controls.Speed.pristine">{{aeratorPerformanceWarnings.Speed}}</span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showSpeedAlert">
+            Value cannot be optimized further.
         </div>
         <!-- EnergyCostUnit -->
         <div class="form-group"

@@ -22,6 +22,11 @@ export class AeratorPerformanceFormService {
       EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]],
       AnoxicZoneCondition: [obj.AnoxicZoneCondition]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 

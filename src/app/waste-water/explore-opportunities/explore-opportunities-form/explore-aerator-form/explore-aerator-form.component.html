@@ -44,6 +44,9 @@
                     {{modificationForm.controls.OperatingDO.errors.min.min}} &#8451;</span>
             </span>
         </div>
+        <div class="alert alert-info small text-center" *ngIf="showDOAlert">
+            Value cannot be optimized further.
+        </div>
     </form>
 </li>
 <!-- END Reduce Supplied Oxygen -->
@@ -90,6 +93,9 @@
                 <span *ngIf="modificationForm.controls.OperatingTime.errors.min">Value can't be less than
                     {{modificationForm.controls.OperatingTime.errors.min.min}} hr/day.</span>
             </span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
+            Value cannot be optimized further.
         </div>
     </form>
 </li>
@@ -173,6 +179,9 @@
             </span>
             <span class="alert-warning pull-right small"
                 *ngIf="modificationWarnings.Speed !== null && !modificationForm.controls.Speed.invalid && !modificationForm.controls.Speed.pristine">{{modificationWarnings.Speed}}</span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showSpeedAlert">
+            Value cannot be optimized further.
         </div>
     </form>
 </li>

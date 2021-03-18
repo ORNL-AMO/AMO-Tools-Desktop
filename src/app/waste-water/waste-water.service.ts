@@ -297,7 +297,7 @@ export class WasteWaterService {
     let operatingTime: number = modification.aeratorPerformanceData.OperatingTime;
     let difference: number = this.checkDifference(modification, modificationResults);
     let counter: number = 0;
-    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false && operatingTime > 16 && operatingTime < 24) {
       if (difference > 0 && difference < 10) {
         operatingTime = operatingTime + .01;
       } else if (difference > 0 && difference > 100) {
@@ -317,6 +317,12 @@ export class WasteWaterService {
       modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
+    }
+    if(operatingTime < 16){
+      operatingTime = 16;
+    }
+    if(operatingTime > 24){
+      operatingTime = 24;
     }
     if (isNaN(difference)) {
       return startingValue;
@@ -344,7 +350,7 @@ export class WasteWaterService {
     let speed: number = modification.aeratorPerformanceData.Speed;
     let difference: number = this.checkDifference(modification, modificationResults);
     let counter: number = 0;
-    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false && speed > 50 && speed < 100) {
       if (difference > 0 && difference < 10) {
         speed = speed + .01;
       } else if (difference > 0 && difference > 100) {
@@ -364,6 +370,12 @@ export class WasteWaterService {
       modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
+    }
+    if(speed < 50){
+      speed = 50;
+    }
+    if(speed > 100){
+      speed = 100;
     }
     if (isNaN(difference)) {
       return startingValue;

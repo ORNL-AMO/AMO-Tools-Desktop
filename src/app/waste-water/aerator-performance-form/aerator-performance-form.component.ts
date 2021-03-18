@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
@@ -32,8 +32,11 @@ export class AeratorPerformanceFormComponent implements OnInit {
   settings: Settings;
   aeratorPerformanceWarnings: AeratorPerformanceWarnings;
   idString: string = 'baseline';
+  showDOAlert: boolean = false;
+  showOperatingTimeAlert: boolean = false;
+  showSpeedAlert: boolean = false;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private compareService: CompareService) { }
+    private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.settings = this.wasteWaterService.settings.getValue();
@@ -62,6 +65,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
 
     this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
       this.aeratorPerformanceDifferent = val.aeratorPerformanceDifferent;
+      this.cd.detectChanges();
     });
   }
 
@@ -97,7 +101,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
         TypeAerators: defaultAeratorTypes[0].value
       });
       this.form.controls.TypeAerators.disable();
-    }  
+    }
 
     if (!this.selected) {
       this.form.controls.TypeAerators.disable();
@@ -126,7 +130,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
 
     } else if (this.selected === false) {
       this.form.controls.Aerator.disable();
-      this.form.controls.AnoxicZoneCondition.disable(); 
+      this.form.controls.AnoxicZoneCondition.disable();
     }
     this.setAeratorTypeStatus();
   }
@@ -150,20 +154,41 @@ export class AeratorPerformanceFormComponent implements OnInit {
   }
 
 
-  calculateDO(){
+  calculateDO() {
     let optimalDo: number = this.wasteWaterService.calculateModDo(this.modificationIndex);
-    this.form.controls.OperatingDO.patchValue(optimalDo);
-    this.save();
+    if (optimalDo == this.form.controls.OperatingDO.value) {
+      this.showDOAlert = true;
+      setTimeout(() => {
+        this.showDOAlert = false;
+      }, 1500);
+    } else {
+      this.form.controls.OperatingDO.patchValue(optimalDo);
+      this.save();
+    }
   }
 
-  calculateOperatingTime(){
+  calculateOperatingTime() {
     let optimalOperatingTime: number = this.wasteWaterService.calculateModOperatingTime(this.modificationIndex);
-    this.form.controls.OperatingTime.patchValue(optimalOperatingTime);
-    this.save();
+    if (optimalOperatingTime == this.form.controls.OperatingTime.value) {
+      this.showOperatingTimeAlert = true;
+      setTimeout(() => {
+        this.showOperatingTimeAlert = false;
+      }, 1500);
+    } else {
+      this.form.controls.OperatingTime.patchValue(optimalOperatingTime);
+      this.save();
+    }
   }
-  calculateSpeed(){
+  calculateSpeed() {
     let optimalSpeed: number = this.wasteWaterService.calculateModSpeed(this.modificationIndex);
-    this.form.controls.Speed.patchValue(optimalSpeed);
-    this.save();
+    if (optimalSpeed == this.form.controls.Speed.value) {
+      this.showSpeedAlert = true;
+      setTimeout(() => {
+        this.showSpeedAlert = false;
+      }, 1500);
+    } else {
+      this.form.controls.Speed.patchValue(optimalSpeed);
+      this.save();
+    }
   }
 }
