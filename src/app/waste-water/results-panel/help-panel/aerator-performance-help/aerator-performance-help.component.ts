@@ -18,6 +18,8 @@ export class AeratorPerformanceHelpComponent implements OnInit {
   standardSOTRValues: Array<{ label: string, value: number }>;
   aerationRanges: AerationRanges;
   settings: Settings;
+
+  displaySuggestions: boolean = false;
   constructor(private wasteWaterService: WasteWaterService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
@@ -61,5 +63,9 @@ export class AeratorPerformanceHelpComponent implements OnInit {
     value = this.convertUnitsService.value(value).from('lbhp').to('kgkw');
     value = this.convertUnitsService.roundVal(value, 1);
     return value;
+  }
+
+  toggleSuggestions(){
+    this.displaySuggestions = !this.displaySuggestions;
   }
 }

@@ -3,6 +3,50 @@
         Aerator Performance Help
         <br>
     </h5>
+    <label class="p-1" (click)="toggleSuggestions()">
+        <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+        <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+        <span class="h6 pl-1">
+            Savings Suggestions
+        </span>
+    </label>
+    <div class="my-2" *ngIf="displaySuggestions">
+        <h6>
+            <small class="text-muted">
+                <ul>
+                    <li>
+                        Reduce DO Concentration: operate aerobic reactors at lower DO concentration if possible (between
+                        0.5 and 2.0 mg/L for most cases).
+                    </li>
+                    <li>
+                        Match oxygen supply to oxygen demand while operating at the lowest acceptable DO concentration
+                        by reducing aerator operating time, speed or power supplied (units on).
+                    </li>
+                    <li>
+                        Use an automatic DO control system to control the amount of aeration equipment in use at any
+                        given time. Consider using luminescent or florescent DO probes. DO probes should be placed at
+                        strategic locations in the aerobic reactor to ensure good process performance. Don’t use too
+                        narrow a DO range so that aeration equipment does not cycle on and off too frequently.
+                    </li>
+                    <li>
+                        Aerator: Consider replacing coarse bubble diffusers with fine bubble diffusers to increase
+                        oxygen transfer rates by about 50%.
+                    </li>
+                    <li>
+                        Reduce Aerator Speed: install variable frequency drives (VFDs) on aeration equipment.
+                    </li>
+                    <li>
+                        Reduce operating time: use timers to start and stop aerators to conserve energy.
+                    </li>
+                    <li>
+                        Reduce operating time: diurnal organic loading may allow for reduced aeration at night and
+                        turning aeration off can promote denitrification, save energy, generate alkalinity, and may
+                        improve sludge settleability.
+                    </li>
+                </ul>
+            </small>
+        </h6>
+    </div>
     <hr class="my-1 hr-spacer">
     <div class="my-2" *ngIf="focusedField == 'OperatingDO'">
         <h6>
@@ -13,6 +57,11 @@
                 equipment. In most cases where aerobic metabolism is desired, the operating DO concentration should be
                 in the range of 0.5 to 1.5 mg/L. If simultaneous nitrification/denitrification is desired, the operating
                 DO concentration should be in the range of 0.0 to 0.3 mg/L.
+                <hr>
+                Operate aerobic reactors at lower DO concentration if possible. Aerobic reactors in activated sludge
+                should have DO levels between 0.5 and 2.0 mg/L in most cases. Operating at DO levels above 2 mg/L should
+                be avoided if possible. In most cases, maintaining a DO concentration above 2 mg/L is excessive and a
+                waste of energy.
                 <hr>
             </small>
         </h6>
@@ -70,7 +119,7 @@
                 equipment at standard conditions to determine the SOTR. The design engineer must adjust the SOTR for
                 field conditions.
                 <br>
-                
+
                 <hr class="my-1 hr-spacer">
                 Aeration Device Range of Standard O2 Transfer Rates ( <span
                     *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
@@ -89,7 +138,7 @@
                         </tr>
                         <tr>
                             <th class="w-50"></th>
-                             <th class="text-center">
+                            <th class="text-center">
                                 Minimum
                             </th>
                             <th class="text-center">
@@ -208,6 +257,8 @@
                 Aerator Operating power is the actual power used by the aerator and is used to calculate the total
                 oxygen supplied to the reactor(s).
                 <hr>
+                The mixing intensity should be at least 50 HP per million gallons of reactor volume.
+                <hr>
             </small>
         </h6>
     </div>
@@ -230,6 +281,16 @@
             <small class="text-muted">
                 Aerators operating time (hr/day) The number of hours per day the aerators are operating. In many cases,
                 aeration equipment will run 24 hours per day.
+                <hr>
+                However, oxygen demand at night should be about 60% of daytime oxygen demand due to diurnal organic
+                loading in most municipal wastewater treatment applications. Thus, less aeration equipment may be able
+                to be used at night.
+                <hr>
+                In extended aeration processes (extended aeration activated sludge and oxidation ditches) not designed
+                for biological nutrient removal, consider turning aerators off 4 to 6 hours per day. It will promote
+                denitrification, save energy, generate alkalinity, and may improve sludge settleability. If hydraulic
+                detention time in the reactor is less than 12 hours, if influent TKN concentration exceeds 40 mg/L, or
+                if effluent ammonia-N limit (monthly average) is 1 mg/L or less, on-off operation may not be feasible.
                 <hr>
             </small>
         </h6>
@@ -254,6 +315,11 @@
             <small class="text-muted">
                 Speed of aerators the fraction of the operating aerator motor speed to the rated motor speed
                 <hr>
+                Installing variable frequency drives (VFDs) on aeration equipment is especially useful for mechanical
+                aerators and positive displacement (PD) blowers. It may not be practical on some types of centrifugal
+                blowers; check with the blower manufacturer before installing VFDs. For mechanical aerators and PD
+                blowers, speed typically should be 50% to 100%.
+                <hr>
             </small>
         </h6>
     </div>
@@ -266,6 +332,19 @@
                 Energy cost unit ($/kWh) represents the total cost of electric energy including the base kWh charge,
                 demand charge, fuel adjustment charge, environmental fee, administrative charge, power factor penalty,
                 and so on.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!--AnoxicZoneCondition-->
+    <div class="my-2" *ngIf="focusedField == 'AnoxicZoneCondition'">
+        <h6>
+            Do you have an anoxic zone with returned mixed liquor from the aerobic zone?
+            <br>
+            <small class="text-muted">
+                An anoxic zone is used to remove nitrogen from the activated sludge, this occurs when the sludge is
+                denied sufficient oxygen. This question is used to determine which "Total O2 Requirements" result to
+                show.
                 <hr>
             </small>
         </h6>

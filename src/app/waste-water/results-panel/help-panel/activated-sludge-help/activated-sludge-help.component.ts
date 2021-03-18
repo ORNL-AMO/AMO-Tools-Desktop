@@ -13,6 +13,7 @@ export class ActivatedSludgeHelpComponent implements OnInit {
   focusedField: string;
   focusedFieldSub: Subscription;
   concentrationRows: Array<{ influent: number, inert: number, inertInorg: number }>
+  displaySuggestions: boolean = false;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
@@ -24,5 +25,9 @@ export class ActivatedSludgeHelpComponent implements OnInit {
 
   ngOnDestroy() {
     this.focusedFieldSub.unsubscribe();
+  }
+
+  toggleSuggestions(){
+    this.displaySuggestions = !this.displaySuggestions;
   }
 }
