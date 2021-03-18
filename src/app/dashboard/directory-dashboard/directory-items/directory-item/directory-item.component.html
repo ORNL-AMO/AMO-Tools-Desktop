@@ -26,10 +26,13 @@
                         src="assets/images/ico-ssmt-diagram.png">
                     <img *ngIf="directoryItem.assessment.type == 'TreasureHunt'" class="fsat icon-image pl-1 pr-1"
                         src="assets/images/treasure-hunt.png">
+                    <img *ngIf="directoryItem.assessment.type == 'WasteWater'" class="fsat icon-image pl-1 pr-1"
+                        src="assets/images/waste-water-icon.png">
                     <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>
                 </span>
                 <span *ngIf="directoryItem.type == 'inventory'">
-                    <i class="fa fa-clipboard pl-1 pr-1" aria-hidden="true"></i> <a
+                    <img class="fsat icon-image pl-1 pr-1" src="assets/images/motor-inventory-icon.png">
+                    <a
                         [routerLink]="['/motor-inventory', directoryItem.inventoryItem.id]">{{directoryItem.inventoryItem.name}}</a>
                 </span>
             </li>
