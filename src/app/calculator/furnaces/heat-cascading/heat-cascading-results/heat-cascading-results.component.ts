@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HeatCascadingOutput } from '../../../../shared/models/phast/heatCascading';
 import { Settings } from '../../../../shared/models/settings';
@@ -12,6 +12,10 @@ import { HeatCascadingService } from '../heat-cascading.service';
 export class HeatCascadingResultsComponent implements OnInit {
   @Input()
   settings: Settings;
+
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
+  table0String: any;
+  
   outputSubscription: Subscription;
   output: HeatCascadingOutput;
   
@@ -26,4 +30,9 @@ export class HeatCascadingResultsComponent implements OnInit {
   ngOnDestroy() {
     this.outputSubscription.unsubscribe();
   }
+
+  updateTable0String() {
+    this.table0String = this.copyTable0.nativeElement.innerText;
+  }
+
 }

@@ -90,6 +90,7 @@ export class HeatCascadingService {
       inputCopy = this.convertPercentInputs(inputCopy);
       let heatCascadingOutput: HeatCascadingOutput = processHeatAddon.cascadeHeatHighToLow(inputCopy);
       heatCascadingOutput = this.convertResultUnits(heatCascadingOutput, settings);
+      heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.secFuelCost;
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }
