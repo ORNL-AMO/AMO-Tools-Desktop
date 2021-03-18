@@ -66,6 +66,9 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   saveAssessment() {
+    if(this.modificationExists){
+      this.ssmt.modifications[this.modificationIndex].exploreOpportunities = false;
+    }
     this.emitSaveAssessment.emit(this.ssmt);
   }
 

@@ -87,10 +87,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.ssmtService.openNewModificationModal.next(true);
   }
 
-  getResults() {
-
-  }
-
   save(newSSMT: SSMT) {
     this.assessment.ssmt = newSSMT;
     this.emitSave.emit(this.assessment.ssmt);
