@@ -131,51 +131,51 @@ export class FsatService {
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
-    // if (fsatValid.isValid) {
-    //   if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
-    //     fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
-    //   }
-    //   let input: FsatInput = {
-    //     fanSpeed: fsat.fanSetup.fanSpeed,
-    //     drive: fsat.fanSetup.drive,
-    //     specifiedDriveEfficiency: fsat.fanSetup.drive === 4 ? fsat.fanSetup.specifiedDriveEfficiency : 100,
-    //     lineFrequency: fsat.fanMotor.lineFrequency,
-    //     motorRatedPower: fsat.fanMotor.motorRatedPower,
-    //     motorRpm: fsat.fanMotor.motorRpm,
-    //     efficiencyClass: fsat.fanMotor.efficiencyClass,
-    //     fanEfficiency: fsat.fanSetup.fanEfficiency,
-    //     //motor
-    //     specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
-    //     motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
-    //     fullLoadAmps: fsat.fanMotor.fullLoadAmps,
-    //     measuredVoltage: fsat.fieldData.measuredVoltage,
-    //     //???????
-    //     measuredAmps: fsat.fieldData.motorPower,
-    //     flowRate: fsat.fieldData.flowRate,
-    //     inletPressure: fsat.fieldData.inletPressure,
-    //     outletPressure: fsat.fieldData.outletPressure,
-    //     compressibilityFactor: fsat.fieldData.compressibilityFactor,
-    //     operatingHours: fsat.fieldData.operatingHours,
-    //     unitCost: fsat.fieldData.cost,
-    //     airDensity: fsat.baseGasDensity.gasDensity,
-    //     sizeMargin: 1
-    //   };
-    //   input = this.convertFsatService.convertInputDataForCalculations(input, settings);
-    //   let results: FsatOutput;
-    //   if (isBaseline) {
-    //     input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
-    //     input.measuredPower = fsat.fieldData.motorPower;
-    //     results = this.fanResultsExisting(input);
-    //   } else {
-    //     input.fanType = fsat.fanSetup.fanType;
-    //     results = this.fanResultsModified(input);
-    //   }
-    //   results = this.convertFsatService.convertFsatOutput(results, settings);
-    //   results.annualCost = results.annualCost * 1000;
-    //   return results;
-    // } else {
+    if (fsatValid.isValid) {
+      if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
+        fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
+      }
+      let input: FsatInput = {
+        fanSpeed: fsat.fanSetup.fanSpeed,
+        drive: fsat.fanSetup.drive,
+        specifiedDriveEfficiency: fsat.fanSetup.drive === 4 ? fsat.fanSetup.specifiedDriveEfficiency : 100,
+        lineFrequency: fsat.fanMotor.lineFrequency,
+        motorRatedPower: fsat.fanMotor.motorRatedPower,
+        motorRpm: fsat.fanMotor.motorRpm,
+        efficiencyClass: fsat.fanMotor.efficiencyClass,
+        fanEfficiency: fsat.fanSetup.fanEfficiency,
+        //motor
+        specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
+        motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
+        fullLoadAmps: fsat.fanMotor.fullLoadAmps,
+        measuredVoltage: fsat.fieldData.measuredVoltage,
+        //???????
+        measuredAmps: fsat.fieldData.motorPower,
+        flowRate: fsat.fieldData.flowRate,
+        inletPressure: fsat.fieldData.inletPressure,
+        outletPressure: fsat.fieldData.outletPressure,
+        compressibilityFactor: fsat.fieldData.compressibilityFactor,
+        operatingHours: fsat.fieldData.operatingHours,
+        unitCost: fsat.fieldData.cost,
+        airDensity: fsat.baseGasDensity.gasDensity,
+        sizeMargin: 1
+      };
+      input = this.convertFsatService.convertInputDataForCalculations(input, settings);
+      let results: FsatOutput;
+      if (isBaseline) {
+        input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
+        input.measuredPower = fsat.fieldData.motorPower;
+        results = this.fanResultsExisting(input);
+      } else {
+        input.fanType = fsat.fanSetup.fanType;
+        results = this.fanResultsModified(input);
+      }
+      results = this.convertFsatService.convertFsatOutput(results, settings);
+      results.annualCost = results.annualCost * 1000;
+      return results;
+    } else {
       return this.getEmptyResults();
-    // }
+    }
   }
 
   fanResultsExisting(input: FsatInput): FsatOutput {
