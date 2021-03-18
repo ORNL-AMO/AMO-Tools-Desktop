@@ -69,6 +69,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
     if (this.isModification) {
       let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
       wasteWater.modifications[this.modificationIndex].activatedSludgeData = activatedSludgeData;
+      wasteWater.modifications[this.modificationIndex].exploreOpportunities = false;
     } else {
       let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
       wasteWater.baselineData.activatedSludgeData = activatedSludgeData;

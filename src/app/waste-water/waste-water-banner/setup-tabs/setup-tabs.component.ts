@@ -67,7 +67,6 @@ export class SetupTabsComponent implements OnInit {
 
   setSystemBasicsStatus(systemBasics: SystemBasics) {
     let form: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
-    console.log(form);
     if (form.invalid) {
       this.systemBasicsClassStatus = ['missing-data'];
     } else {

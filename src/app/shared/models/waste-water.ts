@@ -21,6 +21,7 @@ export interface WasteWaterData {
     id: string,
     outputs?: WasteWaterResults,
     valid?: WasteWaterValid,
+    exploreOpportunities?: boolean,
     exploreAeratorPerformance?: SavingsOpportunity,
     exploreAeratorUpgrade?: SavingsOpportunity,
     exploreReduceOxygen?: SavingsOpportunity,

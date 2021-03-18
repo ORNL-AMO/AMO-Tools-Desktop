@@ -18,25 +18,7 @@
     </div>
     <div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
         <app-results-panel *ngIf="modificationExists"></app-results-panel>
-        <!-- <div class="d-flex flex-wrap tabs primary" #resultTabs>
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-                <a class="border-left-0" (click)="setTab('results')">Results</a>
-            </div>
-            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
-            </div>
-        </div>
-        <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'help'">
-            <!-- <app-explore-opportunities-help [settings]="settings">
-			</app-explore-opportunities-help> --
-        </div>
-
-        <div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'"
-            [ngStyle]="{'height.px': helpHeight}">
-            <app-results-panel></app-results-panel>
-        </div>-->
         <div *ngIf="!modificationExists">
-            <!--Placeholder for help text -->
             <p>Explore Opportunities to view results</p>
         </div>
 
@@ -44,5 +26,5 @@
     </div>
 </div>
 
-<!-- <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'explore-opps'"></app-toast> -->
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'explore-opps'"></app-toast>

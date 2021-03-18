@@ -141,6 +141,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.modifications[this.modificationIndex].aeratorPerformanceData = aeratorPerformanceData;
+      wasteWater.modifications[this.modificationIndex].exploreOpportunities = false;
     } else {
       let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
