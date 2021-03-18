@@ -62,10 +62,8 @@ export class FanDataFormComponent implements OnInit {
     });
 
     this.staticPressureValueSubscription = this.planeDataFormService.staticPressureValue.subscribe(staticPressureControlValue => {
-      if (staticPressureControlValue != undefined) {
         this.dataForm.patchValue({staticPressure: staticPressureControlValue});
         this.save();
-      }
     });
   }
 

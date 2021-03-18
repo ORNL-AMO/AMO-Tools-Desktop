@@ -93,7 +93,7 @@ export class PressureReadingsFormComponent implements OnInit {
     let row: Array<number>;
     let totalHolesValue: number = 0;
     let holeCount: number = 0;
-    let holesAverage: number = 0;
+    let holesAverage: number;
 
     for (let i = 0; i < this.traverseHoles.length; i++) {
       row = this.traverseHoles[i];
@@ -103,8 +103,12 @@ export class PressureReadingsFormComponent implements OnInit {
         }
       }
 
-    holesAverage = holeCount === 0 ? NaN : (totalHolesValue / holeCount);
-    this.planeData.staticPressure = holesAverage;
+    holesAverage = (totalHolesValue / holeCount);
+    if (isNaN(holesAverage)) {
+      this.planeData.staticPressure = undefined;
+    } else {
+      this.planeData.staticPressure = holesAverage;
+    }
   }
 
   save() {

@@ -18,6 +18,8 @@ export class FlueGasModalComponent implements OnInit {
   hideModal = new EventEmitter();
   @Input()
   settings: Settings;
+  @Input()
+  hideSolidLiquidMaterial: boolean;
   
   method: string = 'By Mass';
   baselineData: FlueGas;
@@ -33,6 +35,9 @@ export class FlueGasModalComponent implements OnInit {
   ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
+    }
+    if (this.hideSolidLiquidMaterial) {
+      this.method = 'By Volume';
     }
 
     let existingInputs = this.flueGasService.baselineData.getValue();

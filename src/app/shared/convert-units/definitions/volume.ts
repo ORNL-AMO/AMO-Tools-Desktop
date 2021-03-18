@@ -189,6 +189,14 @@ export const volume = {
             }
             , to_anchor: 128 * 1000
         }
+        , Mgal: {
+            name: {
+                singular: 'Million U.S. Gallons'
+                , plural: 'Million U.S. Gallons' ,
+                 display:  '(Mgal)'
+            }
+            , to_anchor: 128 * 1000000
+        }
         , ft3: {
             name: {
                 singular: 'Cubic foot'

@@ -1260,7 +1260,9 @@ export const MockTreasureHunt: Assessment = {
                 "electricityCost": 0.05,
                 "compressorPower": 300,
                 "pressure": 120,
-                "proposedPressure": 0
+                "proposedPressure": 0,
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "modification": [{
                 "name": "Equipment #1",
@@ -1269,7 +1271,9 @@ export const MockTreasureHunt: Assessment = {
                 "electricityCost": 0.05,
                 "compressorPower": 300,
                 "pressure": 120,
-                "proposedPressure": 110
+                "proposedPressure": 110,
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "opportunitySheet": {
                 "name": "CA Pressure Reduction",

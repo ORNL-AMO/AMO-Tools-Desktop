@@ -215,7 +215,9 @@ Tabs
     .tabs.subtabs.psat .active.missing-data .step-number,
     .tabs.subtabs.psat .missing-data .step-number,
     .tabs.subtabs.ssmt .missing-data .step-number,
-    .tabs.subtabs.ssmt .active.missing-data .step-number {
+    .tabs.subtabs.ssmt .active.missing-data .step-number,
+    .tabs.subtabs.waste-water .missing-data .step-number,
+    .tabs.subtabs.waste-water .active.missing-data .step-number {
       background: red;
     }
 
@@ -226,7 +228,9 @@ Tabs
     .tabs.subtabs.psat .active.input-error .step-number,
     .tabs.subtabs.psat .input-error .step-number,
     .tabs.subtabs.ssmt .active.input-error .step-number,
-    .tabs.subtabs.ssmt .input-error .step-number {
+    .tabs.subtabs.ssmt .input-error .step-number,
+    .tabs.subtabs.waste-water .active.input-error .step-number,
+    .tabs.subtabs.waste-water .input-error .step-number {
       background: orange;
     }
 
@@ -237,7 +241,9 @@ Tabs
     .tabs.subtabs.psat .active.success .step-number,
     .tabs.subtabs.psat .success .step-number,
     .tabs.subtabs.ssmt .active.success .step-number,
-    .tabs.subtabs.ssmt .success .step-number  {
+    .tabs.subtabs.ssmt .success .step-number,
+    .tabs.subtabs.waste-water .active.success .step-number,
+    .tabs.subtabs.waste-water .success .step-number  {
       background: green;
     }
 
@@ -260,6 +266,9 @@ Tabs
         background: #84b641;
       }
 
+      .tabs.subtabs.waste-water .active .step-number {
+        background: #003087;
+      }
       .tabs.subtabs.fsat .active .step-number{
         background: #FFE400;
         color: black;

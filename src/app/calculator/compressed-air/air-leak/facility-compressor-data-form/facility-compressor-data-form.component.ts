@@ -210,7 +210,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   updateOperatingHours(oppHours: OperatingHours) {
     this.operatingCostService.operatingHours = oppHours;
-    this.airLeakInput.facilityCompressorData.hoursPerYear = oppHours.hoursPerYear;
+    this.facilityCompressorDataForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.save();
     this.closeOperatingHoursModal();
   }

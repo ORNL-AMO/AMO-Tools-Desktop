@@ -1,4 +1,5 @@
 import { OperatingHours } from "../operations";
+import { EnergyResult } from "./designedEnergy";
 
 export interface MeteredEnergy {
     meteredEnergyFuel?: MeteredEnergyFuel;
@@ -8,7 +9,6 @@ export interface MeteredEnergy {
     steam?: boolean;
     electricity?: boolean;
 }
-
 
 export interface MeteredEnergyFuel {
     fuelDescription?: string;
@@ -23,14 +23,12 @@ export interface MeteredEnergyFuel {
     operatingHours: number;
     operatingHoursCalc?: OperatingHours;
 }
+
 export interface MeteredEnergyResults {
-    meteredEnergyUsed: number;
-    meteredEnergyIntensity: number;
-    meteredElectricityUsed: number;
-    calculatedFuelEnergyUsed: number;
-    calculatedEnergyIntensity: number;
-    calculatedElectricityUsed: number;
+    metered: EnergyResult;
+    byPhast: EnergyResult;
 }
+
 export interface MeteredEnergySteam {
     totalHeatSteam: number;
     flowRate: number;

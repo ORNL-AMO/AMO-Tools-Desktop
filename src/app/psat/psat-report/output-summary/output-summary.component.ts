@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { CompareService } from '../../compare.service';
+import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
 
 @Component({
   selector: 'app-output-summary',
@@ -20,12 +20,12 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
+  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
     if (this.inRollup) {
-      this.reportRollupService.selectedPsats.forEach(val => {
+      this.psatReportRollupService.selectedPsats.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId == this.assessment.id) {
@@ -56,7 +56,7 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.psatReportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   getDiff(num1: number, num2: number) {

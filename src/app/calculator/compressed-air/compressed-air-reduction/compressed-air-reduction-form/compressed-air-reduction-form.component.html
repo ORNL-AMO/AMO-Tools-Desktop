@@ -104,7 +104,7 @@
           <input class="form-control" name="meterReading" id="{{'meterReading_'+idString}}"
             formControlName="meterReading" type="number" (input)="calculate()" (focus)="focusField('meterReading')"
             (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF/min</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -221,7 +221,7 @@
           <label class="small bold">Nozzle Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.singleNozzleFlowRate | number:'.0-3'}}
+          <span class="small bold">{{individualResults.singleNozzleFlowRate | number:'.0-1'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
@@ -252,13 +252,13 @@
 
     </div>
 
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value != 3">
+    <div [ngClass]="{'form-section': form.controls.utilityType.value == 1}" *ngIf="form.controls.measurementMethod.value != 3">
       <div class="row">
         <div class="col-6">
           <label class="small bold">Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.flowRate | number:'1.0-0'}}
+          <span class="small bold">{{individualResults.flowRate | number:'1.0-1'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
@@ -281,8 +281,7 @@
     </div>
 
     <!-- electricity form -->
-    <div class="form-section" *ngIf="form.controls.utilityType.value == 1">
-
+    <div class="pb-1" *ngIf="form.controls.utilityType.value == 1">
       <div class="form-group">
         <label class="small" for="{{'compressorControl_'+idString}}">Compressor Control</label>
         <div class="input-group">
@@ -359,34 +358,47 @@
         </div>
       </div>
 
-      <div class="row" *ngIf="!compressorCustomSpecificPower">
-        <div class="col-6">
-          <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
+      <div *ngIf="isBaseline">
+        <div class="row" *ngIf="!compressorCustomSpecificPower">
+          <div class="col-6">
+            <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
+          </div>
+          <div class="col-6 text-center">
+            <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+            </span>
+          </div>
         </div>
-        <div class="col-6 text-center">
-          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+
+        <div class="form-group" *ngIf="compressorCustomSpecificPower">
+          <label class="small" for="{{'compressorSpecificPower_'+idString}}">Compressor Specific Power</label>
+          <div class="input-group">
+            <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+idString}}"
+              formControlName="compressorSpecificPower" type="number" (input)="calculate()"
+              (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
+            <span class="units input-group-addon"
+              *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="form.controls.compressorSpecificPower.invalid && !form.controls.compressorSpecificPower.pristine">
+            <span *ngIf="form.controls.compressorSpecificPower.errors.required">Value required.</span>
+            <span *ngIf="form.controls.compressorSpecificPower.errors.min">Value can't be less than
+              {{form.controls.compressorSpecificPower.errors.min.min}}.</span>
           </span>
         </div>
       </div>
-
-      <div class="form-group" *ngIf="compressorCustomSpecificPower">
-        <label class="small" for="{{'compressorSpecificPower_'+idString}}">Compressor Specific Power</label>
-        <div class="input-group">
-          <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+idString}}"
-            formControlName="compressorSpecificPower" type="number" (input)="calculate()"
-            (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
-          <span class="units input-group-addon"
-            *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+      <div *ngIf="!isBaseline">
+        <div class="row">
+          <div class="col-6">
+            <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
+          </div>
+          <div class="col-6 text-center">
+            <span class="small bold">Calculated using baseline
+            </span>
+          </div>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.compressorSpecificPower.invalid && !form.controls.compressorSpecificPower.pristine">
-          <span *ngIf="form.controls.compressorSpecificPower.errors.required">Value required.</span>
-          <span *ngIf="form.controls.compressorSpecificPower.errors.min">Value can't be less than
-            {{form.controls.compressorSpecificPower.errors.min.min}}.</span>
-        </span>
       </div>
 
     </div>

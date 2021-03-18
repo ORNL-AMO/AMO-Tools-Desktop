@@ -358,6 +358,10 @@ select.form-control:not([size]):not([multiple]) {
   color: #F39C12  !important;
 }
 
+.waste-water .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
 
 .input-error{
   color: red;
@@ -567,8 +571,6 @@ Reports
 .output-summary .table th {
     border: none;
     padding: 0px;
-    text-align: left;
-    font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px;
@@ -646,6 +648,16 @@ Reports
     background-size: 60px;
     padding: 0px 0 0px 55px;
 }
+
+.assessment-report.report-in-waste-water .assessment-name,
+.assessment-report.report-in-rollup.report-in-waste-water .assessment-name {
+  background-image: url('../assets/images/waste-water-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
 
 
 .assessment-report .report-header:after {
@@ -1251,7 +1263,11 @@ Banner
     background: #84b641;
   }
 
-
+  .banner.waste-water{
+    background: #003087;
+    color: white;
+  }
+  
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;

@@ -86,12 +86,12 @@
           <span *ngIf="!calculatedResults.fuelEnergyUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredEnergyUsed">{{meteredResults.meteredEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-          <span *ngIf="!meteredResults.meteredEnergyUsed">&mdash; &mdash;</span>
+          <span *ngIf="meteredResults.metered.hourlyEnergy">{{meteredResults.metered.hourlyEnergy | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+          <span *ngIf="!meteredResults.metered.hourlyEnergy">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedEnergyUsed">{{designedResults.designedEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-          <span *ngIf="!designedResults.designedEnergyUsed">&mdash; &mdash;</span>
+          <span *ngIf="designedResults.designed.hourlyEnergy">{{designedResults.designed.hourlyEnergy | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+          <span *ngIf="!designedResults.designed.hourlyEnergy">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
@@ -101,12 +101,12 @@
           <span *ngIf="!calculatedResults.energyIntensity">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredEnergyIntensity">{{meteredResults.meteredEnergyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
-          <span *ngIf="!meteredResults.meteredEnergyIntensity">&mdash; &mdash;</span>
+          <span *ngIf="meteredResults.metered.energyIntensity">{{meteredResults.metered.energyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
+          <span *ngIf="!meteredResults.metered.energyIntensity">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedEnergyIntensity">{{designedResults.designedEnergyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
-          <span *ngIf="!designedResults.designedEnergyIntensity">&mdash; &mdash;</span>
+          <span *ngIf="designedResults.designed.energyIntensity">{{designedResults.designed.energyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
+          <span *ngIf="!designedResults.designed.energyIntensity">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
@@ -116,12 +116,12 @@
           <span *ngIf="!calculatedResults.electricityUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredElectricityUsed">{{meteredResults.meteredElectricityUsed | sigFigs:'5'}} kW</span>
-          <span *ngIf="!meteredResults.meteredElectricityUsed">&mdash; &mdash;</span>
+          <span *ngIf="meteredResults.metered.hourlyElectricity">{{meteredResults.metered.hourlyElectricity | sigFigs:'5'}} kW/hr</span>
+          <span *ngIf="!meteredResults.metered.hourlyElectricity">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedElectricityUsed">{{designedResults.designedElectricityUsed | sigFigs:'5'}} kW</span>
-          <span *ngIf="!designedResults.designedElectricityUsed">&mdash; &mdash;</span>
+          <span *ngIf="designedResults.designed.hourlyElectricity">{{designedResults.designed.hourlyElectricity | sigFigs:'5'}} kW/hr</span>
+          <span *ngIf="!designedResults.designed.hourlyElectricity">&mdash; &mdash;</span>
         </td>
       </tr>
     </tbody>

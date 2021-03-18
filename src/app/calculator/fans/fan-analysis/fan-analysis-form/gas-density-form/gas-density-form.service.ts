@@ -31,7 +31,7 @@ export class GasDensityFormService {
       barometricPressure: [obj.barometricPressure, [Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
       wetBulbTemp: [obj.wetBulbTemp, [Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]],
-      relativeHumidity: [obj.relativeHumidity, [GreaterThanValidator.greaterThan(0), Validators.max(100)]],
+      relativeHumidity: [obj.relativeHumidity, [Validators.min(0), Validators.max(100)]],
       dewPoint: [obj.dewPoint, [Validators.min(ranges.dewPointMin), Validators.max(ranges.dewPointMax)]],
       gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(ranges.gasDensityMax)]],
       specificHeatGas: [obj.specificHeatGas]
@@ -148,7 +148,7 @@ export class GasDensityFormService {
 
   setRelativeHumidityValidators(form: FormGroup) {
     if (form.controls.inputType.value === 'relativeHumidity') {
-      form.controls.relativeHumidity.setValidators([Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]);
+      form.controls.relativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.relativeHumidity.reset(form.controls.relativeHumidity.value);
       if (form.controls.relativeHumidity.value) {
         form.controls.relativeHumidity.markAsDirty();

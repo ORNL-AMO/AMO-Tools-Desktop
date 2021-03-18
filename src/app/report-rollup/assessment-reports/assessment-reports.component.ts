@@ -3,11 +3,15 @@ import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
 import { Calculator } from '../../shared/models/calculators';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PsatReportRollupService } from '../psat-report-rollup.service';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
+import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -21,11 +25,13 @@ export class AssessmentReportsComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
+  _wasteWaterAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
+  wasteWaterAssessmentsSub: Subscription;
   printView: boolean;
   printViewSub: Subscription;
   rollupPrintOptions: PrintOptions;
@@ -37,36 +43,36 @@ export class AssessmentReportsComponent implements OnInit {
   selectedPhastCalcs: Array<Calculator>;
   settings: Settings;
 
-  constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
-    private directoryDashboardService: DirectoryDashboardService) { }
+  constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
+    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
+    private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit(): void {
-    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.settings = this.settingsDbService.getByDirectoryId(directoryId);
-    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
+    this.settings = this.reportRollupService.settings.getValue();
+    this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
       }
     });
-    this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
+    this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(items => {
       if (items) {
         this._phastAssessments = items;
       }
     });
 
-    this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
+    this.fsatAssessmentsSub = this.fsatReportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
         this._fsatAssessments = items;
       }
     });
 
-    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+    this.ssmtAssessmentsSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
         this._ssmtAssessments = items;
       }
     });
 
-    this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
+    this.treasureHuntAssesmentsSub = this.treasureHuntReportRollupService.treasureHuntAssessments.subscribe(items => {
       if (items) {
         this._treasureHuntAssessments = items;
       }
@@ -83,6 +89,12 @@ export class AssessmentReportsComponent implements OnInit {
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(selectedCalcs => {
       this.setSelectedCalcsArrays(selectedCalcs);
     });
+
+    this.wasteWaterAssessmentsSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
+      if (val) {
+        this._wasteWaterAssessments = val;
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -91,8 +103,10 @@ export class AssessmentReportsComponent implements OnInit {
     this.psatAssessmentSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
     this.treasureHuntAssesmentsSub.unsubscribe();
+    this.rollupPrintOptionsSub.unsubscribe();
     this.printViewSub.unsubscribe();
     this.selectedCalcsSub.unsubscribe();
+    this.wasteWaterAssessmentsSub.unsubscribe();
   }
 
   setSelectedCalcsArrays(selectedCalcs: Array<Calculator>) {
