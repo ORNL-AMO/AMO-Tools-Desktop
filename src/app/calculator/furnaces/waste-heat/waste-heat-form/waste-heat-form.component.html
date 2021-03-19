@@ -1,7 +1,5 @@
 <form #formElement [formGroup]="form">
 
-    <div class="form-section">
-
       <div class="form-group">
         <label class="small" for="oppHours">Annual Operating Hours</label>
         <div class="input-group">
@@ -60,9 +58,6 @@
           <span *ngIf="form.controls.cost.errors.required">Value Required</span>
         </span>
       </div>
-    </div>
-
-    <div class="form-section">
 
       <div class="form-group">
         <label class="small" for="heatInput">Heat Input</label>
@@ -205,7 +200,6 @@
         </span>
       </div>
 
-     </div>
   </form>
 
   <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
@@ -221,6 +215,5 @@
 </div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-  [oppHours]="wasteHeatService.oppHours">
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
 </app-operating-hours-modal>

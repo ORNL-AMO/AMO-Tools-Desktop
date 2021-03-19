@@ -34,12 +34,9 @@ export class WasteHeatFormComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-
-
   showOperatingHoursModal: boolean = false;
   warnings: WasteHeatWarnings;
   
-
   constructor(private wasteHeatService: WasteHeatService, 
               private wasteHeatFormService: WasteHeatFormService) { }
 
@@ -94,7 +91,6 @@ export class WasteHeatFormComponent implements OnInit {
   }
 
   updateOperatingHours(oppHours: OperatingHours) {
-    this.wasteHeatService.operatingHours = oppHours;
     this.form.controls.oppHours.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();

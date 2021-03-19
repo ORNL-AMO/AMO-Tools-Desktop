@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { OperatingHours } from '../../../shared/models/operations';
 import { WasteHeatInput, WasteHeatOutput } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
 import { WasteHeatFormService } from './waste-heat-form.service';
@@ -19,7 +18,6 @@ export class WasteHeatService {
   currentField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
 
-  operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService, private wasteHeatFormService: WasteHeatFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.wasteHeatInput = new BehaviorSubject<WasteHeatInput>(undefined);
@@ -140,6 +138,12 @@ export class WasteHeatService {
 
       output.hotWaterFlow = this.convertUnitsService.value(output.hotWaterFlow).from('gal/h').to('m3/h');
       output.hotWaterFlow = this.roundVal(output.hotWaterFlow, 2);
+
+      output.tonsRefrigeration = this.convertUnitsService.value(output.tonsRefrigeration).from('tons').to('kW');
+      output.tonsRefrigeration = this.roundVal(output.tonsRefrigeration, 2);
+
+      output.capacityChiller = this.convertUnitsService.value(output.capacityChiller).from('tons').to('kW');
+      output.capacityChiller = this.roundVal(output.capacityChiller, 2);
 
     } else {
       output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to('MMBtu');
