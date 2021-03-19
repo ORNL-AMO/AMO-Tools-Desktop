@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-analysis.service';
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
@@ -37,7 +37,8 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.fanAnalysisService.inAssessmentModal = true;
     this.fanAnalysisService.inputData = this.fanAnalysisService.getFlowPressureModalDefaults();
     this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
-
+    this.fanAnalysisService.pressureCalcResultType = this.fsat.fieldData.usingStaticPressure? 'static' : 'total';
+    
     if (this.fsat.baseGasDensity) {
       this.fanAnalysisService.inputData.BaseGasDensity = this.fsat.baseGasDensity;
     }
@@ -49,9 +50,6 @@ export class CalculateFlowPressureComponent implements OnInit {
     }
     if (this.fsat.fieldData.planeData) {
       this.fanAnalysisService.inputData.PlaneData = this.fsat.fieldData.planeData;
-    }
-    if (!this.fsat.fieldData.pressureCalcResultType) {
-      this.fsat.fieldData.pressureCalcResultType = 'static';
     }
 
     this.fanAnalysisService.inputData.FanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
@@ -82,9 +80,11 @@ export class CalculateFlowPressureComponent implements OnInit {
     if (planeDataDone && fanInfoDone) {
       let planeResults: PlaneResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
       this.fsat.fieldData.flowRate = Number(planeResults.FanInletFlange.gasVolumeFlowRate.toFixed(3));
+      this.fsat.fieldData.usingStaticPressure = this.fanAnalysisService.pressureCalcResultType == 'static'? true: false;
       if (this.fanAnalysisService.pressureCalcResultType == 'static') {
         this.fsat.fieldData.inletPressure = Number(planeResults.FanInletFlange.staticPressure.toFixed(3));
         this.fsat.fieldData.outletPressure = Number(planeResults.FanOrEvaseOutletFlange.staticPressure.toFixed(3));
+        this.fsat.fieldData.inletVelocityPressure = Number(planeResults.FanInletFlange.gasVelocityPressure.toFixed(3));
       } else if (this.fanAnalysisService.pressureCalcResultType == 'total') {
         this.fsat.fieldData.inletPressure = Number(planeResults.FanInletFlange.gasTotalPressure.toFixed(3));
         this.fsat.fieldData.outletPressure = Number(planeResults.FanOrEvaseOutletFlange.gasTotalPressure.toFixed(3));
