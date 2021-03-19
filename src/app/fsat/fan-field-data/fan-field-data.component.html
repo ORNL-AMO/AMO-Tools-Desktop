@@ -49,6 +49,94 @@
         $/kWh.</span>
     </div>
 
+    <div class="btn-col d-flex flex-column py-2">
+      <div class="btn-group small btn-group-sm align-self-center">
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(true)"
+              [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == true}">Static Pressure
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(false)"
+              [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == false}">Total Pressure</button>
+      </div>
+  </div>
+
+  <div class="form-group"
+      [ngClass]="{'indicate-different': isFlowRateDifferent(), 'invalid': fieldDataForm.controls.flowRate.invalid}">
+      <label for="{{'flowRate_'+idString}}">Flow Rate
+        <a class="form-text small click-link" (click)="showAmcaModal()"
+          [ngClass]="{'disabled-link':!selected}">Calculate
+          Flow Rate and Pressures</a>
+      </label>
+      <div class="input-group">
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate"
+          id="{{'flowRate_'+idString}}" (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();"
+          [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.greaterThan == 0">Flow Rate must be greater than zero</span>
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
+      </span>
+    </div>
+
+
+    
+    <div *ngIf="fieldDataForm.controls.usingStaticPressure.value == true">
+      <div *ngIf="!userDefinedVelocityPressure" class="form-group"
+      [ngClass]="{'indicate-different': isDuctAreaDifferent(), 'invalid': fieldDataForm.controls.ductArea.invalid}">
+      <label for="{{'duct'+idString}}">
+        Duct Area
+      </label>
+      <div class="input-group">
+        <input name="ductArea" type="number" max="0" step="any" class="form-control"
+          formControlName="ductArea" id="{{'ductArea'+idString}}" (input)="save()"
+          (focus)="focusField('ductArea')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+        </span>
+      </div>
+      <!-- <span class="alert-danger pull-right small"
+        *ngIf="fieldDataForm.controls.ductArea.invalid && !fieldDataForm.controls.ductArea.pristine">
+        <span *ngIf="fieldDataForm.controls.ductArea.errors.required">Value Required</span>
+      </span> -->
+           <!-- <span class="alert-warning pull-right small"
+        *ngIf="warnings.calcInletVelocityPressureError !== null && !userDefinedVelocityPressure 
+                && !fieldDataForm.controls.ductArea.pristine">
+        {{ warnings.calcInletVelocityPressureError }}
+      </span> -->
+    </div>
+
+    <div class="form-group" [ngClass]="{'indicate-different': isInletVelocityPressureDifferent(), 'invalid': fieldDataForm.controls.inletVelocityPressure.invalid}">
+      <label for="{{'inletVelocityPressure_'+idString}}">Inlet Velocity Pressure
+        <a class="form-text small click-link" *ngIf="userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()" 
+        [ngClass]="{'disabled-link':!selected}">Estimate Inlet Velocity Pressure</a>
+        <a class="form-text small click-link" *ngIf="!userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()"
+          [ngClass]="{'disabled-link':!selected}">Define Inlet Velocity Pressure</a>
+      </label>
+      <div *ngIf="userDefinedVelocityPressure" class="input-group">
+        <input name="inletVelocityPressure" type="number" max="0" step="any" class="form-control"
+        formControlName="inletVelocityPressure" id="{{'inletVelocityPressure'+idString}}" (input)="save()"
+        (focus)="focusField('inletVelocityPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        <!-- <span class="alert-danger pull-right small"
+        *ngIf="fieldDataForm.controls.inletVelocityPressure.invalid && !fieldDataForm.controls.inletVelocityPressure.pristine">
+        <span *ngIf="fieldDataForm.controls.inletVelocityPressure.errors.required">Value Required</span>
+      </span> -->
+      </div>
+      <div *ngIf="!userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
+        <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value">
+          {{fieldDataForm.controls.inletVelocityPressure.value | number:'1.0-5'}}
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+
+        </span>
+        <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value == undefined">&mdash; &mdash;</span>
+      </div>
+    </div>
+
+    </div>
+
+
     <div class="form-group"
       [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid, 'error': warnings.inletPressureError !== null}">
       <label for="{{'inletPressure_'+idString}}">
@@ -97,26 +185,6 @@
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">
           Outlet Pressure cannot be less than the Inlet Pressure
         </span>
-      </span>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isFlowRateDifferent(), 'invalid': fieldDataForm.controls.flowRate.invalid}">
-      <label for="{{'flowRate_'+idString}}">Flow Rate
-        <a class="form-text small click-link" (click)="showAmcaModal()"
-          [ngClass]="{'disabled-link':!selected}">Calculate
-          Flow Rate and Pressures</a>
-      </label>
-      <div class="input-group">
-        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate"
-          id="{{'flowRate_'+idString}}" (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();"
-          [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
-        <span *ngIf="fieldDataForm.controls.flowRate.errors.greaterThan == 0">Flow Rate must be greater than zero</span>
-        <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
       </span>
     </div>
 
@@ -183,9 +251,9 @@
 
     <div class="form-group">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="showHideInputField()"
+        <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="toggleUserDefinedCompressibilityFactor()"
           [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
-        <a class="form-text small click-link" *ngIf="!userDefinedCompressibilityFactor" (click)="showHideInputField()"
+        <a class="form-text small click-link" *ngIf="!userDefinedCompressibilityFactor" (click)="toggleUserDefinedCompressibilityFactor()"
           [ngClass]="{'disabled-link':!selected}">Define Compressibility Factor</a>
       </label>
       <div class="input-group" *ngIf="userDefinedCompressibilityFactor">
