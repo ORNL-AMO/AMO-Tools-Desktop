@@ -1,0 +1,33 @@
+<div class="table-container scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th class="header-cell sticky-left">
+                    SRT
+                </th>
+                <th class="header-cell" *ngFor="let dataTableVariable of dataTableVariables">
+                    <span [innerHTML]="dataTableVariable.label"></span>
+                </th>
+            </tr>
+            <tr>
+                <th class="sticky-left name-cell">day</th>
+                <th *ngFor="let dataTableVariable of dataTableVariables">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'"
+                        [innerHTML]="dataTableVariable.imperialUnit"></span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" [innerHTML]="dataTableVariable.metricUnit"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tableRow of selectedTableData.results.calculationsTableMapped"
+                [ngClass]="{'selected-row': selectedTableData.results.SolidsRetentionTime == tableRow['SRT']}">
+                <td class="sticky-left name-cell">
+                    {{tableRow['SRT']}}
+                </td>
+                <td *ngFor="let dataTableVariable of dataTableVariables">
+                    {{tableRow[dataTableVariable.name] | number:'0.0-2'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

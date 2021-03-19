@@ -393,6 +393,7 @@ export class FsatComponent implements OnInit {
 
   addNewMod() {
     let tmpModification: Modification = this.fsatService.getNewMod(this._fsat, this.settings);
+    tmpModification.exploreOpportunities = (this.assessmentTab == 'explore-opportunities');
     this.saveNewMod(tmpModification);
   }
 

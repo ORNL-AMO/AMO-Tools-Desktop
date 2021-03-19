@@ -6,7 +6,7 @@ import { ReplaceExistingModule } from '../../calculator/motors/replace-existing/
 import { MotorDriveModule } from '../../calculator/motors/motor-drive/motor-drive.module';
 import { NaturalGasReductionModule } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
 import { ElectricityReductionModule } from '../../calculator/utilities/electricity-reduction/electricity-reduction.module';
-import { WaterReductionModule } from '../../calculator/utilities/water-reduction/water-reduction.module';
+import { WaterReductionModule } from '../../calculator/waste-water/water-reduction/water-reduction.module';
 import { LightingReplacementModule } from '../../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { ModalModule } from 'ngx-bootstrap';
 

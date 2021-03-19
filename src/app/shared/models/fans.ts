@@ -16,8 +16,7 @@ export interface FSAT {
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
   valid?: FsatValid;
-  tempFsatCopy?: FSAT;
-  existingDataUnits?: string;
+  modalFieldData?: FieldData;
 }
 
 export interface FsatValid {
@@ -64,6 +63,9 @@ export interface FieldData {
   specificHeatRatio: number;
   compressibilityFactor: number;
   measuredVoltage: number;
+  usingStaticPressure?: boolean;
+  ductArea?: number,
+  inletVelocityPressure?: number;
   inletPressureData?: InletPressureData;
   outletPressureData?: OutletPressureData;
   fanRatedInfo?: FanRatedInfo;
@@ -323,6 +325,7 @@ export interface FsatInput {
   flowRate: number;
   inletPressure: number;
   outletPressure: number;
+  velocityPressure: number;
   compressibilityFactor: number;
   // operatingFraction: number,
   operatingHours: number;
@@ -358,7 +361,6 @@ export interface FsatOutput {
   energySavings?: number;
   annualSavings?: number;
 }
-
 
 export interface InletPressureData {
   inletLoss: number;

@@ -65,5 +65,6 @@ export class PlanarResultsComponent implements OnInit {
 
   setPressureCalcType(str: string){
     this.fanAnalysisService.pressureCalcResultType = str;
+    this.fanAnalysisService.getResults.next(true);
   }
 }

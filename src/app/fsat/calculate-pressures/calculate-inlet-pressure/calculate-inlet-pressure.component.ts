@@ -23,16 +23,16 @@ export class CalculateInletPressureComponent implements OnInit {
   ngOnInit() {
     if (!this.inletPressureData) {
       this.inletPressureData = {
-        inletLoss: 0,
-        inletDuctworkLoss: 0,
-        systemDamperLoss: 0,
-        airTreatmentLoss: 0,
-        flowMeasurementLoss: 0,
-        inletDamperLoss: 0,
-        processRequirementsFixed: 0,
-        processRequirements: 0,
-        inletSystemEffectLoss: 0,
-        calculatedInletPressure: 0
+        inletLoss: undefined,
+        inletDuctworkLoss: undefined,
+        systemDamperLoss: undefined,
+        airTreatmentLoss: undefined,
+        flowMeasurementLoss: undefined,
+        inletDamperLoss: undefined,
+        processRequirementsFixed: undefined,
+        processRequirements: undefined,
+        inletSystemEffectLoss: undefined,
+        calculatedInletPressure: undefined
       };
     }
   }

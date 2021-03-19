@@ -226,6 +226,152 @@ export class FanAnalysisService {
     return data;
   }
 
+  getFlowPressureModalDefaults(): Fan203Inputs {
+    var area = 143.63 * 32.63 / 144.0;
+    let mockData: Fan203Inputs = {
+      FanRatedInfo: {
+        fanSpeed: 1170,
+        motorSpeed: 1785,
+        fanSpeedCorrected: 1170,
+        densityCorrected: 0.05,
+        pressureBarometricCorrected: 26.28,
+        globalBarometricPressure: 26.28,
+        includesEvase: "No",
+        traversePlanes: 2,
+        upDownStream: "Downstream"
+      },
+      PlaneData: {
+        plane5upstreamOfPlane2: true,
+        totalPressureLossBtwnPlanes1and4: 0,
+        totalPressureLossBtwnPlanes2and5: 0,
+        variationInBarometricPressure: false,
+        inletSEF: 0,
+        outletSEF: 0,
+        estimate2and5TempFrom1: false,
+        FanInletFlange: {
+          area: undefined,
+          length: undefined,
+          dryBulbTemp: undefined,
+          barometricPressure: 26.57,
+          numInletBoxes: 0,
+          planeType: "Rectangular",
+          staticPressure: null,
+          width: undefined
+        },
+        FanEvaseOrOutletFlange: {
+          area: undefined,
+          dryBulbTemp: undefined,
+          barometricPressure: 26.57,
+          length: undefined,
+          numInletBoxes: 0,
+          planeType: "Rectangular",
+          staticPressure: null,
+          width: undefined
+        },
+        FlowTraverse: {
+          area: undefined,
+          dryBulbTemp: undefined,
+          barometricPressure: 26.57,
+          staticPressure: undefined,
+          pitotTubeCoefficient: 0.87292611371180784,
+          traverseData: [[undefined]],
+          staticPressureData: [[undefined]],
+          length: undefined,
+          numInletBoxes: 0,
+          numInsertionPoints: 1,
+          numTraverseHoles: 1,
+          pitotTubeType: "Standard",
+          planeType: "Rectangular",
+          width: undefined
+        },
+        AddlTraversePlanes: [
+          {
+            area: undefined,
+            dryBulbTemp: undefined,
+            barometricPressure: 26.57,
+            staticPressure: undefined,
+            pitotTubeCoefficient: 0.87,
+            traverseData: [[undefined]],
+            staticPressureData: [[undefined]],
+            length: undefined,
+            numInletBoxes: 0,
+            numInsertionPoints: 1,
+            numTraverseHoles: 1,
+            pitotTubeType: "Standard",
+            planeType: "Rectangular",
+            width: undefined
+          }
+        ],
+        InletMstPlane: {
+          area: area * 2,
+          dryBulbTemp: 123,
+          barometricPressure: 26.57,
+          staticPressure: -17.55,
+          length: 143.63,
+          numInletBoxes: 2,
+          planeType: "Rectangular",
+          width: 32.63
+        },
+        OutletMstPlane: {
+          area: (55.42 * 60.49) / 144.0,
+          dryBulbTemp: 132.7,
+          barometricPressure: 26.57,
+          staticPressure: 1.8,
+          length: 55.42,
+          numInletBoxes: null,
+          planeType: "Rectangular",
+          width: 60.49,
+        }
+      },
+      BaseGasDensity: {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: "wetBulb",
+        relativeHumidity: null,
+        specificGravity: 1,
+        specificHeatGas: 0.24,
+        wetBulbTemp: 119
+      },
+      FanShaftPower: {
+        motorShaftPower: 1759.17,
+        efficiencyMotor: 95,
+        efficiencyVFD: 100,
+        efficiencyBelt: 100,
+        sumSEF: 0,
+        amps: 205,
+        driveType: "Direct Drive",
+        efficiencyClass: 1,
+        fla: 210,
+        frequency: 60,
+        isMethodOne: false,
+        isVFD: "No",
+        mainsDataAvailable: "Yes",
+        npv: 4160,
+        phase1: {
+          amps: 205,
+          voltage: 4200
+        },
+        phase2: {
+          amps: 210,
+          voltage: 4200
+        }
+        ,
+        phase3: {
+          amps: 200,
+          voltage: 4200
+        },
+        powerFactorAtLoad: 0.88,
+        ratedHP: 1750,
+        synchronousSpeed: 1200,
+        voltage: 4200
+      }
+    };    
+    return mockData;
+  }
+
   getExampleData(): Fan203Inputs {
     var area = 143.63 * 32.63 / 144.0;
     let mockData: Fan203Inputs = {

@@ -270,6 +270,7 @@ export class CompressedAirReductionService {
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
     // overwrite estimated energyUse value originally set in suite results
     results.modificationAggregateResults.energyUse = results.baselineAggregateResults.energyUse - results.annualEnergySavings;
+    results.modificationAggregateResults.energyCost = results.baselineAggregateResults.energyCost - results.annualCostSavings;
     this.compressedAirResults.next(results);
   }
 
@@ -288,6 +289,7 @@ export class CompressedAirReductionService {
       }
 
       let controlAdjustedSavings: number = (baselineResult.energyUse - modResult.energyUse) * (input.compressorElectricityData.compressorControlAdjustment / 100);
+      modResult.energyUse = baselineResult.energyUse - controlAdjustedSavings;
       results.baselineResults.push(baselineResult);
       results.modificationResults.push(modResult);
       results.annualEnergySavings += controlAdjustedSavings;
@@ -297,7 +299,8 @@ export class CompressedAirReductionService {
   }
 
   calculate(input: Array<CompressedAirReductionData>, settings: Settings): CompressedAirReductionResult {
-    let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(input, settings);
+    let inputCopy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(input));
+    let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(inputCopy, settings);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray
     };

@@ -64,6 +64,8 @@
           {{ratedInfoForm.controls.globalBarometricPressure.errors.min.min}}.</span>
       </span>
     </div>
+
+    <div *ngIf="!inModal">
     <div class="form-group">
       <label for="fanSpeedCorrected">Corrected Fan Speed (N<sub>c</sub>)</label>
       <div class="input-group">
@@ -111,6 +113,8 @@
           {{ratedInfoForm.controls.pressureBarometricCorrected.errors.min.min}}.</span>
       </span>
     </div>
+  </div>
+  
     <div class="form-group">
       <label for="includesEvase">Rated Fan Performance Includes Evase</label>
       <div class="input-group">

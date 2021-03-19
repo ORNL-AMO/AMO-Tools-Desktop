@@ -133,6 +133,8 @@ export class CompressedAirReductionComponent implements OnInit {
     }
 
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, utilityType);
+    let currentIndex = this.baselineData.length > 0 ? this.baselineData.length - 1 : 0;
+    tmpObj.compressorElectricityData = this.baselineData[currentIndex].compressorElectricityData;
     this.modificationData.push(tmpObj);
     this.getResults();
   }

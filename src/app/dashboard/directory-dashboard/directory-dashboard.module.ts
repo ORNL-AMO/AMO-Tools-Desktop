@@ -31,6 +31,8 @@ import { ContentControlsComponent } from './directory-dashboard-menu/content-con
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './directory-items/inventory-item/inventory-item.component';
 import { MotorInventoryCardComponent } from './directory-items/inventory-item/motor-inventory-card/motor-inventory-card.component';
+import { WasteWaterSummaryCardComponent } from './directory-items/assessment-item/waste-water-summary-card/waste-water-summary-card.component';
+import { WasteWaterReportModule } from '../../waste-water/waste-water-report/waste-water-report.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { MotorInventoryCardComponent } from './directory-items/inventory-item/mo
      AddPreAssessmentItemComponent,
      ContentControlsComponent,
      InventoryItemComponent,
-     MotorInventoryCardComponent
+     MotorInventoryCardComponent,
+     WasteWaterSummaryCardComponent
     ],
   imports: [
     CommonModule,
@@ -67,7 +70,8 @@ import { MotorInventoryCardComponent } from './directory-items/inventory-item/mo
     SharedPipesModule,
     SettingsModule,
     PreAssessmentModule,
-    DashboardPipeModule
+    DashboardPipeModule,
+    WasteWaterReportModule
   ],
   providers: [DirectoryDashboardService]
 })

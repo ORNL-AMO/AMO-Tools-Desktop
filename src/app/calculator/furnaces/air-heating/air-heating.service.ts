@@ -33,6 +33,7 @@ export class AirHeatingService {
     let emptyInput: AirHeatingInput = {
       operatingHours: 8760,
       gasFuelType: true,
+      fuelCost: 0,
       materialTypeId: 1,
       flueTemperature: 0,
       flueGasO2: 0,
@@ -64,6 +65,7 @@ export class AirHeatingService {
       hxColdAir: 0,
       hxOutletExhaust: 0,
       energySavings: 0,
+      costSavings: 0,
       heatCapacityFlue: 0,
       heatCapacityAir: 0,
     };
@@ -83,6 +85,7 @@ export class AirHeatingService {
         inputCopy = this.convertPercentInputs(inputCopy);
         let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
+        airHeatingOutput.costSavings = airHeatingOutput.energySavings * inputCopy.fuelCost;
         this.airHeatingOutput.next(airHeatingOutput);
     }
   }
@@ -92,6 +95,7 @@ export class AirHeatingService {
       operatingHours: 8760,
       materialTypeId: 1,
       gasFuelType: true,
+      fuelCost: 3.50,
       flueTemperature: 400,
       flueGasO2: 5.8,
       oxygenCalculationMethod: 'Excess Air',

@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { CompareService } from '../../compare.service';
+import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
 
 @Component({
   selector: 'app-results-summary',
@@ -21,12 +21,12 @@ export class ResultsSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   fsat: FSAT;
-  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
+  constructor(private fsatReportRollupService: FsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.fsat = this.assessment.fsat;
     if (this.inRollup) {
-      this.reportRollupService.selectedFsats.forEach(val => {
+      this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -60,7 +60,7 @@ export class ResultsSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.fsatReportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
 }

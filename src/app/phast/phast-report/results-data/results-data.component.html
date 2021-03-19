@@ -6,14 +6,16 @@
         <th>Energy Loss/Use</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline
         </th>
-        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <th *ngFor="let mod of phastMods; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <app-invalid-phast *ngIf="!mod.phast.valid.isValid" [phastValid]="mod.phast.valid"></app-invalid-phast>
           <div>
             {{mod.phast.name}}
           </div>
         </th>
         <th *ngIf="!inSetup && modification != undefined">
-          <app-invalid-phast *ngIf="!modification.phast.valid.isValid" [phastValid]="modification.phast.valid"></app-invalid-phast>
+          <app-invalid-phast *ngIf="!modification.phast.valid.isValid" [phastValid]="modification.phast.valid">
+          </app-invalid-phast>
           <div>
             {{modification.phast.name}}
           </div>
@@ -23,7 +25,8 @@
         <th></th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{lossUnit}}
         </th>
-        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{lossUnit}}
+        <th *ngFor="let mod of phastMods; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{lossUnit}}
         </th>
         <th *ngIf="!inSetup && modification != undefined">{{lossUnit}}</th>
       </tr>
@@ -31,180 +34,258 @@
     <tbody>
       <tr>
         <td>Charge Materials</td>
-        <td *ngIf="baseLineResults.totalChargeMaterialLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalChargeMaterialLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalChargeMaterialLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalChargeMaterialLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalChargeMaterialLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalChargeMaterialLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalChargeMaterialLoss">{{mod.totalChargeMaterialLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalChargeMaterialLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Fixtures, trays etc.</td>
-        <td *ngIf="baseLineResults.totalFixtureLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalFixtureLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalFixtureLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalFixtureLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalFixtureLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalFixtureLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalFixtureLoss">{{mod.totalFixtureLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalFixtureLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Wall Losses</td>
-        <td *ngIf="baseLineResults.totalWallLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalWallLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalWallLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalWallLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalWallLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalWallLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalWallLoss">{{mod.totalWallLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalWallLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Cooling Losses</td>
-        <td *ngIf="baseLineResults.totalCoolingLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalCoolingLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalCoolingLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalCoolingLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalCoolingLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalCoolingLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalCoolingLoss">{{mod.totalCoolingLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalCoolingLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Atmosphere Losses</td>
-        <td *ngIf="baseLineResults.totalAtmosphereLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalAtmosphereLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalAtmosphereLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalAtmosphereLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalAtmosphereLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalAtmosphereLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalAtmosphereLoss">{{mod.totalAtmosphereLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalAtmosphereLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Opening Losses</td>
-        <td *ngIf="baseLineResults.totalOpeningLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalOpeningLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalOpeningLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalOpeningLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalOpeningLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalOpeningLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalOpeningLoss">{{mod.totalOpeningLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalOpeningLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Leakage Losses</td>
-        <td *ngIf="baseLineResults.totalLeakageLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalLeakageLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalLeakageLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalLeakageLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalLeakageLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalLeakageLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalLeakageLoss">{{mod.totalLeakageLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalLeakageLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Extended Surface Losses</td>
-        <td *ngIf="baseLineResults.totalExtSurfaceLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalExtSurfaceLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalExtSurfaceLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalExtSurfaceLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalExtSurfaceLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalExtSurfaceLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalExtSurfaceLoss">{{mod.totalExtSurfaceLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalExtSurfaceLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showAuxPower">
         <td>Aux Power Losses</td>
-        <td *ngIf="baseLineResults.totalAuxPower" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalAuxPower | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalAuxPower" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalAuxPower"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalAuxPower | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalAuxPower"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalAuxPower">{{mod.totalAuxPower | number: decimalCount}}</span>
           <span *ngIf="!mod.totalAuxPower">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showSlag">
         <td>Slag Losses</td>
-        <td *ngIf="baseLineResults.totalSlag" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalSlag | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalSlag" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalSlag" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalSlag | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalSlag" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          &mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalSlag">{{mod.totalSlag | number: decimalCount}}</span>
           <span *ngIf="!mod.totalSlag">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr class="tr-underline">
         <td>Other Losses</td>
-        <td *ngIf="baseLineResults.totalOtherLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalOtherLoss | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalOtherLoss" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalOtherLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalOtherLoss | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalOtherLoss"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalOtherLoss">{{mod.totalOtherLoss | number: decimalCount}}</span>
           <span *ngIf="!mod.totalOtherLoss">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Total Net Heat Required</td>
-        <td *ngIf="baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalInput | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalInput | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          &mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalInput">{{mod.totalInput | number: decimalCount}}</span>
           <span *ngIf="!mod.totalInput">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showFlueGas">
         <td>Available Heat (%)</td>
-        <td *ngIf="baseLineResults.flueGasAvailableHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.flueGasAvailableHeat | number:'2.1-1'}}%</td>
-        <td *ngIf="!baseLineResults.flueGasAvailableHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.flueGasAvailableHeat"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.flueGasAvailableHeat | number:'2.1-1'}}%</td>
+        <td *ngIf="!baseLineResults.flueGasAvailableHeat"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.flueGasAvailableHeat">{{mod.flueGasAvailableHeat | number:'2.1-1'}}%</span>
           <span *ngIf="!mod.flueGasAvailableHeat">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showFlueGas">
         <td>Flue Gas Losses</td>
-        <td *ngIf="baseLineResults.flueGasSystemLosses" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.flueGasSystemLosses | number: decimalCount}} </td>
-        <td *ngIf="!baseLineResults.flueGasSystemLosses" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.flueGasSystemLosses"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.flueGasSystemLosses | number: decimalCount}} </td>
+        <td *ngIf="!baseLineResults.flueGasSystemLosses"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.flueGasSystemLosses">{{mod.flueGasSystemLosses | number: decimalCount}}</span>
           <span *ngIf="!mod.flueGasSystemLosses">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Exothermic Heat from Process</td>
-        <td *ngIf="baseLineResults.exothermicHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.exothermicHeat | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.exothermicHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.exothermicHeat"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.exothermicHeat | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.exothermicHeat"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.exothermicHeat">{{mod.exothermicHeat | number: decimalCount}}</span>
           <span *ngIf="!mod.exothermicHeat">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput2">
         <td>Energy Input Available Heat</td>
-        <td *ngIf="baseLineResults.availableHeatPercent" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.availableHeatPercent | number:'1.0-0'}}%</td>
-        <td *ngIf="!baseLineResults.availableHeatPercent" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.availableHeatPercent"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.availableHeatPercent | number:'1.0-0'}}%</td>
+        <td *ngIf="!baseLineResults.availableHeatPercent"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.availableHeatPercent">{{mod.availableHeatPercent | number:'1.0-0'}}%</span>
           <span *ngIf="!mod.availableHeatPercent">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput2">
         <td>Exhaust Gas Losses</td>
-        <td *ngIf="baseLineResults.totalExhaustGas" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalExhaustGas | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalExhaustGas" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalExhaustGas"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalExhaustGas | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalExhaustGas"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalExhaustGas">{{mod.totalExhaustGas | number: decimalCount}}</span>
           <span *ngIf="!mod.totalExhaustGas">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showExGas">
         <td>Exhaust Gas Losses</td>
-        <td *ngIf="baseLineResults.totalExhaustGasEAF" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalExhaustGasEAF | number: decimalCount}} </td>
-        <td *ngIf="!baseLineResults.totalExhaustGasEAF" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalExhaustGasEAF"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalExhaustGasEAF | number: decimalCount}} </td>
+        <td *ngIf="!baseLineResults.totalExhaustGasEAF"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalExhaustGasEAF">{{mod.totalExhaustGasEAF | number: decimalCount}}</span>
           <span *ngIf="!mod.totalExhaustGasEAF">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showSystemEff">
         <td>System Efficiency</td>
-        <td *ngIf="baseLineResults.heatingSystemEfficiency" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.heatingSystemEfficiency | number:'1.0-0'}}%</td>
-        <td *ngIf="!baseLineResults.heatingSystemEfficiency" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.heatingSystemEfficiency"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.heatingSystemEfficiency | number:'1.0-0'}}%</td>
+        <td *ngIf="!baseLineResults.heatingSystemEfficiency"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.heatingSystemEfficiency">{{mod.heatingSystemEfficiency | number: decimalCount}}</span>
           <span *ngIf="!mod.heatingSystemEfficiency">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showSystemEff">
         <td>Total System Losses</td>
-        <td *ngIf="baseLineResults.totalSystemLosses" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.totalSystemLosses | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.totalSystemLosses" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.totalSystemLosses"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.totalSystemLosses | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.totalSystemLosses"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.totalSystemLosses">{{mod.totalSystemLosses | number: decimalCount}}</span>
           <span *ngIf="!mod.totalSystemLosses">&mdash; &mdash;</span>
         </td>
@@ -212,36 +293,52 @@
 
       <tr *ngIf="showResultsCats.showEnInput2">
         <td *ngIf="showResultsCats.showEnInput2">Fuel Heat Delivered</td>
-        <td *ngIf="baseLineResults.energyInputHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.energyInputHeatDelivered | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.energyInputHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.energyInputHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.energyInputHeatDelivered | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.energyInputHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.energyInputHeatDelivered">{{mod.energyInputHeatDelivered | number: decimalCount}}</span>
           <span *ngIf="!mod.energyInputHeatDelivered">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput2">
         <td *ngIf="showResultsCats.showEnInput2">Electrical Heat Delivered</td>
-        <td *ngIf="baseLineResults.electricalHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.electricalHeatDelivered | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.electricalHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.electricalHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.electricalHeatDelivered | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.electricalHeatDelivered"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.electricalHeatDelivered">{{mod.electricalHeatDelivered | number: decimalCount}}</span>
           <span *ngIf="!mod.electricalHeatDelivered">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput1">
         <td>Chemical Energy Delivered</td>
-        <td *ngIf="baseLineResults.energyInputTotalChemEnergy" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.energyInputTotalChemEnergy | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.energyInputTotalChemEnergy" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.energyInputTotalChemEnergy"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.energyInputTotalChemEnergy | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.energyInputTotalChemEnergy"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.energyInputTotalChemEnergy">{{mod.energyInputTotalChemEnergy | number: decimalCount}}</span>
           <span *ngIf="!mod.energyInputTotalChemEnergy">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr class="tr-border">
         <td style="font-weight: bold;">Gross Heat Input</td>
-        <td *ngIf="baseLineResults.grossHeatInput" style="font-weight: bold;" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.grossHeatInput | number: decimalCount}}</td>
-        <td *ngIf="!baseLineResults.grossHeatInput" style="font-weight: bold;" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults" style="font-weight: bold;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngIf="baseLineResults.grossHeatInput" style="font-weight: bold;"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          {{baseLineResults.grossHeatInput | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.grossHeatInput" style="font-weight: bold;"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;" style="font-weight: bold;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.grossHeatInput">{{mod.grossHeatInput | number: decimalCount}}</span>
           <span *ngIf="!mod.grossHeatInput">&mdash; &mdash;</span>
         </td>
@@ -249,10 +346,13 @@
       <tr class="hide-print" *ngIf="!inPhast">
         <td>Use for Summary</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1" [(ngModel)]="selectedModificationIndex">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
+            [(ngModel)]="selectedModificationIndex">
         </td>
-        <td *ngFor="let modification of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index" [(ngModel)]="selectedModificationIndex">
+        <td *ngFor="let modification of phastMods; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
+            [(ngModel)]="selectedModificationIndex">
         </td>
       </tr>
     </tbody>

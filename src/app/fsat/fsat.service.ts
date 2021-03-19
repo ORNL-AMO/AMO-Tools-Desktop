@@ -35,7 +35,7 @@ export class FsatService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calculatorTab = new BehaviorSubject<string>('fan-analysis');
+    this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -117,6 +117,7 @@ export class FsatService {
       measuredAmps: fsat.fieldData.motorPower,
       flowRate: fsat.fieldData.flowRate,
       inletPressure: fsat.fieldData.inletPressure,
+      velocityPressure: fsat.fieldData.inletVelocityPressure,
       outletPressure: fsat.fieldData.outletPressure,
       compressibilityFactor: fsat.fieldData.compressibilityFactor,
       operatingHours: fsat.fieldData.operatingHours,
@@ -153,6 +154,7 @@ export class FsatService {
         measuredAmps: fsat.fieldData.motorPower,
         flowRate: fsat.fieldData.flowRate,
         inletPressure: fsat.fieldData.inletPressure,
+        velocityPressure: fsat.fieldData.inletVelocityPressure,
         outletPressure: fsat.fieldData.outletPressure,
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
         operatingHours: fsat.fieldData.operatingHours,
@@ -279,4 +281,3 @@ export class FsatService {
     return tmpModification;
   }
 }
-

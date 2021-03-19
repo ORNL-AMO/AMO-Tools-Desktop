@@ -161,6 +161,11 @@ export class FsatFluidComponent implements OnInit {
           gasDensity: undefined
         });
       }
+    } 
+    
+    if (psychrometricResults) {
+      psychrometricResults.dryBulbTemp = this.gasDensityForm.controls.dryBulbTemp.value;
+      psychrometricResults.barometricPressure = this.gasDensityForm.controls.barometricPressure.value;
     }
 
     if (!this.baseline) {
