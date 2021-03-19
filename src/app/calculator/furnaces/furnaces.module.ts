@@ -15,6 +15,7 @@ import { LeakageModule } from './leakage/leakage.module';
 import { FixtureModule } from './fixture/fixture.module';
 import { AirHeatingModule } from './air-heating/air-heating.module';
 import { CoolingModule } from './cooling/cooling.module';
+import { WasteHeatModule } from './waste-heat/waste-heat.module';
 import { HeatCascadingModule } from './heat-cascading/heat-cascading.module';
 
 @NgModule({
@@ -35,6 +36,7 @@ import { HeatCascadingModule } from './heat-cascading/heat-cascading.module';
     CoolingModule,
     LeakageModule,
     FixtureModule,
+    WasteHeatModule,
     AirHeatingModule,
     HeatCascadingModule
   ],
