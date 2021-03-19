@@ -18,6 +18,9 @@ export class UpdateDataService {
         } else {
             if (assessment.type === 'PSAT') {
                 return this.updatePsat(assessment);
+            }
+            if (assessment.type === 'FSAT') {
+                return this.updateFsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
             } else if (assessment.type == 'SSMT') {
@@ -43,6 +46,16 @@ export class UpdateDataService {
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
+        return assessment;
+    }
+
+    updateFsat(assessment: Assessment): Assessment {
+        //logic for updating fsat data
+        assessment.appVersion = packageJson.version;
+        if (!assessment.fsat.fieldData.inletVelocityPressure) {
+            assessment.fsat.fieldData.inletVelocityPressure = 0;
+            assessment.fsat.fieldData.usingStaticPressure = true;
+        }
         return assessment;
     }
 
