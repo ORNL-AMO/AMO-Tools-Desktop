@@ -34,6 +34,7 @@ export class FanDataFormComponent implements OnInit {
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
+  baselineFanType: string;
 
   constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
@@ -63,6 +64,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   initFanType() {
+    this.baselineFanType = this.fanTypes.find(fan => fan.value == this.baselineForm.controls.fanType.value).display;
     if (this.modificationForm.controls.fanType.value === 12) {
       if (this.modificationForm.controls.fanEfficiency.value !== this.baselineFanEfficiency) {
         this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: true, display: 'Install More Efficient Fan' };
