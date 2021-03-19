@@ -11,7 +11,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingDO, 'invalid': form.controls.OperatingDO.invalid}">
             <label for="{{'OperatingDO_'+idString}}">Operating Dissolved O<sub>2</sub> (DO)
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateDO()"
-                    [ngClass]="{'disabled-link':!selected}">Calculate DO</a>
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize DO</a>
 
             </label>
             <div class="input-group">
@@ -24,7 +24,7 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingDO.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingDO.errors.min">Value can't be
-                    less than {{form.controls.OperatingDO.errors.min.min}} &#8451;</span>
+                    less than {{form.controls.OperatingDO.errors.min.min}} mg/L</span>
             </span>
         </div>
         <div class="alert alert-info small text-center" *ngIf="showDOAlert">
@@ -150,7 +150,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingTime, 'invalid': form.controls.OperatingTime.invalid}">
             <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateOperatingTime()"
-                    [ngClass]="{'disabled-link':!selected}">Calculate Operating Time</a>
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Operating Time</a>
             </label>
             <div class="input-group">
                 <input type="number" name="OperatingTime" class="form-control number-input-field"
@@ -170,7 +170,7 @@
                 *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.pristine">
                 {{aeratorPerformanceWarnings.OperatingTime}}</span>
         </div>
-        
+
         <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
             Value cannot be optimized further.
         </div>
@@ -189,7 +189,7 @@
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Speed,'error': aeratorPerformanceWarnings.Speed !== null, 'invalid': form.controls.Speed.invalid}">
             <label for="{{'Speed_'+idString}}">Aerator Speed
                 <a *ngIf="isModification" class="form-text small click-link" (click)="calculateSpeed()"
-                    [ngClass]="{'disabled-link':!selected}">Calculate Speed</a></label>
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Speed</a></label>
             <div class="input-group">
                 <input type="number" name="Speed" class="form-control number-input-field" id="{{'Speed_'+idString}}"
                     (focus)="focusField('Speed')" (input)="save()" formControlName="Speed" [readonly]="!selected">

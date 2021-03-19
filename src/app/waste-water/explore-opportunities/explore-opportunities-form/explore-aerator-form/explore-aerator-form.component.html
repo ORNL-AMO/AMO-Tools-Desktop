@@ -20,7 +20,7 @@
                 *ngIf="baselineForm.controls.OperatingDO.invalid && !baselineForm.controls.OperatingDO.pristine">
                 <span *ngIf="baselineForm.controls.OperatingDO.errors.required">Value Required</span>
                 <span *ngIf="baselineForm.controls.OperatingDO.errors.min">Value can't be less than
-                    {{baselineForm.controls.OperatingDO.errors.min.min}} &#8451;</span>
+                    {{baselineForm.controls.OperatingDO.errors.min.min}} mg/L</span>
             </span>
         </div>
     </form>
@@ -35,13 +35,13 @@
                     (focus)="focusField('OperatingDO')" formControlName="OperatingDO" (input)="save()" />
                 <span class="input-group-addon units">mg/L</span>
             </div>
-            <a class="form-text small click-link" (click)="calculateDO()">Calculate
-                DO</a>
+            <a class="form-text small click-link" (click)="calculateDO()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize DO</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.OperatingDO.invalid && !modificationForm.controls.OperatingDO.pristine">
                 <span *ngIf="modificationForm.controls.OperatingDO.errors.required">Value Required</span>
                 <span *ngIf="modificationForm.controls.OperatingDO.errors.min">Value can't be less than
-                    {{modificationForm.controls.OperatingDO.errors.min.min}} &#8451;</span>
+                    {{modificationForm.controls.OperatingDO.errors.min.min}} mg/L</span>
             </span>
         </div>
         <div class="alert alert-info small text-center" *ngIf="showDOAlert">
@@ -72,6 +72,8 @@
                 <span *ngIf="baselineForm.controls.OperatingTime.errors.required">Value Required</span>
                 <span *ngIf="baselineForm.controls.OperatingTime.errors.min">Value can't be less than
                     {{baselineForm.controls.OperatingTime.errors.min.min}} hr/day.</span>
+                <span *ngIf="baselineForm.controls.OperatingTime.errors.max">Value can't be greater than
+                    {{baselineForm.controls.OperatingTime.errors.max.max}} hr/day.</span>
             </span>
         </div>
     </form>
@@ -85,14 +87,19 @@
                     (focus)="focusField('OperatingTime')" formControlName="OperatingTime" (input)="save()" />
                 <span class="input-group-addon units">hr/day</span>
             </div>
-            <a class="form-text small click-link" (click)="calculateOperatingTime()">Calculate
-                Operating Hours</a>
+            <a class="form-text small click-link" (click)="calculateOperatingTime()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize Operating Hours</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.OperatingTime.invalid && !modificationForm.controls.OperatingTime.pristine">
                 <span *ngIf="modificationForm.controls.OperatingTime.errors.required">Value Required</span>
                 <span *ngIf="modificationForm.controls.OperatingTime.errors.min">Value can't be less than
                     {{modificationForm.controls.OperatingTime.errors.min.min}} hr/day.</span>
+                <span *ngIf="modificationForm.controls.OperatingTime.errors.max">Value can't be greater than
+                    {{modificationForm.controls.OperatingTime.errors.max.max}} hr/day.</span>
             </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="modificationWarnings.OperatingTime !== null && !modificationForm.controls.OperatingTime.pristine">
+                {{modificationWarnings.OperatingTime}}</span>
         </div>
         <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
             Value cannot be optimized further.
@@ -167,8 +174,8 @@
                     (input)="save()" />
                 <span class="input-group-addon units">%</span>
             </div>
-            <a class="form-text small click-link" (click)="calculateSpeed()">Calculate
-                Speed</a>
+            <a class="form-text small click-link" (click)="calculateSpeed()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize Speed</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.Speed.invalid && !modificationForm.controls.Speed.pristine">
                 <span *ngIf="modificationForm.controls.Speed.errors.required">Value Required</span>

@@ -256,6 +256,9 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingDO;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    if (!modification.aeratorPerformanceData.OperatingDO || modification.aeratorPerformanceData.OperatingDO < 0) {
+      modification.aeratorPerformanceData.OperatingDO = 1;
+    }
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let optimalDo: number = modification.aeratorPerformanceData.OperatingDO;
@@ -292,12 +295,20 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingTime;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    if (!modification.aeratorPerformanceData.OperatingTime || modification.aeratorPerformanceData.OperatingTime > 24
+      || modification.aeratorPerformanceData.OperatingTime < 0) {
+      modification.aeratorPerformanceData.OperatingTime = 24;
+    }
+
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let operatingTime: number = modification.aeratorPerformanceData.OperatingTime;
     let difference: number = this.checkDifference(modification, modificationResults);
     let counter: number = 0;
-    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false && operatingTime > 16 && operatingTime < 24) {
+    if (!operatingTime) {
+      operatingTime = 24;
+    }
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
       if (difference > 0 && difference < 10) {
         operatingTime = operatingTime + .01;
       } else if (difference > 0 && difference > 100) {
@@ -318,10 +329,10 @@ export class WasteWaterService {
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
-    if(operatingTime < 16){
+    if (operatingTime < 16) {
       operatingTime = 16;
     }
-    if(operatingTime > 24){
+    if (operatingTime > 24) {
       operatingTime = 24;
     }
     if (isNaN(difference)) {
@@ -345,12 +356,16 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.Speed;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    if (!modification.aeratorPerformanceData.Speed || modification.aeratorPerformanceData.Speed > 100
+      || modification.aeratorPerformanceData.Speed < 0) {
+      modification.aeratorPerformanceData.Speed = 100;
+    }
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let speed: number = modification.aeratorPerformanceData.Speed;
     let difference: number = this.checkDifference(modification, modificationResults);
     let counter: number = 0;
-    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false && speed > 50 && speed < 100) {
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
       if (difference > 0 && difference < 10) {
         speed = speed + .01;
       } else if (difference > 0 && difference > 100) {
@@ -371,10 +386,10 @@ export class WasteWaterService {
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
-    if(speed < 50){
+    if (speed < 50) {
       speed = 50;
     }
-    if(speed > 100){
+    if (speed > 100) {
       speed = 100;
     }
     if (isNaN(difference)) {
