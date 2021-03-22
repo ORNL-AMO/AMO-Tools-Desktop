@@ -23,8 +23,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   settings: Settings;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
-  // @Input()
-  // psat: PSAT;
   @Output('updateAssessment')
   updateAssessment = new EventEmitter<PSAT>();
   @Output('openModal')
@@ -72,7 +70,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure ||
       this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
       this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure;
-      // TODO change to assessment.psat
     let hasData: boolean = Boolean(this.assessment.psat.inputs.flow_rate || this.assessment.psat.inputs.head || this.assessment.psat.inputs.motor_rated_power || this.assessment.psat.inputs.fluidTemperature);
     
     if (hasData && settingsChanged) {

@@ -91,8 +91,7 @@ export class FanFieldDataComponent implements OnInit {
         this.disableForm();
       }
     }
-    if ((changes.fsat && !changes.fsat.firstChange) 
-    || (changes.modificationIndex && !changes.modificationIndex.firstChange)) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
     }
   }

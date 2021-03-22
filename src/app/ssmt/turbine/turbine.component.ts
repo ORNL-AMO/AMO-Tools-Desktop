@@ -46,7 +46,7 @@ export class TurbineComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    if((changes.boilerInput) || (changes.modificationIndex && !changes.modificationIndex.isFirstChange())){
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
       this.initForms();
     }
   }

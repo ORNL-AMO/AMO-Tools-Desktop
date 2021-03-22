@@ -72,7 +72,7 @@ export class BoilerComponent implements OnInit {
         this.disableForm();
       }
     }
-    if ((changes.boilerInput) || (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.initForm();
     }
   }

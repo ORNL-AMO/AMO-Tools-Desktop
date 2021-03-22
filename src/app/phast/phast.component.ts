@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
-import { StepTab, LossTab } from './tabs';
+import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
@@ -547,10 +547,16 @@ export class PhastComponent implements OnInit {
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
     this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
   }
 
-  closeUpdateUnitsModal() {
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.phastService.mainTab.next('system-setup');
+      this.phastService.stepTab.next(stepTabs[0]);
+    }
     this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
@@ -559,7 +565,7 @@ export class PhastComponent implements OnInit {
     } else {
       this.saveDb();
     }
-    this.closeUpdateUnitsModal();
+    this.closeUpdateUnitsModal(shouldUpdateData);
   }
 
   updateData() {

@@ -450,8 +450,13 @@ export class SsmtComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  closeUpdateUnitsModal() {
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.stepTab.next('system-basics');
+    }
     this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
@@ -461,7 +466,7 @@ export class SsmtComponent implements OnInit {
     else {
       this.save();
     }
-    this.closeUpdateUnitsModal();
+    this.closeUpdateUnitsModal(shouldUpdateData);
   }
 
   updateData() {

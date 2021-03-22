@@ -18,12 +18,10 @@ import { PumpFluidService } from './pump-fluid.service';
 export class PumpFluidComponent implements OnInit {
   @Input()
   psat: PSAT;
-  // @Output('saved')
-  // saved = new EventEmitter<boolean>();
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
   @Input()
   psatInputs: PsatInputs;
-  @Output('saved')
-  saved = new EventEmitter<PsatInputs>();
   @Input()
   selected: boolean;
   @Input()
@@ -80,17 +78,12 @@ export class PumpFluidComponent implements OnInit {
         this.enableForm();
       }
     }
-    if ((changes.psatInputs && !changes.psatInputs.firstChange)|| (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.initForm();
     }
-    // if ((changes.psat)|| (changes.modificationIndex && !changes.modificationIndex.isFirstChange())) {
-    //   console.log('init form after changes')
-    //   this.initForm();
-    // }
   }
 
   initForm() {
-    // this.psatForm = this.pumpFluidService.getFormFromObj(this.psatInputs);
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }
@@ -201,22 +194,13 @@ export class PumpFluidComponent implements OnInit {
   }
 
 
-  // save() {
-  //   //update object values from form values
-  //   this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
-  //   //check warnings
-  //   this.checkWarnings();
-  //   //save
-  //   this.saved.emit(this.selected);
-  // }
-
   save() {
     //update object values from form values
     this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     //check warnings
     this.checkWarnings();
     //save
-    this.saved.emit(this.psat.inputs);
+    this.saved.emit(this.selected);
   }
 
 

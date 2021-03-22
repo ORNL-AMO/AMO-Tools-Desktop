@@ -302,10 +302,7 @@ export class PsatComponent implements OnInit {
       this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex);
-    console.log('saving _psat', this._psat);
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    // Trigger change detection
-    this._psat.inputs = this.assessment.psat.inputs;
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.psatService.getResults.next(true);
@@ -316,11 +313,6 @@ export class PsatComponent implements OnInit {
 
   savePsat(newPSAT: PSAT) {
     this._psat = newPSAT;
-    this.save();
-  }
-
-  savePsatInputs(updatedInputs: PsatInputs) {
-    this._psat.inputs = updatedInputs;
     this.save();
   }
 
@@ -423,7 +415,11 @@ export class PsatComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  closeUpdateUnitsModal() {
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.psatTabService.mainTab.next('system-setup');
+      this.psatTabService.stepTab.next('system-basics');
+    }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();
   }
@@ -434,7 +430,7 @@ export class PsatComponent implements OnInit {
     } else {
       this.save();
     }
-    this.closeUpdateUnitsModal();
+    this.closeUpdateUnitsModal(shouldUpdateData);
   }
 
   updateData() {

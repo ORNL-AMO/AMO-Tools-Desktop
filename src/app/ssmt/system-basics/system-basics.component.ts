@@ -19,8 +19,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   assessment: Assessment;
   @Output('emitSave')
   emitSave = new EventEmitter<Settings>();
-  // @Input()
-  // ssmt: SSMT;
   @Output('emitSaveSsmt')
   emitSaveSsmt = new EventEmitter<SSMT>();
   @Output('openUpdateUnitsModal') 
@@ -28,8 +26,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
   settingsForm: FormGroup;
   oldSettings: Settings;
-  // showUpdateData: boolean = false;
-  // dataUpdated: boolean = false;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private convertSsmtService: ConvertSsmtService) { }

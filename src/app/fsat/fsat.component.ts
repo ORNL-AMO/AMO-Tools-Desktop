@@ -132,7 +132,6 @@ export class FsatComponent implements OnInit {
     });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      console.log(this.stepTab);
       this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
       this.getContainerHeight();
     });
@@ -440,8 +439,13 @@ export class FsatComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  closeUpdateUnitsModal() {
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.fsatService.mainTab.next('system-setup');
+      this.fsatService.stepTab.next('system-basics');
+    }
     this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
@@ -450,7 +454,7 @@ export class FsatComponent implements OnInit {
     } else {
       this.save();
     }
-    this.closeUpdateUnitsModal();
+    this.closeUpdateUnitsModal(shouldUpdateData);
   }
 
   updateData() {

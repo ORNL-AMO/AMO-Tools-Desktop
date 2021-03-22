@@ -77,8 +77,7 @@ export class FsatFluidComponent implements OnInit {
         this.disableForm();
       }
     }
-    if ((changes.fsat && !changes.fsat.firstChange) 
-    || (changes.modificationIndex && !changes.modificationIndex.firstChange)) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
     }
   }
@@ -110,7 +109,6 @@ export class FsatFluidComponent implements OnInit {
     //save is always called on input so add check for warnings call here
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
     this.updateFormValidators();
-    console.log('saving fsat fluid');
     this.emitSave.emit(this.baseGasDensity);
   }
 
