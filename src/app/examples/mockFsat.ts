@@ -322,37 +322,5 @@ export const MockFsatCalculator: Calculator = {
             ],
             dataOrder: 2
         },
-        systemCurveDataPoints: [
-            {
-                pointName: "Baseline1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Baseline",
-                flowRate: 129691,
-                yValue: 17.46
-            },
-            {
-                pointName: "Optimize Fan & Motor Combo1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Optimize Fan & Motor Combo",
-                flowRate: 129691,
-                yValue: 17.46
-            },
-            {
-                pointName: "Reduce pressure & flow1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Reduce pressure & flow",
-                flowRate: 86461,
-                yValue: 20.48
-            }
-        ]
     }
 };
