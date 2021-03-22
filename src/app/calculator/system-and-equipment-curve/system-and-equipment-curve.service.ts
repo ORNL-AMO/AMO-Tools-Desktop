@@ -42,7 +42,6 @@ export class SystemAndEquipmentCurveService {
   modificationPowerDataPairs: Array<{ x: number, y: number }>;
 
   //data points for system curve dropdown in assessment
-  systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
   systemCurveIntersectionData: BehaviorSubject<IntersectionData>;
   modificationEquipment: BehaviorSubject<ModificationEquipment>;
 

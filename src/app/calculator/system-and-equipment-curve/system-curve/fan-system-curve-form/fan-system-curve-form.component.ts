@@ -21,8 +21,6 @@ export class FanSystemCurveFormComponent implements OnInit {
   pointTwoFluidPower: number = 0;
   fanSystemCurveForm: FormGroup;
   resetFormsSub: Subscription;
-  assessmentDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
-  showDataPointOptions: boolean = false;
   fanModificationCollapsed: string = 'closed';
   modificationEquipmentSub: Subscription;
   modificationEquipment: ModificationEquipment;
@@ -42,14 +40,6 @@ export class FanSystemCurveFormComponent implements OnInit {
     this.initForm();
     this.initSubscriptions();
 
-    if (this.systemAndEquipmentCurveService.systemCurveDataPoints) {
-      this.assessmentDataPoints = this.systemAndEquipmentCurveService.systemCurveDataPoints;
-      if (this.fanSystemCurveForm.controls.pointTwo.value == '') {
-        this.fanSystemCurveForm.controls.pointTwo.patchValue('Baseline');
-        this.setFormValues();
-      }
-      this.showDataPointOptions = true;
-    }
   }
 
   ngOnDestroy() {
@@ -126,17 +116,6 @@ export class FanSystemCurveFormComponent implements OnInit {
   calculateFluidPowers(fanSystemCurveData: FanSystemCurveData) {
     this.pointOneFluidPower = this.fanSystemCurveFormService.calculateFanFluidPower(fanSystemCurveData.pointOnePressure, fanSystemCurveData.pointOneFlowRate, fanSystemCurveData.compressibilityFactor, this.settings);
     this.pointTwoFluidPower = this.fanSystemCurveFormService.calculateFanFluidPower(fanSystemCurveData.pointTwoPressure, fanSystemCurveData.pointTwoFlowRate, fanSystemCurveData.compressibilityFactor, this.settings);
-  }
-
-  setFormValues() {
-    let dataPoint: { pointName: string, flowRate: number, yValue: number } = this.assessmentDataPoints.find(point => { return point.pointName == this.fanSystemCurveForm.controls.pointTwo.value });
-    if (dataPoint) {
-      this.fanSystemCurveForm.patchValue({
-        pointTwoFlowRate: dataPoint.flowRate,
-        pointTwoPressure: dataPoint.yValue
-      });
-      this.saveChanges();
-    }
   }
 
   toggleFanModification() {
