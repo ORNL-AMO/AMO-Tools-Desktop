@@ -92,6 +92,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.initSuccessMessage();
     }
     this.showUpdateDataReminder = false;
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.assessment.ssmt.existingDataUnits = this.settings.unitsOfMeasure;
     this.emitSaveSsmt.emit(this.assessment.ssmt);
   }

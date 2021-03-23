@@ -103,7 +103,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     this.assessment.psat = this.psatService.convertExistingData(this.assessment.psat, this.oldSettings, this.settings);
     if (this.assessment.psat.modifications) {
       this.assessment.psat.modifications.forEach(mod => {
-        this.psatService.convertExistingData(this.assessment.psat, this.oldSettings, this.settings, mod.psat);
+        this.psatService.convertExistingData(mod.psat, this.oldSettings, this.settings, mod.psat);
       })
     }
 

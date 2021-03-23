@@ -102,6 +102,7 @@ export class SystemBasicsComponent implements OnInit {
         this.initSuccessMessage();
       }
       this.showUpdateDataReminder = false;
+      this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
       this.phast.lossDataUnits = this.settings.unitsOfMeasure;
       this.save.emit(true);
     }

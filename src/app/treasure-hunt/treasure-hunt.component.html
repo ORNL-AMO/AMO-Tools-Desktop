@@ -6,9 +6,9 @@
   </div>
   <!--end header-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
+      <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
       <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
@@ -54,3 +54,6 @@
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true" (emitDisable)="disableDisclaimer()"></app-toast>
+
+  <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'treasure-hunt'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

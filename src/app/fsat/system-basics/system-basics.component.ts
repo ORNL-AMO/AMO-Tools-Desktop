@@ -65,7 +65,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
     if (settingsChanged) {
       this.assessment.fsat.existingDataUnits = this.oldSettings.unitsOfMeasure;
-
       this.emitSaveFsat.emit(this.assessment.fsat);
       this.showUpdateDataReminder = true;
     }
@@ -89,8 +88,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.initSuccessMessage();
     }
     this.showUpdateDataReminder = false;
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.assessment.fsat.existingDataUnits = this.settings.unitsOfMeasure;
-
     this.emitSaveFsat.emit(this.assessment.fsat);
   }
 
