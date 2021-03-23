@@ -141,7 +141,7 @@ export class FanFieldDataComponent implements OnInit {
       outletPressure: this.fieldDataForm.controls.outletPressure.value,
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
       flowRate: this.fieldDataForm.controls.flowRate.value,
-      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
+      specificHeatRatio: this.fsat.baseGasDensity.specificHeatRatio
     };
     let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
 
@@ -195,7 +195,7 @@ export class FanFieldDataComponent implements OnInit {
       outletPressure: this.fieldDataForm.controls.outletPressure.value,
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
       flowRate: this.fieldDataForm.controls.flowRate.value,
-      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
+      specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
     };
 
     let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, this.baseline, fsatOutput);
@@ -481,13 +481,6 @@ export class FanFieldDataComponent implements OnInit {
   //   }
   // }
 
-  isSpecificHeatRatioDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isSpecificHeatRatioDifferent();
-    } else {
-      return false;
-    }
-  }
   isCompressibilityFactorDifferent() {
     if (this.canCompare()) {
       return this.compareService.isCompressibilityFactorDifferent();

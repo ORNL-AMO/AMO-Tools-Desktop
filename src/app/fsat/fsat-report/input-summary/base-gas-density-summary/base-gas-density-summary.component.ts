@@ -35,6 +35,7 @@ export class BaseGasDensitySummaryComponent implements OnInit {
   relativeHumidityDiff: Array<boolean>;
   wetBulbTempDiff: Array<boolean>;
   specificHeatGasDiff: Array<boolean>;
+  specificHeatRatioDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -51,7 +52,7 @@ export class BaseGasDensitySummaryComponent implements OnInit {
     this.relativeHumidityDiff = new Array<boolean>();
     this.wetBulbTempDiff = new Array<boolean>();
     this.specificHeatGasDiff = new Array<boolean>();
-
+    this.specificHeatRatioDiff = new Array<boolean>();
 
     if (this.fsat.baseGasDensity) {
 
@@ -82,6 +83,7 @@ export class BaseGasDensitySummaryComponent implements OnInit {
         this.relativeHumidityDiff.push(false);
         this.wetBulbTempDiff.push(false);
         this.specificHeatGasDiff.push(false);
+        this.specificHeatRatioDiff.push(false);
       }
 
       this.baseGasDensity = {

@@ -18,7 +18,6 @@ export const MockFsat: Assessment = {
             outletPressure: 1.1,
             loadEstimatedMethod: 0,
             motorPower: 450,
-            specificHeatRatio: 1.4,
             compressibilityFactor: 0.988,
             measuredVoltage: 460
         },
@@ -47,6 +46,7 @@ export const MockFsat: Assessment = {
             wetBulbTemp: 119,
             relativeHumidity: 0,
             dewPoint: 0,
+            specificHeatRatio: 1.4,
             gasDensity: 0.0308,
             specificHeatGas: 0.24
         },
@@ -79,7 +79,8 @@ export const MockFsat: Assessment = {
                         relativeHumidity: 0,
                         dewPoint: 0,
                         gasDensity: 0.0308,
-                        specificHeatGas: 0.24
+                        specificHeatGas: 0.24,
+                        specificHeatRatio: 1.4,
                     },
                     fanMotor: {
                         lineFrequency: 60,
@@ -107,7 +108,6 @@ export const MockFsat: Assessment = {
                         loadEstimatedMethod: 0,
                         motorPower: 450,
                         cost: 0.06,
-                        specificHeatRatio: 1.4,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }
@@ -134,7 +134,8 @@ export const MockFsat: Assessment = {
                         relativeHumidity: 0,
                         dewPoint: 0,
                         gasDensity: 0.0308,
-                        specificHeatGas: 0.24
+                        specificHeatGas: 0.24,
+                        specificHeatRatio: 1.4,
                     },
                     fanMotor: {
                         lineFrequency: 60,
@@ -162,7 +163,6 @@ export const MockFsat: Assessment = {
                         loadEstimatedMethod: 0,
                         motorPower: 450,
                         cost: 0.06,
-                        specificHeatRatio: 1.4,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }

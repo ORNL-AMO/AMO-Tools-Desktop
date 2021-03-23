@@ -29,7 +29,9 @@ export class FsatFluidService {
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
       gasDensity: [obj.gasDensity, [GreaterThanValidator.greaterThan(0), Validators.required]],
-      specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
+      specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators],
+      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, GreaterThanValidator.greaterThan(1), Validators.max(2)]],
+      
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -139,7 +141,8 @@ export class FsatFluidService {
       relativeHumidity: form.controls.relativeHumidity.value,
       dewPoint: form.controls.dewPoint.value,
       gasDensity: form.controls.gasDensity.value,
-      specificHeatGas: form.controls.specificHeatGas.value
+      specificHeatGas: form.controls.specificHeatGas.value,
+      specificHeatRatio: form.controls.specificHeatRatio.value,
     };
     return fanGasDensity;
   }

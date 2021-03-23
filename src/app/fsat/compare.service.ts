@@ -552,7 +552,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.specificHeatRatio !== modification.fieldData.specificHeatRatio) {
+      if (baseline.baseGasDensity.specificHeatRatio !== modification.baseGasDensity.specificHeatRatio) {
         return true;
       } else {
         return false;

@@ -56,6 +56,10 @@ export class UpdateDataService {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
         }
+
+        if(assessment.fsat.fieldData['specificHeatRatio']) {
+            assessment.fsat.baseGasDensity.specificHeatRatio = assessment.fsat.fieldData['specificHeatRatio']; 
+        }
         return assessment;
     }
 
