@@ -51,10 +51,10 @@
 
     <div class="btn-col d-flex flex-column py-2">
       <div class="btn-group small btn-group-sm align-self-center">
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(true)"
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setPressureType(true)"
               [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == true}">Static Pressure
           </button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(false)"
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setPressureType(false)"
               [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == false}">Total Pressure</button>
       </div>
   </div>
