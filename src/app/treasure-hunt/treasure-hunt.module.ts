@@ -28,6 +28,7 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
 import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/tr
     OperatingHoursModalModule,
     ToastModule,
     RouterModule,
-    TreasureChestMenuModule
+    TreasureChestMenuModule,
+    UpdateUnitsModalModule
   ],
   declarations: [
     TreasureHuntComponent, 

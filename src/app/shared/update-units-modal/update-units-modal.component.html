@@ -1,6 +1,10 @@
 <div bsModal #updateUnitsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateUnitsLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-md"
+  [ngClass]="{'phast': assessmentType == 'phast',
+  'ssmt': assessmentType == 'ssmt',
+  'fsat': assessmentType == 'fsat',
+  'psat': assessmentType == 'psat'}">
     <div class="modal-content">
       <div class="card">
         <div class="card-header p-2">

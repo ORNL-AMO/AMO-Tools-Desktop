@@ -13,6 +13,7 @@ import { CalculatorsService } from './calculators/calculators.service';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 import { SettingsService } from '../settings/settings.service';
+import { ConvertInputDataService } from './convert-input-data.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -24,6 +25,8 @@ export class TreasureHuntComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+  oldSettings: Settings;
+  showUpdateUnitsModal: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -53,6 +56,7 @@ export class TreasureHuntComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
+    private convertInputDataService: ConvertInputDataService,
     private calculatorsService: CalculatorsService,
     private treasureChestMenuService: TreasureChestMenuService,
     private settingsService: SettingsService
@@ -265,5 +269,38 @@ export class TreasureHuntComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.treasureHuntService.mainTab.next('system-setup');
+      this.treasureHuntService.subTab.next('settings');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.saveTreasureHunt(this.assessment.treasureHunt);
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
+    let settings = this.convertInputDataService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.addSettings(settings);
+    this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
+    this.saveTreasureHunt(this.assessment.treasureHunt);
+    this.getSettings();
   }
 }

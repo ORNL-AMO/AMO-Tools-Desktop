@@ -17,6 +17,7 @@ export interface FSAT {
   outputs?: FsatOutput;
   valid?: FsatValid;
   modalFieldData?: FieldData;
+  existingDataUnits?: string;
 }
 
 export interface FsatValid {
