@@ -44,6 +44,13 @@ export class PlaneInfoFormComponent implements OnInit {
     this.fanAnalysisService.currentField.next(str);
   }
 
+  updateBarometricPressure() {
+    if (this.planeInfoForm.controls.variationInBarometricPressure.value == false) {
+      this.fanAnalysisService.updateBarometricPressure();
+    }
+    this.save();
+  }
+
   getSum(planeData: PlaneData) {
     this.sumSEF = planeData.inletSEF + planeData.outletSEF;
   }
