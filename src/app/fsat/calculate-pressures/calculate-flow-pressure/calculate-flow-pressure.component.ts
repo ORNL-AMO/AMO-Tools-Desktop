@@ -56,6 +56,13 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;
     this.fanAnalysisService.inputData.FanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
     
+    this.fanAnalysisService.inputData.PlaneData.FanEvaseOrOutletFlange.barometricPressure = this.fsat.baseGasDensity.barometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.FanInletFlange.barometricPressure = this.fsat.baseGasDensity.barometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.InletMstPlane.barometricPressure = this.fsat.baseGasDensity.barometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.OutletMstPlane.barometricPressure = this.fsat.baseGasDensity.barometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.FlowTraverse.barometricPressure = this.fsat.baseGasDensity.barometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.AddlTraversePlanes.forEach(plane => plane.barometricPressure = this.fsat.baseGasDensity.barometricPressure);
+
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
     });

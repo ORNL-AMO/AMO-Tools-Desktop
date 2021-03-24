@@ -19,6 +19,8 @@ export class PressureReadingsFormComponent implements OnInit {
   planeData: Plane;
   resetFormSubscription: Subscription;
   updateTraverseDataSubscription: Subscription;
+  traverseHoleWarning: string;
+
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
@@ -94,14 +96,20 @@ export class PressureReadingsFormComponent implements OnInit {
     let totalHolesValue: number = 0;
     let holeCount: number = 0;
     let holesAverage: number;
+    this.traverseHoleWarning = undefined;
 
     for (let i = 0; i < this.traverseHoles.length; i++) {
       row = this.traverseHoles[i];
       holeCount += row.length;
       for (let j = 0; j < row.length; j++) {
-        totalHolesValue += row[j];
+        console.log(row[j]);
+        if (row[j] == undefined || null) {
+          this.traverseHoleWarning = 'For a more accurate static pressure, enter a value for each insertion point';
+        } else {
+          totalHolesValue += row[j];
         }
       }
+    }
 
     holesAverage = (totalHolesValue / holeCount);
     if (isNaN(holesAverage)) {

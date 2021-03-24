@@ -119,6 +119,7 @@ export interface Plane {
   numInletBoxes?: number; // should have a default of 1 and the
   //psx => staticPressure
   staticPressure?: number;
+  userDefinedStaticPressure?: number;
   pitotTubeCoefficient?: number;
   traverseData?: Array<Array<number>>;
   staticPressureData?: Array<Array<number>>;
@@ -211,7 +212,7 @@ export interface Fan203Inputs {
   FanRatedInfo: FanRatedInfo;
   BaseGasDensity: BaseGasDensity;
   FanShaftPower: FanShaftPower;
-  PlaneData?: PlaneData | PlaneData;
+  PlaneData?: PlaneData;
 }
 
 export interface Fan203Results {

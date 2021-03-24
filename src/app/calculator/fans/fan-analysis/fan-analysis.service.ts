@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FsatService } from '../../../fsat/fsat.service';
-import { Fan203Inputs, FanShaftPowerResults, Plane, VelocityResults } from '../../../shared/models/fans';
+import { Fan203Inputs, FanShaftPowerResults, Plane, PlaneResults, VelocityResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
+import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
+import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
+import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Injectable()
 export class FanAnalysisService {
@@ -20,7 +23,11 @@ export class FanAnalysisService {
 
   inAssessmentModal: boolean;
   pressureCalcResultType: string = 'static';
-  constructor(private fsatService: FsatService) {
+  constructor(private fsatService: FsatService, 
+      private fanInfoFormService: FanInfoFormService, 
+      private planeDataFormService: PlaneDataFormService,
+      private convertFanAnalysisService: ConvertFanAnalysisService
+      ) {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -33,10 +40,18 @@ export class FanAnalysisService {
   }
 
   calculateVelocityResults(planeData: Plane, settings: Settings) {
-    let velocityResults = this.fsatService.getVelocityPressureData(planeData, settings);
-    let traverseVelocity = 1096 * Math.sqrt(velocityResults.pv3 / this.inputData.BaseGasDensity.gasDensity);
-    velocityResults.traverseVelocity = traverseVelocity;
+    let velocityResults: VelocityResults = this.fsatService.getVelocityPressureData(planeData, settings);
     this.velocityResults.next(velocityResults);
+  }
+
+  getPlaneResults(settings: Settings) {
+    let planeResults: PlaneResults;
+    let fanInfoDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.inputData.FanRatedInfo, settings).valid;
+    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.inputData.PlaneData, this.inputData.FanRatedInfo, settings);
+    if (planeDataDone && fanInfoDone) {
+      planeResults = this.convertFanAnalysisService.getPlaneResults(this.inputData, settings);
+    }
+    return planeResults;
   }
 
   getDefaultData(): Fan203Inputs {
@@ -90,20 +105,13 @@ export class FanAnalysisService {
           barometricPressure: 29.92,
           numInletBoxes: 0,
           staticPressure: undefined,
+          userDefinedStaticPressure: undefined,
           pitotTubeCoefficient: 1,
           pitotTubeType: 'Standard',
-          numTraverseHoles: 10,
-          numInsertionPoints: 3,
-          traverseData: [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          ],
-          staticPressureData: [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          ]
+          numTraverseHoles: 1,
+          numInsertionPoints: 1,
+          traverseData: [[0]],
+          staticPressureData: [[0]]
         },
         AddlTraversePlanes: [
           {
@@ -115,20 +123,13 @@ export class FanAnalysisService {
             barometricPressure: 29.92,
             numInletBoxes: 0,
             staticPressure: undefined,
+            userDefinedStaticPressure: undefined,
             pitotTubeCoefficient: 1,
             pitotTubeType: 'Standard',
-            numTraverseHoles: 10,
-            numInsertionPoints: 3,
-            traverseData: [
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ],
-            staticPressureData: [
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
+            numTraverseHoles: 1,
+            numInsertionPoints: 1,
+            traverseData: [[0]],
+            staticPressureData: [[0]]
           },
           {
             planeType: 'Rectangular',
@@ -139,20 +140,13 @@ export class FanAnalysisService {
             barometricPressure: 29.92,
             numInletBoxes: 0,
             staticPressure: undefined,
+            userDefinedStaticPressure: undefined,
             pitotTubeCoefficient: 1,
             pitotTubeType: 'Standard',
-            numTraverseHoles: 10,
-            numInsertionPoints: 3,
-            traverseData: [
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ],
-            staticPressureData: [
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
+            numTraverseHoles: 1,
+            numInsertionPoints: 1,
+            traverseData: [[0]],
+            staticPressureData: [[0]]
           }
         ],
         InletMstPlane: {
@@ -402,6 +396,7 @@ export class FanAnalysisService {
           numInletBoxes: 2,
           planeType: "Rectangular",
           staticPressure: null,
+          userDefinedStaticPressure: null,
           width: 32.63
         },
         FanEvaseOrOutletFlange: {
@@ -412,6 +407,7 @@ export class FanAnalysisService {
           numInletBoxes: 0,
           planeType: "Rectangular",
           staticPressure: null,
+          userDefinedStaticPressure: null,
           width: 78
         },
         FlowTraverse: {
@@ -419,6 +415,7 @@ export class FanAnalysisService {
           dryBulbTemp: 123,
           barometricPressure: 26.57,
           staticPressure: -18.1,
+          userDefinedStaticPressure: -18.1,
           pitotTubeCoefficient: 0.87292611371180784,
           traverseData: [
             [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
@@ -444,6 +441,7 @@ export class FanAnalysisService {
             dryBulbTemp: 123,
             barometricPressure: 26.57,
             staticPressure: -17.0,
+            userDefinedStaticPressure: -17.0,
             pitotTubeCoefficient: 0.87,
             traverseData: [
               [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
@@ -469,6 +467,7 @@ export class FanAnalysisService {
           dryBulbTemp: 123,
           barometricPressure: 26.57,
           staticPressure: -17.55,
+          userDefinedStaticPressure: -17.55,
           length: 143.63,
           numInletBoxes: 2,
           planeType: "Rectangular",
@@ -479,6 +478,7 @@ export class FanAnalysisService {
           dryBulbTemp: 132.7,
           barometricPressure: 26.57,
           staticPressure: 1.8,
+          userDefinedStaticPressure: 1.8,
           length: 55.42,
           numInletBoxes: null,
           planeType: "Rectangular",

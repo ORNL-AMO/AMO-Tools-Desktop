@@ -78,7 +78,8 @@ export class PlaneDataFormService {
       length: [obj.length, [Validators.required, Validators.min(0)]],
       width: [obj.width, [Validators.required, Validators.min(0)]],
       area: [obj.area, [Validators.required, Validators.min(0)]],
-      staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      userDefinedStaticPressure: [obj.userDefinedStaticPressure, [Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      staticPressure: [obj.staticPressure, [Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       numInletBoxes: [obj.numInletBoxes]
@@ -114,6 +115,11 @@ export class PlaneDataFormService {
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
         form.controls.staticPressure.markAsDirty();
+      }
+      form.controls.userDefinedStaticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
+      form.controls.userDefinedStaticPressure.reset(form.controls.userDefinedStaticPressure.value);
+      if (form.controls.userDefinedStaticPressure.value) {
+        form.controls.userDefinedStaticPressure.markAsDirty();
       }
     } else {
       form.controls.staticPressure.setValidators([Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
@@ -175,6 +181,7 @@ export class PlaneDataFormService {
     obj.width = form.controls.width.value;
     obj.area = form.controls.area.value;
     obj.staticPressure = form.controls.staticPressure.value;
+    obj.userDefinedStaticPressure = form.controls.userDefinedStaticPressure.value;
     obj.dryBulbTemp = form.controls.dryBulbTemp.value;
     obj.barometricPressure = form.controls.barometricPressure.value;
     obj.numInletBoxes = form.controls.numInletBoxes.value;

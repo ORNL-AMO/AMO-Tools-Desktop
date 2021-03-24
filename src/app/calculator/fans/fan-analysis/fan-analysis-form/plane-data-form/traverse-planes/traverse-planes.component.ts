@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Plane, VelocityResults } from '../../../../../../shared/models/fans';
+import { Plane, PlaneResults, VelocityResults } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 import { PlaneDataFormService } from '../plane-data-form.service';
@@ -25,6 +25,7 @@ export class TraversePlanesComponent implements OnInit {
   fanDataForm: FormGroup;
   planeData: Plane;
   planeNumber: string;
+  planeResults: PlaneResults;
   getResultsSub: Subscription;
 
   constructor(private fanAnalysisService: FanAnalysisService,
@@ -49,14 +50,15 @@ export class TraversePlanesComponent implements OnInit {
     this.getResultsSub = this.fanAnalysisService.getResults.subscribe(updatedResults => {
       if (updatedResults) {
         this.initForm();
+        this.setPlaneTraverseVelocity();
       }
     });
   }
 
   save() {
     if (this.userDefinedStaticPressure) {
-      this.planeDataFormService.staticPressureValue.next(this.fanDataForm.controls.staticPressure.value);
-    }
+      this.planeDataFormService.staticPressureValue.next(this.fanDataForm.controls.userDefinedStaticPressure.value);
+    } 
   }
 
   initForm() {
@@ -72,6 +74,21 @@ export class TraversePlanesComponent implements OnInit {
   showHideInputField() {
     this.userDefinedStaticPressure = !this.userDefinedStaticPressure;
     this.save();
+  }
+
+  setPlaneTraverseVelocity() {
+    this.planeResults = this.fanAnalysisService.getPlaneResults(this.settings);
+    debugger;
+    if (this.planeResults && this.velocityResults) {
+      this.velocityResults.traverseVelocity = this.planeResults.FlowTraverse.gasVelocity;
+      if (this.planeStep == '3b') {
+        this.velocityResults.traverseVelocity = this.planeResults.AddlTraversePlanes[0].gasVelocity;
+      } else if (this.planeStep == '3c') {
+        this.velocityResults.traverseVelocity = this.planeResults.AddlTraversePlanes[1].gasVelocity;
+      }
+      console.log(this.velocityResults.traverseVelocity);
+    }
+
   }
 
   setPlane() {
