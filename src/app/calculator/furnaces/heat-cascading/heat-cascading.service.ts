@@ -37,7 +37,7 @@ export class HeatCascadingService {
       priCombAirTemperature: undefined,
       priAvailableHeat: undefined,
       priOpHours: undefined,
-      priFuelHV: undefined,
+      priFuelHV: 1032.44,
   
       secFiringRate: undefined,
       secExhaustTemperature: undefined,
@@ -103,7 +103,7 @@ export class HeatCascadingService {
       priCombAirTemperature: 80,
       priAvailableHeat: 100,
       priOpHours: 8000,
-      priFuelHV: 1020,
+      priFuelHV: 1032.44,
   
       secFiringRate: 9.5,
       secExhaustTemperature: 225,

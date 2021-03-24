@@ -16,7 +16,7 @@
       <tr>
         <td class="bold w-50">Exhaust Gas Temperature Leaving Heat Exchanger</td>
         <td *ngIf="output.hxOutletExhaust" class="text-center w-50">
-          {{output.hxOutletExhaust | currency:'USD':'symbol':'1.0-0'}}
+          {{output.hxOutletExhaust | number:'1.0-0'}}
           <span class="input-group-addon">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
                <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
