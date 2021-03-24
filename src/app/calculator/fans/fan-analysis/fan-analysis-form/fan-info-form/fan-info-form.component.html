@@ -50,7 +50,7 @@
       <label for="globalBarometricPressure">Barometric Pressure (P<sub>b</sub>)</label>
       <div class="input-group">
         <input name="globalBarometricPressure" type="number" step="any" class="form-control"
-          formControlName="globalBarometricPressure" id="globalBarometricPressure" (input)="updatePressure()"
+          formControlName="globalBarometricPressure" id="globalBarometricPressure" (input)="updateBarometricPressure()"
           (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
 

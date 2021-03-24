@@ -39,6 +39,18 @@ export class FanAnalysisService {
     this.velocityResults.next(velocityResults);
   }
 
+  updateBarometricPressure() {
+    this.inputData.PlaneData.FanInletFlange.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.FanEvaseOrOutletFlange.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.FlowTraverse.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.AddlTraversePlanes.forEach(plane => {
+      plane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    });
+    this.inputData.PlaneData.InletMstPlane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.OutletMstPlane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.getResults.next(true);
+  }
+
   getDefaultData(): Fan203Inputs {
     let data: Fan203Inputs = {
       FanRatedInfo: {
@@ -251,7 +263,7 @@ export class FanAnalysisService {
           area: undefined,
           length: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           numInletBoxes: 1,
           planeType: "Rectangular",
           staticPressure: null,
@@ -260,7 +272,7 @@ export class FanAnalysisService {
         FanEvaseOrOutletFlange: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           length: undefined,
           numInletBoxes: 0,
           planeType: "Rectangular",
@@ -270,7 +282,7 @@ export class FanAnalysisService {
         FlowTraverse: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           staticPressure: undefined,
           pitotTubeCoefficient: 1,
           traverseData: [[undefined]],
@@ -287,7 +299,7 @@ export class FanAnalysisService {
           {
             area: undefined,
             dryBulbTemp: undefined,
-            barometricPressure: 26.57,
+            barometricPressure: 26.28,
             staticPressure: undefined,
             pitotTubeCoefficient: 1,
             traverseData: [[undefined]],
@@ -304,7 +316,7 @@ export class FanAnalysisService {
         InletMstPlane: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           staticPressure: undefined,
           length: undefined,
           numInletBoxes: 1,
@@ -314,7 +326,7 @@ export class FanAnalysisService {
         OutletMstPlane: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           staticPressure: undefined,
           length: undefined,
           numInletBoxes: undefined,
@@ -325,7 +337,7 @@ export class FanAnalysisService {
       BaseGasDensity: {
         dryBulbTemp: 123,
         staticPressure: -17.6,
-        barometricPressure: 26.57,
+        barometricPressure: 26.28,
         gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: "wetBulb",
