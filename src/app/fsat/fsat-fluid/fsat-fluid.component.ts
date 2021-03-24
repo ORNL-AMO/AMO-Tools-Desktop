@@ -300,6 +300,13 @@ export class FsatFluidComponent implements OnInit {
       return false;
     }
   }
+  isSpecificHeatRatioDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificHeatRatioDifferent();
+    } else {
+      return false;
+    }
+  }
   isDewPointDifferent() {
     if (this.canCompare()) {
       return this.compareService.isDewPointDifferent();

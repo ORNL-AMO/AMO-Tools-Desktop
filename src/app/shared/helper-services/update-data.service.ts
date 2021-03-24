@@ -5,6 +5,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
 import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
+import { FSAT } from '../models/fans';
 declare const packageJson;
 
 @Injectable()
@@ -56,7 +57,19 @@ export class UpdateDataService {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
         }
+
+        assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
+        assessment.fsat.modifications.forEach(mod => {
+            mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+        });
         return assessment;
+    }
+
+    updateSpecificHeatRatio(fsat: FSAT): FSAT {
+        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        }
+        return fsat;
     }
 
     updatePhast(assessment: Assessment): Assessment {
