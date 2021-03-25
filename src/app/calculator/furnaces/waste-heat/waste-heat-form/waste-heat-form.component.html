@@ -111,7 +111,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="chillerOutTemperature">How Water Temperature Out</label>
+        <label class="small" for="chillerOutTemperature">Hot Water Temperature Out</label>
         <div class="input-group" >
           <input name="chillerOutTemperature" type="number" step="any" class="form-control" formControlName="chillerOutTemperature"
             id="chillerOutTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('chillerOutTemperature')" >
@@ -134,6 +134,19 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>)
         </span>
       </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="copCompressor">Existing Compressor COP</label>
+        <div class="input-group">
+          <input name="copCompressor" type="number" step="10" class="form-control"
+            formControlName="copCompressor" id="copCompressor" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('copCompressor')">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.copCompressor.invalid && !form.controls.copCompressor.pristine">
+          <span *ngIf="form.controls.copCompressor.errors.required">Value Required</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -185,19 +198,6 @@
             {{form.controls.chillerEfficiency.errors.max.max}}.</span>
         </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.chillerEfficiencyWarning !== null">{{warnings.chillerEfficiencyWarning}}</span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="copCompressor">Compressor COP</label>
-        <div class="input-group">
-          <input name="copCompressor" type="number" step="10" class="form-control"
-            formControlName="copCompressor" id="copCompressor" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('copCompressor')">
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.copCompressor.invalid && !form.controls.copCompressor.pristine">
-          <span *ngIf="form.controls.copCompressor.errors.required">Value Required</span>
-        </span>
       </div>
 
   </form>
