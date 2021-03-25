@@ -100,7 +100,7 @@ export class AssessmentService {
       motor_rated_fla: null,
       operating_hours: 8760,
       flow_rate: null,
-      head: 277,
+      head: null,
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
@@ -203,7 +203,7 @@ export class AssessmentService {
         //Method 2 variables
         specificGravity: 1,
         wetBulbTemp: 119,
-        relativeHumidity: .001,
+        relativeHumidity: 0,
         dewPoint: 0,
         specificHeatGas: .24,
         specificHeatRatio: 1.4,

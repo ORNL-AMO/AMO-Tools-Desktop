@@ -112,11 +112,9 @@ export class HeadToolComponent implements OnInit {
       this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
       this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
       this.headToolForm.patchValue({
-        specificGravity: this.psat.inputs.specific_gravity,
         flowRate: this.psat.inputs.flow_rate,
       });
       this.headToolSuctionForm.patchValue({
-        specificGravity: this.psat.inputs.specific_gravity,
         flowRate: this.psat.inputs.flow_rate,
       });
     } else {
@@ -235,16 +233,16 @@ export class HeadToolComponent implements OnInit {
   }
 
   btnResetData() {
-    this.headToolForm = this.headToolService.resetHeadToolForm(this.settings);
-    this.headToolSuctionForm = this.headToolService.resetHeadToolSuctionForm(this.settings);
+    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
     this.calculateHeadTool();
     this.calculateHeadToolSuctionTank();
     // this.save();
   }
 
   btnGenerateExample() {
-    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
-    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
+    this.headToolForm = this.headToolService.getExampleHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.getExampleHeadToolSuctionForm(this.settings);
     this.calculateHeadTool();
     this.setFormView('Suction gauge elevation');
     this.calculateHeadToolSuctionTank();

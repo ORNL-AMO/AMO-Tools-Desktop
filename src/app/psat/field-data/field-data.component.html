@@ -181,7 +181,7 @@
         </button>
       </div>
       <div class="modal-body p-0">
-        <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings"
+        <app-head-tool *ngIf="headToolModal.isShown" [headToolResults]="headToolResults" [psat]="psat" [settings]="settings"
           (close)="hideHeadToolModal()" [inAssessment]="true" [assessmentId]="assessment.id"></app-head-tool>
       </div>
     </div>
