@@ -225,7 +225,9 @@ export class ConvertFanAnalysisService {
     }
     input.dryBulbTemp = this.convertNum(input.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
     input.staticPressure = this.convertNum(input.staticPressure, 'inH2o', settings.fanPressureMeasurement);
-    // input.userDefinedStaticPressure = this.convertNum(input.userDefinedStaticPressure, 'inH2o', settings.fanPressureMeasurement);
+    if (input.userDefinedStaticPressure) {
+      input.userDefinedStaticPressure = this.convertNum(input.userDefinedStaticPressure, 'inH2o', settings.fanPressureMeasurement);
+    }
     return input;
   }
 

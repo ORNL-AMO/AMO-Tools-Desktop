@@ -78,8 +78,8 @@ export class PlaneDataFormService {
       length: [obj.length, [Validators.required, Validators.min(0)]],
       width: [obj.width, [Validators.required, Validators.min(0)]],
       area: [obj.area, [Validators.required, Validators.min(0)]],
-      userDefinedStaticPressure: [obj.userDefinedStaticPressure, [Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
-      staticPressure: [obj.staticPressure, [Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      userDefinedStaticPressure: [obj.userDefinedStaticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       numInletBoxes: [obj.numInletBoxes]
@@ -109,8 +109,8 @@ export class PlaneDataFormService {
       }
     }
 
-    //!1 !2
-    if (planeNum !== '1' && planeNum !== '2') {
+    // 3a, 3b, 3c etc
+    if (planeNum.includes('3')) {
       form.controls.staticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
@@ -121,14 +121,16 @@ export class PlaneDataFormService {
       if (form.controls.userDefinedStaticPressure.value) {
         form.controls.userDefinedStaticPressure.markAsDirty();
       }
-    } else {
-      form.controls.staticPressure.setValidators([Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
+    } 
+  
+    if (planeNum === '4' || planeNum === '5') {
+      form.controls.staticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
         form.controls.staticPressure.markAsDirty();
       }
     }
-
+    
     //Rectangular
     if (planeType === 'Rectangular') {
       form.controls.width.setValidators([Validators.required, Validators.min(0)]);

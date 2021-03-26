@@ -249,7 +249,7 @@ export class FanAnalysisService {
           barometricPressure: 26.57,
           numInletBoxes: 0,
           planeType: "Rectangular",
-          staticPressure: null,
+          staticPressure: undefined,
           width: undefined
         },
         FanEvaseOrOutletFlange: {
@@ -259,7 +259,7 @@ export class FanAnalysisService {
           length: undefined,
           numInletBoxes: 0,
           planeType: "Rectangular",
-          staticPressure: null,
+          staticPressure: undefined,
           width: undefined
         },
         FlowTraverse: {
@@ -395,8 +395,8 @@ export class FanAnalysisService {
           barometricPressure: 26.57,
           numInletBoxes: 2,
           planeType: "Rectangular",
-          staticPressure: null,
-          userDefinedStaticPressure: null,
+          staticPressure: undefined,
+          userDefinedStaticPressure: undefined,
           width: 32.63
         },
         FanEvaseOrOutletFlange: {
@@ -406,8 +406,8 @@ export class FanAnalysisService {
           length: 70,
           numInletBoxes: 0,
           planeType: "Rectangular",
-          staticPressure: null,
-          userDefinedStaticPressure: null,
+          staticPressure: undefined,
+          userDefinedStaticPressure: undefined,
           width: 78
         },
         FlowTraverse: {

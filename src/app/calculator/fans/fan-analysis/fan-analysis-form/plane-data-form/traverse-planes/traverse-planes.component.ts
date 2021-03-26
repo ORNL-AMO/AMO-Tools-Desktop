@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Plane, PlaneResults, VelocityResults } from '../../../../../../shared/models/fans';
@@ -21,12 +21,16 @@ export class TraversePlanesComponent implements OnInit {
   velocityResultsSub: Subscription;
   velocityResults: VelocityResults;
   planeDescription: string;
-  userDefinedStaticPressure: boolean = true;
   fanDataForm: FormGroup;
   planeData: Plane;
   planeNumber: string;
   planeResults: PlaneResults;
   getResultsSub: Subscription;
+
+  showUserPressurePlaneA: boolean = true;
+  showUserPressurePlaneB: boolean = true;
+  showUserPressurePlaneC: boolean = true;
+
 
   constructor(private fanAnalysisService: FanAnalysisService,
               private cd: ChangeDetectorRef,
@@ -43,52 +47,68 @@ export class TraversePlanesComponent implements OnInit {
     this.getResultsSub.unsubscribe();
   }
 
+  
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.planeStep && !changes.planeStep.firstChange) {
+      this.planeDataFormService.staticPressureValue.next(undefined);
+    }
+  }
+
   initSubscriptions() {
     this.velocityResultsSub = this.fanAnalysisService.velocityResults.subscribe(results => {
       this.velocityResults = results;
+      this.setPlaneTraverseVelocity();
     });
     this.getResultsSub = this.fanAnalysisService.getResults.subscribe(updatedResults => {
       if (updatedResults) {
         this.initForm();
-        this.setPlaneTraverseVelocity();
       }
     });
   }
 
-  save() {
-    if (this.userDefinedStaticPressure) {
+  setUserDefinedStaticPressure() {
+    let hasDefinedStaticPressure = (this.showUserPressurePlaneA && this.planeStep == '3a') || (this.showUserPressurePlaneB && this.planeStep == '3b') || (this.showUserPressurePlaneC && this.planeStep == '3c');
+    if (hasDefinedStaticPressure) {
       this.planeDataFormService.staticPressureValue.next(this.fanDataForm.controls.userDefinedStaticPressure.value);
     } 
   }
 
   initForm() {
     let planeData = this.fanAnalysisService.getPlane(this.planeStep);
-    this.fanDataForm = this.planeDataFormService.getPlaneFormFromObj(planeData, this.settings, this.planeNumber);
-    this.cd.detectChanges();
+    this.fanDataForm = this.planeDataFormService.getPlaneFormFromObj(planeData, this.settings, this.planeStep);
   }
 
   focusField(str: string) {
     this.fanAnalysisService.currentField.next(str);
   }
 
-  showHideInputField() {
-    this.userDefinedStaticPressure = !this.userDefinedStaticPressure;
-    this.save();
+  toggleStaticPressureInputType(planeStep: string) {
+    switch(planeStep) {
+      case 'a':
+        this.showUserPressurePlaneA = !this.showUserPressurePlaneA;
+        break;
+      case 'b':
+        this.showUserPressurePlaneB = !this.showUserPressurePlaneB;
+        break;
+      case 'c':
+        this.showUserPressurePlaneC = !this.showUserPressurePlaneC;
+        break;
+    }
+    this.cd.detectChanges();
+    this.setUserDefinedStaticPressure();
   }
 
   setPlaneTraverseVelocity() {
     this.planeResults = this.fanAnalysisService.getPlaneResults(this.settings);
-    debugger;
     if (this.planeResults && this.velocityResults) {
-      this.velocityResults.traverseVelocity = this.planeResults.FlowTraverse.gasVelocity;
-      if (this.planeStep == '3b') {
+      if (this.planeStep == '3a') {
+        this.velocityResults.traverseVelocity = this.planeResults.FlowTraverse.gasVelocity;
+      } else if (this.planeStep == '3b') {
         this.velocityResults.traverseVelocity = this.planeResults.AddlTraversePlanes[0].gasVelocity;
       } else if (this.planeStep == '3c') {
         this.velocityResults.traverseVelocity = this.planeResults.AddlTraversePlanes[1].gasVelocity;
       }
-      console.log(this.velocityResults.traverseVelocity);
     }
-
   }
 
   setPlane() {

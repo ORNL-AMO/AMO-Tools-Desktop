@@ -100,13 +100,12 @@ export class PressureReadingsFormComponent implements OnInit {
 
     for (let i = 0; i < this.traverseHoles.length; i++) {
       row = this.traverseHoles[i];
-      holeCount += row.length;
       for (let j = 0; j < row.length; j++) {
-        console.log(row[j]);
         if (row[j] == undefined || null) {
-          this.traverseHoleWarning = 'For a more accurate static pressure, enter a value for each insertion point';
+          this.traverseHoleWarning = 'Enter a value for each insertion point';
         } else {
           totalHolesValue += row[j];
+          holeCount++;
         }
       }
     }
