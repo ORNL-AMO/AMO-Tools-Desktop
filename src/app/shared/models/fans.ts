@@ -17,6 +17,7 @@ export interface FSAT {
   outputs?: FsatOutput;
   valid?: FsatValid;
   modalFieldData?: FieldData;
+  existingDataUnits?: string;
 }
 
 export interface FsatValid {
@@ -60,7 +61,7 @@ export interface FieldData {
   outletPressure: number;
   loadEstimatedMethod: number;
   motorPower: number;
-  specificHeatRatio: number;
+  // specificHeatRatio: number;
   compressibilityFactor: number;
   measuredVoltage: number;
   usingStaticPressure?: boolean;
@@ -159,6 +160,7 @@ export interface BaseGasDensity {
   relativeHumidity?: number;
   wetBulbTemp?: number;
   specificHeatGas?: number; //used with wetBulb
+  specificHeatRatio?: number;
 }
 
 

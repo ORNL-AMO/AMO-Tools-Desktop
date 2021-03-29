@@ -121,7 +121,7 @@ export class PsatWarningService {
       compare = psat.inputs.motor_rated_power;
       compare = compare * 1.5;
       if (val > compare) {
-        return 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+        return 'The Field Data Motor Current is too high compared to the Rated Motor Power, please adjust the input values.';
       } else {
         return null
       }

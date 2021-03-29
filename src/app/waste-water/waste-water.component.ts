@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -11,6 +12,7 @@ import { Settings } from '../shared/models/settings';
 import { WasteWater } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
+import { ConvertWasteWaterService } from './convert-waste-water.service';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
@@ -25,6 +27,10 @@ export class WasteWaterComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -53,7 +59,7 @@ export class WasteWaterComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
-    private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
+    private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService) { }
@@ -224,5 +230,34 @@ export class WasteWaterComponent implements OnInit {
       this.settingsDbService.setAll();
     });
     this.hideToast();
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.wasteWaterService.mainTab.next('system-setup');
+      this.wasteWaterService.setupTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    } 
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    let currentSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    this.assessment.wasteWater = this.convertWasteWaterService.convertWasteWater(this.assessment.wasteWater, this.oldSettings, currentSettings);
+    this.assessment.wasteWater.existingDataUnits = currentSettings.unitsOfMeasure;
+    this.saveWasteWater(this.assessment.wasteWater);
   }
 }

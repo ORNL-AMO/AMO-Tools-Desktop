@@ -12,8 +12,8 @@ export class UpdateUnitsModalComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  @Output('emitClose')
-  emitClose = new EventEmitter<boolean>();
+  @Input()
+  assessmentType: string;
   @Output('emitShouldUpdateData')
   emitShouldUpdateData = new EventEmitter<boolean>();
   showSuccessMessage: boolean = false;
@@ -34,7 +34,7 @@ export class UpdateUnitsModalComponent implements OnInit {
     this.showSuccessMessage = true;
     setTimeout(()=> {
       this.closeModal();
-    }, 3000);
+    }, 2000);
   }
   
   closeModal() {

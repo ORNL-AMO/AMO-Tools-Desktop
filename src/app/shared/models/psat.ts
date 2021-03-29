@@ -12,6 +12,7 @@ export interface PSAT {
   setupDone?: boolean;
   operatingHours?: OperatingHours;
   valid?: PsatValid;
+  existingDataUnits?: string;
 }
 
 export interface PsatValid {

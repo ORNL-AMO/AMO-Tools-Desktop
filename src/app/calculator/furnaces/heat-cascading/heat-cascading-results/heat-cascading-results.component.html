@@ -16,7 +16,7 @@
         <tr>
           <td class="bold w-50">Heat Transferred - Recovered in the Secondary Process</td>
           <td *ngIf="output.hxEnergyRate" class="text-center w-50">
-            {{output.hxEnergyRate | currency:'USD':'symbol':'1.0-2'}}
+            {{output.hxEnergyRate | number:'1.0-2'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
           </td>

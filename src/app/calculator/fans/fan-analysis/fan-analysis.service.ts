@@ -54,7 +54,20 @@ export class FanAnalysisService {
     if (planeDataDone && fanInfoDone && fanBaseGasDensityDataDone) {
       planeResults = this.convertFanAnalysisService.getPlaneResults(this.inputData, settings);
     }
+
     return planeResults;
+  }
+  
+  updateBarometricPressure() {
+    this.inputData.PlaneData.FanInletFlange.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.FanEvaseOrOutletFlange.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.FlowTraverse.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.AddlTraversePlanes.forEach(plane => {
+      plane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    });
+    this.inputData.PlaneData.InletMstPlane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.inputData.PlaneData.OutletMstPlane.barometricPressure = this.inputData.FanRatedInfo.globalBarometricPressure;
+    this.getResults.next(true);
   }
 
   getDefaultData(): Fan203Inputs {
@@ -224,7 +237,6 @@ export class FanAnalysisService {
   }
 
   getFlowPressureModalDefaults(): Fan203Inputs {
-    var area = 143.63 * 32.63 / 144.0;
     let mockData: Fan203Inputs = {
       FanRatedInfo: {
         fanSpeed: 1170,
@@ -234,7 +246,7 @@ export class FanAnalysisService {
         pressureBarometricCorrected: 26.28,
         globalBarometricPressure: 26.28,
         includesEvase: "No",
-        traversePlanes: 2,
+        traversePlanes: 1,
         upDownStream: "Downstream"
       },
       PlaneData: {
@@ -249,8 +261,8 @@ export class FanAnalysisService {
           area: undefined,
           length: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
-          numInletBoxes: 0,
+          barometricPressure: 26.28,
+          numInletBoxes: 1,
           planeType: "Rectangular",
           staticPressure: undefined,
           width: undefined
@@ -258,7 +270,7 @@ export class FanAnalysisService {
         FanEvaseOrOutletFlange: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           length: undefined,
           numInletBoxes: 0,
           planeType: "Rectangular",
@@ -268,9 +280,9 @@ export class FanAnalysisService {
         FlowTraverse: {
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: 26.57,
+          barometricPressure: 26.28,
           staticPressure: undefined,
-          pitotTubeCoefficient: 0.87292611371180784,
+          pitotTubeCoefficient: 1,
           traverseData: [[undefined]],
           staticPressureData: [[undefined]],
           length: undefined,
@@ -285,9 +297,9 @@ export class FanAnalysisService {
           {
             area: undefined,
             dryBulbTemp: undefined,
-            barometricPressure: 26.57,
+            barometricPressure: 26.28,
             staticPressure: undefined,
-            pitotTubeCoefficient: 0.87,
+            pitotTubeCoefficient: 1,
             traverseData: [[undefined]],
             staticPressureData: [[undefined]],
             length: undefined,
@@ -300,30 +312,30 @@ export class FanAnalysisService {
           }
         ],
         InletMstPlane: {
-          area: area * 2,
-          dryBulbTemp: 123,
-          barometricPressure: 26.57,
-          staticPressure: -17.55,
-          length: 143.63,
-          numInletBoxes: 2,
+          area: undefined,
+          dryBulbTemp: undefined,
+          barometricPressure: 26.28,
+          staticPressure: undefined,
+          length: undefined,
+          numInletBoxes: 1,
           planeType: "Rectangular",
-          width: 32.63
+          width: undefined
         },
         OutletMstPlane: {
-          area: (55.42 * 60.49) / 144.0,
-          dryBulbTemp: 132.7,
-          barometricPressure: 26.57,
-          staticPressure: 1.8,
-          length: 55.42,
-          numInletBoxes: null,
+          area: undefined,
+          dryBulbTemp: undefined,
+          barometricPressure: 26.28,
+          staticPressure: undefined,
+          length: undefined,
+          numInletBoxes: undefined,
           planeType: "Rectangular",
-          width: 60.49,
+          width: undefined,
         }
       },
       BaseGasDensity: {
         dryBulbTemp: 123,
         staticPressure: -17.6,
-        barometricPressure: 26.57,
+        barometricPressure: 26.28,
         gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: "wetBulb",

@@ -5,10 +5,10 @@
   </div>
   <!--Setup-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" [ssmt]="_ssmt" (emitSaveSsmt)="saveSetup($event)"></app-system-basics>
+        (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
@@ -152,3 +152,6 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'ssmt'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

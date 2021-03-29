@@ -31,6 +31,21 @@
       </span>
     </div>
 
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':gasDensityForm.controls.specificHeatRatio.invalid}">
+      <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
+        formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
+        (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
+      <span class="alert-danger pull-right small"
+        *ngIf="gasDensityForm.controls.specificHeatRatio.invalid && !gasDensityForm.controls.specificHeatRatio.pristine">
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.required">Value Required</span>
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.max">Value can't be greater than
+          {{gasDensityForm.controls.specificHeatRatio.errors.max.max}}.</span>
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.greaterThan">Value must be greater than 1.</span>
+      </span>
+    </div>
+
     <div class="form-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
       <label for="{{'gasType_'+idString}}">Gas Type</label>
       <div class="input-group">

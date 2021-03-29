@@ -176,7 +176,6 @@ export class AssessmentService {
         motorPower: null,
         cost: null,
         compressibilityFactor: 0.988,
-        specificHeatRatio: 1.4,
         measuredVoltage: 460
       },
       fanMotor: {
@@ -206,7 +205,8 @@ export class AssessmentService {
         wetBulbTemp: 119,
         relativeHumidity: .001,
         dewPoint: 0,
-        specificHeatGas: .24
+        specificHeatGas: .24,
+        specificHeatRatio: 1.4,
       },
       notes: {
         fieldDataNotes: '',

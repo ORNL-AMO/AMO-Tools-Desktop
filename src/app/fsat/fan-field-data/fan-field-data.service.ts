@@ -16,7 +16,7 @@ export class FanFieldDataService {
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       flowRate: [obj.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
+      inletPressure: [obj.inletPressure, [Validators.required]],
       ductArea: [obj.ductArea],
       inletVelocityPressure: [obj.inletVelocityPressure, [Validators.required]],
       usingStaticPressure: [obj.usingStaticPressure],
@@ -24,7 +24,6 @@ export class FanFieldDataService {
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
-      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, GreaterThanValidator.greaterThan(1), Validators.max(2)]],
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       measuredVoltage: [obj.measuredVoltage, Validators.required]
     });
@@ -48,7 +47,6 @@ export class FanFieldDataService {
       usingStaticPressure: form.controls.usingStaticPressure.value,
       motorPower: form.controls.motorPower.value,
       cost: form.controls.cost.value,
-      specificHeatRatio: form.controls.specificHeatRatio.value,
       compressibilityFactor: form.controls.compressibilityFactor.value,
       measuredVoltage: form.controls.measuredVoltage.value
     };

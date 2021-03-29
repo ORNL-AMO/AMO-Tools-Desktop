@@ -51,10 +51,10 @@
 
     <div class="btn-col d-flex flex-column py-2">
       <div class="btn-group small btn-group-sm align-self-center">
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(true)"
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setPressureType(true)"
               [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == true}">Static Pressure
           </button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn p-1" (click)="setPressureType(false)"
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setPressureType(false)"
               [ngClass]="{'active': fieldDataForm.controls.usingStaticPressure.value == false}">Total Pressure</button>
       </div>
   </div>
@@ -234,21 +234,6 @@
     </div>
 
     <!--min-->
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':fieldDataForm.controls.specificHeatRatio.invalid}">
-      <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
-      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
-        formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
-        (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
-      <span class="alert-danger pull-right small"
-        *ngIf="fieldDataForm.controls.specificHeatRatio.invalid && !fieldDataForm.controls.specificHeatRatio.pristine">
-        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.max">Value can't be less than
-          {{fieldDataForm.controls.specificHeatRatio.errors.max.max}}.</span>
-        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.greaterThan">Value must be greater than 1.</span>
-      </span>
-    </div>
-
     <div class="form-group">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
         <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="toggleUserDefinedCompressibilityFactor()"

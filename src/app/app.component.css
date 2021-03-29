@@ -1081,6 +1081,14 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
+
+.waste-water-icon-landing {
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
 .ico-size4.general {
   height: 55px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;

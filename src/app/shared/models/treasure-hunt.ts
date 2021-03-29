@@ -20,6 +20,7 @@ export interface TreasureHunt {
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
+    existingDataUnits?: string;
     setupDone: boolean;
 }
 

@@ -38,6 +38,7 @@ import { WasteWaterDiagramComponent } from './waste-water-diagram/waste-water-di
 import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/explore-opportunities-form/explore-activated-sludge-form/explore-activated-sludge-form.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     WasteWaterAnalysisModule,
     TabsTooltipModule,
     SharedPipesModule,
-    ToastModule
+    ToastModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     WasteWaterService,
