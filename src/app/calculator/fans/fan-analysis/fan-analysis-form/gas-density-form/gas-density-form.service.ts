@@ -30,7 +30,7 @@ export class GasDensityFormService {
       altitude: [obj.altitude],
       barometricPressure: [obj.barometricPressure, [Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
-      wetBulbTemp: [obj.wetBulbTemp, [Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]],
+      wetBulbTemp: [obj.wetBulbTemp],
       relativeHumidity: [obj.relativeHumidity, [Validators.min(0), Validators.max(100)]],
       dewPoint: [obj.dewPoint, [Validators.min(ranges.dewPointMin), Validators.max(ranges.dewPointMax)]],
       gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(ranges.gasDensityMax)]],
@@ -175,11 +175,6 @@ export class GasDensityFormService {
         form.controls.specificHeatGas.markAsDirty();
       }
     } else {
-      form.controls.wetBulbTemp.setValidators([Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]);
-      form.controls.wetBulbTemp.reset(form.controls.wetBulbTemp.value);
-      if (form.controls.wetBulbTemp.value) {
-        form.controls.wetBulbTemp.markAsDirty();
-      }
       form.controls.specificHeatGas.setValidators([]);
       form.controls.specificHeatGas.reset(form.controls.specificHeatGas.value);
       if (form.controls.specificHeatGas.value) {

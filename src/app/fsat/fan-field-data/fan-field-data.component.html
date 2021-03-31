@@ -96,15 +96,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
         </span>
       </div>
-      <!-- <span class="alert-danger pull-right small"
-        *ngIf="fieldDataForm.controls.ductArea.invalid && !fieldDataForm.controls.ductArea.pristine">
-        <span *ngIf="fieldDataForm.controls.ductArea.errors.required">Value Required</span>
-      </span> -->
-           <!-- <span class="alert-warning pull-right small"
-        *ngIf="warnings.calcInletVelocityPressureError !== null && !userDefinedVelocityPressure 
-                && !fieldDataForm.controls.ductArea.pristine">
-        {{ warnings.calcInletVelocityPressureError }}
-      </span> -->
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isInletVelocityPressureDifferent(), 'invalid': fieldDataForm.controls.inletVelocityPressure.invalid}">

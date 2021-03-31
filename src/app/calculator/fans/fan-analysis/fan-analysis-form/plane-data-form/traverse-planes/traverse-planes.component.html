@@ -4,32 +4,29 @@
     [settings]="settings"></app-fan-data-form>
     <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
     
-    <app-pressure-readings-form [planeNum]="planeStep">
-    </app-pressure-readings-form>
-
     <form [formGroup]="fanDataForm" class="form-group mt-4">
-      <label for="{{'staticPressure_'+idString}}">Static Pressure
+      <label for="{{'userDefinedStaticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
-        *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
+        *ngIf="showUserPressurePlaneA" (click)="toggleStaticPressureInputType('a')">Calculate Static Pressure</a>
         <a class="form-text small click-link" 
-        *ngIf="!userDefinedStaticPressure" (click)="showHideInputField()">Define Static Pressure</a>
+        *ngIf="!showUserPressurePlaneA" (click)="toggleStaticPressureInputType('a')">Define Static Pressure</a>
       </label>
-      <div *ngIf="userDefinedStaticPressure">
+      <div *ngIf="showUserPressurePlaneA">
         <div class="input-group">
-          <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-          id="staticPressure" (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          <input name="userDefinedStaticPressure" type="number" step="any" class="form-control" formControlName="userDefinedStaticPressure"
+          id="userDefinedStaticPressure" (input)="setUserDefinedStaticPressure()" (focus)="focusField('staticPressure')" onfocus="this.select();">
           <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right"
-          *ngIf="fanDataForm.controls.staticPressure.invalid && !fanDataForm.controls.staticPressure.pristine">
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.required">Value Required</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.max">Value can't be greater than
-            {{fanDataForm.controls.staticPressure.errors.max.max}}.</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.min">Value can't be less than
-            {{fanDataForm.controls.staticPressure.errors.min.min}}.</span>
+        <span class="alert-danger small pull-right"
+          *ngIf="fanDataForm.controls.userDefinedStaticPressure.invalid && !fanDataForm.controls.userDefinedStaticPressure.pristine">
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.required">Value Required</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.max">Value can't be greater than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.max.max}}.</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.min">Value can't be less than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.min.min}}.</span>
         </span>
       </div>
-      <div *ngIf="!userDefinedStaticPressure" class="input-group d-flex justify-content-center small bold" (focus)="focusField('staticPressure')">
+      <div *ngIf="!showUserPressurePlaneA" class="input-group d-flex justify-content-center small bold" (focus)="focusField('staticPressure')">
         <span class="mr-2" *ngIf="fanDataForm.controls.staticPressure.value">
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
           <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
@@ -38,8 +35,12 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form *ngIf="!showUserPressurePlaneA" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
+    
+    <app-pressure-readings-form [planeNum]="planeStep">
+    </app-pressure-readings-form>
+
 </div>
 
 <!-- 3b -->
@@ -48,32 +49,29 @@
     [settings]="settings"></app-fan-data-form>
     <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
     
-    <app-pressure-readings-form [planeNum]="planeStep">
-    </app-pressure-readings-form>
-    
     <form [formGroup]="fanDataForm" class="form-group mt-4">
-      <label for="{{'staticPressure_'+idString}}">Static Pressure
+      <label for="{{'userDefinedStaticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
-        *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
+        *ngIf="showUserPressurePlaneB" (click)="toggleStaticPressureInputType('b')">Calculate Static Pressure</a>
         <a class="form-text small click-link" 
-        *ngIf="!userDefinedStaticPressure" (click)="showHideInputField()">Define Static Pressure</a>
+        *ngIf="!showUserPressurePlaneB" (click)="toggleStaticPressureInputType('b')">Define Static Pressure</a>
       </label>
-      <div *ngIf="userDefinedStaticPressure">
+      <div *ngIf="showUserPressurePlaneB">
         <div class="input-group">
-          <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-          id="staticPressure" (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          <input name="userDefinedStaticPressure" type="number" step="any" class="form-control" formControlName="userDefinedStaticPressure"
+          id="userDefinedStaticPressure" (input)="setUserDefinedStaticPressure()" (focus)="focusField('staticPressure')" onfocus="this.select();">
           <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right"
-          *ngIf="fanDataForm.controls.staticPressure.invalid && !fanDataForm.controls.staticPressure.pristine">
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.required">Value Required</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.max">Value can't be greater than
-            {{fanDataForm.controls.staticPressure.errors.max.max}}.</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.min">Value can't be less than
-            {{fanDataForm.controls.staticPressure.errors.min.min}}.</span>
+        <span class="alert-danger small pull-right"
+          *ngIf="fanDataForm.controls.userDefinedStaticPressure.invalid && !fanDataForm.controls.userDefinedStaticPressure.pristine">
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.required">Value Required</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.max">Value can't be greater than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.max.max}}.</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.min">Value can't be less than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.min.min}}.</span>
         </span>
       </div>
-      <div *ngIf="!userDefinedStaticPressure" class="input-group d-flex justify-content-center small bold">
+      <div *ngIf="!showUserPressurePlaneB" class="input-group d-flex justify-content-center small bold">
         <span class="mr-2" *ngIf="fanDataForm.controls.staticPressure.value">
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
         </span>
@@ -81,7 +79,10 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form *ngIf="!showUserPressurePlaneB" [planeNum]="planeStep" [pressureType]="'Static'">
+    </app-pressure-readings-form>
+
+    <app-pressure-readings-form [planeNum]="planeStep">
     </app-pressure-readings-form>
 </div>
 
@@ -91,32 +92,30 @@
     [settings]="settings"></app-fan-data-form>
     <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
     
-    <app-pressure-readings-form [planeNum]="planeStep">
-    </app-pressure-readings-form>
     
     <form [formGroup]="fanDataForm" class="form-group mt-4">
-      <label for="{{'staticPressure_'+idString}}">Static Pressure
+      <label for="{{'userDefinedStaticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
-        *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
+        *ngIf="showUserPressurePlaneC" (click)="toggleStaticPressureInputType('c')">Calculate Static Pressure</a>
         <a class="form-text small click-link" 
-        *ngIf="!userDefinedStaticPressure" (click)="showHideInputField()">Define Static Pressure</a>
+        *ngIf="!showUserPressurePlaneC" (click)="toggleStaticPressureInputType('c')">Define Static Pressure</a>
       </label>
-      <div *ngIf="userDefinedStaticPressure">
+      <div *ngIf="showUserPressurePlaneC">
         <div class="input-group">
-          <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-          id="staticPressure" (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          <input name="userDefinedStaticPressure" type="number" step="any" class="form-control" formControlName="userDefinedStaticPressure"
+          id="userDefinedStaticPressure" (input)="setUserDefinedStaticPressure()" (focus)="focusField('staticPressure')" onfocus="this.select();">
           <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right"
-          *ngIf="fanDataForm.controls.staticPressure.invalid && !fanDataForm.controls.staticPressure.pristine">
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.required">Value Required</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.max">Value can't be greater than
-            {{fanDataForm.controls.staticPressure.errors.max.max}}.</span>
-          <span *ngIf="fanDataForm.controls.staticPressure.errors.min">Value can't be less than
-            {{fanDataForm.controls.staticPressure.errors.min.min}}.</span>
+        <span class="alert-danger small pull-right"
+          *ngIf="fanDataForm.controls.userDefinedStaticPressure.invalid && !fanDataForm.controls.userDefinedStaticPressure.pristine">
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.required">Value Required</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.max">Value can't be greater than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.max.max}}.</span>
+          <span *ngIf="fanDataForm.controls.userDefinedStaticPressure.errors.min">Value can't be less than
+            {{fanDataForm.controls.userDefinedStaticPressure.errors.min.min}}.</span>
         </span>
       </div>
-      <div *ngIf="!userDefinedStaticPressure" class="input-group d-flex justify-content-center small bold">
+      <div *ngIf="!showUserPressurePlaneC" class="input-group d-flex justify-content-center small bold">
         <span class="mr-2" *ngIf="fanDataForm.controls.staticPressure.value">
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
         </span>
@@ -124,7 +123,10 @@
       </div>
     </form>
 
-    <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
+    <app-pressure-readings-form *ngIf="!showUserPressurePlaneC" [planeNum]="planeStep" [pressureType]="'Static'">
+    </app-pressure-readings-form>
+
+    <app-pressure-readings-form [planeNum]="planeStep">
     </app-pressure-readings-form>
 </div>
 
@@ -153,10 +155,10 @@
   </div>
 </div>
 <div class="form-group bold">
-    <label for="traverseVelocity">Traverse Velocity</label>
+    <label>Traverse Velocity</label>
     <div class="text-center small bold">
       <span *ngIf="velocityResults && velocityResults.traverseVelocity">
-          {{velocityResults.traverseVelocity | number: '1.1-1'}} 
+          {{velocityResults.traverseVelocity | number: '1.1-2'}} 
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">
             ft/min
           </span>
@@ -164,7 +166,7 @@
             m/min
         </span>
       </span>
-      <span *ngIf="!velocityResults || !velocityResults.traverseVelocity">
+      <span *ngIf="velocityResults && !velocityResults.traverseVelocity">
           &mdash; &mdash;
       </span>
     </div>

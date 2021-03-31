@@ -23,8 +23,13 @@ export class ConvertFanAnalysisService {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertPlaneResults(results, settings);
+    let results: PlaneResults = {};
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertPlaneResults(results, settings);
+    } catch(err) {
+      results.error = true;
+    }
     return results;
   }
 
@@ -225,6 +230,9 @@ export class ConvertFanAnalysisService {
     }
     input.dryBulbTemp = this.convertNum(input.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
     input.staticPressure = this.convertNum(input.staticPressure, 'inH2o', settings.fanPressureMeasurement);
+    if (input.userDefinedStaticPressure) {
+      input.userDefinedStaticPressure = this.convertNum(input.userDefinedStaticPressure, 'inH2o', settings.fanPressureMeasurement);
+    }
     return input;
   }
 
