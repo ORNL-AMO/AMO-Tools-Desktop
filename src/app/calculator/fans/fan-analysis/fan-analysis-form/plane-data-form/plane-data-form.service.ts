@@ -96,7 +96,7 @@ export class PlaneDataFormService {
   setPlaneValidators(form: FormGroup, planeNum: string, planeType: string, ranges: PlaneRanges) {
     //1, 4
     if (planeNum === '1' || planeNum === '4') {
-      form.controls.numInletBoxes.setValidators([Validators.required]);
+      form.controls.numInletBoxes.setValidators([Validators.required, Validators.min(1)]);
       form.controls.numInletBoxes.reset(form.controls.numInletBoxes.value);
       if (form.controls.numInletBoxes.value) {
         form.controls.numInletBoxes.markAsDirty();

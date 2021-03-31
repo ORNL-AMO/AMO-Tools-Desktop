@@ -78,7 +78,6 @@ export class FanDataFormComponent implements OnInit, OnDestroy {
   }
 
   resetData() {
-    this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.planeDataFormService.staticPressureValue.next(undefined);
   }
 
@@ -112,7 +111,9 @@ export class FanDataFormComponent implements OnInit, OnDestroy {
   }
 
   calcVelocityResults() {
-    if (this.dataForm.valid && (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c')) {
+    // update validation from staticPressure in traverse-planes
+    let tempForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    if (tempForm.valid && (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c')) {
       this.fanAnalysisService.calculateVelocityResults(this.planeData, this.settings);
     }
   }

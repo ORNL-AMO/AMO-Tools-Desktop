@@ -4,8 +4,6 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { PlaneResults, Fan203Inputs } from '../../../../../shared/models/fans';
 import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
-import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
-import { FanInfoFormService } from '../../fan-analysis-form/fan-info-form/fan-info-form.service';
 
 @Component({
   selector: 'app-planar-results',

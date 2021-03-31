@@ -237,12 +237,13 @@ export interface Fan203Results {
 
 
 export interface PlaneResults {
-  AddlTraversePlanes: Array<PlaneResult>;
-  FanInletFlange: PlaneResult;
-  FanOrEvaseOutletFlange: PlaneResult;
-  FlowTraverse: PlaneResult;
-  InletMstPlane: PlaneResult;
-  OutletMstPlane: PlaneResult;
+  AddlTraversePlanes?: Array<PlaneResult>;
+  FanInletFlange?: PlaneResult;
+  FanOrEvaseOutletFlange?: PlaneResult;
+  FlowTraverse?: PlaneResult;
+  InletMstPlane?: PlaneResult;
+  OutletMstPlane?: PlaneResult;
+  error?: boolean;
 }
 
 export interface VelocityResults { 

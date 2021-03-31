@@ -100,7 +100,7 @@ export class TraversePlanesComponent implements OnInit {
 
   setPlaneTraverseVelocity() {
     this.planeResults = this.fanAnalysisService.getPlaneResults(this.settings);
-    if (this.planeResults && this.velocityResults) {
+    if (this.planeResults && !this.planeResults.error && this.velocityResults) {
       if (this.planeStep == '3a') {
         this.velocityResults.traverseVelocity = this.planeResults.FlowTraverse.gasVelocity;
       } else if (this.planeStep == '3b') {

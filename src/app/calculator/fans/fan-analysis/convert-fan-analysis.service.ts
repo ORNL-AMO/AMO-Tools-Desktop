@@ -23,8 +23,13 @@ export class ConvertFanAnalysisService {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertPlaneResults(results, settings);
+    let results: PlaneResults = {};
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertPlaneResults(results, settings);
+    } catch(err) {
+      results.error = true;
+    }
     return results;
   }
 
