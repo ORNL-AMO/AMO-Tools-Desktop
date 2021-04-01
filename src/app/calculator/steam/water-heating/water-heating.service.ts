@@ -59,13 +59,15 @@ export class WaterHeatingService {
       tempWaterOut: 0,
       enthalpyMakeupWater: 0,
       flowByPassSteam: 0,
-      energySavingsDWH: 0,
-      energySavingsBoiler: 0,
-      energySavingsTotal: 0,
-      waterSavings: 0,
-      costSavings: 0,
+      heatGainRate: 0,
+      energySavedDWH: 0,
+      energySavedBoiler: 0,
+      energySavedTotal: 0,
+      waterSaved: 0,
+      costSavingsTotal: 0,
       costSavingsBoiler: 0,
       costSavingsWNT: 0,
+      costSavingsDWH: 0,
       bpTempWarningFlag: false
     };
     this.waterHeatingOutput.next(emptyOutput);
@@ -83,21 +85,16 @@ export class WaterHeatingService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
 
+      let output = processHeatAddon.waterHeatingUsingSteam(inputCopy);
+      console.log(output);
       let waterHeatingOutput: WaterHeatingOutput = processHeatAddon.waterHeatingUsingSteam(inputCopy);
+      waterHeatingOutput.energySavedTotal = waterHeatingOutput.energySavedBoiler +  waterHeatingOutput.energySavedDWH + waterHeatingOutput.waterSaved;
       
-      let heatGainRate = 1000 * 4.1796 * (waterHeatingOutput.tempWaterOut - inputCopy.temperatureWaterIn) * inputCopy.flowWaterRate;
-      
-      waterHeatingOutput.energySavingsDWH = heatGainRate * inputCopy.operatingHours / inputCopy.effWaterHeater;
-      waterHeatingOutput.energySavingsBoiler = (inputCopy.flowSteamRate * (waterHeatingOutput.enthalpySteamOut - waterHeatingOutput.enthalpyMakeupWater) * inputCopy.operatingHours) / inputCopy.effBoiler;
-      waterHeatingOutput.energySavingsTotal = waterHeatingOutput.energySavingsBoiler +  waterHeatingOutput.energySavingsDWH;
-      
-      // TODO check 1000
-      // Is this makeupWaterSavings?
-      waterHeatingOutput.waterSavings = (inputCopy.flowSteamRate * inputCopy.operatingHours) / 1000;
-      // supposed to be DWH?
-      waterHeatingOutput.costSavingsWNT = waterHeatingOutput.energySavingsDWH * inputCopy.fuelCost;
-      waterHeatingOutput.costSavingsBoiler = waterHeatingOutput.energySavingsBoiler * inputCopy.fuelCostBoiler + waterHeatingOutput.waterSavings * (inputCopy.waterCost + inputCopy.treatCost);
-      waterHeatingOutput.costSavings = waterHeatingOutput.costSavingsBoiler + waterHeatingOutput.costSavingsWNT;
+      waterHeatingOutput.costSavingsDWH = waterHeatingOutput.energySavedDWH * inputCopy.fuelCost;
+      // waterHeatingOutput.costSavingsBoiler = waterHeatingOutput.energySavedBoiler * inputCopy.fuelCostBoiler + waterHeatingOutput.waterSaved * (inputCopy.waterCost + inputCopy.treatCost);
+      waterHeatingOutput.costSavingsBoiler = waterHeatingOutput.energySavedBoiler * inputCopy.fuelCostBoiler;
+      waterHeatingOutput.costSavingsWNT = waterHeatingOutput.waterSaved * (inputCopy.waterCost + inputCopy.treatCost);
+      waterHeatingOutput.costSavingsTotal = waterHeatingOutput.costSavingsBoiler + waterHeatingOutput.costSavingsDWH + waterHeatingOutput.costSavingsWNT;
       waterHeatingOutput = this.convertResultUnits(waterHeatingOutput, settings);
       
       console.log('output', waterHeatingOutput);
@@ -108,21 +105,61 @@ export class WaterHeatingService {
 
 
   generateExampleData(settings: Settings) {
-    let exampleInput: WaterHeatingInput = {
-      operatingHours: 8760,
-      fuelCost: 6,
+    // let exampleInput: WaterHeatingInput = {
+    //   operatingHours: 8760,
+    //   fuelCost: 6,
+    //   fuelCostBoiler: 6,
+    //   effBoiler: 80,
+    //   waterCost: .002,
+    //   treatCost: .002,
+    //   pressureSteamIn: 8,
+    //   flowSteamRate: 750,
+    //   hxEffectiveness: 72,
+    //   temperatureWaterIn: 55,
+    //   pressureWaterOut: 60,
+    //   flowWaterRate: 12,
+    //   effWaterHeater: 72,
+    //   heatingValueGas: 1015,
+    //   tempMakeupWater: 55,
+    //   presMakeupWater: 15
+    // };
+
+    // // Flag method example
+    // let exampleInput: WaterHeatingInput = {
+    //   operatingHours: 8000,
+    //   fuelCost: 4,
+    //   fuelCostBoiler: 6,
+    //   effBoiler: 70,
+    //   waterCost: .002,
+    //   treatCost: .002,
+    //   pressureSteamIn: 10,
+    //   flowSteamRate: 500,
+    //   hxEffectiveness: 65,
+    //   temperatureWaterIn: 55,
+    //   pressureWaterOut: 25,
+    //   flowWaterRate: 3,
+    //   effWaterHeater: 70,
+    //   heatingValueGas: 1035,
+    //   tempMakeupWater: 55,
+    //   presMakeupWater: 15
+    // };
+
+     // Omers Flag method example
+     let exampleInput: WaterHeatingInput = {
+      operatingHours: 8000,
+      fuelCost: 4,
       fuelCostBoiler: 6,
-      effBoiler: 80,
+      effBoiler: 70,
       waterCost: .002,
       treatCost: .002,
-      pressureSteamIn: 8,
-      flowSteamRate: 750,
-      hxEffectiveness: 72,
+      pressureSteamIn: 10,
+      flowSteamRate: 500,
+      hxEffectiveness: 65,
       temperatureWaterIn: 55,
-      pressureWaterOut: 60,
-      flowWaterRate: 12,
-      effWaterHeater: 72,
-      heatingValueGas: 1015,
+      pressureWaterOut: 25,
+      flowWaterRate: 3,
+      effWaterHeater: 70,
+      heatingValueGas: 1035,
       tempMakeupWater: 55,
       presMakeupWater: 15
     };

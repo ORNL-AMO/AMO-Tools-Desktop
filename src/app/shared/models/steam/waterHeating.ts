@@ -24,14 +24,16 @@ export interface WaterHeatingOutput {
     enthalpySteamOut: number,
     enthalpyMakeupWater: number,
     flowByPassSteam: number
-    bpTempWarningFlag: boolean
+    bpTempWarningFlag: boolean,
 
-    energySavingsDWH: number,
-    energySavingsBoiler: number,
-    energySavingsTotal: number,
-    waterSavings: number,
+    heatGainRate: number,
+    energySavedDWH: number,
+    energySavedBoiler: number,
+    energySavedTotal: number,
+    waterSaved: number,
 
-    costSavings: number,
+    costSavingsTotal: number,
     costSavingsBoiler: number,
-    costSavingsWNT: number
+    costSavingsWNT: number,
+    costSavingsDWH: number,
 }

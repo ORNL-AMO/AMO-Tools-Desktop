@@ -10,7 +10,7 @@
           Savings calculations are based on heat exchanger efficiency and reduction or elimination of energy cost 
           used to heat domestic water that will be heated by using vent steam. 
         <br>
-        <div class="alert-warning text-left">
+        <div class="alert-info p-3 small text-left">
           Additional energy savings are available on the steam/boiler side as vent steam is condensed back and recovered. 
           Makeup water is also saved in addition to the chemical treatment costs. To quantify the additional savings, 
           additional inputs of boiler efficiency, water and treatment costs, makeup water temperature are needed.
@@ -126,7 +126,7 @@
 
       <div class="my-2" *ngIf="currentField == 'fuelHV'">
         <h6>
-          Fuel Heating Value
+          Heating Value of Natural Gas
           <br>
           <small class="text-muted">
             This is the calorific value of the fuel used for the water heater which will be 
@@ -137,7 +137,7 @@
 
       <div class="my-2" *ngIf="currentField == 'tempMakeupWater'">
         <h6>
-          Temperature of Makeup Water
+          Makeup Water Temperature
           <br>
           <small class="text-muted">
             Temperature of makeup water used for steam generating boiler. If the source is city water / river / lake the temperature will be within range of 50 to 100°F. 60°F can be used as default number.
@@ -148,7 +148,7 @@
       
       <div class="my-2" *ngIf="currentField == 'presMakeupWater'">
         <h6>
-            Pressure of Makeup Water
+            Makeup Water Pressure
           <br>
           <small class="text-muted">
             Pressure of makeup water used for steam generating boiler. This is a usually measured process variable. If unmeasured same value as boiler feed water tank could be used.
@@ -189,7 +189,7 @@
 
       <div class="my-2" *ngIf="currentField == 'waterCost'">
         <h6>
-            Cost of Water
+            Cost of Makeup Water
           <br>
           <small class="text-muted">
             This is cost of supplied water and can vary from $1 to $8 per 1000 gallons of water. A default number of $0.002/gal can be used.

@@ -109,7 +109,7 @@
 
       <div class="form-group">
         <label class="small" for="treatCost">
-          Cost of Water Treatment
+          Cost of Makeup Water Treatment
         </label>
         <div class="input-group">
           <input name="treatCost" type="number" class="form-control" formControlName="treatCost" id="treatCost"
@@ -165,6 +165,28 @@
       </div>
 
       <div class="form-group">
+        <label class="small" for="flowWaterRate">Water HX Flow Rate</label>
+        <div class="input-group">
+          <input name="flowWaterRate" type="number" step="10" class="form-control"
+            formControlName="flowWaterRate" id="flowWaterRate" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('flowWaterRate')" >
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.flowWaterRate.invalid && !form.controls.flowWaterRate.pristine">
+          <span *ngIf="form.controls.flowWaterRate.errors.required">Value Required</span>
+          <span *ngIf="form.controls.flowWaterRate.errors.min">Value can't be less than
+            {{form.controls.flowWaterRate.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="alert-warning my-1 p-2 small" *ngIf="showBoilingPointResultWarning">
+        Water temperature at the heat exchanger outlet is 90% value of the boiling point at the given water pressure.
+        It is necessary to increase water flow or bypass the vent steam.
+      </div>
+
+      <div class="form-group">
         <label class="small" for="hxEffectiveness">Heat Exchanger (HX) Effectiveness</label>
         <div class="input-group">
           <input name="hxEffectiveness" type="number" step="10" class="form-control"
@@ -216,22 +238,6 @@
         </span>
       </div>
 
-      <div class="form-group">
-        <label class="small" for="flowWaterRate">Water HX Flow Rate</label>
-        <div class="input-group">
-          <input name="flowWaterRate" type="number" step="10" class="form-control"
-            formControlName="flowWaterRate" id="flowWaterRate" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('flowWaterRate')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.flowWaterRate.invalid && !form.controls.flowWaterRate.pristine">
-          <span *ngIf="form.controls.flowWaterRate.errors.required">Value Required</span>
-          <span *ngIf="form.controls.flowWaterRate.errors.min">Value can't be less than
-            {{form.controls.flowWaterRate.errors.min.min}}.</span>
-        </span>
-      </div>
   
       <div class="form-group">
         <label class="small" for="effWaterHeater">Current Water Heater Efficiency</label>
@@ -305,10 +311,10 @@
 
   </form>
 
-  <div class="alert-warning mt-3 p-2" *ngIf="showBoilingPointResultWarning">
+  <!-- <div class="alert-warning mt-3 p-2 small" *ngIf="showBoilingPointResultWarning">
     Water temperature at the heat exchanger outlet is 90% value of the boiling point at the given water pressure.
     It is necessary to increase water flow or bypass the vent steam.
-  </div>
+  </div> -->
   
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
