@@ -31,9 +31,8 @@
           <input name="fuelCost" type="number" class="form-control" formControlName="fuelCost" id="fuelCost"
             onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelCost')">
           <span class="input-group-addon units">
-            $/
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
@@ -52,9 +51,8 @@
           <input name="fuelCostBoiler" type="number" class="form-control" formControlName="fuelCostBoiler"
             id="fuelCostBoiler" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelCostBoiler')">
           <span class="input-group-addon units">
-            $/
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
@@ -94,9 +92,8 @@
           <input name="waterCost" type="number" class="form-control" formControlName="waterCost" id="waterCost"
             onfocus="this.select();" (input)="calculate()" (focus)="focusField('waterCost')">
           <span class="input-group-addon units">
-            $/
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
@@ -115,9 +112,8 @@
           <input name="treatCost" type="number" class="form-control" formControlName="treatCost" id="treatCost"
             onfocus="this.select();" (input)="calculate()" (focus)="focusField('treatCost')">
           <span class="input-group-addon units">
-            $/
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
@@ -131,7 +127,7 @@
         Heat Exchanger
       </label>
       <div class="form-group">
-        <label class="small" for="pressureSteamIn">Process Vent Steam Pressure Guage</label>
+        <label class="small" for="pressureSteamIn">Vent Steam Pressure</label>
         <div class="input-group">
           <input name="pressureSteamIn" type="number" step="10" class="form-control"
             formControlName="pressureSteamIn" id="pressureSteamIn" onfocus="this.select();"
@@ -170,8 +166,8 @@
           <input name="flowWaterRate" type="number" step="10" class="form-control"
             formControlName="flowWaterRate" id="flowWaterRate" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('flowWaterRate')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.flowWaterRate.invalid && !form.controls.flowWaterRate.pristine">
@@ -311,11 +307,6 @@
 
   </form>
 
-  <!-- <div class="alert-warning mt-3 p-2 small" *ngIf="showBoilingPointResultWarning">
-    Water temperature at the heat exchanger outlet is 90% value of the boiling point at the given water pressure.
-    It is necessary to increase water flow or bypass the vent steam.
-  </div> -->
-  
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">

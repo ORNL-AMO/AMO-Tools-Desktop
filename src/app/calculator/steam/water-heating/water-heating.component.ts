@@ -10,12 +10,10 @@ import { WaterHeatingService } from './water-heating.service';
   styleUrls: ['./water-heating.component.css']
 })
 export class WaterHeatingComponent implements OnInit {
-
   @Input()
   settings: Settings;
-  
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
+
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -25,7 +23,6 @@ export class WaterHeatingComponent implements OnInit {
   modalSubscription: Subscription;
   
   headerHeight: number;
-  isModalOpen: boolean;
   tabSelect: string = 'results';
   
   constructor(private waterHeatingService: WaterHeatingService,
@@ -40,27 +37,20 @@ export class WaterHeatingComponent implements OnInit {
       this.waterHeatingService.initDefaultEmptyInputs();
       this.waterHeatingService.initDefaultEmptyOutputs();
     }
-    this.initSubscriptions();
+    
+    this.waterHeatingInputSub = this.waterHeatingService.waterHeatingInput.subscribe(value => {
+      this.calculate();
+    });
   }
 
   ngOnDestroy() {
     this.waterHeatingInputSub.unsubscribe();
-    this.modalSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  initSubscriptions() {
-    this.waterHeatingInputSub = this.waterHeatingService.waterHeatingInput.subscribe(value => {
-      this.calculate();
-    });
-    this.modalSubscription = this.waterHeatingService.modalOpen.subscribe(modalOpen => {
-      this.isModalOpen = modalOpen;
-    });
   }
 
   calculate() {

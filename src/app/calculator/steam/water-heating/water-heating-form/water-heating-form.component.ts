@@ -15,8 +15,6 @@ import { WaterHeatingService } from '../water-heating.service';
 export class WaterHeatingFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inModal: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -31,9 +29,7 @@ export class WaterHeatingFormComponent implements OnInit {
 
   warnings: WaterHeatingWarnings;
   showBoilingPointResultWarning: boolean;
-
   formWidth: number;
-
   showOperatingHoursModal: boolean;
 
   constructor(private waterHeatingService: WaterHeatingService, 
@@ -51,7 +47,6 @@ export class WaterHeatingFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSub = this.waterHeatingService.waterHeatingOutput.subscribe(output => {
-      console.log('showBoilingPointResultWarning', this.showBoilingPointResultWarning);
       this.showBoilingPointResultWarning = output.bpTempWarningFlag;
     });
   }
@@ -65,6 +60,7 @@ export class WaterHeatingFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.outputSub.unsubscribe();
   }
 
   initForm() {

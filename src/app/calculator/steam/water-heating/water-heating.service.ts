@@ -85,19 +85,15 @@ export class WaterHeatingService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
 
-      let output = processHeatAddon.waterHeatingUsingSteam(inputCopy);
-      console.log(output);
       let waterHeatingOutput: WaterHeatingOutput = processHeatAddon.waterHeatingUsingSteam(inputCopy);
-      waterHeatingOutput.energySavedTotal = waterHeatingOutput.energySavedBoiler +  waterHeatingOutput.energySavedDWH + waterHeatingOutput.waterSaved;
+      waterHeatingOutput = this.convertResultUnits(waterHeatingOutput, settings);
       
+      waterHeatingOutput.energySavedTotal = waterHeatingOutput.energySavedBoiler +  waterHeatingOutput.energySavedDWH;
       waterHeatingOutput.costSavingsDWH = waterHeatingOutput.energySavedDWH * inputCopy.fuelCost;
-      // waterHeatingOutput.costSavingsBoiler = waterHeatingOutput.energySavedBoiler * inputCopy.fuelCostBoiler + waterHeatingOutput.waterSaved * (inputCopy.waterCost + inputCopy.treatCost);
       waterHeatingOutput.costSavingsBoiler = waterHeatingOutput.energySavedBoiler * inputCopy.fuelCostBoiler;
       waterHeatingOutput.costSavingsWNT = waterHeatingOutput.waterSaved * (inputCopy.waterCost + inputCopy.treatCost);
       waterHeatingOutput.costSavingsTotal = waterHeatingOutput.costSavingsBoiler + waterHeatingOutput.costSavingsDWH + waterHeatingOutput.costSavingsWNT;
-      waterHeatingOutput = this.convertResultUnits(waterHeatingOutput, settings);
       
-      console.log('output', waterHeatingOutput);
       this.waterHeatingOutput.next(waterHeatingOutput);
     }
   }
@@ -105,61 +101,21 @@ export class WaterHeatingService {
 
 
   generateExampleData(settings: Settings) {
-    // let exampleInput: WaterHeatingInput = {
-    //   operatingHours: 8760,
-    //   fuelCost: 6,
-    //   fuelCostBoiler: 6,
-    //   effBoiler: 80,
-    //   waterCost: .002,
-    //   treatCost: .002,
-    //   pressureSteamIn: 8,
-    //   flowSteamRate: 750,
-    //   hxEffectiveness: 72,
-    //   temperatureWaterIn: 55,
-    //   pressureWaterOut: 60,
-    //   flowWaterRate: 12,
-    //   effWaterHeater: 72,
-    //   heatingValueGas: 1015,
-    //   tempMakeupWater: 55,
-    //   presMakeupWater: 15
-    // };
-
-    // // Flag method example
-    // let exampleInput: WaterHeatingInput = {
-    //   operatingHours: 8000,
-    //   fuelCost: 4,
-    //   fuelCostBoiler: 6,
-    //   effBoiler: 70,
-    //   waterCost: .002,
-    //   treatCost: .002,
-    //   pressureSteamIn: 10,
-    //   flowSteamRate: 500,
-    //   hxEffectiveness: 65,
-    //   temperatureWaterIn: 55,
-    //   pressureWaterOut: 25,
-    //   flowWaterRate: 3,
-    //   effWaterHeater: 70,
-    //   heatingValueGas: 1035,
-    //   tempMakeupWater: 55,
-    //   presMakeupWater: 15
-    // };
-
-     // Omers Flag method example
-     let exampleInput: WaterHeatingInput = {
-      operatingHours: 8000,
-      fuelCost: 4,
+    let exampleInput: WaterHeatingInput = {
+      operatingHours: 7000,
+      fuelCost: 6,
       fuelCostBoiler: 6,
-      effBoiler: 70,
+      effBoiler: 80,
       waterCost: .002,
       treatCost: .002,
-      pressureSteamIn: 10,
-      flowSteamRate: 500,
-      hxEffectiveness: 65,
+      pressureSteamIn: 8,
+      flowSteamRate: 750,
+      hxEffectiveness: 72,
       temperatureWaterIn: 55,
-      pressureWaterOut: 25,
-      flowWaterRate: 3,
-      effWaterHeater: 70,
-      heatingValueGas: 1035,
+      pressureWaterOut: 60,
+      flowWaterRate: 12,
+      effWaterHeater: 72,
+      heatingValueGas: 1015,
       tempMakeupWater: 55,
       presMakeupWater: 15
     };
@@ -192,7 +148,6 @@ export class WaterHeatingService {
       input.pressureWaterOut = this.roundVal(input.pressureWaterOut, 2);
 
       input.flowWaterRate = this.convertUnitsService.value(input.flowWaterRate).from('gpm').to('m3/s');
-      input.flowWaterRate = this.roundVal(input.flowWaterRate, 2);
 
       input.tempMakeupWater = this.convertUnitsService.value(input.tempMakeupWater).from('F').to('C');
       input.tempMakeupWater = this.roundVal(input.tempMakeupWater, 2);
@@ -219,25 +174,12 @@ export class WaterHeatingService {
 
     if (settings.unitsOfMeasure == "Metric") {
       input.pressureSteamIn = this.convertUnitsService.value(input.pressureSteamIn).from('Pa').to('MPaa');
-      input.pressureSteamIn = this.roundVal(input.pressureSteamIn, 2);
-
       input.temperatureWaterIn = this.convertUnitsService.value(input.temperatureWaterIn).from('C').to('K');
-      input.temperatureWaterIn = this.roundVal(input.temperatureWaterIn, 2);
-
       input.pressureWaterOut = this.convertUnitsService.value(input.pressureWaterOut).from('Pa').to('MPaa');
-      input.pressureWaterOut = this.roundVal(input.pressureWaterOut, 2);
-
       input.flowWaterRate = this.convertUnitsService.value(input.flowWaterRate).from('m3/s').to('m3/h');
-      input.flowWaterRate = this.roundVal(input.flowWaterRate, 2);
-
       input.heatingValueGas = this.convertUnitsService.value(input.heatingValueGas).from('kJNm3').to('btuSCF');
-      input.heatingValueGas = this.roundVal(input.heatingValueGas, 2);
-
       input.tempMakeupWater = this.convertUnitsService.value(input.tempMakeupWater).from('C').to('K');
-      input.tempMakeupWater = this.roundVal(input.tempMakeupWater, 2);
-
       input.presMakeupWater = this.convertUnitsService.value(input.presMakeupWater).from('Pa').to('MPaa');
-      input.presMakeupWater = this.roundVal(input.presMakeupWater, 2);
     }
 
     return input;
@@ -248,7 +190,7 @@ export class WaterHeatingService {
       output.enthalpySteamIn = this.convertUnitsService.value(output.enthalpySteamIn).from('kJkg').to('btuLb');
       output.enthalpySteamIn = this.roundVal(output.enthalpySteamIn, 2);
 
-      output.enthalpySteamOut = this.convertUnitsService.value(output.enthalpySteamOut).from('kJ').to('Btu');
+      output.enthalpySteamOut = this.convertUnitsService.value(output.enthalpySteamOut).from('kJkg').to('btuLb');
       output.enthalpySteamOut = this.roundVal(output.enthalpySteamOut, 2);
 
       output.bpTempWaterOut = this.convertUnitsService.value(output.bpTempWaterOut).from('K').to('F');
@@ -257,8 +199,21 @@ export class WaterHeatingService {
       output.tempWaterOut = this.convertUnitsService.value(output.tempWaterOut).from('K').to('F');
       output.tempWaterOut = this.roundVal(output.tempWaterOut, 2);
       
+      // flowByPassSteam must be misnamed? 403 vs 208.6  enthalpyWaterOut has 208.6
       output.flowByPassSteam = this.convertUnitsService.value(output.flowByPassSteam).from('kg').to('lb');
       output.flowByPassSteam = this.roundVal(output.flowByPassSteam, 2);
+
+      output.energySavedDWH = this.convertUnitsService.value(output.energySavedDWH).from('kJ').to('MMBtu');
+      output.energySavedDWH = this.roundVal(output.energySavedDWH, 2);
+
+      output.energySavedBoiler = this.convertUnitsService.value(output.energySavedBoiler).from('kJ').to('MMBtu');
+      output.energySavedBoiler = this.roundVal(output.energySavedBoiler, 2);
+
+      output.energySavedTotal = this.convertUnitsService.value(output.energySavedTotal).from('kJ').to('MMBtu');
+      output.energySavedTotal = this.roundVal(output.energySavedTotal, 2);
+
+      output.waterSaved = this.convertUnitsService.value(output.waterSaved).from('m3').to('gal');
+      output.waterSaved = this.roundVal(output.waterSaved, 2);
     }
 
     if (settings.unitsOfMeasure == "Metric") {
@@ -267,6 +222,15 @@ export class WaterHeatingService {
 
       output.tempWaterOut = this.convertUnitsService.value(output.tempWaterOut).from('K').to('C');
       output.tempWaterOut = this.roundVal(output.tempWaterOut, 2);
+
+      output.energySavedDWH = this.convertUnitsService.value(output.energySavedDWH).from('kJ').to('GJ');
+      output.energySavedDWH = this.roundVal(output.energySavedDWH, 2);
+
+      output.energySavedBoiler = this.convertUnitsService.value(output.energySavedBoiler).from('kJ').to('GJ');
+      output.energySavedBoiler = this.roundVal(output.energySavedBoiler, 2);
+
+      output.energySavedTotal = this.convertUnitsService.value(output.energySavedTotal).from('kJ').to('GJ');
+      output.energySavedTotal = this.roundVal(output.energySavedTotal, 2);
     }
     return output;
   }
