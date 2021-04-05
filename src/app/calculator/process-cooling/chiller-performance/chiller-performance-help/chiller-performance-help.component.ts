@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
+import { ChillerPerformanceService } from '../chiller-performance.service';
 
 @Component({
   selector: 'app-chiller-performance-help',
@@ -12,13 +15,11 @@ export class ChillerPerformanceHelpComponent implements OnInit {
   
   currentFieldSub: Subscription;
   currentField: string;
-  displaySuggestions: boolean;
 
-
-  constructor(private atmosphereService: AtmosphereService) { }
+  constructor(private chillerPerformanceService: ChillerPerformanceService) { }
 
   ngOnInit(): void {
-    this.currentFieldSub = this.atmosphereService.currentField.subscribe(val => {
+    this.currentFieldSub = this.chillerPerformanceService.currentField.subscribe(val => {
       this.currentField = val;
     });
   }
@@ -27,7 +28,4 @@ export class ChillerPerformanceHelpComponent implements OnInit {
     this.currentFieldSub.unsubscribe();
   }
 
-  toggleSuggestions() {
-    this.displaySuggestions = !this.displaySuggestions;
-  }
 }

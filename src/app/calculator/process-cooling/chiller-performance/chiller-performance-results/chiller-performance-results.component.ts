@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ChillerPerformanceOutput } from '../../../../shared/models/chillers';
+import { Settings } from '../../../../shared/models/settings';
+import { ChillerPerformanceService } from '../chiller-performance.service';
 
 @Component({
   selector: 'app-chiller-performance-results',
@@ -21,12 +25,12 @@ export class ChillerPerformanceResultsComponent implements OnInit {
   table2String: any;
 
   outputSubscription: Subscription;
-  output: AtmosphereLossOutput;
+  output: ChillerPerformanceOutput;
 
-  constructor(private atmosphereService: AtmosphereService) { }
+  constructor(private chillerPerformanceService: ChillerPerformanceService) { }
 
   ngOnInit(): void {
-    this.outputSubscription = this.atmosphereService.output.subscribe(val => {
+    this.outputSubscription = this.chillerPerformanceService.chillerPerformanceOutput.subscribe(val => {
       this.output = val;
     })
   }
@@ -36,15 +40,7 @@ export class ChillerPerformanceResultsComponent implements OnInit {
   }
 
   updateTable0String() {
-    this.table0String = this.copyTable0.nativeElement.innerText;
-  }
-
-  updateTable1String() {
-    this.table1String = this.copyTable1.nativeElement.innerText;
-  }
-
-  updateTable2String() {
-    this.table2String = this.copyTable2.nativeElement.innerText;
+    this.table0String = this.copyTable0.nativeElement.innerText + this.copyTable1.nativeElement.innerText + this.copyTable2.nativeElement.innerText;
   }
 
 }

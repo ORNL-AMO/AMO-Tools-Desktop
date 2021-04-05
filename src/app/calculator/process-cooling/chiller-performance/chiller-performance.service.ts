@@ -1,303 +1,171 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { ChillerPerformanceInput, ChillerPerformanceOutput } from '../../../shared/models/chillers';
+import { OperatingHours } from '../../../shared/models/operations';
+import { Settings } from '../../../shared/models/settings';
+import { ChillerPerformanceFormService } from './chiller-performance-form.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+declare var chillersAddon: any;
+
+@Injectable()
 export class ChillerPerformanceService {
 
-
-  baselineData: BehaviorSubject<Array<AtmosphereLoss>>;
-  modificationData: BehaviorSubject<Array<AtmosphereLoss>>;
-  output: BehaviorSubject<AtmosphereLossOutput>;
+  chillerPerformanceInput: BehaviorSubject<ChillerPerformanceInput>;
+  chillerPerformanceOutput: BehaviorSubject<ChillerPerformanceOutput>;
   
-  currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
-  energySourceType: BehaviorSubject<string>;
-
   generateExample: BehaviorSubject<boolean>;
-  operatingHours: OperatingHours;
-
+  currentField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private atmosphereFormService: AtmosphereFormService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
-    this.modalOpen = new BehaviorSubject<boolean>(false);
 
-    this.baselineData = new BehaviorSubject<Array<AtmosphereLoss>>(undefined);
-    this.modificationData = new BehaviorSubject<Array<AtmosphereLoss>>(undefined);
-    this.output = new BehaviorSubject<AtmosphereLossOutput>(undefined);
-
-    this.currentField = new BehaviorSubject<string>('default');
+  operatingHours: OperatingHours;
+  constructor(private convertUnitsService: ConvertUnitsService, private chillerPerformanceFormService: ChillerPerformanceFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
-    this.energySourceType = new BehaviorSubject<string>(undefined);
+    this.chillerPerformanceInput = new BehaviorSubject<ChillerPerformanceInput>(undefined);
+    this.chillerPerformanceOutput = new BehaviorSubject<ChillerPerformanceOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-  }
-
-  calculate(settings: Settings) {
-    let baselineAtmosphereLosses: Array<AtmosphereLoss> = this.baselineData.getValue();
-    let modificationAtmosphereLosses: Array<AtmosphereLoss> = this.modificationData.getValue();
-    let baselineResults: AtmosphereLossResults;
-    let modificationResults: AtmosphereLossResults;
-
-    this.initDefaultEmptyOutput();
-    let output: AtmosphereLossOutput = this.output.getValue();
-    
-    let validBaseline = this.checkValidInputData(baselineAtmosphereLosses);
-    let validModification: boolean;
-    if (modificationAtmosphereLosses) {
-      validModification = this.checkValidInputData(modificationAtmosphereLosses);
-    }
-
-    if (validBaseline) {
-      output.energyUnit = this.getAnnualEnergyUnit(baselineAtmosphereLosses[0].energySourceType, settings);
-      baselineAtmosphereLosses.forEach((loss, index) => {
-        baselineResults = this.getAtmosphereLossResult(loss, settings);
-        if (baselineResults) {
-          output.baseline.losses.push(baselineResults);
-          output.baseline.totalFuelUse += baselineResults.fuelUse;
-          output.baseline.totalFuelCost += baselineResults.fuelCost;
-          output.baseline.grossLoss += baselineResults.grossLoss;
-        }
-
-        if (validModification && modificationAtmosphereLosses[index]) {
-
-          modificationResults = this.getAtmosphereLossResult(modificationAtmosphereLosses[index], settings);
-          if (modificationResults) {
-            output.modification.losses.push(modificationResults);
-            output.modification.totalFuelUse += modificationResults.fuelUse;
-            output.modification.totalFuelCost += modificationResults.fuelCost;
-            output.modification.grossLoss += modificationResults.grossLoss;
-          }
-        }
-      });
-
-      if (baselineResults && modificationResults) {
-        output.fuelSavings = output.baseline.totalFuelUse - output.modification.totalFuelUse;
-        output.costSavings = output.baseline.totalFuelCost - output.modification.totalFuelCost;
-      }
-    }
-
-    this.output.next(output);
-  }
-
-  checkValidInputData(losses: Array<AtmosphereLoss>):boolean {
-    if (losses.length > 0) {
-      losses.forEach(data => {
-        let form = this.atmosphereFormService.getAtmosphereForm(data);
-        if (!form.valid) {
-          return false;
-        }
-      })
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  getAtmosphereLossResult(atmosphereLossData: AtmosphereLoss, settings: Settings): AtmosphereLossResults {
-    let energyUnit = this.getAnnualEnergyUnit(atmosphereLossData.energySourceType, settings);
-    
-    let result: AtmosphereLossResults = {
-      atmosphereLoss: 0,
-      grossLoss: 0,
-      fuelUse: 0,
-      fuelCost: 0,
-      energyUnit: energyUnit
-    }
-    
-    if (atmosphereLossData) {
-      result.atmosphereLoss = this.phastService.atmosphere(atmosphereLossData, settings, energyUnit);
-      result.grossLoss =  (result.atmosphereLoss / atmosphereLossData.availableHeat) * 100;
-      result.fuelUse = result.grossLoss * atmosphereLossData.hoursPerYear;
-      result.fuelCost = result.fuelUse * atmosphereLossData.fuelCost;
-    }
-    return result;
+    this.currentField = new BehaviorSubject<string>(undefined);
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: AtmosphereLoss = this.initDefaultLoss(0, undefined);
-    let baselineData: Array<AtmosphereLoss> = [emptyBaselineData];
-    this.baselineData.next(baselineData);
-    this.modificationData.next(undefined);
-    this.energySourceType.next('Fuel');
-
-  }
-
-  initDefaultLoss(index: number, treasureHours: number, atmoshpereLoss?: AtmosphereLoss) {
-    let fuelCost: number = 0;
-    let availableHeat: number = 100;
-    let hoursPerYear = 8760;
-
-    if (atmoshpereLoss) {
-      fuelCost = atmoshpereLoss.fuelCost;
-      availableHeat = atmoshpereLoss.availableHeat;
-
-      if (treasureHours) {
-        hoursPerYear = treasureHours;
-      } else {
-        hoursPerYear = atmoshpereLoss.hoursPerYear;
-      }
-    }
-
-    let defaultBaselineData: AtmosphereLoss = {
-      atmosphereGas: 1,
-      specificHeat: 0,
-      inletTemperature: 0,
-      outletTemperature: 0,
-      flowRate: 0,
-      correctionFactor: 0,
-      heatLoss: 0,
-      name: 'Loss #' + (index + 1),
-      energySourceType: 'Fuel',
-      fuelCost: fuelCost,
-      hoursPerYear: hoursPerYear,    
-      availableHeat: availableHeat,  
+    let emptyInput: ChillerPerformanceInput = {
+      chillerType: 0,
+      condenserCoolingType: 0,
+      motorDriveType: 0,
+      compressorConfigType: 0,
+      ariCapacity: 0,
+      ariEfficiency: 0,
+      maxCapacityRatio: 0,
+      waterDeltaT: 0,
+      waterFlowRate: 0,
+      operatingHours: 0,
+      baselineWaterSupplyTemp: 0,
+      baselineWaterEnteringTemp: 0,
+      modWaterSupplyTemp: 0,
+      modWaterEnteringTemp: 0,
     };
-
-    return defaultBaselineData;
+    this.chillerPerformanceInput.next(emptyInput);
   }
 
-
-  initDefaultEmptyOutput() {
-     let output: AtmosphereLossOutput = {
-      baseline: {totalFuelUse: 0, grossLoss: 0, totalFuelCost: 0, losses: []},
-      modification: {totalFuelUse: 0, grossLoss: 0, totalFuelCost: 0, losses: []},
-      fuelSavings: 0,
-      costSavings: 0
+  initDefaultEmptyOutputs() {
+    let emptyOutput: ChillerPerformanceOutput = {
+      baselineActualEfficiency: 0,
+      baselineActualCapacity: 0,
+      baselinePower: 0,
+      baselineEnergy: 0,
+      modActualEfficiency: 0,
+      modActualCapacity: 0,
+      modPower: 0,
+      modEnergy: 0,
+      savingsEnergy: 0,
     };
-    this.output.next(output);
+    this.chillerPerformanceOutput.next(emptyOutput);
   }
 
-  initModification() {
-    let currentBaselineData: Array<AtmosphereLoss> = this.baselineData.getValue();
-    let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
-    this.modificationData.next(currentBaselineCopy);
-  }
-
-  updateDataArray(data: AtmosphereLoss, index: number, isBaseline: boolean) {
-    let dataArray: Array<AtmosphereLoss>;
-    if (isBaseline) {
-      dataArray = this.baselineData.getValue();
-    } else {
-      dataArray = this.modificationData.getValue();
-    }
-    // dataArray won't exist during reset cycle w/ multiple subjects emitting
-    if (dataArray && dataArray[index]) {
-      dataArray[index].name = data.name;
-      dataArray[index].hoursPerYear = data.hoursPerYear;
-      dataArray[index].fuelCost = data.fuelCost;
-      dataArray[index].availableHeat = data.availableHeat;
-      dataArray[index].energySourceType = data.energySourceType;
-      dataArray[index].atmosphereGas = data.atmosphereGas;
-      dataArray[index].specificHeat = data.specificHeat;
-      dataArray[index].inletTemperature = data.inletTemperature;
-      dataArray[index].outletTemperature = data.outletTemperature
-      dataArray[index].flowRate = data.flowRate;
-      dataArray[index].correctionFactor = data.correctionFactor;
-      dataArray[index].heatLoss = data.heatLoss;
-    }
-
-     if (isBaseline) {
-      this.baselineData.next(dataArray);
-    } else {
-      this.modificationData.next(dataArray);
-    }
-  }
-
+  calculate(settings: Settings): void {
+    let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceInput.getValue();
+    let inputCopy: ChillerPerformanceInput = JSON.parse(JSON.stringify(chillerPerformanceInput));
+    let validInput: boolean;
+    validInput = this.chillerPerformanceFormService.getChillerPerformanceForm(inputCopy).valid;
     
-  removeLoss(i: number) {
-    let currentBaselineData: Array<AtmosphereLoss> = this.baselineData.getValue();
-    currentBaselineData.splice(i, 1);
-    this.baselineData.next(currentBaselineData);
-    let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
-    if (currentModificationData) {
-      currentModificationData.splice(i, 1);
-      this.modificationData.next(currentModificationData);
-    }
-  }
-  
-  addLoss(treasureHours: number, modificationExists: boolean) {
-    let currentBaselineData: Array<AtmosphereLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
-    let index = currentBaselineData.length;
-    let baselineObj: AtmosphereLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
-    currentBaselineData.push(baselineObj)
-    this.baselineData.next(currentBaselineData);
-    
-    if (modificationExists) {
-      let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
-      let modificationObj: AtmosphereLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
-      currentModificationData.push(modificationObj);
-      this.modificationData.next(currentModificationData);
+    if(!validInput) {
+      this.initDefaultEmptyOutputs();
+    } else {
+      inputCopy = this.convertInputUnits(inputCopy, settings);
+      let chillerPerformanceOutput: ChillerPerformanceOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      chillerPerformanceOutput = this.convertResultUnits(chillerPerformanceOutput, settings);
+      this.chillerPerformanceOutput.next(chillerPerformanceOutput);
     }
   }
 
   generateExampleData(settings: Settings) {
-    let specificHeat: number = .0185;
-    let inletTemperature: number = 30;
-    let outletTemperature: number = 1000;
-    let modOutletTemperature: number = 900;
-    let flowRate: number = 120000;
+    let exampleInput: ChillerPerformanceInput = {
+      chillerType: 0,
+      condenserCoolingType: 0,
+      motorDriveType: 0,
+      compressorConfigType: 1,
+      ariCapacity: 1000,
+      ariEfficiency: .676,
+      maxCapacityRatio: 1,
+      waterDeltaT: 16.54,
+      waterFlowRate: 924.90,
+      operatingHours: 7000,
+      baselineWaterSupplyTemp: 42,
+      baselineWaterEnteringTemp: 82.12,
+      modWaterSupplyTemp: 43,
+      modWaterEnteringTemp: 81.12
+    };
 
-    if(settings.unitsOfMeasure != 'Imperial'){
-      specificHeat = this.convertUnitsService.value(specificHeat).from('btuScfF').to('kJm3C');
-      specificHeat = Number(specificHeat.toFixed(5));
-
-      inletTemperature = this.convertUnitsService.value(inletTemperature).from('F').to('C');
-      inletTemperature = Number(inletTemperature.toFixed(2));
-
-      outletTemperature = this.convertUnitsService.value(outletTemperature).from('F').to('C');
-      outletTemperature = Number(outletTemperature.toFixed(2));
-
-      modOutletTemperature = this.convertUnitsService.value(modOutletTemperature).from('F').to('C');
-      modOutletTemperature = Number(modOutletTemperature.toFixed(2));
-
-      flowRate = this.convertUnitsService.value(flowRate).from('ft3/h').to('m3/h');
-      flowRate = Number(flowRate.toFixed(2));
+    if (settings.unitsOfMeasure == 'Metric') {
+      exampleInput = this.convertExampleUnits(exampleInput);
     }
+    this.chillerPerformanceInput.next(exampleInput);
+  }
+  
+  convertExampleUnits(input: ChillerPerformanceInput): ChillerPerformanceInput {
+    input.baselineWaterSupplyTemp = this.convertUnitsService.value(input.baselineWaterSupplyTemp).from('F').to('C');
+    input.baselineWaterSupplyTemp = this.roundVal(input.baselineWaterSupplyTemp, 2);
 
-    let baselineExample: AtmosphereLoss = {
-      atmosphereGas: 1,
-      specificHeat: specificHeat,
-      inletTemperature: inletTemperature,
-      outletTemperature: outletTemperature,
-      flowRate: flowRate,
-      correctionFactor: 1,
-      heatLoss: 0,
-      energySourceType: 'Fuel',
-      fuelCost: 3.99,
-      hoursPerYear: 8760,    
-      availableHeat: 100,
-      name: 'Loss #1'
-    };
-    this.baselineData.next([baselineExample]);
+    input.baselineWaterEnteringTemp = this.convertUnitsService.value(input.baselineWaterEnteringTemp).from('F').to('C');
+    input.baselineWaterEnteringTemp = this.roundVal(input.baselineWaterEnteringTemp, 2);
 
-    let modExample: AtmosphereLoss = {
-      atmosphereGas: 1,
-      specificHeat: specificHeat,
-      inletTemperature: inletTemperature,
-      outletTemperature: modOutletTemperature,
-      flowRate: flowRate,
-      correctionFactor: 1,
-      heatLoss: 0,
-      energySourceType: 'Fuel',
-      fuelCost: 3.99,
-      hoursPerYear: 8760,    
-      availableHeat: 100,
-      name: 'Loss #1 (Lower Outlet Temp)'
-    };
+    input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('F').to('C');
+    input.modWaterSupplyTemp = this.roundVal(input.modWaterSupplyTemp, 2);
+
+    input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('F').to('C');
+    input.modWaterEnteringTemp = this.roundVal(input.modWaterEnteringTemp, 2);
+
     
-    this.modificationData.next([modExample]);
-    this.generateExample.next(true);
+    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('F').to('C');
+    input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
+
+    input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('gpm').to('m3/s');
+    input.waterFlowRate = this.roundVal(input.waterFlowRate, 2);
+
+    input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
+    input.ariCapacity = this.roundVal(input.ariCapacity, 2);
+
+
+    return input;
   }
 
-  getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
-    let energyUnit: string = settings.energyResultUnit;
-    if (energySourceType === 'Electricity') {
-      energyUnit = 'kWh';
-    } else if (settings.unitsOfMeasure === 'Metric') {
-      energyUnit = 'GJ';
-    } else {
-      energyUnit = 'MMBtu';
+  convertInputUnits(input: ChillerPerformanceInput, settings: Settings): ChillerPerformanceInput {
+    if (settings.unitsOfMeasure == "Metric") {
+      input.baselineWaterSupplyTemp = this.convertUnitsService.value(input.baselineWaterSupplyTemp).from('C').to('F');
+      input.baselineWaterEnteringTemp = this.convertUnitsService.value(input.baselineWaterEnteringTemp).from('C').to('F');
+      input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('C').to('F');
+      input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('C').to('F');
+      
+      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('C').to('F');
+      input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('m3/s').to('gpm');
+      input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
     }
-    return energyUnit;
+    return input;
+  }
+
+  convertResultUnits(output: ChillerPerformanceOutput, settings: Settings): ChillerPerformanceOutput {
+    if (settings.unitsOfMeasure == "Imperial") {
+      output.baselinePower = this.convertUnitsService.value(output.baselinePower).from('kW').to('hp');
+      output.baselinePower = this.roundVal(output.baselinePower, 2);
+      
+      output.modPower = this.convertUnitsService.value(output.modPower).from('kW').to('hp');
+      output.modPower = this.roundVal(output.modPower, 2);
+    }
+    if (settings.unitsOfMeasure == "Metric") {
+      output.baselineActualCapacity = this.convertUnitsService.value(output.baselineActualCapacity).from('tons').to('kW');
+      output.baselineActualCapacity = this.roundVal(output.baselineActualCapacity, 2);
+
+      output.modActualCapacity = this.convertUnitsService.value(output.modActualCapacity).from('tons').to('kW');
+      output.modActualCapacity = this.roundVal(output.modActualCapacity, 2);
+    }
+    return output;
+  }
+
+  roundVal(val: number, digits: number): number {
+    let rounded = Number(val.toFixed(digits));
+    return rounded;
   }
 
 }

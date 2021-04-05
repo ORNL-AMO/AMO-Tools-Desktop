@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ChillerPerformanceInput } from '../../../../shared/models/chillers';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { Settings } from '../../../../shared/models/settings';
+import { chillerCharacteristics, ChillerCharacteristics } from '../../process-cooling-defaults';
+import { ChillerPerformanceFormService } from '../chiller-performance-form.service';
+import { ChillerPerformanceService } from '../chiller-performance.service';
 
 @Component({
   selector: 'app-chiller-performance-form',
@@ -9,296 +17,125 @@ export class ChillerPerformanceFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isBaseline: boolean;
+  inModal: boolean;
   @Input()
-  index: number;
-  @Input()
-  selected: boolean;
-  @Input()
-  operatingHours: OperatingHours;
+  headerHeight: number;
 
-  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @ViewChild('specificHeatModal', { static: false }) public materialModal: ModalDirective;
-  warnings: AtmosphereLossWarnings;
-
-  materialTypes: Array<AtmosphereSpecificHeat>;
-  showSpecificHeatModal: boolean = false;
-
-  atmosphereLossForm: FormGroup;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+  form: FormGroup;
+  characteristics: ChillerCharacteristics;
+  
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  showFlueGasModal: boolean;
 
-  showOperatingHoursModal: boolean;
+  showOpHoursModal: boolean = false;
   formWidth: number;
-  energyUnit: string;
-  energySourceTypeSub: Subscription;
 
-  lossResult: AtmosphereLossResults;
-  isEditingName: boolean;
+  constructor(private chillerPerformanceService: ChillerPerformanceService, 
+              private chillerPerformanceFormService: ChillerPerformanceFormService) { }
 
-  trackingEnergySource: boolean;
-  idString: string;
-  outputSubscription: Subscription;
-
-  constructor(private atmosphereFormService: AtmosphereFormService,
-    private suiteDbService: SuiteDbService,
-    private convertUnitsService: ConvertUnitsService,
-    private cd: ChangeDetectorRef,
-    private atmosphereService: AtmosphereService) { }
-
-  ngOnInit(): void {
-    if (!this.isBaseline) {
-      this.idString = '_modification_' + this.index;
-    }
-    else {
-      this.idString = '_baseline_' + this.index;
-    }
-    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
-
-    this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
+  ngOnInit() {
     this.initSubscriptions();
-    this.energyUnit = this.atmosphereService.getAnnualEnergyUnit(this.atmosphereLossForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.atmosphereService.energySourceType.next(this.atmosphereLossForm.controls.energySourceType.value);
-    } else {
-      let energySource = this.atmosphereService.energySourceType.getValue();
-      this.setEnergySource(energySource);
-    }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.firstChange) {
-      this.setFormState();
-    }
-    if (changes.index && !changes.index.firstChange) {
-      this.checkEnergySourceSub();
-      let output: AtmosphereLossOutput = this.atmosphereService.output.getValue();
-      this.setLossResult(output);
-    }
+  initSubscriptions() {
+    this.resetDataSub = this.chillerPerformanceService.resetData.subscribe(value => {
+      this.initForm();
+    })
+    this.generateExampleSub = this.chillerPerformanceService.generateExample.subscribe(value => {
+      this.initForm();
+    })
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
+  } 
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
-    if (this.trackingEnergySource) {
-      this.energySourceTypeSub.unsubscribe();
-    }
   }
-
-  checkEnergySourceSub() {
-    let isCurrentlySubscribed = this.trackingEnergySource;
-    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
-
-    if (!this.trackingEnergySource && isCurrentlySubscribed) {
-      this.energySourceTypeSub.unsubscribe();
-    }
-  }
-
-  initSubscriptions() {
-    this.resetDataSub = this.atmosphereService.resetData.subscribe(value => {
-      this.initForm();
-    });
-    this.generateExampleSub = this.atmosphereService.generateExample.subscribe(value => {
-      this.initForm();
-    });
-    this.outputSubscription = this.atmosphereService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
-      }
-    });
-    if (this.trackingEnergySource) {
-      this.energySourceTypeSub = this.atmosphereService.energySourceType.subscribe(energySourceType => {
-        this.setEnergySource(energySourceType);
-      });
-    }
-
-  }
-
-  setLossResult(output: AtmosphereLossOutput) {
-    if (this.isBaseline) {
-      this.lossResult = output.baseline.losses[this.index];
-    } else {
-      this.lossResult = output.modification.losses[this.index];
-    }
-  }
-
-  setFormState() {
-    if (this.selected == false) {
-      this.atmosphereLossForm.disable();
-    } else {
-      this.atmosphereLossForm.enable();
-    }
-  }
-
-  setProperties() {
-    let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (selectedMaterial) {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
-      }
-      this.atmosphereLossForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4),
-      });
-    }
-    this.calculate();
-  }
-
-  editLossName() {
-    this.isEditingName = true;
-  }
-
-  doneEditingName() {
-    this.isEditingName = false;
-  }
-
-  removeLoss() {
-    this.atmosphereService.removeLoss(this.index);
-  }
-
-  checkSpecificHeat() {
-    if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-      let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-      if (material) {
-        let val = material.specificHeat;
-        if (this.settings.unitsOfMeasure === 'Metric') {
-          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
-        }
-        material.specificHeat = this.roundVal(val, 4);
-        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
-  setEnergySource(energySourceType: string) {
-    this.atmosphereLossForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.atmosphereService.getAnnualEnergyUnit(energySourceType, this.settings);
-
-    if (!this.trackingEnergySource) {
-      this.atmosphereService.energySourceType.next(energySourceType);
-    }
-    this.cd.detectChanges();
-    this.calculate();
-  }
-
 
   initForm() {
-    let updatedAtmosphereLossData: AtmosphereLoss;
-    if (this.isBaseline) {
-      let baselineData: Array<AtmosphereLoss> = this.atmosphereService.baselineData.getValue();
-      updatedAtmosphereLossData = baselineData[this.index];
-    } else {
-      let modificationData: Array<AtmosphereLoss> = this.atmosphereService.modificationData.getValue();
-      if (modificationData) {
-        updatedAtmosphereLossData = modificationData[this.index];
-      }
-    }
-
-    if (updatedAtmosphereLossData) {
-      this.atmosphereLossForm = this.atmosphereFormService.getAtmosphereForm(updatedAtmosphereLossData, false);
-    } else {
-      this.atmosphereLossForm = this.atmosphereFormService.initForm();
-    }
-
-    this.calculate();
-    this.setFormState();
+    let chillerPerformanceInput: ChillerPerformanceInput = this.chillerPerformanceService.chillerPerformanceInput.getValue();
+    this.form = this.chillerPerformanceFormService.getChillerPerformanceForm(chillerPerformanceInput);
+    this.setChillerCharacteristics();
   }
+
+  setChillerCharacteristics() {
+    this.characteristics = JSON.parse(JSON.stringify(chillerCharacteristics));
+    if (this.form.value.chillerType == 0) {
+      this.setCentrifugalChillerOptions();
+    } else if (this.form.value.chillerType == 1) {
+      this.setScrewChillerOptions();
+    } 
+    this.calculate();
+  }
+
+  setCentrifugalChillerOptions() {
+    this.form.controls.compressorConfigType.enable();
+    this.form.controls.motorDriveType.enable();
+    this.characteristics.motorDriveTypes.pop();
+
+    if (this.form.value.condenserCoolingType == 0 && this.form.value.motorDriveType == 1) {
+      this.characteristics.compressorConfigTypes.pop();
+    }
+
+    if (this.form.value.condenserCoolingType == 1) {
+      this.characteristics.compressorConfigTypes.splice(1, 2);
+      this.form.patchValue({compressorConfigType: 0});
+      this.form.controls.compressorConfigType.disable();
+    } 
+    this.form.controls.compressorConfigType.updateValueAndValidity();
+  }
+
+  setScrewChillerOptions() {
+    this.form.patchValue({motorDriveType: 2});
+    this.form.controls.motorDriveType.disable();
+    this.form.controls.motorDriveType.updateValueAndValidity();
+
+    this.form.patchValue({compressorConfigType: 0});
+    this.form.controls.compressorConfigType.disable();
+    this.form.controls.compressorConfigType.updateValueAndValidity();
+  }
+
 
   focusField(str: string) {
-    this.atmosphereService.currentField.next(str);
-  }
-
-
-  checkWarnings() {
-    let tmpLoss: AtmosphereLoss = this.atmosphereFormService.getLossFromForm(this.atmosphereLossForm);
-    this.warnings = this.atmosphereFormService.checkWarnings(tmpLoss);
+    this.chillerPerformanceService.currentField.next(str);
   }
 
   calculate() {
-    this.checkWarnings();
-    let currentAtmosphereLoss: AtmosphereLoss = this.atmosphereFormService.getLossFromForm(this.atmosphereLossForm);
-    this.atmosphereService.updateDataArray(currentAtmosphereLoss, this.index, this.isBaseline);
-
+    let updatedInput: ChillerPerformanceInput = this.chillerPerformanceFormService.getChillerPerformanceInput(this.form);
+    this.chillerPerformanceService.chillerPerformanceInput.next(updatedInput)
   }
 
-  initSpecificHeatModal() {
-    this.showSpecificHeatModal = true;
-    this.atmosphereService.modalOpen.next(this.showSpecificHeatModal);
-    this.materialModal.show();
-  }
-
-  hideSpecificHeatModal(event?: any) {
-    if (event) {
-      this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
-      if (newMaterial) {
-        this.atmosphereLossForm.patchValue({
-          atmosphereGas: newMaterial.id
-        });
-        this.setProperties();
-      }
-    }
-    this.materialModal.hide();
-    this.showSpecificHeatModal = false;
-    this.atmosphereService.modalOpen.next(this.showSpecificHeatModal);
-  }
-
-
-  roundVal(val: number, digits: number) {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
-
-  initFlueGasModal() {
-    this.showFlueGasModal = true;
-    this.atmosphereService.modalOpen.next(this.showFlueGasModal);
-    this.flueGasModal.show();
-  }
-
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
-      this.atmosphereLossForm.patchValue({
-        availableHeat: calculatedAvailableHeat
-      });
-    }
-    this.calculate();
-    this.flueGasModal.hide();
-    this.showFlueGasModal = false;
-    this.atmosphereService.modalOpen.next(this.showFlueGasModal);
-  }
 
   closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
+    this.showOpHoursModal = false;
   }
 
   openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
+    this.showOpHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.atmosphereService.operatingHours = oppHours;
-    this.atmosphereLossForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+  updateOperatingHours(operatingHours: OperatingHours) {
+    this.showOpHoursModal
+    this.form.controls.operatingHours.patchValue(operatingHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
+
 }
+

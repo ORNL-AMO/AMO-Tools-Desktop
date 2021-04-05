@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../../shared/models/settings';
+import { ChillerPerformanceService } from './chiller-performance.service';
 
 @Component({
   selector: 'app-chiller-performance',
@@ -8,128 +13,73 @@ import { Component, OnInit } from '@angular/core';
 export class ChillerPerformanceComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inTreasureHunt: boolean;
-  @Input()
-  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    setTimeout(() => {
-      this.resizeTabs();
-    }, 100);
+    this.resizeTabs();
   }
-  containerHeight: number;
-  isModalOpen: boolean;
-  isEditingName: boolean;
+  
+  chillerPerformanceInputSub: Subscription;
   modalSubscription: Subscription;
-
-  baselineData: Array<AtmosphereLoss>;
-  modificationData: Array<AtmosphereLoss>;
-  baselineDataSub: Subscription;
-  modificationDataSub: Subscription;
-  outputSubscription: Subscription;
-  output: AtmosphereLossOutput;
-
+  
+  headerHeight: number;
   tabSelect: string = 'results';
-  baselineSelected: boolean = true;
-  modificationExists: boolean = false;
+  
+  constructor(private chillerPerformanceService: ChillerPerformanceService,
+              private settingsDbService: SettingsDbService) { }
 
-  constructor(private settingsDbService: SettingsDbService, 
-              private atmosphereService: AtmosphereService) { }
-
-  ngOnInit() {
-    if (this.settingsDbService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    }
+  ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
-    let existingInputs = this.atmosphereService.baselineData.getValue();
+    let existingInputs = this.chillerPerformanceService.chillerPerformanceInput.getValue();
     if(!existingInputs) {
-      this.atmosphereService.initDefaultEmptyInputs();
-      this.atmosphereService.initDefaultEmptyOutput();
+      this.chillerPerformanceService.initDefaultEmptyInputs();
+      this.chillerPerformanceService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
-    if(this.modificationData) {
-      this.modificationExists = true;
-    }
   }
 
   ngOnDestroy() {
-    this.modalSubscription.unsubscribe();
-    this.baselineDataSub.unsubscribe();
-    this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
+    this.chillerPerformanceInputSub.unsubscribe();
   }
 
-  initSubscriptions() {
-    this.modalSubscription = this.atmosphereService.modalOpen.subscribe(modalOpen => {
-      this.isModalOpen = modalOpen;
-    })
-    this.baselineDataSub = this.atmosphereService.baselineData.subscribe(value => {
-      this.baselineData = value;
-      this.atmosphereService.calculate(this.settings);
-    })
-    this.modificationDataSub = this.atmosphereService.modificationData.subscribe(value => {
-      this.modificationData = value
-      this.atmosphereService.calculate(this.settings);
-    })
-    this.outputSubscription = this.atmosphereService.output.subscribe(val => {
-      this.output = val;
-    });
-  }
-  
-  setTab(str: string) {
-    this.tabSelect = str;
-  }
-
-  addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
-    this.atmosphereService.addLoss(hoursPerYear, this.modificationExists);
-  }
-
-  createModification() {
-    this.atmosphereService.initModification();
-    this.modificationExists = true;
-    this.setModificationSelected();
-   }
-
-   btnResetData() {
-    this.modificationExists = false;
-    this.atmosphereService.initDefaultEmptyInputs();
-    this.atmosphereService.resetData.next(true);
-  }
-
-  btnGenerateExample() {
-    this.atmosphereService.generateExampleData(this.settings);
-    this.modificationExists = true;
-  }
-
-  setBaselineSelected() {
-    this.baselineSelected = true;
-  }
-
-  setModificationSelected() {
-    this.baselineSelected = false;
-  }
-
-  focusField(str: string) {
-    this.atmosphereService.currentField.next(str);
-  }
-  
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
   }
 
+  initSubscriptions() {
+    this.chillerPerformanceInputSub = this.chillerPerformanceService.chillerPerformanceInput.subscribe(value => {
+      this.calculate();
+    });
+  }
+
+  calculate() {
+    this.chillerPerformanceService.calculate(this.settings);
+  }
+
+  btnResetData() {
+    this.chillerPerformanceService.initDefaultEmptyInputs();
+    this.chillerPerformanceService.resetData.next(true);
+  }
+
+  btnGenerateExample() {
+    this.chillerPerformanceService.generateExampleData(this.settings);
+    this.chillerPerformanceService.generateExample.next(true);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
 }

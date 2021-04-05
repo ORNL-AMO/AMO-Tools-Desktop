@@ -9,6 +9,10 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { ChillerPerformanceService } from './chiller-performance.service';
+import { ChillerPerformanceFormService } from './chiller-performance-form.service';
+import { ChillerPerformanceChartComponent } from './chiller-performance-chart/chiller-performance-chart.component';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 
 
@@ -17,7 +21,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     ChillerPerformanceComponent,
     ChillerPerformanceFormComponent,
     ChillerPerformanceResultsComponent,
-    ChillerPerformanceHelpComponent
+    ChillerPerformanceHelpComponent,
+    ChillerPerformanceChartComponent
   ],
   imports: [
     CommonModule,
@@ -27,9 +32,14 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     OperatingHoursModalModule,
     ExportableResultsTableModule,
     ReactiveFormsModule,
+    SimpleTooltipModule
   ],
   exports: [
     ChillerPerformanceComponent
+  ],
+  providers: [
+    ChillerPerformanceService,
+    ChillerPerformanceFormService
   ]
 })
 export class ChillerPerformanceModule { }

@@ -84,3 +84,11 @@
    .atmosphere-icon {
         width: 53px;
    }
+
+   .w-66 {
+    width: 66.666%;
+   }
+
+   .w-33 {
+    width: 33.333%;
+   }

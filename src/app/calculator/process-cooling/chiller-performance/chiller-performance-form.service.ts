@@ -1,118 +1,50 @@
 import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChillerPerformanceInput } from '../../../shared/models/chillers';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ChillerPerformanceFormService {
 
   constructor(private formBuilder: FormBuilder) {}
-  initForm(lossNum?: number): FormGroup {
-    let formGroup = this.formBuilder.group({
-      'atmosphereGas': ['', Validators.required],
-      'specificHeat': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'inletTemp': ['', Validators.required],
-      'outletTemp': ['', Validators.required],
-      'flowRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNum]
+
+  getChillerPerformanceForm(inputObj: ChillerPerformanceInput): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      chillerType: [inputObj.chillerType, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
+      motorDriveType: [inputObj.motorDriveType, Validators.required],
+      compressorConfigType: [inputObj.compressorConfigType, Validators.required],
+      ariCapacity: [inputObj.ariCapacity, Validators.required],
+      ariEfficiency: [inputObj.ariEfficiency, Validators.required],
+      maxCapacityRatio: [inputObj.maxCapacityRatio, Validators.required],
+      waterDeltaT: [inputObj.waterDeltaT, Validators.required],
+      waterFlowRate: [inputObj.waterFlowRate, Validators.required],
+      operatingHours: [inputObj.operatingHours, Validators.required],
+      baselineWaterSupplyTemp: [inputObj.baselineWaterSupplyTemp, Validators.required],
+      baselineWaterEnteringTemp: [inputObj.baselineWaterEnteringTemp, Validators.required],
+      modWaterSupplyTemp: [inputObj.modWaterSupplyTemp, Validators.required],
+      modWaterEnteringTemp: [inputObj.modWaterEnteringTemp, Validators.required],
     });
 
-    if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(''));
-    }
-
-    return formGroup;
+    return form;
   }
 
-  getAtmosphereForm(loss: AtmosphereLoss, inAssessment: boolean = true): FormGroup {
-    let formGroup = this.formBuilder.group({
-      'atmosphereGas': [loss.atmosphereGas, Validators.required],
-      'specificHeat': [loss.specificHeat, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'inletTemp': [loss.inletTemperature, Validators.required],
-      'outletTemp': [loss.outletTemperature, Validators.required],
-      'flowRate': [loss.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'correctionFactor': [loss.correctionFactor, Validators.required],
-      'name': [loss.name]
-    });
-
-    if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
-      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
-      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
-    }
-    
-    return formGroup;
-  }
-
-  getLossFromForm(form: FormGroup): AtmosphereLoss {
-    let tmpLoss: AtmosphereLoss = {
-      atmosphereGas: form.controls.atmosphereGas.value,
-      specificHeat: form.controls.specificHeat.value,
-      inletTemperature: form.controls.inletTemp.value,
-      outletTemperature: form.controls.outletTemp.value,
-      flowRate: form.controls.flowRate.value,
-      correctionFactor: form.controls.correctionFactor.value,
-      name: form.controls.name.value
+  getChillerPerformanceInput(form: FormGroup): ChillerPerformanceInput {
+    let obj: ChillerPerformanceInput = {
+      operatingHours: form.controls.operatingHours.value,
+      chillerType: form.controls.chillerType.value,
+      condenserCoolingType: form.controls.condenserCoolingType.value,
+      motorDriveType: form.controls.motorDriveType.value,
+      compressorConfigType: form.controls.compressorConfigType.value,
+      ariCapacity: form.controls.ariCapacity.value,
+      ariEfficiency: form.controls.ariEfficiency.value,
+      maxCapacityRatio: form.controls.maxCapacityRatio.value,
+      waterDeltaT: form.controls.waterDeltaT.value,
+      waterFlowRate: form.controls.waterFlowRate.value,
+      baselineWaterSupplyTemp: form.controls.baselineWaterSupplyTemp.value,
+      baselineWaterEnteringTemp: form.controls.baselineWaterEnteringTemp.value,
+      modWaterSupplyTemp: form.controls.modWaterSupplyTemp.value,
+      modWaterEnteringTemp: form.controls.modWaterEnteringTemp.value,
     };
-
-    // In standalone
-    if (form.controls.availableHeat) {
-      tmpLoss.energySourceType = form.controls.energySourceType.value,
-      tmpLoss.hoursPerYear = form.controls.hoursPerYear.value,
-      tmpLoss.fuelCost = form.controls.fuelCost.value
-      tmpLoss.availableHeat = form.controls.availableHeat.value
-    }
-
-    return tmpLoss;
+    return obj;
   }
-
-  checkWarnings(loss: AtmosphereLoss): AtmosphereLossWarnings {
-    return {
-      specificHeatWarning: this.checkSpecificHeat(loss),
-      flowRateWarning: this.checkFlowRate(loss),
-      temperatureWarning: this.checkTempError(loss)
-    };
-  }
-
-  checkTempError(loss: AtmosphereLoss): string {
-    if (loss.inletTemperature > loss.outletTemperature) {
-      return 'Inlet temperature is greater than outlet temperature';
-    } else {
-      return null;
-    }
-  }
-  checkSpecificHeat(loss: AtmosphereLoss) {
-    if (loss.specificHeat < 0) {
-      return 'Specific Heat must be greater than 0';
-    } else {
-      return null;
-    }
-  }
-  checkFlowRate(loss: AtmosphereLoss): string {
-    if (loss.flowRate < 0) {
-      return 'Flow Rate must be greater than 0';
-    } else {
-      return null;
-    }
-  }
-
-  checkWarningsExist(warnings: AtmosphereLossWarnings): boolean {
-    let hasWarning: boolean = false;
-    for (var key in warnings) {
-      if (warnings[key] !== null) {
-        hasWarning = true;
-      }
-    }
-    return hasWarning;
-  }
-}
-
-export interface AtmosphereLossWarnings {
-  specificHeatWarning: string;
-  flowRateWarning: string;
-  temperatureWarning: string;
 }
