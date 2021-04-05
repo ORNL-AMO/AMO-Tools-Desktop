@@ -20,8 +20,6 @@ export class WaterHeatingComponent implements OnInit {
   }
   
   waterHeatingInputSub: Subscription;
-  modalSubscription: Subscription;
-  
   headerHeight: number;
   tabSelect: string = 'results';
   

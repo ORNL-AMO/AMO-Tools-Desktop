@@ -17,7 +17,6 @@ export class WaterHeatingService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
-  modalOpen: BehaviorSubject<boolean>;
 
   operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService, private waterHeatingFormService: WaterHeatingFormService) { 
@@ -26,7 +25,6 @@ export class WaterHeatingService {
     this.waterHeatingOutput = new BehaviorSubject<WaterHeatingOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
-    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   initDefaultEmptyInputs() {

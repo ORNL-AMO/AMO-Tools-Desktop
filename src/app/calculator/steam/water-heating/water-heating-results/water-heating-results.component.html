@@ -5,10 +5,8 @@
         <td class="bold w-50">Enthalpy of Vent Steam</td>
         <td *ngIf="output.enthalpySteamIn" class="text-center w-50">
           {{output.enthalpySteamIn | number:'1.0-3'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
-        </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </td>
         <td *ngIf="!output.enthalpySteamIn" class="text-center w-50">
           &mdash; &mdash;
@@ -18,10 +16,8 @@
         <td class="bold w-50">Heat Content of Steam</td>
         <td *ngIf="output.enthalpySteamOut" class="text-center w-50">
           {{output.enthalpySteamOut | number:'1.0-3'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
-        </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </td>
         <td *ngIf="!output.enthalpySteamOut" class="text-center w-50">
           &mdash; &mdash;
@@ -42,10 +38,8 @@
         <td class="bold w-50">Temperature of HX Water Outlet</td>
         <td *ngIf="output.tempWaterOut" class="text-center w-50">
           {{output.tempWaterOut | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
         </td>
         <td *ngIf="!output.tempWaterOut" class="text-center w-50">
           &mdash; &mdash;
@@ -55,12 +49,8 @@
         <td class="bold w-50">Vent Steam to be Bypassed</td>
         <td *ngIf="output.flowByPassSteam" class="text-center w-50">
           {{output.flowByPassSteam | number:'1.0-0'}} 
-          <span class="input-group-addon">
-            <span class="input-group-addon">
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
-            </span>
-          </span>
         </td>
         <td *ngIf="!output.flowByPassSteam" class="text-center w-50">
           &mdash; &mdash;
@@ -78,7 +68,7 @@
         <td *ngIf="output.energySavedDWH" class="text-center w-50">
           {{output.energySavedDWH | number:'1.0-0'}} 
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
         </td>
         <td *ngIf="!output.energySavedDWH" class="text-center w-50">
           &mdash; &mdash;
