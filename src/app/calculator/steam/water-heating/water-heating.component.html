@@ -1,0 +1,49 @@
+<div class="d-flex h-100 steam modify-conditions standalone-calculator" #contentContainer>
+	<div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+		<div class="d-flex pl-2 align-items-center">
+			<div class="col-md-auto">
+				<img src="assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png" class="ico-size2 p-1">
+			  </div>
+			<div class="pl-2">
+			<h3>Recovery to Heat Water</h3>
+			</div>
+			</div>
+		</div>
+    
+		<div class="d-flex flex-column m-4">
+			<app-water-heating-form [settings]="settings"></app-water-heating-form>	
+
+			  <div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
+				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+				  (click)="btnResetData()">
+				  Reset Data
+				</button>
+				<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+				  (click)="btnGenerateExample()">
+				  Generate Example
+				</button>
+			  </div>
+      		</div>
+		</div>
+
+		  <div class="d-flex flex-column w-50 scroll-item">
+			<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+				  <div>Results</div>
+				</a>
+			  </div>
+			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+				  <div>Help</div>
+				</a>
+			  </div>
+			</div>
+			<div class="d-flex mr-2 ml-2">
+				<app-water-heating-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-water-heating-help>
+				<app-water-heating-results *ngIf="tabSelect == 'results'" class="mt-3 mx-2 w-100" [settings]="settings"></app-water-heating-results>	
+			</div>
+		</div>
+
+  </div>
