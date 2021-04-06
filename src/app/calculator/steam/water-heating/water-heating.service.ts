@@ -37,7 +37,6 @@ export class WaterHeatingService {
       treatCost: undefined,
       pressureSteamIn: undefined,
       flowSteamRate: undefined,
-      hxEffectiveness: undefined,
       temperatureWaterIn: undefined,
       pressureWaterOut: undefined,
       flowWaterRate: undefined,
@@ -107,7 +106,6 @@ export class WaterHeatingService {
       treatCost: .002,
       pressureSteamIn: 8,
       flowSteamRate: 750,
-      hxEffectiveness: 72,
       temperatureWaterIn: 55,
       pressureWaterOut: 60,
       flowWaterRate: 12,
@@ -125,7 +123,6 @@ export class WaterHeatingService {
   convertPercentInputs(inputs: WaterHeatingInput): WaterHeatingInput {
     inputs.effBoiler = inputs.effBoiler > 0? inputs.effBoiler / 100 : inputs.effBoiler;
     inputs.effWaterHeater = inputs.effWaterHeater > 0? inputs.effWaterHeater / 100 : inputs.effWaterHeater;
-    inputs.hxEffectiveness = inputs.hxEffectiveness > 0? inputs.hxEffectiveness / 100 : inputs.hxEffectiveness;
     return inputs;
   }
 

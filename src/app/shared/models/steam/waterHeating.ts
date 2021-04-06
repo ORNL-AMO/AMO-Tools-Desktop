@@ -7,7 +7,6 @@ export interface WaterHeatingInput {
     treatCost: number,
     pressureSteamIn: number,
     flowSteamRate: number,
-    hxEffectiveness: number,
     temperatureWaterIn: number,
     pressureWaterOut: number,
     flowWaterRate: number,
