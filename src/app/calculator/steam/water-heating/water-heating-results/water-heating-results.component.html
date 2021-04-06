@@ -5,19 +5,19 @@
         <td class="bold w-50">Enthalpy of Vent Steam</td>
         <td *ngIf="output.enthalpySteamIn" class="text-center w-50">
           {{output.enthalpySteamIn | number:'1.0-3'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
         </td>
         <td *ngIf="!output.enthalpySteamIn" class="text-center w-50">
           &mdash; &mdash;
         </td>
       </tr>
       <tr>
-        <td class="bold w-50">Heat Content of Steam</td>
+        <td class="bold w-50">Enthalpy of Steam Out</td>
         <td *ngIf="output.enthalpySteamOut" class="text-center w-50">
           {{output.enthalpySteamOut | number:'1.0-3'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
         </td>
         <td *ngIf="!output.enthalpySteamOut" class="text-center w-50">
           &mdash; &mdash;
