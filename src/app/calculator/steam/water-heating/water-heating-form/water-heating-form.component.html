@@ -124,7 +124,7 @@
         </span>
       </div>
       <label class="group-label my-1">
-        Heat Exchanger
+        Heat Exchanger (HX)
       </label>
 
       <div class="form-group">
@@ -182,24 +182,6 @@
       </div>
 
       <br>
-
-      <div class="form-group">
-        <label class="small" for="hxEffectiveness">Heat Exchanger (HX) Effectiveness</label>
-        <div class="input-group">
-          <input name="hxEffectiveness" type="number" step="10" class="form-control"
-            formControlName="hxEffectiveness" id="hxEffectiveness" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('hxEffectiveness')" >
-            <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.hxEffectiveness.invalid && !form.controls.hxEffectiveness.pristine">
-          <span *ngIf="form.controls.hxEffectiveness.errors.required">Value Required</span>
-          <span *ngIf="form.controls.hxEffectiveness.errors.max">Value can't be greater than
-            {{form.controls.hxEffectiveness.errors.max.max}}.</span>
-          <span *ngIf="form.controls.hxEffectiveness.errors.min">Value can't be less than
-            {{form.controls.hxEffectiveness.errors.min.min}}.</span>
-        </span>
-      </div>
 
       <div class="form-group">
         <label class="small" for="flowWaterRate">Water HX Flow Rate</label>
