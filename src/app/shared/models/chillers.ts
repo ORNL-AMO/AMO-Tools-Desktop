@@ -47,6 +47,41 @@ export interface CoolingTowerData {
     driftLossFactor: number;
     cyclesOfConcentration: number;
   }
+
+  export interface CoolingTowerBasinInput {
+    // chiller characteristics
+    chillerType: number,
+    condenserCoolingType: number,
+    motorDriveType: number,
+    compressorConfigType: number
+    // chiller rated conditions
+    ariCapacity: number,
+    ariEfficiency: number,
+    maxCapacityRatio: number,
+    // chiller operating conditions
+    waterDeltaT: number,
+    waterFlowRate: number,
+    operatingHours: number,
+    // chilled water temperature reset
+    baselineWaterSupplyTemp: number,
+    baselineWaterEnteringTemp: number
+    modWaterSupplyTemp: number,
+    modWaterEnteringTemp: number
+  }
+
+
+  export interface CoolingTowerBasinOutput {
+    baselineActualEfficiency: number,
+    baselineActualCapacity: number,
+    baselinePower: number,
+    baselineEnergy: number,
+    modActualEfficiency: number,
+    modActualCapacity: number,
+    modPower: number,
+    modEnergy: number,
+    savingsEnergy: number,
+  }
+
   
 
   //====== Chiller Performance and Temperature ======
