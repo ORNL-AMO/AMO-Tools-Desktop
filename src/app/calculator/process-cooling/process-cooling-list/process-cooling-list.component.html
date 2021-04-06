@@ -32,6 +32,20 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower.png"
+                        class="calc-img" [routerLink]="['/calculators/cooling-tower-fan']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/cooling-tower-fan']">Cooling Tower Fan Energy</a>
+                <p>
+                    Calculate cooling tower fan energy consumption.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/process-cooling-icons/psychrometric-icon.png" class="calc-img"
                         [routerLink]="['/calculators/fan-psychrometric']">
                 </div>
