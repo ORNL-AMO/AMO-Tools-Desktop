@@ -12,7 +12,6 @@ export interface WaterHeatingInput {
     pressureWaterOut: number,
     flowWaterRate: number,
     effWaterHeater: number,
-    heatingValueGas: number,
     tempMakeupWater: number,
     presMakeupWater: number
 }

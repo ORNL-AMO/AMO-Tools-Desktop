@@ -34,7 +34,6 @@ export class WaterHeatingFormService {
       pressureWaterOut: [inputObj.pressureWaterOut, [Validators.required, Validators.min(0)]],
       flowWaterRate: [inputObj.flowWaterRate, [Validators.required, Validators.min(0)]],
       effWaterHeater: [inputObj.effWaterHeater, [Validators.required, Validators.min(0), Validators.max(100)]],
-      heatingValueGas: [inputObj.heatingValueGas, Validators.required],
       tempMakeupWater: [inputObj.tempMakeupWater, [Validators.required, Validators.min(minMakeupWater), Validators.max(maxMakeupWater)]],
       presMakeupWater: [inputObj.presMakeupWater, [Validators.required, Validators.min(0)]]
     });
@@ -57,7 +56,6 @@ export class WaterHeatingFormService {
       pressureWaterOut: form.controls.pressureWaterOut.value,
       flowWaterRate: form.controls.flowWaterRate.value,
       effWaterHeater: form.controls.effWaterHeater.value,
-      heatingValueGas: form.controls.heatingValueGas.value,
       tempMakeupWater: form.controls.tempMakeupWater.value,
       presMakeupWater: form.controls.presMakeupWater.value
     };

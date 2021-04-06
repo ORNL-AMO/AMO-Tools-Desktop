@@ -42,7 +42,6 @@ export class WaterHeatingService {
       pressureWaterOut: undefined,
       flowWaterRate: undefined,
       effWaterHeater: undefined,
-      heatingValueGas: undefined,
       tempMakeupWater: undefined,
       presMakeupWater: undefined
     };
@@ -113,7 +112,6 @@ export class WaterHeatingService {
       pressureWaterOut: 60,
       flowWaterRate: 12,
       effWaterHeater: 72,
-      heatingValueGas: 1015,
       tempMakeupWater: 55,
       presMakeupWater: 15
     };
@@ -153,9 +151,6 @@ export class WaterHeatingService {
       input.presMakeupWater = this.convertUnitsService.value(input.presMakeupWater).from('psig').to('Pa');
       input.presMakeupWater = this.roundVal(input.presMakeupWater, 2);
 
-      input.heatingValueGas = this.convertUnitsService.value(input.heatingValueGas).from('btuSCF').to('kJNm3');
-      input.heatingValueGas = this.roundVal(input.heatingValueGas, 2);
-  
     return input;
   }
 
@@ -175,7 +170,6 @@ export class WaterHeatingService {
       input.temperatureWaterIn = this.convertUnitsService.value(input.temperatureWaterIn).from('C').to('K');
       input.pressureWaterOut = this.convertUnitsService.value(input.pressureWaterOut).from('Pa').to('MPaa');
       input.flowWaterRate = this.convertUnitsService.value(input.flowWaterRate).from('m3/s').to('m3/h');
-      input.heatingValueGas = this.convertUnitsService.value(input.heatingValueGas).from('kJNm3').to('btuSCF');
       input.tempMakeupWater = this.convertUnitsService.value(input.tempMakeupWater).from('C').to('K');
       input.presMakeupWater = this.convertUnitsService.value(input.presMakeupWater).from('Pa').to('MPaa');
     }
