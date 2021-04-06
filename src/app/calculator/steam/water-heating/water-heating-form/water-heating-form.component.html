@@ -4,7 +4,7 @@
       </label>
     
       <div class="form-group">
-        <label class="small" for="operatingHours">Annual Operating Hours for HX</label>
+        <label class="small" for="operatingHours">Operating Hours</label>
         <div class="input-group">
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
@@ -126,6 +126,27 @@
       <label class="group-label my-1">
         Heat Exchanger
       </label>
+
+      <div class="form-group">
+        <label class="small" for="effWaterHeater">Current Water Heater Efficiency</label>
+        <div class="input-group">
+          <input name="effWaterHeater" type="number" step="10" class="form-control"
+            formControlName="effWaterHeater" id="effWaterHeater" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('effWaterHeater')" >
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.effWaterHeater.invalid && !form.controls.effWaterHeater.pristine">
+          <span *ngIf="form.controls.effWaterHeater.errors.required">Value Required</span>
+          <span *ngIf="form.controls.effWaterHeater.errors.min">Value can't be less than
+            {{form.controls.effWaterHeater.errors.min.min}}.</span>
+          <span *ngIf="form.controls.effWaterHeater.errors.max">Value can't be greater than
+            {{form.controls.effWaterHeater.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <br>
+
       <div class="form-group">
         <label class="small" for="pressureSteamIn">Vent Steam Pressure</label>
         <div class="input-group">
@@ -160,6 +181,26 @@
         </span>
       </div>
 
+      <br>
+
+      <div class="form-group">
+        <label class="small" for="hxEffectiveness">Heat Exchanger (HX) Effectiveness</label>
+        <div class="input-group">
+          <input name="hxEffectiveness" type="number" step="10" class="form-control"
+            formControlName="hxEffectiveness" id="hxEffectiveness" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('hxEffectiveness')" >
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.hxEffectiveness.invalid && !form.controls.hxEffectiveness.pristine">
+          <span *ngIf="form.controls.hxEffectiveness.errors.required">Value Required</span>
+          <span *ngIf="form.controls.hxEffectiveness.errors.max">Value can't be greater than
+            {{form.controls.hxEffectiveness.errors.max.max}}.</span>
+          <span *ngIf="form.controls.hxEffectiveness.errors.min">Value can't be less than
+            {{form.controls.hxEffectiveness.errors.min.min}}.</span>
+        </span>
+      </div>
+
       <div class="form-group">
         <label class="small" for="flowWaterRate">Water HX Flow Rate</label>
         <div class="input-group">
@@ -182,23 +223,6 @@
         It is necessary to increase water flow or bypass the vent steam.
       </div>
 
-      <div class="form-group">
-        <label class="small" for="hxEffectiveness">Heat Exchanger (HX) Effectiveness</label>
-        <div class="input-group">
-          <input name="hxEffectiveness" type="number" step="10" class="form-control"
-            formControlName="hxEffectiveness" id="hxEffectiveness" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('hxEffectiveness')" >
-            <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.hxEffectiveness.invalid && !form.controls.hxEffectiveness.pristine">
-          <span *ngIf="form.controls.hxEffectiveness.errors.required">Value Required</span>
-          <span *ngIf="form.controls.hxEffectiveness.errors.max">Value can't be greater than
-            {{form.controls.hxEffectiveness.errors.max.max}}.</span>
-          <span *ngIf="form.controls.hxEffectiveness.errors.min">Value can't be less than
-            {{form.controls.hxEffectiveness.errors.min.min}}.</span>
-        </span>
-      </div>
 
       <div class="form-group">
         <label class="small" for="temperatureWaterIn">Water HX Inlet Temperature</label>
@@ -234,39 +258,7 @@
         </span>
       </div>
 
-  
-      <div class="form-group">
-        <label class="small" for="effWaterHeater">Current Water Heater Efficiency</label>
-        <div class="input-group">
-          <input name="effWaterHeater" type="number" step="10" class="form-control"
-            formControlName="effWaterHeater" id="effWaterHeater" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('effWaterHeater')" >
-          <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.effWaterHeater.invalid && !form.controls.effWaterHeater.pristine">
-          <span *ngIf="form.controls.effWaterHeater.errors.required">Value Required</span>
-          <span *ngIf="form.controls.effWaterHeater.errors.min">Value can't be less than
-            {{form.controls.effWaterHeater.errors.min.min}}.</span>
-          <span *ngIf="form.controls.effWaterHeater.errors.max">Value can't be greater than
-            {{form.controls.effWaterHeater.errors.max.max}}.</span>
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="heatingValueGas">Heating Value of Natural Gas</label>
-        <div class="input-group">
-          <input name="heatingValueGas" type="number" step="10" class="form-control"
-            formControlName="heatingValueGas" id="heatingValueGas" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('heatingValueGas')" >
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/scf</span>
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/m<sup>3</sup></span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.heatingValueGas.invalid && !form.controls.heatingValueGas.pristine">
-          <span *ngIf="form.controls.heatingValueGas.errors.required">Value Required</span>
-        </span>
-      </div>
+      <br>
 
       <div class="form-group">
         <label class="small" for="tempMakeupWater">Makeup Water Temperature</label>
