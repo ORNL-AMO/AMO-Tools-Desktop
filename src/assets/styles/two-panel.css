@@ -113,6 +113,10 @@
     border-bottom: #84b641 solid 2px;
 }
 
+.waste-water .header{
+    border-bottom: #003087 solid 2px;
+}
+
 
 .psat .disabled .header{
     border-bottom-color: gray;

@@ -2,8 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { GasLeakageLossesService, LeakageWarnings } from '../gas-leakage-losses.service';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
+import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furnaces/leakage/leakage-form.service';
 
 @Component({
   selector: 'app-gas-leakage-losses-form',
@@ -34,7 +34,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
 
   warnings: LeakageWarnings;
   idString: string;
-  constructor(private gasLeakageCompareService: GasLeakageCompareService, private gasLeakageLossesService: GasLeakageLossesService) { }
+  constructor(private gasLeakageCompareService: GasLeakageCompareService, private leakageFormService: LeakageFormService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -51,9 +51,9 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: LeakageLoss = this.gasLeakageLossesService.initLossFromForm(this.lossesForm);
-    this.warnings = this.gasLeakageLossesService.checkLeakageWarnings(tmpLoss);
-    let hasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: LeakageLoss = this.leakageFormService.initLossFromForm(this.lossesForm);
+    this.warnings = this.leakageFormService.checkLeakageWarnings(tmpLoss);
+    let hasWarning: boolean = this.leakageFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 

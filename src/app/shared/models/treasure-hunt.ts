@@ -20,6 +20,7 @@ export interface TreasureHunt {
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
+    existingDataUnits?: string;
     setupDone: boolean;
 }
 
@@ -242,6 +243,14 @@ export interface OpportunitySummary {
     team: string,
     equipment: string,
     owner: string
+}
+
+
+export interface SavingsItem { 
+    savings: number, 
+    currentCost: number,
+    newCost: number, 
+    label: string 
 }
 
 export interface UtilityUsageData {

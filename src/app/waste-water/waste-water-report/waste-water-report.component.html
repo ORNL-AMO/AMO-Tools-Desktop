@@ -1,0 +1,107 @@
+<div class="assessment-report waste-water report-in-waste-water"
+    [ngClass]="{'assessment-report-padding': inAssessment, 'report-in-rollup': inRollup}">
+    <div *ngIf="!inRollup" class="report-cover">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+
+        <div class="report-title">
+            <h4>Waste Water Efficiency Report:</h4>
+            <h4>{{assessment.name}}</h4>
+            <h5>{{createdDate| date:'short'}}</h5>
+        </div>
+
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+
+    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inAssessment}">
+
+        <div *ngIf="inAssessment && !quickReport" class="btn-group hide-print">
+            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
+        </div>
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        <div *ngIf="assessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <div class="d-flex">
+                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                            {{directory.name}} /
+                        </span>
+                    </div>
+                    {{assessment.name}}
+
+                </h2>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                </h2>
+            </div>
+        </div>
+    </div>
+    <!-- End .report-header -->
+
+    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+        <div class="col-12 print-col">
+            <h4>Building Print View</h4>
+            <h5>One Moment Please</h5>
+            <span class="fa fa-print"></span>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-data"
+        *ngIf="assessment.wasteWater.setupDone && assessment.wasteWater.baselineData.valid.isValid">
+
+        <ul #reportBtns class="tabs primary hide-print">
+            <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+                <a>Result Data</a>
+            </li>
+            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                <a>Report Graphs</a>
+            </li>
+            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                <a>Input Summary</a>
+            </li>
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Facility Info</a>
+            </li>
+        </ul>
+
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+        <div class="input-data results scroll-item print-height"
+            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-input-data [wasteWater]="assessment.wasteWater" [settings]="settings" [printView]="showPrintView">
+            </app-input-data>
+        </div>
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-result-data [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
+            </app-result-data>
+        </div>
+        <div class="results print-height scroll-item"
+            *ngIf="currentTab == 'reportGraphs' || (showPrintView && printOptions.printReportGraphs)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-energy-analysis [printView]="showPrintView"></app-energy-analysis>
+            <app-srt-graphs [printView]="showPrintView" [settings]="settings"></app-srt-graphs>
+        </div>
+    </div>
+    <!-- End .report-data -->
+
+    <div *ngIf="!assessment.wasteWater.setupDone || !assessment.wasteWater.baselineData.valid.isValid">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
+            see the resulting data.</p>
+    </div>
+
+
+</div>
+
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

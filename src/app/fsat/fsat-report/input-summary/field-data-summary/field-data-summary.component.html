@@ -95,12 +95,7 @@
                 </span>
               </td>
               <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
-                <span *ngIf="mod.loadEstimatedMethod == 0">
-                  Power
-                </span>
-                <span *ngIf="mod.loadEstimatedMethod == 1">
-                  Current
-                </span>
+                &mdash; &mdash;
               </td>
             </tr>
 
@@ -112,19 +107,7 @@
                 {{fieldData.baseline.motorPower}}
               </td>
               <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
-                {{mod.motorPower}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                Specific Heat Ratio
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                {{fieldData.baseline.specificHeatRatio}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
-                {{mod.specificHeatRatio}}
+               &mdash; &mdash;
               </td>
             </tr>
 

@@ -32,6 +32,17 @@
                 {{mod.barometricPressure}}
               </td>
             </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+                Specific Heat Ratio
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+                {{baseGasDensity.baseline.specificHeatRatio}}
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
+                {{mod.specificHeatRatio}}
+              </td>
+            </tr>
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':gasTypeDiff[0] == true}">
@@ -101,7 +112,8 @@
               </td>
             </tr>
 
-            <tr>
+            <!--remove for issue 4332, coming back eventually-->
+            <!-- <tr>
               <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[0] == true}">
                 Specific Gravity
               </td>
@@ -121,7 +133,7 @@
                   &mdash; &mdash;
                 </span>
               </td>
-            </tr>
+            </tr> -->
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':wetBulbTempDiff[0] == true}">

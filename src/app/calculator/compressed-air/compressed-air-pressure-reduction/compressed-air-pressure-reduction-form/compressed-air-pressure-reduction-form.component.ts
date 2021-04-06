@@ -31,6 +31,10 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
   @Input()
   selected: boolean;
+  @Input()
+  pressureRated: number;
+  @Input()
+  atmosphericPressure: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -54,12 +58,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
     }
     else {
       this.idString = 'modification_' + this.index;
-      if (!this.isBaseline) {
-        this.data.compressorPower = this.compressorPower;
-        this.data.pressure = this.pressure;
-      }
     }
-
     this.form = this.compressedAirPressureReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (!this.isBaseline) {
       this.form.controls.compressorPower.disable();
@@ -79,6 +78,18 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
     if (!this.isBaseline && changes.pressure && !changes.pressure.firstChange) {
       this.data.pressure = this.pressure;
       this.form.controls.pressure.patchValue(this.data.pressure);
+      this.calculate();
+    }
+
+    if (!this.isBaseline && changes.atmosphericPressure && !changes.atmosphericPressure.firstChange) {
+      this.data.atmosphericPressure = this.atmosphericPressure;
+      this.form.controls.atmosphericPressure.patchValue(this.data.atmosphericPressure);
+      this.calculate();
+    }
+
+    if (!this.isBaseline && changes.pressureRated && !changes.pressureRated.firstChange) {
+      this.data.pressureRated = this.pressureRated;
+      this.form.controls.pressureRated.patchValue(this.data.pressureRated);
       this.calculate();
     }
     if (changes.selected && !changes.selected.firstChange) {

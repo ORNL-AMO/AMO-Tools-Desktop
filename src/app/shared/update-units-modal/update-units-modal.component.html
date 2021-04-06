@@ -1,0 +1,40 @@
+<div bsModal #updateUnitsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateUnitsLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md"
+  [ngClass]="{'phast': assessmentType == 'phast',
+  'ssmt': assessmentType == 'ssmt',
+  'fsat': assessmentType == 'fsat',
+  'psat': assessmentType == 'psat'}">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            Assessment Settings
+          </span>
+          <button class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="!showSuccessMessage" class="card-block p-5">
+          <span class="h5 bold">
+            Units of measure have changed.
+          </span> 
+          <br><br>
+          For accurate results, assessment data should be updated to reflect these changes.
+        </div>
+        <div *ngIf="showSuccessMessage" class="card-block p-5 alert-success">
+          <div class="h5 bold text-center">
+            Data updated successfully!
+          </div> 
+        </div>
+        <div class="card-footer p-3 text-right">
+          <button class="btn" (click)="closeModal()">
+            <span *ngIf="showSuccessMessage">Dismiss</span>
+            <span *ngIf="!showSuccessMessage">Continue without update</span>
+          </button>
+          <button *ngIf="!showSuccessMessage" class="btn btn-primary ml-2" (click)="updateData()">Update Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

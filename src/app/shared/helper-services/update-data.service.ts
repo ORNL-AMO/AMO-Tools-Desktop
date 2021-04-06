@@ -5,6 +5,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
 import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
+import { FSAT } from '../models/fans';
 declare const packageJson;
 
 @Injectable()
@@ -18,6 +19,9 @@ export class UpdateDataService {
         } else {
             if (assessment.type === 'PSAT') {
                 return this.updatePsat(assessment);
+            }
+            if (assessment.type === 'FSAT') {
+                return this.updateFsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
             } else if (assessment.type == 'SSMT') {
@@ -44,6 +48,28 @@ export class UpdateDataService {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
         return assessment;
+    }
+
+    updateFsat(assessment: Assessment): Assessment {
+        //logic for updating fsat data
+        assessment.appVersion = packageJson.version;
+        if (!assessment.fsat.fieldData.inletVelocityPressure) {
+            assessment.fsat.fieldData.inletVelocityPressure = 0;
+            assessment.fsat.fieldData.usingStaticPressure = true;
+        }
+
+        assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
+        assessment.fsat.modifications.forEach(mod => {
+            mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+        });
+        return assessment;
+    }
+
+    updateSpecificHeatRatio(fsat: FSAT): FSAT {
+        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        }
+        return fsat;
     }
 
     updatePhast(assessment: Assessment): Assessment {

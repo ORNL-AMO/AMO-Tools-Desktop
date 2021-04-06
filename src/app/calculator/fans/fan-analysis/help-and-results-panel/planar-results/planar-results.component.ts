@@ -4,8 +4,6 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { PlaneResults, Fan203Inputs } from '../../../../../shared/models/fans';
 import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
-import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
-import { FanInfoFormService } from '../../fan-analysis-form/fan-info-form/fan-info-form.service';
 
 @Component({
   selector: 'app-planar-results',
@@ -30,7 +28,7 @@ export class PlanarResultsComponent implements OnInit {
   showFull: boolean = false;
   inAssessmentModal: boolean;
   pressureCalcResultType: string = 'static';
-  constructor(private convertFanAnalysisService: ConvertFanAnalysisService, private fanAnalysisService: FanAnalysisService, private fanInfoFormService: FanInfoFormService, private planeDataFormService: PlaneDataFormService) { }
+  constructor(private fanAnalysisService: FanAnalysisService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
     this.inAssessmentModal = this.fanAnalysisService.inAssessmentModal;
@@ -53,17 +51,11 @@ export class PlanarResultsComponent implements OnInit {
 
   getResults() {
     this.inputs = this.fanAnalysisService.inputData;
-    // let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
-    let fanInfoDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
-    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
-    if (planeDataDone && fanInfoDone) {
-      this.planeResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
-    } else {
-      this.planeResults = undefined;
-    }
+    this.planeResults = this.fanAnalysisService.getPlaneResults(this.settings);
   }
 
   setPressureCalcType(str: string){
     this.fanAnalysisService.pressureCalcResultType = str;
+    this.fanAnalysisService.getResults.next(true);
   }
 }

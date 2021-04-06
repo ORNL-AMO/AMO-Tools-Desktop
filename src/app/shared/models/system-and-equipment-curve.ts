@@ -5,7 +5,6 @@ export interface SystemAndEquipmentCurveData {
     byDataInputs?: ByDataInputs,
     equipmentInputs?: EquipmentInputs,
     equipmentCurveFormView?: string,
-    systemCurveDataPoints?: Array<{ pointName: string, flowRate: number, yValue: number }>
   }
   
   export interface PumpSystemCurveData {

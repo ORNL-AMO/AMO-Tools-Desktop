@@ -17,6 +17,7 @@ export class AirHeatingFormService {
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, Validators.required],
       gasFuelType: [inputObj.gasFuelType],
+      fuelCost: [inputObj.fuelCost],
       materialTypeId: [inputObj.materialTypeId],
       flueTemperature: [inputObj.flueTemperature, Validators.required],
       excessAir: [inputObj.excessAir, Validators.required],
@@ -58,6 +59,7 @@ export class AirHeatingFormService {
     let obj: AirHeatingInput = {
       operatingHours: form.controls.operatingHours.value,
       gasFuelType: form.controls.gasFuelType.value,
+      fuelCost: form.controls.fuelCost.value,
       materialTypeId: form.controls.materialTypeId.value,
       flueTemperature: form.controls.flueTemperature.value,
       excessAir: form.controls.excessAir.value,
@@ -89,6 +91,7 @@ export class AirHeatingFormService {
     let obj: AirHeatingInput = {
       operatingHours: form.controls.operatingHours.value,
       gasFuelType: form.controls.gasFuelType.value,
+      fuelCost: form.controls.fuelCost.value,
       materialTypeId: form.controls.materialTypeId.value,
       flueTemperature: form.controls.flueTemperature.value,
       excessAir: form.controls.excessAir.value,

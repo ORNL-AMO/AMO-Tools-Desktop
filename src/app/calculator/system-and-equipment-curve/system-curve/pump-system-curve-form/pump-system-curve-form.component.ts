@@ -32,8 +32,6 @@ export class PumpSystemCurveFormComponent implements OnInit {
   pointTwoFluidPower: number = 0;
   pumpSystemCurveForm: FormGroup;
   resetFormsSub: Subscription;
-  assessmentDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
-  showDataPointOptions: boolean = false;
   pumpModificationCollapsed: string = 'closed';
 
   displaySpeed: boolean = true;
@@ -46,15 +44,6 @@ export class PumpSystemCurveFormComponent implements OnInit {
   ngOnInit() {
     this.initSystemCurveForm();
     this.initSubscriptions();
-
-    if (this.systemAndEquipmentCurveService.systemCurveDataPoints) {
-      this.assessmentDataPoints = this.systemAndEquipmentCurveService.systemCurveDataPoints;
-      if (this.pumpSystemCurveForm.controls.pointTwo.value == '') {
-        this.pumpSystemCurveForm.controls.pointTwo.patchValue('Baseline');
-        this.setFormValues();
-      }
-      this.showDataPointOptions = true;
-    }
   }
 
   ngOnDestroy() {
@@ -117,17 +106,6 @@ export class PumpSystemCurveFormComponent implements OnInit {
   calculateFluidPowers(pumpSystemCurveData: PumpSystemCurveData) {
     this.pointOneFluidPower = this.pumpSystemCurveFormService.calculatePumpFluidPower(pumpSystemCurveData.pointOneHead, pumpSystemCurveData.pointOneFlowRate, pumpSystemCurveData.specificGravity, this.settings);
     this.pointTwoFluidPower = this.pumpSystemCurveFormService.calculatePumpFluidPower(pumpSystemCurveData.pointTwoHead, pumpSystemCurveData.pointTwoFlowRate, pumpSystemCurveData.specificGravity, this.settings);
-  }
-
-  setFormValues() {
-    let dataPoint: { pointName: string, flowRate: number, yValue: number } = this.assessmentDataPoints.find(point => { return point.pointName == this.pumpSystemCurveForm.controls.pointTwo.value });
-    if (dataPoint) {
-      this.pumpSystemCurveForm.patchValue({
-        pointTwoFlowRate: dataPoint.flowRate,
-        pointTwoHead: dataPoint.yValue
-      });
-      this.saveChanges();
-    }
   }
 
   togglePumpModification() {

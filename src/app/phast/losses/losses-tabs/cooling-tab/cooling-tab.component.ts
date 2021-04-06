@@ -4,8 +4,8 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from '../../cooling-losses/cooling-losses-compare.service';
-import { CoolingLossesService, LiquidCoolingWarnings, GasCoolingWarnings } from '../../cooling-losses/cooling-losses.service';
 import { Subscription } from 'rxjs';
+import { CoolingFormService, GasCoolingWarnings, LiquidCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 @Component({
   selector: 'app-cooling-tab',
   templateUrl: './cooling-tab.component.html',
@@ -26,7 +26,7 @@ export class CoolingTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private coolingLossesCompareService: CoolingLossesCompareService, private coolingLossesService: CoolingLossesService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private coolingLossesCompareService: CoolingLossesCompareService, private coolingFormService: CoolingFormService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -67,12 +67,12 @@ export class CoolingTabComponent implements OnInit {
 
   checkWarningExists(loss: CoolingLoss): boolean {
     if (loss.coolingLossType === 'Gas' || loss.coolingLossType === 'Air' || loss.coolingLossType === 'Other Gas') {
-      let warnings: GasCoolingWarnings = this.coolingLossesService.checkGasWarnings(loss.gasCoolingLoss);
-      let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
+      let warnings: GasCoolingWarnings = this.coolingFormService.checkGasWarnings(loss.gasCoolingLoss);
+      let tmpHasWarning: boolean = this.coolingFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     } else if (loss.coolingLossType === 'Liquid' || loss.coolingLossType === 'Water' || loss.coolingLossType === 'Other Liquid') {
-      let warnings: LiquidCoolingWarnings = this.coolingLossesService.checkLiquidWarnings(loss.liquidCoolingLoss);
-      let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
+      let warnings: LiquidCoolingWarnings = this.coolingFormService.checkLiquidWarnings(loss.liquidCoolingLoss);
+      let tmpHasWarning: boolean = this.coolingFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     }
   }
@@ -108,14 +108,14 @@ export class CoolingTabComponent implements OnInit {
 
   checkLossValid(loss: CoolingLoss) {
     if (loss.coolingLossType === 'Gas') {
-      let tmpForm: FormGroup = this.coolingLossesService.initGasFormFromLoss(loss);
+      let tmpForm: FormGroup = this.coolingFormService.initGasFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (loss.coolingLossType === 'Liquid') {
-      let tmpForm: FormGroup = this.coolingLossesService.initLiquidFormFromLoss(loss);
+      let tmpForm: FormGroup = this.coolingFormService.initLiquidFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

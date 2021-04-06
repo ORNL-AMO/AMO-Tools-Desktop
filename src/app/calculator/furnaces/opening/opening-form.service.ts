@@ -108,6 +108,10 @@ export class OpeningFormService {
       formGroup.controls.heightOfOpening.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
       formGroup.controls.heightOfOpening.updateValueAndValidity();
       formGroup.controls.heightOfOpening.markAsDirty();
+    } else {
+      formGroup.controls.heightOfOpening.setValidators([]);
+      formGroup.controls.heightOfOpening.updateValueAndValidity();
+      formGroup.controls.heightOfOpening.markAsDirty();
     }
     return formGroup;
   }

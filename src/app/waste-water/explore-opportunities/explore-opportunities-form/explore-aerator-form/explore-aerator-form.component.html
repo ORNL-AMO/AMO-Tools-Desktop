@@ -1,0 +1,316 @@
+<!-- Reduce Supplied Oxygen -->
+<div class="checkbox">
+    <label class="group-label" for="exploreReduceOxygen">
+        <input type="checkbox" id="exploreReduceOxygen" (focus)="focusField('exploreReduceOxygen')"
+            (change)="setExploreReduceOxygen()" [(ngModel)]="modificationData.exploreReduceOxygen.hasOpportunity" />
+        <span [innerHTML]="modificationData.exploreReduceOxygen.display"></span>
+    </label>
+</div>
+<!-- Operating Dissolved Oxygen (DO)-->
+<li *ngIf="modificationData.exploreReduceOxygen.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':baselineForm.controls.OperatingDO.invalid}">
+            <label for="baselineOperatingDO" class="baseline-value-label">Baseline Operating Dissolved O<sub>2</sub>
+                (DO)</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.OperatingDO.value }}
+                <span>mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.OperatingDO.invalid && !baselineForm.controls.OperatingDO.pristine">
+                <span *ngIf="baselineForm.controls.OperatingDO.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.OperatingDO.errors.min">Value can't be less than
+                    {{baselineForm.controls.OperatingDO.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.OperatingDO.invalid }">
+            <label for="modificationOperatingDO" class="mod-value-label">Modification Operating Dissolved O<sub>2</sub>
+                (DO)</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationOperatingDO" type="number" step="0.1" min="0" max="24"
+                    id="modificationOperatingDO" class="form-control mod-value-input"
+                    (focus)="focusField('OperatingDO')" formControlName="OperatingDO" (input)="save()" />
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <a class="form-text small click-link" (click)="calculateDO()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize DO</a>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.OperatingDO.invalid && !modificationForm.controls.OperatingDO.pristine">
+                <span *ngIf="modificationForm.controls.OperatingDO.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.OperatingDO.errors.min">Value can't be less than
+                    {{modificationForm.controls.OperatingDO.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showDOAlert">
+            Value cannot be optimized further.
+        </div>
+    </form>
+</li>
+<!-- END Reduce Supplied Oxygen -->
+
+<!-- Modify Aerator Performance -->
+<div class="checkbox">
+    <label class="group-label" for="modifyAeratorPerformance">
+        <input type="checkbox" id="modifyAeratorPerformance" (focus)="focusField('modifyAeratorPerformance')"
+            (change)="setExploreAeratorPerformance()"
+            [(ngModel)]="modificationData.exploreAeratorPerformance.hasOpportunity" />
+        {{ modificationData.exploreAeratorPerformance.display }}
+    </label>
+</div>
+<!--Operating Hours (OperatingTime)-->
+<li *ngIf="modificationData.exploreAeratorPerformance.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':baselineForm.controls.OperatingTime.invalid}">
+            <label for="baselineOperatingTime" class="baseline-value-label">Baseline Operating Hours</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.OperatingTime.value }} hr/day</div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.OperatingTime.invalid && !baselineForm.controls.OperatingTime.pristine">
+                <span *ngIf="baselineForm.controls.OperatingTime.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.OperatingTime.errors.min">Value can't be less than
+                    {{baselineForm.controls.OperatingTime.errors.min.min}} hr/day.</span>
+                <span *ngIf="baselineForm.controls.OperatingTime.errors.max">Value can't be greater than
+                    {{baselineForm.controls.OperatingTime.errors.max.max}} hr/day.</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.OperatingTime.invalid }">
+            <label for="modificationOperatingTime" class="mod-value-label">Modification Operating Hours</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationOperatingTime" type="number" step="0.1" min="0" max="24"
+                    id="modificationOperatingTime" class="form-control mod-value-input"
+                    (focus)="focusField('OperatingTime')" formControlName="OperatingTime" (input)="save()" />
+                <span class="input-group-addon units">hr/day</span>
+            </div>
+            <a class="form-text small click-link" (click)="calculateOperatingTime()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize Operating Hours</a>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.OperatingTime.invalid && !modificationForm.controls.OperatingTime.pristine">
+                <span *ngIf="modificationForm.controls.OperatingTime.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.OperatingTime.errors.min">Value can't be less than
+                    {{modificationForm.controls.OperatingTime.errors.min.min}} hr/day.</span>
+                <span *ngIf="modificationForm.controls.OperatingTime.errors.max">Value can't be greater than
+                    {{modificationForm.controls.OperatingTime.errors.max.max}} hr/day.</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="modificationWarnings.OperatingTime !== null && !modificationForm.controls.OperatingTime.pristine">
+                {{modificationWarnings.OperatingTime}}</span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
+            Value cannot be optimized further.
+        </div>
+    </form>
+</li>
+
+<!--Operating Power (Aeration)-->
+<li *ngIf="modificationData.exploreAeratorPerformance.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.Aeration.invalid}">
+            <label for="baselineAeration" class="baseline-value-label">Baseline Operating Power</label>
+            <div class="text-muted baseline-value-input">
+                {{ baselineForm.controls.Aeration.value }}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.Aeration.invalid && !baselineForm.controls.Aeration.pristine">
+                <span *ngIf="baselineForm.controls.Aeration.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.Aeration.errors.min">Value can't be less than
+                    {{baselineForm.controls.Aeration.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>.
+                </span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid': modificationForm.controls.Aeration.invalid}">
+            <label for="modificationAeration" class="mod-value-label">Modification Operating Power</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationAeration" type="number" step="1" min="0" id="modificationAeration"
+                    class="form-control mod-value-input" (focus)="focusField('Aeration')" (input)="save()"
+                    formControlName="Aeration" />
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kW</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.Aeration.invalid && !modificationForm.controls.Aeration.pristine">
+                <span *ngIf="modificationForm.controls.Aeration.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.Aeration.errors.min">Value can't be less than
+                    {{modificationForm.controls.Aeration.errors.min.min}} <span
+                        *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>.</span>
+            </span>
+        </div>
+    </form>
+</li>
+
+<!--Aerator Speed (Speed)-->
+<li *ngIf="modificationData.exploreAeratorPerformance.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.Speed.invalid}">
+            <label for="baselineSpeed" class="baseline-value-label">Baseline Aerator Speed</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.Speed.value }} %</div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.Speed.invalid && !baselineForm.controls.Speed.pristine">
+                <span *ngIf="baselineForm.controls.Speed.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.Speed.errors.min">Value can't be less than
+                    {{baselineForm.controls.OperatingTime.errors.min.min}} %.</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationForm.controls.Speed.invalid }">
+            <label for="modificationSpeed" class="mod-value-label">Modification Aerator Speed</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationSpeed" type="number" step="0.01" min="0" max="100" id="modificationSpeed"
+                    class="form-control mod-value-input" (focus)="focusField('Speed')" formControlName="Speed"
+                    (input)="save()" />
+                <span class="input-group-addon units">%</span>
+            </div>
+            <a class="form-text small click-link" (click)="calculateSpeed()"
+                [ngClass]="{'disabled-link': disableOptimize}">Optimize Speed</a>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.Speed.invalid && !modificationForm.controls.Speed.pristine">
+                <span *ngIf="modificationForm.controls.Speed.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.Speed.errors.min">Value can't be less than
+                    {{modificationForm.controls.Speed.errors.min.min}} %.</span>
+                <span *ngIf="modificationForm.controls.Speed.errors.max">Value can't be greater than
+                    {{modificationForm.controls.Speed.errors.max.max}} %.</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="modificationWarnings.Speed !== null && !modificationForm.controls.Speed.invalid && !modificationForm.controls.Speed.pristine">{{modificationWarnings.Speed}}</span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showSpeedAlert">
+            Value cannot be optimized further.
+        </div>
+    </form>
+</li>
+<!-- END Modify Aerator Performance -->
+
+
+
+<!--Upgrade Aerayor-->
+<div class="checkbox">
+    <label class="group-label" for="exploreAeratorUpgrade">
+        <input type="checkbox" id="exploreAeratorUpgrade" (focus)="focusField('exploreAeratorUpgrade')"
+            (change)="setExploreUpgradeAerator()" [(ngModel)]="modificationData.exploreAeratorUpgrade.hasOpportunity" />
+        {{ modificationData.exploreAeratorUpgrade.display }}
+    </label>
+</div>
+
+<!--Aerator-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.Aerator.invalid}">
+            <label for="baselineAerator" class="baseline-value-label">Baseline Aerator</label>
+            <div class="text-muted baseline-value-input">
+                {{ baselineForm.controls.Aerator.value }}
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid': modificationForm.controls.Aerator.invalid}">
+            <label for="modificationAerator" class="mod-value-label">Modification Aerator</label>
+            <div class="input-group mod-max-width">
+                <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
+                    (focus)="focusField('aerator')" id="modificationAerator">
+                    <optgroup label="Diffused Air Systems">
+                        <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">
+                            {{aerator.label}}
+                        </option>
+                    </optgroup>
+                    <optgroup label="Mechanical Aerators">
+                        <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">
+                            {{aerator.label}}</option>
+                    </optgroup>
+                    <optgroup label="Hybrid Aerators">
+                        <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">
+                            {{aerator.label}}
+                        </option>
+                    </optgroup>
+                    <option [ngValue]="'Other'">Other</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</li>
+
+<!--SOTR-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.Speed.invalid}">
+            <label for="baselineSOTR" class="baseline-value-label">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.SOTR.value }}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+                    O<sub>2</sub>/(kWh)</span>
+
+            </div>
+            <span *ngIf="baselineForm.controls.SOTR.invalid && !baselineForm.controls.SOTR.pristine">
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.SOTR.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.SOTR.errors.min">Value can't be
+                    less than {{baselineForm.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.SOTR.invalid }">
+            <label for="modificationSOTR" class="mod-value-label">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
+            <div class="input-group mod-max-width">
+                <input type="number" name="SOTR" class="form-control number-input-field" id="modificationSOTR"
+                    (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kg
+                    O<sub>2</sub>/(kWh)</span>
+            </div>
+            <span *ngIf="modificationForm.controls.SOTR.invalid && !modificationForm.controls.SOTR.pristine">
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.SOTR.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.SOTR.errors.min">Value
+                    can't be less than {{modificationForm.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
+            </span>
+        </div>
+    </form>
+</li>
+
+<!--Type of Aerator-->
+<li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="baselineTypeAerators" class="baseline-value-label">Type of Aerator</label>
+            <div class="text-muted baseline-value-input">
+                {{ baselineForm.controls.TypeAerators.value | wasteWaterOptionsDisplay }}
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="modificationTypeAerators" class="mod-value-label">Type of Aerator</label>
+            <div class="input-group mod-max-width">
+                <select class="form-control" formControlName="TypeAerators" (change)="save()"
+                    (focus)="focusField('TypeAerators')" id="modificationTypeAerators">
+                    <option *ngFor="let aeratorType of aeratorTypes" [ngValue]="aeratorType.value">
+                        {{aeratorType.display}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </form>
+</li>

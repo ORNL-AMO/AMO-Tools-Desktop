@@ -16,7 +16,8 @@ export interface FSAT {
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
   valid?: FsatValid;
-  tempFsatCopy?: FSAT;
+  modalFieldData?: FieldData;
+  existingDataUnits?: string;
 }
 
 export interface FsatValid {
@@ -60,9 +61,12 @@ export interface FieldData {
   outletPressure: number;
   loadEstimatedMethod: number;
   motorPower: number;
-  specificHeatRatio: number;
+  // specificHeatRatio: number;
   compressibilityFactor: number;
   measuredVoltage: number;
+  usingStaticPressure?: boolean;
+  ductArea?: number,
+  inletVelocityPressure?: number;
   inletPressureData?: InletPressureData;
   outletPressureData?: OutletPressureData;
   fanRatedInfo?: FanRatedInfo;
@@ -116,6 +120,7 @@ export interface Plane {
   numInletBoxes?: number; // should have a default of 1 and the
   //psx => staticPressure
   staticPressure?: number;
+  userDefinedStaticPressure?: number;
   pitotTubeCoefficient?: number;
   traverseData?: Array<Array<number>>;
   staticPressureData?: Array<Array<number>>;
@@ -155,6 +160,7 @@ export interface BaseGasDensity {
   relativeHumidity?: number;
   wetBulbTemp?: number;
   specificHeatGas?: number; //used with wetBulb
+  specificHeatRatio?: number;
 }
 
 
@@ -208,7 +214,7 @@ export interface Fan203Inputs {
   FanRatedInfo: FanRatedInfo;
   BaseGasDensity: BaseGasDensity;
   FanShaftPower: FanShaftPower;
-  PlaneData?: PlaneData | PlaneData;
+  PlaneData?: PlaneData;
 }
 
 export interface Fan203Results {
@@ -231,12 +237,13 @@ export interface Fan203Results {
 
 
 export interface PlaneResults {
-  AddlTraversePlanes: Array<PlaneResult>;
-  FanInletFlange: PlaneResult;
-  FanOrEvaseOutletFlange: PlaneResult;
-  FlowTraverse: PlaneResult;
-  InletMstPlane: PlaneResult;
-  OutletMstPlane: PlaneResult;
+  AddlTraversePlanes?: Array<PlaneResult>;
+  FanInletFlange?: PlaneResult;
+  FanOrEvaseOutletFlange?: PlaneResult;
+  FlowTraverse?: PlaneResult;
+  InletMstPlane?: PlaneResult;
+  OutletMstPlane?: PlaneResult;
+  error?: boolean;
 }
 
 export interface VelocityResults { 
@@ -322,6 +329,7 @@ export interface FsatInput {
   flowRate: number;
   inletPressure: number;
   outletPressure: number;
+  velocityPressure: number;
   compressibilityFactor: number;
   // operatingFraction: number,
   operatingHours: number;
@@ -357,7 +365,6 @@ export interface FsatOutput {
   energySavings?: number;
   annualSavings?: number;
 }
-
 
 export interface InletPressureData {
   inletLoss: number;

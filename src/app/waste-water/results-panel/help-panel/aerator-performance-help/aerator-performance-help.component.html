@@ -1,0 +1,352 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Aerator Performance Help
+        <br>
+    </h5>
+    <label class="p-1" (click)="toggleSuggestions()">
+        <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+        <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+        <span class="h6 pl-1">
+            Savings Suggestions
+        </span>
+    </label>
+    <div class="my-2" *ngIf="displaySuggestions">
+        <h6>
+            <small class="text-muted">
+                <ul>
+                    <li>
+                        Reduce DO Concentration: operate aerobic reactors at lower DO concentration if possible (between
+                        0.5 and 2.0 mg/L for most cases).
+                    </li>
+                    <li>
+                        Match oxygen supply to oxygen demand while operating at the lowest acceptable DO concentration
+                        by reducing aerator operating time, speed or power supplied (units on).
+                    </li>
+                    <li>
+                        Use an automatic DO control system to control the amount of aeration equipment in use at any
+                        given time. Consider using luminescent or florescent DO probes. DO probes should be placed at
+                        strategic locations in the aerobic reactor to ensure good process performance. Don’t use too
+                        narrow a DO range so that aeration equipment does not cycle on and off too frequently.
+                    </li>
+                    <li>
+                        Aerator: Consider replacing coarse bubble diffusers with fine bubble diffusers to increase
+                        oxygen transfer rates by about 50%.
+                    </li>
+                    <li>
+                        Reduce Aerator Speed: install variable frequency drives (VFDs) on aeration equipment.
+                    </li>
+                    <li>
+                        Reduce operating time: use timers to start and stop aerators to conserve energy.
+                    </li>
+                    <li>
+                        Reduce operating time: diurnal organic loading may allow for reduced aeration at night and
+                        turning aeration off can promote denitrification, save energy, generate alkalinity, and may
+                        improve sludge settleability.
+                    </li>
+                </ul>
+            </small>
+        </h6>
+    </div>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="focusedField == 'OperatingDO'">
+        <h6>
+            Operating Dissolved Oxygen
+            <br>
+            <small class="text-muted">
+                Operating DO concentration impacts biological metabolism as well as performance of the aeration
+                equipment. In most cases where aerobic metabolism is desired, the operating DO concentration should be
+                in the range of 0.5 to 1.5 mg/L. If simultaneous nitrification/denitrification is desired, the operating
+                DO concentration should be in the range of 0.0 to 0.3 mg/L.
+                <hr>
+                Operate aerobic reactors at lower DO concentration if possible. Aerobic reactors in activated sludge
+                should have DO levels between 0.5 and 2.0 mg/L in most cases. Operating at DO levels above 2 mg/L should
+                be avoided if possible. In most cases, maintaining a DO concentration above 2 mg/L is excessive and a
+                waste of energy.
+                <hr>
+            </small>
+        </h6>
+        <!-- <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0 <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                        <td class="w-50 text-center">{{ranges.steamFlowMax}} <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+    <!-- Alpha -->
+    <div class="my-2" *ngIf="focusedField == 'Alpha'">
+        <h6>
+            Oxygen Transfer Coefficient Ratio
+            <br>
+            <small class="text-muted">
+                Alpha is the oxygen transfer coefficient in wastewater divided by the oxygen transfer coefficient in tap
+                water. The typical range of alpha for municipal wastewater is 0.8 to 0.9. The default value is 0.84,
+                representing most municipal wastewaters.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- Beta -->
+    <div class="my-2" *ngIf="focusedField == 'Beta'">
+        <h6>
+            Saturation DO Concentration Ratio
+            <br>
+            <small class="text-muted">
+                Beta is the saturation DO concentration in wastewater divided by the saturation DO concentration in tap
+                water. The typical range of beta for municipal wastewater is 0.9 to 0.95. The default value is 0.92,
+                representing most municipal wastewaters.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- SOTR -->
+    <div class="my-2" *ngIf="focusedField == 'SOTR'">
+        <h6>
+            Standard Oxygen Transfer Rate
+            <br>
+            <small class="text-muted">
+                Standard oxygen transfer rate (SOTR) is the oxygen transfer rate in tap water at 20 °C, zero DO
+                concentration, and sea level (one atmosphere of pressure). Aeration equipment manufacturers test their
+                equipment at standard conditions to determine the SOTR. The design engineer must adjust the SOTR for
+                field conditions.
+                <br>
+
+                <hr class="my-1 hr-spacer">
+                Aeration Device Range of Standard O2 Transfer Rates ( <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                )
+            </small>
+            <div class="w-100 justify-content-center mt-1">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <th class="w-50"></th>
+                            <th colspan="2" class="w-50 text-center">
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="w-50"></th>
+                            <th class="text-center">
+                                Minimum
+                            </th>
+                            <th class="text-center">
+                                Maximum
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Diffused Air Systems</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.diffusers">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Mechanical Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.mechanical">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Hybrid Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.hybrid">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="small alert-warning">
+                Please note that standard oxygen transfer capacity for diffused aeration systems is typically expressed
+                as a percent transfer efficiency and was converted to <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span> by assuming a
+                compressor efficiency of
+                75%, tank depth of 15 ft (4.572 m), and diffusers at 1.5 ft (0.4572 m) above tank bottom.
+            </div>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'aerator'">
+        <h6>
+            Aerator
+            <br>
+            <small class="text-muted">
+                Standard oxygen transfer rate (SOTR) is the oxygen transfer rate in tap water at 20 °C, zero DO
+                concentration, and sea level (one atmosphere of pressure). Aeration equipment manufacturers test their
+                equipment at standard conditions to determine the SOTR. The design engineer must adjust the SOTR for
+                field conditions.
+                <br>
+                <hr class="my-1 hr-spacer">
+                Standard oxygen transfer rate in tap water at 20°C, zero DO, & sea level <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+            </small>
+            <div class="w-100 justify-content-center mt-1">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Diffused Air Systems</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.diffusers">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Mechanical Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.mechanical">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Hybrid Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.hybrid">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="small alert-warning">
+                Please note that standard oxygen transfer capacity for diffused aeration systems is typically expressed
+                as a percent transfer efficiency and was converted to <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span> by assuming a
+                compressor efficiency of
+                75%, tank depth of 15 ft (4.572 m), and diffusers at 1.5 ft (0.4572 m) above tank bottom.
+            </div>
+        </h6>
+    </div>
+    <!-- Aeration -->
+    <div class="my-2" *ngIf="focusedField == 'Aeration'">
+        <h6>
+            Aeration Operating Power
+            <br>
+            <small class="text-muted">
+                Aerator Operating power is the actual power used by the aerator and is used to calculate the total
+                oxygen supplied to the reactor(s).
+                <hr>
+                The mixing intensity should be at least 50 HP per million gallons of reactor volume.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- Elevation -->
+    <div class="my-2" *ngIf="focusedField == 'Elevation'">
+        <h6>
+            Site Elevation
+            <br>
+            <small class="text-muted">
+                Elevation of the site, which impacts the saturation DO concentration.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- OperatingTime -->
+    <div class="my-2" *ngIf="focusedField == 'OperatingTime'">
+        <h6>
+            Aerator Operating Time
+            <br>
+            <small class="text-muted">
+                Aerators operating time (hr/day) The number of hours per day the aerators are operating. In many cases,
+                aeration equipment will run 24 hours per day.
+                <hr>
+                However, oxygen demand at night should be about 60% of daytime oxygen demand due to diurnal organic
+                loading in most municipal wastewater treatment applications. Thus, less aeration equipment may be able
+                to be used at night.
+                <hr>
+                In extended aeration processes (extended aeration activated sludge and oxidation ditches) not designed
+                for biological nutrient removal, consider turning aerators off 4 to 6 hours per day. It will promote
+                denitrification, save energy, generate alkalinity, and may improve sludge settleability. If hydraulic
+                detention time in the reactor is less than 12 hours, if influent TKN concentration exceeds 40 mg/L, or
+                if effluent ammonia-N limit (monthly average) is 1 mg/L or less, on-off operation may not be feasible.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- TypeAerators -->
+    <div class="my-2" *ngIf="focusedField == 'TypeAerators'">
+        <h6>
+            Type of Aerator
+            <br>
+            <small class="text-muted">
+                Type of aerators The three types of aeration equipment are mechanical aerators, positive displacement
+                blowers, and centrifugal blowers.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- Speed -->
+    <div class="my-2" *ngIf="focusedField == 'Speed'">
+        <h6>
+            Aerator Speed
+            <br>
+            <small class="text-muted">
+                Speed of aerators the fraction of the operating aerator motor speed to the rated motor speed
+                <hr>
+                Installing variable frequency drives (VFDs) on aeration equipment is especially useful for mechanical
+                aerators and positive displacement (PD) blowers. It may not be practical on some types of centrifugal
+                blowers; check with the blower manufacturer before installing VFDs. For mechanical aerators and PD
+                blowers, speed typically should be 50% to 100%.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- EnergyCostUnit -->
+    <div class="my-2" *ngIf="focusedField == 'EnergyCostUnit'">
+        <h6>
+            Electricity Cost
+            <br>
+            <small class="text-muted">
+                Energy cost unit ($/kWh) represents the total cost of electric energy including the base kWh charge,
+                demand charge, fuel adjustment charge, environmental fee, administrative charge, power factor penalty,
+                and so on.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!--AnoxicZoneCondition-->
+    <div class="my-2" *ngIf="focusedField == 'AnoxicZoneCondition'">
+        <h6>
+            Do you have an anoxic zone with returned mixed liquor from the aerobic zone?
+            <br>
+            <small class="text-muted">
+                An anoxic zone is used to remove nitrogen from the activated sludge, this occurs when the sludge is
+                denied sufficient oxygen. This question is used to determine which "Total O2 Requirements" result to
+                show.
+                <hr>
+            </small>
+        </h6>
+    </div>
+</div>

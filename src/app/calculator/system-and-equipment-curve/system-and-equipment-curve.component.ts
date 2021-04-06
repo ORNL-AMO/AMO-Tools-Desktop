@@ -129,7 +129,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs = undefined;
       this.systemAndEquipmentCurveService.existingInputUnits = this.settings.unitsOfMeasure;
     }
-    this.systemAndEquipmentCurveService.systemCurveDataPoints = undefined;
   }
 
   setEquipmentType() {

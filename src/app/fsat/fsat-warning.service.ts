@@ -21,7 +21,8 @@ export class FsatWarningService {
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
       ratedPowerError: ratedPowerWarning,
-      outletPressureError: this.checkOutletPressure(fsat)
+      inletPressureError: this.checkInletPressure(fsat),
+      outletPressureError: this.checkOutletPressure(fsat),
     };
 
     return warnings;
@@ -30,7 +31,15 @@ export class FsatWarningService {
   //REQUIRED?
   checkOutletPressure(fsat: FSAT) {
     if (fsat.fieldData.outletPressure < 0) {
-      return 'Outlet pressure should be greater than or equal to 0';
+      return 'Outlet pressure is usually not less than zero';
+    } else {
+      return null;
+    }
+  }
+
+  checkInletPressure(fsat: FSAT) {
+    if(fsat.fieldData.inletPressure > 0) {
+      return 'Inlet Pressure is usually not greater than zero';
     } else {
       return null;
     }
@@ -43,6 +52,7 @@ export class FsatWarningService {
       return null;
     }
   }
+
 
   checkCost(fsat: FSAT) {
     if (fsat.fieldData.cost > 1) {
@@ -312,6 +322,7 @@ export interface FanFieldDataWarnings {
   voltageError: string;
   costError: string;
   ratedPowerError: string;
+  inletPressureError: string;
   outletPressureError: string;
 }
 

@@ -1,5 +1,4 @@
 <form #formElement [formGroup]="form">
-    <div class="form-section">
       <label class="group-label my-1">
         Flue Gas Conditions
       </label>
@@ -42,6 +41,26 @@
           (change)="setMaterialProperties()" (focus)="focusField('materialTypeId')" >
           <option *ngFor="let option of fuelOptions" [ngValue]="option.id">{{option.substance}}</option>
         </select>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="fuelCost">
+           Fuel Cost
+         </label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" class="form-control"
+          formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelCost')" >
+          <span class="input-group-addon units">
+            $/
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
+          <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -225,8 +244,6 @@
       </span>
       </div>
 
-
-     </div>
   </form>
   
   <div bsModal #solidMaterialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"

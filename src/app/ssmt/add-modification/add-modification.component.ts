@@ -29,10 +29,6 @@ export class AddModificationComponent implements OnInit {
     } else {
       this.newModificationName = 'Scenario 1';
     }
-    // this.tabSubscription = this.psatService.secondaryTab.subscribe(val => {
-    //   this.currentTab = val;
-    // })
-
     this.assessmentTabSub = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });

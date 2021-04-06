@@ -106,25 +106,13 @@ export class OpeningService {
   addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<OpeningLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    
-    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
-    let baselineObj: OpeningLoss = this.initDefaultLoss(index, hoursPerYear);
-    if (index > 0) {
-      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-    }
+    let baselineObj: OpeningLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<OpeningLoss> = this.modificationData.getValue();
-      let modificationObj: OpeningLoss = this.initDefaultLoss(index, hoursPerYear);
-      
-      if (index > 0) {
-        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-      }
-
+      let modificationObj: OpeningLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }
@@ -143,7 +131,7 @@ export class OpeningService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: OpeningLoss = this.initDefaultLoss(0);
+    let emptyBaselineData: OpeningLoss = this.initDefaultLoss(0, undefined);
     this.modificationData.next(undefined);
     this.energySourceType.next('Fuel');
     this.baselineData.next([emptyBaselineData]);
@@ -168,7 +156,22 @@ export class OpeningService {
     }
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+  initDefaultLoss(index: number, treasureHours: number, openingLoss?: OpeningLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (openingLoss) {
+      fuelCost = openingLoss.fuelCost;
+      availableHeat = openingLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = openingLoss.hoursPerYear;
+      }
+    }
+
     let defaultBaselineLoss: OpeningLoss = {
       numberOfOpenings: 1,
       emissivity: .9,
@@ -182,10 +185,10 @@ export class OpeningService {
       heightOfOpening: 0,
       openingTotalArea: 0,
       heatLoss: 0,
-      fuelCost: 3.99,
+      fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,
       energySourceType: 'Fuel',
-      availableHeat: 100,
+      availableHeat: availableHeat,
       name: 'Loss #' + (index + 1),
       
     };

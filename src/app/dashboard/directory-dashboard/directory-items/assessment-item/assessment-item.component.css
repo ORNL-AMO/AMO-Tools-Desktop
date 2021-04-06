@@ -30,6 +30,10 @@
     border-bottom: #2E4053 groove 2px;
     border-image: linear-gradient(to right, #F0F3F4, #2E4053) 50 / 2;
   }
+  .waste-water .summary-card-header{
+    border-bottom: #2E4053 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #003087) 50 / 2;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;
@@ -89,6 +93,11 @@
 .treasure-hunt .dropdown-toggle,
 .treasure-hunt .btn-primary{
   background-color: #2E4053;
+}
+
+.waste-water .dropdown-toggle,
+.waste-water .btn-primary{
+  background-color: #003087;
 }
 
 .dropdown-menu.shown{
@@ -182,6 +191,12 @@ i{
     border-bottom: #2E4053 groove 6px;
     border-image: linear-gradient(to right, #F0F3F4, #2E4053) 80 / 2;
   }
+  
+  .list-row.waste-water{
+    border-bottom: #2E4053 groove 6px;
+    border-image: linear-gradient(to right, #F0F3F4, #003087) 80 / 2;
+  }
+  
   .dropdown-menu.shown{
     display: grid;
     padding: 0px;
@@ -224,6 +239,10 @@ i{
   .treasure-hunt .dropdown-toggle,
   .treasure-hunt .btn-primary{
     background-color: #2E4053;
+  }  
+  .waste-water .dropdown-toggle,
+  .waste-water .btn-primary{
+    background-color: #003087;
   }
   
   .dropdown-menu.shown{

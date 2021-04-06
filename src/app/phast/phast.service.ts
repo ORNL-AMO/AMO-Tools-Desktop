@@ -24,9 +24,6 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
-import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
-import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
@@ -37,8 +34,11 @@ import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
-import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
+import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 
 declare var phastAddon: any;
 
@@ -57,10 +57,10 @@ export class PhastService {
     private convertUnitsService: ConvertUnitsService,
     private atmosphereFormService: AtmosphereFormService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
-    private coolingLossesService: CoolingLossesService,
+    private coolingFormService: CoolingFormService,
     private wallFormService: WallFormService,
-    private fixtureLossesService: FixtureLossesService,
-    private gasLeakageLossesService: GasLeakageLossesService,
+    private leakageFormService: LeakageFormService,
+    private fixtureFormService: FixtureFormService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
@@ -111,7 +111,7 @@ export class PhastService {
     return val;
   }
 
-  fixtureLosses(input: FixtureLoss, settings: Settings): number {
+  fixtureLosses(input: FixtureLoss, settings: Settings, calculatorEnergyUnit = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -123,11 +123,12 @@ export class PhastService {
     } else {
       results = phastAddon.fixtureLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
-  gasCoolingLosses(input: GasCoolingLoss, settings: Settings): number {
+  gasCoolingLosses(input: GasCoolingLoss, settings: Settings, calculatorEnergyUnit = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -141,7 +142,8 @@ export class PhastService {
     else {
       results = phastAddon.gasCoolingLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -178,7 +180,7 @@ export class PhastService {
     };
   }
 
-  liquidCoolingLosses(input: LiquidCoolingLoss, settings: Settings): number {
+  liquidCoolingLosses(input: LiquidCoolingLoss, settings: Settings, calculatorEnergyUnit = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -192,7 +194,9 @@ export class PhastService {
     else {
       results = phastAddon.liquidCoolingLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    // console.log(input, results);
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -332,7 +336,7 @@ export class PhastService {
   }
 
 
-  leakageLosses(input: LeakageLoss, settings: Settings) {
+  leakageLosses(input: LeakageLoss, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -344,7 +348,9 @@ export class PhastService {
     } else {
       results = phastAddon.leakageLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -688,12 +694,12 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType === 'Gas') {
-        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss);
+        let tmpForm = this.coolingFormService.initGasFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
       } else if (loss.coolingLossType === 'Liquid') {
-        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
+        let tmpForm = this.coolingFormService.initLiquidFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
         }
@@ -758,7 +764,7 @@ export class PhastService {
   sumFixtureLosses(losses: FixtureLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.fixtureLossesService.getFormFromLoss(loss);
+      let tmpForm = this.fixtureFormService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.fixtureLosses(loss, settings);
       }
@@ -781,7 +787,7 @@ export class PhastService {
   sumLeakageLosses(losses: LeakageLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.gasLeakageLossesService.initFormFromLoss(loss);
+      let tmpForm = this.leakageFormService.initFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.leakageLosses(loss, settings);
       }
