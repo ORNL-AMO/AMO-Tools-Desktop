@@ -2,32 +2,12 @@
 <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
   <tbody>
     <tr>
-        <td class="bold w-50">Actual Chiller Capacity</td>
-        <td *ngIf="output.baselineActualCapacity" class="text-center w-50">
-          {{output.baselineActualCapacity | number:'1.0-2'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >tons</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-        </td>
-        <td *ngIf="!output.baselineActualCapacity" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Actual Chiller Efficiency</td>
-        <td *ngIf="output.baselineActualEfficiency" class="text-center w-50">
-          {{output.baselineActualEfficiency | number:'1.0-4'}} kW/ton
-        </td>
-        <td *ngIf="!output.baselineActualEfficiency" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      
-    <tr>
       <td class="bold w-50">Power Consumption</td>
       <td *ngIf="output.baselinePower" class="text-center w-50">
         {{output.baselinePower | number:'1.0-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+        <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+        <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+        <span>kW</span>
       </td>
       <td *ngIf="!output.baselinePower" class="text-center w-50">
         &mdash; &mdash;
@@ -49,31 +29,12 @@
 <table *ngIf="output" #copyTable1 class="table table-hover table-striped">
   <tbody>
     <tr>
-      <td class="bold w-50">Actual Chiller Capacity</td>
-      <td *ngIf="output.modActualCapacity" class="text-center w-50">
-        {{output.modActualCapacity | number:'1.0-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >tons</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-      </td>
-      <td *ngIf="!output.modActualCapacity" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Actual Chiller Efficiency</td>
-      <td *ngIf="output.modActualEfficiency" class="text-center w-50">
-        {{output.modActualEfficiency | number:'1.0-4'}} kW/ton
-      </td>
-      <td *ngIf="!output.modActualEfficiency" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
       <td class="bold w-50">Power Consumption</td>
       <td *ngIf="output.modPower" class="text-center w-50">
         {{output.modPower | number:'1.0-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+        <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span> -->
+        <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span> -->
+        <span>kW</span>
       </td>
       <td *ngIf="!output.modPower" class="text-center w-50">
         &mdash; &mdash;
@@ -99,7 +60,7 @@
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
       <td *ngIf="output.savingsEnergy" class="text-center w-50">
-        {{output.savingsEnergy | number:'1.0-0'}} kWh
+        {{output.savingsEnergy | number:'1.0-3'}} kWh
       </td>
       <td *ngIf="!output.savingsEnergy" class="text-center w-50">
         &mdash; &mdash;

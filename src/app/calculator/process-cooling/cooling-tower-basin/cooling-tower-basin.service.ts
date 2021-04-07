@@ -27,35 +27,27 @@ export class CoolingTowerBasinService {
 
   initDefaultEmptyInputs() {
     let emptyInput: CoolingTowerBasinInput = {
-      chillerType: 0,
-      condenserCoolingType: 0,
-      motorDriveType: 0,
-      compressorConfigType: 0,
-      ariCapacity: 0,
-      ariEfficiency: 0,
-      maxCapacityRatio: 0,
-      waterDeltaT: 0,
-      waterFlowRate: 0,
+      ratedCapacity: 0,
+      ratedTempSetPoint: 0,
+      ratedTempDryBulb: 0,
+      ratedWindSpeed: 0,
+      panLossRatio: .011,
+      operatingTempDryBulb: 0,
+      operatingWindSpeed: 0,
       operatingHours: 0,
-      baselineWaterSupplyTemp: 0,
-      baselineWaterEnteringTemp: 0,
-      modWaterSupplyTemp: 0,
-      modWaterEnteringTemp: 0,
+      baselineTempSetPoint: 0,
+      modTempSetPoint: 0
     };
     this.coolingTowerBasinInput.next(emptyInput);
   }
 
   initDefaultEmptyOutputs() {
     let emptyOutput: CoolingTowerBasinOutput = {
-      baselineActualEfficiency: 0,
-      baselineActualCapacity: 0,
       baselinePower: 0,
       baselineEnergy: 0,
-      modActualEfficiency: 0,
-      modActualCapacity: 0,
       modPower: 0,
       modEnergy: 0,
-      savingsEnergy: 0,
+      savingsEnergy: 0
     };
     this.coolingTowerBasinOutput.next(emptyOutput);
   }
@@ -64,65 +56,68 @@ export class CoolingTowerBasinService {
     let coolingTowerBasinInput: CoolingTowerBasinInput = this.coolingTowerBasinInput.getValue();
     let inputCopy: CoolingTowerBasinInput = JSON.parse(JSON.stringify(coolingTowerBasinInput));
     let validInput: boolean;
-    validInput = this.coolingTowerBasinFormService.getChillerPerformanceForm(inputCopy).valid;
+    validInput = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(inputCopy).valid;
     
     if(!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
       console.log('inputs', inputCopy)
-      inputCopy = this.convertInputUnits(inputCopy, settings);
-      // let coolingTowerBasinOutput: CoolingTowerBasinOutput = chillersAddon.chillerCapacityEfficiency(inputCopy);
+      // inputCopy = this.convertInputUnits(inputCopy, settings);
+      let coolingTowerBasinOutput: CoolingTowerBasinOutput = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
       // coolingTowerBasinOutput = this.convertResultUnits(coolingTowerBasinOutput, settings);
-      // this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+      this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
     }
   }
 
   generateExampleData(settings: Settings) {
     let exampleInput: CoolingTowerBasinInput = {
-      chillerType: 0,
-      condenserCoolingType: 0,
-      motorDriveType: 0,
-      compressorConfigType: 1,
-      ariCapacity: 1000,
-      ariEfficiency: .676,
-      maxCapacityRatio: 1,
-      waterDeltaT: 16.54,
-      waterFlowRate: 924.90,
-      operatingHours: 7000,
-      baselineWaterSupplyTemp: 42,
-      baselineWaterEnteringTemp: 82.12,
-      modWaterSupplyTemp: 43,
-      modWaterEnteringTemp: 81.12
+      ratedCapacity: 1201.67,
+      ratedTempSetPoint: 40,
+      ratedTempDryBulb: -10,
+      ratedWindSpeed: 45,
+      panLossRatio: .011,
+      operatingTempDryBulb: 28,
+      operatingWindSpeed: 9.21,
+      operatingHours: 1,
+      baselineTempSetPoint: 40,
+      modTempSetPoint: 39
     };
 
+    // example results
+    // baselinePower:3.0743,
+    // baselineEnergy:3.0743
+    // modPower:2.761026
+    // modEnergy:2.761026
+    // savingsEnergy:0.313274
+
+
     if (settings.unitsOfMeasure == 'Metric') {
-      exampleInput = this.convertExampleUnits(exampleInput);
+      // exampleInput = this.convertExampleUnits(exampleInput);
     }
     this.coolingTowerBasinInput.next(exampleInput);
   }
   
   convertExampleUnits(input: CoolingTowerBasinInput): CoolingTowerBasinInput {
-    input.baselineWaterSupplyTemp = this.convertUnitsService.value(input.baselineWaterSupplyTemp).from('F').to('C');
-    input.baselineWaterSupplyTemp = this.roundVal(input.baselineWaterSupplyTemp, 2);
+    input.ratedTempSetPoint = this.convertUnitsService.value(input.ratedTempSetPoint).from('F').to('C');
+    input.ratedTempSetPoint = this.roundVal(input.ratedTempSetPoint, 2);
 
-    input.baselineWaterEnteringTemp = this.convertUnitsService.value(input.baselineWaterEnteringTemp).from('F').to('C');
-    input.baselineWaterEnteringTemp = this.roundVal(input.baselineWaterEnteringTemp, 2);
-
-    input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('F').to('C');
-    input.modWaterSupplyTemp = this.roundVal(input.modWaterSupplyTemp, 2);
-
-    input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('F').to('C');
-    input.modWaterEnteringTemp = this.roundVal(input.modWaterEnteringTemp, 2);
-
+    input.ratedTempDryBulb = this.convertUnitsService.value(input.ratedTempDryBulb).from('F').to('C');
+    input.ratedTempDryBulb = this.roundVal(input.ratedTempDryBulb, 2);
     
-    input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('F').to('C');
-    input.waterDeltaT = this.roundVal(input.waterDeltaT, 2);
+    input.ratedWindSpeed = this.convertUnitsService.value(input.ratedWindSpeed).from('mph').to('kmh');
+    input.ratedWindSpeed = this.roundVal(input.ratedWindSpeed, 2);
 
-    input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('gpm').to('m3/s');
-    input.waterFlowRate = this.roundVal(input.waterFlowRate, 2);
+    input.operatingTempDryBulb = this.convertUnitsService.value(input.operatingTempDryBulb).from('F').to('C');
+    input.operatingTempDryBulb = this.roundVal(input.operatingTempDryBulb, 2);
 
-    input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
-    input.ariCapacity = this.roundVal(input.ariCapacity, 2);
+    input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('kmh');
+    input.operatingWindSpeed = this.roundVal(input.operatingWindSpeed, 2);
+
+    input.baselineTempSetPoint = this.convertUnitsService.value(input.baselineTempSetPoint).from('F').to('C');
+    input.baselineTempSetPoint = this.roundVal(input.baselineTempSetPoint, 2);
+
+    input.modTempSetPoint = this.convertUnitsService.value(input.modTempSetPoint).from('F').to('C');
+    input.modTempSetPoint = this.roundVal(input.modTempSetPoint, 2);
 
 
     return input;
@@ -130,33 +125,27 @@ export class CoolingTowerBasinService {
 
   convertInputUnits(input: CoolingTowerBasinInput, settings: Settings): CoolingTowerBasinInput {
     if (settings.unitsOfMeasure == "Metric") {
-      input.baselineWaterSupplyTemp = this.convertUnitsService.value(input.baselineWaterSupplyTemp).from('C').to('F');
-      input.baselineWaterEnteringTemp = this.convertUnitsService.value(input.baselineWaterEnteringTemp).from('C').to('F');
-      input.modWaterSupplyTemp = this.convertUnitsService.value(input.modWaterSupplyTemp).from('C').to('F');
-      input.modWaterEnteringTemp = this.convertUnitsService.value(input.modWaterEnteringTemp).from('C').to('F');
-      
-      input.waterDeltaT = this.convertUnitsService.value(input.waterDeltaT).from('C').to('F');
-      input.waterFlowRate = this.convertUnitsService.value(input.waterFlowRate).from('m3/s').to('gpm');
-      input.ariCapacity = this.convertUnitsService.value(input.ariCapacity).from('kW').to('hp');
+      input.ratedTempSetPoint = this.convertUnitsService.value(input.ratedTempSetPoint).from('C').to('F');
+      input.ratedTempDryBulb = this.convertUnitsService.value(input.ratedTempDryBulb).from('C').to('F');
+      input.operatingTempDryBulb = this.convertUnitsService.value(input.operatingTempDryBulb).from('C').to('F');
+      input.baselineTempSetPoint = this.convertUnitsService.value(input.baselineTempSetPoint).from('C').to('F');
+      input.modTempSetPoint = this.convertUnitsService.value(input.modTempSetPoint).from('C').to('F');
+    }
+    if (settings.unitsOfMeasure == 'Imperial') {
+      input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('kmh');
     }
     return input;
   }
 
   convertResultUnits(output: CoolingTowerBasinOutput, settings: Settings): CoolingTowerBasinOutput {
-    if (settings.unitsOfMeasure == "Imperial") {
-      output.baselinePower = this.convertUnitsService.value(output.baselinePower).from('kW').to('hp');
+    if (settings.unitsOfMeasure == "Metric") {
+      output.baselinePower = this.convertUnitsService.value(output.baselinePower).from('hp').to('kW');
       output.baselinePower = this.roundVal(output.baselinePower, 2);
-      
-      output.modPower = this.convertUnitsService.value(output.modPower).from('kW').to('hp');
+
+      output.modPower = this.convertUnitsService.value(output.modPower).from('hp').to('kW');
       output.modPower = this.roundVal(output.modPower, 2);
     }
-    if (settings.unitsOfMeasure == "Metric") {
-      output.baselineActualCapacity = this.convertUnitsService.value(output.baselineActualCapacity).from('tons').to('kW');
-      output.baselineActualCapacity = this.roundVal(output.baselineActualCapacity, 2);
 
-      output.modActualCapacity = this.convertUnitsService.value(output.modActualCapacity).from('tons').to('kW');
-      output.modActualCapacity = this.roundVal(output.modActualCapacity, 2);
-    }
     return output;
   }
 

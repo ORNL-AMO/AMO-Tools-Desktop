@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ChillerPerformanceInput } from '../../../../shared/models/chillers';
+import { CoolingTowerBasinInput } from '../../../../shared/models/chillers';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
 import { CoolingTowerBasinFormService } from '../cooling-tower-basin-form.service';
@@ -16,10 +16,6 @@ export class CoolingTowerBasinFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  @Input()
-  inModal: boolean;
-  @Input()
-  headerHeight: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -62,7 +58,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   }
 
   initForm() {
-    let coolingTowerBasinInput: ChillerPerformanceInput = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
+    let coolingTowerBasinInput: CoolingTowerBasinInput = this.coolingTowerBasinService.coolingTowerBasinInput.getValue();
     this.form = this.coolingTowerBasinFormService.getCoolingTowerBasinForm(coolingTowerBasinInput);
     this.calculate();
   }
@@ -72,7 +68,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   }
 
   calculate() {
-    let updatedInput: ChillerPerformanceInput = this.coolingTowerBasinFormService.getCoolingTowerBasinInput(this.form);
+    let updatedInput: CoolingTowerBasinInput = this.coolingTowerBasinFormService.getCoolingTowerBasinInput(this.form);
     this.coolingTowerBasinService.coolingTowerBasinInput.next(updatedInput)
   }
 

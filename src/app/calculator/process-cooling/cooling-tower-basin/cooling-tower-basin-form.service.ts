@@ -9,20 +9,16 @@ export class CoolingTowerBasinFormService {
 
   getCoolingTowerBasinForm(inputObj: CoolingTowerBasinInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      chillerType: [inputObj.chillerType, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      condenserCoolingType: [inputObj.condenserCoolingType, Validators.required],
-      motorDriveType: [inputObj.motorDriveType, Validators.required],
-      compressorConfigType: [inputObj.compressorConfigType, Validators.required],
-      ariCapacity: [inputObj.ariCapacity, Validators.required],
-      ariEfficiency: [inputObj.ariEfficiency, Validators.required],
-      maxCapacityRatio: [inputObj.maxCapacityRatio, Validators.required],
-      waterDeltaT: [inputObj.waterDeltaT, Validators.required],
-      waterFlowRate: [inputObj.waterFlowRate, Validators.required],
-      operatingHours: [inputObj.operatingHours, Validators.required],
-      baselineWaterSupplyTemp: [inputObj.baselineWaterSupplyTemp, Validators.required],
-      baselineWaterEnteringTemp: [inputObj.baselineWaterEnteringTemp, Validators.required],
-      modWaterSupplyTemp: [inputObj.modWaterSupplyTemp, Validators.required],
-      modWaterEnteringTemp: [inputObj.modWaterEnteringTemp, Validators.required],
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      ratedCapacity: [inputObj.ratedCapacity, [Validators.required, Validators.min(0), Validators.max(8333)]],
+      ratedTempSetPoint: [inputObj.ratedTempSetPoint, Validators.required],
+      ratedTempDryBulb: [inputObj.ratedTempDryBulb, Validators.required],
+      ratedWindSpeed: [inputObj.ratedWindSpeed, Validators.required],
+      panLossRatio: [inputObj.panLossRatio, Validators.required],
+      operatingTempDryBulb: [inputObj.operatingTempDryBulb, Validators.required],
+      operatingWindSpeed: [inputObj.operatingWindSpeed, Validators.required],
+      baselineTempSetPoint: [inputObj.baselineTempSetPoint, Validators.required],
+      modTempSetPoint: [inputObj.modTempSetPoint, Validators.required]
     });
 
     return form;
@@ -31,19 +27,15 @@ export class CoolingTowerBasinFormService {
   getCoolingTowerBasinInput(form: FormGroup): CoolingTowerBasinInput {
     let obj: CoolingTowerBasinInput = {
       operatingHours: form.controls.operatingHours.value,
-      chillerType: form.controls.chillerType.value,
-      condenserCoolingType: form.controls.condenserCoolingType.value,
-      motorDriveType: form.controls.motorDriveType.value,
-      compressorConfigType: form.controls.compressorConfigType.value,
-      ariCapacity: form.controls.ariCapacity.value,
-      ariEfficiency: form.controls.ariEfficiency.value,
-      maxCapacityRatio: form.controls.maxCapacityRatio.value,
-      waterDeltaT: form.controls.waterDeltaT.value,
-      waterFlowRate: form.controls.waterFlowRate.value,
-      baselineWaterSupplyTemp: form.controls.baselineWaterSupplyTemp.value,
-      baselineWaterEnteringTemp: form.controls.baselineWaterEnteringTemp.value,
-      modWaterSupplyTemp: form.controls.modWaterSupplyTemp.value,
-      modWaterEnteringTemp: form.controls.modWaterEnteringTemp.value,
+      ratedCapacity: form.controls.ratedCapacity.value,
+      ratedTempSetPoint: form.controls.ratedTempSetPoint.value,
+      ratedTempDryBulb: form.controls.ratedTempDryBulb.value,
+      ratedWindSpeed: form.controls.ratedWindSpeed.value,
+      panLossRatio: form.controls.panLossRatio.value,
+      operatingTempDryBulb: form.controls.operatingTempDryBulb.value,
+      operatingWindSpeed: form.controls.operatingWindSpeed.value,
+      baselineTempSetPoint: form.controls.baselineTempSetPoint.value,
+      modTempSetPoint: form.controls.modTempSetPoint.value
     };
     return obj;
   }
