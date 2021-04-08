@@ -53,15 +53,17 @@ export class UpdateDataService {
     updateFsat(assessment: Assessment): Assessment {
         //logic for updating fsat data
         assessment.appVersion = packageJson.version;
-        if (!assessment.fsat.fieldData.inletVelocityPressure) {
+        if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
         }
 
         assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
-        assessment.fsat.modifications.forEach(mod => {
-            mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
-        });
+        if(assessment.fsat.modifications){
+            assessment.fsat.modifications.forEach(mod => {
+                mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+            });
+        }
         return assessment;
     }
 
