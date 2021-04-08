@@ -2,9 +2,9 @@
   <thead>
     <tr>
       <th class="table-col-0">Pressure
-        (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</th>
+        (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</th>
       <th class="table-col-1">Temperature
-        (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)
+        (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
       </th>
       <th class="table-col-2">Specific Enthalpy(<span
           [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</th>
@@ -22,8 +22,8 @@
   <tbody>
     <tr *ngFor="let row of rowData; let i = index">
       <td>{{row.pressure | number:'1.0-4'}}</td>
-      <td>{{row.temperature | number:'1.0-4'}}</td>
-      <td>{{row.enthalpy | number:'1.0-4'}}</td>
+      <td>{{row.temperature | number:'1.0-2'}}</td>
+      <td>{{row.enthalpy | number:'1.0-2'}}</td>
       <td>{{row.entropy | number:'1.0-4'}}</td>
       <td>
         <span *ngIf="row.quality == 0">Liquid</span>
