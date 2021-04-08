@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ChillerService } from './chiller.service';
 import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
 import { ChillerPerformanceModule } from './chiller-performance/chiller-performance.module';
+import { ChillerStagingModule } from './chiller-staging/chiller-staging.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { ChillerPerformanceModule } from './chiller-performance/chiller-performa
     CommonModule,
     CoolingTowerModule,
     ChillerPerformanceModule,
+    ChillerStagingModule,
     FanPsychrometricModule
   ],
   exports: [

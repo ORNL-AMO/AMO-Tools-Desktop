@@ -98,6 +98,7 @@ import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
+import { ChillerStagingComponent } from '../calculator/process-cooling/chiller-staging/chiller-staging.component';
 
 export const coreRoutes: Routes = [
   {
@@ -449,6 +450,10 @@ export const coreRoutes: Routes = [
           {
             path: 'chiller-performance',
             component: ChillerPerformanceComponent
+          },
+          {
+            path: 'chiller-staging',
+            component: ChillerStagingComponent
           },
           {
             path: 'waste-water-list',
