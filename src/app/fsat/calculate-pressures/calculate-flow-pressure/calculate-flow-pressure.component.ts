@@ -100,6 +100,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     } else {
       this.emitInvalid.emit(true);
     }
+    console.log('updated fieldData', this.fsat.fieldData);
     this.updateFieldData.emit(this.fsat.fieldData);
   }
 }
