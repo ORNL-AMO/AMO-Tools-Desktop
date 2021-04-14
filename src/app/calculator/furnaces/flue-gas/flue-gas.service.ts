@@ -47,7 +47,7 @@ export class FlueGasService {
     let modificationFlueGas: FlueGas = this.modificationData.getValue();
     let baselineEnergyData: EnergyData = this.baselineEnergyData.getValue();
     let modificationEnergyData: EnergyData = this.modificationEnergyData.getValue();
-    
+
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
     output.baseline = baselineResults;
     if (modificationFlueGas) {
@@ -112,7 +112,7 @@ export class FlueGasService {
     return result;
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(treasureHuntHours?: number) {
     let emptyBaselineData: FlueGas = {
       flueGasType: 'By Mass',
       flueGasByVolume: undefined,
@@ -122,9 +122,8 @@ export class FlueGasService {
 
     let energyData: EnergyData = {
       fuelCost: 0,
-      hoursPerYear: 8760
+      hoursPerYear: treasureHuntHours? treasureHuntHours : 8760
     }
-    
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
     
@@ -185,7 +184,10 @@ export class FlueGasService {
   generateExampleData(settings: Settings) {
     let exampleCombAirTemp: number = 80;
     let exampleFlueGasTemp: number = 900;
+    let exampleModFlueGasTemp: number = 250;
     let exampleFuelTemp: number = 80;
+    let exampleHeatInput: number = 15;
+
     if(settings.unitsOfMeasure != 'Imperial'){
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
       exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
@@ -193,9 +195,16 @@ export class FlueGasService {
       exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
       exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
 
+      exampleModFlueGasTemp = this.convertUnitsService.value(exampleModFlueGasTemp).from('F').to('C');
+      exampleModFlueGasTemp = Number(exampleModFlueGasTemp.toFixed(2));
+
       exampleFuelTemp = this.convertUnitsService.value(exampleFuelTemp).from('F').to('C');
       exampleFuelTemp = Number(exampleFuelTemp.toFixed(2));
+
+      exampleHeatInput = this.convertUnitsService.value(exampleHeatInput).from('MMBtu').to('GJ');
+      exampleHeatInput = Number(exampleHeatInput.toFixed(2));
     }
+    
     let exampleBaseline: FlueGas = {
       flueGasByMass: undefined,
       flueGasByVolume: {
@@ -217,12 +226,12 @@ export class FlueGasService {
         gasTypeId: 1,
         o2InFlueGas: 2.857,
         oxygenCalculationMethod: "Excess Air",
-        heatInput: 15,
+        heatInput: exampleHeatInput,
       },
       flueGasType: 'By Volume',
       name: 'Baseline Flue Gas'
     }
-
+    
     let exampleMod: FlueGas = {
       flueGasByMass: undefined,
       flueGasByVolume: {
@@ -239,28 +248,29 @@ export class FlueGasService {
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
         excessAirPercentage: 10,
-        flueGasTemperature: 250,
+        flueGasTemperature: exampleModFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 3.124,
         oxygenCalculationMethod: "Excess Air",
-        heatInput: 15,
+        heatInput: exampleHeatInput,
       },
       flueGasType: 'By Volume',
       name: 'Modification Flue Gas'
     }
-
+    
     let energyExample: EnergyData = {
       hoursPerYear: 8760,
       fuelCost: 3.99
     };
-
+    
     this.baselineEnergyData.next(energyExample);
     this.modificationEnergyData.next(energyExample);
-  
+    
     this.baselineData.next(exampleBaseline);
     this.modificationData.next(exampleMod);
     this.generateExample.next(true);
   }
+
 
 }

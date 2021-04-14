@@ -109,6 +109,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.calculatorsService.editPipeInsulationReductionsItem(opportunityCard.pipeInsulationReduction, opportunityCard.opportunityIndex);
     } else if (opportunityCard.opportunityType == 'tank-insulation-reduction') {
       this.calculatorsService.editTankInsulationReductionsItem(opportunityCard.tankInsulationReduction, opportunityCard.opportunityIndex);
+    } else if (opportunityCard.opportunityType == 'flue-gas') {
+      this.calculatorsService.editFlueGasItem(opportunityCard.flueGas, opportunityCard.opportunityIndex); 
     } else if (opportunityCard.opportunityType == 'air-leak-survey') {
       this.calculatorsService.editAirLeakSurveyItem(opportunityCard.airLeakSurvey, opportunityCard.opportunityIndex);
     }
@@ -154,6 +156,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.deletePipeInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
     } else if (this.deleteOpportunity.opportunityType == 'tank-insulation-reduction') {
       this.treasureHuntService.deleteTankInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
+    } else if (this.deleteOpportunity.opportunityType == 'flue-gas') {
+      this.treasureHuntService.deleteFlueGasItem(this.deleteOpportunity.opportunityIndex);
     } else if (this.deleteOpportunity.opportunityType == 'air-leak-survey') {
       this.treasureHuntService.deleteAirLeakSurveyItem(this.deleteOpportunity.opportunityIndex);
     }
@@ -229,6 +233,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (this.editOpportunitySheetCardData.opportunityType == 'tank-insulation-reduction') {
       this.editOpportunitySheetCardData.tankInsulationReduction.opportunitySheet = updatedOpportunitySheet;
       this.treasureHuntService.editTankInsulationReductionItem(this.editOpportunitySheetCardData.tankInsulationReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'flue-gas') {
+      this.editOpportunitySheetCardData.flueGas.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editFlueGasItem(this.editOpportunitySheetCardData.flueGas, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
     } else if (this.editOpportunitySheetCardData.opportunityType == 'air-leak-survey') {
       this.editOpportunitySheetCardData.airLeakSurvey.opportunitySheet = updatedOpportunitySheet;
       this.treasureHuntService.editAirLeakSurveyItem(this.editOpportunitySheetCardData.airLeakSurvey, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
@@ -274,6 +281,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'tank-insulation-reduction') {
       cardData.tankInsulationReduction.selected = cardData.selected;
       this.treasureHuntService.editTankInsulationReductionItem(cardData.tankInsulationReduction, cardData.opportunityIndex, this.settings);
+    } else if (cardData.opportunityType == 'flue-gas') {
+      cardData.flueGas.selected = cardData.selected;
+      this.treasureHuntService.editFlueGasItem(cardData.flueGas, cardData.opportunityIndex, this.settings); 
     } else if (cardData.opportunityType == 'air-leak-survey') {
       cardData.airLeakSurvey.selected = cardData.selected;
       this.treasureHuntService.editAirLeakSurveyItem(cardData.airLeakSurvey, cardData.opportunityIndex, this.settings);
@@ -359,6 +369,11 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.addNewTankInsulationReductionItem(newOpportunityCard.tankInsulationReduction);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       newOpportunityCard = this.opportunityCardsService.getTankInsulationReductionCardData(newOpportunityCard.tankInsulationReduction, this.settings, treasureHunt.tankInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
+    }  else if (newOpportunityCard.opportunityType == 'flue-gas') {
+      newOpportunityCard.flueGas.opportunitySheet = this.updateCopyName(newOpportunityCard.flueGas.opportunitySheet);
+      this.treasureHuntService.addNewFlueGasItem(newOpportunityCard.flueGas);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getFlueGasCardData(newOpportunityCard.flueGas, this.settings, treasureHunt.flueGasLosses.length - 1, treasureHunt.currentEnergyUsage);
     } else if (newOpportunityCard.opportunityType == 'air-leak-survey') {
       newOpportunityCard.airLeakSurvey.opportunitySheet = this.updateCopyName(newOpportunityCard.airLeakSurvey.opportunitySheet);
       this.treasureHuntService.addNewAirLeakSurveyItem(newOpportunityCard.airLeakSurvey);

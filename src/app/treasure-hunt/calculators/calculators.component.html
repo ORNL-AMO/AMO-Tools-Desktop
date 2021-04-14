@@ -52,6 +52,11 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-tank-insulation-reduction>
 
+<app-flue-gas *ngIf="selectedCalc == 'flue-gas'" [inTreasureHunt]="true"
+  (emitSave)="saveFlueGas($event)" (emitCancel)="cancelFlueGas()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours">
+</app-flue-gas>
+
 <app-air-leak *ngIf="selectedCalc == 'air-leak-survey'" [inTreasureHunt]="true"
   (emitSave)="saveAirLeakSurvey($event)" (emitCancel)="cancelAirLeakSurvey()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours">

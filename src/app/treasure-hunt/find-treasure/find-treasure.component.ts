@@ -88,4 +88,8 @@ export class FindTreasureComponent implements OnInit {
   selectAirLeakSurvey(){
     this.calculatorsService.addNewAirLeakSurvey()
   }
+
+  selectFlueGas(){
+    this.calculatorsService.addNewFlueGas()
+  }
 }

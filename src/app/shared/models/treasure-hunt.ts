@@ -2,6 +2,8 @@ import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { FlueGas } from "./phast/losses/flueGas";
+import { EnergyData } from "./phast/losses/chargeMaterial";
 
 export interface TreasureHunt {
     name: string,
@@ -17,6 +19,7 @@ export interface TreasureHunt {
     steamReductions?: Array<SteamReductionTreasureHunt>;
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
@@ -156,6 +159,15 @@ export interface TankInsulationReductionTreasureHunt {
     selected?: boolean;
 }
 
+export interface FlueGasTreasureHunt {
+    baseline: FlueGas;
+    modification: FlueGas;
+    baselineEnergyData: EnergyData;
+    modificationEnergyData: EnergyData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface WaterReductionTreasureHunt {
     baseline: Array<WaterReductionData>;
     modification: Array<WaterReductionData>;
@@ -289,4 +301,5 @@ export interface ImportExportOpportunities {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
 }

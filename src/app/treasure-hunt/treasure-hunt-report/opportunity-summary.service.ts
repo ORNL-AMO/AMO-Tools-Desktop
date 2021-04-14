@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, FlueGasTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -18,6 +18,8 @@ import { SteamReductionService } from '../../calculator/steam/steam-reduction/st
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
+import { FlueGasService } from '../../calculator/furnaces/flue-gas/flue-gas.service';
+import { FlueGasOutput } from '../../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -27,7 +29,7 @@ export class OpportunitySummaryService {
     private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService,
     private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private steamReductionService: SteamReductionService, private pipeInsulationReductionService: PipeInsulationReductionService,
-    private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) { }
+    private tankInsulationReductionService: TankInsulationReductionService, private flueGasService: FlueGasService, private airLeakService: AirLeakService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -53,11 +55,12 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getPipeInsulationReductionSummaries(treasureHunt.pipeInsulationReductions, opportunitySummaries, settings);
     //tank insulation reduction
     opportunitySummaries = this.getTankInsulationReductionSummaries(treasureHunt.tankInsulationReductions, opportunitySummaries, settings);
+    // flue gas
+    opportunitySummaries = this.getFlueGasSummaries(treasureHunt.flueGasLosses, opportunitySummaries, settings);
     //air leak survey
     opportunitySummaries = this.getAirLeakSurveySummaries(treasureHunt.airLeakSurveys, opportunitySummaries, settings);
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
-
 
     return opportunitySummaries;
   }
@@ -507,6 +510,53 @@ export class OpportunitySummaryService {
     }
 
     let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
+    return oppSummary;
+  }
+
+   //flueGasSummaries
+   getFlueGasSummaries(flueGasLosses: Array<FlueGasTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (flueGasLosses) {
+      let index: number = 1;
+      flueGasLosses.forEach(flueGas => {
+        if (flueGas.selected) {
+          let oppSummary: OpportunitySummary = this.getFlueGasSummary(flueGas, index, settings);
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  getFlueGasSummary(flueGas: FlueGasTreasureHunt, index: number, settings: Settings): OpportunitySummary {
+    let name: string = 'Flue Gas #' + index;
+    this.flueGasService.baselineData.next(flueGas.baseline);
+    this.flueGasService.modificationData.next(flueGas.modification);
+    this.flueGasService.baselineEnergyData.next(flueGas.baselineEnergyData);
+    this.flueGasService.modificationEnergyData.next(flueGas.modificationEnergyData);
+    this.flueGasService.calculate(settings);
+    let results: FlueGasOutput = this.flueGasService.output.getValue();
+    let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
+    if (flueGas.opportunitySheet) {
+      if (flueGas.opportunitySheet.name) {
+        name = flueGas.opportunitySheet.name;
+      }
+      opportunityCost = flueGas.opportunitySheet.opportunityCost;
+      team = flueGas.opportunitySheet.owner;
+      owner = flueGas.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(flueGas.opportunitySheet.equipment);
+    }
+    let utilityTypeStr: string;
+    if (flueGas.baseline.flueGasType == 'By Volume' && flueGas.baseline.flueGasByVolume.gasTypeId == 1) {
+      utilityTypeStr = 'Natural Gas';
+    } else {
+      utilityTypeStr = 'Other Fuel';
+    }
+    
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.costSavings, results.fuelSavings, opportunityCost, results.baseline.fuelCost, results.modification.fuelCost, team, equipment, owner);
     return oppSummary;
   }
 

@@ -16,7 +16,8 @@ import { FlueGasService } from '../flue-gas.service';
   styleUrls: ['./flue-gas-form-volume.component.css']
 })
 export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
-
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -43,6 +44,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
+  baselineDataSub: Subscription;
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
@@ -58,6 +60,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    if (!this.isBaseline) {
+      this.baselineDataSub.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,6 +78,12 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
       this.initForm();
     })
+    if (!this.isBaseline) {
+      this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
+        this.byVolumeForm.patchValue({gasTypeId: baselineData.flueGasByVolume.gasTypeId});
+        this.calculate();
+      })
+    }
   }
 
   initFormSetup() {
@@ -107,6 +118,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       this.byVolumeForm.disable();
     } else {
       this.byVolumeForm.enable();
+    }
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.byVolumeForm.controls.gasTypeId.disable();
     }
   }
 
@@ -167,7 +181,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   checkWarnings() {
     let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm).flueGasByVolume;
-    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss, this.settings);
   }
 
   calculate() {

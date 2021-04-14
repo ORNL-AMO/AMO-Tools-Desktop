@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, FlueGasTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
@@ -14,6 +14,7 @@ import { CompressedAirPressureReductionService } from '../../calculator/compress
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
+import { FlueGasService } from '../../calculator/furnaces/flue-gas/flue-gas.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -26,7 +27,7 @@ export class CalculatorsService {
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService,
-    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) {
+    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private flueGasService: FlueGasService, private airLeakService: AirLeakService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -294,6 +295,28 @@ export class CalculatorsService {
     this.calcOpportunitySheet = undefined;
     this.tankInsulationReductionService.baselineData = undefined;
     this.tankInsulationReductionService.modificationData = undefined;
+    this.cancelCalc();
+  }
+
+   // Fleu Gas
+   addNewFlueGas() {
+    this.calcOpportunitySheet = undefined;
+    this.isNewOpportunity = true;
+    this.flueGasService.initDefaultEmptyInputs();
+    this.selectedCalc.next('flue-gas');
+  }
+  editFlueGasItem(flueGas: FlueGasTreasureHunt, index: number) {
+    this.calcOpportunitySheet = flueGas.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.flueGasService.baselineData.next(flueGas.baseline);
+    this.flueGasService.baselineEnergyData.next(flueGas.baselineEnergyData);
+    this.flueGasService.modificationData.next(flueGas.modification);
+    this.flueGasService.modificationEnergyData.next(flueGas.modificationEnergyData);
+    this.selectedCalc.next('flue-gas');
+  }
+  cancelFlueGas() {
+    this.calcOpportunitySheet = undefined;
     this.cancelCalc();
   }
 

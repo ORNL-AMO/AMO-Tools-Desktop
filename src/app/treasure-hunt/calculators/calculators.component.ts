@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, FlueGasTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -31,6 +31,7 @@ export class CalculatorsComponent implements OnInit {
   steamReduction: SteamReductionTreasureHunt;
   pipeInsulationReduction: PipeInsulationReductionTreasureHunt;
   tankInsulationReduction: TankInsulationReductionTreasureHunt;
+  flueGas: FlueGasTreasureHunt;
   airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt;
 
   selectedCalc: string;
@@ -109,6 +110,8 @@ export class CalculatorsComponent implements OnInit {
       this.confirmPipeInsulationReduction();
     } else if (this.selectedCalc == 'tank-insulation-reduction'){
       this.confirmTankInsulationReduction();
+    } else if (this.selectedCalc == 'flue-gas'){
+      this.confirmFlueGas();
     } else if(this.selectedCalc == 'air-leak-survey'){
       this.confirmAirLeakSurvey();
     }
@@ -331,6 +334,25 @@ export class CalculatorsComponent implements OnInit {
       this.treasureHuntService.addNewTankInsulationReductionItem(this.tankInsulationReduction);
     } else {
       this.treasureHuntService.editTankInsulationReductionItem(this.tankInsulationReduction, this.calculatorsService.itemIndex, this.settings);
+    }
+    this.finishSaveCalc();
+  }
+
+  // flue gas
+  cancelFlueGas() {
+    this.calculatorsService.cancelFlueGas();
+  }
+  saveFlueGas(flueGas: FlueGasTreasureHunt) {
+    this.flueGas = flueGas;
+    this.initSaveCalc();
+  }
+  confirmFlueGas() {
+    this.flueGas.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.flueGas.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewFlueGasItem(this.flueGas);
+    } else {
+      this.treasureHuntService.editFlueGasItem(this.flueGas, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }

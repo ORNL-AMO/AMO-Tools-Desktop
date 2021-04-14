@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, FlueGasTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { Settings } from '../shared/models/settings';
 
@@ -277,6 +277,28 @@ export class TreasureHuntService {
   deleteTankInsulationReductionsItem(index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.tankInsulationReductions.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
+  }
+
+  //flue gas
+  addNewFlueGasItem(flueGas: FlueGasTreasureHunt) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if (!treasureHunt.flueGasLosses) {
+      treasureHunt.flueGasLosses = new Array();
+    }
+    treasureHunt.flueGasLosses.push(flueGas);
+    this.treasureHunt.next(treasureHunt);
+  }
+  editFlueGasItem(flueGas: FlueGasTreasureHunt, index: number, settings: Settings) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.flueGasLosses[index] = flueGas;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getFlueGasCardData(flueGas, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+    this.treasureHunt.next(treasureHunt);
+  }
+  deleteFlueGasItem(index: number) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.flueGasLosses.splice(index, 1);
     this.treasureHunt.next(treasureHunt);
   }
 

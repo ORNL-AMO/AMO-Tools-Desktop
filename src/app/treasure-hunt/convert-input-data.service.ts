@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput, AirLeakSurveyInput } from '../shared/models/standalone';
+import { FlueGasService } from '../calculator/furnaces/flue-gas/flue-gas.service';
+import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class ConvertInputDataService {
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private flueGasService: FlueGasService) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
     //no conversion for lighting needed..
@@ -40,6 +42,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.tankInsulationReductions != undefined) {
       treasureHunt.tankInsulationReductions = this.convertTankInsulationReductions(treasureHunt.tankInsulationReductions, oldSettings, newSettings);
+    }
+    if (treasureHunt.flueGasLosses != undefined) {
+      treasureHunt.flueGasLosses = this.convertFlueGasLosses(treasureHunt.flueGasLosses, oldSettings);
     }
     if (treasureHunt.airLeakSurveys != undefined) {
       treasureHunt.airLeakSurveys = this.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
@@ -330,6 +335,61 @@ export class ConvertInputDataService {
       airLeakSurvey.airLeakSurveyInput = this.convertAirLeakSurveyInput(airLeakSurvey.airLeakSurveyInput, oldSettings, newSettings);
     });
     return airLeakSurveys;
+  }
+
+  convertFlueGasLosses(flueGasLosses: Array<FlueGasTreasureHunt>, oldSettings: Settings): Array<FlueGasTreasureHunt> {
+    flueGasLosses.forEach(flueGas => {
+      if (flueGas.baseline.flueGasType == 'By Volume') {
+        flueGas.baseline.flueGasByVolume = this.convertFlueGasInput(flueGas.baseline.flueGasByVolume, oldSettings);
+        flueGas.modification.flueGasByVolume = this.convertFlueGasInput(flueGas.modification.flueGasByVolume, oldSettings);
+      } 
+      if (flueGas.baseline.flueGasType == 'By Mass') {
+        flueGas.baseline.flueGasByMass = this.convertFlueGasInput(flueGas.baseline.flueGasByMass, oldSettings);
+        flueGas.modification.flueGasByMass = this.convertFlueGasInput(flueGas.modification.flueGasByMass, oldSettings);
+      }
+    });
+    return flueGasLosses;
+  }
+
+  convertFlueGasInput(flueGasInput: FlueGasByMass | FlueGasByVolume, currentSettings: Settings): FlueGasByMass | FlueGasByVolume {
+    if (currentSettings.unitsOfMeasure == 'Imperial'){
+      flueGasInput.combustionAirTemperature = this.convertUnitsService.value(flueGasInput.combustionAirTemperature).from('F').to('C');
+      flueGasInput.combustionAirTemperature = Number(flueGasInput.combustionAirTemperature.toFixed(2));
+
+      flueGasInput.flueGasTemperature = this.convertUnitsService.value(flueGasInput.flueGasTemperature).from('F').to('C');
+      flueGasInput.flueGasTemperature = Number(flueGasInput.flueGasTemperature.toFixed(2));
+
+      flueGasInput.fuelTemperature = this.convertUnitsService.value(flueGasInput.fuelTemperature).from('F').to('C');
+      flueGasInput.fuelTemperature = Number(flueGasInput.fuelTemperature.toFixed(2));
+
+      if ('ashDischargeTemperature' in flueGasInput) {
+        flueGasInput.ashDischargeTemperature = this.convertUnitsService.value(flueGasInput.ashDischargeTemperature).from('F').to('C');
+        flueGasInput.ashDischargeTemperature = Number(flueGasInput.ashDischargeTemperature.toFixed(2));
+      }
+
+      flueGasInput.heatInput = this.convertUnitsService.value(flueGasInput.heatInput).from('MMBtu').to('GJ');
+      flueGasInput.heatInput = Number(flueGasInput.heatInput.toFixed(2));
+    }
+    if (currentSettings.unitsOfMeasure == 'Metric'){
+      flueGasInput.combustionAirTemperature = this.convertUnitsService.value(flueGasInput.combustionAirTemperature).from('C').to('F');
+      flueGasInput.combustionAirTemperature = Number(flueGasInput.combustionAirTemperature.toFixed(2));
+
+      flueGasInput.flueGasTemperature = this.convertUnitsService.value(flueGasInput.flueGasTemperature).from('C').to('F');
+      flueGasInput.flueGasTemperature = Number(flueGasInput.flueGasTemperature.toFixed(2));
+
+      flueGasInput.fuelTemperature = this.convertUnitsService.value(flueGasInput.fuelTemperature).from('C').to('F');
+      flueGasInput.fuelTemperature = Number(flueGasInput.fuelTemperature.toFixed(2));
+
+      if ('ashDischargeTemperature' in flueGasInput) {
+        flueGasInput.ashDischargeTemperature = this.convertUnitsService.value(flueGasInput.ashDischargeTemperature).from('C').to('F');
+        flueGasInput.ashDischargeTemperature = Number(flueGasInput.ashDischargeTemperature.toFixed(2));
+      }
+
+      flueGasInput.heatInput = this.convertUnitsService.value(flueGasInput.heatInput).from('GJ').to('MMBtu');
+      flueGasInput.heatInput = Number(flueGasInput.heatInput.toFixed(2));
+    }
+    
+    return flueGasInput;
   }
 
   convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {

@@ -102,6 +102,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Tank Insulation';
       case 'air-leak-survey':
         return 'Air Leak Survey';
+      case 'flue-gas':
+        return 'Flue Gas';
     }
   }
 }
