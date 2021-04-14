@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { InletPressureData } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
+import { FsatService, InletVelocityPressureInputs } from '../../fsat.service';
 
 @Component({
   selector: 'app-calculate-inlet-pressure',
@@ -16,9 +17,13 @@ export class CalculateInletPressureComponent implements OnInit {
   settings: Settings;
   @Input()
   bodyHeight: number;
-  
+  @Input()
+  usingStaticPressure: boolean;
+  @Input()
+  inletVelocityPressureInputs: InletVelocityPressureInputs;
+
   currentField: string = 'inletLoss';
-  constructor() { }
+  constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.inletPressureData) {
@@ -32,15 +37,34 @@ export class CalculateInletPressureComponent implements OnInit {
         processRequirementsFixed: undefined,
         processRequirements: undefined,
         inletSystemEffectLoss: undefined,
-        calculatedInletPressure: undefined
+        calculatedInletPressure: undefined,
+        inletVelocityPressure: undefined,
+        userDefinedVelocityPressure: undefined,
+        fanInletArea: undefined
       };
+    } 
+  }
+
+  toggleUserDefinedVelocityPressure() {
+    this.inletPressureData.userDefinedVelocityPressure = !this.inletPressureData.userDefinedVelocityPressure
+    this.calculate();
+  }
+
+  setInletVelocityPressure() {
+    if (!this.inletPressureData.userDefinedVelocityPressure) {
+      this.inletVelocityPressureInputs.ductArea = this.inletPressureData.fanInletArea;
+      let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
+      this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure? calculatedInletVelocityPressure : 0; 
     }
   }
 
   calculate() {
+    this.setInletVelocityPressure();
     let sum: number = 0;
     Object.keys(this.inletPressureData).map((key, index) => {
-      if (key.valueOf() !== 'calculatedInletPressure') {
+      if (key.valueOf() !== 'calculatedInletPressure' 
+          && key.valueOf() !== 'fanInletArea'
+          && key.valueOf() !== 'userDefinedVelocityPressure') {
         sum = sum + this.inletPressureData[key];
       }
     });
