@@ -302,7 +302,8 @@ export class CalculatorsService {
    addNewFlueGas() {
     this.calcOpportunitySheet = undefined;
     this.isNewOpportunity = true;
-    this.flueGasService.initDefaultEmptyInputs();
+    this.flueGasService.baselineData.next(undefined);
+    this.flueGasService.modificationData.next(undefined);
     this.selectedCalc.next('flue-gas');
   }
   editFlueGasItem(flueGas: FlueGasTreasureHunt, index: number) {

@@ -160,7 +160,6 @@ export class FlueGasComponent implements OnInit {
   }
 
   cancel() {
-    this.flueGasService.initDefaultEmptyInputs();
     this.emitCancel.emit(true);
   }
 
