@@ -19,3 +19,8 @@
     border-left: solid 1px;
     border-right: none;
   }
+
+.calculated-error {
+    color: red;
+    font-weight: bold;
+}

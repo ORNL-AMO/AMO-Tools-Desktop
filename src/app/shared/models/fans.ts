@@ -391,6 +391,9 @@ export interface OutletPressureData {
   processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
+  inletVelocityPressure?: number,
+  userDefinedVelocityPressure?: boolean,
+  fanOutletArea?: number
 }
 
 

@@ -273,6 +273,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   showOutletPressureModal() {
+    this.setInletVelocityPressureInputs();
     if (this.fieldData.outletPressureData) {
       this.outletPressureCopy = JSON.parse(JSON.stringify(this.fieldData.outletPressureData));
     }

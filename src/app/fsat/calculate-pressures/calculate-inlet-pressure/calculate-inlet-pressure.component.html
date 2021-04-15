@@ -109,12 +109,16 @@
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
           <div *ngIf="!inletPressureData.userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
-            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure">
+            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure !== undefined">
               {{inletPressureData.inletVelocityPressure | number:'1.0-5'}}
             <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
             </span>
-            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure == undefined">&mdash; &mdash;</span>
+            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure === undefined">&mdash; &mdash;</span>
           </div>
+          <span class="alert-warning pull-right small"
+            *ngIf="calcInletVelocityPressureError !== null && !inletPressureData.userDefinedVelocityPressure">
+            {{ calcInletVelocityPressureError }}
+          </span>
         </div>
     
         </div>

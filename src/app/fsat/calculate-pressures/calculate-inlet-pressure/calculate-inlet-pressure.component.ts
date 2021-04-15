@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { InletPressureData } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
+import { FsatWarningService } from '../../fsat-warning.service';
 import { FsatService, InletVelocityPressureInputs } from '../../fsat.service';
 
 @Component({
@@ -22,8 +23,9 @@ export class CalculateInletPressureComponent implements OnInit {
   @Input()
   inletVelocityPressureInputs: InletVelocityPressureInputs;
 
+  calcInletVelocityPressureError: string = null;
   currentField: string = 'inletLoss';
-  constructor(private fsatService: FsatService) { }
+  constructor(private fsatService: FsatService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     if (!this.inletPressureData) {
@@ -54,7 +56,10 @@ export class CalculateInletPressureComponent implements OnInit {
     if (!this.inletPressureData.userDefinedVelocityPressure) {
       this.inletVelocityPressureInputs.ductArea = this.inletPressureData.fanInletArea;
       let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
-      this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure? calculatedInletVelocityPressure : 0; 
+      this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure; 
+      this.calcInletVelocityPressureError = this.fsatWarningService.checkCalcInletVelocityPressureError(this.inletVelocityPressureInputs.flowRate);
+    } else {
+      this.calcInletVelocityPressureError = null;
     }
   }
 

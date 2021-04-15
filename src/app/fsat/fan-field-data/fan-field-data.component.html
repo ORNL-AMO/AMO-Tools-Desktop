@@ -112,13 +112,16 @@
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <div *ngIf="!userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
-        <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value">
+        <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value !== undefined">
           {{fieldDataForm.controls.inletVelocityPressure.value | number:'1.0-5'}}
         <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-
         </span>
-        <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value == undefined">&mdash; &mdash;</span>
+        <span class="calculated-error mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value === undefined">&mdash; &mdash;</span>
       </div>
+      <span class="alert-warning pull-right small"
+      *ngIf="warnings.calcInletVelocityPressureError !== null && !userDefinedVelocityPressure && !fieldDataForm.controls.ductArea.pristine">
+      {{ warnings.calcInletVelocityPressureError }}
+    </span>
     </div>
 
     </div>
@@ -270,6 +273,7 @@
         </app-calculate-inlet-pressure>
         <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
           [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)"
+          [usingStaticPressure]="fieldDataForm.controls.usingStaticPressure.value" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
           [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
           [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
