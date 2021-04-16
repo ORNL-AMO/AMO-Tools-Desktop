@@ -2,6 +2,7 @@ import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { WallLoss } from "./phast/losses/wallLoss";
 
 export interface TreasureHunt {
     name: string,
@@ -18,6 +19,7 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wallLosses?: Array<WallLossTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -168,6 +170,19 @@ export interface WastewaterReductionTreasureHunt {
     modification: Array<WaterReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
+}
+
+export interface WallLossTreasureHunt {
+    baseline: Array<WallLoss>;
+    modification: Array<WallLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface EnergySourceData {
+    energySourceType: string,
+    unit: string
 }
 
 export interface AirLeakSurveyTreasureHunt {

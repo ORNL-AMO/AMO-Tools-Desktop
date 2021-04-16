@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
@@ -14,6 +14,7 @@ import { CompressedAirPressureReductionService } from '../../calculator/compress
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
+import { WallService } from '../../calculator/furnaces/wall/wall.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -26,7 +27,7 @@ export class CalculatorsService {
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService,
-    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) {
+    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService, private wallService: WallService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -297,7 +298,7 @@ export class CalculatorsService {
     this.cancelCalc();
   }
 
-  //tank insulation reduction
+  //air leak survey
   addNewAirLeakSurvey() {
     this.calcOpportunitySheet = undefined;
     this.airLeakService.airLeakInput.next(undefined);
@@ -316,4 +317,31 @@ export class CalculatorsService {
     this.airLeakService.airLeakInput.next(undefined);
     this.cancelCalc();
   }
+
+   //wall loss
+   addNewWallLoss() {
+    this.calcOpportunitySheet = undefined;
+    this.removeExistingWallLossInputs();
+    this.isNewOpportunity = true;
+    this.selectedCalc.next('wall-loss');
+  }
+
+  editWallLosssItem(wallLoss: WallLossTreasureHunt, index: number) {
+    this.calcOpportunitySheet = wallLoss.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.wallService.baselineData.next(wallLoss.baseline);
+    this.wallService.modificationData.next(wallLoss.modification);
+    this.selectedCalc.next('wall-loss');
+  }
+
+  cancelWallLoss() {
+    this.calcOpportunitySheet = undefined;
+    this.cancelCalc();
+  }
+  removeExistingWallLossInputs() {
+    this.wallService.baselineData.next(undefined);
+    this.wallService.modificationData.next(undefined);
+  }
+
 }

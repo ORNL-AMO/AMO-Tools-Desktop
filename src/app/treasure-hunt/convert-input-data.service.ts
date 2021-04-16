@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput, AirLeakSurveyInput } from '../shared/models/standalone';
+import { WallLoss } from '../shared/models/phast/losses/wallLoss';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -295,6 +296,46 @@ export class ConvertInputDataService {
     reduction.waterMassFlowMethodData.massFlowNameplateData.flowRate = this.convertGallonPerMinuteAndLiterPerSecondValue(reduction.waterMassFlowMethodData.massFlowNameplateData.flowRate, oldSettings, newSettings);
     return reduction;
   }
+
+  convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings): Array<WallLossTreasureHunt> {
+    wallLosses.forEach(wallLoss => {
+      wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings));
+      wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings));
+    });
+    return wallLosses;
+  }
+
+  convertWallLoss(wallLoss: WallLoss, currentSettings: Settings): WallLoss {
+    if (currentSettings.unitsOfMeasure == 'Imperial'){
+      wallLoss.ambientTemperature = this.convertUnitsService.value(wallLoss.ambientTemperature).from('F').to('C');
+      wallLoss.ambientTemperature = Number(wallLoss.ambientTemperature.toFixed(2));
+
+      wallLoss.surfaceTemperature = this.convertUnitsService.value(wallLoss.surfaceTemperature).from('F').to('C');
+      wallLoss.surfaceTemperature = Number(wallLoss.surfaceTemperature.toFixed(2));
+
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('mph').to('km/h');
+      wallLoss.windVelocity = Number(wallLoss.windVelocity.toFixed(2));
+
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('ft2').to('m2');
+      wallLoss.surfaceArea = Number(wallLoss.surfaceArea.toFixed(2));
+    }
+    if (currentSettings.unitsOfMeasure == 'Metric'){
+      wallLoss.ambientTemperature = this.convertUnitsService.value(wallLoss.ambientTemperature).from('C').to('F');
+      wallLoss.ambientTemperature = Number(wallLoss.ambientTemperature.toFixed(2));
+
+      wallLoss.surfaceTemperature = this.convertUnitsService.value(wallLoss.surfaceTemperature).from('C').to('F');
+      wallLoss.surfaceTemperature = Number(wallLoss.surfaceTemperature.toFixed(2));
+
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('km/h').to('mph');
+      wallLoss.windVelocity = Number(wallLoss.windVelocity.toFixed(2));
+
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('m2').to('ft2');
+      wallLoss.surfaceArea = Number(wallLoss.surfaceArea.toFixed(2));
+    }
+    
+    return wallLoss;
+  }
+
 
   convertTankInsulationReductions(tankReductions: Array<TankInsulationReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<TankInsulationReductionTreasureHunt> {
     tankReductions.forEach(tankReduction => {

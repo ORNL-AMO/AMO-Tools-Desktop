@@ -100,6 +100,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Pipe Insulation';
       case 'tank-insulation-reduction':
         return 'Tank Insulation';
+      case 'wall-loss':
+        return 'Wall Loss';
       case 'air-leak-survey':
         return 'Air Leak Survey';
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt } from '../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { Settings } from '../shared/models/settings';
 
@@ -299,6 +299,28 @@ export class TreasureHuntService {
   deleteAirLeakSurveyItem(index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.airLeakSurveys.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
+  }
+
+  //Wall loss
+  addNewWallLossItem(wallLoss: WallLossTreasureHunt) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if (!treasureHunt.wallLosses) {
+      treasureHunt.wallLosses = new Array();
+    }
+    treasureHunt.wallLosses.push(wallLoss);
+    this.treasureHunt.next(treasureHunt);
+  }
+  editWallLossItem(wallLoss: WallLossTreasureHunt, index: number, settings: Settings) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.wallLosses[index] = wallLoss;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getWallLossCardData(wallLoss, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+    this.treasureHunt.next(treasureHunt);
+  }
+  deleteWallLossItem(index: number) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.wallLosses.splice(index, 1);
     this.treasureHunt.next(treasureHunt);
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -18,6 +18,8 @@ import { SteamReductionService } from '../../calculator/steam/steam-reduction/st
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
+import { WallService } from '../../calculator/furnaces/wall/wall.service';
+import { WallLossOutput } from '../../shared/models/phast/losses/wallLoss';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -27,7 +29,7 @@ export class OpportunitySummaryService {
     private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService,
     private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private steamReductionService: SteamReductionService, private pipeInsulationReductionService: PipeInsulationReductionService,
-    private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) { }
+    private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService, private wallService: WallService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -55,6 +57,8 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getTankInsulationReductionSummaries(treasureHunt.tankInsulationReductions, opportunitySummaries, settings);
     //air leak survey
     opportunitySummaries = this.getAirLeakSurveySummaries(treasureHunt.airLeakSurveys, opportunitySummaries, settings);
+    // wall loss
+    opportunitySummaries = this.getWallLossSummaries(treasureHunt.wallLosses, opportunitySummaries, settings);
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
 
@@ -555,6 +559,47 @@ export class OpportunitySummaryService {
     return oppSummary;
   }
 
+   getWallLossSummaries(wallLosses: Array<WallLossTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (wallLosses) {
+      let index: number = 1;
+      wallLosses.forEach(wallLoss => {
+        if (wallLoss.selected) {
+          let oppSummary: OpportunitySummary = this.getWallLossSummary(wallLoss, index, settings);
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  getWallLossSummary(wallLoss: WallLossTreasureHunt, index: number, settings: Settings): OpportunitySummary {
+    let name: string = 'Wall Loss #' + index;
+    this.wallService.baselineData.next(wallLoss.baseline);
+    this.wallService.modificationData.next(wallLoss.modification);
+    this.wallService.calculate(settings);
+    let output: WallLossOutput = this.wallService.output.getValue();
+    this.wallService.baselineData.next(undefined);
+    this.wallService.modificationData.next(undefined);
+    let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
+    if (wallLoss.opportunitySheet) {
+      if (wallLoss.opportunitySheet.name) {
+        name = wallLoss.opportunitySheet.name;
+      }
+      opportunityCost = wallLoss.opportunitySheet.opportunityCost;
+      team = wallLoss.opportunitySheet.owner;
+      owner = wallLoss.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(wallLoss.opportunitySheet.equipment);
+    }
+    let energySavings: number = output.fuelSavings;
+    let utilityTypeStr: string = wallLoss.energySourceData.energySourceType;
+    
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, output.costSavings, energySavings, opportunityCost, output.baseline.totalFuelCost, output.modification.totalFuelCost, team, equipment, owner);
+    return oppSummary;
+  }
 
   //stand alone opp sheets
   getOpportunitySheetSummaries(opportunitySheets: Array<OpportunitySheet>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings, getAllResults?: boolean): Array<OpportunitySummary> {

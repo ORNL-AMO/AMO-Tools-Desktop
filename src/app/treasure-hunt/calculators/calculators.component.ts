@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -32,6 +32,7 @@ export class CalculatorsComponent implements OnInit {
   pipeInsulationReduction: PipeInsulationReductionTreasureHunt;
   tankInsulationReduction: TankInsulationReductionTreasureHunt;
   airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt;
+  wallLossTreasureHunt: WallLossTreasureHunt;
 
   selectedCalc: string;
   selectedCalcSubscription: Subscription;
@@ -111,6 +112,8 @@ export class CalculatorsComponent implements OnInit {
       this.confirmTankInsulationReduction();
     } else if(this.selectedCalc == 'air-leak-survey'){
       this.confirmAirLeakSurvey();
+    } else if(this.selectedCalc == 'wall-loss'){
+      this.confirmSaveWallLoss();
     }
   }
   initSaveCalc() {
@@ -354,6 +357,26 @@ export class CalculatorsComponent implements OnInit {
     this.finishSaveCalc();
   }
 
+   //Wall Loss
+  cancelWallLoss() {
+    this.calculatorsService.cancelWallLoss();
+    this.calculatorsService.removeExistingWallLossInputs();
+  }
+  saveWallLoss(wallLoss: WallLossTreasureHunt) {
+    this.wallLossTreasureHunt = wallLoss;
+    this.initSaveCalc();
+  }
+  confirmSaveWallLoss() {
+    this.wallLossTreasureHunt.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.wallLossTreasureHunt.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewWallLossItem(this.wallLossTreasureHunt);
+    } else {
+      this.treasureHuntService.editWallLossItem(this.wallLossTreasureHunt, this.calculatorsService.itemIndex, this.settings);
+    }
+    this.finishSaveCalc();
+    this.calculatorsService.removeExistingWallLossInputs();
+  }
 
   //stand alone opportunity sheet
   cancelStandaloneOpportunitySheet() {
