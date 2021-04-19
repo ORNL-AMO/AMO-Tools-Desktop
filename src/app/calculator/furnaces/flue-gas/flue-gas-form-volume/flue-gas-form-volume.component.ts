@@ -80,8 +80,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     })
     if (!this.isBaseline) {
       this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
-        this.byVolumeForm.patchValue({gasTypeId: baselineData.flueGasByVolume.gasTypeId});
-        this.calculate();
+        if (baselineData.flueGasByVolume) {
+          this.byVolumeForm.patchValue({gasTypeId: baselineData.flueGasByVolume.gasTypeId});
+          this.calculate();
+        }
       })
     }
   }

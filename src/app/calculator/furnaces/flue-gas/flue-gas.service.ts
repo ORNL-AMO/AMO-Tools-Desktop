@@ -50,7 +50,7 @@ export class FlueGasService {
 
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
     output.baseline = baselineResults;
-    if (modificationFlueGas) {
+    if (modificationFlueGas && modificationEnergyData) {
       let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal);
       output.modification = modificationResults;
       
