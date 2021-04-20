@@ -283,6 +283,7 @@ export class EnrichmentGraphComponent implements OnInit {
             point.combAirTemp = displayPoint.combAirTemp;
             point.o2FlueGas = displayPoint.o2FlueGas;
             point.flueGasTemp = displayPoint.flueGasTemp;
+            point.pointY = displayPoint.pointY;
           }
         })
       }
