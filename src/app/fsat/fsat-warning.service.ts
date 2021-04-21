@@ -23,9 +23,18 @@ export class FsatWarningService {
       ratedPowerError: ratedPowerWarning,
       inletPressureError: this.checkInletPressure(fsat),
       outletPressureError: this.checkOutletPressure(fsat),
+      calcInletVelocityPressureError: this.checkCalcInletVelocityPressureError(fsat.fieldData.flowRate)
     };
 
     return warnings;
+  }
+
+  checkCalcInletVelocityPressureError(flowRate: number) {
+    if (flowRate <= 0) {
+      return 'Flow rate is required to calculate Inlet Velocity Pressure';
+    } else {
+      return null;
+    }
   }
 
   //REQUIRED?
@@ -324,6 +333,7 @@ export interface FanFieldDataWarnings {
   ratedPowerError: string;
   inletPressureError: string;
   outletPressureError: string;
+  calcInletVelocityPressureError: string;
 }
 
 export interface FanMotorWarnings {

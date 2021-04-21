@@ -10,6 +10,7 @@ import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
+import { FormGroup } from '@angular/forms';
 
 
 declare var fanAddon: any;
@@ -250,6 +251,18 @@ export class FsatService {
     return fanAddon.compressibilityFactor(inputCpy);
   }
 
+  calculateInletVelocityPressure(calculationInputs: InletVelocityPressureInputs): number {
+    let inletVelocityPressure: number;
+    let flowRateCalc: number = (1/1096) * (calculationInputs.flowRate / calculationInputs.ductArea); 
+    inletVelocityPressure = calculationInputs.gasDensity * Math.pow(flowRateCalc, 2);
+    if (isNaN(inletVelocityPressure) || !isFinite(inletVelocityPressure)) {
+      inletVelocityPressure = undefined;
+    } else {
+      inletVelocityPressure = Number(inletVelocityPressure.toFixed(5));
+    }
+    return inletVelocityPressure;
+  }
+
 
   getNewMod(fsat: FSAT, settings: Settings): Modification {
     let modNum: number = 1;
@@ -280,4 +293,10 @@ export class FsatService {
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
     return tmpModification;
   }
+}
+
+export interface InletVelocityPressureInputs {
+  gasDensity: number,
+  flowRate: number,
+  ductArea: number
 }
