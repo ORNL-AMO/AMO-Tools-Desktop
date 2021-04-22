@@ -24,10 +24,6 @@
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !isBaselineValid}"
-                (click)="changeTab('analysis')">Analysis</a>
-        </div>
-        <div class="nav-item">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}"
                 (click)="changeTab('diagram')">Diagram</a>
         </div>
@@ -57,6 +53,7 @@
 
 
 <app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
+
 
 <!--
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">

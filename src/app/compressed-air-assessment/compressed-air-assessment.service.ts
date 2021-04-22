@@ -11,10 +11,12 @@ export class CompressedAirAssessmentService {
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
+  profileTab: BehaviorSubject<string>;
   constructor() { 
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.focusedField = new BehaviorSubject<string>('default');
+    this.profileTab = new BehaviorSubject<string>('setup');
   }
 }

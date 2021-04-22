@@ -22,6 +22,10 @@ export class SetupTabsComponent implements OnInit {
   endUsesBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   inventoryStatus: Array<string> = [];
   inventoryBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  systemProfileStatus: Array<string> = [];
+  systemProfileBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  profileTab: string;
+  profileTabSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -32,11 +36,17 @@ export class SetupTabsComponent implements OnInit {
       this.setDayTypesStatus();
       this.setEndUsesStatus();
       this.setInventoryStatus();
+      this.setSystemProfileStatus();
+    });
+
+    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
+      this.profileTab = val;
     });
   }
 
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
+    this.profileTabSub.unsubscribe();
   }
 
   changeSetupTab(str: string) {
@@ -83,6 +93,14 @@ export class SetupTabsComponent implements OnInit {
     }
   }
 
+  setSystemProfileStatus(){
+    if (this.setupTab == "system-profile") {
+      this.systemProfileStatus = ["active"];
+    } else {
+      this.systemProfileStatus = [];
+    }
+  }
+
   showTooltip(badge: { display: boolean, hover: boolean }) {
     badge.hover = true;
     setTimeout(() => {
@@ -102,4 +120,9 @@ export class SetupTabsComponent implements OnInit {
       badge.display = false;
     }
   }
+
+  changeProfileTab(str: string) {
+    this.compressedAirAssessmentService.profileTab.next(str);
+  }
+
 }

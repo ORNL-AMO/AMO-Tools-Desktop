@@ -12,7 +12,7 @@ export class CompressedAirBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  isBaselineValid: boolean = false;
+  isBaselineValid: boolean = true;
   mainTab: string;
   mainTabSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
