@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
   selector: 'app-compressed-air-banner',
@@ -9,10 +11,26 @@ import { Assessment } from '../../shared/models/assessment';
 export class CompressedAirBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
-  
-  constructor() { }
+
+  isBaselineValid: boolean = false;
+  mainTab: string;
+  mainTabSub: Subscription;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
+    this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    });
+  }
+
+  ngOnDestroy(){
+    this.mainTabSub.unsubscribe();
+  }
+
+  changeTab(str: string) {
+    if (str == 'system-setup' || str == 'diagram' || this.isBaselineValid) {
+      this.compressedAirAssessmentService.mainTab.next(str);
+    }
   }
 
 }

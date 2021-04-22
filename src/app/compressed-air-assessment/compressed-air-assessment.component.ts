@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -16,6 +17,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   assessment: Assessment;
   settings: Settings;
+  mainTab: string;
+  mainTabSubscription: Subscription;
+  setupTab: string;
+  setupTabSubscription: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService) { }
@@ -36,6 +41,19 @@ export class CompressedAirAssessmentComponent implements OnInit {
       //   this.wasteWaterService.mainTab.next(this.assessmentService.tab);
       // }
     });
+
+    this.mainTabSubscription = this.compressedAirAssessmentService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    });
+
+    this.setupTabSubscription = this.compressedAirAssessmentService.setupTab.subscribe(val => {
+      this.setupTab = val;
+    });
+  }
+
+  ngOnDestroy(){
+    this.mainTabSubscription.unsubscribe();
+    this.setupTabSubscription.unsubscribe();
   }
 
 
@@ -49,6 +67,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.compressedAirAssessmentService.settings.next(this.settings);
       });
     });
+  }
+
+
+  initUpdateUnitsModal(){
+    
   }
 
 }
