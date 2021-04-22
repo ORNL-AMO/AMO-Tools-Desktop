@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
@@ -14,6 +14,9 @@ import { CompressedAirPressureReductionService } from '../../calculator/compress
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
+import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
+import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class CalculatorsService {
@@ -22,298 +25,367 @@ export class CalculatorsService {
   itemIndex: number;
   isNewOpportunity: boolean;
   calcOpportunitySheet: OpportunitySheet;
-  constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
+  constructor(
+    private opportunityCardsService: OpportunityCardsService,
+    private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService,
-    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) {
+    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakTreasureHuntService: AirLeakTreasureHuntService,
+    private airLeakService: AirLeakService
+    ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
-  cancelCalc() {
-    this.itemIndex = undefined;
-    this.selectedCalc.next('none');
+  // cancelCalc() {
+  //   this.itemIndex = undefined;
+  //   this.selectedCalc.next('none');
+  // }
+
+  // //lighting replacement
+  // addNewLighting() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.lightingReplacementService.baselineData = undefined;
+  //   this.lightingReplacementService.modificationData = undefined;
+  //   this.lightingReplacementService.baselineElectricityCost = undefined;
+  //   this.lightingReplacementService.modificationElectricityCost = undefined;
+  //   this.selectedCalc.next('lighting-replacement');
+  // }
+  // editLightingReplacementItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = lightingReplacementTreasureHunt.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.lightingReplacementService.baselineData = lightingReplacementTreasureHunt.baseline;
+  //   this.lightingReplacementService.modificationData = lightingReplacementTreasureHunt.modifications;
+  //   this.lightingReplacementService.baselineElectricityCost = lightingReplacementTreasureHunt.baselineElectricityCost;
+  //   this.lightingReplacementService.modificationElectricityCost = lightingReplacementTreasureHunt.modificationElectricityCost;
+  //   this.itemIndex = index;
+  //   this.selectedCalc.next('lighting-replacement');
+  // }
+  // cancelLightingCalc() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.lightingReplacementService.baselineData = undefined;
+  //   this.lightingReplacementService.modificationData = undefined;
+  //   this.lightingReplacementService.baselineElectricityCost = undefined;
+  //   this.lightingReplacementService.modificationElectricityCost = undefined;
+  //   this.cancelCalc();
+  // }
+  // //opportunitySheet
+  // addNewOpportunitySheet() {
+  //   this.isNewOpportunity = true;
+  //   this.opportunitySheetService.opportunitySheet = undefined;
+  //   this.selectedCalc.next('opportunity-sheet');
+  // }
+  // editOpportunitySheetItem(opportunitySheet: OpportunitySheet, index: number) {
+  //   this.isNewOpportunity = false;
+  //   this.opportunitySheetService.opportunitySheet = opportunitySheet;
+  //   this.itemIndex = index;
+  //   this.selectedCalc.next('opportunity-sheet');
+  // }
+  // cancelOpportunitySheet() {
+  //   this.opportunitySheetService.opportunitySheet = undefined;
+  //   this.cancelCalc();
+  // }
+
+  // //replace existing
+  // addNewReplaceExistingMotor() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.replaceExistingService.replaceExistingData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('replace-existing');
+  // }
+  // editReplaceExistingMotorsItem(replaceExistingMotorsTreasureHunt: ReplaceExistingMotorTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = replaceExistingMotorsTreasureHunt.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.replaceExistingService.replaceExistingData = replaceExistingMotorsTreasureHunt.replaceExistingData;
+  //   this.itemIndex = index;
+  //   this.selectedCalc.next('replace-existing');
+  // }
+  // cancelReplaceExistingMotors() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.replaceExistingService.replaceExistingData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //motor drive
+  // addNewMotorDrive() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.motorDriveService.motorDriveData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('motor-drive');
+  // }
+  // editMotorDrivesItem(motorDriveTreasureHunt: MotorDriveInputsTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = motorDriveTreasureHunt.opportunitySheet;
+  //   this.itemIndex = index;
+  //   this.isNewOpportunity = false;
+  //   this.motorDriveService.motorDriveData = motorDriveTreasureHunt.motorDriveInputs;
+  //   this.selectedCalc.next('motor-drive');
+  // }
+  // cancelMotorDrive() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.motorDriveService.motorDriveData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //natural gas reduction
+  // addNewNaturalGasReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.naturalGasReductionService.baselineData = undefined;
+  //   this.naturalGasReductionService.modificationData = undefined;
+  //   this.selectedCalc.next('natural-gas-reduction');
+  // }
+  // editNaturalGasReductionsItem(naturalGasReductionTreasureHunt: NaturalGasReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = naturalGasReductionTreasureHunt.opportunitySheet;
+  //   this.itemIndex = index;
+  //   this.isNewOpportunity = false;
+  //   this.naturalGasReductionService.baselineData = naturalGasReductionTreasureHunt.baseline;
+  //   this.naturalGasReductionService.modificationData = naturalGasReductionTreasureHunt.modification;
+  //   this.selectedCalc.next('natural-gas-reduction');
+  // }
+  // cancelNaturalGasReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.naturalGasReductionService.baselineData = undefined;
+  //   this.naturalGasReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //edit electricity
+  // addNewElectricityReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.electricityReductionService.baselineData = undefined;
+  //   this.electricityReductionService.modificationData = undefined;
+  //   this.selectedCalc.next('electricity-reduction');
+  // }
+  // editElectricityReductionsItem(electricityReduction: ElectricityReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = electricityReduction.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.electricityReductionService.baselineData = electricityReduction.baseline;
+  //   this.electricityReductionService.modificationData = electricityReduction.modification;
+  //   this.itemIndex = index;
+  //   this.selectedCalc.next('electricity-reduction');
+  // }
+  // cancelElectricityReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.electricityReductionService.baselineData = undefined;
+  //   this.electricityReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //compressed air reduction
+  // addNewCompressedAirReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.compressedAirReductionService.baselineData = undefined;
+  //   this.compressedAirReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('compressed-air-reduction');
+  // }
+  // editCompressedAirReductionsItem(compressedAirReduction: CompressedAirReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = compressedAirReduction.opportunitySheet;
+  //   this.compressedAirReductionService.baselineData = compressedAirReduction.baseline;
+  //   this.compressedAirReductionService.modificationData = compressedAirReduction.modification;
+  //   this.itemIndex = index;
+  //   this.isNewOpportunity = false;
+  //   this.selectedCalc.next('compressed-air-reduction');
+  // }
+  // cancelCompressedAirReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.compressedAirReductionService.baselineData = undefined;
+  //   this.compressedAirReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //compressed air pressure
+  // addNewCompressedAirPressureReductions() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.compressedAirPressureReductionService.baselineData = undefined;
+  //   this.compressedAirPressureReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('compressed-air-pressure-reduction');
+  // }
+  // editCompressedAirPressureReductionsItem(compressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = compressedAirPressureReduction.opportunitySheet;
+  //   this.compressedAirPressureReductionService.baselineData = compressedAirPressureReduction.baseline;
+  //   this.compressedAirPressureReductionService.modificationData = compressedAirPressureReduction.modification;
+  //   this.itemIndex = index;
+  //   this.isNewOpportunity = false;
+  //   this.selectedCalc.next('compressed-air-pressure-reduction');
+  // }
+  // cancelCompressedAirPressureReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.compressedAirPressureReductionService.baselineData = undefined;
+  //   this.compressedAirPressureReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+  // //water reductions
+  // addNewWaterReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.waterReductionService.baselineData = undefined;
+  //   this.waterReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('water-reduction');
+  // }
+  // editWaterReductionsItem(waterReduction: WaterReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = waterReduction.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.itemIndex = index;
+  //   this.waterReductionService.baselineData = waterReduction.baseline;
+  //   this.waterReductionService.modificationData = waterReduction.modification;
+  //   this.selectedCalc.next('water-reduction');
+  // }
+  // cancelWaterReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.waterReductionService.baselineData = undefined;
+  //   this.waterReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+
+  // //steam reductions
+  // addNewSteamReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.steamReductionService.baselineData = undefined;
+  //   this.steamReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('steam-reduction');
+  // }
+  // editSteamReductionsItem(steamReduction: SteamReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = steamReduction.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.itemIndex = index;
+  //   this.steamReductionService.baselineData = steamReduction.baseline;
+  //   this.steamReductionService.modificationData = steamReduction.modification;
+  //   this.selectedCalc.next('steam-reduction');
+  // }
+  // cancelSteamReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.steamReductionService.baselineData = undefined;
+  //   this.steamReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+
+  // //pipe insulation reduction
+  // addNewPipeInsulationReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.pipeInsulationReductionService.baselineData = undefined;
+  //   this.pipeInsulationReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('pipe-insulation-reduction');
+  // }
+  // editPipeInsulationReductionsItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = pipeInsulationReduction.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.itemIndex = index;
+  //   this.pipeInsulationReductionService.baselineData = pipeInsulationReduction.baseline;
+  //   this.pipeInsulationReductionService.modificationData = pipeInsulationReduction.modification;
+  //   this.selectedCalc.next('pipe-insulation-reduction');
+  // }
+  // cancelPipeInsulationReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.pipeInsulationReductionService.baselineData = undefined;
+  //   this.pipeInsulationReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+
+  // //tank insulation reduction
+  // addNewTankInsulationReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.tankInsulationReductionService.baselineData = undefined;
+  //   this.tankInsulationReductionService.modificationData = undefined;
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('tank-insulation-reduction');
+  // }
+  // editTankInsulationReductionsItem(tankInsulationReduction: TankInsulationReductionTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = tankInsulationReduction.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.itemIndex = index;
+  //   this.tankInsulationReductionService.baselineData = tankInsulationReduction.baseline;
+  //   this.tankInsulationReductionService.modificationData = tankInsulationReduction.modification;
+  //   this.selectedCalc.next('tank-insulation-reduction');
+  // }
+  // cancelTankInsulationReduction() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.tankInsulationReductionService.baselineData = undefined;
+  //   this.tankInsulationReductionService.modificationData = undefined;
+  //   this.cancelCalc();
+  // }
+
+  // //air leak survey
+  // addNewAirLeakSurvey() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.airLeakService.airLeakInput.next(undefined);
+  //   this.isNewOpportunity = true;
+  //   this.selectedCalc.next('air-leak-survey');
+  // }
+
+  // editAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt, index: number) {
+  //   this.calcOpportunitySheet = airLeakSurvey.opportunitySheet;
+  //   this.isNewOpportunity = false;
+  //   this.itemIndex = index;
+  //   this.airLeakService.airLeakInput.next(airLeakSurvey.airLeakSurveyInput);
+  //   this.selectedCalc.next('air-leak-survey');
+  // }
+
+  // cancelAirLeakSurvey() {
+  //   this.calcOpportunitySheet = undefined;
+  //   this.airLeakService.airLeakInput.next(undefined);
+  //   this.cancelCalc();
+  // }
+
+
+  //================
+
+  displaySelectedCalculator(calculatorType: string) {
+    this.calcOpportunitySheet = undefined;
+    this.isNewOpportunity = true;
+
+    if (calculatorType === 'air-leak-survey') {
+      this.airLeakTreasureHuntService.initNewAirLeakCalculator();
+    } else if (calculatorType === '') {
+
+    }
+    this.selectedCalc.next(calculatorType);
   }
 
-  //lighting replacement
-  addNewLighting() {
-    this.calcOpportunitySheet = undefined;
-    this.isNewOpportunity = true;
-    this.lightingReplacementService.baselineData = undefined;
-    this.lightingReplacementService.modificationData = undefined;
-    this.lightingReplacementService.baselineElectricityCost = undefined;
-    this.lightingReplacementService.modificationElectricityCost = undefined;
-    this.selectedCalc.next('lighting-replacement');
-  }
-  editLightingReplacementItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt, index: number) {
-    this.calcOpportunitySheet = lightingReplacementTreasureHunt.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.lightingReplacementService.baselineData = lightingReplacementTreasureHunt.baseline;
-    this.lightingReplacementService.modificationData = lightingReplacementTreasureHunt.modifications;
-    this.lightingReplacementService.baselineElectricityCost = lightingReplacementTreasureHunt.baselineElectricityCost;
-    this.lightingReplacementService.modificationElectricityCost = lightingReplacementTreasureHunt.modificationElectricityCost;
-    this.itemIndex = index;
-    this.selectedCalc.next('lighting-replacement');
-  }
-  cancelLightingCalc() {
-    this.calcOpportunitySheet = undefined;
-    this.lightingReplacementService.baselineData = undefined;
-    this.lightingReplacementService.modificationData = undefined;
-    this.lightingReplacementService.baselineElectricityCost = undefined;
-    this.lightingReplacementService.modificationElectricityCost = undefined;
-    this.cancelCalc();
-  }
-  //opportunitySheet
-  addNewOpportunitySheet() {
-    this.isNewOpportunity = true;
-    this.opportunitySheetService.opportunitySheet = undefined;
-    this.selectedCalc.next('opportunity-sheet');
-  }
-  editOpportunitySheetItem(opportunitySheet: OpportunitySheet, index: number) {
-    this.isNewOpportunity = false;
-    this.opportunitySheetService.opportunitySheet = opportunitySheet;
-    this.itemIndex = index;
-    this.selectedCalc.next('opportunity-sheet');
-  }
-  cancelOpportunitySheet() {
-    this.opportunitySheetService.opportunitySheet = undefined;
-    this.cancelCalc();
+  copyOpportunity(opportunityCardData: OpportunityCardData,treasureHunt: TreasureHunt, settings: Settings): OpportunityCardData {
+    if (opportunityCardData.opportunityType === 'air-leak-survey') {
+      opportunityCardData.airLeakSurvey.opportunitySheet = this.updateCopyName(opportunityCardData.airLeakSurvey.opportunitySheet);
+      this.airLeakTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.airLeakSurvey, treasureHunt);
+      opportunityCardData = this.opportunityCardsService.getAirLeakSurveyCardData(opportunityCardData.airLeakSurvey, settings, treasureHunt.airLeakSurveys.length - 1, treasureHunt.currentEnergyUsage);
+    } else if (opportunityCardData.opportunityType == '') {
+
+    }
+
+    return opportunityCardData;
   }
 
-  //replace existing
-  addNewReplaceExistingMotor() {
-    this.calcOpportunitySheet = undefined;
-    this.replaceExistingService.replaceExistingData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('replace-existing');
-  }
-  editReplaceExistingMotorsItem(replaceExistingMotorsTreasureHunt: ReplaceExistingMotorTreasureHunt, index: number) {
-    this.calcOpportunitySheet = replaceExistingMotorsTreasureHunt.opportunitySheet;
+  editOpportunity(opportunityCardData: OpportunityCardData) {
+    // oppcarddata.oppsheet appears to be the same as opportunutiyCardData.airLeakSurvey.oppsheet
+    console.log(opportunityCardData.opportunitySheet);
+    console.log(opportunityCardData.airLeakSurvey.opportunitySheet);
+    this.calcOpportunitySheet = opportunityCardData.opportunitySheet;
     this.isNewOpportunity = false;
-    this.replaceExistingService.replaceExistingData = replaceExistingMotorsTreasureHunt.replaceExistingData;
-    this.itemIndex = index;
-    this.selectedCalc.next('replace-existing');
-  }
-  cancelReplaceExistingMotors() {
-    this.calcOpportunitySheet = undefined;
-    this.replaceExistingService.replaceExistingData = undefined;
-    this.cancelCalc();
-  }
-  //motor drive
-  addNewMotorDrive() {
-    this.calcOpportunitySheet = undefined;
-    this.motorDriveService.motorDriveData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('motor-drive');
-  }
-  editMotorDrivesItem(motorDriveTreasureHunt: MotorDriveInputsTreasureHunt, index: number) {
-    this.calcOpportunitySheet = motorDriveTreasureHunt.opportunitySheet;
-    this.itemIndex = index;
-    this.isNewOpportunity = false;
-    this.motorDriveService.motorDriveData = motorDriveTreasureHunt.motorDriveInputs;
-    this.selectedCalc.next('motor-drive');
-  }
-  cancelMotorDrive() {
-    this.calcOpportunitySheet = undefined;
-    this.motorDriveService.motorDriveData = undefined;
-    this.cancelCalc();
-  }
-  //natural gas reduction
-  addNewNaturalGasReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.isNewOpportunity = true;
-    this.naturalGasReductionService.baselineData = undefined;
-    this.naturalGasReductionService.modificationData = undefined;
-    this.selectedCalc.next('natural-gas-reduction');
-  }
-  editNaturalGasReductionsItem(naturalGasReductionTreasureHunt: NaturalGasReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = naturalGasReductionTreasureHunt.opportunitySheet;
-    this.itemIndex = index;
-    this.isNewOpportunity = false;
-    this.naturalGasReductionService.baselineData = naturalGasReductionTreasureHunt.baseline;
-    this.naturalGasReductionService.modificationData = naturalGasReductionTreasureHunt.modification;
-    this.selectedCalc.next('natural-gas-reduction');
-  }
-  cancelNaturalGasReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.naturalGasReductionService.baselineData = undefined;
-    this.naturalGasReductionService.modificationData = undefined;
-    this.cancelCalc();
-  }
-  //edit electricity
-  addNewElectricityReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.isNewOpportunity = true;
-    this.electricityReductionService.baselineData = undefined;
-    this.electricityReductionService.modificationData = undefined;
-    this.selectedCalc.next('electricity-reduction');
-  }
-  editElectricityReductionsItem(electricityReduction: ElectricityReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = electricityReduction.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.electricityReductionService.baselineData = electricityReduction.baseline;
-    this.electricityReductionService.modificationData = electricityReduction.modification;
-    this.itemIndex = index;
-    this.selectedCalc.next('electricity-reduction');
-  }
-  cancelElectricityReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.electricityReductionService.baselineData = undefined;
-    this.electricityReductionService.modificationData = undefined;
-    this.cancelCalc();
-  }
-  //compressed air reduction
-  addNewCompressedAirReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.compressedAirReductionService.baselineData = undefined;
-    this.compressedAirReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('compressed-air-reduction');
-  }
-  editCompressedAirReductionsItem(compressedAirReduction: CompressedAirReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = compressedAirReduction.opportunitySheet;
-    this.compressedAirReductionService.baselineData = compressedAirReduction.baseline;
-    this.compressedAirReductionService.modificationData = compressedAirReduction.modification;
-    this.itemIndex = index;
-    this.isNewOpportunity = false;
-    this.selectedCalc.next('compressed-air-reduction');
-  }
-  cancelCompressedAirReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.compressedAirReductionService.baselineData = undefined;
-    this.compressedAirReductionService.modificationData = undefined;
-    this.cancelCalc();
-  }
-  //compressed air pressure
-  addNewCompressedAirPressureReductions() {
-    this.calcOpportunitySheet = undefined;
-    this.compressedAirPressureReductionService.baselineData = undefined;
-    this.compressedAirPressureReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('compressed-air-pressure-reduction');
-  }
-  editCompressedAirPressureReductionsItem(compressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = compressedAirPressureReduction.opportunitySheet;
-    this.compressedAirPressureReductionService.baselineData = compressedAirPressureReduction.baseline;
-    this.compressedAirPressureReductionService.modificationData = compressedAirPressureReduction.modification;
-    this.itemIndex = index;
-    this.isNewOpportunity = false;
-    this.selectedCalc.next('compressed-air-pressure-reduction');
-  }
-  cancelCompressedAirPressureReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.compressedAirPressureReductionService.baselineData = undefined;
-    this.compressedAirPressureReductionService.modificationData = undefined;
-    this.cancelCalc();
-  }
-  //water reductions
-  addNewWaterReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.waterReductionService.baselineData = undefined;
-    this.waterReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('water-reduction');
-  }
-  editWaterReductionsItem(waterReduction: WaterReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = waterReduction.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.itemIndex = index;
-    this.waterReductionService.baselineData = waterReduction.baseline;
-    this.waterReductionService.modificationData = waterReduction.modification;
-    this.selectedCalc.next('water-reduction');
-  }
-  cancelWaterReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.waterReductionService.baselineData = undefined;
-    this.waterReductionService.modificationData = undefined;
-    this.cancelCalc();
+    this.itemIndex = opportunityCardData.opportunityIndex;
+
+    if (opportunityCardData.opportunityType === 'air-leak-survey') {
+      this.airLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.airLeakSurvey);
+    } else if (opportunityCardData.opportunityType === '') {
+
+    }
+
+    this.selectedCalc.next(opportunityCardData.opportunityType);
   }
 
-  //steam reductions
-  addNewSteamReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.steamReductionService.baselineData = undefined;
-    this.steamReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('steam-reduction');
-  }
-  editSteamReductionsItem(steamReduction: SteamReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = steamReduction.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.itemIndex = index;
-    this.steamReductionService.baselineData = steamReduction.baseline;
-    this.steamReductionService.modificationData = steamReduction.modification;
-    this.selectedCalc.next('steam-reduction');
-  }
-  cancelSteamReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.steamReductionService.baselineData = undefined;
-    this.steamReductionService.modificationData = undefined;
-    this.cancelCalc();
+  deleteOpportunity(deleteOpportunity: OpportunityCardData, treasureHunt: TreasureHunt): TreasureHunt {
+    if (deleteOpportunity.opportunityType === 'air-leak-survey') {
+      treasureHunt = this.airLeakTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt);
+    } else if (deleteOpportunity.opportunityType === '') {
+
+    }
+
+    return treasureHunt;
   }
 
-  //pipe insulation reduction
-  addNewPipeInsulationReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.pipeInsulationReductionService.baselineData = undefined;
-    this.pipeInsulationReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('pipe-insulation-reduction');
-  }
-  editPipeInsulationReductionsItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = pipeInsulationReduction.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.itemIndex = index;
-    this.pipeInsulationReductionService.baselineData = pipeInsulationReduction.baseline;
-    this.pipeInsulationReductionService.modificationData = pipeInsulationReduction.modification;
-    this.selectedCalc.next('pipe-insulation-reduction');
-  }
-  cancelPipeInsulationReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.pipeInsulationReductionService.baselineData = undefined;
-    this.pipeInsulationReductionService.modificationData = undefined;
-    this.cancelCalc();
+  updateCopyName(oppSheet: OpportunitySheet): OpportunitySheet {
+    if (oppSheet) {
+      oppSheet.name = oppSheet.name + ' (copy)';
+      return oppSheet;
+    } else { return }
   }
 
-  //tank insulation reduction
-  addNewTankInsulationReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.tankInsulationReductionService.baselineData = undefined;
-    this.tankInsulationReductionService.modificationData = undefined;
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('tank-insulation-reduction');
-  }
-  editTankInsulationReductionsItem(tankInsulationReduction: TankInsulationReductionTreasureHunt, index: number) {
-    this.calcOpportunitySheet = tankInsulationReduction.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.itemIndex = index;
-    this.tankInsulationReductionService.baselineData = tankInsulationReduction.baseline;
-    this.tankInsulationReductionService.modificationData = tankInsulationReduction.modification;
-    this.selectedCalc.next('tank-insulation-reduction');
-  }
-  cancelTankInsulationReduction() {
-    this.calcOpportunitySheet = undefined;
-    this.tankInsulationReductionService.baselineData = undefined;
-    this.tankInsulationReductionService.modificationData = undefined;
-    this.cancelCalc();
-  }
 
-  //tank insulation reduction
-  addNewAirLeakSurvey() {
-    this.calcOpportunitySheet = undefined;
-    this.airLeakService.airLeakInput.next(undefined);
-    this.isNewOpportunity = true;
-    this.selectedCalc.next('air-leak-survey');
-  }
-  editAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt, index: number) {
-    this.calcOpportunitySheet = airLeakSurvey.opportunitySheet;
-    this.isNewOpportunity = false;
-    this.itemIndex = index;
-    this.airLeakService.airLeakInput.next(airLeakSurvey.airLeakSurveyInput);
-    this.selectedCalc.next('air-leak-survey');
-  }
-  cancelAirLeakSurvey() {
-    this.calcOpportunitySheet = undefined;
-    this.airLeakService.airLeakInput.next(undefined);
-    this.cancelCalc();
-  }
 }

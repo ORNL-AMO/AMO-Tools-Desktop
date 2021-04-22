@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity } from '../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { Settings } from '../shared/models/settings';
 
@@ -14,7 +14,9 @@ export class TreasureHuntService {
   getResults: BehaviorSubject<boolean>;
   updateMenuOptions: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private opportunityCardsService: OpportunityCardsService) {
+  constructor(
+    private opportunityCardsService: OpportunityCardsService
+    ) {
     this.mainTab = new BehaviorSubject<string>('system-basics');
     this.subTab = new BehaviorSubject<string>('settings');
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -281,25 +283,29 @@ export class TreasureHuntService {
   }
 
   //air leak survey
-  addNewAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    let treasureHunt: TreasureHunt = this.treasureHunt.value;
-    if (!treasureHunt.airLeakSurveys) {
-      treasureHunt.airLeakSurveys = new Array();
-    }
-    treasureHunt.airLeakSurveys.push(airLeakSurvey);
-    this.treasureHunt.next(treasureHunt);
-  }
-  editAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt, index: number, settings: Settings) {
-    let treasureHunt: TreasureHunt = this.treasureHunt.value;
-    treasureHunt.airLeakSurveys[index] = airLeakSurvey;
-    let updatedCard: OpportunityCardData = this.opportunityCardsService.getAirLeakSurveyCardData(airLeakSurvey, settings, index, treasureHunt.currentEnergyUsage);
-    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
-    this.treasureHunt.next(treasureHunt);
-  }
-  deleteAirLeakSurveyItem(index: number) {
-    let treasureHunt: TreasureHunt = this.treasureHunt.value;
-    treasureHunt.airLeakSurveys.splice(index, 1);
-    this.treasureHunt.next(treasureHunt);
-  }
+  // addNewAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt) {
+  //   let treasureHunt: TreasureHunt = this.treasureHunt.value;
+  //   if (!treasureHunt.airLeakSurveys) {
+  //     treasureHunt.airLeakSurveys = new Array();
+  //   }
+  //   treasureHunt.airLeakSurveys.push(airLeakSurvey);
+  //   this.treasureHunt.next(treasureHunt);
+  // }
+  
+  // editAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt, index: number, settings: Settings) {
+  //   let treasureHunt: TreasureHunt = this.treasureHunt.value;
+  //   treasureHunt.airLeakSurveys[index] = airLeakSurvey;
+  //   let updatedCard: OpportunityCardData = this.opportunityCardsService.getAirLeakSurveyCardData(airLeakSurvey, settings, index, treasureHunt.currentEnergyUsage);
+  //   this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+  //   this.treasureHunt.next(treasureHunt);
+  // }
+  // deleteAirLeakSurveyItem(index: number) {
+  //   let treasureHunt: TreasureHunt = this.treasureHunt.value;
+  //   treasureHunt.airLeakSurveys.splice(index, 1);
+  //   this.treasureHunt.next(treasureHunt);
+  // }
+
+
 
 }
+

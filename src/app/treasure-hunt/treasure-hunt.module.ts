@@ -29,6 +29,8 @@ import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
 import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { TreasureHuntCalculatorService } from './treasure-hunt-calculator-services/treasure-hunt-calculator.service';
+import { AirLeakTreasureHuntService } from './treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -64,7 +66,9 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     TreasureHuntReportService,
     OpportunityCardsService, 
     SortCardsService,
-    ConvertInputDataService
+    ConvertInputDataService,
+    TreasureHuntCalculatorService,
+    AirLeakTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

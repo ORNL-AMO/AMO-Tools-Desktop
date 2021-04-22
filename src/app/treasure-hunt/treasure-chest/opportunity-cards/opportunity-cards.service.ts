@@ -12,7 +12,9 @@ export class OpportunityCardsService {
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   updateOpportunityCards: BehaviorSubject<boolean>;
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) {
+  constructor(private opportunitySheetService: OpportunitySheetService, 
+    private opportunitySummaryService: OpportunitySummaryService
+    ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
     this.updateOpportunityCards = new BehaviorSubject<boolean>(true);
@@ -809,7 +811,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
   getAirLeakSurveyCardData(airLeakSurvey: AirLeakSurveyTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getAirLeakSurveySummary(airLeakSurvey, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(airLeakSurvey, index, settings);
     let unitStr: string;
     let currentCosts: number;
     //utilityType: 0 = Compressed Air, 1 = Electricity
@@ -865,8 +867,6 @@ export class OpportunityCardsService {
     }
   }
 }
-
-
 
 
 export interface OpportunityCardData {

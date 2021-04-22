@@ -102,7 +102,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-    this.emitSave.emit({ airLeakSurveyInput: this.airLeakService.airLeakInput.getValue() });
+    this.emitSave.emit({ airLeakSurveyInput: this.airLeakService.airLeakInput.getValue(), opportunityType: 'air-leak-survey'});
   }
 
   cancel() {

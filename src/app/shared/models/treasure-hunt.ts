@@ -90,6 +90,7 @@ export interface OtherCostItem {
     description?: string
 }
 
+
 export interface SteamReductionTreasureHunt {
     baseline: Array<SteamReductionData>;
     modification: Array<SteamReductionData>;
@@ -170,11 +171,25 @@ export interface WastewaterReductionTreasureHunt {
     selected?: boolean;
 }
 
-export interface AirLeakSurveyTreasureHunt {
+export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
-    opportunitySheet?: OpportunitySheet,
-    selected?: boolean
 }
+
+export interface TreasureHuntOpportunity {
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+    // opportunityType == calculator selector/name
+    opportunityType: string;
+}
+
+export interface TreasureHuntOpportunityResults {
+    costSavings: number,
+    energySavings: number,
+    baselineCost: number,
+    modificationCost: number,
+    utilityType: string,
+    opportunityDefaultName?: string
+  }
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
