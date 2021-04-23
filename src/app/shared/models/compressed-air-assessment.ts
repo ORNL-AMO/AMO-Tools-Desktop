@@ -4,7 +4,8 @@ export interface CompressedAirAssessment {
     modifications?: Modification[];
     selected?: boolean;
     systemBasics: CASystemBasics,
-    systemInformation: SystemInformation
+    systemInformation: SystemInformation,
+    compressorInventoryItems: Array<CompressorInventoryItem>
 }
 
 export interface Modification {
@@ -25,4 +26,65 @@ export interface SystemInformation {
     isSequencerUsed: boolean,
     targetPressure: number,
     variance: number
+}
+
+export interface CompressorInventoryItem {
+    itemId: string,
+    name: string,
+    nameplateData: CompressorNameplateData,
+    compressorControls: CompressorControls,
+    performanceData: PerformanceData,
+    designDetails: DesignDetails,
+    performancePoints: PerformancePoints
+
+}
+
+export interface CompressorNameplateData {
+    compressorType: string,
+    motorPower: number,
+    fullLoadOperatingPressure: number,
+    fullLoadRatedCapacity: number,
+    ratedLoadPower: number,
+    ploytropicCompressorExponent: number
+}
+
+export interface CompressorControls {
+    controlType: string,
+    unloadControls: UnloadControls
+}
+
+export interface UnloadControls {
+    unloadingPointCapacity: number,
+    numberOfUnloadingSteps: number,
+    shutdownTimer: boolean
+}
+
+export interface PerformanceData {
+    inletAtmosphericPressure: number
+}
+
+export interface DesignDetails {
+    blowdownTime: number,
+    unloadSlumpPressure: number,
+    modulatingPressureRange: number,
+    inputPressure: number,
+    surgeAirflow: number,
+    maxFullLoadPressure: number,
+    maxFullLoadCapacity: number,
+    minFullLoadPressure: number
+    minFullLoadCapacity: number,
+    designEfficiency: number
+}
+
+export interface PerformancePoints {
+    fullLoad: PerformancePoint,
+    maxFullFlow: PerformancePoint,
+    unloadPoint: PerformancePoint,
+    noLoad: PerformancePoint
+}
+
+export interface PerformancePoint {
+    dischargePressure: number,
+    airflow: number,
+    power: number
 }

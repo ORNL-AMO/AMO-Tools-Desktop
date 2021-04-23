@@ -355,7 +355,8 @@ export class AssessmentService {
         isSequencerUsed: false,
         targetPressure: undefined,
         variance: undefined
-      }
+      },
+      compressorInventoryItems: new Array(),
     }
   }
 

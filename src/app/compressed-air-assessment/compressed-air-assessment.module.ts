@@ -17,6 +17,11 @@ import { SystemProfileGraphsComponent } from './system-profile-graphs/system-pro
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
+import { ControlDataComponent } from './inventory/control-data/control-data.component';
+import { PerformanceComponent } from './inventory/performance/performance.component';
+import { DesignDetailsComponent } from './inventory/design-details/design-details.component';
+import { InventoryService } from './inventory/inventory.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +35,11 @@ import { SystemInformationFormService } from './system-information/system-inform
     InventoryComponent,
     SystemProfileSetupComponent,
     SystemProfileSummaryComponent,
-    SystemProfileGraphsComponent
+    SystemProfileGraphsComponent,
+    NameplateDataComponent,
+    ControlDataComponent,
+    PerformanceComponent,
+    DesignDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +50,8 @@ import { SystemInformationFormService } from './system-information/system-inform
   providers: [
     CompressedAirAssessmentService,
     SystemBasicsFormService,
-    SystemInformationFormService
+    SystemInformationFormService,
+    InventoryService
   ]
 })
 export class CompressedAirAssessmentModule { }
