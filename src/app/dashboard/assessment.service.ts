@@ -347,6 +347,14 @@ export class AssessmentService {
         electricityCost: settings.electricityCost,
         demandCost: .066,
         notes: undefined
+      },
+      systemInformation: {
+        nominalPressure: undefined,
+        systemElevation: undefined,
+        totalAirStorage: undefined,
+        isSequencerUsed: false,
+        targetPressure: undefined,
+        variance: undefined
       }
     }
   }

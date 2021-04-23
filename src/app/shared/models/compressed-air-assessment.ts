@@ -3,7 +3,8 @@ export interface CompressedAirAssessment {
     name?: string;
     modifications?: Modification[];
     selected?: boolean;
-    systemBasics: CASystemBasics
+    systemBasics: CASystemBasics,
+    systemInformation: SystemInformation
 }
 
 export interface Modification {
@@ -15,4 +16,13 @@ export interface CASystemBasics {
     electricityCost: number,
     demandCost: number,
     notes: string
+}
+
+export interface SystemInformation {
+    nominalPressure: number,
+    systemElevation: number,
+    totalAirStorage: number,
+    isSequencerUsed: boolean,
+    targetPressure: number,
+    variance: number
 }

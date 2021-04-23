@@ -16,6 +16,7 @@ import { SystemProfileSummaryComponent } from './system-profile-summary/system-p
 import { SystemProfileGraphsComponent } from './system-profile-graphs/system-profile-graphs.component';
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   providers: [
     CompressedAirAssessmentService,
-    SystemBasicsFormService
+    SystemBasicsFormService,
+    SystemInformationFormService
   ]
 })
 export class CompressedAirAssessmentModule { }
