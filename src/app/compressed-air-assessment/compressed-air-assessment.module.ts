@@ -14,6 +14,8 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './system-profile-summary/system-profile-summary.component';
 import { SystemProfileGraphsComponent } from './system-profile-graphs/system-profile-graphs.component';
+import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,10 +34,12 @@ import { SystemProfileGraphsComponent } from './system-profile-graphs/system-pro
   imports: [
     CommonModule,
     RouterModule,
-    SettingsModule
+    SettingsModule,
+    ReactiveFormsModule
   ],
   providers: [
-    CompressedAirAssessmentService
+    CompressedAirAssessmentService,
+    SystemBasicsFormService
   ]
 })
 export class CompressedAirAssessmentModule { }

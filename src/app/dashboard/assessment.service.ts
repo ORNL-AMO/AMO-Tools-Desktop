@@ -8,6 +8,7 @@ import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 
 declare const packageJson;
 @Injectable()
@@ -333,6 +334,19 @@ export class AssessmentService {
         TimeIncrement: .5,
         equipmentNotes: '',
         operatingMonths: 12
+      }
+    }
+  }
+
+  getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        demandCost: .066,
+        notes: undefined
       }
     }
   }

@@ -4,8 +4,10 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
+import { CASystemBasics, CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { SystemBasicsFormService } from './system-basics-form.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -26,12 +28,13 @@ export class SystemBasicsComponent implements OnInit {
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService,
+    private systemBasicsFormService: SystemBasicsFormService) { }
 
 
   ngOnInit() {
-    // let wasteWater: WasteWater = this.compressedAirAssessmentService..getValue();
-    // this.systemBasicsForm = this.systemBasicsService.getFormFromObj(wasteWater.systemBasics);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(compressedAirAssessment.systemBasics);
     let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
@@ -49,10 +52,10 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveSystemBasics() {
-    // let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    // let systemBasics: SystemBasics = this.systemBasicsService.getObjFromForm(this.systemBasicsForm);
-    // wasteWater.systemBasics = systemBasics;
-    // this.wasteWaterService.updateWasteWater(wasteWater);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let systemBasics: CASystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
+    compressedAirAssessment.systemBasics = systemBasics;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
   saveSettings() {

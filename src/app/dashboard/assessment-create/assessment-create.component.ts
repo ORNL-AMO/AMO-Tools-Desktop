@@ -139,7 +139,7 @@ export class AssessmentCreateComponent implements OnInit {
         let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.directory.id;
-        // tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
+        tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         this.addAssessment(tmpAssessment, '/compressed-air/');
       }
     }

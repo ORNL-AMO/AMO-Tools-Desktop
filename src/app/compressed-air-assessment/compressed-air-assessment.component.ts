@@ -5,6 +5,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
+import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 
@@ -26,11 +27,12 @@ export class CompressedAirAssessmentComponent implements OnInit {
   assessment: Assessment;
   settings: Settings;
   mainTab: string;
-  mainTabSubscription: Subscription;
+  mainTabSub: Subscription;
   setupTab: string;
-  setupTabSubscription: Subscription;
+  setupTabSub: Subscription;
   profileTab: string;
-  profileTabSubscription: Subscription;
+  profileTabSub: Subscription;
+  compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -39,7 +41,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      // this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -53,25 +55,32 @@ export class CompressedAirAssessmentComponent implements OnInit {
       // }
     });
 
-    this.mainTabSubscription = this.compressedAirAssessmentService.mainTab.subscribe(val => {
+    this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      if (val && this.assessment) {
+        this.save(val);
+      }
+    })
+
+    this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.setContainerHeight();
     });
 
-    this.setupTabSubscription = this.compressedAirAssessmentService.setupTab.subscribe(val => {
+    this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
       this.setContainerHeight();
     });
 
-    this.profileTabSubscription = this.compressedAirAssessmentService.profileTab.subscribe(val => {
+    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
       this.profileTab = val;
     })
   }
 
-  ngOnDestroy(){
-    this.mainTabSubscription.unsubscribe();
-    this.setupTabSubscription.unsubscribe();
-    this.profileTabSubscription.unsubscribe();
+  ngOnDestroy() {
+    this.mainTabSub.unsubscribe();
+    this.setupTabSub.unsubscribe();
+    this.profileTabSub.unsubscribe();
+    this.compressedAirAsseementSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -94,15 +103,15 @@ export class CompressedAirAssessmentComponent implements OnInit {
   }
 
 
-  initUpdateUnitsModal(){
-    
-  }
-
-  next(){
+  initUpdateUnitsModal() {
 
   }
 
-  back(){
+  next() {
+
+  }
+
+  back() {
 
   }
 
@@ -118,5 +127,12 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
+  }
+
+  save(compressedAirAssessment: CompressedAirAssessment) {
+    this.assessment.compressedAirAssessment = compressedAirAssessment;
+    this.indexedDbService.putAssessment(this.assessment).then(() => {
+      this.assessmentDbService.setAll();
+    });
   }
 }
