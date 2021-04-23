@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -14,6 +14,14 @@ import { CompressedAirAssessmentService } from './compressed-air-assessment.serv
   styleUrls: ['./compressed-air-assessment.component.css']
 })
 export class CompressedAirAssessmentComponent implements OnInit {
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
+  containerHeight: number;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setContainerHeight();
+  }
 
   assessment: Assessment;
   settings: Settings;
@@ -21,6 +29,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
   mainTabSubscription: Subscription;
   setupTab: string;
   setupTabSubscription: Subscription;
+  profileTab: string;
+  profileTabSubscription: Subscription;
+  disableNext: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService) { }
@@ -44,18 +55,31 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.mainTabSubscription = this.compressedAirAssessmentService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.setContainerHeight();
     });
 
     this.setupTabSubscription = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
+      this.setContainerHeight();
     });
+
+    this.profileTabSubscription = this.compressedAirAssessmentService.profileTab.subscribe(val => {
+      this.profileTab = val;
+    })
   }
 
   ngOnDestroy(){
     this.mainTabSubscription.unsubscribe();
     this.setupTabSubscription.unsubscribe();
+    this.profileTabSubscription.unsubscribe();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      // this.disclaimerToast();
+      this.setContainerHeight();
+    }, 100);
+  }
 
   addSettings(settings: Settings) {
     delete settings.id;
@@ -74,4 +98,25 @@ export class CompressedAirAssessmentComponent implements OnInit {
     
   }
 
+  next(){
+
+  }
+
+  back(){
+
+  }
+
+  setContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.offsetHeight;
+        let headerHeight = this.header.nativeElement.offsetHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.offsetHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      }, 100);
+    }
+  }
 }

@@ -86,7 +86,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   setInventoryStatus() {
-    if (this.setupTab == "inventory-status") {
+    if (this.setupTab == "inventory") {
       this.inventoryStatus = ["active"];
     } else {
       this.inventoryStatus = [];

@@ -28,7 +28,7 @@
             [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
     </li>
     <li [ngClass]="inventoryStatus">
-        <a (click)="changeSetupTab('inventory-status')">
+        <a (click)="changeSetupTab('inventory')">
             <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
                 class="step-number">5</span>Inventory</a>
         <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
