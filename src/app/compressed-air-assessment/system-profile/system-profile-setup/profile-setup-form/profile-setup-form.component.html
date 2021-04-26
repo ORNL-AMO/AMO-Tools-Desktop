@@ -1,0 +1,39 @@
+<form class="p-2" [formGroup]="form">
+    <div class="row m-0">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="dayType">Select Day Type</label>
+                <select class="form-control" id="dayType" formControlName="dayType" (focus)="focusField('dayType')"
+                    (change)="save()">
+                    <option [ngValue]="'IDK'">IDK</option>
+                    <option [ngValue]="'What'">What</option>
+                    <option [ngValue]="'To'">To</option>
+                    <option [ngValue]="'Put'">Put</option>
+                    <option [ngValue]="'Here'">Here</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="numberOfHours">Number of Hours</label>
+                <input class="form-control" id="numberOfHours" formControlName="numberOfHours"
+                    (focus)="focusField('numberOfHours')" (input)="save()" step="1" min="24">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="dataInterval">Data Interval</label>
+                <select class="form-control" id="dataInterval" formControlName="dataInterval"
+                    (focus)="focusField('dataInterval')" (change)="save()">
+                    <option [ngValue]="1">1 hr</option>
+                    <option [ngValue]="2">2 hr</option>
+                    <option [ngValue]=".5">30 min</option>
+                    <option [ngValue]=".25">15 min</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pressure Control Range</label>
+                <!--TODO: get range from inventory-->
+                <label>109 - 120 psig</label>
+            </div>
+        </div>
+    </div>
+</form>

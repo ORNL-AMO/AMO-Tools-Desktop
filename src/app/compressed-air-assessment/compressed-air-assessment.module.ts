@@ -11,9 +11,9 @@ import { SystemInformationComponent } from './system-information/system-informat
 import { DayTypesComponent } from './day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './inventory/inventory.component';
-import { SystemProfileSetupComponent } from './system-profile-setup/system-profile-setup.component';
-import { SystemProfileSummaryComponent } from './system-profile-summary/system-profile-summary.component';
-import { SystemProfileGraphsComponent } from './system-profile-graphs/system-profile-graphs.component';
+import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
+import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
+import { SystemProfileGraphsComponent } from './system-profile/system-profile-graphs/system-profile-graphs.component';
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
@@ -24,6 +24,10 @@ import { DesignDetailsComponent } from './inventory/design-details/design-detail
 import { InventoryService } from './inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { ProfileSetupFormComponent } from './system-profile/system-profile-setup/profile-setup-form/profile-setup-form.component';
+import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
+import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
+import { SystemProfileService } from './system-profile/system-profile.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,10 @@ import { InventoryTableComponent } from './results-panel/inventory-table/invento
     PerformanceComponent,
     DesignDetailsComponent,
     ResultsPanelComponent,
-    InventoryTableComponent
+    InventoryTableComponent,
+    ProfileSetupFormComponent,
+    CompressorOrderingTableComponent,
+    OperatingProfileTableComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +62,8 @@ import { InventoryTableComponent } from './results-panel/inventory-table/invento
     CompressedAirAssessmentService,
     SystemBasicsFormService,
     SystemInformationFormService,
-    InventoryService
+    InventoryService,
+    SystemProfileService
   ]
 })
 export class CompressedAirAssessmentModule { }
