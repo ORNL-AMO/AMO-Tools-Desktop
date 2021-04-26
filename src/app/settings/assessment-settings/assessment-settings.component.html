@@ -1,15 +1,20 @@
 <div class="row">
   <div class="col-10  mx-auto">
-    <div class="d-flex ml-auto navbar-container pull-right">
-      <div class="pl-2 pr-2">
-        <a [routerLink]="['/directory-dashboard', 1]"><span class="fa fa-folder pull-right"></span></a>
-      </div>
-      <div class="pl-2 pr-2 border-left">
-        <a [routerLink]="['/landing-screen']"><span class="fa fa-home pull-right"></span></a>
-      </div>
-    </div>
     <div class="tab-content content-container" *ngIf="settingsForm">
       <div class="card-form">
+        <div class="d-flex ml-auto justify-content-end p-1">
+          <div class="pl-1">
+            <button [routerLink]="['/directory-dashboard', 1]" class="btn btn-secondary action-btn">
+              <span class="fa fa-folder"></span>
+            </button>
+          </div>
+          <div class="pl-1">
+            <button [routerLink]="['/landing-screen']" class="btn btn-secondary action-btn">
+              <span class="fa fa-home"></span>
+            </button>
+          </div>
+        </div>
+        <hr class="my-1 hr-spacer">
         <div class="form-section">
           <!--add click event to call function that toggles section boolean-->
           <label class="group-label general" (click)="toggleGeneralSettings()">General Settings

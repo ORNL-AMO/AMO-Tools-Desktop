@@ -12,6 +12,10 @@
     border-bottom: groove 2px #808B96;
 }
 
+.btn{
+  padding: 6px;
+}
+
 .btn-danger{
     padding: 6px;
 }
@@ -24,10 +28,6 @@
     padding-top: 0.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
-}
-
-.navbar-container{
-    padding-top: 0.5rem;
 }
 
 .group-label:hover{
