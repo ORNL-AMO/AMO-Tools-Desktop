@@ -3,7 +3,7 @@
   [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'"
-  (emitCancel)="cancelStandaloneOpportunitySheet()" (emitSave)="saveStandaloneOpportunitySheet($event)"
+  (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveStandaloneOpportunitySheet($event)"
   [settings]="settings">
 </app-standalone-opportunity-sheet>
 
@@ -48,12 +48,12 @@
 </app-pipe-insulation-reduction>
 
 <app-tank-insulation-reduction *ngIf="selectedCalc == 'tank-insulation-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveTankInsulationReduction($event)" (emitCancel)="cancelTankInsulationReduction()" [settings]="settings"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours">
 </app-tank-insulation-reduction>
 
 <app-air-leak *ngIf="selectedCalc == 'air-leak-survey'" [inTreasureHunt]="true"
-  (emitSave)="saveAirLeakSurvey($event)" (emitCancel)="cancelAirLeakSurvey()" [settings]="settings"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours">
 </app-air-leak>
 

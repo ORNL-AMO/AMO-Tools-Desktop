@@ -68,7 +68,7 @@ export class SortCardsService {
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
       if (treasureHunt.lightingReplacements && treasureHunt.lightingReplacements.length != 0) {
-        lightingReplacements = this.sortLightingReplacements(treasureHunt.lightingReplacements, sortBy, treasureHunt);
+        lightingReplacements = this.sortLightingReplacements(treasureHunt.lightingReplacements, sortBy, treasureHunt, settings);
       }
     }
     let opportunitySheets: Array<OpportunitySheet> = [];
@@ -86,7 +86,7 @@ export class SortCardsService {
     let motorDrives: Array<MotorDriveInputsTreasureHunt> = [];
     if (allCalcTypes || hasMotorDrive) {
       if (treasureHunt.motorDrives && treasureHunt.motorDrives.length != 0) {
-        motorDrives = this.sortMotorDrives(treasureHunt.motorDrives, sortBy, treasureHunt);
+        motorDrives = this.sortMotorDrives(treasureHunt.motorDrives, sortBy, treasureHunt, settings);
       }
     }
     let naturalGasReductions: Array<NaturalGasReductionTreasureHunt> = [];
@@ -196,16 +196,16 @@ export class SortCardsService {
     return (isUtilityType && isCalcTypeIncluded && isTeamIncluded && isEquipmentIncluded);
   }
 
-  sortLightingReplacements(items: Array<LightingReplacementTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt): Array<LightingReplacementTreasureHunt> {
+  sortLightingReplacements(items: Array<LightingReplacementTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<LightingReplacementTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getLightingReplacementCardData(item, 0, treasureHunt.currentEnergyUsage);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getLightingReplacementCardData(item, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortOpportunitySheets(items: Array<OpportunitySheet>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySheet> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(item, treasureHunt.currentEnergyUsage, 0, settings);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(item, settings, 0, treasureHunt.currentEnergyUsage,);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
@@ -217,16 +217,16 @@ export class SortCardsService {
     });
   }
 
-  sortMotorDrives(items: Array<MotorDriveInputsTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt): Array<MotorDriveInputsTreasureHunt> {
+  sortMotorDrives(items: Array<MotorDriveInputsTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<MotorDriveInputsTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getMotorDriveCard(item, 0, treasureHunt.currentEnergyUsage);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getMotorDriveCard(item, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortNaturalGasReductions(items: Array<NaturalGasReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<NaturalGasReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getNaturalGasReductionCard(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getNaturalGasReductionCard(item, 0, treasureHunt.currentEnergyUsage,  settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
