@@ -5,7 +5,8 @@ export interface CompressedAirAssessment {
     selected?: boolean;
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
-    compressorInventoryItems: Array<CompressorInventoryItem>
+    compressorInventoryItems: Array<CompressorInventoryItem>,
+    systemProfile: SystemProfile
 }
 
 export interface Modification {
@@ -87,4 +88,15 @@ export interface PerformancePoint {
     dischargePressure: number,
     airflow: number,
     power: number
+}
+
+export interface SystemProfile {
+    systemProfileSetup: SystemProfileSetup
+}
+
+
+export interface SystemProfileSetup {
+    dayType: string,
+    numberOfHours: number,
+    dataInterval: 2 | 1 | .5 | .25
 }

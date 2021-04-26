@@ -357,6 +357,13 @@ export class AssessmentService {
         variance: undefined
       },
       compressorInventoryItems: new Array(),
+      systemProfile: {
+        systemProfileSetup: {
+          dayType: undefined,
+          numberOfHours: 24,
+          dataInterval: 1
+        }
+      }
     }
   }
 
