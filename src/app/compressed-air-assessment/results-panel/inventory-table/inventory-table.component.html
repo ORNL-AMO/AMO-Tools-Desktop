@@ -1,0 +1,29 @@
+<div class="p-2">
+    <table class="table table-sm table-striped table-hover" *ngIf="selectedCompressor && compressorInventoryItems">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
+                [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId}">
+                <td class="w-75">
+                    <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
+                        class="fa fa-chevron-right"></span>
+                    <a class="click-link"
+                        (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
+                </td>
+                <td class="w-25">
+                    <a class="fa fa-trash danger" (click)="deleteItem(compressorInventoryItem)"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="p-2 w-100 text-center">
+    <a class="click-link" (click)="addNewCompressor()">+Add New Compressor</a>
+</div>

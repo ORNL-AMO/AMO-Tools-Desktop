@@ -26,7 +26,7 @@ export class InventoryComponent implements OnInit {
         if (this.isFormChange == false) {
           this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name);
         } else {
-          this.isFormChange = true;
+          this.isFormChange = false;
         }
       }
     });

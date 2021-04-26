@@ -22,6 +22,8 @@ import { ControlDataComponent } from './inventory/control-data/control-data.comp
 import { PerformanceComponent } from './inventory/performance/performance.component';
 import { DesignDetailsComponent } from './inventory/design-details/design-details.component';
 import { InventoryService } from './inventory/inventory.service';
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { InventoryService } from './inventory/inventory.service';
     NameplateDataComponent,
     ControlDataComponent,
     PerformanceComponent,
-    DesignDetailsComponent
+    DesignDetailsComponent,
+    ResultsPanelComponent,
+    InventoryTableComponent
   ],
   imports: [
     CommonModule,
