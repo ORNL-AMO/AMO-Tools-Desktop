@@ -6,12 +6,13 @@ import * as _ from 'lodash';
 @Injectable()
 export class OpportunitySheetService {
 
+  defaultSheetName: string = 'New Opportunity';
   opportunitySheet: OpportunitySheet;
   constructor() { }
 
   initOpportunitySheet(): OpportunitySheet {
     return {
-      name: 'New Opportunity',
+      name: this.defaultSheetName,
       equipment: '',
       description: '',
       originator: '',

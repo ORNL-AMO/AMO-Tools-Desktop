@@ -37,55 +37,8 @@ export class FindTreasureComponent implements OnInit {
     this.treasureHuntSub.unsubscribe();
   }
 
-  selectLightingCalc() {
-    this.calculatorsService.addNewLighting();
+  openCalculator(calculatorType: string) {
+    this.calculatorsService.displaySelectedCalculator(calculatorType);
   }
 
-  selectReplaceExisting(){
-    this.calculatorsService.addNewReplaceExistingMotor();
-  }
-
-  selectMotorDrive(){
-    this.calculatorsService.addNewMotorDrive();
-  }
-
-  selectNaturalGas(){
-    this.calculatorsService.addNewNaturalGasReduction();
-  }  
-
-  selectElectricityReduction(){
-    this.calculatorsService.addNewElectricityReduction();
-  }
-
-  selectCompressedAirReduction(){
-    this.calculatorsService.addNewCompressedAirReduction();
-  }
-
-  selectCompressedAirPressureReduction(){
-    this.calculatorsService.addNewCompressedAirPressureReductions();
-  }
-
-  selectWaterReduction(){
-    this.calculatorsService.addNewWaterReduction();
-  }
-
-  selectOpportunitySheet(){
-    this.calculatorsService.addNewOpportunitySheet();
-  }
-
-  selectSteamReduction(){
-    this.calculatorsService.addNewSteamReduction();
-  }
-
-  selectPipeInsulationReduction(){
-    this.calculatorsService.addNewPipeInsulationReduction();
-  }
-
-  selectTankInsulationReduction(){
-    this.calculatorsService.addNewTankInsulationReduction();
-  }
-
-  selectAirLeakSurvey(){
-    this.calculatorsService.addNewAirLeakSurvey()
-  }
 }
