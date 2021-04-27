@@ -5,7 +5,7 @@ import { CompressedAirPressureReductionService } from './compressed-air-pressure
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FormBuilder } from '@angular/forms';
 import { CompressedAirPressureReductionResults, CompressedAirPressureReductionData } from '../../../shared/models/standalone';
-import { CompressedAirPressureReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-pressure-reduction',
@@ -194,7 +194,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
   
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAirPressure });
   }
 
   cancel() {

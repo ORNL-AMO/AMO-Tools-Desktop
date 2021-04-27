@@ -12,7 +12,9 @@ export class OpportunityCardsService {
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   updateOpportunityCards: BehaviorSubject<boolean>;
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) {
+  constructor(private opportunitySheetService: OpportunitySheetService, 
+    private opportunitySummaryService: OpportunitySummaryService
+    ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
     this.updateOpportunityCards = new BehaviorSubject<boolean>(true);
@@ -20,15 +22,15 @@ export class OpportunityCardsService {
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    let lightingReplacementsCardData: Array<OpportunityCardData> = this.getLightingReplacements(treasureHunt.lightingReplacements, treasureHunt.currentEnergyUsage);
-    let motorDrivesCardData: Array<OpportunityCardData> = this.getMotorDrives(treasureHunt.motorDrives, treasureHunt.currentEnergyUsage);
+    let lightingReplacementsCardData: Array<OpportunityCardData> = this.getLightingReplacements(treasureHunt.lightingReplacements, treasureHunt.currentEnergyUsage, settings);
+    let motorDrivesCardData: Array<OpportunityCardData> = this.getMotorDrives(treasureHunt.motorDrives, treasureHunt.currentEnergyUsage, settings);
     let replaceExistingData: Array<OpportunityCardData> = this.getReplaceExistingMotors(treasureHunt.replaceExistingMotors, treasureHunt.currentEnergyUsage, settings);
     let naturalGasReductionData: Array<OpportunityCardData> = this.getNaturalGasReductions(treasureHunt.naturalGasReductions, treasureHunt.currentEnergyUsage, settings);
     let electricityReductionData: Array<OpportunityCardData> = this.getElectricityReductions(treasureHunt.electricityReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirReductionData: Array<OpportunityCardData> = this.getCompressedAirReductions(treasureHunt.compressedAirReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirPressureReductionData: Array<OpportunityCardData> = this.getCompressedAirPressureReductions(treasureHunt.compressedAirPressureReductions, treasureHunt.currentEnergyUsage, settings);
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
-    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
+    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, treasureHunt.currentEnergyUsage, settings)
     let steamReductionData: Array<OpportunityCardData> = this.getSteamReductions(treasureHunt.steamReductions, treasureHunt.currentEnergyUsage, settings);
     let pipeInsulationReductionData: Array<OpportunityCardData> = this.getPipeInsulationReductions(treasureHunt.pipeInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let tankInsulationReductionData: Array<OpportunityCardData> = this.getTankInsulationReductions(treasureHunt.tankInsulationReductions, treasureHunt.currentEnergyUsage, settings);
@@ -45,12 +47,12 @@ export class OpportunityCardsService {
   }
 
   //lightingReplacement;
-  getLightingReplacements(lightingReplacements: Array<LightingReplacementTreasureHunt>, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getLightingReplacements(lightingReplacements: Array<LightingReplacementTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (lightingReplacements) {
       let index: number = 0;
       lightingReplacements.forEach(lightingReplacement => {
-        let cardData: OpportunityCardData = this.getLightingReplacementCardData(lightingReplacement, index, currentEnergyUsage);
+        let cardData: OpportunityCardData = this.getLightingReplacementCardData(lightingReplacement, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -58,8 +60,8 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getLightingReplacementCardData(lightingReplacement: LightingReplacementTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getLightingSummary(lightingReplacement, index);
+  getLightingReplacementCardData(lightingReplacement: LightingReplacementTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(lightingReplacement, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -89,12 +91,12 @@ export class OpportunityCardsService {
   }
 
   //opportunitySheets
-  getStandaloneOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, settings: Settings, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getStandaloneOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (opportunitySheets) {
       let index: number = 0;
       opportunitySheets.forEach(oppSheet => {
-        let cardData: OpportunityCardData = this.getOpportunitySheetCardData(oppSheet, currentEnergyUsage, index, settings);
+        let cardData: OpportunityCardData = this.getOpportunitySheetCardData(oppSheet, settings, index, currentEnergyUsage);
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -102,7 +104,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getOpportunitySheetCardData(oppSheet: OpportunitySheet, currentEnergyUsage: EnergyUsage, index: number, settings: Settings): OpportunityCardData {
+  getOpportunitySheetCardData(oppSheet: OpportunitySheet, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let results: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(oppSheet, settings);
     let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
@@ -294,7 +296,7 @@ export class OpportunityCardsService {
 
   getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
     // let results: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingMotor.replaceExistingData);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getReplaceExistingSummary(replaceExistingMotor, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(replaceExistingMotor, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -325,12 +327,12 @@ export class OpportunityCardsService {
   }
 
   //motorDrives
-  getMotorDrives(motorDrives: Array<MotorDriveInputsTreasureHunt>, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getMotorDrives(motorDrives: Array<MotorDriveInputsTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (motorDrives) {
       let index: number = 0;
       motorDrives.forEach(drive => {
-        let cardData: OpportunityCardData = this.getMotorDriveCard(drive, index, currentEnergyUsage);
+        let cardData: OpportunityCardData = this.getMotorDriveCard(drive, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       });
@@ -338,9 +340,9 @@ export class OpportunityCardsService {
     }
   }
 
-  getMotorDriveCard(drive: MotorDriveInputsTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+  getMotorDriveCard(drive: MotorDriveInputsTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
     // let results: MotorDriveOutputs = this.motorDriveService.getResults(drive.motorDriveInputs);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getMotorDriveSummary(drive, index);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(drive, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -374,7 +376,7 @@ export class OpportunityCardsService {
     if (naturalGasReductions) {
       let index: number = 0;
       naturalGasReductions.forEach(naturalGasReduction => {
-        let cardData: OpportunityCardData = this.getNaturalGasReductionCard(naturalGasReduction, settings, index, currentEnergyUsage);
+        let cardData: OpportunityCardData = this.getNaturalGasReductionCard(naturalGasReduction, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       });
@@ -382,9 +384,9 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getNaturalGasReductionCard(naturalGasReduction: NaturalGasReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+  getNaturalGasReductionCard(naturalGasReduction: NaturalGasReductionTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
     // let results: NaturalGasReductionResults = this.naturalGasReductionService.getResults(settings, naturalGasReduction.baseline, naturalGasReduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getNaturalGasReductionSummary(naturalGasReduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(naturalGasReduction, settings);
     let unitStr: string = 'MMBtu/yr';
     if (settings.unitsOfMeasure == 'Metric') {
       unitStr = 'MJ/yr';
@@ -432,7 +434,7 @@ export class OpportunityCardsService {
   }
   getElectricityReductionCard(reduction: ElectricityReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: ElectricityReductionResults = this.electricityReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getElectricityReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -477,7 +479,7 @@ export class OpportunityCardsService {
 
   getCompressedAirReductionCardData(reduction: CompressedAirReductionTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, index: number): OpportunityCardData {
     // let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let utilityCost: number = currentEnergyUsage.compressedAirCosts;
     let unitStr: string = 'kSCF'
     //electricity utility
@@ -531,7 +533,7 @@ export class OpportunityCardsService {
 
   getCompressedAirPressureReductionCardData(reduction: CompressedAirPressureReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirPressureReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -576,7 +578,7 @@ export class OpportunityCardsService {
 
   getWaterReductionCardData(reduction: WaterReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getWaterReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let utilityCost: number = currentEnergyUsage.waterCosts;
     let unitStr: string = 'm3';
     if (settings.unitsOfMeasure == 'Imperial') {
@@ -629,7 +631,7 @@ export class OpportunityCardsService {
 
   getSteamReductionCardData(reduction: SteamReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getSteamReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let unitStr: string = 'klb';
     if (settings.unitsOfMeasure == 'Imperial') {
       unitStr = 'tonnes';
@@ -691,7 +693,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
   getPipeInsulationReductionCardData(reduction: PipeInsulationReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getPipeInsulationReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let unitStr: string;
     let currentCosts: number;
     if (reduction.baseline.utilityType == 0) {
@@ -750,7 +752,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
   getTankInsulationReductionCardData(reduction: TankInsulationReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getTankInsulationReductionSummary(reduction, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
     let unitStr: string;
     let currentCosts: number;
     if (reduction.baseline.utilityType == 0) {
@@ -809,7 +811,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
   getAirLeakSurveyCardData(airLeakSurvey: AirLeakSurveyTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getAirLeakSurveySummary(airLeakSurvey, index, settings);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(airLeakSurvey, settings);
     let unitStr: string;
     let currentCosts: number;
     //utilityType: 0 = Compressed Air, 1 = Electricity
@@ -865,8 +867,6 @@ export class OpportunityCardsService {
     }
   }
 }
-
-
 
 
 export interface OpportunityCardData {
