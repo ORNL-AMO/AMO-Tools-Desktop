@@ -91,7 +91,8 @@ export interface PerformancePoint {
 }
 
 export interface SystemProfile {
-    systemProfileSetup: SystemProfileSetup
+    systemProfileSetup: SystemProfileSetup,
+    compressorOrdering: Array<CompressorOrderItem>;
 }
 
 
@@ -99,4 +100,11 @@ export interface SystemProfileSetup {
     dayType: string,
     numberOfHours: number,
     dataInterval: 2 | 1 | .5 | .25
+}
+
+
+export interface CompressorOrderItem {
+    compressorName: string,
+    compressorId: string,
+    orders: Array<number>
 }

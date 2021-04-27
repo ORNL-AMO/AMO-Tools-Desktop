@@ -1,1 +1,29 @@
-<p>compressor-ordering-table works!</p>
+<label class="group-label">
+    Compressor Ordering
+</label>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Compressor Name</th>
+            <th *ngFor="let interval of hourIntervals">
+                {{interval}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let compressor of compressorOrdering; let compressorIndex = index;">
+            <td class="bold">
+                {{compressor.compressorName}}
+            </td>
+            <td *ngFor="let compressorOrder of compressor.orders; let orderIndex = index;">
+                <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
+                    name="{{'order_'+compressorIndex+orderIndex}}" [(ngModel)]="compressorOrdering[compressorIndex].orders[orderIndex]">
+                    <option *ngFor="let orderingOption of orderingOptions" [value]="orderingOption">
+                        {{orderingOption}}
+                    </option>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>

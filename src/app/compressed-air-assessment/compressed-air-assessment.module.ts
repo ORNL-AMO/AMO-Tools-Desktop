@@ -15,7 +15,7 @@ import { SystemProfileSetupComponent } from './system-profile/system-profile-set
 import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
 import { SystemProfileGraphsComponent } from './system-profile/system-profile-graphs/system-profile-graphs.component';
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
 import { ControlDataComponent } from './inventory/control-data/control-data.component';
@@ -56,7 +56,8 @@ import { SystemProfileService } from './system-profile/system-profile.service';
     CommonModule,
     RouterModule,
     SettingsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     CompressedAirAssessmentService,

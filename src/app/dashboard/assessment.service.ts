@@ -362,7 +362,8 @@ export class AssessmentService {
           dayType: undefined,
           numberOfHours: 24,
           dataInterval: 1
-        }
+        },
+        compressorOrdering: new Array()
       }
     }
   }
