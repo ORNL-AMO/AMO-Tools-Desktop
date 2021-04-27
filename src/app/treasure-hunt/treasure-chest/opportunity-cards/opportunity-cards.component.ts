@@ -92,7 +92,6 @@ export class OpportunityCardsComponent implements OnInit {
   setDeleteOpportunity(cardOpportunity: OpportunityCardData) {
     this.modifyDataIndex = cardOpportunity.index;
     this.deleteOpportunityCard = cardOpportunity;
-    console.log(this.deleteOpportunityCard);
     this.showDeleteOpportunityModal();
   }
   showDeleteOpportunityModal() {

@@ -4,28 +4,47 @@ import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReduction
 import { Settings } from '../../shared/models/settings';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
-import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { TankInsulationTreasureHuntService } from '../treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
+import { LightingReplacementTreasureHuntService } from '../treasure-hunt-calculator-services/lighting-replacement-treasure-hunt.service';
+import { ReplaceExistingTreasureHuntService } from '../treasure-hunt-calculator-services/replace-existing-treasure-hunt.service';
+import { CaPressureReductionTreasureHuntService } from '../treasure-hunt-calculator-services/ca-pressure-reduction-treasure-hunt.service';
+import { CaReductionTreasureHuntService } from '../treasure-hunt-calculator-services/ca-reduction-treasure-hunt.service';
+import { ElectricityReductionTreasureHuntService } from '../treasure-hunt-calculator-services/electricity-reduction-treasure-hunt.service';
+import { MotorDriveTreasureHuntService } from '../treasure-hunt-calculator-services/motor-drive-treasure-hunt.service';
+import { NaturalGasReductionTreasureHuntService } from '../treasure-hunt-calculator-services/natural-gas-reduction-treasure-hunt.service';
+import { PipeInsulationTreasureHuntService } from '../treasure-hunt-calculator-services/pipe-insulation-treasure-hunt.service';
+import { SteamReductionTreasureHuntService } from '../treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
+import { WaterReductionTreasureHuntService } from '../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
 @Injectable()
 export class OpportunitySummaryService {
 
   constructor(private opportunitySheetService: OpportunitySheetService,
     private airLeakTreasureHuntService: AirLeakTreasureHuntService,
-    private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService
+    private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
+    private lightingTreasureHuntService: LightingReplacementTreasureHuntService,
+    private replaceExistingTreasureService: ReplaceExistingTreasureHuntService,
+    private motorDriveTreasureHuntService: MotorDriveTreasureHuntService,
+    private naturalGasTreasureHuntService: NaturalGasReductionTreasureHuntService,
+    private electricityReductionTreasureHuntService: ElectricityReductionTreasureHuntService,
+    private compressedAirTreasureHuntService: CaReductionTreasureHuntService,
+    private compressedAirPressureTreasureHuntService: CaPressureReductionTreasureHuntService,
+    private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
+    private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
+    private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
     ) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.lightingReplacements, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.replaceExistingMotors, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.motorDrives, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.naturalGasReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.electricityReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.compressedAirReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.compressedAirPressureReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.waterReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.steamReductions, opportunitySummaries, settings);
-    // opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.pipeInsulationReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.lightingReplacements, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.replaceExistingMotors, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.motorDrives, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.naturalGasReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.electricityReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.compressedAirReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.compressedAirPressureReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.waterReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.steamReductions, opportunitySummaries, settings);
+    opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.pipeInsulationReductions, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.tankInsulationReductions, opportunitySummaries, settings);
     opportunitySummaries = this.getTreasureHuntOpportunitySummaries(treasureHunt.airLeakSurveys, opportunitySummaries, settings);
     //standalone opp sheets
@@ -47,16 +66,6 @@ export class OpportunitySummaryService {
     return opportunitySummaries;
   }
 
-    
-  getEquipmentDisplay2(equipment): string {
-    if (equipment) {
-      let findEquipment = processEquipmentOptions.find(option => { return option.value == equipment });
-      if (findEquipment) {
-        return findEquipment.display;
-      }
-    }
-    return
-  }
 
   getOpportunityMetaData(opportunitySheet: OpportunitySheet): OpportunityMetaData {
     let teamData = {
@@ -114,17 +123,54 @@ export class OpportunitySummaryService {
   
   getCalculatorTreasureHuntResults(treasureHuntOpportunity: TreasureHuntOpportunity, settings: Settings): TreasureHuntOpportunityResults {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults; 
-    if (treasureHuntOpportunity.opportunityType === Treasure.tankInsulation) {
-      let tankInsulationOpportunity = treasureHuntOpportunity as TankInsulationReductionTreasureHunt;
-      treasureHuntOpportunityResults = this.tankInsulationTreasureHuntService.getTreasureHuntOpportunityResults(tankInsulationOpportunity, settings);
-    } else if (treasureHuntOpportunity.opportunityType === '') {
-    }
-    
-    
-    else if (treasureHuntOpportunity.opportunityType === Treasure.airLeak) {
+    if (treasureHuntOpportunity.opportunityType === Treasure.airLeak) {
       let airLeakSurveyOpportunity = treasureHuntOpportunity as AirLeakSurveyTreasureHunt;
       treasureHuntOpportunityResults = this.airLeakTreasureHuntService.getTreasureHuntOpportunityResults(airLeakSurveyOpportunity, settings);
-    } 
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.tankInsulation) {
+      let tankInsulationOpportunity = treasureHuntOpportunity as TankInsulationReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.tankInsulationTreasureHuntService.getTreasureHuntOpportunityResults(tankInsulationOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.lightingReplacement) {
+      let lightingReplacementOpportunity = treasureHuntOpportunity as LightingReplacementTreasureHunt;
+      treasureHuntOpportunityResults = this.lightingTreasureHuntService.getTreasureHuntOpportunityResults(lightingReplacementOpportunity);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.replaceExisting) {
+      let replaceExistingMotorOpportunity = treasureHuntOpportunity as ReplaceExistingMotorTreasureHunt;
+      treasureHuntOpportunityResults = this.replaceExistingTreasureService.getTreasureHuntOpportunityResults(replaceExistingMotorOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.motorDrive) {
+      let motorDriveOpportunity = treasureHuntOpportunity as MotorDriveInputsTreasureHunt;
+      treasureHuntOpportunityResults = this.motorDriveTreasureHuntService.getTreasureHuntOpportunityResults(motorDriveOpportunity);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.naturalGasReduction) {
+      let naturalGasOpportunity = treasureHuntOpportunity as NaturalGasReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.naturalGasTreasureHuntService.getTreasureHuntOpportunityResults(naturalGasOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.electricityReduction) {
+      let electricityReductionOpportunity = treasureHuntOpportunity as ElectricityReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.electricityReductionTreasureHuntService.getTreasureHuntOpportunityResults(electricityReductionOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.compressedAir) {
+      let compressedAirOpportunity = treasureHuntOpportunity as CompressedAirReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.compressedAirTreasureHuntService.getTreasureHuntOpportunityResults(compressedAirOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.compressedAirPressure) {
+      let compressedAirPressureOpportunity = treasureHuntOpportunity as CompressedAirPressureReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.compressedAirPressureTreasureHuntService.getTreasureHuntOpportunityResults(compressedAirPressureOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.waterReduction) {
+      let waterReductionOpportunity = treasureHuntOpportunity as WaterReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.waterReductionTreasureHuntService.getTreasureHuntOpportunityResults(waterReductionOpportunity, settings);
+
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.steamReduction) {
+      let steamReductionOpportunity = treasureHuntOpportunity as SteamReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.steamReductionTreasureHuntService.getTreasureHuntOpportunityResults(steamReductionOpportunity, settings);
+    
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.pipeInsulation) {
+      let pipeInsulationOpportunity = treasureHuntOpportunity as PipeInsulationReductionTreasureHunt;
+      treasureHuntOpportunityResults = this.pipeInsulationTreasureHuntService.getTreasureHuntOpportunityResults(pipeInsulationOpportunity, settings);
+    }
 
     return treasureHuntOpportunityResults;
   }

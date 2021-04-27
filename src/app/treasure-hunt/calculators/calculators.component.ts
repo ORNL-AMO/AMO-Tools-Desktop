@@ -1,14 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, OpportunitySheet, TankInsulationReductionTreasureHunt, Treasure } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, TankInsulationReductionTreasureHunt, Treasure, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
-import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
-import { StandaloneOpportunitySheetService } from '../treasure-hunt-calculator-services/standalone-opportunity-sheet.service';
-import { TankInsulationTreasureHuntService } from '../treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
+import { TreasureHuntOpportunityService } from '../treasure-hunt-calculator-services/treasure-hunt-opportunity.service';
 
 @Component({
   selector: 'app-calculators',
@@ -33,12 +30,10 @@ export class CalculatorsComponent implements OnInit {
   currentOpportunity: TreasureHuntOpportunity;
   standaloneOpportunitySheet: OpportunitySheet;
 
-  constructor(private calculatorsService: CalculatorsService,
-    private opportunityCardsService: OpportunityCardsService,
-    private airLeakTreasureHuntService: AirLeakTreasureHuntService,
-    private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
-    private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
-    private treasureHuntService: TreasureHuntService) { }
+  constructor(private calculatorsService: CalculatorsService, 
+    private treasureHuntOpportunityService: TreasureHuntOpportunityService,
+     private treasureHuntService: TreasureHuntService
+    ) { }
 
   ngOnInit() {
     this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
@@ -85,7 +80,7 @@ export class CalculatorsComponent implements OnInit {
   saveOpportunity(treasureHuntOpportunity: TreasureHuntOpportunity) {
     this.currentOpportunity = treasureHuntOpportunity;
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    if (this.mainTab == 'find-treasure' && this.selectedCalc != Treasure.opportunitySheet) {
+    if (this.mainTab == 'find-treasure' && this.selectedCalc !== Treasure.opportunitySheet) {
       this.showOpportunitySheetModal();
     } else {
       this.showSaveCalcModal();
@@ -93,7 +88,7 @@ export class CalculatorsComponent implements OnInit {
   }
 
   confirmSaveCalc() {
-    if (this.selectedCalc == Treasure.opportunitySheet) {
+    if (this.selectedCalc === Treasure.opportunitySheet) {
       this.standaloneOpportunitySheet.selected = true;
     } else {
       this.currentOpportunity.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
@@ -110,7 +105,7 @@ export class CalculatorsComponent implements OnInit {
 
   initSaveCalc() {
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    if (this.mainTab == 'find-treasure' && this.selectedCalc != Treasure.opportunitySheet) {
+    if (this.mainTab == 'find-treasure' && this.selectedCalc !== Treasure.opportunitySheet) {
       this.showOpportunitySheetModal();
     } else {
       this.showSaveCalcModal();
@@ -122,58 +117,16 @@ export class CalculatorsComponent implements OnInit {
     this.calculatorsService.selectedCalc.next('none');
   }
 
-
   saveTreasureHuntOpportunity() {
-    let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    if (this.selectedCalc === Treasure.airLeak) {
-      let airLeakSurveyOpportunity = this.currentOpportunity as AirLeakSurveyTreasureHunt;
-      treasureHunt = this.airLeakTreasureHuntService.saveTreasureHuntOpportunity(airLeakSurveyOpportunity, treasureHunt);
-    } else if (this.selectedCalc === Treasure.tankInsulation) {
-      let tankInsulationReductionTreasureHunt = this.currentOpportunity as TankInsulationReductionTreasureHunt;
-      treasureHunt = this.tankInsulationTreasureHuntService.saveTreasureHuntOpportunity(tankInsulationReductionTreasureHunt, treasureHunt);
-    } else if (this.selectedCalc === Treasure.opportunitySheet) {
-      treasureHunt = this.standaloneOpportunitySheetService.saveTreasureHuntOpportunity(this.standaloneOpportunitySheet, treasureHunt);
-    } 
-
-    this.treasureHuntService.treasureHunt.next(treasureHunt);
+    this.treasureHuntOpportunityService.saveTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.standaloneOpportunitySheet)
   }
 
   cancelTreasureHuntOpportunity() {
-    this.calculatorsService.calcOpportunitySheet = undefined
-    if (this.selectedCalc === Treasure.airLeak) {
-      this.airLeakTreasureHuntService.resetCalculatorInputs();
-    } else if (this.selectedCalc === Treasure.tankInsulation) {
-      this.tankInsulationTreasureHuntService.resetCalculatorInputs();
-    }  else if (this.selectedCalc === Treasure.opportunitySheet) {
-      this.calculatorsService.cancelOpportunitySheet();
-    }
-    
-
-    this.calculatorsService.itemIndex = undefined;
-    this.calculatorsService.selectedCalc.next('none');
+    this.treasureHuntOpportunityService.cancelTreasureHuntOpportunity(this.selectedCalc);
   }
 
   updateTreasureHuntOpportunity() {
-    let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    let updatedCard: OpportunityCardData;
-    if (this.selectedCalc === Treasure.airLeak) {
-      let airLeakSurveyOpportunity = this.currentOpportunity as AirLeakSurveyTreasureHunt;
-      treasureHunt.airLeakSurveys[this.calculatorsService.itemIndex] = airLeakSurveyOpportunity;
-      updatedCard = this.opportunityCardsService.getAirLeakSurveyCardData(airLeakSurveyOpportunity, this.settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
-    
-    } else if (this.selectedCalc === Treasure.tankInsulation) {
-      let tankInsulationOpportunity = this.currentOpportunity as TankInsulationReductionTreasureHunt;
-      treasureHunt.tankInsulationReductions[this.calculatorsService.itemIndex] = tankInsulationOpportunity;
-      updatedCard = this.opportunityCardsService.getTankInsulationReductionCardData(tankInsulationOpportunity, this.settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
-    
-    } else if (this.selectedCalc === Treasure.opportunitySheet) {
-      treasureHunt.opportunitySheets[this.calculatorsService.itemIndex] = this.standaloneOpportunitySheet;
-      updatedCard = this.opportunityCardsService.getOpportunitySheetCardData(this.standaloneOpportunitySheet, this.settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
-   
-    }
-    
-    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
-    this.treasureHuntService.treasureHunt.next(treasureHunt);
+    this.treasureHuntOpportunityService.updateTreasureHuntOpportunity(this.currentOpportunity, this.selectedCalc, this.settings, this.standaloneOpportunitySheet);
   }
 
   saveStandaloneOpportunitySheet(opportunitySheet: OpportunitySheet) {
