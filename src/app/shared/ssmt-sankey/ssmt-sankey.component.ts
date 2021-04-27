@@ -49,6 +49,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
 
   // node/link not rendered or too small to see
   minPlotlyDisplayValue = .2;
+  hasLowPressureVentLoss: boolean;
 
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
     private _dom: ElementRef,
@@ -255,7 +256,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   buildNodes(): Array<SSMTSankeyNode> {
     this.nodes = [];
     let energyInput = this.losses.fuelEnergy + this.losses.makeupWaterEnergy;
-    let stackLosses = this.losses.stack + this.losses.blowdown;
+    let stackLosses = this.losses.stack;
+    let blowdownLosses = this.losses.blowdown;
     let turbineLosses = this.losses.condensingTurbineEfficiencyLoss + this.losses.highToMediumTurbineEfficiencyLoss + this.losses.highToLowTurbineEfficiencyLoss + this.losses.mediumToLowTurbineEfficiencyLoss + this.losses.condensingLosses
     let turbineGeneration = this.losses.condensingTurbineUsefulEnergy + this.losses.highToLowTurbineUsefulEnergy + this.losses.highToMediumTurbineUsefulEnergy + this.losses.mediumToLowTurbineUsefulEnergy;
     let processUsage = this.losses.highPressureProcessUsage + this.losses.mediumPressureProcessUsage + this.losses.lowPressureProcessUsage;
@@ -263,7 +265,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     
 
     let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss;
-    if (!isNaN(this.losses.lowPressureVentLoss)) {
+    this.hasLowPressureVentLoss = !isNaN(this.losses.lowPressureVentLoss);
+    if (this.hasLowPressureVentLoss) {
       otherLosses + this.losses.lowPressureVentLoss;
     }
     // Returned condensate and steam
@@ -281,6 +284,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     energyInputValue += returnedCondensateValue;
     
     let stackLossValue = (stackLosses / energyInput) * 100;
+    let blowdownLossValue = (blowdownLosses / energyInput) * 100;
     let otherLossValue = (otherLosses / energyInput) * 100;
     let turbineLossValue = (turbineLosses / energyInput) * 100;
     let turbineGenerationValue = (turbineGeneration / energyInput) * 100;
@@ -367,6 +371,35 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
             {
               name: 'Stack Loss',
               text: `${this.decimalPipe.transform(stackLosses, '1.0-0')} ${this.units}/hr (${this.decimalPipe.transform(stackLossValue, '1.1-2')}%)`,
+            }
+          );
+        }
+    }
+
+    if (blowdownLossValue > 0) {
+      if (blowdownLossValue > this.minPlotlyDisplayValue) {
+        this.nodes.push(
+          {
+            name: this.getNameLabel("Blowdown Loss", blowdownLosses, blowdownLossValue),
+            value: blowdownLossValue,
+            x: .6,
+            y: .15,
+            source: currentSourceIndex,
+            target: [],
+            isConnector: false,
+            nodeColor: this.gradientRed,
+            id: 'blowdownLoss'
+          }
+          );
+          lossConnectorTargets.push(currentSourceIndex);
+          this.redLinkPaths.push(currentSourceIndex);
+          totalLosses += blowdownLosses;
+          currentSourceIndex++;
+        } else {
+          this.minLosses.push(
+            {
+              name: 'Blowdown Loss',
+              text: `${this.decimalPipe.transform(blowdownLosses, '1.0-0')} ${this.units}/hr (${this.decimalPipe.transform(blowdownLossValue, '1.1-2')}%)`,
             }
           );
         }
