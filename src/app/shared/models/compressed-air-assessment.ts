@@ -41,7 +41,7 @@ export interface CompressorInventoryItem {
 }
 
 export interface CompressorNameplateData {
-    compressorType: string,
+    compressorType: number,
     motorPower: number,
     fullLoadOperatingPressure: number,
     fullLoadRatedCapacity: number,
@@ -50,14 +50,10 @@ export interface CompressorNameplateData {
 }
 
 export interface CompressorControls {
-    controlType: string,
-    unloadControls: UnloadControls
-}
-
-export interface UnloadControls {
-    unloadingPointCapacity: number,
-    numberOfUnloadingSteps: number,
-    shutdownTimer: boolean
+    controlType: number,
+    unloadPoint: number,
+    numberOfUnloadSteps: number,
+    automaticShutdown: boolean
 }
 
 export interface PerformanceData {

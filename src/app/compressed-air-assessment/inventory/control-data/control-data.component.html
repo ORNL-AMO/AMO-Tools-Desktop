@@ -1,1 +1,57 @@
-<p>control-data works!</p>
+<label class="group-label">Controls</label>
+<form [formGroup]="form">
+    <!-- controlType -->
+    <div class="form-group">
+        <label for="controlType">Control Type</label>
+        <select id="controlType" name="controlType" formControlName="controlType" (change)="changeControlType()"
+            (focus)="focusField('controlType')" class="form-control">
+            <option *ngFor="let controlTypeOption of controlTypeOptions" [ngValue]="controlTypeOption.value">
+                {{controlTypeOption.label}}</option>
+        </select>
+    </div>
+    <!--control type: 1 Inlet modulation without unloading-->
+    <!--control type: 2 Inlet modulation with unloading-->
+    <!--control type: 3 Variable displacement with unloading-->
+    <!--control type: 4 Load/unload-->
+    <!--control type: 6 Start/Stop-->
+    <!--control type: 7 Multi-step unloading-->
+    <label class="group-label secondary-group" *ngIf="displayUnload">Unload Controls</label>
+    <!-- unloadPoint -->
+    <div class="form-group" *ngIf="displayUnload">
+        <label for="unloadPoint">Unload Point Capacity</label>
+        <div class="input-group">
+            <input name="unloadPoint" type="number" step="any" class="form-control" id="unloadPoint"
+                formControlName="unloadPoint" (change)="save()" (focus)="focusField('unloadPoint')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- numberOfUnloadSteps -->
+    <div class="form-group" *ngIf="displayUnload">
+        <label for="numberOfUnloadSteps"># of Unloading Steps</label>
+        <div class="input-group">
+            <input name="numberOfUnloadSteps" type="number" step="any" class="form-control" id="numberOfUnloadSteps"
+                formControlName="numberOfUnloadSteps" (change)="save()" (focus)="focusField('numberOfUnloadSteps')">
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- automaticShutdown -->
+    <div class="form-group" *ngIf="displayAutomaticShutdown">
+        <label for="automaticShutdown">Automatic Shutdown Timer</label>
+        <select id="automaticShutdown" name="automaticShutdown" formControlName="automaticShutdown" (change)="save()"
+            (focus)="focusField('automaticShutdown')" class="form-control">
+            <option [value]="true">Yes</option>
+            <option [value]="false">No</option>
+        </select>
+    </div>
+</form>

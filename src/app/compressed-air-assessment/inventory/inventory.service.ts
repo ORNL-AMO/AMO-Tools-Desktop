@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CompressorControls, CompressorInventoryItem, CompressorNameplateData, UnloadControls } from '../../shared/models/compressed-air-assessment';
+import { CompressorControls, CompressorInventoryItem, CompressorNameplateData } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class InventoryService {
@@ -26,11 +26,9 @@ export class InventoryService {
       },
       compressorControls: {
         controlType: undefined,
-        unloadControls: {
-          unloadingPointCapacity: undefined,
-          numberOfUnloadingSteps: undefined,
-          shutdownTimer: false
-        }
+        unloadPoint: 100,
+        numberOfUnloadSteps: 2,
+        automaticShutdown: false
       },
       performanceData: {
         inletAtmosphericPressure: undefined
@@ -106,32 +104,50 @@ export class InventoryService {
 
   //CompressorControls
   getCompressorControlsFormFromObj(compressorControls: CompressorControls): FormGroup {
+    // control type: 1 Inlet modulation without unloading
+    // control type: 2 Inlet modulation with unloading
+    // control type: 3 Variable displacement with unloading
+    // control type: 4 Load/unload
+    // control type: 6 Start/Stop
+    // control type: 7 Multi-step unloading
     let form: FormGroup = this.formBuilder.group({
-      controlType: [compressorControls.controlType]
+      controlType: [compressorControls.controlType],
+      unloadPoint: [compressorControls.unloadPoint],
+      numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
+      automaticShutdown: [compressorControls.automaticShutdown]
     });
+    form = this.setCompressorControlValidators(form);
     return form;
   }
 
-  getCompressorControlsObjFromForm(form: FormGroup, compressorControls: CompressorControls): CompressorControls {
-    compressorControls.controlType = form.controls.controlType.value;
-    return compressorControls;
-  }
-
-  getUnloadControlsFormFromObj(unloadControls: UnloadControls): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      unloadingPointCapacity: [unloadControls.unloadingPointCapacity],
-      numberOfUnloadingSteps: [unloadControls.numberOfUnloadingSteps],
-      shutdownTimer: [unloadControls.shutdownTimer]
-    });
-    return form;
-  }
-
-  getUnloadControlsObjFromForm(form: FormGroup): UnloadControls {
-    return {
-      unloadingPointCapacity: form.controls.unloadingPointCapacity.value,
-      numberOfUnloadingSteps: form.controls.numberOfUnloadingSteps.value,
-      shutdownTimer: form.controls.shutdownTimer.value,
+  setCompressorControlValidators(form: FormGroup): FormGroup {
+    if (form.controls.controlType.value && (form.controls.controlType.value == 2 || form.controls.controlType.value == 3
+      || form.controls.controlType.value == 4 || form.controls.controlType.value == 6 || form.controls.controlType.value == 7)) {
+      form.controls.unloadPoint.setValidators([Validators.required]);
+      form.controls.numberOfUnloadSteps.setValidators([Validators.required]);
+      if (form.controls.controlType.value != 6) {
+        form.controls.automaticShutdown.setValidators([Validators.required]);
+      } else {
+        form.controls.automaticShutdown.setValidators([]);
+      }
+    } else {
+      form.controls.automaticShutdown.setValidators([]);
+      form.controls.unloadPoint.setValidators([]);
+      form.controls.numberOfUnloadSteps.setValidators([]);
     }
+    form.controls.unloadPoint.updateValueAndValidity();
+    form.controls.numberOfUnloadSteps.updateValueAndValidity();
+    form.controls.automaticShutdown.updateValueAndValidity();
+
+    return form;
   }
 
+  getCompressorControlsObjFromForm(form: FormGroup): CompressorControls {
+    return {
+      controlType: form.controls.controlType.value,
+      unloadPoint: form.controls.unloadPoint.value,
+      numberOfUnloadSteps: form.controls.numberOfUnloadSteps.value,
+      automaticShutdown: form.controls.automaticShutdown.value
+    };
+  }
 }
