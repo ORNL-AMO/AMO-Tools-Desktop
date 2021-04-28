@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CompressorControls, CompressorInventoryItem, CompressorNameplateData } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class InventoryService {
@@ -38,12 +38,14 @@ export class InventoryService {
         unloadSlumpPressure: undefined,
         modulatingPressureRange: undefined,
         inputPressure: undefined,
+        designEfficiency: undefined
+      },
+      centrifugalSpecifics: {
         surgeAirflow: undefined,
         maxFullLoadPressure: undefined,
         maxFullLoadCapacity: undefined,
         minFullLoadPressure: undefined,
-        minFullLoadCapacity: undefined,
-        designEfficiency: undefined
+        minFullLoadCapacity: undefined
       },
       performancePoints: {
         fullLoad: {
@@ -150,4 +152,27 @@ export class InventoryService {
       automaticShutdown: form.controls.automaticShutdown.value
     };
   }
+
+
+  getCentrifugalFormFromObj(centrifugalSpecifics: CentrifugalSpecifics): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      surgeAirflow: [centrifugalSpecifics.surgeAirflow],
+      maxFullLoadPressure: [centrifugalSpecifics.maxFullLoadPressure],
+      maxFullLoadCapacity: [centrifugalSpecifics.maxFullLoadCapacity],
+      minFullLoadPressure: [centrifugalSpecifics.minFullLoadPressure],
+      minFullLoadCapacity: [centrifugalSpecifics.minFullLoadCapacity],
+    });
+    return form;
+  }
+
+  getCentrifugalObjFromForm(form: FormGroup): CentrifugalSpecifics {
+    return {
+      surgeAirflow: form.controls.surgeAirflow.value,
+      maxFullLoadPressure: form.controls.maxFullLoadPressure.value,
+      maxFullLoadCapacity: form.controls.maxFullLoadCapacity.value,
+      minFullLoadPressure: form.controls.minFullLoadPressure.value,
+      minFullLoadCapacity: form.controls.minFullLoadCapacity.value,      
+    };
+  }
+
 }

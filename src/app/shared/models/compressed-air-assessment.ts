@@ -36,7 +36,8 @@ export interface CompressorInventoryItem {
     compressorControls: CompressorControls,
     performanceData: PerformanceData,
     designDetails: DesignDetails,
-    performancePoints: PerformancePoints
+    performancePoints: PerformancePoints,
+    centrifugalSpecifics: CentrifugalSpecifics
 
 }
 
@@ -65,11 +66,6 @@ export interface DesignDetails {
     unloadSlumpPressure: number,
     modulatingPressureRange: number,
     inputPressure: number,
-    surgeAirflow: number,
-    maxFullLoadPressure: number,
-    maxFullLoadCapacity: number,
-    minFullLoadPressure: number
-    minFullLoadCapacity: number,
     designEfficiency: number
 }
 
@@ -103,4 +99,12 @@ export interface CompressorOrderItem {
     compressorName: string,
     compressorId: string,
     orders: Array<number>
+}
+
+export interface CentrifugalSpecifics {
+    surgeAirflow: number,
+    maxFullLoadPressure: number,
+    maxFullLoadCapacity: number,
+    minFullLoadPressure: number
+    minFullLoadCapacity: number
 }

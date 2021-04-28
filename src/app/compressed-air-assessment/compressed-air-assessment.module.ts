@@ -28,6 +28,7 @@ import { ProfileSetupFormComponent } from './system-profile/system-profile-setup
 import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
 import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
 import { SystemProfileService } from './system-profile/system-profile.service';
+import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics/centrifugal-specifics.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SystemProfileService } from './system-profile/system-profile.service';
     InventoryTableComponent,
     ProfileSetupFormComponent,
     CompressorOrderingTableComponent,
-    OperatingProfileTableComponent
+    OperatingProfileTableComponent,
+    CentrifugalSpecificsComponent
   ],
   imports: [
     CommonModule,
