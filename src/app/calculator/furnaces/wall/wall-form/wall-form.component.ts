@@ -7,6 +7,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { WallLoss, WallLossOutput, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WallFormService } from '../wall-form.service';
 import { WallService } from '../wall.service';
 
@@ -16,7 +17,8 @@ import { WallService } from '../wall.service';
   styleUrls: ['./wall-form.component.css']
 })
 export class WallFormComponent implements OnInit {
-
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -37,6 +39,7 @@ export class WallFormComponent implements OnInit {
   }
 
   surfaceOptions: Array<WallLossesSurface>;
+  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
   showSurfaceModal: boolean = false;
 
   wallLossesForm: FormGroup;
@@ -59,6 +62,7 @@ export class WallFormComponent implements OnInit {
     private suiteDbService: SuiteDbService,
     private cd: ChangeDetectorRef,
     private wallService: WallService) { }
+
   ngOnInit(): void {
     if (!this.isBaseline) {
       this.idString = '_modification_' + this.index;
@@ -75,6 +79,10 @@ export class WallFormComponent implements OnInit {
     } else {
       this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
     }
+    if (this.inTreasureHunt) {
+      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
+    }
+    this.setEnergySource();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -143,6 +151,9 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm.enable();
     }
 
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.wallLossesForm.controls.energySourceType.disable();
+    }
     if (this.index > 0) {
       this.wallLossesForm.controls.hoursPerYear.disable();
       this.wallLossesForm.controls.fuelCost.disable();
@@ -150,14 +161,16 @@ export class WallFormComponent implements OnInit {
     }
   }
 
-  setEnergySource(energySourceType: string) {
-    this.wallLossesForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.wallService.getAnnualEnergyUnit(energySourceType, this.settings);
+  setEnergySource(baselineEnergySource?: string) {
+    if (baselineEnergySource) {
+      this.wallLossesForm.patchValue({
+        energySourceType: baselineEnergySource
+      });
+    }
+    this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
 
     if (!this.trackingEnergySource) {
-      this.wallService.energySourceType.next(energySourceType);
+      this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
     }
     this.cd.detectChanges();
     this.calculate();

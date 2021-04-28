@@ -59,6 +59,10 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-air-leak>
 
+<app-wall *ngIf="selectedCalc == 'wall-loss'" [inTreasureHunt]="true"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-wall>
+
 
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

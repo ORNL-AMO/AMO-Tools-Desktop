@@ -82,6 +82,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
     }
+    if(data.wallLosses){
+      if (treasureHunt.wallLosses == undefined) {
+        treasureHunt.wallLosses = new Array();
+      }
+      treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
+    }
     return treasureHunt;
   }
 }

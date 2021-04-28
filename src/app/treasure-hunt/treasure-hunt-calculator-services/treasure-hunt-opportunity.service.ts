@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
@@ -16,6 +16,7 @@ import { ReplaceExistingTreasureHuntService } from './replace-existing-treasure-
 import { StandaloneOpportunitySheetService } from './standalone-opportunity-sheet.service';
 import { SteamReductionTreasureHuntService } from './steam-reduction-treasure-hunt.service';
 import { TankInsulationTreasureHuntService } from './tank-insulation-treasure-hunt.service';
+import { WallTreasureHuntService } from './wall-treasure-hunt.service';
 import { WaterReductionTreasureHuntService } from './water-reduction-treasure-hunt.service';
 
 @Injectable()
@@ -36,6 +37,7 @@ export class TreasureHuntOpportunityService {
     private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
+    private wallTreasureService: WallTreasureHuntService,
     private treasureHuntService: TreasureHuntService,
     private calculatorsService: CalculatorsService
   ) { }
@@ -80,6 +82,9 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.pipeInsulation) {
       let pipeInsulation = currentOpportunity as PipeInsulationReductionTreasureHunt;
       treasureHunt = this.pipeInsulationTreasureHuntService.saveTreasureHuntOpportunity(pipeInsulation, treasureHunt);
+    } else if (selectedCalc === Treasure.wallLoss) {
+      let wallLoss = currentOpportunity as WallLossTreasureHunt;
+      treasureHunt = this.wallTreasureService.saveTreasureHuntOpportunity(wallLoss, treasureHunt);
     } 
 
     this.treasureHuntService.treasureHunt.next(treasureHunt);
@@ -114,7 +119,9 @@ export class TreasureHuntOpportunityService {
       this.steamReductionTreasureHuntService.resetCalculatorInputs();
     } else if (selectedCalc === Treasure.pipeInsulation) {
       this.pipeInsulationTreasureHuntService.resetCalculatorInputs();
-    } 
+    } else if (selectedCalc === Treasure.wallLoss) {
+      this.wallTreasureService.resetCalculatorInputs();
+    }  
 
     this.calculatorsService.itemIndex = undefined;
     this.calculatorsService.selectedCalc.next('none');
@@ -186,6 +193,11 @@ export class TreasureHuntOpportunityService {
       let pipeInsulationOpportunity = currentOpportunity as PipeInsulationReductionTreasureHunt;
       treasureHunt.pipeInsulationReductions[this.calculatorsService.itemIndex] = pipeInsulationOpportunity;
       updatedCard = this.opportunityCardsService.getPipeInsulationReductionCardData(pipeInsulationOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+    
+    } else if (selectedCalc === Treasure.wallLoss) {
+      let wallLossOpportunity = currentOpportunity as WallLossTreasureHunt;
+      treasureHunt.wallLosses[this.calculatorsService.itemIndex] = wallLossOpportunity;
+      updatedCard = this.opportunityCardsService.getWallLossCardData(wallLossOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     }
     
