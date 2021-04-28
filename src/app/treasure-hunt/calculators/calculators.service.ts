@@ -17,6 +17,7 @@ import { CaPressureReductionTreasureHuntService } from '../treasure-hunt-calcula
 import { WaterReductionTreasureHuntService } from '../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
 import { SteamReductionTreasureHuntService } from '../treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
 import { PipeInsulationTreasureHuntService } from '../treasure-hunt-calculator-services/pipe-insulation-treasure-hunt.service';
+import { FlueGasTreasureHuntService } from '../treasure-hunt-calculator-services/flue-gas-treasure-hunt.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -40,7 +41,8 @@ export class CalculatorsService {
     private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
-    private standaloneOpportunitySheetService: StandaloneOpportunitySheetService
+    private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService
     ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
@@ -79,6 +81,8 @@ export class CalculatorsService {
       this.steamReductionTreasureHuntService.initNewCalculator();
     } else if (calculatorType === Treasure.pipeInsulation) {
       this.pipeInsulationTreasureHuntService.initNewCalculator();
+    } else if (calculatorType === Treasure.flueGas) {
+      this.flueGasTreasureHuntService.initNewCalculator();
     } 
     this.selectedCalc.next(calculatorType);
   }
@@ -149,6 +153,11 @@ export class CalculatorsService {
       this.pipeInsulationTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.pipeInsulationReduction, treasureHunt);
       opportunityCardData = this.opportunityCardsService.getPipeInsulationReductionCardData(opportunityCardData.pipeInsulationReduction, settings, treasureHunt.pipeInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
     
+    } else if (opportunityCardData.opportunityType === Treasure.flueGas) {
+      opportunityCardData.flueGas.opportunitySheet = this.updateCopyName(opportunityCardData.flueGas.opportunitySheet);
+      this.flueGasTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.flueGas, treasureHunt);
+      opportunityCardData = this.opportunityCardsService.getFlueGasCardData(opportunityCardData.flueGas, settings, treasureHunt.flueGasLosses.length - 1, treasureHunt.currentEnergyUsage);
+    
     }
 
     return opportunityCardData;
@@ -185,7 +194,9 @@ export class CalculatorsService {
       this.steamReductionTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamReduction);
     } else if (opportunityCardData.opportunityType === Treasure.pipeInsulation) {
       this.pipeInsulationTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.pipeInsulationReduction);
-    } 
+    } else if (opportunityCardData.opportunityType === Treasure.flueGas) {
+      this.flueGasTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.flueGas);
+    }  
 
     this.selectedCalc.next(opportunityCardData.opportunityType);
   }
@@ -257,6 +268,11 @@ export class CalculatorsService {
       treasureHunt.pipeInsulationReductions[opportunityCardData.opportunityIndex] = opportunityCardData.pipeInsulationReduction;
       updatedCard = this.opportunityCardsService.getPipeInsulationReductionCardData(opportunityCardData.pipeInsulationReduction, settings, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage);
       
+    } else if (opportunityCardData.opportunityType === Treasure.flueGas) {
+      opportunityCardData.flueGas.selected = opportunityCardData.selected;
+      treasureHunt.flueGasLosses[opportunityCardData.opportunityIndex] = opportunityCardData.flueGas;
+      updatedCard = this.opportunityCardsService.getFlueGasCardData(opportunityCardData.flueGas, settings, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage);
+      
     }
     
     
@@ -291,6 +307,8 @@ export class CalculatorsService {
       this.steamReductionTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.pipeInsulation) {
       this.pipeInsulationTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
+    } else if (deleteOpportunity.opportunityType === Treasure.flueGas) {
+      this.flueGasTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } 
 
     return treasureHunt;

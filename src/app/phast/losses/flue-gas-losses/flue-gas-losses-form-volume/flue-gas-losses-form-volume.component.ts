@@ -159,7 +159,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   checkWarnings() {
     let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
-    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss, this.settings);
     let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
