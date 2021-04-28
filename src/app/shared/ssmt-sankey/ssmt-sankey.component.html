@@ -1,8 +1,19 @@
 <div #ngChart></div>
+<div class="d-flex small mt-2 ml-5">
+    <span class="bold mr-2">* Other Losses include:</span>
+    High Pressure Header,
+    Medium Pressure Header,
+    Low Pressure Header,
+    Condensate,
+    Deaerator Vent,
+    Condensate Flash Tank 
+    <ng-container *ngIf="hasLowPressureVentLoss">,</ng-container>
+    <ng-container *ngIf="hasLowPressureVentLoss"> Low Pressure Vent</ng-container>
+</div>
 
 <div *ngIf="minLosses.length > 0" class="ml-5">
-    <div class="ml-5 mt-2">
-        <label class="group-label mb-2">Negligible Losses (not shown)</label>
+    <div class="mt-4">
+        <label class="group-label bold mb-2">Negligible Losses (not shown)</label>
         <table class="small w-25 ml-3">
             <tr *ngFor="let loss of minLosses">
                 <td>{{ loss.name}}</td>
