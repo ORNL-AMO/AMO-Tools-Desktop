@@ -26,6 +26,7 @@ import { SteamReductionModule } from '../../calculator/steam/steam-reduction/ste
 import { TankInsulationReductionModule } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.module';
 import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak.module';
 import { WallModule } from '../../calculator/furnaces/wall/wall.module';
+import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.module';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { WallModule } from '../../calculator/furnaces/wall/wall.module';
     CompressedAirReductionModule,
     TankInsulationReductionModule,
     AirLeakModule,
-    WallModule
+    WallModule,
+    FlueGasModule
   ],
   providers: [
     CalculatorsService,

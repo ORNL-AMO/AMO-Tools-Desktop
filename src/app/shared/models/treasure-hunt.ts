@@ -3,6 +3,8 @@ import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
 import { WallLoss } from "./phast/losses/wallLoss";
+import { FlueGas } from "./phast/losses/flueGas";
+import { EnergyData } from "./phast/losses/chargeMaterial";
 
 export interface TreasureHunt {
     name: string,
@@ -20,6 +22,7 @@ export interface TreasureHunt {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -40,7 +43,8 @@ export enum Treasure {
     pipeInsulation = 'pipe-insulation-reduction',
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
-    wallLoss = 'wall-loss'
+    wallLoss = 'wall-loss',
+    flueGas = 'flue-gas'
 }
 
 export interface FilterOption {
@@ -202,6 +206,15 @@ export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
+    baseline: FlueGas;
+    modification: FlueGas;
+    baselineEnergyData: EnergyData;
+    modificationEnergyData: EnergyData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface EnergySourceData {
     energySourceType: string,
     unit: string
@@ -211,7 +224,7 @@ export interface TreasureHuntOpportunity {
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
     // opportunityType == calculator selector/name
-    opportunityType?: string;
+    opportunityType: string;
     opportunityIndex?: number;
 }
 
@@ -337,4 +350,5 @@ export interface ImportExportOpportunities {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
 }

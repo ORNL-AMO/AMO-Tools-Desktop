@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
@@ -36,6 +36,8 @@ export class OpportunityCardsService {
     let tankInsulationReductionData: Array<OpportunityCardData> = this.getTankInsulationReductions(treasureHunt.tankInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let airLeakSurveyData: Array<OpportunityCardData> = this.getAirLeakSurveys(treasureHunt.airLeakSurveys, treasureHunt.currentEnergyUsage, settings);
     let wallLossData: Array<OpportunityCardData> = this.getWallLosses(treasureHunt.wallLosses, treasureHunt.currentEnergyUsage, settings);
+    let flueGasData: Array<OpportunityCardData> = this.getFlueGasLosses(treasureHunt.flueGasLosses, treasureHunt.currentEnergyUsage, settings);
+    
     opportunityCardsData = _.union(
       lightingReplacementsCardData, 
       replaceExistingData, 
@@ -50,7 +52,8 @@ export class OpportunityCardsService {
       pipeInsulationReductionData, 
       tankInsulationReductionData, 
       airLeakSurveyData,
-      wallLossData
+      wallLossData,
+      flueGasData
       );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
@@ -912,6 +915,60 @@ export class OpportunityCardsService {
     return cardData;
   }
 
+  getFlueGasLosses(flueGasLosses: Array<FlueGasTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (flueGasLosses) {
+      let index: number = 0;
+      flueGasLosses.forEach(flueGas => {
+        let cardData: OpportunityCardData = this.getFlueGasCardData(flueGas, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+  getFlueGasCardData(flueGas: FlueGasTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(flueGas, settings);
+    let currentCosts: number;
+    let unitStr: string = 'MMBtu';
+    if (settings.unitsOfMeasure != 'Imperial') {
+      unitStr = 'GJ';
+    }
+
+    if (flueGas.baseline.flueGasType == 'By Volume' && flueGas.baseline.flueGasByVolume.gasTypeId == 1) {
+      currentCosts = currentEnergyUsage.naturalGasCosts;
+    } else {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+    }
+
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: flueGas.selected,
+      opportunityType: 'flue-gas',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: unitStr,
+        label: opportunitySummary.utilityType
+      }],
+      utilityType: [opportunitySummary.utilityType],
+      percentSavings: [{
+        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+      flueGas: flueGas,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: flueGas.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/furnace-icons/fluegas.png',
+      teamName: this.getTeamName(flueGas.opportunitySheet)
+    }
+    return cardData;
+  }
+
 
   getFurnaceEnergySourceCost(energySourceData: EnergySourceData, currentEnergyUsage: EnergyUsage) {
     let currentCosts: number = 0;
@@ -980,4 +1037,5 @@ export interface OpportunityCardData {
   tankInsulationReduction?: TankInsulationReductionTreasureHunt;
   airLeakSurvey?: AirLeakSurveyTreasureHunt;
   wallLoss?: WallLossTreasureHunt
+  flueGas?: FlueGasTreasureHunt;
 }

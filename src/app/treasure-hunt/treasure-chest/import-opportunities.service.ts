@@ -4,9 +4,6 @@ import { ImportExportOpportunities, TreasureHunt } from '../../shared/models/tre
 @Injectable()
 export class ImportOpportunitiesService {
 
-
-  
-
   constructor() { }
 
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
@@ -76,6 +73,14 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.tankInsulationReductions = treasureHunt.tankInsulationReductions.concat(data.tankInsulationReductions);
     }
+
+    if(data.flueGasLosses){
+      if (treasureHunt.flueGasLosses == undefined) {
+        treasureHunt.flueGasLosses = new Array();
+      }
+      treasureHunt.flueGasLosses = treasureHunt.flueGasLosses.concat(data.flueGasLosses);
+    }
+
     if(data.airLeakSurveys){
       if (treasureHunt.airLeakSurveys == undefined) {
         treasureHunt.airLeakSurveys = new Array();

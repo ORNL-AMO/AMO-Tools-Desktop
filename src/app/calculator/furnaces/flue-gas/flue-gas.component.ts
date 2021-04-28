@@ -1,8 +1,11 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { OperatingHours } from '../../../shared/models/operations';
+import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
 import { FlueGas, FlueGasOutput } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
+import { FlueGasTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from './flue-gas.service';
 
 @Component({
@@ -16,6 +19,13 @@ export class FlueGasComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
+
+  @Output('emitSave')
+  emitSave = new EventEmitter<FlueGasTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -31,8 +41,6 @@ export class FlueGasComponent implements OnInit {
   isModalOpen: boolean;
   modalSubscription: Subscription;
   results: {baseline: number, modification: number};
-  baselineData: FlueGas;
-  modificationData: FlueGas;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
   outputSubscription: Subscription;
@@ -45,6 +53,7 @@ export class FlueGasComponent implements OnInit {
   modificationExists = false;
 
   constructor(private settingsDbService: SettingsDbService, 
+              private cd: ChangeDetectorRef,
               private flueGasService: FlueGasService) { }
 
   ngOnInit() {
@@ -57,11 +66,14 @@ export class FlueGasComponent implements OnInit {
 
     let existingInputs = this.flueGasService.baselineData.getValue();
     if(!existingInputs) {
+      let treasureHuntHours: number = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
       this.flueGasService.initDefaultEmptyOutput();
-      this.flueGasService.initDefaultEmptyInputs();
+      this.flueGasService.initDefaultEmptyInputs(treasureHuntHours);
+    } else {
+      this.method = existingInputs.flueGasType;
     }
     this.initSubscriptions();
-    if(this.modificationData) {
+    if(this.flueGasService.modificationData.getValue()) {
       this.modificationExists = true;
     }
   }
@@ -79,23 +91,31 @@ export class FlueGasComponent implements OnInit {
     this.modalSubscription = this.flueGasService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
     });
-    this.baselineDataSub = this.flueGasService.baselineData.subscribe(value => {
-      this.setBaselineSelected();
-      this.flueGasService.calculate(this.settings);
+    this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
+      if (baselineData) {
+        this.setBaselineSelected();
+        this.flueGasService.calculate(this.settings);
+      }
     });
-    this.modificationDataSub = this.flueGasService.modificationData.subscribe(value => {
-      this.flueGasService.calculate(this.settings);
+    this.modificationDataSub = this.flueGasService.modificationData.subscribe(modificationData => {
+      if (modificationData) {
+        this.flueGasService.calculate(this.settings);
+      }
     });
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
       if (val) {
         this.output = val;
       }
     });
-    this.baselineEnergySub = this.flueGasService.baselineEnergyData.subscribe(energyData => {
-      this.flueGasService.calculate(this.settings);
+    this.baselineEnergySub = this.flueGasService.baselineEnergyData.subscribe(baselineEnergyData => {
+      if (baselineEnergyData) {
+        this.flueGasService.calculate(this.settings);
+      }
     });
-    this.modificationEnergySub = this.flueGasService.modificationEnergyData.subscribe(energyData => {
-      this.flueGasService.calculate(this.settings);
+    this.modificationEnergySub = this.flueGasService.modificationEnergyData.subscribe(modificationEnergyData => {
+      if (modificationEnergyData) {
+        this.flueGasService.calculate(this.settings);
+      }
   });
   }
 
@@ -107,6 +127,7 @@ export class FlueGasComponent implements OnInit {
 
   changeFuelType() {
     this.flueGasService.initDefaultEmptyOutput();
+    this.cd.detectChanges();
   }
 
   createModification() {
@@ -136,6 +157,24 @@ export class FlueGasComponent implements OnInit {
     if (this.baselineSelected == false) {
       this.baselineSelected = true;
     }
+  }
+
+  save() {
+    let baselineData: FlueGas = this.flueGasService.baselineData.getValue();
+    let baselineEnergyData: EnergyData = this.flueGasService.baselineEnergyData.getValue();
+    let modificationData: FlueGas = this.flueGasService.modificationData.getValue();
+    let modificationEnergyData: EnergyData = this.flueGasService.modificationEnergyData.getValue();
+    this.emitSave.emit({ 
+      baseline: baselineData, 
+      modification: modificationData, 
+      baselineEnergyData: baselineEnergyData, 
+      modificationEnergyData: modificationEnergyData,
+      opportunityType: Treasure.flueGas
+    });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
   setModificationSelected() {
