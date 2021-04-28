@@ -182,7 +182,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
-    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss, this.settings);
     let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }

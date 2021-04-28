@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
@@ -8,6 +8,7 @@ import { AirLeakTreasureHuntService } from './air-leak-treasure-hunt.service';
 import { CaPressureReductionTreasureHuntService } from './ca-pressure-reduction-treasure-hunt.service';
 import { CaReductionTreasureHuntService } from './ca-reduction-treasure-hunt.service';
 import { ElectricityReductionTreasureHuntService } from './electricity-reduction-treasure-hunt.service';
+import { FlueGasTreasureHuntService } from './flue-gas-treasure-hunt.service';
 import { LightingReplacementTreasureHuntService } from './lighting-replacement-treasure-hunt.service';
 import { MotorDriveTreasureHuntService } from './motor-drive-treasure-hunt.service';
 import { NaturalGasReductionTreasureHuntService } from './natural-gas-reduction-treasure-hunt.service';
@@ -36,6 +37,7 @@ export class TreasureHuntOpportunityService {
     private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService,
     private treasureHuntService: TreasureHuntService,
     private calculatorsService: CalculatorsService
   ) { }
@@ -80,6 +82,9 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.pipeInsulation) {
       let pipeInsulation = currentOpportunity as PipeInsulationReductionTreasureHunt;
       treasureHunt = this.pipeInsulationTreasureHuntService.saveTreasureHuntOpportunity(pipeInsulation, treasureHunt);
+    } else if (selectedCalc === Treasure.flueGas) {
+      let flueGas = currentOpportunity as FlueGasTreasureHunt;
+      treasureHunt = this.flueGasTreasureHuntService.saveTreasureHuntOpportunity(flueGas, treasureHunt);
     } 
 
     this.treasureHuntService.treasureHunt.next(treasureHunt);
@@ -114,6 +119,8 @@ export class TreasureHuntOpportunityService {
       this.steamReductionTreasureHuntService.resetCalculatorInputs();
     } else if (selectedCalc === Treasure.pipeInsulation) {
       this.pipeInsulationTreasureHuntService.resetCalculatorInputs();
+    } else if (selectedCalc === Treasure.flueGas) {
+      this.flueGasTreasureHuntService.resetCalculatorInputs();
     } 
 
     this.calculatorsService.itemIndex = undefined;
@@ -186,6 +193,11 @@ export class TreasureHuntOpportunityService {
       let pipeInsulationOpportunity = currentOpportunity as PipeInsulationReductionTreasureHunt;
       treasureHunt.pipeInsulationReductions[this.calculatorsService.itemIndex] = pipeInsulationOpportunity;
       updatedCard = this.opportunityCardsService.getPipeInsulationReductionCardData(pipeInsulationOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+    
+    } else if (selectedCalc === Treasure.flueGas) {
+      let flueGasOpportunity = currentOpportunity as FlueGasTreasureHunt;
+      treasureHunt.flueGasLosses[this.calculatorsService.itemIndex] = flueGasOpportunity;
+      updatedCard = this.opportunityCardsService.getFlueGasCardData(flueGasOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     }
     

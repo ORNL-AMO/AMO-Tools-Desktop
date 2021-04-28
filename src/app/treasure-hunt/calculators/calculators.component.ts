@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, TankInsulationReductionTreasureHunt, Treasure, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, Treasure } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
