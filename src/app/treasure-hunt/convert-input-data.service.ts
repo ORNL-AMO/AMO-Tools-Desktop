@@ -46,6 +46,9 @@ export class ConvertInputDataService {
     if (treasureHunt.flueGasLosses != undefined) {
       treasureHunt.flueGasLosses = this.convertFlueGasLosses(treasureHunt.flueGasLosses, oldSettings, newSettings);
     }
+    if (treasureHunt.wallLosses != undefined) {
+      treasureHunt.wallLosses = this.convertWallLosses(treasureHunt.wallLosses, oldSettings, newSettings);
+    }
     if (treasureHunt.airLeakSurveys != undefined) {
       treasureHunt.airLeakSurveys = this.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
     }
@@ -301,42 +304,28 @@ export class ConvertInputDataService {
     return reduction;
   }
 
-  convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings): Array<WallLossTreasureHunt> {
+  convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WallLossTreasureHunt> {
     wallLosses.forEach(wallLoss => {
-      wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings));
-      wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings));
+      wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings, newSettings));
+      if (wallLoss.modification) {
+        wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings, newSettings));
+      }
     });
     return wallLosses;
   }
 
-  convertWallLoss(wallLoss: WallLoss, currentSettings: Settings): WallLoss {
-    if (currentSettings.unitsOfMeasure == 'Imperial'){
-      wallLoss.ambientTemperature = this.convertUnitsService.value(wallLoss.ambientTemperature).from('F').to('C');
-      wallLoss.ambientTemperature = Number(wallLoss.ambientTemperature.toFixed(2));
+  convertWallLoss(wallLoss: WallLoss, oldSettings: Settings, newSettings: Settings): WallLoss {
+    wallLoss.ambientTemperature = this.convertTemperatureValue(wallLoss.ambientTemperature, oldSettings, newSettings);
+    wallLoss.surfaceTemperature = this.convertTemperatureValue(wallLoss.surfaceTemperature, oldSettings, newSettings);
 
-      wallLoss.surfaceTemperature = this.convertUnitsService.value(wallLoss.surfaceTemperature).from('F').to('C');
-      wallLoss.surfaceTemperature = Number(wallLoss.surfaceTemperature.toFixed(2));
-
+    if (oldSettings.unitsOfMeasure == 'Imperial'){
       wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('mph').to('km/h');
-      wallLoss.windVelocity = Number(wallLoss.windVelocity.toFixed(2));
-
       wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('ft2').to('m2');
-      wallLoss.surfaceArea = Number(wallLoss.surfaceArea.toFixed(2));
     }
-    if (currentSettings.unitsOfMeasure == 'Metric'){
-      wallLoss.ambientTemperature = this.convertUnitsService.value(wallLoss.ambientTemperature).from('C').to('F');
-      wallLoss.ambientTemperature = Number(wallLoss.ambientTemperature.toFixed(2));
-
-      wallLoss.surfaceTemperature = this.convertUnitsService.value(wallLoss.surfaceTemperature).from('C').to('F');
-      wallLoss.surfaceTemperature = Number(wallLoss.surfaceTemperature.toFixed(2));
-
+    if (oldSettings.unitsOfMeasure == 'Metric'){
       wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('km/h').to('mph');
-      wallLoss.windVelocity = Number(wallLoss.windVelocity.toFixed(2));
-
       wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('m2').to('ft2');
-      wallLoss.surfaceArea = Number(wallLoss.surfaceArea.toFixed(2));
     }
-    
     return wallLoss;
   }
 
