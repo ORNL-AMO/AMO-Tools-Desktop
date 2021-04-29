@@ -46,6 +46,13 @@ export class ControlDataComponent implements OnInit {
     } else {
       this.controlTypeOptions = [];
     }
+    let controlOptionSelected: { value: number, label: string, compressorTypes: Array<number> } = this.controlTypeOptions.find(option => { 
+      return option.value == this.form.controls.controlType.value;
+    });
+    if(!controlOptionSelected){
+      this.form.controls.controlType.patchValue(undefined);
+      this.changeControlType();
+    }
   }
 
   changeControlType() {

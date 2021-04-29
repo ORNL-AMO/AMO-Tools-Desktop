@@ -66,7 +66,8 @@ export interface DesignDetails {
     unloadSlumpPressure: number,
     modulatingPressureRange: number,
     inputPressure: number,
-    designEfficiency: number
+    designEfficiency: number,
+    serviceFactor: number
 }
 
 export interface PerformancePoints {

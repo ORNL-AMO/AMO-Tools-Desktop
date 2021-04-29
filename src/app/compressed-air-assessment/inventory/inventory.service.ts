@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class InventoryService {
@@ -34,11 +34,12 @@ export class InventoryService {
         inletAtmosphericPressure: undefined
       },
       designDetails: {
-        blowdownTime: undefined,
+        blowdownTime: 40,
         unloadSlumpPressure: undefined,
         modulatingPressureRange: undefined,
         inputPressure: undefined,
-        designEfficiency: undefined
+        designEfficiency: undefined,
+        serviceFactor: 1.15
       },
       centrifugalSpecifics: {
         surgeAirflow: undefined,
@@ -171,8 +172,32 @@ export class InventoryService {
       maxFullLoadPressure: form.controls.maxFullLoadPressure.value,
       maxFullLoadCapacity: form.controls.maxFullLoadCapacity.value,
       minFullLoadPressure: form.controls.minFullLoadPressure.value,
-      minFullLoadCapacity: form.controls.minFullLoadCapacity.value,      
+      minFullLoadCapacity: form.controls.minFullLoadCapacity.value,
     };
+  }
+
+  getDesignDetailsFormFromObj(designDetails: DesignDetails): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      blowdownTime: [designDetails.blowdownTime],
+      unloadSlumpPressure: [designDetails.unloadSlumpPressure],
+      modulatingPressureRange: [designDetails.modulatingPressureRange],
+      inputPressure: [designDetails.inputPressure],
+      designEfficiency: [designDetails.designEfficiency],
+      serviceFactor: [designDetails.serviceFactor]
+    });
+    return form;
+  }
+
+  getDesignDetailsObjFromForm(form: FormGroup): DesignDetails {
+    return {
+      blowdownTime: form.controls.blowdownTime.value,
+      unloadSlumpPressure: form.controls.unloadSlumpPressure.value,
+      modulatingPressureRange: form.controls.modulatingPressureRange.value,
+      inputPressure: form.controls.inputPressure.value,
+      designEfficiency: form.controls.designEfficiency.value,
+      serviceFactor: form.controls.serviceFactor.value
+    }
+
   }
 
 }
