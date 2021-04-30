@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt } from '../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt } from '../shared/models/treasure-hunt';
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput, AirLeakSurveyInput } from '../shared/models/standalone';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput, AirLeakSurveyInput } from '../shared/models/standalone';
-import { FlueGasService } from '../calculator/furnaces/flue-gas/flue-gas.service';
+import { WallLoss } from '../shared/models/phast/losses/wallLoss';
 import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class ConvertInputDataService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private flueGasService: FlueGasService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
     //no conversion for lighting needed..
@@ -45,6 +45,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.flueGasLosses != undefined) {
       treasureHunt.flueGasLosses = this.convertFlueGasLosses(treasureHunt.flueGasLosses, oldSettings, newSettings);
+    }
+    if (treasureHunt.wallLosses != undefined) {
+      treasureHunt.wallLosses = this.convertWallLosses(treasureHunt.wallLosses, oldSettings, newSettings);
     }
     if (treasureHunt.airLeakSurveys != undefined) {
       treasureHunt.airLeakSurveys = this.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
@@ -300,6 +303,32 @@ export class ConvertInputDataService {
     reduction.waterMassFlowMethodData.massFlowNameplateData.flowRate = this.convertGallonPerMinuteAndLiterPerSecondValue(reduction.waterMassFlowMethodData.massFlowNameplateData.flowRate, oldSettings, newSettings);
     return reduction;
   }
+
+  convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WallLossTreasureHunt> {
+    wallLosses.forEach(wallLoss => {
+      wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings, newSettings));
+      if (wallLoss.modification) {
+        wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings, newSettings));
+      }
+    });
+    return wallLosses;
+  }
+
+  convertWallLoss(wallLoss: WallLoss, oldSettings: Settings, newSettings: Settings): WallLoss {
+    wallLoss.ambientTemperature = this.convertTemperatureValue(wallLoss.ambientTemperature, oldSettings, newSettings);
+    wallLoss.surfaceTemperature = this.convertTemperatureValue(wallLoss.surfaceTemperature, oldSettings, newSettings);
+
+    if (oldSettings.unitsOfMeasure == 'Imperial'){
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('mph').to('km/h');
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('ft2').to('m2');
+    }
+    if (oldSettings.unitsOfMeasure == 'Metric'){
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('km/h').to('mph');
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('m2').to('ft2');
+    }
+    return wallLoss;
+  }
+
 
   convertTankInsulationReductions(tankReductions: Array<TankInsulationReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<TankInsulationReductionTreasureHunt> {
     tankReductions.forEach(tankReduction => {
