@@ -43,6 +43,7 @@ import { SteamReductionTreasureHuntService } from './treasure-hunt-calculator-se
 import { TankInsulationTreasureHuntService } from './treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
 import { TreasureHuntOpportunityService } from './treasure-hunt-calculator-services/treasure-hunt-opportunity.service';
 import { FlueGasTreasureHuntService } from './treasure-hunt-calculator-services/flue-gas-treasure-hunt.service';
+import { WallTreasureHuntService } from './treasure-hunt-calculator-services/wall-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -93,6 +94,7 @@ import { FlueGasTreasureHuntService } from './treasure-hunt-calculator-services/
     SteamReductionTreasureHuntService,
     PipeInsulationTreasureHuntService,
     TreasureHuntOpportunityService,
+    WallTreasureHuntService,
     FlueGasTreasureHuntService
     
   ]

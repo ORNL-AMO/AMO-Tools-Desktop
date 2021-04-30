@@ -2,6 +2,7 @@ import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
 
@@ -20,6 +21,7 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wallLosses?: Array<WallLossTreasureHunt>
     flueGasLosses?: Array<FlueGasTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
@@ -41,6 +43,7 @@ export enum Treasure {
     pipeInsulation = 'pipe-insulation-reduction',
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
+    wallLoss = 'wall-loss',
     flueGas = 'flue-gas'
 }
 
@@ -195,6 +198,14 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
 }
 
+export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
+    baseline: Array<WallLoss>;
+    modification: Array<WallLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
     baseline: FlueGas;
     modification: FlueGas;
@@ -202,6 +213,11 @@ export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
     modificationEnergyData: EnergyData;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
+}
+
+export interface EnergySourceData {
+    energySourceType: string,
+    unit: string
 }
 
 export interface TreasureHuntOpportunity {
@@ -333,5 +349,6 @@ export interface ImportExportOpportunities {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wallLosses?: Array<WallLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
 }
