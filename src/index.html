@@ -136,7 +136,7 @@
 		//	var d3 = require("d3");
 		var phastAddon = require('../node_modules/amo-tools-suite/build/Release/phast.node');
 		var processHeatAddon = require('../node_modules/amo-tools-suite/build/Release/processHeat.node');
-		var psatAddon = require('../node_modules/amo-tools-suite/build/Release/psat.node');
+		// var psatAddon = require('../node_modules/amo-tools-suite/build/Release/psat.node');
 		var db = require('../node_modules/amo-tools-suite/build/Release/db.node');
 		var standaloneAddon = require('../node_modules/amo-tools-suite/build/Release/standalone.node');
 		var fanAddon = require('../node_modules/amo-tools-suite/build/Release/fan.node');
@@ -148,7 +148,14 @@
 	//	var autoUpdater = require('electron-updater');
 		//var json2csv = require("../node_modules/dist/json2csv.js");
 	</script>
-
+	<script>
+		var Module = {
+			onRuntimeInitialized: function () {
+				console.log('Tools Suite Module Initialized');
+			}
+		}
+	</script>
+	<script src="assets/client.js"></script>
 </body>
 
 </html>
