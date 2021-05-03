@@ -140,8 +140,8 @@
         *ngIf="fieldDataWarnings.ratedPowerError !== null && !psatForm.controls.motorAmps.invalid && !psatForm.controls.motorAmps.pristine">{{fieldDataWarnings.ratedPowerError}}</span>
     </div>
 
-    <div class="form-group" *ngIf="baseline"
-      [ngClass]="{'error': fieldDataWarnings.voltageError !== null, 'invalid': psatForm.controls.measuredVoltage.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isMotorFieldVoltageDifferent(), 'error': fieldDataWarnings.voltageError !== null, 'invalid': psatForm.controls.measuredVoltage.invalid}">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
       <div class="input-group">
         <input [readonly]="!selected" name="measuredVoltage" type="number" min="1" step="any" class="form-control"
@@ -153,8 +153,8 @@
         *ngIf="psatForm.controls.measuredVoltage.invalid && !psatForm.controls.measuredVoltage.pristine">
         <span *ngIf="psatForm.controls.measuredVoltage.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="fieldDataWarnings.voltageError !== null && !psatForm.controls.measuredVoltage.invalid && !psatForm.controls.measuredVoltage.pristine">{{fieldDataWarnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.voltageError !== null && !psatForm.controls.measuredVoltage.invalid && !psatForm.controls.measuredVoltage.pristine">{{fieldDataWarnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="!baseline && fieldDataWarnings.suggestedVoltage !== null && !psatForm.controls.measuredVoltage.pristine">{{fieldDataWarnings.suggestedVoltage}}</span>
     </div>
   </div>
   <div class="pl-3 pr-3" *ngIf="!baseline">
