@@ -29,6 +29,7 @@ import { CompressorOrderingTableComponent } from './system-profile/system-profil
 import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
 import { SystemProfileService } from './system-profile/system-profile.service';
 import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics/centrifugal-specifics.component';
+import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics
     SystemBasicsFormService,
     SystemInformationFormService,
     InventoryService,
-    SystemProfileService
+    SystemProfileService,
+    CompressedAirCalculationService
   ]
 })
 export class CompressedAirAssessmentModule { }

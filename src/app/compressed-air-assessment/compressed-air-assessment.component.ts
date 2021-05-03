@@ -8,6 +8,7 @@ import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
+import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -36,9 +37,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
   disableNext: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService) { }
+    private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService) { }
 
   ngOnInit(): void {
+    // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment);
