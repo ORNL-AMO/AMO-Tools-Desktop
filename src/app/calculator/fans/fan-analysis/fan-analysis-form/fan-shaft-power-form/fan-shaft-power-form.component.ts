@@ -7,9 +7,9 @@ import { Settings } from '../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { FanInfoFormService } from '../fan-info-form/fan-info-form.service';
-import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
 import { PlaneDataFormService } from '../plane-data-form/plane-data-form.service';
 import { GasDensityFormService } from '../gas-density-form/gas-density-form.service';
+import { FsatService } from '../../../../../fsat/fsat.service';
 
 @Component({
   selector: 'app-fan-shaft-power-form',
@@ -58,10 +58,10 @@ export class FanShaftPowerFormComponent implements OnInit {
     private fanShaftPowerFormService: FanShaftPowerFormService, 
     private psatService: PsatService, 
     private fanAnalysisService: FanAnalysisService,
-    private convertFanAnalysisService: ConvertFanAnalysisService, 
     private gasDensityFormService: GasDensityFormService,
     private planeDataFormService: PlaneDataFormService, 
-    private fanInfoFormService: FanInfoFormService
+    private fanInfoFormService: FanInfoFormService,
+    private fsatService: FsatService
     ) { }
 
   ngOnInit() {
@@ -136,7 +136,7 @@ export class FanShaftPowerFormComponent implements OnInit {
       let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower, true, this.settings).valid;
   
       if (planeDataDone && basicsDone && gasDone && shaftPowerDone) {
-        let fanResults = this.convertFanAnalysisService.fan203(this.fanAnalysisService.inputData, this.settings);
+        let fanResults = this.fsatService.fan203(this.fanAnalysisService.inputData, this.settings);
         this.results = 
           {
             power: fanResults.power,

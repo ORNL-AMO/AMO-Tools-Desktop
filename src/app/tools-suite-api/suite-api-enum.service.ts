@@ -8,7 +8,22 @@ declare var Module: any;
 @Injectable()
 export class SuiteApiEnumService {
 
-  constructor() { }
+  constructor() {
+    console.log('init');
+    // var Module = {
+		// 	onRuntimeInitialized: function () {
+		// 		console.log('Tools Suite Module Initialized');
+		// 	}
+		// }
+    // fetch("assets/client.js");
+    // let config: WebAssembly.Module = {
+
+    // }
+
+    // WebAssembly.instantiateStreaming(fetch("assets/client.wasm"), { }).then(results => {
+    //   console.log(results);
+    // });
+  }
   getPumpStyleEnum(pumpStyle: number): any {
     switch (pumpStyle) {
       case 0:

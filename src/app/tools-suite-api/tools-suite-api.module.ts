@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PumpsSuiteApiService } from './pumps-suite-api.service';
 import { SuiteApiEnumService } from './suite-api-enum.service';
+import { FansSuiteApiService } from './fans-suite-api.service';
 
 
 
@@ -12,7 +13,8 @@ import { SuiteApiEnumService } from './suite-api-enum.service';
   ],
   providers: [
     PumpsSuiteApiService,
-    SuiteApiEnumService
+    SuiteApiEnumService,
+    FansSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }

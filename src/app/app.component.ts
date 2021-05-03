@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
+import { SuiteApiEnumService } from './tools-suite-api/suite-api-enum.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,7 +9,7 @@ import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 export class AppComponent {
   title = 'app works!';
   private viewContainerRef: ViewContainerRef;
-  constructor(viewContainerRef: ViewContainerRef) {
+  constructor(viewContainerRef: ViewContainerRef, private SuiteApiEnumService: SuiteApiEnumService) {
     this.viewContainerRef = viewContainerRef;
   }
 }

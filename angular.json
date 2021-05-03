@@ -73,7 +73,8 @@
               "src/assets/styles/plotly-overrides.css",
               "src/assets/styles/explore-opps.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
