@@ -19,21 +19,4 @@ export class StandaloneOpportunitySheetService {
     return treasureHunt;
   }
 
-
-  // setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-  //   this.airLeakService.airLeakInput.next(airLeakSurvey.airLeakSurveyInput);
-  // }
-
-
-  // saveTreasureHuntOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt, treasureHunt: TreasureHunt): TreasureHunt {
-  //   if (!treasureHunt.airLeakSurveys) {
-  //     treasureHunt.airLeakSurveys = new Array();
-  //   }
-  //   treasureHunt.airLeakSurveys.push(airLeakSurvey);
-  //   return treasureHunt;
-  // }
-
-  // resetCalculatorInputs() {
-  //   this.airLeakService.airLeakInput.next(undefined);
-  // }
 }

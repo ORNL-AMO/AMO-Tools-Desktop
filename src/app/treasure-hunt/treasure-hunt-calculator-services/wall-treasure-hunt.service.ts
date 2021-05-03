@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { WallService } from '../../calculator/furnaces/wall/wall.service';
-import { WallLossOutput } from '../../shared/models/phast/losses/wallLoss';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { WallLoss, WallLossOutput } from '../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../shared/models/settings';
-import { TreasureHunt, TreasureHuntOpportunityResults, WallLossTreasureHunt } from '../../shared/models/treasure-hunt';
+import { EnergySourceData, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults, WallLossTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Injectable()
 export class WallTreasureHuntService {
 
   constructor(
-    private wallService: WallService) { }
+    private wallService: WallService, private convertUnitsService: ConvertUnitsService) { }
 
 
   initNewCalculator() {
@@ -56,4 +58,68 @@ export class WallTreasureHuntService {
     return treasureHuntOpportunityResults;
   }
 
+  getWallLossCardData(wallLoss: WallLossTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let currentCosts: number = 0;
+    if (wallLoss.energySourceData.energySourceType == 'Electricity') {
+      currentCosts = currentEnergyUsage.electricityCosts;
+    } else if (wallLoss.energySourceData.energySourceType == 'Natural Gas') {
+      currentCosts = currentEnergyUsage.naturalGasCosts
+    } else if (wallLoss.energySourceData.energySourceType == 'Other Fuel') {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+    } else if (wallLoss.energySourceData.energySourceType == 'Steam') {
+      currentCosts = currentEnergyUsage.steamCosts
+    }
+    
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: wallLoss.selected,
+      opportunityType: 'wall-loss',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: wallLoss.energySourceData.unit,
+        label: opportunitySummary.utilityType
+      }],
+      utilityType: [opportunitySummary.utilityType],
+      percentSavings: [{
+        percent: (opportunitySummary.costSavings / currentCosts) * 100,
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+      wallLoss: wallLoss,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: wallLoss.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/furnace-icons/wall-loss.png',
+      teamName: wallLoss.opportunitySheet? wallLoss.opportunitySheet.owner : undefined
+    }
+    return cardData;
+  }
+
+  convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WallLossTreasureHunt> {
+    wallLosses.forEach(wallLoss => {
+      wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings, newSettings));
+      if (wallLoss.modification && wallLoss.modification.length > 0) {
+        wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings, newSettings));
+      }
+    });
+    return wallLosses;
+  }
+
+  convertWallLoss(wallLoss: WallLoss, oldSettings: Settings, newSettings: Settings): WallLoss {
+    wallLoss.ambientTemperature = this.convertUnitsService.convertTemperatureValue(wallLoss.ambientTemperature, oldSettings, newSettings);
+    wallLoss.surfaceTemperature = this.convertUnitsService.convertTemperatureValue(wallLoss.surfaceTemperature, oldSettings, newSettings);
+
+    if (oldSettings.unitsOfMeasure == 'Imperial'){
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('mph').to('km/h');
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('ft2').to('m2');
+    }
+    if (oldSettings.unitsOfMeasure == 'Metric'){
+      wallLoss.windVelocity = this.convertUnitsService.value(wallLoss.windVelocity).from('km/h').to('mph');
+      wallLoss.surfaceArea = this.convertUnitsService.value(wallLoss.surfaceArea).from('m2').to('ft2');
+    }
+    return wallLoss;
+  }
 }

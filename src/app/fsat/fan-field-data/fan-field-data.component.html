@@ -206,8 +206,8 @@
       <span class="alert-warning pull-right small"
         *ngIf="warnings.ratedPowerError !== null && !fieldDataForm.controls.motorPower.pristine && !fieldDataForm.controls.motorPower.invalid">{{warnings.ratedPowerError}}</span>
     </div>
-    <div class="form-group" *ngIf="baseline"
-      [ngClass]="{'error': warnings.voltageError !== null, 'invalid':fieldDataForm.controls.measuredVoltage.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isMeasuredVoltageDifferent(), 'error': warnings.voltageError !== null, 'invalid':fieldDataForm.controls.measuredVoltage.invalid}">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
       <div class="input-group">
         <input name="measuredVoltage" type="number" min="1" step="any" class="form-control"
@@ -219,8 +219,8 @@
         *ngIf="fieldDataForm.controls.measuredVoltage.invalid && !fieldDataForm.controls.measuredVoltage.pristine">
         <span *ngIf="fieldDataForm.controls.measuredVoltage.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.pristine && !fieldDataForm.controls.measuredVoltage.invalid">{{warnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.pristine && !fieldDataForm.controls.measuredVoltage.invalid">{{warnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="!baseline && warnings.suggestedVoltage !== null && !fieldDataForm.controls.measuredVoltage.pristine">{{warnings.suggestedVoltage}}</span>
     </div>
 
     <!--min-->
