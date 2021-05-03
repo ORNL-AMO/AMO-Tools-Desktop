@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ReplaceExistingResults } from '../../shared/models/calculators';
 import { Settings } from '../../shared/models/settings';
-import { ReplaceExistingMotorTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { EnergyUsage, OpportunitySummary, ReplaceExistingMotorTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Injectable()
 export class ReplaceExistingTreasureHuntService {
 
-  constructor(private replaceExistingService: ReplaceExistingService) { }
+  constructor(private replaceExistingService: ReplaceExistingService, private convertUnitsService: ConvertUnitsService) { }
 
   initNewCalculator() {
     this.resetCalculatorInputs();
@@ -47,5 +49,46 @@ export class ReplaceExistingTreasureHuntService {
 
     return treasureHuntOpportunityResults;
   }
+
+  getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: replaceExistingMotor.selected,
+      opportunityType: 'replace-existing',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: 'kWh',
+        label: 'Electricity'
+      }],
+      utilityType: ['Electricity'],
+      percentSavings: [{
+        percent: (opportunitySummary.costSavings / currentEnergyUsage.electricityCosts) * 100,
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+
+      replaceExistingMotor: replaceExistingMotor,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: replaceExistingMotor.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/motor-icons/replace.png',
+      teamName: replaceExistingMotor.opportunitySheet? replaceExistingMotor.opportunitySheet.owner : undefined
+    };
+    return cardData;
+  }
+
+  convertReplaceExistingMotors(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<ReplaceExistingMotorTreasureHunt> {
+    replaceExistingMotors.forEach(replaceExistingMotor => {
+      //imperial: hp, metric: kW
+      replaceExistingMotor.replaceExistingData.motorSize = this.convertUnitsService.convertPowerValue(replaceExistingMotor.replaceExistingData.motorSize, oldSettings, newSettings);
+    });
+    return replaceExistingMotors;
+  }
+
+
+  
 
 }

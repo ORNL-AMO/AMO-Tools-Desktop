@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { PipeInsulationReductionService } from '../../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.service';
 import { Settings } from '../../shared/models/settings';
 import { PipeInsulationReductionResults } from '../../shared/models/standalone';
-import { PipeInsulationReductionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { EnergyUsage, OpportunitySummary, PipeInsulationReductionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Injectable()
 export class PipeInsulationTreasureHuntService {
@@ -55,6 +56,51 @@ export class PipeInsulationTreasureHuntService {
     }
 
     return treasureHuntOpportunityResults;
+  }
+
+  getPipeInsulationReductionCardData(reduction: PipeInsulationReductionTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let unitStr: string;
+    let currentCosts: number;
+    if (reduction.baseline.utilityType == 0) {
+      currentCosts = currentEnergyUsage.naturalGasCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    } else if (reduction.baseline.utilityType == 1) {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    }
+
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: reduction.selected,
+      opportunityType: 'pipe-insulation-reduction',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: unitStr,
+        label: opportunitySummary.utilityType
+      }],
+      utilityType: [opportunitySummary.utilityType],
+      percentSavings: [{
+        percent: (opportunitySummary.costSavings / currentCosts) * 100,
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+      pipeInsulationReduction: reduction,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: reduction.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/utilities-icons/pipe-insulation-reduction-icon.png',
+      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined
+    }
+    return cardData;
   }
 
 }
