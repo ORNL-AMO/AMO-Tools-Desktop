@@ -114,9 +114,11 @@ export class SteamReductionTreasureHuntService {
       steamReduction.baseline.forEach(reduction => {
         reduction = this.convertSteamReduction(reduction, oldSettings, newSettings);
       });
-      steamReduction.modification.forEach(reduction => {
-        reduction = this.convertSteamReduction(reduction, oldSettings, newSettings);
-      })
+      if (steamReduction.modification && steamReduction.modification.length > 0) {
+        steamReduction.modification.forEach(reduction => {
+          reduction = this.convertSteamReduction(reduction, oldSettings, newSettings);
+        })
+      }
     })
     return steamReductions;
   }

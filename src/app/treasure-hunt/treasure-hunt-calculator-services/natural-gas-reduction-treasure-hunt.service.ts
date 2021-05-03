@@ -91,10 +91,12 @@ export class NaturalGasReductionTreasureHuntService {
       reductionThItem.baseline.forEach(reduction => {
         reduction = this.convertNaturalGasReduction(reduction, oldSettings, newSettings);
       });
-      reductionThItem.modification.forEach(reduction => {
-        reduction = this.convertNaturalGasReduction(reduction, oldSettings, newSettings);
-      })
-    });
+      if (reductionThItem.modification && reductionThItem.modification.length > 0) { 
+        reductionThItem.modification.forEach(reduction => {
+          reduction = this.convertNaturalGasReduction(reduction, oldSettings, newSettings);
+        })
+      }
+      });
     return naturalGasReductions;
   }
 

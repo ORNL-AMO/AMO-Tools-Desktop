@@ -87,9 +87,11 @@ export class CaPressureReductionTreasureHuntService {
       compressedAirPressureReduction.baseline.forEach(reduction => {
         reduction = this.convertCompressedAirPressureReduction(reduction, oldSettings, newSettings);
       });
-      compressedAirPressureReduction.modification.forEach(reduction => {
-        reduction = this.convertCompressedAirPressureReduction(reduction, oldSettings, newSettings);
-      });
+      if (compressedAirPressureReduction.modification && compressedAirPressureReduction.modification.length > 0) {
+        compressedAirPressureReduction.modification.forEach(reduction => {
+          reduction = this.convertCompressedAirPressureReduction(reduction, oldSettings, newSettings);
+        });
+      }
     });
     return compressedAirPressureReductions;
   }

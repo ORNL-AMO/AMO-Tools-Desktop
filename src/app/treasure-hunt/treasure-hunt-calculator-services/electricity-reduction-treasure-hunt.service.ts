@@ -85,9 +85,11 @@ export class ElectricityReductionTreasureHuntService {
       electricityReduction.baseline.forEach(reduction => {
         reduction = this.convertElectricityReduction(reduction, oldSettings, newSettings);
       });
-      electricityReduction.modification.forEach(reduction => {
-        reduction = this.convertElectricityReduction(reduction, oldSettings, newSettings);
-      })
+      if (electricityReduction.modification && electricityReduction.modification.length > 0) { 
+        electricityReduction.modification.forEach(reduction => {
+          reduction = this.convertElectricityReduction(reduction, oldSettings, newSettings);
+        })
+      }
     });
     return electricityReductions;
   }

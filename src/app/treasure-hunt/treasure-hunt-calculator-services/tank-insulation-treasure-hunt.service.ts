@@ -107,7 +107,9 @@ export class TankInsulationTreasureHuntService {
   convertTankInsulationReductions(tankReductions: Array<TankInsulationReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<TankInsulationReductionTreasureHunt> {
     tankReductions.forEach(tankReduction => {
       tankReduction.baseline = this.convertTankInsulationReduction(tankReduction.baseline, oldSettings, newSettings);
-      tankReduction.modification = this.convertTankInsulationReduction(tankReduction.modification, oldSettings, newSettings);
+      if (tankReduction.modification) { 
+        tankReduction.modification = this.convertTankInsulationReduction(tankReduction.modification, oldSettings, newSettings);
+      }
     })
     return tankReductions;
   }

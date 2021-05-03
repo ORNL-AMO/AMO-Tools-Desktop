@@ -101,7 +101,7 @@ export class WallTreasureHuntService {
   convertWallLosses(wallLosses: Array<WallLossTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WallLossTreasureHunt> {
     wallLosses.forEach(wallLoss => {
       wallLoss.baseline.forEach(baselineLoss => this.convertWallLoss(baselineLoss, oldSettings, newSettings));
-      if (wallLoss.modification) {
+      if (wallLoss.modification && wallLoss.modification.length > 0) {
         wallLoss.modification.forEach(modificationLoss => this.convertWallLoss(modificationLoss, oldSettings, newSettings));
       }
     });

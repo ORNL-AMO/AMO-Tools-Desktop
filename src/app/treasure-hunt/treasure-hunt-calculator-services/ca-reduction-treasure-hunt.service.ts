@@ -104,10 +104,11 @@ export class CaReductionTreasureHuntService {
       compressedAirReduction.baseline.forEach(reduction => {
         reduction = this.convertCompressedAirReduction(reduction, oldSettings, newSettings);
       });
-    // debugger;
-      compressedAirReduction.modification.forEach(reduction => {
-        reduction = this.convertCompressedAirReduction(reduction, oldSettings, newSettings);
-      });
+      if (compressedAirReduction.modification && compressedAirReduction.modification.length > 0) { 
+        compressedAirReduction.modification.forEach(reduction => {
+          reduction = this.convertCompressedAirReduction(reduction, oldSettings, newSettings);
+        });
+      }
     })
     return compressedAirReductions;
   }

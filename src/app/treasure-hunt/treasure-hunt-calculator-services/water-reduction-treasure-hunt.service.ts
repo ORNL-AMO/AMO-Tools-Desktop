@@ -101,9 +101,11 @@ export class WaterReductionTreasureHuntService {
       waterReduction.baseline.forEach(reduction => {
         reduction = this.convertWaterReduction(reduction, oldSettings, newSettings);
       });
-      waterReduction.modification.forEach(reduction => {
-        reduction = this.convertWaterReduction(reduction, oldSettings, newSettings);
-      });
+      if (waterReduction.modification && waterReduction.modification.length > 0) { 
+        waterReduction.modification.forEach(reduction => {
+          reduction = this.convertWaterReduction(reduction, oldSettings, newSettings);
+        });
+      }
     })
     return waterReductions;
   }
