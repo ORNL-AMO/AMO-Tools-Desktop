@@ -19,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
 import { ControlDataComponent } from './inventory/control-data/control-data.component';
-import { PerformanceComponent } from './inventory/performance/performance.component';
 import { DesignDetailsComponent } from './inventory/design-details/design-details.component';
 import { InventoryService } from './inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
@@ -30,6 +29,7 @@ import { OperatingProfileTableComponent } from './system-profile/system-profile-
 import { SystemProfileService } from './system-profile/system-profile.service';
 import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics/centrifugal-specifics.component';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
+import { PerformancePointsComponent } from './inventory/performance-points/performance-points.component';
 
 @NgModule({
   declarations: [
@@ -46,14 +46,14 @@ import { CompressedAirCalculationService } from './compressed-air-calculation.se
     SystemProfileGraphsComponent,
     NameplateDataComponent,
     ControlDataComponent,
-    PerformanceComponent,
     DesignDetailsComponent,
     ResultsPanelComponent,
     InventoryTableComponent,
     ProfileSetupFormComponent,
     CompressorOrderingTableComponent,
     OperatingProfileTableComponent,
-    CentrifugalSpecificsComponent
+    CentrifugalSpecificsComponent,
+    PerformancePointsComponent
   ],
   imports: [
     CommonModule,

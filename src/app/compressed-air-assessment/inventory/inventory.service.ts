@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class InventoryService {
@@ -197,7 +197,49 @@ export class InventoryService {
       designEfficiency: form.controls.designEfficiency.value,
       serviceFactor: form.controls.serviceFactor.value
     }
-
   }
 
+
+  getPerformancePointFormFromObj(performancePoints: PerformancePoints): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      fullLoadDischargePressure: [performancePoints.fullLoad.dischargePressure],
+      fullLoadAirflow: [performancePoints.fullLoad.airflow],
+      fullLoadPower: [performancePoints.fullLoad.power],
+      maxFullFlowDischargePressure: [performancePoints.maxFullFlow.dischargePressure],
+      maxFullFlowAirflow: [performancePoints.maxFullFlow.airflow],
+      maxFullFlowPower: [performancePoints.maxFullFlow.power],
+      unloadPointDischargePressure: [performancePoints.unloadPoint.dischargePressure],
+      unloadPointAirflow: [performancePoints.unloadPoint.airflow],
+      unloadPointPower: [performancePoints.unloadPoint.power],
+      noLoadDischargePressure: [performancePoints.noLoad.dischargePressure],
+      noLoadAirflow: [performancePoints.noLoad.airflow],
+      noLoadPower: [performancePoints.noLoad.power],
+    });
+    return form;
+  }
+
+  getPerformancePointObjFromForm(form: FormGroup): PerformancePoints {
+    return {
+      fullLoad: {
+        dischargePressure: form.controls.fullLoadDischargePressure.value,
+        airflow: form.controls.fullLoadAirflow.value,
+        power: form.controls.fullLoadPower.value,
+      },
+      maxFullFlow: {
+        dischargePressure: form.controls.maxFullFlowDischargePressure.value,
+        airflow: form.controls.maxFullFlowAirflow.value,
+        power: form.controls.maxFullFlowPower.value,
+      },
+      unloadPoint: {
+        dischargePressure: form.controls.unloadPointDischargePressure.value,
+        airflow: form.controls.unloadPointAirflow.value,
+        power: form.controls.unloadPointPower.value,
+      },
+      noLoad: {
+        dischargePressure: form.controls.noLoadDischargePressure.value,
+        airflow: form.controls.noLoadAirflow.value,
+        power: form.controls.noLoadPower.value,
+      }
+    }
+  }
 }
