@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirPressureReductionService } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
-import { CompressedAirPressureReductionResults } from '../../shared/models/standalone';
-import { CompressedAirPressureReductionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { CompressedAirPressureReductionData, CompressedAirPressureReductionResults } from '../../shared/models/standalone';
+import { CompressedAirPressureReductionTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Injectable()
 export class CaPressureReductionTreasureHuntService {
 
-  constructor(private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
+  constructor(private compressedAirPressureReductionService: CompressedAirPressureReductionService, private convertUnitsService: ConvertUnitsService) { }
 
   
   initNewCalculator() {
@@ -49,6 +51,53 @@ export class CaPressureReductionTreasureHuntService {
     }
 
     return treasureHuntOpportunityResults;
+  }
+
+  getCompressedAirPressureReductionCardData(reduction: CompressedAirPressureReductionTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: reduction.selected,
+      opportunityType: 'compressed-air-pressure-reduction',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: 'kWh',
+        label: 'Electricity'
+      }],
+      utilityType: ['Electricity'],
+      percentSavings: [{
+        percent: (opportunitySummary.costSavings / currentEnergyUsage.electricityCosts) * 100,
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+      compressedAirPressureReduction: reduction,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: reduction.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
+      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined
+    };
+    return cardData;
+  }
+
+  convertCompressedAirPressureReductions(compressedAirPressureReductions: Array<CompressedAirPressureReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<CompressedAirPressureReductionTreasureHunt> {
+    compressedAirPressureReductions.forEach(compressedAirPressureReduction => {
+      compressedAirPressureReduction.baseline.forEach(reduction => {
+        reduction = this.convertCompressedAirPressureReduction(reduction, oldSettings, newSettings);
+      });
+      compressedAirPressureReduction.modification.forEach(reduction => {
+        reduction = this.convertCompressedAirPressureReduction(reduction, oldSettings, newSettings);
+      });
+    });
+    return compressedAirPressureReductions;
+  }
+  convertCompressedAirPressureReduction(reduction: CompressedAirPressureReductionData, oldSettings: Settings, newSettings: Settings): CompressedAirPressureReductionData {
+    //imperial: psig, metric: barg
+    reduction.pressure = this.convertUnitsService.convertPsigAndBargValue(reduction.pressure, oldSettings, newSettings);
+    reduction.proposedPressure = this.convertUnitsService.convertPsigAndBargValue(reduction.proposedPressure, oldSettings, newSettings);
+    return reduction;
   }
 
 }

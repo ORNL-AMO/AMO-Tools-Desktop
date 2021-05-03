@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { OpportunitySummaryService } from '../treasure-hunt-report/opportunity-summary.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { AirLeakTreasureHuntService } from './air-leak-treasure-hunt.service';
 import { CaPressureReductionTreasureHuntService } from './ca-pressure-reduction-treasure-hunt.service';
@@ -25,6 +26,7 @@ export class TreasureHuntOpportunityService {
 
   constructor(
     private opportunityCardsService: OpportunityCardsService,
+    private opportunitySummaryService: OpportunitySummaryService,
     private airLeakTreasureHuntService: AirLeakTreasureHuntService,
     private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
     private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
@@ -140,12 +142,14 @@ export class TreasureHuntOpportunityService {
     if (selectedCalc === Treasure.airLeak) {
       let airLeakSurveyOpportunity = currentOpportunity as AirLeakSurveyTreasureHunt;
       treasureHunt.airLeakSurveys[this.calculatorsService.itemIndex] = airLeakSurveyOpportunity;
-      updatedCard = this.opportunityCardsService.getAirLeakSurveyCardData(airLeakSurveyOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(airLeakSurveyOpportunity, settings);
+      updatedCard = this.airLeakTreasureHuntService.getAirLeakSurveyCardData(airLeakSurveyOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.tankInsulation) {
       let tankInsulationOpportunity = currentOpportunity as TankInsulationReductionTreasureHunt;
       treasureHunt.tankInsulationReductions[this.calculatorsService.itemIndex] = tankInsulationOpportunity;
-      updatedCard = this.opportunityCardsService.getTankInsulationReductionCardData(tankInsulationOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(tankInsulationOpportunity, settings);
+      updatedCard = this.tankInsulationTreasureHuntService.getTankInsulationReductionCardData(tankInsulationOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.opportunitySheet && standaloneOpportunitySheet) {
       treasureHunt.opportunitySheets[this.calculatorsService.itemIndex] = standaloneOpportunitySheet;
@@ -154,62 +158,74 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.lightingReplacement) {
       let lightingReplacementOpportunity = currentOpportunity as LightingReplacementTreasureHunt;
       treasureHunt.lightingReplacements[this.calculatorsService.itemIndex] = lightingReplacementOpportunity;
-      updatedCard = this.opportunityCardsService.getLightingReplacementCardData(lightingReplacementOpportunity, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings,);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(lightingReplacementOpportunity, settings);
+      updatedCard = this.lightingReplacementTreasureHuntService.getLightingReplacementCardData(lightingReplacementOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings,);
     
     } else if (selectedCalc === Treasure.replaceExisting) {
       let replaceExistingMotorOpportunity = currentOpportunity as ReplaceExistingMotorTreasureHunt;
       treasureHunt.replaceExistingMotors[this.calculatorsService.itemIndex] = replaceExistingMotorOpportunity;
-      updatedCard = this.opportunityCardsService.getReplaceExistingCardData(replaceExistingMotorOpportunity, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(replaceExistingMotorOpportunity, settings);
+      updatedCard = this.replaceExistingTreasureService.getReplaceExistingCardData(replaceExistingMotorOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
     
     } else if (selectedCalc === Treasure.motorDrive) {
       let motorDriveOpportunity = currentOpportunity as MotorDriveInputsTreasureHunt;
       treasureHunt.motorDrives[this.calculatorsService.itemIndex] = motorDriveOpportunity;
-      updatedCard = this.opportunityCardsService.getMotorDriveCard(motorDriveOpportunity, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(motorDriveOpportunity, settings);
+      updatedCard = this.motorDriveTreasureHuntService.getMotorDriveCard(motorDriveOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
     
     } else if (selectedCalc === Treasure.naturalGasReduction) {
       let naturalGasReductionOpportunity = currentOpportunity as NaturalGasReductionTreasureHunt;
       treasureHunt.naturalGasReductions[this.calculatorsService.itemIndex] = naturalGasReductionOpportunity;
-      updatedCard = this.opportunityCardsService.getNaturalGasReductionCard(naturalGasReductionOpportunity, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(naturalGasReductionOpportunity, settings);
+      updatedCard = this.naturalGasTreasureHuntService.getNaturalGasReductionCard(naturalGasReductionOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
     
     } else if (selectedCalc === Treasure.electricityReduction) {
       let electricityReductionOpportunity = currentOpportunity as ElectricityReductionTreasureHunt;
       treasureHunt.electricityReductions[this.calculatorsService.itemIndex] = electricityReductionOpportunity;
-      updatedCard = this.opportunityCardsService.getElectricityReductionCard(electricityReductionOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(electricityReductionOpportunity, settings);
+      updatedCard = this.electricityReductionTreasureHuntService.getElectricityReductionCard(electricityReductionOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.compressedAir) {
       let compressedAirOpportunity = currentOpportunity as CompressedAirReductionTreasureHunt;
       treasureHunt.compressedAirReductions[this.calculatorsService.itemIndex] = compressedAirOpportunity;
-      updatedCard = this.opportunityCardsService.getCompressedAirReductionCardData(compressedAirOpportunity, settings, treasureHunt.currentEnergyUsage, this.calculatorsService.itemIndex);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(compressedAirOpportunity, settings);
+      updatedCard = this.compressedAirTreasureHuntService.getCompressedAirReductionCardData(compressedAirOpportunity, opportunitySummary, settings, treasureHunt.currentEnergyUsage, this.calculatorsService.itemIndex);
     
     } else if (selectedCalc === Treasure.compressedAirPressure) {
       let compressedAirPressureOpportunity = currentOpportunity as CompressedAirPressureReductionTreasureHunt;
       treasureHunt.compressedAirPressureReductions[this.calculatorsService.itemIndex] = compressedAirPressureOpportunity;
-      updatedCard = this.opportunityCardsService.getCompressedAirPressureReductionCardData(compressedAirPressureOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(compressedAirPressureOpportunity, settings);
+      updatedCard = this.compressedAirPressureTreasureHuntService.getCompressedAirPressureReductionCardData(compressedAirPressureOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.waterReduction) {
       let waterReductionOpportunity = currentOpportunity as WaterReductionTreasureHunt;
       treasureHunt.waterReductions[this.calculatorsService.itemIndex] = waterReductionOpportunity;
-      updatedCard = this.opportunityCardsService.getWaterReductionCardData(waterReductionOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(waterReductionOpportunity, settings);
+      updatedCard = this.waterReductionTreasureHuntService.getWaterReductionCardData(waterReductionOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.steamReduction) {
       let steamReductionOpportunity = currentOpportunity as SteamReductionTreasureHunt;
       treasureHunt.steamReductions[this.calculatorsService.itemIndex] = steamReductionOpportunity;
-      updatedCard = this.opportunityCardsService.getSteamReductionCardData(steamReductionOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(steamReductionOpportunity, settings);
+      updatedCard = this.steamReductionTreasureHuntService.getSteamReductionCardData(steamReductionOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.pipeInsulation) {
       let pipeInsulationOpportunity = currentOpportunity as PipeInsulationReductionTreasureHunt;
       treasureHunt.pipeInsulationReductions[this.calculatorsService.itemIndex] = pipeInsulationOpportunity;
-      updatedCard = this.opportunityCardsService.getPipeInsulationReductionCardData(pipeInsulationOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(pipeInsulationOpportunity, settings);
+      updatedCard = this.pipeInsulationTreasureHuntService.getPipeInsulationReductionCardData(pipeInsulationOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.wallLoss) {
       let wallLossOpportunity = currentOpportunity as WallLossTreasureHunt;
       treasureHunt.wallLosses[this.calculatorsService.itemIndex] = wallLossOpportunity;
-      updatedCard = this.opportunityCardsService.getWallLossCardData(wallLossOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(wallLossOpportunity, settings);
+      updatedCard = this.wallTreasureService.getWallLossCardData(wallLossOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     } else if (selectedCalc === Treasure.flueGas) {
       let flueGasOpportunity = currentOpportunity as FlueGasTreasureHunt;
       treasureHunt.flueGasLosses[this.calculatorsService.itemIndex] = flueGasOpportunity;
-      updatedCard = this.opportunityCardsService.getFlueGasCardData(flueGasOpportunity, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(flueGasOpportunity, settings);
+      updatedCard = this.flueGasTreasureHuntService.getFlueGasCardData(flueGasOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     
     }
     

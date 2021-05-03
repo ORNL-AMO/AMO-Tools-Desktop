@@ -9,6 +9,7 @@ import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ConvertInputDataService } from '../convert-input-data.service';
 import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 
 @Component({
@@ -40,7 +41,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService,
-    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService) { }
+    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -126,7 +128,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.initSuccessMessage();
     }
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
-    this.settings = this.convertInputDataService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.saveSettings();
 
