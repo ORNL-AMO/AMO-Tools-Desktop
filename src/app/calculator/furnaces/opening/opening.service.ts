@@ -22,6 +22,7 @@ export class OpeningService {
   operatingHours: OperatingHours;
 
   modalOpen: BehaviorSubject<boolean>;
+  defaultEnergySourceType: string;
   constructor(private convertUnitsService: ConvertUnitsService, 
               private openingFormService: OpeningFormService, 
               private phastService: PhastService) {
@@ -35,6 +36,8 @@ export class OpeningService {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.energySourceType = new BehaviorSubject<string>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+
+    this.defaultEnergySourceType = 'Fuel';
   }
 
   calculate(settings: Settings) {
@@ -129,12 +132,23 @@ export class OpeningService {
       this.modificationData.next(currentModificationData);
     }
   }
-
+  
   initDefaultEmptyInputs() {
-    let emptyBaselineData: OpeningLoss = this.initDefaultLoss(0, undefined);
+    this.defaultEnergySourceType = 'Fuel';
+    let emptyBaselineData: OpeningLoss = this.initDefaultLoss(0);
+    let baselineData: Array<OpeningLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
-    this.energySourceType.next('Fuel');
-    this.baselineData.next([emptyBaselineData]);
+    this.energySourceType.next(this.defaultEnergySourceType);
+    this.baselineData.next(baselineData);
+  }
+  
+  initTreasureHuntEmptyInputs(treasureHuntHours: number) {
+    this.defaultEnergySourceType = 'Natural Gas';
+    let emptyBaselineData: OpeningLoss = this.initDefaultLoss(0, treasureHuntHours);
+    let baselineData: Array<OpeningLoss> = [emptyBaselineData];
+    this.modificationData.next(undefined);
+    this.energySourceType.next(this.defaultEnergySourceType);
+    this.baselineData.next(baselineData);
   }
 
   updateDataArray(data: OpeningLoss, index: number, isBaseline: boolean) {
@@ -156,20 +170,14 @@ export class OpeningService {
     }
   }
 
-  initDefaultLoss(index: number, treasureHours: number, openingLoss?: OpeningLoss) {
+  initDefaultLoss(index: number, hoursPerYear = 8760, openingLoss?: OpeningLoss) {
     let fuelCost: number = 0;
     let availableHeat: number = 100;
-    let hoursPerYear = 8760;
 
     if (openingLoss) {
       fuelCost = openingLoss.fuelCost;
       availableHeat = openingLoss.availableHeat;
-
-      if (treasureHours) {
-        hoursPerYear = treasureHours;
-      } else {
-        hoursPerYear = openingLoss.hoursPerYear;
-      }
+      hoursPerYear = openingLoss.hoursPerYear;
     }
 
     let defaultBaselineLoss: OpeningLoss = {
@@ -187,7 +195,7 @@ export class OpeningService {
       heatLoss: 0,
       fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       availableHeat: availableHeat,
       name: 'Loss #' + (index + 1),
       
@@ -233,7 +241,10 @@ export class OpeningService {
     this.modificationData.next(currentBaselineCopy);
   }
 
-  generateExampleData(settings: Settings) {
+  generateExampleData(settings: Settings, inTreasureHunt: boolean) {
+    if (inTreasureHunt) {
+      this.defaultEnergySourceType = 'Other Fuel';
+    }
     let ambientTemp: number = 75;
     let insideTemp: number = 2400;
     let thickness: number = 16;
@@ -272,7 +283,7 @@ export class OpeningService {
       heatLoss: 0,
       fuelCost: 3.99,
       hoursPerYear: 8760,
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       availableHeat: 100,
       name: 'Loss #1',
     };
@@ -294,7 +305,7 @@ export class OpeningService {
       heatLoss: 0,
       fuelCost: 3.99,
       hoursPerYear: 8760,
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       availableHeat: 100,
       name: 'Loss #1 (Lower Time Open)',
     };

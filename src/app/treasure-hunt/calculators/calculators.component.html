@@ -59,6 +59,10 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-air-leak>
 
+<app-opening *ngIf="selectedCalc == 'opening-loss'" [inTreasureHunt]="true"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-opening>
+
 <app-wall *ngIf="selectedCalc == 'wall-loss'" [inTreasureHunt]="true"
   (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-wall>
