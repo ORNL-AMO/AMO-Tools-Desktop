@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
@@ -19,6 +19,7 @@ import { SteamReductionTreasureHuntService } from '../../treasure-hunt-calculato
 import { TankInsulationTreasureHuntService } from '../../treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
 import { WallTreasureHuntService } from '../../treasure-hunt-calculator-services/wall-treasure-hunt.service';
 import { WaterReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from '../../treasure-hunt-calculator-services/leakage-treasure-hunt.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -41,6 +42,7 @@ export class OpportunityCardsService {
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
     private wallLossTreasureHuntService: WallTreasureHuntService,
+    private leakageLossTreasureService: LeakageTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService
     ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
@@ -64,6 +66,7 @@ export class OpportunityCardsService {
     let tankInsulationReductionData: Array<OpportunityCardData> = this.getTankInsulationReductions(treasureHunt.tankInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let airLeakSurveyData: Array<OpportunityCardData> = this.getAirLeakSurveys(treasureHunt.airLeakSurveys, treasureHunt.currentEnergyUsage, settings);
     let wallLossData: Array<OpportunityCardData> = this.getWallLosses(treasureHunt.wallLosses, treasureHunt.currentEnergyUsage, settings);
+    let leakageLossData: Array<OpportunityCardData> = this.getLeakageLosses(treasureHunt.leakageLosses, treasureHunt.currentEnergyUsage, settings);
     let flueGasData: Array<OpportunityCardData> = this.getFlueGasLosses(treasureHunt.flueGasLosses, treasureHunt.currentEnergyUsage, settings);
     
     opportunityCardsData = _.union(
@@ -81,6 +84,7 @@ export class OpportunityCardsService {
       tankInsulationReductionData, 
       airLeakSurveyData,
       wallLossData,
+      leakageLossData,
       flueGasData
       );
     let index: number = 0;
@@ -494,6 +498,20 @@ export class OpportunityCardsService {
     }
     return opportunityCardsData;
   }
+
+  getLeakageLosses(leakageLosses: Array<LeakageLossTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (leakageLosses) {
+      let index: number = 0;
+      leakageLosses.forEach(leakageLoss => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(leakageLoss, settings);
+        let cardData: OpportunityCardData = this.leakageLossTreasureService.getLeakageLossCardData(leakageLoss, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
  
   getFlueGasLosses(flueGasLosses: Array<FlueGasTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
@@ -549,6 +567,7 @@ export interface OpportunityCardData {
   pipeInsulationReduction?: PipeInsulationReductionTreasureHunt;
   tankInsulationReduction?: TankInsulationReductionTreasureHunt;
   airLeakSurvey?: AirLeakSurveyTreasureHunt;
-  wallLoss?: WallLossTreasureHunt
+  wallLoss?: WallLossTreasureHunt;
+  leakageLoss?: LeakageLossTreasureHunt;
   flueGas?: FlueGasTreasureHunt;
 }

@@ -45,7 +45,6 @@ export class WallTreasureHuntService {
     this.setCalculatorInputFromOpportunity(wallLossTreasureHunt);
     this.wallService.calculate(settings);
     let output: WallLossOutput = this.wallService.output.getValue();
-    this.resetCalculatorInputs()
 
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavings,
