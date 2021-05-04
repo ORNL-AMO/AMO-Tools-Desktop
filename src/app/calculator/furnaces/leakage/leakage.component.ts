@@ -1,9 +1,10 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
+import { LeakageLoss, LeakageLossOutput } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
+import { LeakageLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { LeakageService } from './leakage.service';
 
 @Component({
@@ -16,6 +17,10 @@ export class LeakageComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Output("emitSave")
+  emitSave = new EventEmitter<LeakageLossTreasureHunt>();
+  @Output("emitCancel")
+  emitCancel = new EventEmitter<boolean>();
   @Input()
   operatingHours: OperatingHours;
   
@@ -54,8 +59,7 @@ export class LeakageComponent implements OnInit {
 
     let existingInputs = this.leakageService.baselineData.getValue();
     if(!existingInputs) {
-      this.leakageService.initDefaultEmptyInputs();
-      this.leakageService.initDefaultEmptyOutput();
+      this.resetLeakageInputs();
     }
     this.initSubscriptions();
     if(this.modificationData) {
@@ -67,19 +71,26 @@ export class LeakageComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.leakageService.initDefaultEmptyInputs();
+    }
   }
 
   initSubscriptions() {
     this.modalSubscription = this.leakageService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
     });
-    this.baselineDataSub = this.leakageService.baselineData.subscribe(value => {
-      this.baselineData = value;
-      this.leakageService.calculate(this.settings);
+    this.baselineDataSub = this.leakageService.baselineData.subscribe(baselineData => {
+      if (baselineData) {
+        this.baselineData = baselineData;
+        this.leakageService.calculate(this.settings);
+      }
     });
-    this.modificationDataSub = this.leakageService.modificationData.subscribe(value => {
-      this.modificationData = value
-      this.leakageService.calculate(this.settings);
+    this.modificationDataSub = this.leakageService.modificationData.subscribe(modificationData => {
+      if (modificationData) {
+        this.modificationData = modificationData;
+        this.leakageService.calculate(this.settings);
+      }
     });
   }
   
@@ -105,7 +116,7 @@ export class LeakageComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.leakageService.generateExampleData(this.settings);
+    this.leakageService.generateExampleData(this.settings, this.inTreasureHunt);
     this.modificationExists = true;
   }
 
@@ -130,6 +141,32 @@ export class LeakageComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+    }
+  }
+  
+  save() {
+    let output: LeakageLossOutput = this.leakageService.output.getValue();
+    this.emitSave.emit({
+      baseline: this.baselineData,
+      modification: this.modificationData,
+      energySourceData: {
+        energySourceType: this.baselineData[0].energySourceType,
+        unit: output.energyUnit,
+      },
+      opportunityType: Treasure.leakageLoss
+    });
+  }
+
+  cancel() {
+    this.leakageService.initDefaultEmptyInputs();
+    this.emitCancel.emit(true);
+  }
+
+  resetLeakageInputs() {
+    if (this.inTreasureHunt) {
+      this.leakageService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+    } else {
+      this.leakageService.initDefaultEmptyInputs();
     }
   }
 }

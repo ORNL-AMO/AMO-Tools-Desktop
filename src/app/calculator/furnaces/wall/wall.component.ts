@@ -75,6 +75,9 @@ export class WallComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.wallService.initDefaultEmptyInputs();
+    }
   }
 
   initSubscriptions() {

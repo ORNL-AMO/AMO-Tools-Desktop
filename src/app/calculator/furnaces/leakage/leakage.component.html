@@ -36,7 +36,7 @@
 			  </div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of baselineData; let i = index;">
-					<app-leakage-form [index]="i" [operatingHours]="operatingHours" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-leakage-form>
+					<app-leakage-form [index]="i" [operatingHours]="operatingHours" [inTreasureHunt]="inTreasureHunt" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-leakage-form>
 				</div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -60,7 +60,7 @@
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of modificationData; let i = index;">
-					<app-leakage-form [operatingHours]="operatingHours" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-leakage-form>
+					<app-leakage-form [operatingHours]="operatingHours" [inTreasureHunt]="inTreasureHunt" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-leakage-form>
 				  </div>
 			</div>
 		  </div>

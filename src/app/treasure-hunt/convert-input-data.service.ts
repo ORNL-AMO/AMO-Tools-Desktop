@@ -14,6 +14,7 @@ import { SteamReductionTreasureHuntService } from './treasure-hunt-calculator-se
 import { TankInsulationTreasureHuntService } from './treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
 import { WallTreasureHuntService } from './treasure-hunt-calculator-services/wall-treasure-hunt.service';
 import { WaterReductionTreasureHuntService } from './treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/leakage-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -31,6 +32,7 @@ export class ConvertInputDataService {
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private wallTreasureService: WallTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private leakageTreasureHuntService: LeakageTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -73,6 +75,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.airLeakSurveys != undefined) {
       treasureHunt.airLeakSurveys = this.airLeakTreasureService.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
+    }
+    if (treasureHunt.leakageLosses != undefined) {
+      treasureHunt.leakageLosses = this.leakageTreasureHuntService.convertLeakageLosses(treasureHunt.leakageLosses, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

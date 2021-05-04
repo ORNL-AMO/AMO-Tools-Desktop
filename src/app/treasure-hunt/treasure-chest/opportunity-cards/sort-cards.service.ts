@@ -4,7 +4,7 @@ import { SortCardsData } from './sort-cards-by.pipe';
 import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
-  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure
+  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -24,6 +24,7 @@ import { StandaloneOpportunitySheetService } from '../../treasure-hunt-calculato
 import { SteamReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
 import { WallTreasureHuntService } from '../../treasure-hunt-calculator-services/wall-treasure-hunt.service';
 import { WaterReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from '../../treasure-hunt-calculator-services/leakage-treasure-hunt.service';
 
 @Injectable()
 export class SortCardsService {
@@ -43,6 +44,7 @@ export class SortCardsService {
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
     private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
+    private leakageTreasureHuntService: LeakageTreasureHuntService,
     private wallLossTreasureHuntService: WallTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService
     ) { }
@@ -100,6 +102,7 @@ export class SortCardsService {
     let hasAirLeakSurvey: boolean = calculatorTypes.includes(Treasure.airLeak);
     let hasWallLoss: boolean = calculatorTypes.includes(Treasure.wallLoss);
     let hasFlueGas: boolean = calculatorTypes.includes(Treasure.flueGas);
+    let hasLeakageLoss: boolean = calculatorTypes.includes(Treasure.leakageLoss);
 
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
@@ -191,6 +194,12 @@ export class SortCardsService {
         flueGasLosses = this.sortFlueGasLosses(treasureHunt.flueGasLosses, sortBy, treasureHunt, settings);
       }
     }
+    let leakageLosses: Array<LeakageLossTreasureHunt> = [];
+    if (allCalcTypes || hasLeakageLoss) {
+      if (treasureHunt.leakageLosses && treasureHunt.leakageLosses.length != 0) {
+        leakageLosses = this.sortLeakageLosses(treasureHunt.leakageLosses, sortBy, treasureHunt, settings);
+      }
+    }
 
     let filteredTreasureHunt: TreasureHunt = {
       name: treasureHunt.name,
@@ -209,6 +218,7 @@ export class SortCardsService {
       airLeakSurveys: airLeakSurveys,
       wallLosses: wallLosses,
       flueGasLosses: flueGasLosses,
+      leakageLosses: leakageLosses,
       operatingHours: treasureHunt.operatingHours,
       currentEnergyUsage: treasureHunt.currentEnergyUsage,
       setupDone: treasureHunt.setupDone
@@ -354,6 +364,13 @@ export class SortCardsService {
       let cardItem: OpportunityCardData = this.wallLossTreasureHuntService.getWallLossCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
   });
+}
+sortLeakageLosses(items: Array<LeakageLossTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<LeakageLossTreasureHunt> {
+  return items.filter(item => {
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+    let cardItem: OpportunityCardData = this.leakageTreasureHuntService.getLeakageLossCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+    return this.checkCardItemIncluded(cardItem, sortBy);
+});
 }
   sortFlueGasLosses(items: Array<FlueGasTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<FlueGasTreasureHunt> {
     return items.filter(item => {

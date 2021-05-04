@@ -63,6 +63,10 @@
   (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-wall>
 
+<app-leakage *ngIf="selectedCalc == 'leakage-loss'" [inTreasureHunt]="true"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-leakage>
+
 <app-flue-gas *ngIf="selectedCalc == 'flue-gas'" [inTreasureHunt]="true"
   (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours">

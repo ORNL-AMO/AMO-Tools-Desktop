@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput, LeakageLossResults } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../../shared/models/settings';
+import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { LeakageFormService, LeakageWarnings } from '../leakage-form.service';
 import { LeakageService } from '../leakage.service';
 
@@ -14,6 +15,8 @@ import { LeakageService } from '../leakage.service';
   styleUrls: ['./leakage-form.component.css']
 })
 export class LeakageFormComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -45,6 +48,7 @@ export class LeakageFormComponent implements OnInit {
   trackingEnergySource: boolean;
   idString: string;
   outputSubscription: Subscription;
+  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
 
   constructor(private leakageFormService: LeakageFormService,
     private cd: ChangeDetectorRef,
@@ -61,12 +65,17 @@ export class LeakageFormComponent implements OnInit {
 
     this.initSubscriptions();
     this.energyUnit = this.leakageService.getAnnualEnergyUnit(this.leakageForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.leakageService.energySourceType.next(this.leakageForm.controls.energySourceType.value);
-    } else {
+    if (this.trackingEnergySource) {
       let energySource = this.leakageService.energySourceType.getValue();
       this.setEnergySource(energySource);
+    } else {
+      this.leakageService.energySourceType.next(this.leakageForm.controls.energySourceType.value);
     }
+
+    if (this.inTreasureHunt) {
+      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
+    }
+    this.setEnergySource();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -106,11 +115,7 @@ export class LeakageFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSubscription = this.leakageService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
-      }
+     this.setLossResult(output);
     });
     if (this.trackingEnergySource) {
       this.energySourceTypeSub = this.leakageService.energySourceType.subscribe(energySourceType => {
@@ -134,6 +139,9 @@ export class LeakageFormComponent implements OnInit {
     } else {
       this.leakageForm.enable();
     }
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.leakageForm.controls.energySourceType.disable();
+    }
   }
 
   editLossName() {
@@ -148,14 +156,16 @@ export class LeakageFormComponent implements OnInit {
     this.leakageService.removeLoss(this.index);
   }
 
-  setEnergySource(energySourceType: string) {
-    this.leakageForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.leakageService.getAnnualEnergyUnit(energySourceType, this.settings);
+  setEnergySource(baselineEnergySource?: string) {
+    if (baselineEnergySource) {
+      this.leakageForm.patchValue({
+        energySourceType: baselineEnergySource
+      });
+    }
+    this.energyUnit = this.leakageService.getAnnualEnergyUnit(this.leakageForm.controls.energySourceType.value, this.settings);
 
     if (!this.trackingEnergySource) {
-      this.leakageService.energySourceType.next(energySourceType);
+      this.leakageService.energySourceType.next(this.leakageForm.controls.energySourceType.value);
     }
     this.cd.detectChanges();
     this.calculate();

@@ -5,6 +5,7 @@ import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReducti
 import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
+import { LeakageLoss } from "./phast/losses/leakageLoss";
 
 export interface TreasureHunt {
     name: string,
@@ -21,7 +22,8 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
-    wallLosses?: Array<WallLossTreasureHunt>
+    wallLosses?: Array<WallLossTreasureHunt>;
+    leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
@@ -44,7 +46,8 @@ export enum Treasure {
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
     wallLoss = 'wall-loss',
-    flueGas = 'flue-gas'
+    flueGas = 'flue-gas',
+    leakageLoss = 'leakage-loss'
 }
 
 export interface FilterOption {
@@ -206,6 +209,14 @@ export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface LeakageLossTreasureHunt extends TreasureHuntOpportunity {
+    baseline: Array<LeakageLoss>;
+    modification: Array<LeakageLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
     baseline: FlueGas;
     modification: FlueGas;
@@ -350,5 +361,6 @@ export interface ImportExportOpportunities {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
+    leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
 }
