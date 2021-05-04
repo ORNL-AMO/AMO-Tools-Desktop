@@ -12,6 +12,13 @@ export interface WasteHeatInput {
 }
 
 export interface WasteHeatOutput {
+    baseline: WasteHeatResults,
+    modification?: WasteHeatResults,
+    annualEnergySavings?: number,
+    annualCostSavings?: number
+}
+
+export interface WasteHeatResults {
     recoveredHeat: number,
     hotWaterFlow: number,
     tonsRefrigeration: number,

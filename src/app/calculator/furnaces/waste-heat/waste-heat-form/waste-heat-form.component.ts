@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { ElementRef, HostListener, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -15,7 +15,10 @@ import { WasteHeatService } from '../waste-heat.service';
   styleUrls: ['./waste-heat-form.component.css']
 })
 export class WasteHeatFormComponent implements OnInit {
-
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -44,6 +47,20 @@ export class WasteHeatFormComponent implements OnInit {
     this.initSubscriptions();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      this.setFormState();
+    }
+  }
+
+  setFormState() {
+    if (this.selected == false) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+  }
+  
   initSubscriptions() {
     this.resetDataSub = this.wasteHeatService.resetData.subscribe(value => {
       this.initForm();
@@ -52,6 +69,8 @@ export class WasteHeatFormComponent implements OnInit {
       this.initForm();
     })
   }
+
+  
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -65,7 +84,12 @@ export class WasteHeatFormComponent implements OnInit {
   }
 
   initForm() {
-    let wasteHeatInput: WasteHeatInput = this.wasteHeatService.wasteHeatInput.getValue();
+    let wasteHeatInput: WasteHeatInput
+    if (this.isBaseline) {
+      wasteHeatInput = this.wasteHeatService.baselineData.getValue();
+    } else {
+      wasteHeatInput = this.wasteHeatService.modificationData.getValue();
+    }
     this.form = this.wasteHeatFormService.getWasteHeatForm(wasteHeatInput, this.settings);
     this.calculate();
   }
@@ -79,7 +103,11 @@ export class WasteHeatFormComponent implements OnInit {
     this.form = this.wasteHeatFormService.setChillerTempValidators(this.form, this.settings);
     let updatedInput: WasteHeatInput = this.wasteHeatFormService.getWasteHeatInput(this.form);
     this.warnings = this.wasteHeatFormService.checkWasteHeatWarnings(updatedInput);
-    this.wasteHeatService.wasteHeatInput.next(updatedInput);
+    if (this.isBaseline) {
+      this.wasteHeatService.baselineData.next(updatedInput);
+    } else {
+      this.wasteHeatService.modificationData.next(updatedInput);
+    }
   }
 
   closeOperatingHoursModal() {

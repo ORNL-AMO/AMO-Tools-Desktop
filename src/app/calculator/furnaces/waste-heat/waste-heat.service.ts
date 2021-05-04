@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { WasteHeatInput, WasteHeatOutput } from '../../../shared/models/phast/wasteHeat';
+import { WasteHeatInput, WasteHeatOutput, WasteHeatResults } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
 import { WasteHeatFormService } from './waste-heat-form.service';
 
@@ -10,7 +10,8 @@ declare var processHeatAddon;
 @Injectable()
 export class WasteHeatService {
 
-  wasteHeatInput: BehaviorSubject<WasteHeatInput>;
+  baselineData: BehaviorSubject<WasteHeatInput>;
+  modificationData: BehaviorSubject<WasteHeatInput>;
   wasteHeatOutput: BehaviorSubject<WasteHeatOutput>;
   
   resetData: BehaviorSubject<boolean>;
@@ -20,16 +21,17 @@ export class WasteHeatService {
 
   constructor(private convertUnitsService: ConvertUnitsService, private wasteHeatFormService: WasteHeatFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
-    this.wasteHeatInput = new BehaviorSubject<WasteHeatInput>(undefined);
+    this.baselineData = new BehaviorSubject<WasteHeatInput>(undefined);
+    this.modificationData = new BehaviorSubject<WasteHeatInput>(undefined);
     this.wasteHeatOutput = new BehaviorSubject<WasteHeatOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-    this.currentField = new BehaviorSubject<string>(undefined);
+    this.currentField = new BehaviorSubject<string>('default');
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(operationHours: number = 8760) {
     let emptyInput: WasteHeatInput = {
-      oppHours: 8760,
+      oppHours: operationHours,
       cost: undefined,
       availableHeat: undefined,
       heatInput: undefined,
@@ -40,43 +42,93 @@ export class WasteHeatService {
       chillerEfficiency: undefined,
       copCompressor: undefined
     };
-    this.wasteHeatInput.next(emptyInput);
+    this.baselineData.next(emptyInput);
+    this.modificationData.next(undefined);
   }
 
   initDefaultEmptyOutputs() {
     let emptyOutput: WasteHeatOutput = {
-      recoveredHeat: 0,
-      hotWaterFlow: 0,
-      tonsRefrigeration: 0,
-      capacityChiller: 0,
-      electricalEnergy: 0,
-      annualEnergy: 0,
-      annualCost: 0
+      baseline: {
+        recoveredHeat: 0,
+        hotWaterFlow: 0,
+        tonsRefrigeration: 0,
+        capacityChiller: 0,
+        electricalEnergy: 0,
+        annualEnergy: 0,
+        annualCost: 0
+      },
+      modification: {
+        recoveredHeat: 0,
+        hotWaterFlow: 0,
+        tonsRefrigeration: 0,
+        capacityChiller: 0,
+        electricalEnergy: 0,
+        annualEnergy: 0,
+        annualCost: 0
+      },
     };
     this.wasteHeatOutput.next(emptyOutput);
   }
 
-  calculate(settings: Settings): void {
-    let wasteHeatInput: WasteHeatInput = this.wasteHeatInput.getValue();
-    let inputCopy: WasteHeatInput = JSON.parse(JSON.stringify(wasteHeatInput));
-    let validInput: boolean;
-    validInput = this.wasteHeatFormService.getWasteHeatForm(inputCopy, settings).valid;
+  // calculate(settings: Settings): void {
+  //   let wasteHeatInput: WasteHeatInput = this.wasteHeatInput.getValue();
+  //   let inputCopy: WasteHeatInput = JSON.parse(JSON.stringify(wasteHeatInput));
+  //   let validInput: boolean;
+  //   validInput = this.wasteHeatFormService.getWasteHeatForm(inputCopy, settings).valid;
     
-    if(!validInput) {
-      this.initDefaultEmptyOutputs();
-    } else {
-        inputCopy = this.convertInputUnits(inputCopy, settings);
-        let wasteHeatOutput: WasteHeatOutput = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
-        wasteHeatOutput = this.convertResultUnits(wasteHeatOutput, settings);
+  //   if(!validInput) {
+  //     this.initDefaultEmptyOutputs();
+  //   } else {
+  //       inputCopy = this.convertInputUnits(inputCopy, settings);
+  //       let wasteHeatOutput: WasteHeatOutput = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
+  //       wasteHeatOutput = this.convertResultUnits(wasteHeatOutput, settings);
 
-        wasteHeatOutput.annualEnergy = wasteHeatOutput.electricalEnergy * inputCopy.oppHours;
-        wasteHeatOutput.annualCost = wasteHeatOutput.annualEnergy * inputCopy.cost;
-        this.wasteHeatOutput.next(wasteHeatOutput);
+  //       wasteHeatOutput.annualEnergy = wasteHeatOutput.electricalEnergy * inputCopy.oppHours;
+  //       wasteHeatOutput.annualCost = wasteHeatOutput.annualEnergy * inputCopy.cost;
+  //       this.wasteHeatOutput.next(wasteHeatOutput);
+  //   }
+  // }
+
+  calculate(settings: Settings) {
+    this.initDefaultEmptyOutputs();
+    let output: WasteHeatOutput = this.wasteHeatOutput.getValue();
+    
+    let baselineWasteHeatInput: WasteHeatInput = this.baselineData.getValue();
+    let modificationWasteHeatInput: WasteHeatInput = this.modificationData.getValue();
+    let validBaseline = this.wasteHeatFormService.getWasteHeatForm(baselineWasteHeatInput, settings).valid;
+    let validModification: boolean;
+    if (modificationWasteHeatInput) {
+      validModification = this.wasteHeatFormService.getWasteHeatForm(modificationWasteHeatInput, settings).valid;
     }
+
+    if (validBaseline) {
+      let baselineResults: WasteHeatResults = this.getWasteHeatResults(baselineWasteHeatInput, settings);
+      output.baseline = baselineResults;
+
+      let modificationResults: WasteHeatResults;
+      if (modificationWasteHeatInput && validModification) {
+        modificationResults = this.getWasteHeatResults(modificationWasteHeatInput, settings);
+        output.modification = modificationResults;
+      }
+      if (baselineResults && modificationResults) {
+        output.annualEnergySavings = baselineResults.annualEnergy - modificationResults.annualEnergy;
+        output.annualCostSavings = baselineResults.annualCost - modificationResults.annualCost;
+      }
+    }
+    this.wasteHeatOutput.next(output);
+  }
+
+  getWasteHeatResults(wasteHeatInput: WasteHeatInput, settings: Settings): WasteHeatResults {
+    let inputCopy = this.convertInputUnits(wasteHeatInput, settings);
+    let wasteHeatResults: WasteHeatResults = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
+    wasteHeatResults = this.convertResultUnits(wasteHeatResults, settings);
+    wasteHeatResults.annualEnergy = wasteHeatResults.electricalEnergy * inputCopy.oppHours;
+    wasteHeatResults.annualCost = wasteHeatResults.annualEnergy * inputCopy.cost;
+    return wasteHeatResults;
   }
 
   generateExampleData(settings: Settings) {
-    let exampleInput: WasteHeatInput = {
+    let exampleBaseline: WasteHeatInput = {
       oppHours: 7500,
       cost: .075,
       availableHeat: 69,
@@ -88,11 +140,17 @@ export class WasteHeatService {
       chillerEfficiency: 88,
       copCompressor: 5
     };
+    
+    let exampleMod = exampleBaseline;
+    exampleMod.hxEfficiency = 85;
 
     if (settings.unitsOfMeasure == 'Metric') {
-      exampleInput = this.convertExampleUnits(exampleInput);
+      exampleBaseline = this.convertExampleUnits(exampleBaseline);
+      exampleMod = this.convertExampleUnits(exampleMod);
     }
-    this.wasteHeatInput.next(exampleInput);
+    this.baselineData.next(exampleBaseline);
+    this.modificationData.next(exampleMod);
+    
   }
 
   
@@ -129,31 +187,39 @@ export class WasteHeatService {
     return input;
   }
 
-  convertResultUnits(output: WasteHeatOutput, settings: Settings): WasteHeatOutput {
-    output.electricalEnergy = this.convertUnitsService.value(output.electricalEnergy).from('btuhr').to('kW');
-    output.electricalEnergy = this.roundVal(output.electricalEnergy, 2);
+  convertResultUnits(result: WasteHeatResults, settings: Settings): WasteHeatResults {
+    result.electricalEnergy = this.convertUnitsService.value(result.electricalEnergy).from('btuhr').to('kW');
+    result.electricalEnergy = this.roundVal(result.electricalEnergy, 2);
     if (settings.unitsOfMeasure == "Metric") {
-      output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to('GJ');
-      output.recoveredHeat = this.roundVal(output.recoveredHeat, 2);
+      result.recoveredHeat = this.convertUnitsService.value(result.recoveredHeat).from('Btu').to('GJ');
+      result.recoveredHeat = this.roundVal(result.recoveredHeat, 2);
 
-      output.hotWaterFlow = this.convertUnitsService.value(output.hotWaterFlow).from('gal/h').to('m3/h');
-      output.hotWaterFlow = this.roundVal(output.hotWaterFlow, 2);
+      result.hotWaterFlow = this.convertUnitsService.value(result.hotWaterFlow).from('gal/h').to('m3/h');
+      result.hotWaterFlow = this.roundVal(result.hotWaterFlow, 2);
 
-      output.tonsRefrigeration = this.convertUnitsService.value(output.tonsRefrigeration).from('tons').to('kW');
-      output.tonsRefrigeration = this.roundVal(output.tonsRefrigeration, 2);
+      result.tonsRefrigeration = this.convertUnitsService.value(result.tonsRefrigeration).from('tons').to('kW');
+      result.tonsRefrigeration = this.roundVal(result.tonsRefrigeration, 2);
 
-      output.capacityChiller = this.convertUnitsService.value(output.capacityChiller).from('tons').to('kW');
-      output.capacityChiller = this.roundVal(output.capacityChiller, 2);
+      result.capacityChiller = this.convertUnitsService.value(result.capacityChiller).from('tons').to('kW');
+      result.capacityChiller = this.roundVal(result.capacityChiller, 2);
 
     } else {
-      output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to('MMBtu');
-      output.recoveredHeat = this.roundVal(output.recoveredHeat, 2);
+      result.recoveredHeat = this.convertUnitsService.value(result.recoveredHeat).from('Btu').to('MMBtu');
+      result.recoveredHeat = this.roundVal(result.recoveredHeat, 2);
 
-      output.hotWaterFlow = this.convertUnitsService.value(output.hotWaterFlow).from('gal/h').to('gpm');
-      output.hotWaterFlow = this.roundVal(output.hotWaterFlow, 2);
+      result.hotWaterFlow = this.convertUnitsService.value(result.hotWaterFlow).from('gal/h').to('gpm');
+      result.hotWaterFlow = this.roundVal(result.hotWaterFlow, 2);
     }
-    return output;
+    return result;
   }
+
+  initModification() {
+    let currentBaselineData: WasteHeatInput = this.baselineData.getValue();
+    let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
+    let modification: WasteHeatInput = currentBaselineCopy;
+    this.modificationData.next(modification);
+  }
+
 
   roundVal(val: number, digits: number): number {
     let rounded = Number(val.toFixed(digits));
