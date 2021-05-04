@@ -22,16 +22,16 @@ export class InventoryService {
         fullLoadOperatingPressure: undefined,
         fullLoadRatedCapacity: undefined,
         ratedLoadPower: undefined,
-        ploytropicCompressorExponent: undefined
+        ploytropicCompressorExponent: 1.4
       },
       compressorControls: {
         controlType: undefined,
-        unloadPoint: 100,
+        unloadPointCapacity: 100,
         numberOfUnloadSteps: 2,
         automaticShutdown: false
       },
-      performanceData: {
-        inletAtmosphericPressure: undefined
+      inletConditions: {
+        atmosphericPressure: undefined
       },
       designDetails: {
         blowdownTime: 40,
@@ -65,6 +65,11 @@ export class InventoryService {
           power: undefined
         },
         noLoad: {
+          dischargePressure: undefined,
+          airflow: undefined,
+          power: undefined
+        },
+        blowoff: {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined
@@ -115,7 +120,7 @@ export class InventoryService {
     // control type: 7 Multi-step unloading
     let form: FormGroup = this.formBuilder.group({
       controlType: [compressorControls.controlType],
-      unloadPoint: [compressorControls.unloadPoint],
+      unloadPointCapacity: [compressorControls.unloadPointCapacity],
       numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
       automaticShutdown: [compressorControls.automaticShutdown]
     });
@@ -126,7 +131,7 @@ export class InventoryService {
   setCompressorControlValidators(form: FormGroup): FormGroup {
     if (form.controls.controlType.value && (form.controls.controlType.value == 2 || form.controls.controlType.value == 3
       || form.controls.controlType.value == 4 || form.controls.controlType.value == 6 || form.controls.controlType.value == 7)) {
-      form.controls.unloadPoint.setValidators([Validators.required]);
+      form.controls.unloadPointCapacity.setValidators([Validators.required]);
       form.controls.numberOfUnloadSteps.setValidators([Validators.required]);
       if (form.controls.controlType.value != 6) {
         form.controls.automaticShutdown.setValidators([Validators.required]);
@@ -135,10 +140,10 @@ export class InventoryService {
       }
     } else {
       form.controls.automaticShutdown.setValidators([]);
-      form.controls.unloadPoint.setValidators([]);
+      form.controls.unloadPointCapacity.setValidators([]);
       form.controls.numberOfUnloadSteps.setValidators([]);
     }
-    form.controls.unloadPoint.updateValueAndValidity();
+    form.controls.unloadPointCapacity.updateValueAndValidity();
     form.controls.numberOfUnloadSteps.updateValueAndValidity();
     form.controls.automaticShutdown.updateValueAndValidity();
 
@@ -148,7 +153,7 @@ export class InventoryService {
   getCompressorControlsObjFromForm(form: FormGroup): CompressorControls {
     return {
       controlType: form.controls.controlType.value,
-      unloadPoint: form.controls.unloadPoint.value,
+      unloadPointCapacity: form.controls.unloadPointCapacity.value,
       numberOfUnloadSteps: form.controls.numberOfUnloadSteps.value,
       automaticShutdown: form.controls.automaticShutdown.value
     };
@@ -156,6 +161,7 @@ export class InventoryService {
 
 
   getCentrifugalFormFromObj(centrifugalSpecifics: CentrifugalSpecifics): FormGroup {
+    //todo set validators base on compressor type
     let form: FormGroup = this.formBuilder.group({
       surgeAirflow: [centrifugalSpecifics.surgeAirflow],
       maxFullLoadPressure: [centrifugalSpecifics.maxFullLoadPressure],
@@ -177,6 +183,7 @@ export class InventoryService {
   }
 
   getDesignDetailsFormFromObj(designDetails: DesignDetails): FormGroup {
+    //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime],
       unloadSlumpPressure: [designDetails.unloadSlumpPressure],
@@ -201,6 +208,7 @@ export class InventoryService {
 
 
   getPerformancePointFormFromObj(performancePoints: PerformancePoints): FormGroup {
+    //todo validators
     let form: FormGroup = this.formBuilder.group({
       fullLoadDischargePressure: [performancePoints.fullLoad.dischargePressure],
       fullLoadAirflow: [performancePoints.fullLoad.airflow],
@@ -214,6 +222,9 @@ export class InventoryService {
       noLoadDischargePressure: [performancePoints.noLoad.dischargePressure],
       noLoadAirflow: [performancePoints.noLoad.airflow],
       noLoadPower: [performancePoints.noLoad.power],
+      blowoffDischargePressure: [performancePoints.blowoff.dischargePressure],
+      blowoffAirflow: [performancePoints.blowoff.airflow],
+      blowoffPower: [performancePoints.blowoff.power],
     });
     return form;
   }
@@ -239,7 +250,23 @@ export class InventoryService {
         dischargePressure: form.controls.noLoadDischargePressure.value,
         airflow: form.controls.noLoadAirflow.value,
         power: form.controls.noLoadPower.value,
+      },
+      blowoff: {
+        dischargePressure: form.controls.blowoffDischargePressure.value,
+        airflow: form.controls.blowoffAirflow.value,
+        power: form.controls.blowoffPower.value,
+
       }
     }
+  }
+
+
+  isCompressorValid(compressor: CompressorInventoryItem): boolean {
+    let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
+    let compressorControlsForm: FormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls);
+    let performancePointsForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints);
+    let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails);
+    let centrifugalSpecsForm: FormGroup = this.getCentrifugalFormFromObj(compressor.centrifugalSpecifics);
+    return nameplateForm.valid && compressorControlsForm.valid && performancePointsForm.valid && designDetailsForm.valid && centrifugalSpecsForm.valid;
   }
 }

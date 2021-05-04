@@ -16,12 +16,12 @@
     <!--control type: 6 Start/Stop-->
     <!--control type: 7 Multi-step unloading-->
     <label class="group-label secondary-group" *ngIf="displayUnload">Unload Controls</label>
-    <!-- unloadPoint -->
+    <!-- unloadPointCapacity -->
     <div class="form-group" *ngIf="displayUnload">
-        <label for="unloadPoint">Unload Point Capacity</label>
+        <label for="unloadPointCapacity">Unload Point Capacity</label>
         <div class="input-group">
-            <input name="unloadPoint" type="number" step="any" class="form-control" id="unloadPoint"
-                formControlName="unloadPoint" (change)="save()" (focus)="focusField('unloadPoint')">
+            <input name="unloadPointCapacity" type="number" step="any" class="form-control" id="unloadPointCapacity"
+                formControlName="unloadPointCapacity" (change)="save()" (focus)="focusField('unloadPointCapacity')">
             <span class="units input-group-addon">%</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

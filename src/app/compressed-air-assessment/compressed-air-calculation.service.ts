@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
+import { InventoryService } from './inventory/inventory.service';
 import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
 
 
@@ -48,12 +49,10 @@ enum ComputeFrom {
 };
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CompressedAirCalculationService {
 
-  constructor() { }
+  constructor(private inventoryService: InventoryService) { }
 
   test() {
     console.log(compressorAddon);
@@ -86,22 +85,52 @@ export class CompressedAirCalculationService {
     // console.log(testCalc);
   }
 
-  compressorsCalc(compressor: CompressorInventoryItem): CompressorCalcResult {
-    //TODO: validation and conversions
-    let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor);
-    let results: CompressorCalcResult = compressorAddon.CompressorCalc(inputData);
-    return results;
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorCalcResult {
+    //TODO: conversions
+    let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
+    if (isValid) {
+      let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
+      let results: CompressorCalcResult = compressorAddon.CompressorCalc(inputData);
+      return results;
+    } else {
+      return {
+        powerCalculated: 0,
+        capacityCalculated: 0,
+        percentagePower: 0,
+        percentageCapacity: 0,
+        //Load/Unload, Modulation w/o unload, Start/stop
+        reRatedFlow: 0,
+        reRatedPower: 0,
+        reRatedFlowMax: 0,
+        reRatedPowerMax: 0,
+        //centrifugal
+        capacityAtFullLoadAdjusted: 0,
+        capacityAtMaxFullFlowAdjusted: 0,
+        percentageBlowOff: 0,
+        surgeFlow: 0
+      }
+    }
   }
 
-  getInputFromInventoryItem(compressor: CompressorInventoryItem): CompressorsCalcInput {
+  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorsCalcInput {
     //TODO: double check input mapping
-    //TODO: figure oout computeFrom meaning...
+    //TODO: figure out computeFrom meaning...
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
+    let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
+    let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
+    //TODO: number should come from DB
+    let ratedDischargePressure: number = 0;
+    let ratedInletPressure: number = 0;
     return {
+      //TODO: Figure out compute stuff
+      computeFrom: computeFrom,
+      computeFromVal: computeFromVal,
+      computeFromPFVoltage: 0,
+      computeFromPFAmps: 0,
+
       compressorType: compressorEnumVal,
       controlType: controlTypeEnumVal,
-      computeFrom: 0,
       fullLoadPressure: compressor.nameplateData.fullLoadOperatingPressure,
       powerAtFullLoad: compressor.nameplateData.ratedLoadPower,
       capacityAtFullLoad: compressor.nameplateData.fullLoadRatedCapacity,
@@ -109,14 +138,51 @@ export class CompressedAirCalculationService {
       capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
       minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
       maxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
-      computeFromVal: 0,
-      computeFromPFVoltage: 0,
-      computeFromPFAmps: 0,
       powerAtNoLoad: compressor.performancePoints.noLoad.power,
       capacityAtMaxFullFlow: compressor.performancePoints.maxFullFlow.airflow,
       powerAtUnload: compressor.performancePoints.unloadPoint.power,
       capacityAtUnload: compressor.performancePoints.unloadPoint.airflow,
-      adjustForDischargePressure: false
+      lubricantType: lubricantTypeEnumValue,
+      stageType: stageTypeEnumVal,
+      //base on use default selection in performance points
+      adjustForDischargePressure: false,
+      applyPressureInletCorrection: false,
+
+      powerMax: compressor.performancePoints.maxFullFlow.power,
+      dischargePsiFullLoad: compressor.performancePoints.fullLoad.dischargePressure,
+      dischargePsiMax: compressor.performancePoints.maxFullFlow.dischargePressure,
+      modulatingPsi: compressor.designDetails.modulatingPressureRange,
+
+      
+      capacity: compressor.compressorControls.unloadPointCapacity,
+      fullLoadPower: compressor.performancePoints.fullLoad.power,
+      polyExponent: compressor.nameplateData.ploytropicCompressorExponent,
+      ratedDischargePressure: ratedDischargePressure,
+      ratedInletPressure: ratedInletPressure,
+      motorEfficiency: compressor.designDetails.designEfficiency,
+      fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
+      maxDischargePressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+      
+      //TODO: Sort out correct pressure mapping
+      atmosphericPsi: compressor.inletConditions.atmosphericPressure,
+      inletPressure: 0,
+      atmosphericPressure: compressor.inletConditions.atmosphericPressure,
+    
+      //centrifugal
+      powerAtBlowOff: compressor.performancePoints.blowoff.power,
+      surgeFlow: compressor.centrifugalSpecifics.surgeAirflow,
+      //TODO: percentageBlowOff
+      percentageBlowOff: 0,
+      maxPressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+    
+      //Modulation w/ unload
+      powerAtNolLoad: compressor.performancePoints.noLoad.power,
+    
+      //TODO: VFD, Multi step unloading
+    
+      //Start stop
+      powerMaxPercentage: compressor.performancePoints.maxFullFlow.power,
+      powerAtFullLoadPercentage: compressor.performancePoints.fullLoad.power
 
     }
   }
@@ -129,7 +195,7 @@ export class CompressedAirCalculationService {
       return;
     }
   }
-  
+
   getControlTypeEnumValue(compressor: CompressorInventoryItem): number {
     let selectedOption = ControlTypes.find(option => { return option.value == compressor.compressorControls.controlType });
     if (selectedOption) {
@@ -139,7 +205,26 @@ export class CompressedAirCalculationService {
     }
   }
 
-  
+  getStageTypeEnumVal(compressor: CompressorInventoryItem): number {
+    let selectedOption = CompressorTypeOptions.find(option => { return option.value == compressor.nameplateData.compressorType });
+    if (selectedOption) {
+      return selectedOption.stageTypeEnumValue;
+    } else {
+      return;
+    }
+  }
+
+  getLubricantTypeEnumVal(compressor: CompressorInventoryItem): number {
+    let selectedOption = CompressorTypeOptions.find(option => { return option.value == compressor.nameplateData.compressorType });
+    if (selectedOption) {
+      return selectedOption.lubricantTypeEnumValue;
+    } else {
+      return;
+    }
+
+  }
+
+
 
 
 }
@@ -149,6 +234,17 @@ export interface CompressorCalcResult {
   capacityCalculated: number,
   percentagePower: number,
   percentageCapacity: number
+  //Load/Unload, Modulation w/o unload, Start/stop
+  reRatedFlow?: number
+  reRatedPower?: number
+  reRatedFlowMax?: number
+  reRatedPowerMax?: number
+  //centrifugal
+  capacityAtFullLoadAdjusted?: number
+  capacityAtMaxFullFlowAdjusted?: number
+  percentageBlowOff?: number
+  surgeFlow?: number
+
 }
 
 export interface CompressorsCalcInput {
@@ -176,6 +272,42 @@ export interface CompressorsCalcInput {
   capacityAtUnload: number,
   adjustForDischargePressure: boolean,
 
-  lubricantType?: number,
-  stageType?: number
+  //not centfrigual
+  lubricantType: number,
+  stageType: number,
+
+  //Load/Unload, Modulation w/o unload
+  applyPressureInletCorrection: boolean
+  powerMax: number
+  dischargePsiFullLoad: number
+  dischargePsiMax: number
+  modulatingPsi: number
+  atmosphericPsi: number
+  capacity: number
+  fullLoadPower: number
+  polyExponent: number
+  ratedDischargePressure: number
+  ratedInletPressure: number
+  motorEfficiency: number
+  fullLoadDischargePressure: number
+  maxDischargePressure: number
+  inletPressure: number
+  atmosphericPressure: number
+
+  //centrifugal
+  powerAtBlowOff: number
+  surgeFlow: number
+  percentageBlowOff: number
+  maxPressure: number
+
+  //Modulation w/ unload
+  powerAtNolLoad: number
+
+  //TODO: VFD, Multi step unloading
+
+  //Start stop
+  powerMaxPercentage: number
+  powerAtFullLoadPercentage: number
+
+
 }

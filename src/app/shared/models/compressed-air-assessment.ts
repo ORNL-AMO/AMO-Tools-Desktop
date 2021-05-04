@@ -34,7 +34,7 @@ export interface CompressorInventoryItem {
     name: string,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
-    performanceData: PerformanceData,
+    inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics
@@ -52,13 +52,13 @@ export interface CompressorNameplateData {
 
 export interface CompressorControls {
     controlType: number,
-    unloadPoint: number,
+    unloadPointCapacity: number,
     numberOfUnloadSteps: number,
     automaticShutdown: boolean
 }
 
-export interface PerformanceData {
-    inletAtmosphericPressure: number
+export interface InletConditions {
+    atmosphericPressure: number
 }
 
 export interface DesignDetails {
@@ -74,7 +74,8 @@ export interface PerformancePoints {
     fullLoad: PerformancePoint,
     maxFullFlow: PerformancePoint,
     unloadPoint: PerformancePoint,
-    noLoad: PerformancePoint
+    noLoad: PerformancePoint,
+    blowoff: PerformancePoint
 }
 
 export interface PerformancePoint {

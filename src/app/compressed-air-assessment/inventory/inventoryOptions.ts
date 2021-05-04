@@ -1,33 +1,45 @@
-export const CompressorTypeOptions: Array<{ value: number, label: string, enumValue: number }> = [
+export const CompressorTypeOptions: Array<{ value: number, label: string, enumValue: number, lubricantTypeEnumValue: number, stageTypeEnumValue: number }> = [
     {
         value: 1,
         label: "Single stage lubricant-injected rotary screw",
-        enumValue: 1
+        enumValue: 1,
+        lubricantTypeEnumValue: 0,
+        stageTypeEnumValue: 0
     },
     {
         value: 2,
         label: "Two stage lubricant-injected rotary screw",
-        enumValue: 1
+        enumValue: 1,
+        lubricantTypeEnumValue: 0,
+        stageTypeEnumValue: 1
     },
     {
         value: 3,
         label: "Two stage lubricant-free rotary screw",
-        enumValue: 1
+        enumValue: 1,
+        lubricantTypeEnumValue: 1,
+        stageTypeEnumValue: 1
     },
     {
         value: 4,
         label: "Single stage reciprocating",
-        enumValue: 2
+        enumValue: 2,
+        lubricantTypeEnumValue: 2,
+        stageTypeEnumValue: 0
     },
     {
         value: 5,
         label: "Two stage reciprocating",
-        enumValue: 2
+        enumValue: 2,
+        lubricantTypeEnumValue: 2,
+        stageTypeEnumValue: 1
     },
     {
         value: 6,
         label: "Multiple Stage Centrifugal",
-        enumValue: 0
+        enumValue: 0,
+        lubricantTypeEnumValue: 2,
+        stageTypeEnumValue: 2
     },
 ]
 
