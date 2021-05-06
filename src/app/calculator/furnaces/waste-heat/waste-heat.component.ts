@@ -26,19 +26,21 @@ export class WasteHeatComponent implements OnInit {
   // emitCancel = new EventEmitter<boolean>();
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
+  @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
   modalSubscription: Subscription;
   
-  headerHeight: number;
+  containerHeight: number;
   isModalOpen: boolean;
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists: boolean;
   
@@ -128,10 +130,8 @@ export class WasteHeatComponent implements OnInit {
   btnResetData() {
     this.modificationExists = false;
     this.resetWasteHeatInputs()
-    // this.wasteHeatService.initDefaultEmptyInputs();
     this.wasteHeatService.resetData.next(true);
     this.baselineSelected = true;
-
   }
 
   resetWasteHeatInputs() {
@@ -152,7 +152,8 @@ export class WasteHeatComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+
     }
   }
 

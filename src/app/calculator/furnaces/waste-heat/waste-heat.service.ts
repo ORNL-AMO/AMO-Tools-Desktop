@@ -70,31 +70,13 @@ export class WasteHeatService {
     this.wasteHeatOutput.next(emptyOutput);
   }
 
-  // calculate(settings: Settings): void {
-  //   let wasteHeatInput: WasteHeatInput = this.wasteHeatInput.getValue();
-  //   let inputCopy: WasteHeatInput = JSON.parse(JSON.stringify(wasteHeatInput));
-  //   let validInput: boolean;
-  //   validInput = this.wasteHeatFormService.getWasteHeatForm(inputCopy, settings).valid;
-    
-  //   if(!validInput) {
-  //     this.initDefaultEmptyOutputs();
-  //   } else {
-  //       inputCopy = this.convertInputUnits(inputCopy, settings);
-  //       let wasteHeatOutput: WasteHeatOutput = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
-  //       wasteHeatOutput = this.convertResultUnits(wasteHeatOutput, settings);
-
-  //       wasteHeatOutput.annualEnergy = wasteHeatOutput.electricalEnergy * inputCopy.oppHours;
-  //       wasteHeatOutput.annualCost = wasteHeatOutput.annualEnergy * inputCopy.cost;
-  //       this.wasteHeatOutput.next(wasteHeatOutput);
-  //   }
-  // }
-
   calculate(settings: Settings) {
     this.initDefaultEmptyOutputs();
     let output: WasteHeatOutput = this.wasteHeatOutput.getValue();
     
     let baselineWasteHeatInput: WasteHeatInput = this.baselineData.getValue();
     let modificationWasteHeatInput: WasteHeatInput = this.modificationData.getValue();
+
     let validBaseline = this.wasteHeatFormService.getWasteHeatForm(baselineWasteHeatInput, settings).valid;
     let validModification: boolean;
     if (modificationWasteHeatInput) {
@@ -119,7 +101,8 @@ export class WasteHeatService {
   }
 
   getWasteHeatResults(wasteHeatInput: WasteHeatInput, settings: Settings): WasteHeatResults {
-    let inputCopy = this.convertInputUnits(wasteHeatInput, settings);
+    let inputCopy = JSON.parse(JSON.stringify(wasteHeatInput));
+    inputCopy = this.convertInputUnits(inputCopy, settings);
     let wasteHeatResults: WasteHeatResults = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
     wasteHeatResults = this.convertResultUnits(wasteHeatResults, settings);
     wasteHeatResults.annualEnergy = wasteHeatResults.electricalEnergy * inputCopy.oppHours;
@@ -141,7 +124,7 @@ export class WasteHeatService {
       copCompressor: 5
     };
     
-    let exampleMod = exampleBaseline;
+    let exampleMod = JSON.parse(JSON.stringify(exampleBaseline));
     exampleMod.hxEfficiency = 85;
 
     if (settings.unitsOfMeasure == 'Metric') {

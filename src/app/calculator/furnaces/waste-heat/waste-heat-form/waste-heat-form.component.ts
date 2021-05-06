@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, HostListener, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -40,7 +40,8 @@ export class WasteHeatFormComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   warnings: WasteHeatWarnings;
   
-  constructor(private wasteHeatService: WasteHeatService, 
+  constructor(private wasteHeatService: WasteHeatService,
+              private cd: ChangeDetectorRef,
               private wasteHeatFormService: WasteHeatFormService) { }
 
   ngOnInit() {
@@ -64,13 +65,12 @@ export class WasteHeatFormComponent implements OnInit {
   initSubscriptions() {
     this.resetDataSub = this.wasteHeatService.resetData.subscribe(value => {
       this.initForm();
+      this.cd.detectChanges();
     })
     this.generateExampleSub = this.wasteHeatService.generateExample.subscribe(value => {
       this.initForm();
     })
   }
-
-  
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -90,8 +90,11 @@ export class WasteHeatFormComponent implements OnInit {
     } else {
       wasteHeatInput = this.wasteHeatService.modificationData.getValue();
     }
-    this.form = this.wasteHeatFormService.getWasteHeatForm(wasteHeatInput, this.settings);
-    this.calculate();
+    if (wasteHeatInput) {
+      this.form = this.wasteHeatFormService.getWasteHeatForm(wasteHeatInput, this.settings);
+      this.calculate();
+    }
+    this.setFormState();
   }
 
 

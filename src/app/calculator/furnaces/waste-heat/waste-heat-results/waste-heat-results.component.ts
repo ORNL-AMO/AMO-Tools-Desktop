@@ -12,7 +12,6 @@ import { WasteHeatService } from '../waste-heat.service';
 export class WasteHeatResultsComponent implements OnInit {
   @Input()
   settings: Settings;
-
   @Input()
   modificationExists: boolean;
 
