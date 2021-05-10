@@ -2,10 +2,19 @@
 <html>
 
 <head>
+	<script>
+		var Module = {
+			onRuntimeInitialized: function () {
+				console.log('Tools Suite Module Initialized');
+			}
+		}
+	</script>
+	<script src="client.js"></script>
+	
 	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 	<meta charset="utf-8">
 	<title>MEASUR</title>
-	<base href="./">
+	<base href="/">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/x-icon" href="favicon.ico">
 
@@ -148,14 +157,6 @@
 	//	var autoUpdater = require('electron-updater');
 		//var json2csv = require("../node_modules/dist/json2csv.js");
 	</script>
-	<script>
-		var Module = {
-			onRuntimeInitialized: function () {
-				console.log('Tools Suite Module Initialized');
-			}
-		}
-	</script>
-	<script src="assets/client.js"></script>
 </body>
 
 </html>

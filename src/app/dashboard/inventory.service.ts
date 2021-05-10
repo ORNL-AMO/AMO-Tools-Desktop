@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorInventoryService } from '../motor-inventory/motor-inventory.service';
-declare const packageJson;
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class InventoryService {
 
@@ -15,7 +16,7 @@ export class InventoryService {
       modifiedDate: new Date(),
       type: 'motorInventory',
       name: null,
-      appVersion:  packageJson.version,
+      appVersion:  environment.version,
       isExample: false
     }
   }

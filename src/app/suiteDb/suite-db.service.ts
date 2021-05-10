@@ -15,7 +15,11 @@ export class SuiteDbService {
 
   startup() {
     this.hasStarted = true;
-    this.dbInstance = new Module.SQLite(":memory:", true);
+    if(Module){
+      this.dbInstance = new Module.SQLite(":memory:", true);
+    }else {
+      console.log("NO MODULE FOUND OH SHIT")
+    }
     // return db.startup();
   }
   // preUpdate() {

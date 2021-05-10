@@ -110,8 +110,7 @@ export class CoreComponent implements OnInit {
 
         }
       }
-    })
-
+    });
   }
 
   ngOnDestroy() {

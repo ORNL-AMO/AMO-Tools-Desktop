@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-declare const packageJson;
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-version-modal',
   templateUrl: './version-modal.component.html',
@@ -15,8 +15,7 @@ export class VersionModalComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
-    this.versionNum = packageJson.version;
+    this.versionNum = environment.version;
   }
   ngAfterViewInit() {
     this.showVersionModal();

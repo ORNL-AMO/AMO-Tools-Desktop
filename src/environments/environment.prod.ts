@@ -1,3 +1,7 @@
+import { version } from '../../package.json';
+
+
 export const environment = {
-  production: true
+  production: false,
+  version: version
 };

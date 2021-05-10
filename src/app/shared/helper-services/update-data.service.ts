@@ -6,7 +6,8 @@ import { SSMT } from '../models/steam/ssmt';
 import { LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-declare const packageJson;
+import { environment } from '../../../environments/environment';
+
 
 @Injectable()
 export class UpdateDataService {
@@ -36,7 +37,7 @@ export class UpdateDataService {
     }
 
     checkAssessmentVersionDifferent(assessment: Assessment): boolean {
-        if (assessment.appVersion !== packageJson.version) {
+        if (assessment.appVersion !== environment.version) {
             return true;
         } else {
             return false;
@@ -46,13 +47,13 @@ export class UpdateDataService {
 
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         return assessment;
     }
 
     updateFsat(assessment: Assessment): Assessment {
         //logic for updating fsat data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
@@ -93,12 +94,12 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         return assessment;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
-        if (settings.appVersion !== packageJson.version) {
+        if (settings.appVersion !== environment.version) {
             return true;
         } else {
             return false;
@@ -125,7 +126,7 @@ export class UpdateDataService {
         if (!settings.electricityCost) {
             settings.electricityCost = .066;
         }
-        settings.appVersion = packageJson.version;
+        settings.appVersion = environment.version;
         return settings;
     }
 

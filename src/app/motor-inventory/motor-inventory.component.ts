@@ -10,8 +10,8 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
+import { environment } from '../../environments/environment';
 
-declare const packageJson;
 
 @Component({
   selector: 'app-motor-inventory',
@@ -99,7 +99,7 @@ export class MotorInventoryComponent implements OnInit {
     let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     this.motorInventoryItem.modifiedDate = new Date();
-    this.motorInventoryItem.appVersion = packageJson.version;
+    this.motorInventoryItem.appVersion = environment.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
     this.indexedDbService.putInventoryItem(this.motorInventoryItem).then(() => {

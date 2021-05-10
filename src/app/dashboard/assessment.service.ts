@@ -8,8 +8,8 @@ import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+import { environment } from '../../environments/environment';
 
-declare const packageJson;
 @Injectable()
 export class AssessmentService {
 
@@ -75,7 +75,7 @@ export class AssessmentService {
       createdDate: new Date(),
       modifiedDate: new Date(),
       type: assessmentType,
-      appVersion: packageJson.version
+      appVersion: environment.version
     };
     return newAssessment;
   }
