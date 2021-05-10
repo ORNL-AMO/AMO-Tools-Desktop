@@ -16,8 +16,10 @@ export class FansSuiteApiService {
     let lineFrequencyEnum = this.suiteApiEnumService.getLineFrequencyEnum(input.lineFrequency);
     let efficiencyClassEnum = this.suiteApiEnumService.getMotorEfficiencyEnum(input.efficiencyClass);
     let loadEstimationMethodEnum = this.suiteApiEnumService.getLoadEstimationMethod(input.loadEstimationMethod);
+    //convert from percent to fraction
+    let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
 
-    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, input.specifiedDriveEfficiency);
+    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let baselineFieldData = new Module.FieldDataBaseline(input.measuredPower, input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, loadEstimationMethodEnum, input.velocityPressure);
     let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
@@ -35,12 +37,15 @@ export class FansSuiteApiService {
     let driveEnum = this.suiteApiEnumService.getDriveEnum(input.drive);
     let lineFrequencyEnum = this.suiteApiEnumService.getLineFrequencyEnum(input.lineFrequency);
     let efficiencyClassEnum = this.suiteApiEnumService.getMotorEfficiencyEnum(input.efficiencyClass);
+    //convert from percent to fraction
+    let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
+    let fanEfficiencyFraction: number = input.fanEfficiency / 100;
 
-    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, input.specifiedDriveEfficiency);
+    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     let fanFieldData = new Module.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
     let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
-    let output: FsatOutput = fanResult.calculateModified(fanFieldData, input.fanEfficiency);
+    let output: FsatOutput = fanResult.calculateModified(fanFieldData, fanEfficiencyFraction);
     output = this.convertOutputPercentages(output);
     fanInput.delete();
     fanFieldData.delete();
