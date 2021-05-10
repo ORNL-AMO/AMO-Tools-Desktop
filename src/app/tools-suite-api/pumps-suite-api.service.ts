@@ -50,7 +50,6 @@ export class PumpsSuiteApiService {
     let specificGravity = psatInput.specific_gravity;
     let stageCount = psatInput.stages;
     let speed = this.suiteApiEnumService.getFixedSpeedEnum(psatInput.fixed_speed);
-    debugger
     let specifiedDriveEfficiency = psatInput.specifiedDriveEfficiency / 100;
     let pumpInput = new Module.PsatInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
     //motor
