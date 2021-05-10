@@ -2,35 +2,38 @@ import { Injectable } from '@angular/core';
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 
-declare var db: any;
+// declare var db: any;
 
 
+declare var Module: any;
 @Injectable()
 export class SuiteDbService {
-  db: any = db;
+  // db: any = db;
   hasStarted: boolean = false;
+  dbInstance: any;
   constructor(private indexedDbService: IndexedDbService) { }
 
   startup() {
     this.hasStarted = true;
-    return db.startup();
+    this.dbInstance = new Module.SQLite(":memory:", true);
+    // return db.startup();
   }
-  preUpdate() {
-    return db.preUpdate();
-  }
+  // preUpdate() {
+  //   return db.preUpdate();
+  // }
 
-  postUpdate() {
-    return db.postUpdate();
-  }
+  // postUpdate() {
+  //   return db.postUpdate();
+  // }
 
-  test() {
-    console.log(db);
-  }
+  // test() {
+  //   console.log(db);
+  // }
 
   //volume
   selectGasFlueGasMaterials(): Array<FlueGasMaterial> {
     try {
-      return db.selectGasFlueGasMaterials();
+      return this.dbInstance.getGasFlueGasMaterials();
     }
     catch (err) {
       return [];
@@ -39,7 +42,7 @@ export class SuiteDbService {
 
   selectGasFlueGasMaterialById(id: number): FlueGasMaterial {
     try {
-      return db.selectGasFlueGasMaterialById(id);
+      return this.dbInstance.getGasFlueGasMaterialById(id);
     }
     catch (err) {
       return undefined;
@@ -48,7 +51,7 @@ export class SuiteDbService {
   //mass
   selectSolidLiquidFlueGasMaterials(): Array<SolidLiquidFlueGasMaterial> {
     try {
-      return db.selectSolidLiquidFlueGasMaterials();
+      return this.dbInstance.getSolidLiquidFlueGasMaterials();
     }
     catch (err) {
       return [];
@@ -57,7 +60,7 @@ export class SuiteDbService {
 
   selectSolidLiquidFlueGasMaterialById(id: number): SolidLiquidFlueGasMaterial {
     try {
-      return db.selectSolidLiquidFlueGasMaterialById(id);
+      return this.dbInstance.getSolidLiquidFlueGasMaterialById(id);
     }
     catch (err) {
       return undefined;
@@ -66,7 +69,7 @@ export class SuiteDbService {
 
   selectGasLoadChargeMaterials(): Array<GasLoadChargeMaterial> {
     try {
-      return db.selectGasLoadChargeMaterials();
+      return this.dbInstance.getGasLoadChargeMaterials();
     }
     catch (err) {
       return [];
@@ -75,7 +78,7 @@ export class SuiteDbService {
 
   selectGasLoadChargeMaterialById(id: number): LiquidLoadChargeMaterial {
     try {
-      return db.selectGasLoadChargeMaterialById(id);
+      return this.dbInstance.getGasLoadChargeMaterialById(id);
     }
     catch (err) {
       return undefined;
@@ -84,7 +87,7 @@ export class SuiteDbService {
 
   selectLiquidLoadChargeMaterials(): Array<LiquidLoadChargeMaterial> {
     try {
-      return db.selectLiquidLoadChargeMaterials();
+      return this.dbInstance.getLiquidLoadChargeMaterials();
     }
     catch (err) {
       return [];
@@ -93,7 +96,7 @@ export class SuiteDbService {
 
   selectLiquidLoadChargeMaterialById(id: number): LiquidLoadChargeMaterial {
     try {
-      return db.selectLiquidLoadChargeMaterialById(id);
+      return this.dbInstance.getLiquidLoadChargeMaterialById(id);
     }
     catch (err) {
       return undefined;
@@ -102,7 +105,7 @@ export class SuiteDbService {
 
   selectSolidLoadChargeMaterials(): Array<SolidLoadChargeMaterial> {
     try {
-      return db.selectSolidLoadChargeMaterials();
+      return this.dbInstance.getSolidLoadChargeMaterials();
     }
     catch (err) {
       return [];
@@ -111,7 +114,7 @@ export class SuiteDbService {
 
   selectSolidLoadChargeMaterialById(id: number): SolidLoadChargeMaterial {
     try {
-      return db.selectSolidLoadChargeMaterialById(id);
+      return this.dbInstance.getSolidLoadChargeMaterialById(id);
     }
     catch (err) {
       return undefined;
@@ -120,7 +123,7 @@ export class SuiteDbService {
 
   selectAtmosphereSpecificHeat(): Array<AtmosphereSpecificHeat> {
     try {
-      return db.selectAtmosphereSpecificHeat();
+      return this.dbInstance.getAtmosphereSpecificHeat();
     }
     catch (err) {
       return [];
@@ -129,7 +132,7 @@ export class SuiteDbService {
 
   selectAtmosphereSpecificHeatById(id: number): AtmosphereSpecificHeat {
     try {
-      return db.selectAtmosphereSpecificHeatById(id);
+      return this.dbInstance.getAtmosphereSpecificHeatById(id);
     }
     catch (err) {
       return undefined;
@@ -139,7 +142,7 @@ export class SuiteDbService {
 
   selectWallLossesSurface(): Array<WallLossesSurface> {
     try {
-      return db.selectWallLossesSurface();
+      return this.dbInstance.getWallLossesSurface();
     }
     catch (err) {
       return [];
@@ -148,7 +151,7 @@ export class SuiteDbService {
 
   selectWallLossesSurfaceById(id: number): WallLossesSurface {
     try {
-      return db.selectWallLossesSurfaceById(id);
+      return this.dbInstance.getWallLossesSurfaceById(id);
     }
     catch (err) {
       return undefined;
@@ -156,109 +159,109 @@ export class SuiteDbService {
   }
 
 
-  update() {
-    return db.update();
-  }
+  // update() {
+  //   return db.update();
+  // }
 
 
   insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) {
-    return db.insertAtmosphereSpecificHeat(material);
+    return this.dbInstance.insertAtmosphereSpecificHeat(material);
   }
 
   insertGasFlueGasMaterial(material: FlueGasMaterial) {
-    return db.insertGasFlueGasMaterial(material);
+    return this.dbInstance.insertGasFlueGasMaterial(material);
   }
 
   insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
-    return db.insertGasLoadChargeMaterial(material);
+    return this.dbInstance.insertGasLoadChargeMaterial(material);
   }
 
   insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) {
-    return db.insertLiquidLoadChargeMaterial(material);
+    return this.dbInstance.insertLiquidLoadChargeMaterial(material);
   }
 
   insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
-    return db.insertSolidLiquidFlueGasMaterial(material);
+    return this.dbInstance.insertSolidLiquidFlueGasMaterial(material);
   }
 
   insertSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) {
-    return db.insertSolidLoadChargeMaterial(material);
+    return this.dbInstance.insertSolidLoadChargeMaterial(material);
   }
 
   insertWallLossesSurface(material: WallLossesSurface) {
-    return db.insertWallLossesSurface(material);
+    return this.dbInstance.insertWallLossesSurface(material);
   }
 
 
   //update functions
   updateGasFlueGasMaterial(material: FlueGasMaterial) {
-    return db.updateGasFlueGasMaterial(material);
+    return this.dbInstance.updateGasFlueGasMaterial(material);
   }
 
   updateSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
-    return db.updateSolidLiquidFlueGasMaterial(material);
+    return this.dbInstance.updateSolidLiquidFlueGasMaterial(material);
   }
 
   updateGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
-    return db.updateGasLoadChargeMaterial(material);
+    return this.dbInstance.updateGasLoadChargeMaterial(material);
   }
 
   updateLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) {
-    return db.updateLiquidLoadChargeMaterial(material);
+    return this.dbInstance.updateLiquidLoadChargeMaterial(material);
   }
 
   updateSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) {
-    return db.updateSolidLoadChargeMaterial(material);
+    return this.dbInstance.updateSolidLoadChargeMaterial(material);
   }
 
   updateAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) {
-    return db.updateAtmosphereSpecificHeat(material);
+    return this.dbInstance.updateAtmosphereSpecificHeat(material);
   }
 
   updateWallLossesSurface(material: WallLossesSurface) {
-    return db.updateWallLossesSurface(material);
+    return this.dbInstance.updateWallLossesSurface(material);
   }
 
   //delete functions
   deleteGasFlueGasMaterial(id: number) {
-    return db.deleteGasFlueGasMaterial(id);
+    return this.dbInstance.deleteGasFlueGasMaterial(id);
   }
 
   deleteSolidLiquidFlueGasMaterial(id: number) {
-    return db.deleteSolidLiquidFlueGasMaterial(id);
+    return this.dbInstance.deleteSolidLiquidFlueGasMaterial(id);
   }
 
   deleteGasLoadChargeMaterial(id: number) {
-    return db.deleteGasLoadChargeMaterial(id);
+    return this.dbInstance.deleteGasLoadChargeMaterial(id);
   }
 
   deleteLiquidLoadChargeMaterial(id: number) {
-    return db.deleteLiquidLoadChargeMaterial(id);
+    return this.dbInstance.deleteLiquidLoadChargeMaterial(id);
   }
 
   deleteSolidLoadChargeMaterial(id: number) {
-    return db.deleteSolidLoadChargeMaterial(id);
+    return this.dbInstance.deleteSolidLoadChargeMaterial(id);
   }
 
   deleteAtmosphereSpecificHeat(id: number) {
-    return db.deleteAtmosphereSpecificHeat(id);
+    return this.dbInstance.deleteAtmosphereSpecificHeat(id);
   }
 
   deleteWallLossesSurface(id: number) {
-    return db.deleteWallLossesSurface(id);
+    return this.dbInstance.deleteWallLossesSurface(id);
   }
 
 
   //motors
   deleteMotor(id: number) {
-    return db.deleteMotor(id);
+    return this.dbInstance.deleteMotorData(id);
   }
   insertMotor(motor: SuiteDbMotor) {
-    return db.insertMotor(motor);
+    return this.dbInstance.insertMotorData(motor);
   }
   selectMotors(): Array<SuiteDbMotor> {
     try {
-      return db.selectMotors();
+      return this.dbInstance.getMotorData();
     }
     catch (err) {
       return [];
@@ -266,25 +269,25 @@ export class SuiteDbService {
   }
   selectMotorById(id: number): SuiteDbMotor {
     try {
-      return db.selectMotorById(id);
+      return this.dbInstance.getMotorDataById(id);
     }
     catch (err) {
       return undefined;
     }
   }
   updateMotor(motor: SuiteDbMotor): SuiteDbMotor {
-    return db.updateMotor(motor);
+    return this.dbInstance.updateMotorData(motor);
   }
   //pumps
   deletePump(id: number) {
-    return db.deletePump(id);
+    return this.dbInstance.deletePumpData(id);
   }
   insertPump(pump: SuiteDbPump) {
-    return db.insertPump(pump);
+    return this.dbInstance.insertPumpData(pump);
   }
   selectPumps(): Array<SuiteDbPump> {
     try {
-      return db.selectPumps();
+      return this.dbInstance.getPumpData();
     }
     catch (err) {
       return [];
@@ -292,14 +295,14 @@ export class SuiteDbService {
   }
   selectPumpById(id: number): SuiteDbPump {
     try {
-      return db.selectPumpById(id);
+      return this.dbInstance.getPumpDataById(id);
     }
     catch (err) {
       return undefined;
     }
   }
   updatePump(pump: SuiteDbPump): SuiteDbPump {
-    return db.updatePump(pump);
+    return this.dbInstance.updatePumpData(pump);
   }
 
   //insert custom materials held in indexedDb into suite db
