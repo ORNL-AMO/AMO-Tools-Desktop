@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { InventoryService } from '../inventory.service';
 
 @Component({
@@ -13,38 +11,80 @@ import { InventoryService } from '../inventory.service';
 export class PerformancePointsComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
-  form: FormGroup;
-  isFormChange: boolean = false;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  showMaxFullFlow: boolean;
+  showUnload: boolean;
+  showNoLoad: boolean;
+  showBlowoff: boolean;
+
+  constructor(private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
-        if (this.isFormChange == false) {
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints);
-        } else {
-          this.isFormChange = false;
-        }
+        this.setShowMaxFlow(val);
+        this.setShowUnload(val);
+        this.setShowNoLoad(val);
+        this.setShowBlowoff(val);
       }
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
   }
 
-  save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.performancePoints = this.inventoryService.getPerformancePointObjFromForm(this.form);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+
+  setShowMaxFlow(selectedCompressor: CompressorInventoryItem) {
+    if (selectedCompressor.nameplateData.compressorType == 6) {
+      this.showMaxFullFlow = false;
+    } else if (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2) {
+      if (selectedCompressor.compressorControls.controlType == 1) {
+        this.showMaxFullFlow = false;
+      } else {
+        this.showMaxFullFlow = true;
+      }
+    } else {
+      this.showMaxFullFlow = true;
+    }
   }
 
-  focusField(str: string){
-    this.compressedAirAssessmentService.focusedField.next(str);
+  setShowUnload(selectedCompressor: CompressorInventoryItem) {
+    if (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2) {
+      if (selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 3) {
+        this.showUnload = true;
+      } else {
+        this.showUnload = false;
+      }
+    } else {
+      this.showUnload = false;
+    }
+  }
+
+  setShowNoLoad(selectedCompressor: CompressorInventoryItem) {
+    if (selectedCompressor.nameplateData.compressorType != 6) {
+      this.showNoLoad = true;
+    } else {
+      if(selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10){
+        this.showNoLoad = false
+      }else{
+        this.showNoLoad = true;
+      }
+    }
+
+  }
+
+  setShowBlowoff(selectedCompressor: CompressorInventoryItem) {
+    //centrifugal
+    if (selectedCompressor.nameplateData.compressorType == 6) {
+      //"with blowoff"
+      if (selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
+        this.showBlowoff = true;
+      } else {
+        this.showBlowoff = false;
+      }
+    } else {
+      this.showBlowoff = false;
+    }
+
   }
 }

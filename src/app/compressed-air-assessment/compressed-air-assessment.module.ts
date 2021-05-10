@@ -30,6 +30,11 @@ import { SystemProfileService } from './system-profile/system-profile.service';
 import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics/centrifugal-specifics.component';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { PerformancePointsComponent } from './inventory/performance-points/performance-points.component';
+import { FullLoadComponent } from './inventory/performance-points/full-load/full-load.component';
+import { MaxFullFlowComponent } from './inventory/performance-points/max-full-flow/max-full-flow.component';
+import { NoLoadComponent } from './inventory/performance-points/no-load/no-load.component';
+import { UnloadPointComponent } from './inventory/performance-points/unload-point/unload-point.component';
+import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +58,12 @@ import { PerformancePointsComponent } from './inventory/performance-points/perfo
     CompressorOrderingTableComponent,
     OperatingProfileTableComponent,
     CentrifugalSpecificsComponent,
-    PerformancePointsComponent
+    PerformancePointsComponent,
+    FullLoadComponent,
+    MaxFullFlowComponent,
+    NoLoadComponent,
+    UnloadPointComponent,
+    BlowoffComponent
   ],
   imports: [
     CommonModule,

@@ -62,7 +62,7 @@ export class ControlDataComponent implements OnInit {
       this.form.controls.numberOfUnloadSteps.patchValue(2);
     }
     if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7) {
-      this.form.controls.unloadPoint.patchValue(100);
+      this.form.controls.unloadPointCapacity.patchValue(100);
     }
     this.toggleDisableControls();
     this.setDisplayValues();
@@ -71,9 +71,9 @@ export class ControlDataComponent implements OnInit {
 
   toggleDisableControls() {
     if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7) {
-      this.form.controls.unloadPoint.disable();
+      this.form.controls.unloadPointCapacity.disable();
     } else {
-      this.form.controls.unloadPoint.enable();
+      this.form.controls.unloadPointCapacity.enable();
     }
 
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3

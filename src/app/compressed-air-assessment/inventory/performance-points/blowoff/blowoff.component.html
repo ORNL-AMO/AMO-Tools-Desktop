@@ -1,0 +1,51 @@
+<form [formGroup]="form">
+    <!--BLOWOFF-->
+    <label class="group-label secondary-group">Surge (blowoff) point</label>
+    <!-- blowoffDischargePressure -->
+    <div class="form-group">
+        <label for="blowoffDischargePressure">Discharge Pressure</label>
+        <div class="input-group">
+            <input name="blowoffDischargePressure" type="number" step="any" class="form-control"
+                id="blowoffDischargePressure" formControlName="dischargePressure" (change)="save()"
+                (focus)="focusField('blowoffDischargePressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- blowoffAirflow -->
+    <div class="form-group">
+        <label for="blowoffAirflow">Air Flow</label>
+        <div class="input-group">
+            <input name="blowoffAirflow" type="number" step="any" class="form-control" id="blowoffAirflow"
+                formControlName="airflow" (change)="save()" (focus)="focusField('blowoffAirflow')">
+            <span class="units input-group-addon">acfm</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- blowoffPower -->
+    <div class="form-group">
+        <label for="blowoffPower">Power</label>
+        <div class="input-group">
+            <input name="blowoffPower" type="number" step="any" class="form-control" id="blowoffPower"
+                formControlName="power" (change)="save()" (focus)="focusField('blowoffPower')">
+            <span class="units input-group-addon">kW</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+
+</form>

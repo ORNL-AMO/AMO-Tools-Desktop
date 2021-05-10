@@ -1,0 +1,50 @@
+<form [formGroup]="form">
+    <!--NO LOAD-->
+    <label class="group-label secondary-group">No Load {{noLoadLabel}}</label>
+    <!-- noLoadDischargePressure -->
+    <div class="form-group">
+        <label for="noLoadDischargePressure">Discharge Pressure</label>
+        <div class="input-group">
+            <input name="noLoadDischargePressure" type="number" step="any" class="form-control"
+                id="noLoadDischargePressure" formControlName="dischargePressure" (change)="save()"
+                (focus)="focusField('noLoadDischargePressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- noLoadAirflow -->
+    <div class="form-group">
+        <label for="noLoadAirflow">Air Flow</label>
+        <div class="input-group">
+            <input name="noLoadAirflow" type="number" step="any" class="form-control" id="noLoadAirflow"
+                formControlName="airflow" (change)="save()" (focus)="focusField('noLoadAirflow')">
+            <span class="units input-group-addon">acfm</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- noLoadPower -->
+    <div class="form-group">
+        <label for="noLoadPower">Power</label>
+        <div class="input-group">
+            <input name="noLoadPower" type="number" step="any" class="form-control" id="noLoadPower"
+                formControlName="power" (change)="save()" (focus)="focusField('noLoadPower')">
+            <span class="units input-group-addon">kW</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+</form>

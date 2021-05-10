@@ -52,27 +52,37 @@ export class InventoryService {
         fullLoad: {
           dischargePressure: undefined,
           airflow: undefined,
-          power: undefined
+          power: undefined,
+          defaultPower: true,
+          defaultAirFlow: true
         },
         maxFullFlow: {
           dischargePressure: undefined,
           airflow: undefined,
-          power: undefined
+          power: undefined,
+          defaultPower: true,
+          defaultAirFlow: true
         },
         unloadPoint: {
           dischargePressure: undefined,
           airflow: undefined,
-          power: undefined
+          power: undefined,
+          defaultPower: true,
+          defaultAirFlow: true
         },
         noLoad: {
           dischargePressure: undefined,
           airflow: undefined,
-          power: undefined
+          power: undefined,
+          defaultPower: true,
+          defaultAirFlow: true
         },
         blowoff: {
           dischargePressure: undefined,
           airflow: undefined,
-          power: undefined
+          power: undefined,
+          defaultPower: true,
+          defaultAirFlow: true
         }
       }
     }
@@ -207,66 +217,111 @@ export class InventoryService {
   }
 
 
-  getPerformancePointFormFromObj(performancePoints: PerformancePoints): FormGroup {
+  // getPerformancePointFormFromObj(performancePoints: PerformancePoints): FormGroup {
+  //   //todo validators
+  //   let form: FormGroup = this.formBuilder.group({
+  //     fullLoadDischargePressure: [performancePoints.fullLoad.dischargePressure],
+  //     fullLoadAirflow: [performancePoints.fullLoad.airflow],
+  //     fullLoadPower: [performancePoints.fullLoad.power],
+  //     fullLoadDefaultAirFlow: [performancePoints.fullLoad.defaultAirFlow],
+  //     fullLoadDefaultPower: [performancePoints.fullLoad.defaultPower],
+
+  //     maxFullFlowDischargePressure: [performancePoints.maxFullFlow.dischargePressure],
+  //     maxFullFlowAirflow: [performancePoints.maxFullFlow.airflow],
+  //     maxFullFlowPower: [performancePoints.maxFullFlow.power],
+  //     maxFullFlowDefaultAirFlow: [performancePoints.maxFullFlow.defaultAirFlow],
+  //     maxFullFlowDefaultPower: [performancePoints.maxFullFlow.defaultPower],
+
+  //     unloadPointDischargePressure: [performancePoints.unloadPoint.dischargePressure],
+  //     unloadPointAirflow: [performancePoints.unloadPoint.airflow],
+  //     unloadPointPower: [performancePoints.unloadPoint.power],
+  //     unloadPointDefaultAirFlow: [performancePoints.unloadPoint.defaultAirFlow],
+  //     unloadPointDefaultPower: [performancePoints.unloadPoint.defaultPower],
+
+  //     noLoadDischargePressure: [performancePoints.noLoad.dischargePressure],
+  //     noLoadAirflow: [performancePoints.noLoad.airflow],
+  //     noLoadPower: [performancePoints.noLoad.power],
+  //     noLoadDefaultAirFlow: [performancePoints.noLoad.defaultAirFlow],
+  //     noLoadDefaultPower: [performancePoints.noLoad.defaultPower],
+
+  //     blowoffDischargePressure: [performancePoints.blowoff.dischargePressure],
+  //     blowoffAirflow: [performancePoints.blowoff.airflow],
+  //     blowoffPower: [performancePoints.blowoff.power],
+  //     blowoffDefaultAirFlow: [performancePoints.blowoff.defaultAirFlow],
+  //     blowoffDefaultPower: [performancePoints.blowoff.defaultPower],
+  //   });
+  //   return form;
+  // }
+
+  // getPerformancePointObjFromForm(form: FormGroup): PerformancePoints {
+  //   return {
+  //     fullLoad: {
+  //       dischargePressure: form.controls.fullLoadDischargePressure.value,
+  //       airflow: form.controls.fullLoadAirflow.value,
+  //       power: form.controls.fullLoadPower.value,
+  //       defaultAirFlow: form.controls.fullLoadDefaultAirFlow.value,
+  //       defaultPower: form.controls.fullLoadDefaultPower.value
+  //     },
+  //     maxFullFlow: {
+  //       dischargePressure: form.controls.maxFullFlowDischargePressure.value,
+  //       airflow: form.controls.maxFullFlowAirflow.value,
+  //       power: form.controls.maxFullFlowPower.value,
+  //       defaultAirFlow: form.controls.maxFullFlowDefaultAirFlow.value,
+  //       defaultPower: form.controls.maxFullFlowDefaultPower.value
+  //     },
+  //     unloadPoint: {
+  //       dischargePressure: form.controls.unloadPointDischargePressure.value,
+  //       airflow: form.controls.unloadPointAirflow.value,
+  //       power: form.controls.unloadPointPower.value,
+  //       defaultAirFlow: form.controls.unloadPointDefaultAirFlow.value,
+  //       defaultPower: form.controls.unloadPointDefaultPower.value
+  //     },
+  //     noLoad: {
+  //       dischargePressure: form.controls.noLoadDischargePressure.value,
+  //       airflow: form.controls.noLoadAirflow.value,
+  //       power: form.controls.noLoadPower.value,
+  //       defaultAirFlow: form.controls.noLoadDefaultAirFlow.value,
+  //       defaultPower: form.controls.noLoadDefaultPower.value
+  //     },
+  //     blowoff: {
+  //       dischargePressure: form.controls.blowoffDischargePressure.value,
+  //       airflow: form.controls.blowoffAirflow.value,
+  //       power: form.controls.blowoffPower.value,
+  //       defaultAirFlow: form.controls.blowoffDefaultAirFlow.value,
+  //       defaultPower: form.controls.blowoffDefaultPower.value
+
+  //     }
+  //   }
+  // }
+
+  getPerformancePointFormFromObj(performancePoint: PerformancePoint): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
-      fullLoadDischargePressure: [performancePoints.fullLoad.dischargePressure],
-      fullLoadAirflow: [performancePoints.fullLoad.airflow],
-      fullLoadPower: [performancePoints.fullLoad.power],
-      maxFullFlowDischargePressure: [performancePoints.maxFullFlow.dischargePressure],
-      maxFullFlowAirflow: [performancePoints.maxFullFlow.airflow],
-      maxFullFlowPower: [performancePoints.maxFullFlow.power],
-      unloadPointDischargePressure: [performancePoints.unloadPoint.dischargePressure],
-      unloadPointAirflow: [performancePoints.unloadPoint.airflow],
-      unloadPointPower: [performancePoints.unloadPoint.power],
-      noLoadDischargePressure: [performancePoints.noLoad.dischargePressure],
-      noLoadAirflow: [performancePoints.noLoad.airflow],
-      noLoadPower: [performancePoints.noLoad.power],
-      blowoffDischargePressure: [performancePoints.blowoff.dischargePressure],
-      blowoffAirflow: [performancePoints.blowoff.airflow],
-      blowoffPower: [performancePoints.blowoff.power],
+      dischargePressure: [performancePoint.dischargePressure],
+      airflow: [performancePoint.airflow],
+      power: [performancePoint.power],
+      airFlow: [performancePoint.defaultAirFlow],
+      defaultPower: [performancePoint.defaultPower]
     });
     return form;
   }
 
-  getPerformancePointObjFromForm(form: FormGroup): PerformancePoints {
+  getPerformancePointObjFromForm(form: FormGroup): PerformancePoint {
     return {
-      fullLoad: {
-        dischargePressure: form.controls.fullLoadDischargePressure.value,
-        airflow: form.controls.fullLoadAirflow.value,
-        power: form.controls.fullLoadPower.value,
-      },
-      maxFullFlow: {
-        dischargePressure: form.controls.maxFullFlowDischargePressure.value,
-        airflow: form.controls.maxFullFlowAirflow.value,
-        power: form.controls.maxFullFlowPower.value,
-      },
-      unloadPoint: {
-        dischargePressure: form.controls.unloadPointDischargePressure.value,
-        airflow: form.controls.unloadPointAirflow.value,
-        power: form.controls.unloadPointPower.value,
-      },
-      noLoad: {
-        dischargePressure: form.controls.noLoadDischargePressure.value,
-        airflow: form.controls.noLoadAirflow.value,
-        power: form.controls.noLoadPower.value,
-      },
-      blowoff: {
-        dischargePressure: form.controls.blowoffDischargePressure.value,
-        airflow: form.controls.blowoffAirflow.value,
-        power: form.controls.blowoffPower.value,
-
-      }
+      dischargePressure: form.controls.dischargePressure.value,
+      airflow: form.controls.airflow.value,
+      power: form.controls.power.value,
+      defaultAirFlow: form.controls.defaultAirFlow.value,
+      defaultPower: form.controls.defaultPower.value
     }
   }
-
 
   isCompressorValid(compressor: CompressorInventoryItem): boolean {
     let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
     let compressorControlsForm: FormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls);
-    let performancePointsForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints);
+    // let performancePointsForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints);
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails);
     let centrifugalSpecsForm: FormGroup = this.getCentrifugalFormFromObj(compressor.centrifugalSpecifics);
-    return nameplateForm.valid && compressorControlsForm.valid && performancePointsForm.valid && designDetailsForm.valid && centrifugalSpecsForm.valid;
+    return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsForm.valid;
   }
 }

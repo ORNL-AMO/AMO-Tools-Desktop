@@ -1,0 +1,49 @@
+<form [formGroup]="form">
+    <label class="group-label secondary-group">Max Full Load {{maxFullFlowLabel}}</label>
+    <!-- fullLoadDischargePressure -->
+    <div class="form-group">
+        <label for="maxFullFlowDischargePressure">Discharge Pressure</label>
+        <div class="input-group">
+            <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
+                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (change)="save()"
+                (focus)="focusField('maxFullFlowDischargePressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- maxFullFlowAirflow -->
+    <div class="form-group">
+        <label for="maxFullFlowAirflow">Air Flow</label>
+        <div class="input-group">
+            <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
+                formControlName="airflow" (change)="save()" (focus)="focusField('maxFullFlowAirflow')">
+            <span class="units input-group-addon">acfm</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- maxFullFlowPower -->
+    <div class="form-group">
+        <label for="maxFullFlowPower">Power</label>
+        <div class="input-group">
+            <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
+                formControlName="power" (change)="save()" (focus)="focusField('maxFullFlowPower')">
+            <span class="units input-group-addon">kW</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+</form>
