@@ -35,6 +35,7 @@ import { MaxFullFlowComponent } from './inventory/performance-points/max-full-fl
 import { NoLoadComponent } from './inventory/performance-points/no-load/no-load.component';
 import { UnloadPointComponent } from './inventory/performance-points/unload-point/unload-point.component';
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
+import { GenericCompressorDbService } from './generic-compressor-db.service';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff
     SystemInformationFormService,
     InventoryService,
     SystemProfileService,
-    CompressedAirCalculationService
+    CompressedAirCalculationService,
+    GenericCompressorDbService
   ]
 })
 export class CompressedAirAssessmentModule { }
