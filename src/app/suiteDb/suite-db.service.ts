@@ -18,7 +18,7 @@ export class SuiteDbService {
     if(Module){
       this.dbInstance = new Module.SQLite(":memory:", true);
     }else {
-      console.log("NO MODULE FOUND OH SHIT")
+      console.log("NO MODULE FOUND")
     }
     // return db.startup();
   }
@@ -37,6 +37,7 @@ export class SuiteDbService {
   //volume
   selectGasFlueGasMaterials(): Array<FlueGasMaterial> {
     try {
+      //TODO: Take C++/wasm object and convert to .js array
       return this.dbInstance.getGasFlueGasMaterials();
     }
     catch (err) {
@@ -46,6 +47,7 @@ export class SuiteDbService {
 
   selectGasFlueGasMaterialById(id: number): FlueGasMaterial {
     try {
+      //TODO: Take C++/wasm object and convert to .js object
       return this.dbInstance.getGasFlueGasMaterialById(id);
     }
     catch (err) {
