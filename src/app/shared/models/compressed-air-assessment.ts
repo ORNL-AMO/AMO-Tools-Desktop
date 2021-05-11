@@ -32,6 +32,7 @@ export interface SystemInformation {
 export interface CompressorInventoryItem {
     itemId: string,
     name: string,
+    description: string,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     inletConditions: InletConditions,

@@ -36,6 +36,12 @@ import { NoLoadComponent } from './inventory/performance-points/no-load/no-load.
 import { UnloadPointComponent } from './inventory/performance-points/unload-point/unload-point.component';
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
+import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
+import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
+import { CompressorTypePipe } from './compressor-type.pipe';
+import { ControlTypePipe } from './control-type.pipe';
 
 @NgModule({
   declarations: [
@@ -64,14 +70,20 @@ import { GenericCompressorDbService } from './generic-compressor-db.service';
     MaxFullFlowComponent,
     NoLoadComponent,
     UnloadPointComponent,
-    BlowoffComponent
+    BlowoffComponent,
+    GenericCompressorModalComponent,
+    CompressorOptionsTableComponent,
+    FilterCompressorsComponent,
+    CompressorTypePipe,
+    ControlTypePipe
   ],
   imports: [
     CommonModule,
     RouterModule,
     SettingsModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ModalModule
   ],
   providers: [
     CompressedAirAssessmentService,

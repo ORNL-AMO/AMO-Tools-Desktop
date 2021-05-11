@@ -16,6 +16,7 @@ export class InventoryService {
     return {
       itemId: Math.random().toString(36).substr(2, 9),
       name: 'New Compressor',
+      description: undefined,
       nameplateData: {
         compressorType: undefined,
         motorPower: undefined,
@@ -89,9 +90,10 @@ export class InventoryService {
   }
 
   //general information
-  getGeneralInformationFormFromObj(name: string): FormGroup {
+  getGeneralInformationFormFromObj(name: string, description: string): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [name, Validators.required],
+      description: [description]
     });
     return form;
   }

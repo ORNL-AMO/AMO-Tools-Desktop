@@ -36,6 +36,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
   profileTabSub: Subscription;
   compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
@@ -78,7 +80,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
       this.profileTab = val;
-    })
+    });
+
+    this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
   }
 
   ngOnDestroy() {
@@ -86,6 +92,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {

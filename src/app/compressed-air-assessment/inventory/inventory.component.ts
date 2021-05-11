@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
@@ -17,8 +17,9 @@ export class InventoryComponent implements OnInit {
   selectedCompressorSub: Subscription;
   isFormChange: boolean = false;
   compressorType: number;
+  showCompressorModal: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private inventoryService: InventoryService) { }
+    private inventoryService: InventoryService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initializeInventory();
@@ -26,7 +27,7 @@ export class InventoryComponent implements OnInit {
       if (val) {
         this.compressorType = val.nameplateData.compressorType;
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name);
+          this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name, val.description);
         } else {
           this.isFormChange = false;
         }
@@ -66,11 +67,22 @@ export class InventoryComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.name = this.form.controls.name.value;
+    selectedCompressor.description = this.form.controls.description.value;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
+  }
+
+  openCompressorModal(){
+    this.showCompressorModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeCompressorModal(){
+    this.showCompressorModal = false;
+    this.cd.detectChanges();
   }
 }
