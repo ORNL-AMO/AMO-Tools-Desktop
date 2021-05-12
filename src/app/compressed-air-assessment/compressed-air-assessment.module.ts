@@ -43,6 +43,7 @@ import { FilterCompressorsComponent } from './inventory/generic-compressor-modal
 import { CompressorTypePipe } from './compressor-type.pipe';
 import { ControlTypePipe } from './control-type.pipe';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
+import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filt
     FilterCompressorsComponent,
     CompressorTypePipe,
     ControlTypePipe,
-    FilterCompressorsPipe
+    FilterCompressorsPipe,
+    InletConditionsComponent
   ],
   imports: [
     CommonModule,

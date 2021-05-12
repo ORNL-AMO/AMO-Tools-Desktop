@@ -5,19 +5,27 @@
                 <th>
                     Name
                 </th>
+                <th>Compressor Type</th>
+                <th>Control Type</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
                 [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId}">
-                <td class="w-75">
+                <td>
                     <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
                         class="fa fa-chevron-right"></span>
                     <a class="click-link"
                         (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
                 </td>
-                <td class="w-25">
+                <td>
+                    {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                </td>
+                <td>
+                    {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                </td>
+                <td>
                     <a class="fa fa-trash danger" (click)="deleteItem(compressorInventoryItem)"></a>
                 </td>
             </tr>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 
 @Injectable()
@@ -35,7 +35,8 @@ export class InventoryService {
         automaticShutdown: false
       },
       inletConditions: {
-        atmosphericPressure: undefined
+        atmosphericPressure: undefined,
+        temperature: undefined
       },
       designDetails: {
         blowdownTime: 40,
@@ -247,6 +248,23 @@ export class InventoryService {
       defaultPower: form.controls.defaultPower.value
     }
   }
+
+  getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
+    //todo validators
+    let form: FormGroup = this.formBuilder.group({
+      atmosphericPressure: [inletConditions.atmosphericPressure],
+      temperature: [inletConditions.temperature],
+    });
+    return form;
+  }
+
+  getInletConditionsObjFromForm(form: FormGroup): InletConditions {
+    return {
+      atmosphericPressure: form.controls.atmosphericPressure.value,
+      temperature: form.controls.temperature.value
+    }
+  }
+
 
   isCompressorValid(compressor: CompressorInventoryItem): boolean {
     let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
