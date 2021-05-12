@@ -9,6 +9,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
+import { GenericCompressorDbService } from './generic-compressor-db.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -35,11 +36,15 @@ export class CompressedAirAssessmentComponent implements OnInit {
   profileTabSub: Subscription;
   compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService) { }
+    private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
+    private genericCompressorDbService: GenericCompressorDbService) { }
 
   ngOnInit(): void {
+    this.genericCompressorDbService.getAllCompressors();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
@@ -75,7 +80,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
       this.profileTab = val;
-    })
+    });
+
+    this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
   }
 
   ngOnDestroy() {
@@ -83,6 +92,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {

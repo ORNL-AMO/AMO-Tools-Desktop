@@ -1,28 +1,32 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
+import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 
 @Injectable()
 export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
-
+  filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
   constructor(private formBuilder: FormBuilder) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
+    this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
 
   getNewInventoryItem(): CompressorInventoryItem {
     return {
       itemId: Math.random().toString(36).substr(2, 9),
       name: 'New Compressor',
+      description: undefined,
       nameplateData: {
         compressorType: undefined,
         motorPower: undefined,
         fullLoadOperatingPressure: undefined,
         fullLoadRatedCapacity: undefined,
         ratedLoadPower: undefined,
-        ploytropicCompressorExponent: 1.4
+        ploytropicCompressorExponent: 1.4,
+        fullLoadAmps: undefined
       },
       compressorControls: {
         controlType: undefined,
@@ -31,7 +35,8 @@ export class InventoryService {
         automaticShutdown: false
       },
       inletConditions: {
-        atmosphericPressure: undefined
+        atmosphericPressure: undefined,
+        temperature: undefined
       },
       designDetails: {
         blowdownTime: 40,
@@ -39,7 +44,8 @@ export class InventoryService {
         modulatingPressureRange: undefined,
         inputPressure: undefined,
         designEfficiency: undefined,
-        serviceFactor: 1.15
+        serviceFactor: 1.15,
+        fullLoadEfficiency: undefined
       },
       centrifugalSpecifics: {
         surgeAirflow: undefined,
@@ -89,9 +95,10 @@ export class InventoryService {
   }
 
   //general information
-  getGeneralInformationFormFromObj(name: string): FormGroup {
+  getGeneralInformationFormFromObj(name: string, description: string): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [name, Validators.required],
+      description: [description]
     });
     return form;
   }
@@ -104,7 +111,8 @@ export class InventoryService {
       fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure],
       fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity],
       ratedLoadPower: [nameplateData.ratedLoadPower],
-      ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent]
+      ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
+      fullLoadAmps: [nameplateData.fullLoadAmps]
     });
     return form;
   }
@@ -116,7 +124,8 @@ export class InventoryService {
       fullLoadOperatingPressure: form.controls.fullLoadOperatingPressure.value,
       fullLoadRatedCapacity: form.controls.fullLoadRatedCapacity.value,
       ratedLoadPower: form.controls.ratedLoadPower.value,
-      ploytropicCompressorExponent: form.controls.ploytropicCompressorExponent.value
+      ploytropicCompressorExponent: form.controls.ploytropicCompressorExponent.value,
+      fullLoadAmps: form.controls.fullLoadAmps.value
     }
   }
 
@@ -200,7 +209,8 @@ export class InventoryService {
       modulatingPressureRange: [designDetails.modulatingPressureRange],
       inputPressure: [designDetails.inputPressure],
       designEfficiency: [designDetails.designEfficiency],
-      serviceFactor: [designDetails.serviceFactor]
+      serviceFactor: [designDetails.serviceFactor],
+      fullLoadEfficiency: [designDetails.fullLoadEfficiency]
     });
     return form;
   }
@@ -212,7 +222,8 @@ export class InventoryService {
       modulatingPressureRange: form.controls.modulatingPressureRange.value,
       inputPressure: form.controls.inputPressure.value,
       designEfficiency: form.controls.designEfficiency.value,
-      serviceFactor: form.controls.serviceFactor.value
+      serviceFactor: form.controls.serviceFactor.value,
+      fullLoadEfficiency: form.controls.fullLoadEfficiency.value
     }
   }
 
@@ -237,6 +248,23 @@ export class InventoryService {
       defaultPower: form.controls.defaultPower.value
     }
   }
+
+  getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
+    //todo validators
+    let form: FormGroup = this.formBuilder.group({
+      atmosphericPressure: [inletConditions.atmosphericPressure],
+      temperature: [inletConditions.temperature],
+    });
+    return form;
+  }
+
+  getInletConditionsObjFromForm(form: FormGroup): InletConditions {
+    return {
+      atmosphericPressure: form.controls.atmosphericPressure.value,
+      temperature: form.controls.temperature.value
+    }
+  }
+
 
   isCompressorValid(compressor: CompressorInventoryItem): boolean {
     let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);

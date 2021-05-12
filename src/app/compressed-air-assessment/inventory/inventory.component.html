@@ -13,11 +13,20 @@
                 <label for="name">Compressor Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name" (input)="save()" />
             </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" type="text" id="description" formControlName="description"
+                    (input)="save()"></textarea>
+            </div>
+            <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
         </form>
         <app-nameplate-data></app-nameplate-data>
         <app-control-data></app-control-data>
-        <app-design-details></app-design-details>
-        <app-centrifugal-specifics *ngIf="compressorType == 6"></app-centrifugal-specifics>
-        <app-performance-points></app-performance-points>
+        <app-inlet-conditions *ngIf="compressorType && controlType"></app-inlet-conditions>
+        <app-design-details *ngIf="compressorType && controlType"></app-design-details>
+        <app-centrifugal-specifics *ngIf="compressorType == 6 && controlType"></app-centrifugal-specifics>
+        <app-performance-points *ngIf="compressorType && controlType"></app-performance-points>
     </div>
 </div>
+
+<app-generic-compressor-modal *ngIf="showCompressorModal" (emitClose)="closeCompressorModal()"></app-generic-compressor-modal>

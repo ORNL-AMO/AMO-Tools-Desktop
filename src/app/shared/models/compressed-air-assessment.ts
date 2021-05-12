@@ -31,7 +31,9 @@ export interface SystemInformation {
 
 export interface CompressorInventoryItem {
     itemId: string,
+    compressorLibId?: number,
     name: string,
+    description: string,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     inletConditions: InletConditions,
@@ -47,7 +49,8 @@ export interface CompressorNameplateData {
     fullLoadOperatingPressure: number,
     fullLoadRatedCapacity: number,
     ratedLoadPower: number,
-    ploytropicCompressorExponent: number
+    ploytropicCompressorExponent: number,
+    fullLoadAmps: number
 }
 
 export interface CompressorControls {
@@ -58,7 +61,8 @@ export interface CompressorControls {
 }
 
 export interface InletConditions {
-    atmosphericPressure: number
+    atmosphericPressure: number,
+    temperature: number
 }
 
 export interface DesignDetails {
@@ -67,7 +71,8 @@ export interface DesignDetails {
     modulatingPressureRange: number,
     inputPressure: number,
     designEfficiency: number,
-    serviceFactor: number
+    serviceFactor: number,
+    fullLoadEfficiency: number
 }
 
 export interface PerformancePoints {
