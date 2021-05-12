@@ -6,6 +6,7 @@ import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.se
 import { FlueGas, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Subscription } from 'rxjs';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-flue-gas-tab',
@@ -17,6 +18,8 @@ export class FlueGasTabComponent implements OnInit {
   phast: PHAST;
   @Input()
   inSetup: boolean;
+  @Input()
+  settings: Settings;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -74,11 +77,11 @@ export class FlueGasTabComponent implements OnInit {
 
   checkWarningExists(loss: FlueGas): boolean {
     if (loss.flueGasType === 'By Mass') {
-      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByMassWarnings(loss.flueGasByMass);
+      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByMassWarnings(loss.flueGasByMass, this.settings);
       let tmpHasWarning: boolean = this.flueGasFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     } else if (loss.flueGasType === 'By Volume') {
-      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(loss.flueGasByVolume);
+      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(loss.flueGasByVolume, this.settings);
       let tmpHasWarning: boolean = this.flueGasFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     }

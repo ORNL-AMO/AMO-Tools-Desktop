@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -60,7 +60,11 @@ export class ExportOpportunitiesComponent implements OnInit {
       waterReductions: this.getSelectedWaterReductions(this.treasureHunt.waterReductions),
       pipeInsulationReductions: this.getSelectedPipeInsulationReductions(this.treasureHunt.pipeInsulationReductions),
       tankInsulationReductions: this.getSelectedTankInsulationReductions(this.treasureHunt.tankInsulationReductions),
-      airLeakSurveys: this.getSelectedAirLeakSurveys(this.treasureHunt.airLeakSurveys)
+      airLeakSurveys: this.getSelectedAirLeakSurveys(this.treasureHunt.airLeakSurveys),
+      openingLosses: this.getSelectedOpeningLosses(this.treasureHunt.openingLosses),
+      wallLosses: this.getSelectedWallLosses(this.treasureHunt.wallLosses),
+      leakageLosses: this.getSelectedLeakageLosses(this.treasureHunt.leakageLosses),
+      flueGasLosses: this.getSelectedFlueGasLosses(this.treasureHunt.flueGasLosses)
     }
   }
   getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
@@ -146,9 +150,35 @@ export class ExportOpportunitiesComponent implements OnInit {
     return undefined;
   }
 
+  getSelectedFlueGasLosses(losses: Array<FlueGasTreasureHunt>): Array<FlueGasTreasureHunt> {
+    if (losses) {
+      return _.filter(losses, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
   getSelectedAirLeakSurveys(reductions: Array<AirLeakSurveyTreasureHunt>): Array<AirLeakSurveyTreasureHunt> {
     if (reductions) {
       return _.filter(reductions, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getSelectedOpeningLosses(losses: Array<OpeningLossTreasureHunt>): Array<OpeningLossTreasureHunt> {
+    if (losses) {
+      return _.filter(losses, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getSelectedWallLosses(losses: Array<WallLossTreasureHunt>): Array<WallLossTreasureHunt> {
+    if (losses) {
+      return _.filter(losses, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getSelectedLeakageLosses(losses: Array<LeakageLossTreasureHunt>): Array<LeakageLossTreasureHunt> {
+    if (losses) {
+      return _.filter(losses, (opportunity) => { return opportunity.selected });
     }
     return undefined;
   }

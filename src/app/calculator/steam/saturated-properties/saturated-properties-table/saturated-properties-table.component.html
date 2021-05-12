@@ -33,11 +33,11 @@
   <tbody>
     <tr *ngFor="let row of rowData; let i = index">
       <td>{{row.pressure | number:'1.0-4'}}</td>
-      <td class="parent-col">{{row.temperature | number:'1.0-4'}}</td>
+      <td class="parent-col">{{row.temperature | number:'1.0-2'}}</td>
 
-      <td class="parent-col">{{row.satLiquidEnthalpy | number:'1.0-4'}}</td>
-      <td class="child-col">{{row.evapEnthalpy | number:'1.0-4'}}</td>
-      <td class="child-col">{{row.satGasEnthalpy | number:'1.0-4'}}</td>
+      <td class="parent-col">{{row.satLiquidEnthalpy | number:'1.0-2'}}</td>
+      <td class="child-col">{{row.evapEnthalpy | number:'1.0-2'}}</td>
+      <td class="child-col">{{row.satGasEnthalpy | number:'1.0-2'}}</td>
 
       <td class="parent-col">{{row.satLiquidEntropy | number:'1.0-4'}}</td>
       <td class="child-col">{{row.evapEntropy | number:'1.0-4'}}</td>

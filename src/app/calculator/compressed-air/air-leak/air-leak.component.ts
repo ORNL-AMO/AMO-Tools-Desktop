@@ -5,7 +5,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Subscription } from 'rxjs';
-import { AirLeakSurveyTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-air-leak',
@@ -102,7 +102,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-    this.emitSave.emit({ airLeakSurveyInput: this.airLeakService.airLeakInput.getValue() });
+    this.emitSave.emit({ airLeakSurveyInput: this.airLeakService.airLeakInput.getValue(), opportunityType: Treasure.airLeak});
   }
 
   cancel() {

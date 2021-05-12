@@ -72,7 +72,7 @@
       <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- energy intensity -->
       <td>{{data.baselineEnergyIntensity | sigFigs:'5'}}</td>
-      <td *ngIf="data.modificationName">{{data.modiedEnergyIntensity | sigFigs:'5'}}</td>
+      <td *ngIf="data.modificationName">{{data.modifiedEnergyIntensity | sigFigs:'5'}}</td>
       <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- available heat -->
       <td>{{data.baselineAvailableHeat | sigFigs:'5'}}</td>
@@ -80,7 +80,7 @@
       <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- annual cost -->
       <td>${{data.baselineAnnualCost | sigFigs:'4'}}</td>
-      <td *ngIf="data.modificationName">${{data.modiedAnnualCost | sigFigs:'4'}}</td>
+      <td *ngIf="data.modificationName">${{data.modifiedAnnualCost | sigFigs:'4'}}</td>
       <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- savings -->
       <td *ngIf="data.modificationName">${{data.costSavings | sigFigs:'4'}}</td>
@@ -107,4 +107,34 @@
       <td *ngIf="!data.modificationName">&mdash;</td>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <!-- name -->
+      <td>Total</td>
+      <td>&mdash;</td>
+      <!-- energy intensity -->
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <!-- available heat -->
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <!-- annual cost -->
+      <td>${{totalBaselineCost | sigFigs:'4'}}</td>
+      <td *ngIf="totalModificationCost">${{totalModificationCost | sigFigs:'4'}}</td>
+      <td *ngIf="!totalModificationCost">&mdash;</td>
+      <!-- savings -->
+      <td *ngIf="totalCostSavings">${{totalCostSavings | sigFigs:'4'}}</td>
+      <td *ngIf="!totalCostSavings">&mdash;</td>
+      <!-- implementation costs -->
+      <td *ngIf="totalImplementationCosts">
+        ${{totalImplementationCosts| sigFigs:'4'}}
+      </td>
+      <td class="col-span" *ngIf="!totalImplementationCosts">&mdash;</td>
+      <!-- simple patback -->
+      <td *ngIf="totalPaybackPeriod">
+        {{totalPaybackPeriod| sigFigs:'4'}}
+      </td>
+      <td *ngIf="!totalPaybackPeriod">&mdash;</td>
+    </tr>
+  </tfoot>
 </table>

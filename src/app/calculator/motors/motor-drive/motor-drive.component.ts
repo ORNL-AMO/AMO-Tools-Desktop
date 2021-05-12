@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
-import { MotorDriveInputsTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { MotorDriveInputsTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-motor-drive',
@@ -99,7 +99,7 @@ export class MotorDriveComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ motorDriveInputs: this.motorDriveData });
+    this.emitSave.emit({ motorDriveInputs: this.motorDriveData, opportunityType: Treasure.motorDrive });
   }
 
   cancel() {

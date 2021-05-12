@@ -118,8 +118,11 @@ export class FieldDataComponent implements OnInit {
     this.psatForm.controls.loadEstimatedMethod.enable();
   }
 
-  focusField(str: string) {
-    this.helpPanelService.currentField.next(str);
+  focusField(inputName: string) {
+    if (!this.baseline && inputName === 'measuredVoltage') {
+      inputName = 'modMeasuredVoltage';
+    }
+    this.helpPanelService.currentField.next(inputName);
   }
 
   save() {

@@ -16,6 +16,11 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
 
   tableData: Array<TableDataItem>;
 
+  totalBaselineCost: number = 0;
+  totalModificationCost: number = 0;
+  totalCostSavings: number = 0;
+  totalImplementationCosts: number = 0;
+  totalPaybackPeriod: number = 0;
   constructor(private convertUnitsService: ConvertUnitsService, private phastResultsService: PhastResultsService,
     private phastReportRollupService: PhastReportRollupService) { }
 
@@ -26,7 +31,14 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
     phastResultsCpy.forEach(resultItem => {
       let tableRow: TableDataItem = this.getTableRow(resultItem);
       this.tableData.push(tableRow);
+      this.totalBaselineCost += tableRow.baselineAnnualCost;
+      if(tableRow.modificationName){
+        this.totalModificationCost += tableRow.modifiedAnnualCost;
+      }
+      this.totalCostSavings += tableRow.costSavings;
+      this.totalImplementationCosts += tableRow.implementationCost;
     });
+    this.totalPaybackPeriod = this.totalImplementationCosts / this.totalCostSavings;
   }
 
   getTableRow(resultItem: PhastResultsData): TableDataItem {
@@ -36,11 +48,11 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
       baselineName: resultItem.name,
       modificationName: resultItem.modName,
       baselineEnergyIntensity: resultItem.baselineResults.energyPerMass,
-      modiedEnergyIntensity: resultItem.modificationResults.energyPerMass,
+      modifiedEnergyIntensity: resultItem.modificationResults.energyPerMass,
       baselineAvailableHeat: this.phastResultsService.getAvailableHeat(resultItem.baselineResultData, resultItem.settings),
       modifiedAvailableHeat: this.phastResultsService.getAvailableHeat(resultItem.modificationResultData, resultItem.settings),
       baselineAnnualCost: resultItem.baselineResults.annualCost,
-      modiedAnnualCost: resultItem.modificationResults.annualCost,
+      modifiedAnnualCost: resultItem.modificationResults.annualCost,
       costSavings: resultItem.baselineResults.annualCost - resultItem.modificationResults.annualCost,
       implementationCost: resultItem.modificationResults.implementationCosts,
       paybackPeriod: resultItem.modificationResults.paybackPeriod
@@ -58,11 +70,11 @@ export interface TableDataItem {
   modificationName: string,
   baselineName: string,
   baselineEnergyIntensity: number,
-  modiedEnergyIntensity: number,
+  modifiedEnergyIntensity: number,
   baselineAvailableHeat: number,
   modifiedAvailableHeat: number,
   baselineAnnualCost: number,
-  modiedAnnualCost: number,
+  modifiedAnnualCost: number,
   costSavings: number,
   implementationCost: number,
   paybackPeriod: number

@@ -377,6 +377,9 @@ export interface InletPressureData {
   processRequirements: number;
   inletSystemEffectLoss: number;
   calculatedInletPressure: number;
+  fanInletArea?: number;
+  inletVelocityPressure?: number;
+  userDefinedVelocityPressure?: boolean;
 }
 
 export interface OutletPressureData {
@@ -388,6 +391,9 @@ export interface OutletPressureData {
   processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
+  inletVelocityPressure?: number,
+  userDefinedVelocityPressure?: boolean,
+  fanOutletArea?: number
 }
 
 
