@@ -1,10 +1,10 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { WasteHeatInput } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
-import { Treasure } from '../../../shared/models/treasure-hunt';
+import { Treasure, WasteHeatTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { WasteHeatService } from './waste-heat.service';
 
 @Component({
@@ -19,12 +19,10 @@ export class WasteHeatComponent implements OnInit {
   inTreasureHunt: boolean;
   @Input()
   operatingHours: OperatingHours;
-
-  // @Output('emitSave')
-  // emitSave = new EventEmitter<Wasteheat>();
-  // @Output('emitCancel')
-  // emitCancel = new EventEmitter<boolean>();
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<WasteHeatTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -65,6 +63,9 @@ export class WasteHeatComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     this.modalSubscription.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.wasteHeatService.initDefaultEmptyInputs();
+    }
   }
 
   ngAfterViewInit() {
@@ -116,15 +117,15 @@ export class WasteHeatComponent implements OnInit {
   save() {
     let baselineData: WasteHeatInput = this.wasteHeatService.baselineData.getValue();
     let modificationData: WasteHeatInput = this.wasteHeatService.modificationData.getValue();
-    // this.emitSave.emit({ 
-    //   baseline: baselineData, 
-    //   modification: modificationData, 
-    //   opportunityType: Treasure.wasteHeat
-    // });
+    this.emitSave.emit({ 
+      baseline: baselineData, 
+      modification: modificationData, 
+      opportunityType: Treasure.wasteHeat
+    });
   }
 
   cancel() {
-    // this.emitCancel.emit(true);
+    this.emitCancel.emit(true);
   }
 
   btnResetData() {
@@ -153,7 +154,6 @@ export class WasteHeatComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
-
     }
   }
 

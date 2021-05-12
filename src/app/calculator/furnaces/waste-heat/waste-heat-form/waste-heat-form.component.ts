@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { WasteHeatInput, WasteHeatWarnings } from '../../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../../shared/models/settings';
+import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WasteHeatFormService } from '../waste-heat-form.service';
 import { WasteHeatService } from '../waste-heat.service';
 
@@ -23,10 +24,16 @@ export class WasteHeatFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inModal: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   showFlueGasModal: boolean;
+  
+  energyUnit: string;
+  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  energySourceTypeSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -46,6 +53,18 @@ export class WasteHeatFormComponent implements OnInit {
 
   ngOnInit() {
     this.initSubscriptions();
+    this.energyUnit = this.wasteHeatService.getAnnualEnergyUnit(this.form.controls.energySourceType.value, this.settings);
+    if (!this.isBaseline) {
+      let energySource = this.wasteHeatService.energySourceType.getValue();
+      this.setEnergySource(energySource);
+    } else {
+      this.wasteHeatService.energySourceType.next(this.form.controls.energySourceType.value);
+    }
+
+    if (this.inTreasureHunt) {
+      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
+    }
+    this.setEnergySource();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -60,6 +79,10 @@ export class WasteHeatFormComponent implements OnInit {
     } else {
       this.form.enable();
     }
+
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.form.controls.energySourceType.disable();
+    }
   }
   
   initSubscriptions() {
@@ -70,6 +93,26 @@ export class WasteHeatFormComponent implements OnInit {
     this.generateExampleSub = this.wasteHeatService.generateExample.subscribe(value => {
       this.initForm();
     })
+    if (!this.isBaseline) {
+      this.energySourceTypeSub = this.wasteHeatService.energySourceType.subscribe(energySourceType => {
+        this.setEnergySource(energySourceType);
+      });
+    }
+  }
+
+  setEnergySource(baselineEnergySource?: string) {
+    if (baselineEnergySource) {
+      this.form.patchValue({
+        energySourceType: baselineEnergySource
+      });
+    }
+    this.energyUnit = this.wasteHeatService.getAnnualEnergyUnit(this.form.controls.energySourceType.value, this.settings);
+
+    if (this.isBaseline) {
+      this.wasteHeatService.energySourceType.next(this.form.controls.energySourceType.value);
+    }
+    this.cd.detectChanges();
+    this.calculate();
   }
 
   ngAfterViewInit() {
@@ -81,6 +124,9 @@ export class WasteHeatFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    if (!this.isBaseline) {
+      this.energySourceTypeSub.unsubscribe();
+    }
   }
 
   initForm() {

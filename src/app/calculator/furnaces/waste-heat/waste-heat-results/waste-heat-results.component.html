@@ -6,8 +6,8 @@
           <td *ngIf="output.baseline.recoveredHeat" class="text-center w-50">
             {{output.baseline.recoveredHeat | number:'1.0-3'}}
             <span class="input-group-addon">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            <span [innerHTML]="output.energyUnit | settingsLabel"></span>/yr
+
           </span>
           </td>
           <td *ngIf="!output.baseline.recoveredHeat" class="text-center w-50">
@@ -97,8 +97,7 @@
           <td *ngIf="output.modification.recoveredHeat" class="text-center w-50">
             {{output.modification.recoveredHeat | number:'1.0-3'}}
             <span class="input-group-addon">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            <span [innerHTML]="output.energyUnit | settingsLabel"></span>/yr
           </span>
           </td>
           <td *ngIf="!output.modification.recoveredHeat" class="text-center w-50">

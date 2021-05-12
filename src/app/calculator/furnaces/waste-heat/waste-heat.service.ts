@@ -13,6 +13,7 @@ export class WasteHeatService {
   baselineData: BehaviorSubject<WasteHeatInput>;
   modificationData: BehaviorSubject<WasteHeatInput>;
   wasteHeatOutput: BehaviorSubject<WasteHeatOutput>;
+  energySourceType: BehaviorSubject<string>;
   
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
@@ -24,6 +25,7 @@ export class WasteHeatService {
     this.baselineData = new BehaviorSubject<WasteHeatInput>(undefined);
     this.modificationData = new BehaviorSubject<WasteHeatInput>(undefined);
     this.wasteHeatOutput = new BehaviorSubject<WasteHeatOutput>(undefined);
+    this.energySourceType = new BehaviorSubject<string>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     this.currentField = new BehaviorSubject<string>('default');
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -34,6 +36,7 @@ export class WasteHeatService {
       oppHours: operationHours,
       cost: undefined,
       availableHeat: undefined,
+      energySourceType: 'Natural Gas',
       heatInput: undefined,
       hxEfficiency: undefined,
       chillerInTemperature: undefined,
@@ -84,6 +87,7 @@ export class WasteHeatService {
     }
 
     if (validBaseline) {
+      output.energyUnit = this.getAnnualEnergyUnit(this.energySourceType.getValue(), settings);
       let baselineResults: WasteHeatResults = this.getWasteHeatResults(baselineWasteHeatInput, settings);
       output.baseline = baselineResults;
 
@@ -115,6 +119,7 @@ export class WasteHeatService {
       oppHours: 7500,
       cost: .075,
       availableHeat: 69,
+      energySourceType: 'Natural Gas',
       heatInput: 6,
       hxEfficiency: 70,
       chillerInTemperature: 190,
@@ -201,6 +206,19 @@ export class WasteHeatService {
     let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
     let modification: WasteHeatInput = currentBaselineCopy;
     this.modificationData.next(modification);
+  }
+
+  
+  getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (energySourceType === 'Electricity') {
+      energyUnit = 'kWh';
+    } else if (settings.unitsOfMeasure === 'Metric') {
+      energyUnit = 'GJ';
+    } else {
+      energyUnit = 'MMBtu';
+    }
+    return energyUnit;
   }
 
 
