@@ -28,6 +28,7 @@ import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak
 import { WallModule } from '../../calculator/furnaces/wall/wall.module';
 import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.module';
 import { LeakageModule } from '../../calculator/furnaces/leakage/leakage.module';
+import { WasteHeatModule } from '../../calculator/furnaces/waste-heat/waste-heat.module';
 import { OpeningModule } from '../../calculator/furnaces/opening/opening.module';
 
 @NgModule({
@@ -56,6 +57,7 @@ import { OpeningModule } from '../../calculator/furnaces/opening/opening.module'
     PipeInsulationReductionModule,
     CompressedAirReductionModule,
     TankInsulationReductionModule,
+    WasteHeatModule,
     LeakageModule,
     AirLeakModule,
     OpeningModule,

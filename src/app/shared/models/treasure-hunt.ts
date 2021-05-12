@@ -6,6 +6,7 @@ import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
 import { LeakageLoss } from "./phast/losses/leakageLoss";
+import { WasteHeatInput } from "./phast/wasteHeat";
 import { OpeningLoss } from "./phast/losses/openingLoss";
 
 export interface TreasureHunt {
@@ -23,6 +24,7 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
@@ -50,6 +52,7 @@ export enum Treasure {
     wallLoss = 'wall-loss',
     flueGas = 'flue-gas',
     leakageLoss = 'leakage-loss',
+    wasteHeat = 'waste-heat',
     openingLoss = 'opening-loss'
 }
 
@@ -202,6 +205,13 @@ export interface WastewaterReductionTreasureHunt extends TreasureHuntOpportunity
 
 export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
+}
+
+export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
+    baseline: WasteHeatInput;
+    modification: WasteHeatInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
 }
 
 export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
@@ -376,4 +386,5 @@ export interface ImportExportOpportunities {
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
 }
