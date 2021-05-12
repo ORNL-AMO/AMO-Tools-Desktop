@@ -64,25 +64,25 @@
 
     <div class="form-group">
       <label class="small bold">Pressure</label>
-      <div class="small text-center bold">{{steamPropertiesOutput.pressure | number:'1.1-4'}}
+      <div class="small text-center bold">{{steamPropertiesOutput.pressure | number:'1.0-4'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small bold">Temperature</label>
-      <div class="small text-center bold">{{steamPropertiesOutput.temperature | number:'1.1-4'}}
+      <div class="small text-center bold">{{steamPropertiesOutput.temperature | number:'1.0-2'}}
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small bold">Specific Enthalpy</label>
-      <div class="small text-center bold">{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}
+      <div class="small text-center bold">{{steamPropertiesOutput.specificEnthalpy | number:'1.0-2'}}
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small bold">Specific Entropy</label>
-      <div class="small text-center bold">{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}
+      <div class="small text-center bold">{{steamPropertiesOutput.specificEntropy | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
       </div>
     </div>
@@ -96,7 +96,7 @@
     </div>
     <div class="form-group">
       <label class="small bold">Specific Volume</label>
-      <div class="small text-center bold">{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}
+      <div class="small text-center bold">{{steamPropertiesOutput.specificVolume | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
       </div>
     </div>

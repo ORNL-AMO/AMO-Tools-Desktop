@@ -22,6 +22,7 @@ export class LeakageService {
   operatingHours: OperatingHours;
 
   modalOpen: BehaviorSubject<boolean>;
+  defaultEnergySourceType: string;
   constructor(private leakageFormService: LeakageFormService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
@@ -33,6 +34,8 @@ export class LeakageService {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.energySourceType = new BehaviorSubject<string>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+
+    this.defaultEnergySourceType = 'Fuel';
   }
 
   calculate(settings: Settings) {
@@ -117,27 +120,31 @@ export class LeakageService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0, undefined);
+    this.defaultEnergySourceType = 'Fuel';
+    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0);
     let baselineData: Array<LeakageLoss> = [emptyBaselineData];
-    this.baselineData.next(baselineData);
     this.modificationData.next(undefined);
-    this.energySourceType.next('Fuel');
+    this.energySourceType.next(this.defaultEnergySourceType);
+    this.baselineData.next(baselineData);
   }
 
-  initDefaultLoss(index: number, treasureHours: number, leakageLoss?: LeakageLoss) {
+  initTreasureHuntEmptyInputs(treasureHuntHours: number) {
+    this.defaultEnergySourceType = 'Natural Gas';
+    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0, treasureHuntHours);
+    let baselineData: Array<LeakageLoss> = [emptyBaselineData];
+    this.modificationData.next(undefined);
+    this.energySourceType.next(this.defaultEnergySourceType);
+    this.baselineData.next(baselineData);
+  }
+
+  initDefaultLoss(index: number, hoursPerYear: number = 8760, leakageLoss?: LeakageLoss) {
     let fuelCost: number = 0;
     let availableHeat: number = 100;
-    let hoursPerYear = 8760;
 
     if (leakageLoss) {
       fuelCost = leakageLoss.fuelCost;
       availableHeat = leakageLoss.availableHeat;
-
-      if (treasureHours) {
-        hoursPerYear = treasureHours;
-      } else {
-        hoursPerYear = leakageLoss.hoursPerYear;
-      }
+      hoursPerYear = leakageLoss.hoursPerYear;
     }
 
     let defaultBaselineData: LeakageLoss = {
@@ -149,7 +156,7 @@ export class LeakageService {
       specificGravity: 1.0,
       correctionFactor: 1.0,
       name: 'Loss #' + (index + 1),
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,    
       availableHeat: availableHeat,  
@@ -157,7 +164,6 @@ export class LeakageService {
 
     return defaultBaselineData;
   }
-
 
   initDefaultEmptyOutput() {
      let output: LeakageLossOutput = {
@@ -221,7 +227,11 @@ export class LeakageService {
     }
   }
 
-  generateExampleData(settings: Settings) {
+  generateExampleData(settings: Settings, inTreasureHunt: boolean) {
+    if (inTreasureHunt) {
+      this.defaultEnergySourceType = "Other Fuel";
+    }
+
     let draftPressure: number = .5;
     let openingArea: number = 4;
     let modOpeningArea: number = 1;
@@ -253,7 +263,7 @@ export class LeakageService {
       coefficient: .8052,
       specificGravity: 1.0,
       correctionFactor: 1.0,
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       fuelCost: 3.99,
       hoursPerYear: 8760,    
       availableHeat: 100,
@@ -269,7 +279,7 @@ export class LeakageService {
       coefficient: .8052,
       specificGravity: 1.0,
       correctionFactor: 1.0,
-      energySourceType: 'Fuel',
+      energySourceType: this.defaultEnergySourceType,
       fuelCost: 3.99,
       hoursPerYear: 8760,    
       availableHeat: 100,

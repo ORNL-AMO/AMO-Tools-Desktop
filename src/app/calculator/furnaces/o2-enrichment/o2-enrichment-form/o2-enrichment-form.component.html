@@ -157,9 +157,16 @@
 
   <div class="d-flex w-100 justify-content-end">
     <button type="button" class="btn btn-primary pull-right m-2 btn-form" id="plotBtn" 
-    (click)="addModification()">Add New Line</button>
-    <button *ngIf="!o2Form.controls.isBaseline.value" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
-    (click)="removeModification()">Remove Line</button>
+    (click)="addModification()">
+    <span *ngIf="o2Form.controls.isBaseline.value === true">
+      Add Modification
+    </span>
+    <span *ngIf="o2Form.controls.isBaseline.value === false">
+      Add New Line
+    </span>
+  </button>
+    <button *ngIf="o2Form.controls.isBaseline.value === false" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
+    (click)="removeModification()">Remove line</button>
   </div>
 </form>
 

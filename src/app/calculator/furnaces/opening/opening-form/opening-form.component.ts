@@ -10,7 +10,7 @@ import { OpeningFormService } from '../opening-form.service';
 import { OpeningService } from '../opening.service';
 
 import * as _ from 'lodash';
-
+import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 
 @Component({
   selector: 'app-opening-form',
@@ -18,6 +18,8 @@ import * as _ from 'lodash';
   styleUrls: ['./opening-form.component.css']
 })
 export class OpeningFormComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -53,10 +55,13 @@ export class OpeningFormComponent implements OnInit {
   canCalculateViewFactor: boolean;
   calculateVFWarning: string;
 
+  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
               private cd: ChangeDetectorRef,
               private openingService: OpeningService) { }
+
   ngOnInit(): void {
     if (!this.isBaseline) {
       this.idString = '_modification_' + this.index;
@@ -73,6 +78,10 @@ export class OpeningFormComponent implements OnInit {
     } else {
       this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
     }
+    if (this.inTreasureHunt) {
+      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
+    }
+    this.setEnergySource();
     this.checkCanCalculateViewFactor();
     this.checkWarnings();
   }
@@ -151,6 +160,10 @@ export class OpeningFormComponent implements OnInit {
     } else {
       this.openingLossesForm.enable();
     }
+
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.openingLossesForm.controls.energySourceType.disable();
+    }
   }
 
   checkCanCalculateViewFactor() {
@@ -203,14 +216,16 @@ export class OpeningFormComponent implements OnInit {
     this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm.controls.viewFactor.value, calculatedViewFactor);
   }
 
-  setEnergySource(energySourceType: string) {
-    this.openingLossesForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.openingService.getAnnualEnergyUnit(energySourceType, this.settings);
+  setEnergySource(baselineEnergySource?: string) {
+    if (baselineEnergySource) {
+      this.openingLossesForm.patchValue({
+        energySourceType: baselineEnergySource
+      });
+    }
+    this.energyUnit = this.openingService.getAnnualEnergyUnit(this.openingLossesForm.controls.energySourceType.value, this.settings);
 
     if (!this.trackingEnergySource) {
-      this.openingService.energySourceType.next(energySourceType);
+      this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
     }
     this.cd.detectChanges();
     this.calculate();

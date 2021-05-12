@@ -5,7 +5,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PipeInsulationReductionService } from './pipe-insulation-reduction.service';
 import { PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { FormGroup } from '@angular/forms';
-import { PipeInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { PipeInsulationReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-pipe-insulation-reduction',
@@ -163,7 +163,7 @@ export class PipeInsulationReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.pipeInsulationReductionService.baselineData, modification: this.pipeInsulationReductionService.modificationData });
+    this.emitSave.emit({ baseline: this.pipeInsulationReductionService.baselineData, modification: this.pipeInsulationReductionService.modificationData, opportunityType: Treasure.pipeInsulation });
   }
 
   cancel() {

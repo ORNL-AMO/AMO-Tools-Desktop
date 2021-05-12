@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { WaterReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { Treasure, WaterReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
@@ -189,7 +189,7 @@ export class WaterReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.waterReduction });
   }
 
   cancel() {

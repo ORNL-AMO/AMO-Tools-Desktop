@@ -4,11 +4,12 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
 import { FsatService } from './fsat.service';
+import { CompareService } from './compare.service';
 
 @Injectable()
 export class FsatWarningService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private psatService: PsatService, private fsatService: FsatService) {
    }
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
@@ -20,12 +21,22 @@ export class FsatWarningService {
     let warnings: FanFieldDataWarnings = {
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
+      suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
       inletPressureError: this.checkInletPressure(fsat),
       outletPressureError: this.checkOutletPressure(fsat),
+      calcInletVelocityPressureError: this.checkCalcInletVelocityPressureError(fsat.fieldData.flowRate)
     };
 
     return warnings;
+  }
+
+  checkCalcInletVelocityPressureError(flowRate: number) {
+    if (flowRate <= 0) {
+      return 'Flow rate is required to calculate Inlet Velocity Pressure';
+    } else {
+      return null;
+    }
   }
 
   //REQUIRED?
@@ -131,6 +142,20 @@ export class FsatWarningService {
     } else if (fsat.fieldData.measuredVoltage < 1) {
       return "Voltage should be greater then 1 V.";
     } else {
+      return null;
+    }
+  }
+
+  checkSuggestedVoltage(fsat: FSAT, isModification: boolean) {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && isModification) {
+      let ratedVoltage = this.compareService.modifiedFSAT.fanMotor.motorRatedVoltage;
+      if (this.compareService.isMotorRatedVoltageDifferent() && fsat.fieldData.measuredVoltage != ratedVoltage) {
+        return `Motor modification Rated Voltage differs from baseline. Consider using ${ratedVoltage} (modification Rated Voltage) for Measured Voltage`;
+      } else {
+        return null;
+      }
+    }
+    else {
       return null;
     }
   }
@@ -322,8 +347,10 @@ export interface FanFieldDataWarnings {
   voltageError: string;
   costError: string;
   ratedPowerError: string;
+  suggestedVoltage: string,
   inletPressureError: string;
   outletPressureError: string;
+  calcInletVelocityPressureError: string;
 }
 
 export interface FanMotorWarnings {
