@@ -63,17 +63,14 @@ export class CoolingTowerFanService {
     if(!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
-      console.log('inputs', inputCopy);
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let coolingTowerFanOutput: CoolingTowerFanOutput = chillersAddon.coolingTowerFanEnergyConsumption(inputCopy);
-      console.log('output', coolingTowerFanOutput);
       coolingTowerFanOutput = this.convertResultUnits(coolingTowerFanOutput, settings);
       this.coolingTowerFanOutput.next(coolingTowerFanOutput);
     }
   }
 
   generateExampleData(settings: Settings) {
-    // Example
     let exampleInput: CoolingTowerFanInput = {
       towerType: 0,
       numCells: 1,
@@ -86,13 +83,6 @@ export class CoolingTowerFanService {
       baselineSpeedType: 0,
       modSpeedType: 1,
     };
-
-    // Example returns
-    // baselinePower: 55.149962
-    // baselineEnergy: 41.141872,
-    // modPower: 50.503133
-    // modEnergy: 37.675337
-    // savingsEnergy: 3.466535
 
     if (settings.unitsOfMeasure == 'Metric') {
       exampleInput = this.convertExampleUnits(exampleInput);
