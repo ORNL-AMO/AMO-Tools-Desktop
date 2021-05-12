@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost, Treasure } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import * as _ from 'lodash';
 
 @Injectable()
 export class OpportunitySheetService {
 
+  defaultSheetName: string = 'New Opportunity';
   opportunitySheet: OpportunitySheet;
   constructor() { }
 
   initOpportunitySheet(): OpportunitySheet {
     return {
-      name: 'New Opportunity',
+      name: this.defaultSheetName,
       equipment: '',
       description: '',
       originator: '',
@@ -30,7 +31,8 @@ export class OpportunitySheetService {
         type: 'Electricity',
         amount: 0
       }],
-      modificationEnergyUseItems: []
+      modificationEnergyUseItems: [],
+      opportunityType: Treasure.opportunitySheet
     };
   }
 

@@ -4,7 +4,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
 import { CompressedAirReductionData } from '../../../shared/models/standalone';
-import { CompressedAirReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { CompressedAirReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-reduction',
@@ -203,7 +203,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAir });
   }
 
   cancel() {

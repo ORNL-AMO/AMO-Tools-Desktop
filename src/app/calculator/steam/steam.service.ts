@@ -279,18 +279,33 @@ export class SteamService {
         inputCpy.outletQuantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.outletQuantityValue, settings);
       }
     }
-    //call suite calculator
+
     let results: TurbineOutput = steamAddon.turbine(inputCpy);
-    //adjust isentropic efficiency for "ideal" turbine properties calcluation
-    inputCpy.isentropicEfficiency = 100
-    //calculate and set ideal reaults
-    let idealResults: TurbineOutput = steamAddon.turbine(inputCpy);
-    results.outletIdealPressure = idealResults.outletPressure;
-    results.outletIdealQuality = idealResults.outletQuality;
-    results.outletIdealSpecificEnthalpy = idealResults.outletSpecificEnthalpy;
-    results.outletIdealSpecificEntropy = idealResults.outletSpecificEntropy;
-    results.outletIdealTemperature = idealResults.outletTemperature;
-    results.outletIdealVolume = idealResults.outletVolume;
+    if (inputCpy.solveFor == 0) {
+      inputCpy.isentropicEfficiency = 100
+      let idealResults: TurbineOutput = steamAddon.turbine(inputCpy);
+      results.outletIdealPressure = idealResults.outletPressure;
+      results.outletIdealQuality = idealResults.outletQuality;
+      results.outletIdealSpecificEnthalpy = idealResults.outletSpecificEnthalpy;
+      results.outletIdealSpecificEntropy = idealResults.outletSpecificEntropy;
+      results.outletIdealTemperature = idealResults.outletTemperature;
+      results.outletIdealVolume = idealResults.outletVolume;
+    } else {
+      let inletSpecificEntropy = results.inletSpecificEntropy
+      let idealOutletInput: SteamPropertiesInput = {
+        thermodynamicQuantity: 2,
+        pressure: inputCpy.outletSteamPressure,
+        quantityValue: inletSpecificEntropy
+      }
+      let idealOutletResults: SteamPropertiesOutput = steamAddon.steamProperties(idealOutletInput);
+      results.outletIdealPressure = idealOutletResults.pressure;
+      results.outletIdealQuality = results.outletQuality;
+      results.outletIdealSpecificEnthalpy = idealOutletResults.specificEnthalpy;
+      results.outletIdealSpecificEntropy = idealOutletResults.specificEntropy;
+      results.outletIdealTemperature = idealOutletResults.temperature;
+      results.outletIdealVolume = idealOutletResults.specificVolume;
+    }
+
     //convert results and return
     results = this.convertSteamService.convertTurbineOutput(results, settings);
     return results;

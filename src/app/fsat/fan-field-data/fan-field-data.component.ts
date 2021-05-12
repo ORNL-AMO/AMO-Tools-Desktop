@@ -5,7 +5,7 @@ import { FanFieldDataService } from './fan-field-data.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { FsatService } from '../fsat.service';
+import { FsatService, InletVelocityPressureInputs } from '../fsat.service';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
 import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
@@ -35,6 +35,8 @@ export class FanFieldDataComponent implements OnInit {
   emitSave = new EventEmitter<FieldData>();
   @Input()
   fsat: FSAT;
+  
+  inletVelocityPressureInputs: InletVelocityPressureInputs;
 
   @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
@@ -150,8 +152,11 @@ export class FanFieldDataComponent implements OnInit {
     });
   }
 
-  focusField(str: string) {
-    this.helpPanelService.currentField.next(str);
+  focusField(inputName: string) {
+    if (!this.baseline && inputName === 'measuredVoltage') {
+      inputName = 'modMeasuredVoltage';
+    }
+    this.helpPanelService.currentField.next(inputName);
   }
 
   save(usingModalVelocityPressure?: boolean) {
@@ -231,25 +236,21 @@ export class FanFieldDataComponent implements OnInit {
   setInletVelocityPressure() {
     if (this.fieldDataForm.controls.usingStaticPressure.value == true && !this.userDefinedVelocityPressure) {
       if (this.fieldDataForm.controls.flowRate.valid) {
-        this.fieldDataForm.patchValue({inletVelocityPressure: this.calculateInletVelocityPressure()});
+        this.setInletVelocityPressureInputs();
+        let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
+        this.fieldDataForm.patchValue({inletVelocityPressure: calculatedInletVelocityPressure});
       } 
     } else if (this.fieldDataForm.controls.usingStaticPressure.value == false) {
       this.fieldDataForm.patchValue({inletVelocityPressure: 0});
     }
-
-  
   }
 
-  calculateInletVelocityPressure(): number {
-    let inletVelocityPressure: number;
-    let flowRateCalc: number = (1/1096) * (this.fieldDataForm.controls.flowRate.value / this.fieldDataForm.controls.ductArea.value); 
-    inletVelocityPressure = this.fsat.baseGasDensity.gasDensity * Math.pow(flowRateCalc, 2);
-    if (isNaN(inletVelocityPressure) || !isFinite(inletVelocityPressure)) {
-      inletVelocityPressure = undefined;
-    } else {
-      inletVelocityPressure = Number(inletVelocityPressure.toFixed(5));
+  setInletVelocityPressureInputs() {
+    this.inletVelocityPressureInputs = {
+      ductArea: this.fieldDataForm.controls.ductArea.value,
+      gasDensity: this.fsat.baseGasDensity.gasDensity,
+      flowRate: this.fieldDataForm.controls.flowRate.value
     }
-    return inletVelocityPressure;
   }
 
   setPressureType(usingStaticPressure: boolean) {
@@ -265,6 +266,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   showInletPressureModal() {
+    this.setInletVelocityPressureInputs();
     if (this.fieldData.inletPressureData) {
       this.inletPressureCopy = JSON.parse(JSON.stringify(this.fieldData.inletPressureData));
     }
@@ -274,6 +276,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   showOutletPressureModal() {
+    this.setInletVelocityPressureInputs();
     if (this.fieldData.outletPressureData) {
       this.outletPressureCopy = JSON.parse(JSON.stringify(this.fieldData.outletPressureData));
     }
@@ -488,11 +491,11 @@ export class FanFieldDataComponent implements OnInit {
       return false;
     }
   }
-    // isMeasuredVoltageDifferent() {
-  //   if (this.canCompare()) {
-  //     return this.compareService.isMeasuredVoltageDifferent();
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  isMeasuredVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMeasuredVoltageDifferent();
+    } else {
+      return false;
+    }
+  }
 }

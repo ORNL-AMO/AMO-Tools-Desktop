@@ -99,6 +99,7 @@ import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/he
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
+import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 
 export const coreRoutes: Routes = [
   {
@@ -290,6 +291,10 @@ export const coreRoutes: Routes = [
           {
             path: 'water-reduction',
             component: WaterReductionComponent
+          },
+          {
+            path: 'water-heating',
+            component: WaterHeatingComponent
           },
           {
             path: 'steam-reduction',
