@@ -51,7 +51,7 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.nameplateData.fullLoadOperatingPressure = genericCompressor.RatedPressure;
     selectedCompressor.nameplateData.fullLoadRatedCapacity = genericCompressor.RatedCapacity;
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
-    
+
     selectedCompressor.compressorControls.unloadPointCapacity = genericCompressor.UnloadPoint;
     selectedCompressor.compressorControls.numberOfUnloadSteps = genericCompressor.UnloadSteps;
 
@@ -84,7 +84,13 @@ export class CompressorOptionsTableComponent implements OnInit {
     //TotPackageInputPower
     // NoLoadPowerFM: number,
     // NoLoadPowerUL: number,
-
+    if (selectedCompressor.compressorControls.controlType == 4 || selectedCompressor.compressorControls.controlType == 7 || selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 3 || selectedCompressor.compressorControls.controlType == 9 || selectedCompressor.compressorControls.controlType == 11) {
+      selectedCompressor.performancePoints.noLoad.power = 0;
+    } else if (selectedCompressor.compressorControls.controlType == 6) {
+      selectedCompressor.performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL;
+    } else if (selectedCompressor.compressorControls.controlType == 1) {
+      selectedCompressor.performancePoints.noLoad.power = genericCompressor.NoLoadPowerFM;
+    }
 
     return selectedCompressor;
   }
