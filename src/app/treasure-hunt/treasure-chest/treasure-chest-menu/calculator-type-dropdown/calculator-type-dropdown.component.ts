@@ -110,6 +110,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Leakage Loss';
       case Treasure.wasteHeat:
         return 'Waste Heat';
+      case Treasure.openingLoss:
+        return 'Opening Loss'
     }
   }
 }

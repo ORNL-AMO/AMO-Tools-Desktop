@@ -477,6 +477,14 @@ export class ConvertUnitsService {
       return this.convertValue(val, 'kPag', 'psig');
     }
   }
+  convertInAndMm(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'in', 'mm');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'mm', 'in');
+    }
+  }
+
 
   convertValue(value: number, oldUnit: string, newUnit: string): number {
     value = this.value(value).from(oldUnit).to(newUnit);
