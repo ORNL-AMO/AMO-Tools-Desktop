@@ -17,6 +17,7 @@ export class InventoryComponent implements OnInit {
   selectedCompressorSub: Subscription;
   isFormChange: boolean = false;
   compressorType: number;
+  controlType: number;
   showCompressorModal: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef) { }
@@ -26,6 +27,7 @@ export class InventoryComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.compressorType = val.nameplateData.compressorType;
+        this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
           this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name, val.description);
         } else {

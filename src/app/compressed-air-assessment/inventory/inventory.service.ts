@@ -25,7 +25,8 @@ export class InventoryService {
         fullLoadOperatingPressure: undefined,
         fullLoadRatedCapacity: undefined,
         ratedLoadPower: undefined,
-        ploytropicCompressorExponent: 1.4
+        ploytropicCompressorExponent: 1.4,
+        fullLoadAmps: undefined
       },
       compressorControls: {
         controlType: undefined,
@@ -42,7 +43,8 @@ export class InventoryService {
         modulatingPressureRange: undefined,
         inputPressure: undefined,
         designEfficiency: undefined,
-        serviceFactor: 1.15
+        serviceFactor: 1.15,
+        fullLoadEfficiency: undefined
       },
       centrifugalSpecifics: {
         surgeAirflow: undefined,
@@ -108,7 +110,8 @@ export class InventoryService {
       fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure],
       fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity],
       ratedLoadPower: [nameplateData.ratedLoadPower],
-      ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent]
+      ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
+      fullLoadAmps: [nameplateData.fullLoadAmps]
     });
     return form;
   }
@@ -120,7 +123,8 @@ export class InventoryService {
       fullLoadOperatingPressure: form.controls.fullLoadOperatingPressure.value,
       fullLoadRatedCapacity: form.controls.fullLoadRatedCapacity.value,
       ratedLoadPower: form.controls.ratedLoadPower.value,
-      ploytropicCompressorExponent: form.controls.ploytropicCompressorExponent.value
+      ploytropicCompressorExponent: form.controls.ploytropicCompressorExponent.value,
+      fullLoadAmps: form.controls.fullLoadAmps.value
     }
   }
 
@@ -204,7 +208,8 @@ export class InventoryService {
       modulatingPressureRange: [designDetails.modulatingPressureRange],
       inputPressure: [designDetails.inputPressure],
       designEfficiency: [designDetails.designEfficiency],
-      serviceFactor: [designDetails.serviceFactor]
+      serviceFactor: [designDetails.serviceFactor],
+      fullLoadEfficiency: [designDetails.fullLoadEfficiency]
     });
     return form;
   }
@@ -216,7 +221,8 @@ export class InventoryService {
       modulatingPressureRange: form.controls.modulatingPressureRange.value,
       inputPressure: form.controls.inputPressure.value,
       designEfficiency: form.controls.designEfficiency.value,
-      serviceFactor: form.controls.serviceFactor.value
+      serviceFactor: form.controls.serviceFactor.value,
+      fullLoadEfficiency: form.controls.fullLoadEfficiency.value
     }
   }
 

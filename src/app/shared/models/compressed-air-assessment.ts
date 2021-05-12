@@ -48,7 +48,8 @@ export interface CompressorNameplateData {
     fullLoadOperatingPressure: number,
     fullLoadRatedCapacity: number,
     ratedLoadPower: number,
-    ploytropicCompressorExponent: number
+    ploytropicCompressorExponent: number,
+    fullLoadAmps: number
 }
 
 export interface CompressorControls {
@@ -68,7 +69,8 @@ export interface DesignDetails {
     modulatingPressureRange: number,
     inputPressure: number,
     designEfficiency: number,
-    serviceFactor: number
+    serviceFactor: number,
+    fullLoadEfficiency: number
 }
 
 export interface PerformancePoints {

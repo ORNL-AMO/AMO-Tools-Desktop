@@ -15,7 +15,7 @@
             {{form.controls.motorPower.errors.min.min}} hp.</span>
         </span> -->
     </div>
-    
+
     <!-- unloadSlumpPressure -->
     <div class="form-group" *ngIf="displayUnloadSumpPressure">
         <label for="unloadSlumpPressure">Unload Sump Pressure</label>
@@ -36,8 +36,9 @@
     <div class="form-group" *ngIf="displayModulation">
         <label for="modulatingPressureRange">Proportional Modulating Pressure Range</label>
         <div class="input-group">
-            <input name="modulatingPressureRange" type="number" step="any" class="form-control" id="modulatingPressureRange"
-                formControlName="modulatingPressureRange" (change)="save()" (focus)="focusField('modulatingPressureRange')">
+            <input name="modulatingPressureRange" type="number" step="any" class="form-control"
+                id="modulatingPressureRange" formControlName="modulatingPressureRange" (change)="save()"
+                (focus)="focusField('modulatingPressureRange')">
             <span class="units input-group-addon">psig</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -96,6 +97,23 @@
             {{form.controls.motorPower.errors.min.min}} hp.</span>
         </span> -->
     </div>
+
+    <!-- fullLoadEfficiency -->
+    <div class="form-group">
+        <label for="fullLoadEfficiency">Full Load Efficiency</label>
+        <div class="input-group">
+            <input name="fullLoadEfficiency" type="number" step="any" class="form-control" id="fullLoadEfficiency"
+                formControlName="fullLoadEfficiency" (change)="save()" (focus)="focusField('fullLoadEfficiency')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+              *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+              <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+              <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+                {{form.controls.motorPower.errors.min.min}} hp.</span>
+            </span> -->
+    </div>
+
 
 
 </form>

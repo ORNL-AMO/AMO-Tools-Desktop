@@ -9,6 +9,11 @@
                 {{controlTypeOption.label}}</option>
         </select>
     </div>
+    <div *ngIf="controlTypeOptions.length == 0" class="w-100 text-center">
+        <span class="alert alert-warning small w-100">
+            Select Compressor Type before selecting Control Type.
+        </span>
+    </div>
     <!--control type: 1 Inlet modulation without unloading-->
     <!--control type: 2 Inlet modulation with unloading-->
     <!--control type: 3 Variable displacement with unloading-->

@@ -2,9 +2,6 @@
     <table class="table table-sm table-hover">
         <tr class="header-row">
             <th></th>
-            <!-- <th>
-            Catalog
-          </th> -->
             <th>
                 Compressor
             </th>
@@ -23,23 +20,11 @@
             <th>
                 Max Full Flow Pressure
             </th>
-            <!-- <th>
-                Unload Point
-            </th> -->
-            <!-- <th>
-                Poles
-            </th> -->
-            <!-- <th>
-            Nema Table
-          </th> -->
         </tr>
         <tr *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
             </td>
-            <!-- <td>
-            {{option.catalog}}
-          </td> -->
             <td>
                 {{compressor.IDCompType | compressorType}}
             </td>
@@ -58,15 +43,6 @@
             <td>
                 {{compressor.MaxFullFlowPressure}} psig
             </td>
-            <!-- <td>
-                {{compressor.UnloadPoint}}
-            </td> -->
-            <!-- <td>
-                {{compressor.poles}}
-            </td> -->
-            <!-- <td>
-            {{option.nemaTable}}
-          </td> -->
         </tr>
     </table>
 </div>

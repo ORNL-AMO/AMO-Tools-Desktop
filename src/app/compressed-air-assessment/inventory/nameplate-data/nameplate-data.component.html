@@ -57,6 +57,23 @@
         </span> -->
     </div>
 
+    <!-- fullLoadAmps -->
+    <div class="form-group">
+        <label for="fullLoadAmps">Full Load Amps</label>
+        <div class="input-group">
+            <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
+                formControlName="fullLoadAmps" (change)="save()" (focus)="focusField('fullLoadAmps')">
+            <span class="units input-group-addon">amps</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+
+
 
     <!-- ratedLoadPower (hidden)-->
     <!-- ploytropicCompressorExponent (hidden)-->
