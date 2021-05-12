@@ -5,7 +5,7 @@ import { CoolingTowerBasinInput, CoolingTowerBasinOutput } from '../../../shared
 import { Settings } from '../../../shared/models/settings';
 import { CoolingTowerBasinFormService } from './cooling-tower-basin-form.service';
 
-declare var chillersAddon: any;
+declare var chillersAddon;
 
 @Injectable()
 export class CoolingTowerBasinService {
@@ -61,10 +61,9 @@ export class CoolingTowerBasinService {
     if(!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
-      console.log('inputs', inputCopy)
-      // inputCopy = this.convertInputUnits(inputCopy, settings);
+      inputCopy = this.convertInputUnits(inputCopy, settings);
       let coolingTowerBasinOutput: CoolingTowerBasinOutput = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
-      // coolingTowerBasinOutput = this.convertResultUnits(coolingTowerBasinOutput, settings);
+      coolingTowerBasinOutput = this.convertResultUnits(coolingTowerBasinOutput, settings);
       this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
     }
   }
@@ -83,16 +82,8 @@ export class CoolingTowerBasinService {
       modTempSetPoint: 39
     };
 
-    // example results
-    // baselinePower:3.0743,
-    // baselineEnergy:3.0743
-    // modPower:2.761026
-    // modEnergy:2.761026
-    // savingsEnergy:0.313274
-
-
     if (settings.unitsOfMeasure == 'Metric') {
-      // exampleInput = this.convertExampleUnits(exampleInput);
+      exampleInput = this.convertExampleUnits(exampleInput);
     }
     this.coolingTowerBasinInput.next(exampleInput);
   }
@@ -104,13 +95,13 @@ export class CoolingTowerBasinService {
     input.ratedTempDryBulb = this.convertUnitsService.value(input.ratedTempDryBulb).from('F').to('C');
     input.ratedTempDryBulb = this.roundVal(input.ratedTempDryBulb, 2);
     
-    input.ratedWindSpeed = this.convertUnitsService.value(input.ratedWindSpeed).from('mph').to('kmh');
+    input.ratedWindSpeed = this.convertUnitsService.value(input.ratedWindSpeed).from('mph').to('km/h');
     input.ratedWindSpeed = this.roundVal(input.ratedWindSpeed, 2);
 
     input.operatingTempDryBulb = this.convertUnitsService.value(input.operatingTempDryBulb).from('F').to('C');
     input.operatingTempDryBulb = this.roundVal(input.operatingTempDryBulb, 2);
 
-    input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('kmh');
+    input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('km/h');
     input.operatingWindSpeed = this.roundVal(input.operatingWindSpeed, 2);
 
     input.baselineTempSetPoint = this.convertUnitsService.value(input.baselineTempSetPoint).from('F').to('C');
@@ -119,12 +110,15 @@ export class CoolingTowerBasinService {
     input.modTempSetPoint = this.convertUnitsService.value(input.modTempSetPoint).from('F').to('C');
     input.modTempSetPoint = this.roundVal(input.modTempSetPoint, 2);
 
+    input.ratedCapacity = this.convertUnitsService.value(input.ratedCapacity).from('tons').to('kW');
+    input.ratedCapacity = this.roundVal(input.ratedCapacity, 2);
 
     return input;
   }
 
   convertInputUnits(input: CoolingTowerBasinInput, settings: Settings): CoolingTowerBasinInput {
     if (settings.unitsOfMeasure == "Metric") {
+      input.ratedCapacity = this.convertUnitsService.value(input.ratedCapacity).from('kW').to('tons');
       input.ratedTempSetPoint = this.convertUnitsService.value(input.ratedTempSetPoint).from('C').to('F');
       input.ratedTempDryBulb = this.convertUnitsService.value(input.ratedTempDryBulb).from('C').to('F');
       input.operatingTempDryBulb = this.convertUnitsService.value(input.operatingTempDryBulb).from('C').to('F');
@@ -132,7 +126,8 @@ export class CoolingTowerBasinService {
       input.modTempSetPoint = this.convertUnitsService.value(input.modTempSetPoint).from('C').to('F');
     }
     if (settings.unitsOfMeasure == 'Imperial') {
-      input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('kmh');
+      input.operatingWindSpeed = this.convertUnitsService.value(input.operatingWindSpeed).from('mph').to('km/h');
+      input.ratedWindSpeed = this.convertUnitsService.value(input.ratedWindSpeed).from('mph').to('km/h');
     }
     return input;
   }
