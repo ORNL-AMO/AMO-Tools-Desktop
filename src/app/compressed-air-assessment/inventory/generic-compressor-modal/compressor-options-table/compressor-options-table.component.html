@@ -23,9 +23,9 @@
             <th>
                 Max Full Flow Pressure
             </th>
-            <th>
+            <!-- <th>
                 Unload Point
-            </th>
+            </th> -->
             <!-- <th>
                 Poles
             </th> -->
@@ -33,7 +33,7 @@
             Nema Table
           </th> -->
         </tr>
-        <tr *ngFor="let compressor of genericCompressors">
+        <tr *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
             </td>
@@ -50,17 +50,17 @@
                 {{compressor.Model}}
             </td>
             <td>
-                {{compressor.RatedCapacity}}
+                {{compressor.RatedCapacity}} acfm
             </td>
             <td>
-                {{compressor.RatedPressure}}
+                {{compressor.RatedPressure}} psig
             </td>
             <td>
-                {{compressor.MaxFullFlowPressure}}
+                {{compressor.MaxFullFlowPressure}} psig
             </td>
-            <td>
+            <!-- <td>
                 {{compressor.UnloadPoint}}
-            </td>
+            </td> -->
             <!-- <td>
                 {{compressor.poles}}
             </td> -->

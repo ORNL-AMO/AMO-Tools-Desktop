@@ -1,4 +1,11 @@
-export const CompressorTypeOptions: Array<{ value: number, label: string, enumValue: number, lubricantTypeEnumValue: number, stageTypeEnumValue: number }> = [
+export interface CompressorTypeOption {
+    value: number,
+    label: string,
+    enumValue: number,
+    lubricantTypeEnumValue: number,
+    stageTypeEnumValue: number
+}
+export const CompressorTypeOptions: Array<CompressorTypeOption> = [
     {
         value: 1,
         label: "Single stage lubricant-injected rotary screw",
@@ -43,7 +50,14 @@ export const CompressorTypeOptions: Array<{ value: number, label: string, enumVa
     },
 ]
 
-export const ControlTypes: Array<{value: number, label: string, compressorTypes: Array<number>, enumValue: number}> = [
+export interface ControlType {
+    value: number,
+    label: string,
+    compressorTypes: Array<number>,
+    enumValue: number
+}
+
+export const ControlTypes: Array<ControlType> = [
     {
         value: 1,
         label: 'Inlet modulation without unloading',

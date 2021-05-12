@@ -49,6 +49,8 @@ export class GenericCompressorDbService {
           TotPackageInputPower: Number(result['TotPackageInputPower']),
           UnloadPoint: Number(result['UnloadPoint']),
           UnloadSteps: Number(result['UnloadSteps']),
+          AmpsFL: Number(result['AmpsFL']),
+          EffFL: Number(result['EffFL'])
         });
       }
     });
@@ -105,5 +107,7 @@ export interface GenericCompressor {
   SpecPackagePower: number,
   TotPackageInputPower: number,
   UnloadPoint: number,
-  UnloadSteps: number
+  UnloadSteps: number,
+  AmpsFL: number,
+  EffFL: number
 }

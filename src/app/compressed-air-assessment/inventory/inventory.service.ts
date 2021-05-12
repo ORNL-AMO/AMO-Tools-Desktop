@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
+import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 
 @Injectable()
 export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
-
+  filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
   constructor(private formBuilder: FormBuilder) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
+    this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
 
   getNewInventoryItem(): CompressorInventoryItem {

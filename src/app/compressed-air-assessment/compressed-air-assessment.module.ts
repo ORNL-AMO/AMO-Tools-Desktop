@@ -42,6 +42,7 @@ import { CompressorOptionsTableComponent } from './inventory/generic-compressor-
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { CompressorTypePipe } from './compressor-type.pipe';
 import { ControlTypePipe } from './control-type.pipe';
+import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { ControlTypePipe } from './control-type.pipe';
     CompressorOptionsTableComponent,
     FilterCompressorsComponent,
     CompressorTypePipe,
-    ControlTypePipe
+    ControlTypePipe,
+    FilterCompressorsPipe
   ],
   imports: [
     CommonModule,
