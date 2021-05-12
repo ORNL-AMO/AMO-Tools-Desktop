@@ -165,6 +165,36 @@
     </div>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'modMeasuredVoltage'">
+    <h6>
+      Measured Voltage
+      <br>
+      <div class="text-muted small alert-warning text-left p-1">
+        For what-if modifications that change the motor, this value can not be measured. If the rated voltage of the motor stays the 
+        same, the baseline's measured voltage is a valid estimate, if the rated voltage changes, use the rated voltage as a first estimate
+      </div>
+      <small class="text-muted">
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the specified
+        Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">1 V</td>
+            <td class="w-50 text-center">13800 V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'implementationCosts'">
     <h6>
       Implementation Costs

@@ -45,7 +45,7 @@
 				</div>
 				<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [settings]="settings" [selected]="baselineSelected"
 				[inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-mass>
-				<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [selected]="baselineSelected" [settings]="settings"
+				<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [inTreasureHunt]="inTreasureHunt" [selected]="baselineSelected" [settings]="settings"
 				[inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-volume>
 				
 			 <!-- Results -->
@@ -106,7 +106,7 @@
 				</div>
 			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [selected]="!baselineSelected" [settings]="settings"
 			  [inModal]="inModal" [isBaseline]="false"></app-flue-gas-form-mass>
-			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="!baselineSelected" [settings]="settings"
+			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="!baselineSelected" [inTreasureHunt]="inTreasureHunt" [settings]="settings"
 			  [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
 			 <!-- Mod results -->
 				<div class="d-flex flex-column mt-3 mb-2">

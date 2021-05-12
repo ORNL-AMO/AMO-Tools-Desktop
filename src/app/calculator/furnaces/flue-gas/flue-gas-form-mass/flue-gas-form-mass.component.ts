@@ -16,7 +16,6 @@ import { FlueGasService } from '../flue-gas.service';
   styleUrls: ['./flue-gas-form-mass.component.css']
 })
 export class FlueGasFormMassComponent implements OnInit {
-
   @Input()
   settings: Settings;
   @Input()
@@ -68,7 +67,7 @@ export class FlueGasFormMassComponent implements OnInit {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.initForm();
       this.cd.detectChanges();
-    })
+    });
   }
 
   initFormSetup() {
@@ -109,7 +108,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
-    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss, this.settings);
   }
 
   setCalcMethod() {
