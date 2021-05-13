@@ -85,12 +85,30 @@ export class CompressedAirCalculationService {
     // console.log(testCalc);
   }
 
+
+  //computeFrom
+  // 0 = PercentagePower,
+  // 1 = PercentageCapacity,
+  // 2 = PowerMeasured,
+  // 3 = CapacityMeasured,
+  // 4 = PowerFactor
+
   compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorCalcResult {
+    // let inputData: CentrifugalBlowOffInput = this.getCentrifugalBlowOffInput(compressor, computeFrom, computeFromVal)
+    // let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+    // results.percentagePower = results.percentagePower * 100;
+    // results.percentageCapacity = results.percentageCapacity * 100;
+    // return results;
+
+
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
     if (isValid) {
       let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
-      let results: CompressorCalcResult = compressorAddon.CompressorCalc(inputData);
+      console.log(inputData);
+      let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+      results.percentagePower = results.percentagePower * 100;
+      results.percentageCapacity = results.percentageCapacity * 100;
       return results;
     } else {
       return {
@@ -111,6 +129,48 @@ export class CompressedAirCalculationService {
       }
     }
   }
+  getCentrifugalBlowOffInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalBlowOffInput {
+    //TODO: double check input mapping
+    //TODO: figure out computeFrom meaning...
+    let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
+    let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
+    // let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
+    // let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
+    //TODO: number should come from DB
+    // let ratedDischargePressure: number = 0;
+    // let ratedInletPressure: number = 0;
+    return {
+      //TODO: Figure out compute stuff
+      computeFrom: computeFrom,
+      computeFromVal: computeFromVal / 100,
+      computeFromPFVoltage: 0,
+      computeFromPFAmps: 0,
+
+      compressorType: compressorEnumVal,
+      controlType: controlTypeEnumVal,
+
+      fullLoadPressure: compressor.performancePoints.fullLoad.dischargePressure,
+      powerAtFullLoad: compressor.performancePoints.fullLoad.power,
+      capacityAtFullLoad: compressor.performancePoints.fullLoad.airflow,
+      
+      capacityAtMinFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadCapacity,
+      capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
+      
+      minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
+      maxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
+      //base on use default selection in performance points
+      adjustForDischargePressure: true,
+      // applyPressureInletCorrection: true,
+      //centrifugal
+      powerAtBlowOff: compressor.performancePoints.blowoff.power,
+      surgeFlow: compressor.performancePoints.blowoff.airflow,
+      //TODO: percentageBlowOff
+      percentageBlowOff: 100,
+    }
+  }
+
+
+
 
   getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorsCalcInput {
     //TODO: double check input mapping
@@ -120,20 +180,20 @@ export class CompressedAirCalculationService {
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
     let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
     //TODO: number should come from DB
-    let ratedDischargePressure: number = 0;
-    let ratedInletPressure: number = 0;
+    // let ratedDischargePressure: number = 0;
+    // let ratedInletPressure: number = 0;
     return {
       //TODO: Figure out compute stuff
       computeFrom: computeFrom,
-      computeFromVal: computeFromVal,
+      computeFromVal: computeFromVal / 100,
       computeFromPFVoltage: 0,
       computeFromPFAmps: 0,
 
       compressorType: compressorEnumVal,
       controlType: controlTypeEnumVal,
-      fullLoadPressure: compressor.nameplateData.fullLoadOperatingPressure,
-      powerAtFullLoad: compressor.nameplateData.ratedLoadPower,
-      capacityAtFullLoad: compressor.nameplateData.fullLoadRatedCapacity,
+      fullLoadPressure: compressor.performancePoints.fullLoad.dischargePressure,
+      powerAtFullLoad: compressor.performancePoints.fullLoad.power,
+      capacityAtFullLoad: compressor.performancePoints.fullLoad.airflow,
       capacityAtMinFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadCapacity,
       capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
       minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
@@ -145,8 +205,8 @@ export class CompressedAirCalculationService {
       lubricantType: lubricantTypeEnumValue,
       stageType: stageTypeEnumVal,
       //base on use default selection in performance points
-      adjustForDischargePressure: false,
-      applyPressureInletCorrection: false,
+      adjustForDischargePressure: true,
+      applyPressureInletCorrection: true,
 
       powerMax: compressor.performancePoints.maxFullFlow.power,
       dischargePsiFullLoad: compressor.performancePoints.fullLoad.dischargePressure,
@@ -157,23 +217,23 @@ export class CompressedAirCalculationService {
       capacity: compressor.compressorControls.unloadPointCapacity,
       fullLoadPower: compressor.performancePoints.fullLoad.power,
       polyExponent: compressor.nameplateData.ploytropicCompressorExponent,
-      ratedDischargePressure: ratedDischargePressure,
-      ratedInletPressure: ratedInletPressure,
+      ratedDischargePressure: compressor.nameplateData.fullLoadOperatingPressure,
+      ratedInletPressure: compressor.inletConditions.atmosphericPressure,
       motorEfficiency: compressor.designDetails.designEfficiency,
       fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
-      maxDischargePressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+      maxDischargePressure: compressor.performancePoints.blowoff.dischargePressure,
       
       //TODO: Sort out correct pressure mapping
       atmosphericPsi: compressor.inletConditions.atmosphericPressure,
-      inletPressure: 0,
+      inletPressure:  compressor.inletConditions.atmosphericPressure,
       atmosphericPressure: compressor.inletConditions.atmosphericPressure,
     
       //centrifugal
       powerAtBlowOff: compressor.performancePoints.blowoff.power,
-      surgeFlow: compressor.centrifugalSpecifics.surgeAirflow,
+      surgeFlow: compressor.performancePoints.blowoff.airflow,
       //TODO: percentageBlowOff
-      percentageBlowOff: 0,
-      maxPressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+      percentageBlowOff: 100,
+      maxPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
     
       //Modulation w/ unload
       powerAtNolLoad: compressor.performancePoints.noLoad.power,
@@ -310,4 +370,25 @@ export interface CompressorsCalcInput {
   powerAtFullLoadPercentage: number
 
 
+}
+
+
+export interface CentrifugalBlowOffInput {
+  compressorType: number,
+  controlType: number,
+  computeFrom: number;
+  adjustForDischargePressure: boolean;
+  powerAtFullLoad: number;
+  capacityAtFullLoad: number;
+  capacityAtMinFullLoadPressure: number;
+  capacityAtMaxFullLoadPressure: number;
+  fullLoadPressure: number;
+  minFullLoadPressure: number;
+  maxFullLoadPressure: number;
+  computeFromVal: number;
+  computeFromPFVoltage: number;
+  computeFromPFAmps: number;
+  powerAtBlowOff: number;
+  surgeFlow: number;
+  percentageBlowOff: number;
 }

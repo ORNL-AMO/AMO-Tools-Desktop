@@ -230,7 +230,7 @@ export class InventoryService {
       dischargePressure: [performancePoint.dischargePressure],
       airflow: [performancePoint.airflow],
       power: [performancePoint.power],
-      airFlow: [performancePoint.defaultAirFlow],
+      defaultAirFlow: [performancePoint.defaultAirFlow],
       defaultPower: [performancePoint.defaultPower]
     });
     return form;

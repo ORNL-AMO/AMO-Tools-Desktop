@@ -71,12 +71,14 @@ export class CompressorOptionsTableComponent implements OnInit {
     }
 
     selectedCompressor.performancePoints.blowoff.airflow = genericCompressor.MaxPressSurgeFlow;
-    selectedCompressor.performancePoints.blowoff.airflow = genericCompressor.MaxSurgePressure;
+    selectedCompressor.performancePoints.blowoff.dischargePressure = genericCompressor.MaxSurgePressure;
 
 
     selectedCompressor.centrifugalSpecifics.minFullLoadPressure = genericCompressor.MinStonewallPressure;
     selectedCompressor.centrifugalSpecifics.minFullLoadCapacity = genericCompressor.MinPressStonewallFlow;
     selectedCompressor.centrifugalSpecifics.surgeAirflow = genericCompressor.DesignSurgeFlow;
+    selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = genericCompressor.MaxSurgePressure;
+    selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = genericCompressor.MaxPressSurgeFlow;
 
     selectedCompressor.performancePoints.fullLoad.power = genericCompressor.PowerFLBHP;
 
