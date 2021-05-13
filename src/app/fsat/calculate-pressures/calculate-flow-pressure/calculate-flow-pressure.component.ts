@@ -41,6 +41,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     
     if (this.fsat.baseGasDensity) {
       this.fanAnalysisService.inputData.BaseGasDensity = this.fsat.baseGasDensity;
+      this.fanAnalysisService.inputData.PlaneData.FlowTraverse.dryBulbTemp = this.fsat.baseGasDensity.dryBulbTemp;
     }
     if (this.fsat.fieldData.fanRatedInfo) {
       this.fanAnalysisService.inputData.FanRatedInfo = this.fsat.fieldData.fanRatedInfo;
