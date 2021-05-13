@@ -44,8 +44,7 @@ export class InventoryService {
         modulatingPressureRange: undefined,
         inputPressure: undefined,
         designEfficiency: undefined,
-        serviceFactor: 1.15,
-        fullLoadEfficiency: undefined
+        serviceFactor: 1.15
       },
       centrifugalSpecifics: {
         surgeAirflow: undefined,
@@ -209,8 +208,7 @@ export class InventoryService {
       modulatingPressureRange: [designDetails.modulatingPressureRange],
       inputPressure: [designDetails.inputPressure],
       designEfficiency: [designDetails.designEfficiency],
-      serviceFactor: [designDetails.serviceFactor],
-      fullLoadEfficiency: [designDetails.fullLoadEfficiency]
+      serviceFactor: [designDetails.serviceFactor]
     });
     return form;
   }
@@ -222,8 +220,7 @@ export class InventoryService {
       modulatingPressureRange: form.controls.modulatingPressureRange.value,
       inputPressure: form.controls.inputPressure.value,
       designEfficiency: form.controls.designEfficiency.value,
-      serviceFactor: form.controls.serviceFactor.value,
-      fullLoadEfficiency: form.controls.fullLoadEfficiency.value
+      serviceFactor: form.controls.serviceFactor.value
     }
   }
 

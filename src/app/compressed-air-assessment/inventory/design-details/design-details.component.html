@@ -97,23 +97,4 @@
             {{form.controls.motorPower.errors.min.min}} hp.</span>
         </span> -->
     </div>
-
-    <!-- fullLoadEfficiency -->
-    <div class="form-group">
-        <label for="fullLoadEfficiency">Full Load Efficiency</label>
-        <div class="input-group">
-            <input name="fullLoadEfficiency" type="number" step="any" class="form-control" id="fullLoadEfficiency"
-                formControlName="fullLoadEfficiency" (change)="save()" (focus)="focusField('fullLoadEfficiency')">
-            <span class="units input-group-addon">%</span>
-        </div>
-        <!-- <span class="alert-danger pull-right small"
-              *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-              <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-              <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-                {{form.controls.motorPower.errors.min.min}} hp.</span>
-            </span> -->
-    </div>
-
-
-
 </form>

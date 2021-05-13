@@ -62,7 +62,7 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.designDetails.blowdownTime = genericCompressor.BlowdownTime;
     selectedCompressor.designDetails.unloadSlumpPressure = genericCompressor.MinULSumpPressure;
     selectedCompressor.designDetails.modulatingPressureRange = genericCompressor.ModulatingPressRange;
-    selectedCompressor.designDetails.fullLoadEfficiency = genericCompressor.EffFL;
+    selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
 
     //MaxFullFlowPressure = "cut-out" performance point
     selectedCompressor.performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure;
