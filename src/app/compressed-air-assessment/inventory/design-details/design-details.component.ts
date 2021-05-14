@@ -25,7 +25,7 @@ export class DesignDetailsComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getDesignDetailsFormFromObj(val.designDetails);
+          this.form = this.inventoryService.getDesignDetailsFormFromObj(val.designDetails, val.nameplateData.compressorType, val.compressorControls.controlType);
           this.setDisplayBlowdownTime(val.nameplateData.compressorType, val.compressorControls.controlType);
           this.setDisplayUnloadSumpPressure(val.nameplateData.compressorType, val.compressorControls.controlType);
           this.setDisplayModulation(val.compressorControls.controlType)
@@ -57,36 +57,15 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayBlowdownTime(compressorType: number, controlType: number) {
-    //"lubricant-injected rotary screws"
-    if (compressorType == 1 || compressorType == 2) {
-      //has word "unloading"
-      if (controlType == 1 || controlType == 2 || controlType == 3) {
-        this.displayBlowdownTime = true;
-      } else {
-        this.displayBlowdownTime = false;
-      }
-    } else {
-      this.displayBlowdownTime = false;
-    }
+    this.displayBlowdownTime = this.inventoryService.checkDisplayBlowdownTime(compressorType, controlType);
   }
 
   setDisplayUnloadSumpPressure(compressorType: number, controlType: number) {
-    //"lubricant-injected rotary screws"
-    //controlType "load/unload"
-    if ((compressorType == 1 || compressorType == 2) && controlType == 4) {
-      this.displayUnloadSumpPressure = true;
-    } else {
-      this.displayUnloadSumpPressure = false;
-    }
+    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
   }
 
   setDisplayModulation(controlType: number) {
-    //any control type with "modulation"
-    if (controlType == 1 || controlType == 2 || controlType == 8 || controlType == 9 || controlType == 10 || controlType == 11) {
-      this.displayModulation = true;
-    } else {
-      this.displayModulation = false;
-    }
+    this.displayModulation = this.inventoryService.checkDisplayModulation(controlType);
   }
 
 }

@@ -99,13 +99,10 @@ export class CompressedAirCalculationService {
     // results.percentagePower = results.percentagePower * 100;
     // results.percentageCapacity = results.percentageCapacity * 100;
     // return results;
-
-
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
     if (isValid) {
       let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
-      console.log(inputData);
       let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
       results.percentagePower = results.percentagePower * 100;
       results.percentageCapacity = results.percentageCapacity * 100;
@@ -130,17 +127,9 @@ export class CompressedAirCalculationService {
     }
   }
   getCentrifugalBlowOffInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalBlowOffInput {
-    //TODO: double check input mapping
-    //TODO: figure out computeFrom meaning...
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
-    // let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
-    // let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
-    //TODO: number should come from DB
-    // let ratedDischargePressure: number = 0;
-    // let ratedInletPressure: number = 0;
     return {
-      //TODO: Figure out compute stuff
       computeFrom: computeFrom,
       computeFromVal: computeFromVal / 100,
       computeFromPFVoltage: 0,
