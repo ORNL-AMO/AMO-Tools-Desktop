@@ -58,36 +58,36 @@ export class InventoryService {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined,
-          defaultPower: true,
-          defaultAirFlow: true
+          // defaultPower: true,
+          // defaultAirFlow: true
         },
         maxFullFlow: {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined,
-          defaultPower: true,
-          defaultAirFlow: true
+          // defaultPower: true,
+          // defaultAirFlow: true
         },
         unloadPoint: {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined,
-          defaultPower: true,
-          defaultAirFlow: true
+          // defaultPower: true,
+          // defaultAirFlow: true
         },
         noLoad: {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined,
-          defaultPower: true,
-          defaultAirFlow: true
+          // defaultPower: true,
+          // defaultAirFlow: true
         },
         blowoff: {
           dischargePressure: undefined,
           airflow: undefined,
           power: undefined,
-          defaultPower: true,
-          defaultAirFlow: true
+          // defaultPower: true,
+          // defaultAirFlow: true
         }
       }
     }
@@ -105,10 +105,10 @@ export class InventoryService {
   //CompressorNameplateData
   getNameplateDataFormFromObj(nameplateData: CompressorNameplateData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      compressorType: [nameplateData.compressorType],
-      motorPower: [nameplateData.motorPower],
-      fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure],
-      fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity],
+      compressorType: [nameplateData.compressorType, Validators.required],
+      motorPower: [nameplateData.motorPower, Validators.required],
+      fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure, Validators.required],
+      fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity, Validators.required],
       ratedLoadPower: [nameplateData.ratedLoadPower],
       ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
       fullLoadAmps: [nameplateData.fullLoadAmps]
@@ -137,7 +137,7 @@ export class InventoryService {
     // control type: 6 Start/Stop
     // control type: 7 Multi-step unloading
     let form: FormGroup = this.formBuilder.group({
-      controlType: [compressorControls.controlType],
+      controlType: [compressorControls.controlType, Validators.required],
       unloadPointCapacity: [compressorControls.unloadPointCapacity],
       numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
       automaticShutdown: [compressorControls.automaticShutdown]
@@ -227,11 +227,11 @@ export class InventoryService {
   getPerformancePointFormFromObj(performancePoint: PerformancePoint): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoint.dischargePressure],
-      airflow: [performancePoint.airflow],
-      power: [performancePoint.power],
-      defaultAirFlow: [performancePoint.defaultAirFlow],
-      defaultPower: [performancePoint.defaultPower]
+      dischargePressure: [performancePoint.dischargePressure, Validators.required],
+      airflow: [performancePoint.airflow, Validators.required],
+      power: [performancePoint.power, Validators.required],
+      // defaultAirFlow: [performancePoint.defaultAirFlow],
+      // defaultPower: [performancePoint.defaultPower]
     });
     return form;
   }
@@ -241,15 +241,15 @@ export class InventoryService {
       dischargePressure: form.controls.dischargePressure.value,
       airflow: form.controls.airflow.value,
       power: form.controls.power.value,
-      defaultAirFlow: form.controls.defaultAirFlow.value,
-      defaultPower: form.controls.defaultPower.value
+      // defaultAirFlow: form.controls.defaultAirFlow.value,
+      // defaultPower: form.controls.defaultPower.value
     }
   }
 
   getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
-      atmosphericPressure: [inletConditions.atmosphericPressure],
+      atmosphericPressure: [inletConditions.atmosphericPressure, Validators.required],
       temperature: [inletConditions.temperature],
     });
     return form;
@@ -269,6 +269,7 @@ export class InventoryService {
     // let performancePointsForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints);
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails);
     let centrifugalSpecsForm: FormGroup = this.getCentrifugalFormFromObj(compressor.centrifugalSpecifics);
-    return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsForm.valid;
+    let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
+    return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsForm.valid && inletConditionsForm.valid;
   }
 }
