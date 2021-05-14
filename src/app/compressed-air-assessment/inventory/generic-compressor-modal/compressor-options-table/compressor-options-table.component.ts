@@ -44,6 +44,7 @@ export class CompressorOptionsTableComponent implements OnInit {
   }
 
   setCompressorData(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): CompressorInventoryItem {
+    debugger
     selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
 
     selectedCompressor.nameplateData.compressorType = genericCompressor.IDCompType;
@@ -80,7 +81,8 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = genericCompressor.MaxSurgePressure;
     selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = genericCompressor.MaxPressSurgeFlow;
 
-    selectedCompressor.performancePoints.fullLoad.power = genericCompressor.PowerFLBHP;
+    //fullLoad.power = 'kW', PowerFLBHP = HP
+    // selectedCompressor.performancePoints.fullLoad.power = genericCompressor.PowerFLBHP;
 
     // SpecPackagePower?
     //TotPackageInputPower
