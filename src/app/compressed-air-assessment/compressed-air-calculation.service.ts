@@ -102,11 +102,19 @@ export class CompressedAirCalculationService {
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
     if (isValid) {
-      let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
-      let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
-      results.percentagePower = results.percentagePower * 100;
-      results.percentageCapacity = results.percentageCapacity * 100;
-      return results;
+      if (compressor.nameplateData.compressorType == 6) {
+        let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
+        let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        results.percentagePower = results.percentagePower * 100;
+        results.percentageCapacity = results.percentageCapacity * 100;
+        return results;
+      } else {
+        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
+        let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        results.percentagePower = results.percentagePower * 100;
+        results.percentageCapacity = results.percentageCapacity * 100;
+        return results;
+      }
     } else {
       return {
         powerCalculated: 0,
@@ -126,7 +134,7 @@ export class CompressedAirCalculationService {
       }
     }
   }
-  getCentrifugalBlowOffInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalBlowOffInput {
+  getCentrifugalInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     return {
@@ -155,6 +163,12 @@ export class CompressedAirCalculationService {
       surgeFlow: compressor.performancePoints.blowoff.airflow,
       //TODO: percentageBlowOff
       percentageBlowOff: 100 / 100,
+
+      powerAtNoLoad: compressor.performancePoints.noLoad.power,
+      maxPressure: 0,
+      capacityAtMaxFullFlow: 0,
+      capacityAtUnload: compressor.performancePoints.unloadPoint.airflow,
+      powerAtUnload: compressor.performancePoints.unloadPoint.power
     }
   }
 
@@ -167,19 +181,19 @@ export class CompressedAirCalculationService {
     return {
       compressorType: compressorEnumVal,
       controlType: controlTypeEnumVal,
-    
+
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,
-    
+
       stageType: stageTypeEnumVal,
       lubricantType: lubricantTypeEnumValue,
-    
-    
+
+
       applyPressureInletCorrection: true,
       //same?
       powerAtFullLoad: compressor.performancePoints.fullLoad.power,
       fullLoadPower: compressor.performancePoints.fullLoad.power,
-      
+
       capacityAtFullLoad: compressor.performancePoints.fullLoad.airflow,
 
       powerMax: compressor.performancePoints.maxFullFlow.power,
@@ -193,7 +207,7 @@ export class CompressedAirCalculationService {
       atmosphericPsi: compressor.inletConditions.atmosphericPressure,
       inletPressure: compressor.inletConditions.atmosphericPressure,
       atmosphericPressure: compressor.inletConditions.atmosphericPressure,
-    
+
       //applyPressureInletCorrection
       //%?
       capacity: compressor.compressorControls.unloadPointCapacity / 100,
@@ -202,12 +216,12 @@ export class CompressedAirCalculationService {
       //fullLoadOperatingPressure??
       ratedDischargePressure: compressor.nameplateData.fullLoadOperatingPressure,
       ratedInletPressure: compressor.designDetails.inputPressure,
-      
+
       motorEfficiency: compressor.designDetails.designEfficiency,
       fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
       maxDischargePressure: compressor.performancePoints.maxFullFlow.dischargePressure
 
-   }
+    }
   }
 
 
@@ -412,7 +426,7 @@ export interface CompressorsCalcInput {
 }
 
 
-export interface CentrifugalBlowOffInput {
+export interface CentrifugalInput {
   compressorType: number,
   controlType: number,
   computeFrom: number;
@@ -430,6 +444,11 @@ export interface CentrifugalBlowOffInput {
   powerAtBlowOff: number;
   surgeFlow: number;
   percentageBlowOff: number;
+  powerAtNoLoad: number;
+  maxPressure: number,
+  capacityAtMaxFullFlow: number
+  powerAtUnload: number,
+  capacityAtUnload: number
 }
 
 export interface ModulationWithUnloadInput {

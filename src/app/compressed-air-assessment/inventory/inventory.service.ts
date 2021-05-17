@@ -377,6 +377,8 @@ export class InventoryService {
       if (controlType == 2 || controlType == 3) {
         return true;
       }
+    } else if (compressorType == 6 && (controlType == 9 || controlType == 11)) {
+      return true;
     }
     return false;
   }

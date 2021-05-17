@@ -44,7 +44,6 @@ export class PerformancePointsComponent implements OnInit {
 
   setShowNoLoad(selectedCompressor: CompressorInventoryItem) {
     this.showNoLoad = this.inventoryService.checkShowNoLoadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
-
   }
 
   setShowBlowoff(selectedCompressor: CompressorInventoryItem) {

@@ -5,7 +5,7 @@
         <label for="maxFullFlowDischargePressure">Discharge Pressure</label>
         <div class="input-group">
             <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
-                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (change)="save()"
+                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="save()"
                 (focus)="focusField('maxFullFlowDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -21,7 +21,7 @@
         <label for="maxFullFlowAirflow">Air Flow</label>
         <div class="input-group">
             <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
-                formControlName="airflow" (change)="save()" (focus)="focusField('maxFullFlowAirflow')">
+                formControlName="airflow" (input)="save()" (focus)="focusField('maxFullFlowAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -36,7 +36,7 @@
         <label for="maxFullFlowPower">Power</label>
         <div class="input-group">
             <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
-                formControlName="power" (change)="save()" (focus)="focusField('maxFullFlowPower')">
+                formControlName="power" (input)="save()" (focus)="focusField('maxFullFlowPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

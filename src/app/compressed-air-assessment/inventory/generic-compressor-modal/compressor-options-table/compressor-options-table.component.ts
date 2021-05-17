@@ -44,7 +44,6 @@ export class CompressorOptionsTableComponent implements OnInit {
   }
 
   setCompressorData(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): CompressorInventoryItem {
-    debugger
     selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
 
     selectedCompressor.nameplateData.compressorType = genericCompressor.IDCompType;
@@ -64,6 +63,8 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.designDetails.unloadSlumpPressure = genericCompressor.MinULSumpPressure;
     selectedCompressor.designDetails.modulatingPressureRange = genericCompressor.ModulatingPressRange;
     selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
+
+    selectedCompressor.inletConditions.temperature = genericCompressor.DesignInTemp;
 
     //MaxFullFlowPressure = "cut-out" performance point
     selectedCompressor.performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure;

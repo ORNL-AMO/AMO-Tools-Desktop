@@ -6,7 +6,7 @@
         <label for="blowoffDischargePressure">Discharge Pressure</label>
         <div class="input-group">
             <input name="blowoffDischargePressure" type="number" step="any" class="form-control"
-                id="blowoffDischargePressure" formControlName="dischargePressure" (change)="save()"
+                id="blowoffDischargePressure" formControlName="dischargePressure" (input)="save()"
                 (focus)="focusField('blowoffDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -22,7 +22,7 @@
         <label for="blowoffAirflow">Air Flow</label>
         <div class="input-group">
             <input name="blowoffAirflow" type="number" step="any" class="form-control" id="blowoffAirflow"
-                formControlName="airflow" (change)="save()" (focus)="focusField('blowoffAirflow')">
+                formControlName="airflow" (input)="save()" (focus)="focusField('blowoffAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -37,7 +37,7 @@
         <label for="blowoffPower">Power</label>
         <div class="input-group">
             <input name="blowoffPower" type="number" step="any" class="form-control" id="blowoffPower"
-                formControlName="power" (change)="save()" (focus)="focusField('blowoffPower')">
+                formControlName="power" (input)="save()" (focus)="focusField('blowoffPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

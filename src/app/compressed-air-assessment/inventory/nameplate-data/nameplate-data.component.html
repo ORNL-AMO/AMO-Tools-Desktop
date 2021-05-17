@@ -14,7 +14,7 @@
         <label for="motorPower">Motor Power</label>
         <div class="input-group">
             <input name="motorPower" type="number" step="any" class="form-control" id="motorPower"
-                formControlName="motorPower" (change)="save()" (focus)="focusField('motorPower')">
+                formControlName="motorPower" (input)="save()" (focus)="focusField('motorPower')">
             <span class="units input-group-addon">hp</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -30,7 +30,7 @@
         <label for="fullLoadOperatingPressure">Full Load Operating Pressure</label>
         <div class="input-group">
             <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control" id="fullLoadOperatingPressure"
-                formControlName="fullLoadOperatingPressure" (change)="save()" (focus)="focusField('fullLoadOperatingPressure')">
+                formControlName="fullLoadOperatingPressure" (input)="save()" (focus)="focusField('fullLoadOperatingPressure')">
             <span class="units input-group-addon">psig</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -46,7 +46,7 @@
         <label for="fullLoadRatedCapacity">Rated Capacity at Full Load Pressure</label>
         <div class="input-group">
             <input name="fullLoadRatedCapacity" type="number" step="any" class="form-control" id="fullLoadRatedCapacity"
-                formControlName="fullLoadRatedCapacity" (change)="save()" (focus)="focusField('fullLoadRatedCapacity')">
+                formControlName="fullLoadRatedCapacity" (input)="save()" (focus)="focusField('fullLoadRatedCapacity')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -62,7 +62,7 @@
         <label for="fullLoadAmps">Full Load Amps</label>
         <div class="input-group">
             <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
-                formControlName="fullLoadAmps" (change)="save()" (focus)="focusField('fullLoadAmps')">
+                formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')">
             <span class="units input-group-addon">amps</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
