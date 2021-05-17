@@ -4,6 +4,7 @@ import { InventoryService } from '../../inventory/inventory.service';
 import * as Plotly from 'plotly.js';
 import { CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../../compressed-air-calculation.service';
+import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 @Component({
   selector: 'app-inventory-performance-profile',
   templateUrl: './inventory-performance-profile.component.html',
@@ -15,11 +16,11 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
   selectedCompressor: CompressorInventoryItem;
-  constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService) { }
+  constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      console.log('change')
       this.selectedCompressor = val;
       this.drawChart();
     });
@@ -35,16 +36,17 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   drawChart() {
     if (this.performanceProfileChart && this.selectedCompressor) {
-      let chartData: Array<{ x: number, y: number }> = this.getChartData();
+      let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let trace = {
-        x: chartData.map(data => { return data.x }),
-        y: chartData.map(data => { return data.y }),
-        type: 'scatter'
-      }
-      traceData.push(trace);
-
-
+      chartData.forEach(dataItem => {
+        let trace = {
+          x: dataItem.data.map(cData => { return cData.percentageCapacity }),
+          y: dataItem.data.map(cData => { return cData.percentagePower }),
+          type: 'scatter',
+          name: dataItem.compressorName
+        }
+        traceData.push(trace);
+      });
       var layout = {
         // barmode: 'group',
         title: {
@@ -82,18 +84,32 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     }
   }
 
-  getChartData(): Array<{ x: number, y: number }> {
-    let chartData: Array<{ x: number, y: number }> = new Array();
-    for (let airFlow = 0; airFlow <= 100;) {
-      let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(this.selectedCompressor, 1, airFlow);
-      chartData.push({
-        x: airFlow,
-        y: results.percentagePower
-      });
-      airFlow = airFlow + 5;
-    }
+  getChartData(): Array<ProfileChartData> {
+    let compressorInventory: Array<CompressorInventoryItem> = this.compressedAirAssessmentService.compressedAirAssessment.getValue().compressorInventoryItems;
+    let chartData: Array<ProfileChartData> = new Array();
+    compressorInventory.forEach(item => {
+      let compressorData: Array<CompressorCalcResult> = new Array();
+      let isValid: boolean = this.inventoryService.isCompressorValid(item)
+      if (isValid) {
+        for (let airFlow = 0; airFlow <= 100;) {
+          let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(item, 1, airFlow);
+          compressorData.push(results);
+          airFlow = airFlow + 10;
+        }
+        chartData.push({
+          compressorName: item.name,
+          data: compressorData
+        });
+      }
+    });
     return chartData;
   }
 
 
+}
+
+
+export interface ProfileChartData {
+  data: Array<CompressorCalcResult>
+  compressorName: string
 }
