@@ -6,7 +6,7 @@ import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGas, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
@@ -49,11 +49,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
     private phastService: PhastService,
-    private suiteDbService: SuiteDbService) {
+    private sqlDbApiService: SqlDbApiService) {
   }
 
   ngOnInit() {
-    this.options = this.suiteDbService.selectGasFlueGasMaterials();
+    this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     this.initSubscriptions();
   }
 
@@ -220,7 +220,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.byVolumeForm.patchValue({
         CH4: this.roundVal(tmpFlueGas.CH4, 4),
@@ -250,7 +250,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.byVolumeForm.patchValue({

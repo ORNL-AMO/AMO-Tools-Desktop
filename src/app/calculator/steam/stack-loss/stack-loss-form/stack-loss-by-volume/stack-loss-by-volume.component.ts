@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
@@ -8,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { StackLossService } from '../../stack-loss.service';
 import { FlueGasMaterial } from '../../../../../shared/models/materials';
 import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';
+import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-stack-loss-by-volume',
@@ -39,10 +39,10 @@ export class StackLossByVolumeComponent implements OnInit {
   stackTemperatureWarning: boolean = false;
   tempMin: number;
 
-  constructor(private suiteDbService: SuiteDbService, private stackLossService: StackLossService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private stackLossService: StackLossService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.options = this.suiteDbService.selectGasFlueGasMaterials();
+    this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
         if (this.stackLossForm.controls.CH4.value === '' || !this.stackLossForm.controls.CH4.value) {
@@ -73,7 +73,7 @@ export class StackLossByVolumeComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.stackLossForm.patchValue({
@@ -153,7 +153,7 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.stackLossForm.patchValue({
         CH4: this.roundVal(tmpFlueGas.CH4, 4),

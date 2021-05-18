@@ -10,6 +10,7 @@ import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-boiler',
@@ -51,7 +52,8 @@ export class BoilerComponent implements OnInit {
   highPressureHeaderForm: FormGroup;
   lowPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
+    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService,
+    private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -96,7 +98,7 @@ export class BoilerComponent implements OnInit {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     } else if (this.boilerForm.controls.fuelType.value === 1) {
-      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
   }
 

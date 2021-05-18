@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Injectable()
 export class CustomMaterialsService {
@@ -18,7 +19,7 @@ export class CustomMaterialsService {
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) {
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private sqlDbApiService: SqlDbApiService) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedGasLoadCharge = new Array<GasLoadChargeMaterial>();
@@ -84,7 +85,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       delete material.id;
       material.selected = false;
-      let test: boolean = this.suiteDbService.insertGasFlueGasMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertGasFlueGasMaterial(material);
       if (test === true) {
         this.indexedDbService.addFlueGasMaterial(material);
       }
@@ -181,11 +182,11 @@ export class CustomMaterialsService {
   }
 
   deleteFlueGas(data: Array<FlueGasMaterial>) {
-    let sdbMaterials: Array<FlueGasMaterial> = this.suiteDbService.selectGasFlueGasMaterials();
+    let sdbMaterials: Array<FlueGasMaterial> = this.sqlDbApiService.selectGasFlueGasMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteFlueGasMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteGasFlueGasMaterial(sdbId);
+      this.sqlDbApiService.deleteGasFlueGasMaterial(sdbId);
     });
   }
 

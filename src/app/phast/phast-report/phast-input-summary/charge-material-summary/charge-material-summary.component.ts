@@ -5,6 +5,7 @@ import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMat
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-charge-material-summary',
   templateUrl: './charge-material-summary.component.html',
@@ -45,7 +46,8 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   vaporizingTemperatureDiff: Array<boolean>;
   chargeMeltedDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private cd: ChangeDetectorRef) { }
+  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private cd: ChangeDetectorRef,
+    private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.materialTypeDiff = new Array();
@@ -70,7 +72,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     this.vaporizingTemperatureDiff = new Array();
     this.chargeMeltedDiff = new Array();
 
-    this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
+    this.volumeOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {

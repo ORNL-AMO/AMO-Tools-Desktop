@@ -12,6 +12,7 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 declare var google: any;
 @Component({
   selector: 'app-core',
@@ -54,7 +55,7 @@ export class CoreComponent implements OnInit {
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
-    private inventoryDbService: InventoryDbService) {
+    private inventoryDbService: InventoryDbService, private sqlDbAPiService: SqlDbApiService) {
   }
 
   ngOnInit() {
@@ -82,8 +83,9 @@ export class CoreComponent implements OnInit {
       }
     });
 
+    //TODO: has started flag move to api service
     if (this.suiteDbService.hasStarted === false) {
-      this.suiteDbService.startup();
+      this.sqlDbAPiService.startup();
     }
     if (this.indexedDbService.db === undefined) {
       this.initData();

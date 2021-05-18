@@ -8,6 +8,7 @@ import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-boiler-form',
@@ -48,7 +49,7 @@ export class BoilerFormComponent implements OnInit {
   modificationForm: FormGroup;
 
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
-    private ssmtService: SsmtService) { }
+    private ssmtService: SsmtService, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.init();
@@ -73,12 +74,12 @@ export class BoilerFormComponent implements OnInit {
     if (this.baselineForm.controls.fuelType.value === 0) {
       this.baselineFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     } else if (this.baselineForm.controls.fuelType.value === 1) {
-      this.baselineFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.baselineFuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
     if (this.modificationForm.controls.fuelType.value === 0) {
       this.modificationFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     } else if (this.modificationForm.controls.fuelType.value === 1) {
-      this.modificationFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.modificationFuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
     if (save) {
       this.save();

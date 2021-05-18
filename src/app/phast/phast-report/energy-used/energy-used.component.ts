@@ -10,6 +10,7 @@ import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
+import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -71,7 +72,9 @@ export class EnergyUsedComponent implements OnInit {
   fuelUsedUnit: string;
   baseEnergyUnit: string;
   electricityHeatingValue: number;
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, 
+    private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService,
+    private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
@@ -156,7 +159,7 @@ export class EnergyUsedComponent implements OnInit {
         this.fuelName = gas.substance;
       }
     } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+      let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
       if (gas) {
         this.fuelHeatingValue = gas.heatingValue;
         this.fuelName = gas.substance;

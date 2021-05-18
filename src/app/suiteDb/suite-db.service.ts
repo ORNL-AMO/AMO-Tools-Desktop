@@ -35,25 +35,25 @@ export class SuiteDbService {
   // }
 
   //volume
-  selectGasFlueGasMaterials(): Array<FlueGasMaterial> {
-    try {
-      //TODO: Take C++/wasm object and convert to .js array
-      return this.dbInstance.getGasFlueGasMaterials();
-    }
-    catch (err) {
-      return [];
-    }
-  }
+  // selectGasFlueGasMaterials(): Array<FlueGasMaterial> {
+  //   try {
+  //     //TODO: Take C++/wasm object and convert to .js array
+  //     return this.dbInstance.getGasFlueGasMaterials();
+  //   }
+  //   catch (err) {
+  //     return [];
+  //   }
+  // }
 
-  selectGasFlueGasMaterialById(id: number): FlueGasMaterial {
-    try {
-      //TODO: Take C++/wasm object and convert to .js object
-      return this.dbInstance.getGasFlueGasMaterialById(id);
-    }
-    catch (err) {
-      return undefined;
-    }
-  }
+  // selectGasFlueGasMaterialById(id: number): FlueGasMaterial {
+  //   try {
+  //     //TODO: Take C++/wasm object and convert to .js object
+  //     return this.dbInstance.getGasFlueGasMaterialById(id);
+  //   }
+  //   catch (err) {
+  //     return undefined;
+  //   }
+  // }
   //mass
   selectSolidLiquidFlueGasMaterials(): Array<SolidLiquidFlueGasMaterial> {
     try {
@@ -174,9 +174,9 @@ export class SuiteDbService {
     return this.dbInstance.insertAtmosphereSpecificHeat(material);
   }
 
-  insertGasFlueGasMaterial(material: FlueGasMaterial) {
-    return this.dbInstance.insertGasFlueGasMaterial(material);
-  }
+  // insertGasFlueGasMaterial(material: FlueGasMaterial) {
+  //   return this.dbInstance.insertGasFlueGasMaterial(material);
+  // }
 
   insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
     return this.dbInstance.insertGasLoadChargeMaterial(material);
@@ -200,9 +200,9 @@ export class SuiteDbService {
 
 
   //update functions
-  updateGasFlueGasMaterial(material: FlueGasMaterial) {
-    return this.dbInstance.updateGasFlueGasMaterial(material);
-  }
+  // updateGasFlueGasMaterial(material: FlueGasMaterial) {
+  //   return this.dbInstance.updateGasFlueGasMaterial(material);
+  // }
 
   updateSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
     return this.dbInstance.updateSolidLiquidFlueGasMaterial(material);
@@ -229,9 +229,9 @@ export class SuiteDbService {
   }
 
   //delete functions
-  deleteGasFlueGasMaterial(id: number) {
-    return this.dbInstance.deleteGasFlueGasMaterial(id);
-  }
+  // deleteGasFlueGasMaterial(id: number) {
+  //   return this.dbInstance.deleteGasFlueGasMaterial(id);
+  // }
 
   deleteSolidLiquidFlueGasMaterial(id: number) {
     return this.dbInstance.deleteSolidLiquidFlueGasMaterial(id);
@@ -347,7 +347,8 @@ export class SuiteDbService {
     this.indexedDbService.getFlueGasMaterials().then(results => {
       let customFluesGasses: FlueGasMaterial[] = results;
       customFluesGasses.forEach(material => {
-        let suiteResult = this.insertGasFlueGasMaterial(material);
+        //TODO: add call to sqlDbApi service
+        // let suiteResult = this.insertGasFlueGasMaterial(material);
       });
     });
     this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
