@@ -23,7 +23,7 @@ export class NoLoadComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setNoLoadLabel(val.compressorControls.controlType);
           this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.noLoad);
-          this.form.controls.airFlow.disable();
+          // this.form.controls.airflow.disable();
         } else {
           this.isFormChange = false;
         }

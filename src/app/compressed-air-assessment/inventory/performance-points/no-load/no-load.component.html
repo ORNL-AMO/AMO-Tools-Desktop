@@ -6,7 +6,7 @@
         <label for="noLoadDischargePressure">Discharge Pressure</label>
         <div class="input-group">
             <input name="noLoadDischargePressure" type="number" step="any" class="form-control"
-                id="noLoadDischargePressure" formControlName="dischargePressure" (change)="save()"
+                id="noLoadDischargePressure" formControlName="dischargePressure" (input)="save()"
                 (focus)="focusField('noLoadDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -22,7 +22,7 @@
         <label for="noLoadAirflow">Air Flow</label>
         <div class="input-group">
             <input name="noLoadAirflow" type="number" step="any" class="form-control" id="noLoadAirflow"
-                formControlName="airflow" (change)="save()" (focus)="focusField('noLoadAirflow')">
+                formControlName="airflow" (input)="save()" (focus)="focusField('noLoadAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -37,7 +37,7 @@
         <label for="noLoadPower">Power</label>
         <div class="input-group">
             <input name="noLoadPower" type="number" step="any" class="form-control" id="noLoadPower"
-                formControlName="power" (change)="save()" (focus)="focusField('noLoadPower')">
+                formControlName="power" (input)="save()" (focus)="focusField('noLoadPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

@@ -85,12 +85,9 @@ export class ControlDataComponent implements OnInit {
   }
 
   setDisplayValues() {
-    this.displayUnload = (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3 || this.form.controls.controlType.value == 4 ||
-      this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7);
-    this.displayAutomaticShutdown = (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7);
+    this.displayUnload = this.inventoryService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
+    this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
   }
-
 
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();

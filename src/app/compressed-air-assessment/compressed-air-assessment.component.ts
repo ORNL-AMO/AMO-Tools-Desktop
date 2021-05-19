@@ -45,7 +45,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.genericCompressorDbService.getAllCompressors();
-    // this.compressedAirCalculationService.test();
+    this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment);

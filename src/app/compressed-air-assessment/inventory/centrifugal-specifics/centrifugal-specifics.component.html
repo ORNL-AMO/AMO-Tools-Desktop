@@ -6,7 +6,7 @@
         <label for="surgeAirflow">Surge airflow at design conditions</label>
         <div class="input-group">
             <input name="surgeAirflow" type="number" step="any" class="form-control" id="surgeAirflow"
-                formControlName="surgeAirflow" (change)="save()" (focus)="focusField('surgeAirflow')">
+                formControlName="surgeAirflow" (input)="save()" (focus)="focusField('surgeAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -22,7 +22,7 @@
         <label for="maxFullLoadPressure">Max. full load (surge) pressure</label>
         <div class="input-group">
             <input name="maxFullLoadPressure" type="number" step="any" class="form-control" id="maxFullLoadPressure"
-                formControlName="maxFullLoadPressure" (change)="save()" (focus)="focusField('maxFullLoadPressure')">
+                formControlName="maxFullLoadPressure" (input)="save()" (focus)="focusField('maxFullLoadPressure')">
             <span class="units input-group-addon">psig</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -38,7 +38,7 @@
         <label for="maxFullLoadCapacity">Capacity at max full load pressure</label>
         <div class="input-group">
             <input name="maxFullLoadCapacity" type="number" step="any" class="form-control" id="maxFullLoadCapacity"
-                formControlName="maxFullLoadCapacity" (change)="save()" (focus)="focusField('maxFullLoadCapacity')">
+                formControlName="maxFullLoadCapacity" (input)="save()" (focus)="focusField('maxFullLoadCapacity')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -54,7 +54,7 @@
         <label for="minFullLoadPressure">Min. full load (stonewall) pressure</label>
         <div class="input-group">
             <input name="minFullLoadPressure" type="number" step="any" class="form-control" id="minFullLoadPressure"
-                formControlName="minFullLoadPressure" (change)="save()" (focus)="focusField('minFullLoadPressure')">
+                formControlName="minFullLoadPressure" (input)="save()" (focus)="focusField('minFullLoadPressure')">
             <span class="units input-group-addon">psig</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -70,7 +70,7 @@
         <label for="minFullLoadCapacity">Capacity at min. full load pressure</label>
         <div class="input-group">
             <input name="minFullLoadCapacity" type="number" step="any" class="form-control" id="minFullLoadCapacity"
-                formControlName="minFullLoadCapacity" (change)="save()" (focus)="focusField('minFullLoadCapacity')">
+                formControlName="minFullLoadCapacity" (input)="save()" (focus)="focusField('minFullLoadCapacity')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

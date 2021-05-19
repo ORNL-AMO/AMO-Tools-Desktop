@@ -64,6 +64,8 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.designDetails.modulatingPressureRange = genericCompressor.ModulatingPressRange;
     selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
 
+    selectedCompressor.inletConditions.temperature = genericCompressor.DesignInTemp;
+
     //MaxFullFlowPressure = "cut-out" performance point
     selectedCompressor.performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure;
     if (selectedCompressor.compressorControls.controlType != 2 && selectedCompressor.compressorControls.controlType != 3) {
@@ -71,14 +73,17 @@ export class CompressorOptionsTableComponent implements OnInit {
     }
 
     selectedCompressor.performancePoints.blowoff.airflow = genericCompressor.MaxPressSurgeFlow;
-    selectedCompressor.performancePoints.blowoff.airflow = genericCompressor.MaxSurgePressure;
+    selectedCompressor.performancePoints.blowoff.dischargePressure = genericCompressor.MaxSurgePressure;
 
 
     selectedCompressor.centrifugalSpecifics.minFullLoadPressure = genericCompressor.MinStonewallPressure;
     selectedCompressor.centrifugalSpecifics.minFullLoadCapacity = genericCompressor.MinPressStonewallFlow;
     selectedCompressor.centrifugalSpecifics.surgeAirflow = genericCompressor.DesignSurgeFlow;
+    selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = genericCompressor.MaxSurgePressure;
+    selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = genericCompressor.MaxPressSurgeFlow;
 
-    selectedCompressor.performancePoints.fullLoad.power = genericCompressor.PowerFLBHP;
+    //fullLoad.power = 'kW', PowerFLBHP = HP
+    // selectedCompressor.performancePoints.fullLoad.power = genericCompressor.PowerFLBHP;
 
     // SpecPackagePower?
     //TotPackageInputPower

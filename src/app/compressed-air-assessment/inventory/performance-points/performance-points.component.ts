@@ -35,56 +35,19 @@ export class PerformancePointsComponent implements OnInit {
 
 
   setShowMaxFlow(selectedCompressor: CompressorInventoryItem) {
-    if (selectedCompressor.nameplateData.compressorType == 6) {
-      this.showMaxFullFlow = false;
-    } else if (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2) {
-      if (selectedCompressor.compressorControls.controlType == 1) {
-        this.showMaxFullFlow = false;
-      } else {
-        this.showMaxFullFlow = true;
-      }
-    } else {
-      this.showMaxFullFlow = true;
-    }
+    this.showMaxFullFlow = this.inventoryService.checkShowMaxFlowPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowUnload(selectedCompressor: CompressorInventoryItem) {
-    if (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2) {
-      if (selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 3) {
-        this.showUnload = true;
-      } else {
-        this.showUnload = false;
-      }
-    } else {
-      this.showUnload = false;
-    }
+    this.showUnload = this.inventoryService.checkShowUnloadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowNoLoad(selectedCompressor: CompressorInventoryItem) {
-    if (selectedCompressor.nameplateData.compressorType != 6) {
-      this.showNoLoad = true;
-    } else {
-      if(selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10){
-        this.showNoLoad = false
-      }else{
-        this.showNoLoad = true;
-      }
-    }
-
+    this.showNoLoad = this.inventoryService.checkShowNoLoadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowBlowoff(selectedCompressor: CompressorInventoryItem) {
-    //centrifugal
-    if (selectedCompressor.nameplateData.compressorType == 6) {
-      //"with blowoff"
-      if (selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
-        this.showBlowoff = true;
-      } else {
-        this.showBlowoff = false;
-      }
-    } else {
-      this.showBlowoff = false;
-    }
+    this.showBlowoff = this.inventoryService.checkShowBlowoffPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
 
   }
 }
