@@ -44,18 +44,20 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           x: dataItem.data.map(cData => { return cData.percentageCapacity }),
           y: dataItem.data.map(cData => { return cData.percentagePower }),
           type: 'scatter',
-          name: dataItem.compressorName
+          name: dataItem.compressorName,
+          text:  dataItem.data.map(cData => { return dataItem.compressorName }),
+          hovertemplate: "%{text}: (Airflow: %{x:.2f}%, Power: %{y:.2f}%) <extra></extra>"
         }
         traceData.push(trace);
       });
       var layout = {
         // barmode: 'group',
-        title: {
-          text: 'Performance Profile',
-          font: {
-            size: 18
-          },
-        },
+        // title: {
+        //   text: 'Performance Profile',
+        //   font: {
+        //     size: 18
+        //   },
+        // },
         xaxis: {
           range: [0, 105],
           ticksuffix: '%',
@@ -78,7 +80,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
             },
           },
           hoverformat: ",.2f",
-          automargin: true
+          // automargin: true
+        },
+        margin: {
+          t: 20,
+          r: 20
+        },
+        legend: {
+          orientation: "h",
+          y: 1.5
         }
       };
       var config = {
