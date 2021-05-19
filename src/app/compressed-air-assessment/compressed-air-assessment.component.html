@@ -21,7 +21,8 @@
       <app-system-profile-graphs *ngIf="setupTab == 'system-profile' && profileTab == 'graphs'">
       </app-system-profile-graphs>
     </div>
-    <div [ngClass]="{'w-50': setupTab != 'system-profile', 'w-25': setupTab == 'system-profile'}">
+    <div class="scroll-item" [ngClass]="{'w-50': setupTab != 'system-profile', 'w-25': setupTab == 'system-profile'}"
+      [ngStyle]="{'height.px': containerHeight}">
       <app-results-panel></app-results-panel>
     </div>
   </div>

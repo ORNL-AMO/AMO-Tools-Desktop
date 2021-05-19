@@ -165,65 +165,12 @@ export class CompressedAirCalculationService {
       percentageBlowOff: 100 / 100,
 
       powerAtNoLoad: compressor.performancePoints.noLoad.power,
-      maxPressure: 0,
-      capacityAtMaxFullFlow: 0,
+      maxPressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+      capacityAtMaxFullFlow: compressor.performancePoints.maxFullFlow.airflow,
       capacityAtUnload: compressor.performancePoints.unloadPoint.airflow,
       powerAtUnload: compressor.performancePoints.unloadPoint.power
     }
   }
-
-  getModulationWithUnloadInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): ModulationWithUnloadInput {
-    let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
-    let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
-    let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
-    let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
-
-    return {
-      compressorType: compressorEnumVal,
-      controlType: controlTypeEnumVal,
-
-      computeFrom: computeFrom,
-      computeFromVal: computeFromVal,
-
-      stageType: stageTypeEnumVal,
-      lubricantType: lubricantTypeEnumValue,
-
-
-      applyPressureInletCorrection: true,
-      //same?
-      powerAtFullLoad: compressor.performancePoints.fullLoad.power,
-      fullLoadPower: compressor.performancePoints.fullLoad.power,
-
-      capacityAtFullLoad: compressor.performancePoints.fullLoad.airflow,
-
-      powerMax: compressor.performancePoints.maxFullFlow.power,
-      powerAtNolLoad: compressor.performancePoints.noLoad.power,
-      dischargePsiMax: compressor.performancePoints.maxFullFlow.dischargePressure,
-
-      //modulatingPressureRange????
-      modulatingPsi: compressor.designDetails.modulatingPressureRange,
-
-      //same?
-      atmosphericPsi: compressor.inletConditions.atmosphericPressure,
-      inletPressure: compressor.inletConditions.atmosphericPressure,
-      atmosphericPressure: compressor.inletConditions.atmosphericPressure,
-
-      //applyPressureInletCorrection
-      //%?
-      capacity: compressor.compressorControls.unloadPointCapacity / 100,
-      polyExponent: compressor.nameplateData.ploytropicCompressorExponent,
-
-      //fullLoadOperatingPressure??
-      ratedDischargePressure: compressor.nameplateData.fullLoadOperatingPressure,
-      ratedInletPressure: compressor.designDetails.inputPressure,
-
-      motorEfficiency: compressor.designDetails.designEfficiency,
-      fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
-      maxDischargePressure: compressor.performancePoints.maxFullFlow.dischargePressure
-
-    }
-  }
-
 
   getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorsCalcInput {
     //TODO: double check input mapping
@@ -243,14 +190,20 @@ export class CompressedAirCalculationService {
       computeFromPFAmps: 0,
 
       compressorType: compressorEnumVal,
-      controlType: controlTypeEnumVal,
+      controlType: controlTypeEnumVal,     
+      
       fullLoadPressure: compressor.performancePoints.fullLoad.dischargePressure,
       powerAtFullLoad: compressor.performancePoints.fullLoad.power,
       capacityAtFullLoad: compressor.performancePoints.fullLoad.airflow,
-      capacityAtMinFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadCapacity,
-      capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
-      minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
-      maxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
+      dischargePsiFullLoad: compressor.performancePoints.fullLoad.dischargePressure,
+      fullLoadPower: compressor.performancePoints.fullLoad.power,
+      fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
+
+      // capacityAtMinFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadCapacity,
+      // capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
+      // minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
+      // maxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
+
       powerAtNoLoad: compressor.performancePoints.noLoad.power,
       capacityAtMaxFullFlow: compressor.performancePoints.maxFullFlow.airflow,
       powerAtUnload: compressor.performancePoints.unloadPoint.power,
@@ -259,21 +212,19 @@ export class CompressedAirCalculationService {
       stageType: stageTypeEnumVal,
       //base on use default selection in performance points
       adjustForDischargePressure: true,
-      applyPressureInletCorrection: true,
+      applyPressureInletCorrection: false,
 
       powerMax: compressor.performancePoints.maxFullFlow.power,
-      dischargePsiFullLoad: compressor.performancePoints.fullLoad.dischargePressure,
       dischargePsiMax: compressor.performancePoints.maxFullFlow.dischargePressure,
+
       modulatingPsi: compressor.designDetails.modulatingPressureRange,
 
 
       capacity: compressor.compressorControls.unloadPointCapacity / 100,
-      fullLoadPower: compressor.performancePoints.fullLoad.power,
       polyExponent: compressor.nameplateData.ploytropicCompressorExponent,
       ratedDischargePressure: compressor.nameplateData.fullLoadOperatingPressure,
       ratedInletPressure: compressor.inletConditions.atmosphericPressure,
       motorEfficiency: compressor.designDetails.designEfficiency / 100,
-      fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
       maxDischargePressure: compressor.performancePoints.blowoff.dischargePressure,
 
       //TODO: Sort out correct pressure mapping
@@ -282,11 +233,11 @@ export class CompressedAirCalculationService {
       atmosphericPressure: compressor.inletConditions.atmosphericPressure,
 
       //centrifugal
-      powerAtBlowOff: compressor.performancePoints.blowoff.power,
-      surgeFlow: compressor.performancePoints.blowoff.airflow,
+      // powerAtBlowOff: compressor.performancePoints.blowoff.power,
+      // surgeFlow: compressor.performancePoints.blowoff.airflow,
       //TODO: percentageBlowOff
-      percentageBlowOff: 100 / 100,
-      maxPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
+      // percentageBlowOff: 100 / 100,
+      // maxPressure: compressor.performancePoints.maxFullFlow.dischargePressure,
 
       //Modulation w/ unload
       powerAtNolLoad: compressor.performancePoints.noLoad.power,
@@ -294,8 +245,8 @@ export class CompressedAirCalculationService {
       //TODO: VFD, Multi step unloading
 
       //Start stop
-      powerMaxPercentage: compressor.performancePoints.maxFullFlow.power / 100,
-      powerAtFullLoadPercentage: compressor.performancePoints.fullLoad.power
+      powerMaxPercentage: 1,
+      powerAtFullLoadPercentage: 1
 
     }
   }
@@ -370,10 +321,10 @@ export interface CompressorsCalcInput {
   powerAtFullLoad: number,
   capacityAtFullLoad: number,
 
-  capacityAtMinFullLoadPressure: number,
-  capacityAtMaxFullLoadPressure: number,
-  minFullLoadPressure: number,
-  maxFullLoadPressure: number,
+  // capacityAtMinFullLoadPressure: number,
+  // capacityAtMaxFullLoadPressure: number,
+  // minFullLoadPressure: number,
+  // maxFullLoadPressure: number,
 
   computeFromVal: number,
   computeFromPFVoltage: number,
@@ -408,10 +359,10 @@ export interface CompressorsCalcInput {
   atmosphericPressure: number
 
   //centrifugal
-  powerAtBlowOff: number
-  surgeFlow: number
-  percentageBlowOff: number
-  maxPressure: number
+  // powerAtBlowOff: number
+  // surgeFlow: number
+  // percentageBlowOff: number
+  // maxPressure: number
 
   //Modulation w/ unload
   powerAtNolLoad: number

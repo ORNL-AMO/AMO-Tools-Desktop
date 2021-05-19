@@ -16,6 +16,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
   selectedCompressor: CompressorInventoryItem;
+  showAllCompressors: boolean = false;
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
@@ -52,33 +53,37 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         title: {
           text: 'Performance Profile',
           font: {
-            size: 24
+            size: 18
           },
         },
         xaxis: {
+          range: [0, 105],
           ticksuffix: '%',
           // autotick: false,
           title: {
             text: 'Airflow (% Capacity)',
             font: {
-              size: 18
+              size: 16
             },
           },
+          automargin: true
         },
         yaxis: {
-          range: [0, 100],
+          range: [0, 105],
           ticksuffix: '%',
           title: {
             text: 'Power (% Full Load)',
             font: {
-              size: 18
+              size: 16
             },
           },
           hoverformat: ",.2f",
+          automargin: true
         }
       };
       var config = {
         responsive: true,
+        displaylogo: false
       };
       Plotly.newPlot(this.performanceProfileChart.nativeElement, traceData, layout, config);
     }
@@ -87,21 +92,38 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   getChartData(): Array<ProfileChartData> {
     let compressorInventory: Array<CompressorInventoryItem> = this.compressedAirAssessmentService.compressedAirAssessment.getValue().compressorInventoryItems;
     let chartData: Array<ProfileChartData> = new Array();
-    compressorInventory.forEach(item => {
+
+    if (this.showAllCompressors) {
+      compressorInventory.forEach(item => {
+        let compressorData: Array<CompressorCalcResult> = new Array();
+        let isValid: boolean = this.inventoryService.isCompressorValid(item)
+        if (isValid) {
+          for (let airFlow = 0; airFlow <= 100;) {
+            let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(item, 1, airFlow);
+            compressorData.push(results);
+            airFlow = airFlow + 2.5;
+          }
+          chartData.push({
+            compressorName: item.name,
+            data: compressorData
+          });
+        }
+      });
+    } else {
       let compressorData: Array<CompressorCalcResult> = new Array();
-      let isValid: boolean = this.inventoryService.isCompressorValid(item)
+      let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor);
       if (isValid) {
         for (let airFlow = 0; airFlow <= 100;) {
-          let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(item, 1, airFlow);
+          let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(this.selectedCompressor, 1, airFlow);
           compressorData.push(results);
-          airFlow = airFlow + 10;
+          airFlow = airFlow + 2.5;
         }
         chartData.push({
-          compressorName: item.name,
+          compressorName: this.selectedCompressor.name,
           data: compressorData
         });
       }
-    });
+    }
     return chartData;
   }
 

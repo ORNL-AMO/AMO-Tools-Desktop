@@ -1,3 +1,11 @@
+<div class="pl-2 pr-2">
+    <div class="checkbox text-right">
+        <label>
+            <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
+            Graph All Compressors
+        </label>
+    </div>
+</div>
 <div class="p-2">
     <div #performanceProfileChart id="performanceProfileChart"></div>
 </div>

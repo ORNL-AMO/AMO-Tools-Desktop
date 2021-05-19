@@ -1,6 +1,3 @@
-<!-- <div class="p-2 w-100 text-center">
-    <a class="click-link" (click)="addNewCompressor()">+Add New Compressor</a>
-</div> -->
 <div class="p-2">
     <table class="table table-sm table-striped table-hover" *ngIf="selectedCompressor && compressorInventoryItems">
         <thead>
@@ -34,4 +31,7 @@
             </tr>
         </tbody>
     </table>
+    <div class="w-100 text-right">
+        <a class="click-link small" (click)="addNewCompressor()">+Add New Compressor</a>
+    </div>
 </div>

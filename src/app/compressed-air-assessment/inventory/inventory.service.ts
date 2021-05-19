@@ -35,7 +35,7 @@ export class InventoryService {
         automaticShutdown: false
       },
       inletConditions: {
-        atmosphericPressure: undefined,
+        atmosphericPressure: 14.7,
         temperature: undefined
       },
       designDetails: {
@@ -335,7 +335,6 @@ export class InventoryService {
   }
 
   checkPerformancePointsValid(compressor: CompressorInventoryItem): boolean {
-
     let fullLoadForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad);
     let isValid: boolean = fullLoadForm.valid;
     let showMaxFullFlow: boolean = this.checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
@@ -343,7 +342,7 @@ export class InventoryService {
       let maxFlowForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow);
       isValid = maxFlowForm.valid;
     }
-    let showUnloadForm: boolean = this.checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+    let showUnloadForm: boolean = this.checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     if (isValid && showUnloadForm) {
       let unloadForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint);
       isValid = unloadForm.valid;
@@ -362,7 +361,7 @@ export class InventoryService {
   }
 
   checkShowMaxFlowPerformancePoint(compressorType: number, controlType: number): boolean {
-    if (compressorType == 6) {
+    if (compressorType == 6 && (controlType == 8 || controlType == 10)) {
       return false;
     } else if (compressorType == 1 || compressorType == 2) {
       if (controlType == 1) {
