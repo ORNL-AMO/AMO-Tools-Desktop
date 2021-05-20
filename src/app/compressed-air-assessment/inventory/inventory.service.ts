@@ -40,7 +40,7 @@ export class InventoryService {
       },
       designDetails: {
         blowdownTime: 40,
-        unloadSlumpPressure: undefined,
+        unloadSlumpPressure: 15,
         modulatingPressureRange: undefined,
         inputPressure: undefined,
         designEfficiency: undefined,
@@ -76,9 +76,9 @@ export class InventoryService {
           // defaultAirFlow: true
         },
         noLoad: {
-          dischargePressure: undefined,
-          airflow: undefined,
-          power: undefined,
+          dischargePressure: 15,
+          airflow: 0,
+          power: 0,
           // defaultPower: true,
           // defaultAirFlow: true
         },
