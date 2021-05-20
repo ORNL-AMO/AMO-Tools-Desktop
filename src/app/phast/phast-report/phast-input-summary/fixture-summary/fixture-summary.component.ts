@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-fixture-summary',
   templateUrl: './fixture-summary.component.html',
@@ -30,7 +30,7 @@ export class FixtureSummaryComponent implements OnInit {
   finalTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.materialNameDiff = new Array();
@@ -40,7 +40,7 @@ export class FixtureSummaryComponent implements OnInit {
     this.finalTemperatureDiff = new Array();
     this.correctionFactorDiff = new Array();
 
-    this.materialOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.materialOptions = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -107,7 +107,7 @@ export class FixtureSummaryComponent implements OnInit {
   }
 
   checkSpecificHeat(loss: FixtureLoss) {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(loss.materialName);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');

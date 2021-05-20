@@ -3,7 +3,6 @@ import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
 import { BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
-import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
@@ -51,7 +50,7 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: FormGroup;
   lowPressureHeaderForm: FormGroup;
-  constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
+  constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService,
     private sqlDbApiService: SqlDbApiService) { }
 
@@ -96,7 +95,7 @@ export class BoilerComponent implements OnInit {
 
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
-      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     } else if (this.boilerForm.controls.fuelType.value === 1) {
       this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     }

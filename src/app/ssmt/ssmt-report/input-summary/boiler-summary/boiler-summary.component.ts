@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
@@ -37,10 +36,10 @@ export class BoilerSummaryComponent implements OnInit {
 
   solidLiquidFuelTypes: Array<SolidLiquidFlueGasMaterial>;
   gasFuelTypes: Array<FlueGasMaterial>;
-  constructor(private cd: ChangeDetectorRef, private suiteDbService: SuiteDbService, private sqlDbApiService: SqlDbApiService) { }
+  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
-    this.solidLiquidFuelTypes = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    this.solidLiquidFuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     this.gasFuelTypes = this.sqlDbApiService.selectGasFlueGasMaterials();
 
 

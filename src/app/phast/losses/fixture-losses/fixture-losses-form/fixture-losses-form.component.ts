@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -40,7 +40,7 @@ export class FixtureLossesFormComponent implements OnInit {
   materials: Array<SolidLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -61,7 +61,7 @@ export class FixtureLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -84,7 +84,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   setSpecificHeat() {
-    let tmpMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    let tmpMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (tmpMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -97,7 +97,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   checkSpecificHeat() {
     if (this.lossesForm.controls.materialName.value) {
-      let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+      let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
       if (material) {
         let val = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
@@ -121,7 +121,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   
   setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -144,7 +144,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.lossesForm.patchValue({

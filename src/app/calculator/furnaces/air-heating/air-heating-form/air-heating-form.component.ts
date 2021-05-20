@@ -8,7 +8,6 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { AirHeatingInput } from '../../../../shared/models/phast/airHeating';
 import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { AirHeatingFormService } from '../air-heating-form.service';
 import { AirHeatingService } from '../air-heating.service';
@@ -50,7 +49,7 @@ export class AirHeatingFormComponent implements OnInit {
   showOperatingHoursModal: boolean;
   o2Warning: string;
 
-  constructor(private suiteDbService: SuiteDbService,
+  constructor(
               private airHeatingService: AirHeatingService, 
               private airHeatingFormService: AirHeatingFormService,
               private phastService: PhastService,
@@ -112,7 +111,7 @@ export class AirHeatingFormComponent implements OnInit {
     if (this.form.controls.gasFuelType.value == true) {
       this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     } else {
-      this.fuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.fuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     }
   }
 
@@ -191,7 +190,7 @@ export class AirHeatingFormComponent implements OnInit {
         substance: material.substance
       });
     } else {
-      let material = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
+      let material = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
       this.form.patchValue({
         carbon: this.airHeatingService.roundVal(material.carbon, 4),
         hydrogen: this.airHeatingService.roundVal(material.hydrogen, 4),

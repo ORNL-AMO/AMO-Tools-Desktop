@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SuiteDbService } from './suite-db.service';
 import { FlueGasMaterialComponent } from './flue-gas-material/flue-gas-material.component';
 import { GasLoadChargeMaterialComponent } from './gas-load-charge-material/gas-load-charge-material.component';
 import { LiquidLoadChargeMaterialComponent } from './liquid-load-charge-material/liquid-load-charge-material.component';
@@ -35,7 +34,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
         SharedPipesModule
     ],
     providers: [
-        SuiteDbService,
         CustomMaterialsService
     ],
     declarations: [

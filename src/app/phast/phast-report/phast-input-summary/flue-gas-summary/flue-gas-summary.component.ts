@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -49,7 +48,7 @@ export class FlueGasSummaryComponent implements OnInit {
   so2Diff: Array<boolean>;
 
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
+  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.typeDiff = new Array();
@@ -76,7 +75,7 @@ export class FlueGasSummaryComponent implements OnInit {
     this.so2Diff = new Array();
   
     this.volumeOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
-    this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    this.massOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {

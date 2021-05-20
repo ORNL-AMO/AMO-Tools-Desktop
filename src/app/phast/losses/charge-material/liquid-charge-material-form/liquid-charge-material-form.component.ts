@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
@@ -9,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -45,7 +45,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -66,7 +66,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     else {
       this.idString = 'phast_baseline_solid_' + this.lossIndex;
     }
-    this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+    this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
@@ -102,7 +102,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
@@ -140,7 +140,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkSpecificHeatDiffLiquid() {
-    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
@@ -155,7 +155,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkVaporizingTempDiff() {
-    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
@@ -170,7 +170,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkLatentHeatDiff() {
-    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
@@ -185,7 +185,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkSpecificHeatVaporDiff() {
-    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
@@ -279,7 +279,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({

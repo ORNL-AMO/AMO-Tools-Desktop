@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { Subscription } from 'rxjs';
-import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -13,6 +12,7 @@ import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
+import { LiquidLoadChargeMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 declare var google: any;
 @Component({
   selector: 'app-core',
@@ -52,10 +52,10 @@ export class CoreComponent implements OnInit {
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
+    private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
-    private inventoryDbService: InventoryDbService, private sqlDbAPiService: SqlDbApiService) {
+    private inventoryDbService: InventoryDbService, private sqlDbApiService: SqlDbApiService) {
   }
 
   ngOnInit() {
@@ -84,14 +84,12 @@ export class CoreComponent implements OnInit {
     });
 
     //TODO: has started flag move to api service
-    if (this.suiteDbService.hasStarted === false) {
-      this.sqlDbAPiService.startup();
+    if (this.sqlDbApiService.hasStarted === false) {
+      this.sqlDbApiService.startup();
     }
     if (this.indexedDbService.db === undefined) {
       this.initData();
     }
-
-
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
@@ -156,8 +154,8 @@ export class CoreComponent implements OnInit {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
             this.inventoryDbService.setAll().then(() => {
-              if (this.suiteDbService.hasStarted == true) {
-                this.suiteDbService.initCustomDbMaterials();
+              if (this.sqlDbApiService.hasStarted == true) {
+                this.sqlDbApiService.initCustomDbMaterials();
               }
               this.idbStarted = true;
               this.changeDetectorRef.detectChanges();

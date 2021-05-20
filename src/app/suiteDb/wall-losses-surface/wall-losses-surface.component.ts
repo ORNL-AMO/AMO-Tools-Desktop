@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { WallLossesSurface } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-wall-losses-surface',
@@ -38,7 +38,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   currentField: string = 'selectedMaterial';
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
+  constructor(
+    private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -46,7 +47,7 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
 
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectWallLossesSurface();
+      this.allMaterials = this.sqlDbApiService.selectWallLossesSurface();
       this.indexedDbService.getWallLossesSurface().then(idbResults => {
         this.allCustomMaterials = idbResults;
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
@@ -56,7 +57,7 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectWallLossesSurface();
+      this.allMaterials = this.sqlDbApiService.selectWallLossesSurface();
       this.checkMaterialName();
     }
   }
@@ -64,7 +65,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
-      let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertWallLossesSurface(this.newMaterial);
       if (suiteDbResult === true) {
         this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
@@ -75,7 +76,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
   updateMaterial() {
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateWallLossesSurface(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateWallLossesSurface(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -87,7 +88,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteWallLossesSurface(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteWallLossesSurface(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         this.indexedDbService.deleteWallLossesSurface(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);

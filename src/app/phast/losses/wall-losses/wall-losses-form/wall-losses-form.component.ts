@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { WallLossCompareService } from '../wall-loss-compare.service';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -39,7 +39,9 @@ export class WallLossesFormComponent implements OnInit {
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   idString: string;
-  constructor(private wallLossCompareService: WallLossCompareService, private wallFormService: WallFormService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private wallLossCompareService: WallLossCompareService, 
+    private sqlDbApiService: SqlDbApiService,
+    private wallFormService: WallFormService, private lossesService: LossesService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -48,7 +50,7 @@ export class WallLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
     //init warnings
     if (!this.baselineSelected) {
       this.disableForm();
@@ -94,7 +96,7 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    let tmpFactor: WallLossesSurface = this.sqlDbApiService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     if (tmpFactor) {
       this.wallLossesForm.patchValue({
         conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
@@ -116,7 +118,7 @@ export class WallLossesFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+      this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
       let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
       if (newMaterial) {
         this.wallLossesForm.patchValue({

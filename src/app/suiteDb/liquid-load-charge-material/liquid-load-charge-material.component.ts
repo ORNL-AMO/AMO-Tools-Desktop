@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { LiquidLoadChargeMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-liquid-load-charge-material',
@@ -43,7 +43,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   canAdd: boolean;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -51,7 +51,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
 
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
       this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
@@ -60,7 +60,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
       this.checkMaterialName();
     }
   }
@@ -74,7 +74,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
         this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
       }
-      let suiteDbResult = this.suiteDbService.insertLiquidLoadChargeMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertLiquidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         this.indexedDbService.addLiquidLoadChargeMaterial(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
@@ -91,7 +91,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateLiquidLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateLiquidLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -103,7 +103,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
 
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         this.indexedDbService.deleteLiquidLoadChargeMaterial(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);

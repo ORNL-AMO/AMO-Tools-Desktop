@@ -6,7 +6,7 @@ import { PhastService } from '../../../../phast/phast.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGas, FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
@@ -44,12 +44,13 @@ export class FlueGasFormMassComponent implements OnInit {
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
+    private sqlDbApiService: SqlDbApiService, 
     private phastService: PhastService,
     private cd: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService) { }
+    ) { }
 
   ngOnInit() {
-    this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     this.initSubscriptions();
   }
 
@@ -182,7 +183,7 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.byMassForm.patchValue({
         carbon: this.roundVal(tmpFlueGas.carbon, 4),
@@ -217,7 +218,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.byMassForm.patchValue({

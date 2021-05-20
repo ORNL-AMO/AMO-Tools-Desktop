@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLoadChargeMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-solid-load-charge-material',
@@ -44,14 +44,14 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
   currentField: string = 'selectedMaterial';
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
     }
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
@@ -61,7 +61,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.allMaterials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       this.checkMaterialName();
     }
   }
@@ -75,7 +75,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
         this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
         this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
       }
-      let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult === true) {
         this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
@@ -92,7 +92,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateSolidLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateSolidLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -104,7 +104,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         this.indexedDbService.deleteSolidLoadChargeMaterial(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);

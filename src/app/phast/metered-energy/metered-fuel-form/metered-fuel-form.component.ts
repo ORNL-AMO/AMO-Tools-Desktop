@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MeteredEnergyFuel } from '../../../shared/models/phast/meteredEnergy';
-import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertPhastService } from '../../convert-phast.service';
@@ -41,7 +40,7 @@ export class MeteredFuelFormComponent implements OnInit {
   fuelTypes: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   setMeteredEnergy: boolean;
 
-  constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService,
+  constructor(private convertPhastService: ConvertPhastService, private phastService: PhastService,
     private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
@@ -55,7 +54,7 @@ export class MeteredFuelFormComponent implements OnInit {
     if (this.inputs.fuelDescription === 'gas') {
       this.fuelTypes = this.sqlDbApiService.selectGasFlueGasMaterials();
     } else if (this.inputs.fuelDescription === 'solidLiquid') {
-      this.fuelTypes = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.fuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     }
     if (!bool) {
       this.inputs.fuelType = undefined;
@@ -84,7 +83,7 @@ export class MeteredFuelFormComponent implements OnInit {
         this.inputs.heatingValue = fuel.heatingValueVolume;
       }
     } else {
-      let fuel: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
+      let fuel: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
       if (fuel) {
         let heatingVal = this.phastService.flueGasByMassCalculateHeatingValue(fuel);
         if (this.settings.unitsOfMeasure === 'Metric') {
