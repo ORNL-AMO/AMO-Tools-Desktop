@@ -4,6 +4,7 @@ import { PumpsSuiteApiService } from './pumps-suite-api.service';
 import { SuiteApiEnumService } from './suite-api-enum.service';
 import { FansSuiteApiService } from './fans-suite-api.service';
 import { SqlDbApiService } from './sql-db-api.service';
+import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
 
 
 
@@ -16,7 +17,8 @@ import { SqlDbApiService } from './sql-db-api.service';
     PumpsSuiteApiService,
     SuiteApiEnumService,
     FansSuiteApiService,
-    SqlDbApiService
+    SqlDbApiService,
+    WasteWaterSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }
