@@ -30,8 +30,12 @@ export class ChillersSuiteApiService {
       BaselineWaterConservationData, 
       ModificationConservationData
       );
+    
     let output: CoolingTowerOutput = CoolingTowerMakeupWaterInstance.calculate();
     CoolingTowerMakeupWaterInstance.delete();
+    OperatingConditionsData.delete();
+    BaselineWaterConservationData.delete();
+    ModificationConservationData.delete();
     return output;
   }
 
