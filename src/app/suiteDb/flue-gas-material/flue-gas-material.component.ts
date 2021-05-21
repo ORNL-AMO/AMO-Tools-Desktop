@@ -44,12 +44,12 @@ export class FlueGasMaterialComponent implements OnInit {
     heatingValue: 0,
     heatingValueVolume: 0,
     specificGravity: 0,
-
   };
   selectedMaterial: FlueGasMaterial;
   allMaterials: Array<FlueGasMaterial>;
   allCustomMaterials: Array<FlueGasMaterial>;
-  isValid: boolean;
+  isValidHHVResult: boolean;
+  isValidForm: boolean;
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
@@ -229,23 +229,32 @@ export class FlueGasMaterialComponent implements OnInit {
 
   setHHV() {
     this.getTotalOfFlueGasses();
-    const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
-    if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
-      this.isValid = true;
-      this.newMaterial.heatingValue = vals.heatingValue;
-      this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
-      this.newMaterial.specificGravity = vals.specificGravity;
+    this.isValidForm = true;
+    for (let property in this.newMaterial) {
+      if(this.newMaterial[property] === null) {
+        this.isValidForm = false;
+      }
+    }
 
+    if (this.isValidForm) {
+      const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
+      if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
+        this.isValidHHVResult = true;
+        this.newMaterial.heatingValue = vals.heatingValue;
+        this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
+      this.newMaterial.specificGravity = vals.specificGravity;
+      
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
       }
     } else {
-      this.isValid = false;
+      this.isValidHHVResult = false;
       this.newMaterial.heatingValue = 0;
       this.newMaterial.heatingValueVolume = 0;
       this.newMaterial.specificGravity = 0;
     }
+  }
   }
 
   checkEditMaterialName() {
@@ -270,13 +279,16 @@ export class FlueGasMaterialComponent implements OnInit {
   }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
-    if (test.length > 0) {
+    this.isNameValid = true;
+    this.nameError = null;
+
+    let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
+    if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;
-    } else {
-      this.isNameValid = true;
-      this.nameError = null;
+    } else if (this.newMaterial.substance === '') {
+      this.isNameValid = false;
+      this.nameError = 'Please enter a name';
     }
   }
 

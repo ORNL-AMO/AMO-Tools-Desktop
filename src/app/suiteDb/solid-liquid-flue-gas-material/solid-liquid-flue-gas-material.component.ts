@@ -39,7 +39,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
   allCustomMaterials: Array<SolidLiquidFlueGasMaterial>;
-  isValid: boolean;
+  isValidHHVResult: boolean;
+  isValidForm: boolean;
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
@@ -162,17 +163,26 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   setHHV() {
-    const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
-    this.getDiff();
-    if (isNaN(tmpHeatingVals) === false) {
-      this.isValid = true;
-      this.newMaterial.heatingValue = tmpHeatingVals;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+    this.isValidForm = true;
+    for (let property in this.newMaterial) {
+      if(this.newMaterial[property] === null) {
+        this.isValidForm = false;
       }
-    } else {
-      this.isValid = false;
-      this.newMaterial.heatingValue = 0;
+    }
+
+    if (this.isValidForm) {
+      const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+      this.getDiff();
+      if (isNaN(tmpHeatingVals) === false) {
+        this.isValidHHVResult = true;
+        this.newMaterial.heatingValue = tmpHeatingVals;
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+        }
+      } else {
+        this.isValidHHVResult = false;
+        this.newMaterial.heatingValue = 0;
+      }
     }
   }
 
@@ -207,13 +217,16 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
-    if (test.length > 0) {
+    this.isNameValid = true;
+    this.nameError = null;
+
+    let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
+    if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;
-    } else {
-      this.isNameValid = true;
-      this.nameError = null;
+    } else if (this.newMaterial.substance === '') {
+      this.isNameValid = false;
+      this.nameError = 'Please enter a name';
     }
   }
 

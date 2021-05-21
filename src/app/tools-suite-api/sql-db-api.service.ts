@@ -357,7 +357,7 @@ export class SqlDbApiService {
   }
 
   getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer): SolidLiquidFlueGasMaterial {
-    return {
+    let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = {
       id: solidLiquidFlueGasMaterialPointer.getID(),
       selected: false,
       carbon: solidLiquidFlueGasMaterialPointer.getCarbon(),
@@ -370,6 +370,7 @@ export class SqlDbApiService {
       sulphur: solidLiquidFlueGasMaterialPointer.getSulphur(),
       heatingValue: undefined,
     };
+    return solidLiquidFlueGasMaterial;
   }
 
 
@@ -412,22 +413,15 @@ export class SqlDbApiService {
 
   getSolidLiquidFlueGasMaterial(solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial) {
     let SolidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial(
-      0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
+      solidLiquidFlueGasMaterial.substance,
 			solidLiquidFlueGasMaterial.carbon,
 			solidLiquidFlueGasMaterial.hydrogen,
 			solidLiquidFlueGasMaterial.sulphur,
 			solidLiquidFlueGasMaterial.inertAsh,
 			solidLiquidFlueGasMaterial.o2,
 			solidLiquidFlueGasMaterial.moisture,
-			solidLiquidFlueGasMaterial.nitrogen
+			solidLiquidFlueGasMaterial.nitrogen,
     );
-    
     return SolidLiquidFlueGasMaterial;
   }
 
