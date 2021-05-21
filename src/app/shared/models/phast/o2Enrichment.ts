@@ -31,10 +31,11 @@ export interface EnrichmentOutputData {
 }
 
 export interface RawO2Output {
-    annualFuelCost: number;
+    annualFuelCost?: number;
     availableHeatInput: number;
     availableHeatEnriched: number;
-    annualFuelCostEnriched: number;
+    annualFuelCostEnriched?: number;
+    fuelConsumption?: number;
     fuelConsumptionEnriched: number;
     fuelSavingsEnriched: number;
     annualCostSavings?: number;

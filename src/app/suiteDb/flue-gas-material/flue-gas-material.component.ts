@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast/phast.service';
+import { HeatingValueByVolumeOutput } from '../../tools-suite-api/process-heating-api.service';
 
 
 
@@ -231,7 +232,7 @@ export class FlueGasMaterialComponent implements OnInit {
 
   setHHV() {
     this.getTotalOfFlueGasses();
-    const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
+    const vals: HeatingValueByVolumeOutput = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
     if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = vals.heatingValue;
