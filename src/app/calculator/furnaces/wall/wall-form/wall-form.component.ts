@@ -39,7 +39,7 @@ export class WallFormComponent implements OnInit {
   }
 
   surfaceOptions: Array<WallLossesSurface>;
-  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  treasureHuntUtilityOptions: Array<string>;
   showSurfaceModal: boolean = false;
 
   wallLossesForm: FormGroup;

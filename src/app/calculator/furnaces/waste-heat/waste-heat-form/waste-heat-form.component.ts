@@ -32,7 +32,7 @@ export class WasteHeatFormComponent implements OnInit {
   showFlueGasModal: boolean;
   
   energyUnit: string;
-  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  treasureHuntUtilityOptions: Array<string>;
   energySourceTypeSub: Subscription;
 
   @HostListener('window:resize', ['$event'])

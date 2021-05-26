@@ -55,7 +55,7 @@ export class OpeningFormComponent implements OnInit {
   canCalculateViewFactor: boolean;
   calculateVFWarning: string;
 
-  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  treasureHuntUtilityOptions: Array<string>;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
