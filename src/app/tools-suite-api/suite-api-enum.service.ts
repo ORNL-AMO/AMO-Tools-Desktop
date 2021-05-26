@@ -147,4 +147,47 @@ export class SuiteApiEnumService {
         return Module.FanType.VaneAxial;
     }
   }
+
+  getCoolingTowerFanControlSpeedType(speedType: number) {
+    switch (speedType) {
+      case 0:
+        return Module.FanControlSpeedType.One;
+      case 1:
+        return Module.FanControlSpeedType.Two;
+      case 2:
+        return Module.FanControlSpeedType.Variable;
+
+    }
+  }
+
+  getCoolingTowerChillerType(chillerType: number) {
+    switch (chillerType) {
+      case 0:
+        return Module.ChillerType.Centrifugal;
+      case 1:
+        return Module.ChillerType.Screw;
+
+    }
+  }
+
+  getCoolingTowerCondenserCoolingType(condenserType: number) {
+    switch (condenserType) {
+      case 0:
+        return Module.CondenserCoolingType.Water;
+      case 1:
+        return Module.CondenserCoolingType.Air;
+
+    }
+  }
+
+  getCoolingTowerCompressorConfigType(configType: number) {
+    switch (configType) {
+      case 0:
+        return Module.CompressorConfigType.NoVFD;
+      case 1:
+        return Module.CompressorConfigType.VFD;
+      case 2:
+        return Module.CompressorConfigType.MagneticBearing;
+    }
+  }
 }
