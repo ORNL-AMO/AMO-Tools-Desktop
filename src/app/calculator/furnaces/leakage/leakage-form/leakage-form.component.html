@@ -29,7 +29,7 @@
         </label>
         <select name="{{'energySourceType'+idString}}" class="form-control" id="{{'energySourceType'+idString}}"
           formControlName="energySourceType" (change)="setEnergySource()" (focus)="focusField('energySourceType')">
-          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option.utilityName">{{option.display}}</option>
+          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option">{{option}}</option>
         </select>
       </div>
  
@@ -78,7 +78,7 @@
 
       <div class="form-group">
         <label class="small" for="{{'availableHeat'+idString}}">
-          <span *ngIf="leakageForm.controls.energySourceType.value == 'Fuel'">
+          <span *ngIf="leakageForm.controls.energySourceType.value !== 'Steam' && leakageForm.controls.energySourceType.value !== 'Electricity'">
             Available Heat
           </span>
           <span *ngIf="leakageForm.controls.energySourceType.value == 'Steam'">

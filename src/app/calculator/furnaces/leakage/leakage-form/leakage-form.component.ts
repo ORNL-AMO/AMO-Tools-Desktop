@@ -48,7 +48,7 @@ export class LeakageFormComponent implements OnInit {
   trackingEnergySource: boolean;
   idString: string;
   outputSubscription: Subscription;
-  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  treasureHuntUtilityOptions: Array<string>;
 
   constructor(private leakageFormService: LeakageFormService,
     private cd: ChangeDetectorRef,
