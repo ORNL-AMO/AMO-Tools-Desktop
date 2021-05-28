@@ -98,6 +98,7 @@ export interface LoadChargeMaterial
 export interface EnergyData {
   energySourceType?: string;
   fuelCost?: number;
+  userFuelCost?: number;
   hoursPerYear?: number;
   availableHeat?: number;
 }
