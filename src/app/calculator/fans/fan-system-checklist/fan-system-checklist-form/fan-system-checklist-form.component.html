@@ -1,1 +1,323 @@
-<p>fan-system-checklist-form works!</p>
+<div class="mb-3 p-2 form-card">
+    <div class="d-flex w-100">
+        <label class="group-label bold my-1 mx-2 w-100" (click)="toggleCollapse()" [ngClass]="{'collapsed-border': isCollapsed === true}">
+            <span *ngIf="isCollapsed" class="fa fa-chevron-right collapse-icon"></span>
+            <span *ngIf="!isCollapsed" class="fa fa-chevron-down collapse-icon"></span>
+            Equipment # {{index + 1}}
+            <a *ngIf="index > 0" class="click-link pull-right text-danger small px-3"
+                (click)="removeEquipment()">Remove Equipment</a>
+            </label>
+        </div>
+
+    <ng-container *ngIf="!isCollapsed">
+    <div class="d-flex w-100 mt-2">
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form #formElement [formGroup]="form">
+                <div class="form-group">
+                    <label class="small" for="motorPower">Motor Power</label>
+                    <div class="input-group">
+                        <input class="form-control" name="motorPower" id="motorPower" formControlName="motorPower"
+                            type="number" (input)="calculate()" (focus)="focusField('motorPower')"
+                            onfocus="this.select();">
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+                        <span *ngIf="form.controls.motorPower.errors.required">Value required.</span>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fanType">Operating with VFD</label>
+                    <select class="form-control" formControlName="fanType" (change)="calculate()"
+                        (focus)="focusField('fanType')">
+                        <option [ngValue]="0">No</option>
+                        <option [ngValue]="1">Yes</option>
+                    </select>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="form-group">
+                    <label class="small" for="operatingHours">Annual Operating Hours</label>
+                    <div class="input-group">
+                        <span class="input-group-addon op-hour-addon units">
+                            <a class="click-link" (click)="openOperatingHoursModal()"><span
+                                    class="fa fa-calculator"></span></a>
+                        </span>
+                        <input class="form-control" name="operatingHours" id="operatingHours"
+                            formControlName="operatingHours" type="number" (input)="calculate()"
+                            (focus)="focusField('operatingHours')" onfocus="this.select();">
+                        <span class="units input-group-addon">hrs/yr</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+                        <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+                        <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+                            {{form.controls.operatingHours.errors.max.max}}.</span>
+                        <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+                            {{form.controls.operatingHours.errors.min.min}}.</span>
+                    </span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex w-100 mx-2">
+        <div class="w-50">
+            <label class="group-label">
+                Control
+            </label>
+        </div>
+        <div class="w-50">
+            <label class="group-label">
+                System Effect
+            </label>
+        </div>
+    </div>
+    <div class="d-flex w-100 my-1">
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="checkbox" (mouseenter)="focusField('motorOverloads')">
+                    <label for="motorOverloads">
+                        <input type="checkbox" formControlName="motorOverloads" id="motorOverloads"
+                            name="motorOverloads" (input)="setFormControlCheckbox($event, 'motorOverloads')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Motor overloads unless damper restricts flow.</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('spillOrBypass')">
+                    <label for="spillOrBypass">
+                        <input type="checkbox" formControlName="spillOrBypass" id="spillOrBypass"
+                            name="spillOrBypass" (input)="setFormControlCheckbox($event, 'spillOrBypass')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Spill or bypass</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('dischargeDamper')">
+                    <label for="dischargeDamper">
+                        <input type="checkbox" formControlName="dischargeDamper" id="dischargeDamper"
+                            name="dischargeDamper" (input)="setFormControlCheckbox($event, 'dischargeDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Discharge damper</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('inletDamper')">
+                    <label for="inletDamper">
+                        <input type="checkbox" formControlName="inletDamper" id="inletDamper"
+                            name="inletDamper" (input)="setFormControlCheckbox($event, 'inletDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Inlet damper</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('variableInletVane')">
+                    <label for="variableInletVane">
+                        <input type="checkbox" formControlName="variableInletVane" id="variableInletVane"
+                            name="variableInletVane" (input)="setFormControlCheckbox($event, 'variableInletVane')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Variable Inlet Vane</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('systemDamper')">
+                    <label for="systemDamper">
+                        <input type="checkbox" formControlName="systemDamper" id="systemDamper"
+                            name="systemDamper" (input)="setFormControlCheckbox($event, 'systemDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">System Damper</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('damperClosed')">
+                    <label for="damperClosed">
+                        <input type="checkbox" formControlName="damperClosed" id="damperClosed"
+                            name="damperClosed" (input)="setFormControlCheckbox($event, 'damperClosed')"
+                            onfocus="this.select();">
+                        <span class="ml-2">Damper is mostly closed</span>
+                    </label>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div (mouseenter)="focusField('turnRight')">
+                    <label for="turnRight">
+                        <input type="checkbox" formControlName="turnRight" id="turnRight"
+                            name="turnRight" (input)="setFormControlCheckbox($event, 'turnRight')"
+                            onfocus="this.select();">
+                        90% turn <i>right</i> at fan outlet or inlet
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('turnNear')">
+                    <label for="turnNear">
+                        <input type="checkbox" formControlName="turnNear" id="turnNear"
+                            name="turnNear" (input)="setFormControlCheckbox($event, 'turnNear')"
+                            onfocus="this.select();">
+                        90% turn <i>near</i> fan outlet or inlet
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('dirtLeg')">
+                    <label for="dirtLeg">
+                        <input type="checkbox" formControlName="dirtLeg" id="dirtLeg"
+                            name="dirtLeg" (input)="setFormControlCheckbox($event, 'dirtLeg')"
+                            onfocus="this.select();">
+                        Dirt leg at bottom of inlet duct
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('noOutletDuct')">
+                    <label for="noOutletDuct">
+                        <input type="checkbox" formControlName="noOutletDuct" id="noOutletDuct"
+                            name="noOutletDuct" (input)="setFormControlCheckbox($event, 'noOutletDuct')"
+                            onfocus="this.select();">
+                        No outlet duct
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('restrictedInlet')">
+                    <label for="restrictedInlet">
+                        <input type="checkbox" formControlName="restrictedInlet" id="restrictedInlet"
+                            name="restrictedInlet" (input)="setFormControlCheckbox($event, 'restrictedInlet')"
+                            onfocus="this.select();">
+                        Restricted or sharp inlet
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <label class="group-label mx-2">Production and Maintenance</label>
+    <div class="d-flex w-100">
+        <div class="w-50 d-flex flex-column mx-3 mb-3">
+            <form [formGroup]="form">
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Too much flow or pressure for production</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="excessFlowOrPressure" class="btn btn-secondary btn-sm toggle-btn py-1 px-2" 
+                                (click)="setFormControlRadioValue('excessFlowOrPressure', option.value)" 
+                                [ngClass]="{'active':  form.controls.excessFlowOrPressure.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Unstable or hard to control system</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="unstableSystem" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('unstableSystem', option.value)"
+                                [ngClass]="{'active':  form.controls.unstableSystem.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Unreliable system breaks down regularly</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="unreliableSystem" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('unreliableSystem', option.value)"
+                                [ngClass]="{'active':  form.controls.unreliableSystem.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Not enough flow or pressure for production</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="lowFlowOrPressure" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('lowFlowOrPressure', option.value)"
+                                [ngClass]="{'active':  form.controls.lowFlowOrPressure.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">System is excessively noisy</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="systemNoisy" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('systemNoisy', option.value)"
+                                [ngClass]="{'active':  form.controls.systemNoisy.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Buildup on fan blades</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="fanBladeBuildup" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('fanBladeBuildup', option.value)"
+                                [ngClass]="{'active':  form.controls.fanBladeBuildup.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Need to weld ductwork cracks regularly</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="weldingDuctwork" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('weldingDuctwork', option.value)"
+                                [ngClass]="{'active':  form.controls.weldingDuctwork.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1">Radial fan handling clean air</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="radialFanCleanAir" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('radialFanCleanAir', option.value)"
+                                [ngClass]="{'active':  form.controls.radialFanCleanAir.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="mb-2">
+        <label (click)="toggleNotes()" class="group-label mx-2">
+            <span *ngIf="!displayNotes" (click)="toggleNotes()" class="fa fa-chevron-right collapse-icon"></span>
+            <span *ngIf="displayNotes" (click)="toggleNotes()" class="fa fa-chevron-down collapse-icon"></span>
+            <span>
+                Notes
+            </span>
+        </label>
+        <form [formGroup]="form" *ngIf="displayNotes" class="d-flex w-100">
+            <div class="mx-3 mt-2 w-100">
+                <textarea rows="6" cols="25" class="w-100" id="notes" (input)="calculate()" placeholder="Add detail about equipment opportunities" id="notes" formControlName="notes"
+                    (focus)="focusField('notes')" onfocus="this.select();"></textarea>
+            </div>
+        </form>
+    </div>
+
+</ng-container>
+</div>
+
+<app-operating-hours-modal *ngIf="showOpHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>

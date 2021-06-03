@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
+import { FanSystemChecklistService } from '../fan-system-checklist.service';
 
 @Component({
   selector: 'app-fan-system-checklist-help',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FanSystemChecklistHelpComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  settings: Settings;
+  currentFieldSub: Subscription;
+  currentField: string;
+
+  constructor(private fanSystemChecklistService: FanSystemChecklistService) { }
 
   ngOnInit(): void {
+    this.currentFieldSub = this.fanSystemChecklistService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
   }
 
+  ngOnDestroy(): void {
+    this.currentFieldSub.unsubscribe();
+  }
 }

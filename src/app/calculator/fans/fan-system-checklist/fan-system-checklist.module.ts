@@ -6,6 +6,11 @@ import { FanSystemChecklistService } from './fan-system-checklist.service';
 import { FanSystemChecklistFormComponent } from './fan-system-checklist-form/fan-system-checklist-form.component';
 import { FanSystemChecklistResultsComponent } from './fan-system-checklist-results/fan-system-checklist-results.component';
 import { FanSystemChecklistHelpComponent } from './fan-system-checklist-help/fan-system-checklist-help.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { FanSystemChecklistCopyTableComponent } from './fan-system-checklist-copy-table/fan-system-checklist-copy-table.component';
 
 
 
@@ -14,10 +19,13 @@ import { FanSystemChecklistHelpComponent } from './fan-system-checklist-help/fan
     FanSystemChecklistComponent,
     FanSystemChecklistFormComponent, 
     FanSystemChecklistResultsComponent, 
-    FanSystemChecklistHelpComponent
+    FanSystemChecklistHelpComponent, FanSystemChecklistCopyTableComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule,
+    OperatingHoursModalModule,
+    ExportableResultsTableModule
   ],
   exports: [
     FanSystemChecklistComponent

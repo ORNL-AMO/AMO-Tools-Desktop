@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { FanSystemChecklistInput, FanSystemChecklistOutput } from '../../../../shared/models/fans';
+import { Settings } from '../../../../shared/models/settings';
+import { FanSystemChecklistService } from '../fan-system-checklist.service';
 
 @Component({
   selector: 'app-fan-system-checklist-results',
@@ -6,10 +10,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fan-system-checklist-results.component.css']
 })
 export class FanSystemChecklistResultsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
+  @Input()
+  settings: Settings;
+  
+  fanSystemChecklistOutput: FanSystemChecklistOutput;
+  fanSystemChecklistOutputSub: Subscription;
+  
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
+  
+  table0String: any;
+  
+  constructor(private fanSystemChecklistService: FanSystemChecklistService) { }
+  
+  ngOnInit() {
+    this.fanSystemChecklistOutputSub = this.fanSystemChecklistService.fanSystemChecklistOutput.subscribe(value => {
+      this.fanSystemChecklistOutput = value;
+      console.log('results', this.fanSystemChecklistOutput);
+    })
   }
-
+  
+  ngOnDestroy() {
+    this.fanSystemChecklistOutputSub.unsubscribe();
+  }
+  updateTable0String() {
+    this.table0String = this.copyTable0.nativeElement.innerText;
+    console.log(this.table0String);
+  }
 }

@@ -405,3 +405,52 @@ export interface CompressibilityFactor {
   flowRate: number;
   specificHeatRatio: number;
 };
+
+
+export interface FanSystemChecklistInput {
+  operatingHours: number,
+  motorPower: number,
+  fanType: number,
+  // Control
+  motorOverloads: number,
+  spillOrBypass: number,
+  dischargeDamper: number,
+  inletDamper: number,
+  variableInletVane: number,
+  systemDamper: number,
+  damperClosed: number,
+  // System
+  turnRight: number,
+  turnNear: number,
+  dirtLeg: number,
+  noOutletDuct: number,
+  restrictedInlet: number,
+  // Production
+  excessFlowOrPressure: number,
+  unstableSystem: number,
+  unreliableSystem: number,
+  lowFlowOrPressure: number,
+  systemNoisy: number,
+  fanBladeBuildup: number,
+  weldingDuctwork: number,
+  radialFanCleanAir: number,
+  notes: string,
+  name: string
+}
+
+
+export interface FanSystemChecklistOutput {
+  equipmentResults: Array<FanSystemChecklistResult>;
+}
+
+export interface FanSystemChecklistResult {
+  totalScore: number;
+  priority: string,
+  motorPowerScore: number;
+  operatingHoursScore: number;
+  controlsScore: number;
+  productionScore: number;
+  systemScore: number;
+  name: string;
+  hasMotorPowerPriority: boolean;
+}

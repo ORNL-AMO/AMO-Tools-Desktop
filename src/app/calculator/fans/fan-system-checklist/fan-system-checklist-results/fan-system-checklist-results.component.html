@@ -1,1 +1,90 @@
-<p>fan-system-checklist-results works!</p>
+<ng-container *ngFor="let result of fanSystemChecklistOutput.equipmentResults; let i = index;">
+    <label class="group-label mb-1">{{result.name}} Score</label>
+    <div *ngIf="result.priority == 'Low'">
+        <span class="bold small">Assessment Needed:</span> 
+        <span class="ml-1 small alert-success p-1">Low Priority</span> 
+    </div>
+    <div *ngIf="result.priority == 'Medium'">
+        <span class="bold small">Assessment Needed:</span> 
+        <span class="ml-1 small alert-warning p-1">Medium Priority</span> 
+    </div>
+    <div *ngIf="result.priority == 'High'" >
+        <span class="bold small">Assessment Needed:</span> 
+        <span class="ml-1 small alert-danger p-1">High Priority</span> 
+    </div>
+    <table #copyTable0 class="table table-hover table-striped mt-2">
+        <tbody>
+            <th class="p-1">Total</th>
+            <th *ngIf="result.totalScore >= 0" class="p-1 text-center">
+                {{result.totalScore | number:'1.0-0'}}
+            </th>
+            <th *ngIf="result.totalScore === undefined" class="p-1">
+                &mdash; &mdash;
+            </th>
+            <!-- <tr>
+                <td class="bold w-50">Total</td>
+                <td *ngIf="result.totalScore >= 0" class="text-center bold w-50">
+                    {{result.totalScore | number:'1.0-0'}} points
+                </td>
+                <td *ngIf="result.totalScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr> -->
+            <tr>
+                <td class="bold w-50">Motor Power</td>
+                <td *ngIf="result.motorPowerScore >= 0" class="text-center bold w-50">
+                    {{result.motorPowerScore | number:'1.0-0'}} 
+                </td>
+                <td *ngIf="result.motorPowerScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="bold w-50">Operating Hours</td>
+                <td *ngIf="result.operatingHoursScore >= 0" class="text-center bold w-50">
+                    {{result.operatingHoursScore | number:'1.0-0'}} 
+                </td>
+                <td *ngIf="result.operatingHoursScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="bold w-50">Control</td>
+                <td *ngIf="result.controlsScore >= 0" class="text-center bold w-50">
+                    {{result.controlsScore | number:'1.0-0'}} 
+                </td>
+                <td *ngIf="result.controlsScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="bold w-50">Production</td>
+                <td *ngIf="result.productionScore >= 0" class="text-center bold w-50">
+                    {{result.productionScore | number:'1.0-0'}} 
+                </td>
+                <td *ngIf="result.productionScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="bold w-50">System</td>
+                <td *ngIf="result.systemScore >= 0" class="text-center bold w-50">
+                    {{result.systemScore | number:'1.0-0'}} 
+                </td>
+                <td *ngIf="result.systemScore === undefined" class="text-center w-50">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="result.hasMotorPowerPriority" class="alert-warning small w-100">
+      Priority rating solely due to size of motor.  Regular checkups or real-time monitoring of key parameters is recommended 
+    </div>
+
+    <app-fan-system-checklist-copy-table [result]="fanSystemChecklistOutput[i]" [input]="currentInput"></app-fan-system-checklist-copy-table>
+    <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+    </app-exportable-results-table>
+
+    
+</ng-container>
+<!-- export table component -->
