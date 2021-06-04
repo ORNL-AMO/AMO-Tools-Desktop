@@ -47,7 +47,6 @@ export class FsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      //change here
       this.yAxisLabel = 'Annual Energy Usage (MWh)';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
@@ -67,7 +66,6 @@ export class FsatRollupComponent implements OnInit {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      //chnage here
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
       traceName = "Modification Energy Use";
     }

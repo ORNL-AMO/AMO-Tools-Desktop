@@ -50,7 +50,6 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      //Chnage here
       let newEnergyUnit: string;
       if(this.energyUnit == 'hp'){
         newEnergyUnit = 'MWh';
@@ -107,7 +106,6 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      //chnage here
       textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {
