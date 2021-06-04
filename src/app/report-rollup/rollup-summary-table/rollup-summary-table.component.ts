@@ -35,6 +35,10 @@ export class RollupSummaryTableComponent implements OnInit {
       this.totalImplementationCosts += dataItem.implementationCosts;
     });
     this.totalPaybackPeriod = this.totalImplementationCosts / this.totalCostSavings;
+
+    if(this.equipmentType == 'Pump' || this.equipmentType == 'Fan'){
+      this.energyUnit = 'MWh';
+    }
   }
 
 }

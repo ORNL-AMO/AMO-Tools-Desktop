@@ -50,7 +50,14 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
+      //Chnage here
+      let newEnergyUnit: string;
+      if(this.energyUnit == 'hp'){
+        newEnergyUnit = 'MWh';
+      }else{
+        newEnergyUnit = this.energyUnit;
+      }
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + newEnergyUnit;
     }
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
@@ -100,6 +107,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
+      //chnage here
       textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {

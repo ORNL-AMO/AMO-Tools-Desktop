@@ -48,7 +48,8 @@ export class PsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
+      //Chnage here
+      this.yAxisLabel = 'Annual Energy Usage (MWh)';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
@@ -67,7 +68,8 @@ export class PsatRollupComponent implements OnInit {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
+      //Change Here
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -149,7 +151,7 @@ export class PsatRollupComponent implements OnInit {
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annual_energy,
         modificationCost: dataItem.modificationResults.annual_cost,
-        modificationEnergyUse: dataItem.baselineResults.annual_energy,
+        modificationEnergyUse: dataItem.modificationResults.annual_energy,
         baselineCost: dataItem.baselineResults.annual_cost,
         costSavings: dataItem.baselineResults.annual_cost - dataItem.modificationResults.annual_cost,
         implementationCosts: dataItem.modification.inputs.implementationCosts,
