@@ -166,7 +166,12 @@ export class PsatRollupComponent implements OnInit {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
       if (isNaN(val) === false) {
-        return val;
+        if(val <= 0){
+          return 0;
+        }else{
+          return val;
+        }
+        
       } else {
         return 0;
       }
