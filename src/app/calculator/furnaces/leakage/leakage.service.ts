@@ -17,6 +17,7 @@ export class LeakageService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   energySourceType: BehaviorSubject<string>;
+  treasureHuntFuelCost: BehaviorSubject<number>;
 
   generateExample: BehaviorSubject<boolean>;
   operatingHours: OperatingHours;
@@ -34,6 +35,8 @@ export class LeakageService {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.energySourceType = new BehaviorSubject<string>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.energySourceType = new BehaviorSubject<string>(undefined);
+    this.treasureHuntFuelCost = new BehaviorSubject<number>(undefined);
 
     this.defaultEnergySourceType = 'Fuel';
   }
@@ -56,6 +59,7 @@ export class LeakageService {
     if (validBaseline) {
       output.energyUnit = this.getAnnualEnergyUnit(baselineLeakageLosses[0].energySourceType, settings);
       baselineLeakageLosses.forEach((loss, index) => {
+        loss.fuelCost = baselineLeakageLosses[0].fuelCost;
         baselineResults = this.getLeakageLossResult(loss, settings);
         if (baselineResults) {
           output.baseline.losses.push(baselineResults);
@@ -65,7 +69,7 @@ export class LeakageService {
         }
 
         if (validModification && modificationLeakageLosses[index]) {
-
+          modificationLeakageLosses[index].fuelCost = modificationLeakageLosses[0].fuelCost;
           modificationResults = this.getLeakageLossResult(modificationLeakageLosses[index], settings);
           if (modificationResults) {
             output.modification.losses.push(modificationResults);
@@ -120,7 +124,7 @@ export class LeakageService {
   }
 
   initDefaultEmptyInputs() {
-    this.defaultEnergySourceType = 'Fuel';
+    this.energySourceType.next('Fuel');
     let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0);
     let baselineData: Array<LeakageLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
@@ -128,17 +132,17 @@ export class LeakageService {
     this.baselineData.next(baselineData);
   }
 
-  initTreasureHuntEmptyInputs(treasureHuntHours: number) {
-    this.defaultEnergySourceType = 'Natural Gas';
-    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0, treasureHuntHours);
+  initTreasureHuntEmptyInputs(treasureHuntHours: number, settings: Settings) {
+    this.energySourceType.next('Natural Gas');
+    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0, treasureHuntHours, undefined, settings.fuelCost);
     let baselineData: Array<LeakageLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
     this.energySourceType.next(this.defaultEnergySourceType);
     this.baselineData.next(baselineData);
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760, leakageLoss?: LeakageLoss) {
-    let fuelCost: number = 0;
+  initDefaultLoss(index: number, hoursPerYear: number = 8760, leakageLoss?: LeakageLoss, fuelCost?: number) {
+    let energySourceType = this.energySourceType.getValue();
     let availableHeat: number = 100;
 
     if (leakageLoss) {
@@ -156,7 +160,7 @@ export class LeakageService {
       specificGravity: 1.0,
       correctionFactor: 1.0,
       name: 'Loss #' + (index + 1),
-      energySourceType: this.defaultEnergySourceType,
+      energySourceType: energySourceType,
       fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,    
       availableHeat: availableHeat,  
@@ -228,9 +232,8 @@ export class LeakageService {
   }
 
   generateExampleData(settings: Settings, inTreasureHunt: boolean) {
-    if (inTreasureHunt) {
-      this.defaultEnergySourceType = "Other Fuel";
-    }
+    let fuelCost: number =  3.99;
+    let energySourceType: string = inTreasureHunt? "Other Fuel" : "Fuel"
 
     let draftPressure: number = .5;
     let openingArea: number = 4;
@@ -263,8 +266,8 @@ export class LeakageService {
       coefficient: .8052,
       specificGravity: 1.0,
       correctionFactor: 1.0,
-      energySourceType: this.defaultEnergySourceType,
-      fuelCost: 3.99,
+      energySourceType: energySourceType,
+      fuelCost: fuelCost,
       hoursPerYear: 8760,    
       availableHeat: 100,
       name: 'Loss #1'
@@ -279,13 +282,14 @@ export class LeakageService {
       coefficient: .8052,
       specificGravity: 1.0,
       correctionFactor: 1.0,
-      energySourceType: this.defaultEnergySourceType,
-      fuelCost: 3.99,
+      energySourceType: energySourceType,
+      fuelCost: fuelCost,
       hoursPerYear: 8760,    
       availableHeat: 100,
       name: 'Loss #1 (Reduce Opening Area)'
     };
     
+    this.energySourceType.next(energySourceType);
     this.modificationData.next([modExample]);
     this.generateExample.next(true);
   }
@@ -300,6 +304,20 @@ export class LeakageService {
       energyUnit = 'MMBtu';
     }
     return energyUnit;
+  }
+
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+      case 'Electricity':
+        return settings.electricityCost;
+      case 'Steam':
+        return settings.steamCost;
+    }
   }
 
 }

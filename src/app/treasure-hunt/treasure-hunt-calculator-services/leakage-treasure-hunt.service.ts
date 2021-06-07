@@ -17,8 +17,12 @@ export class LeakageTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(leakageLoss: LeakageLossTreasureHunt) {
-    this.leakageService.baselineData.next(leakageLoss.baseline);
-    this.leakageService.modificationData.next(leakageLoss.modification);
+     // Use copy. on cancel energysource reset will change reference before form destroys
+     leakageLoss = JSON.parse(JSON.stringify(leakageLoss));
+     this.leakageService.energySourceType.next(leakageLoss.baseline[0].energySourceType);
+     this.leakageService.treasureHuntFuelCost.next(undefined);
+     this.leakageService.modificationData.next(leakageLoss.modification);
+     this.leakageService.baselineData.next(leakageLoss.baseline);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -37,6 +41,8 @@ export class LeakageTreasureHuntService {
   resetCalculatorInputs() {
     this.leakageService.baselineData.next(undefined);
     this.leakageService.modificationData.next(undefined);
+    this.leakageService.energySourceType.next(undefined);
+    this.leakageService.treasureHuntFuelCost.next(undefined);
   }
 
 
