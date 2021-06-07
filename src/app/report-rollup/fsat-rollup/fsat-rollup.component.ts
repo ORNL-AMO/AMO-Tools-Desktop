@@ -30,6 +30,9 @@ export class FsatRollupComponent implements OnInit {
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   settings: Settings;
+
+  rollupEnergyUnit: string = 'MWh';
+  
   constructor(private fsatReportRollupService: FsatReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
