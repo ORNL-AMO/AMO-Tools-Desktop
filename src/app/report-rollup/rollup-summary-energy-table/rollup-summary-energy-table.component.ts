@@ -14,6 +14,8 @@ export class RollupSummaryEnergyTableComponent implements OnInit {
   energyUnit: string;
   @Input()
   equipmentType: string;
+  @Input()
+  rollupEnergyUnit: string;
 
   totalEnergyUse: number;
   totalCost: number;
@@ -23,7 +25,7 @@ export class RollupSummaryEnergyTableComponent implements OnInit {
     this.totalEnergyUse = _.sumBy(this.pieChartData, 'energyUsed');
     this.totalCost = _.sumBy(this.pieChartData, 'annualCost');
     if(this.equipmentType === 'Pump' || this.equipmentType === 'Fan'){
-      this.energyUnit = 'MWh';
+      this.energyUnit = this.rollupEnergyUnit;
     }
   }
 

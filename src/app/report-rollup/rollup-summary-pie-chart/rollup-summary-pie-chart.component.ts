@@ -15,6 +15,9 @@ export class RollupSummaryPieChartComponent implements OnInit {
   dataOption: string;
   @Input()
   energyUnit: string;
+  @Input()
+  rollupEnergyUnit: string;
+  
 
   @ViewChild('rollupSummaryPieChart', { static: false }) rollupSummaryPieChart: ElementRef;
 
@@ -50,13 +53,13 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      let newEnergyUnit: string;
+  
       if(this.energyUnit == 'hp'){
-        newEnergyUnit = 'MWh';
+        this.energyUnit = this.rollupEnergyUnit;
       }else{
-        newEnergyUnit = this.energyUnit;
+        this.energyUnit = this.energyUnit;
       }
-      textTemplate = '%{label}:<br>%{value:,.0f} ' + newEnergyUnit;
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
