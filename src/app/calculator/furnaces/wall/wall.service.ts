@@ -17,7 +17,7 @@ export class WallService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   energySourceType: BehaviorSubject<string>;
-  defaultEnergySourceType: string;
+  treasureHuntFuelCost: BehaviorSubject<number>;
 
   generateExample: BehaviorSubject<boolean>;
   operatingHours: OperatingHours;
@@ -34,8 +34,8 @@ export class WallService {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.energySourceType = new BehaviorSubject<string>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.treasureHuntFuelCost = new BehaviorSubject<number>(undefined);
 
-    this.defaultEnergySourceType = 'Fuel';
   }
 
   calculate(settings: Settings) {
@@ -56,6 +56,7 @@ export class WallService {
     if (validBaseline) {
       output.energyUnit = this.getAnnualEnergyUnit(baselineWallLosses[0].energySourceType, settings);
       baselineWallLosses.forEach((loss, index) => {
+        loss.fuelCost = baselineWallLosses[0].fuelCost;
         baselineResults = this.getWallLossResult(loss, settings);
         if (baselineResults) {
           output.baseline.losses.push(baselineResults);
@@ -64,7 +65,8 @@ export class WallService {
           output.baseline.grossLoss += baselineResults.grossLoss;
         }
 
-        if (validModification) {
+        if (validModification && modificationWallLosses[index]) {
+          modificationWallLosses[index].fuelCost = modificationWallLosses[0].fuelCost;
           modificationResults = this.getWallLossResult(modificationWallLosses[index], settings);
           if (modificationResults) {
             output.modification.losses.push(modificationResults);
@@ -108,7 +110,7 @@ export class WallService {
     
     if (wallLossData) {
       result.energyUnit = this.getAnnualEnergyUnit(wallLossData.energySourceType, settings);
-      result.wallLoss = this.phastService.wallLosses(wallLossData, settings);
+      result.wallLoss = this.phastService.wallLosses(wallLossData, settings, result.energyUnit);
       result.grossLoss =  (result.wallLoss / wallLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * wallLossData.hoursPerYear;
       result.fuelCost = result.fuelUse * wallLossData.fuelCost;
@@ -117,25 +119,23 @@ export class WallService {
   }
 
   initDefaultEmptyInputs() {
-    this.defaultEnergySourceType = 'Fuel';
+    this.energySourceType.next('Fuel');
     let emptyBaselineData: WallLoss = this.initDefaultLoss(0);
     let baselineData: Array<WallLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
-    this.energySourceType.next(this.defaultEnergySourceType);
     this.baselineData.next(baselineData);
   }
 
-  initTreasureHuntEmptyInputs(treasureHuntHours: number) {
-    this.defaultEnergySourceType = 'Natural Gas';
-    let emptyBaselineData: WallLoss = this.initDefaultLoss(0, treasureHuntHours);
+  initTreasureHuntEmptyInputs(treasureHuntHours: number, settings: Settings) {
+    this.energySourceType.next('Natural Gas');
+    let emptyBaselineData: WallLoss = this.initDefaultLoss(0, treasureHuntHours, undefined, settings.fuelCost);
     let baselineData: Array<WallLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
-    this.energySourceType.next(this.defaultEnergySourceType);
     this.baselineData.next(baselineData);
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760, wallLoss?: WallLoss) {
-    let fuelCost: number = 0;
+  initDefaultLoss(index: number, hoursPerYear: number = 8760, wallLoss?: WallLoss, fuelCost?: number) {
+    let energySourceType = this.energySourceType.getValue();
     let availableHeat: number = 100;
 
     if (wallLoss) {
@@ -157,7 +157,7 @@ export class WallService {
       name: 'Loss #' + (index + 1),
       hoursPerYear: hoursPerYear,
       fuelCost: fuelCost,
-      energySourceType: this.defaultEnergySourceType
+      energySourceType: energySourceType
     };
     return defaultBaselineLoss;
   }
@@ -239,9 +239,9 @@ export class WallService {
   }
 
   generateExampleData(settings: Settings, inTreasureHunt: boolean) {
-    if (inTreasureHunt) {
-      this.defaultEnergySourceType = "Other Fuel";
-    }
+    let fuelCost: number =  3.99;
+    let energySourceType: string = inTreasureHunt? "Other Fuel" : "Fuel"
+
     let ambientTemp: number = 75;
     let surfaceArea: number = 11100;
 
@@ -273,8 +273,8 @@ export class WallService {
       availableHeat: 100,
       name: 'Loss #1',
       hoursPerYear: 8760,
-      fuelCost: 3.5,
-      energySourceType: this.defaultEnergySourceType
+      fuelCost: fuelCost,
+      energySourceType: energySourceType
     };
 
     let baselineExample = [baselineData];
@@ -292,10 +292,11 @@ export class WallService {
       availableHeat: 100,
       name: 'Loss #1 (Lower Surface Temp)',
       hoursPerYear: 8760,
-      fuelCost: 3.5,
-      energySourceType: this.defaultEnergySourceType
+      fuelCost: fuelCost,
+      energySourceType: energySourceType
     };
     
+    this.energySourceType.next(energySourceType);
     this.modificationData.next([modificationData]);
     this.generateExample.next(true);
   }
@@ -310,6 +311,19 @@ export class WallService {
       energyUnit = 'MMBtu';
     }
     return energyUnit;
+  }
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+      case 'Electricity':
+        return settings.electricityCost;
+      case 'Steam':
+        return settings.steamCost;
+    }
   }
 
 }
