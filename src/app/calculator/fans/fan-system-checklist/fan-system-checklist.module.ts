@@ -11,6 +11,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 import { FanSystemChecklistCopyTableComponent } from './fan-system-checklist-copy-table/fan-system-checklist-copy-table.component';
+import { FanSystemChecklistChartComponent } from './fan-system-checklist-chart/fan-system-checklist-chart.component';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 
 
@@ -19,12 +21,13 @@ import { FanSystemChecklistCopyTableComponent } from './fan-system-checklist-cop
     FanSystemChecklistComponent,
     FanSystemChecklistFormComponent, 
     FanSystemChecklistResultsComponent, 
-    FanSystemChecklistHelpComponent, FanSystemChecklistCopyTableComponent
+    FanSystemChecklistHelpComponent, FanSystemChecklistCopyTableComponent, FanSystemChecklistChartComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     OperatingHoursModalModule,
+    SimpleTooltipModule,
     ExportableResultsTableModule
   ],
   exports: [

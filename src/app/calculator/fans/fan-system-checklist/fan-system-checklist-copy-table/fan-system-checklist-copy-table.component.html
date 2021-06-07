@@ -4,143 +4,169 @@
         <tbody>
           <tr>
             <td>{{result.name}}</td>
-            <td>{{result.priority}}</td>
-            <!-- <td>Available Heat (%)</td>
-            <td>Annual Fuel Cost</td>
-            <td>Fuel Consumption
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                (MMBtu/hr)
-              </span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                (GJ/hr)
-              </span>
-            </td>
-            <td>Fuel Savings (%)</td>
-            <td>Annual Cost Savings</td>
-            <td>O<sub>2</sub> in Air (%)</td>
-            <td>Combustion Temp
-                 (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </td>
-            <td>Flue O2 (%)
-  
-            </td>
-            <td>Fuel Temp
-              (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </td> -->
+            <td>{{result.priority}} Priority</td>
           </tr>
           <tr>
             <td>Total</td>
             <td>{{result.totalScore}}</td>
-            <!-- <td>Available Heat (%)</td>
-            <td>Annual Fuel Cost</td>
-            <td>Fuel Consumption
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                (MMBtu/hr)
-              </span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                (GJ/hr)
-              </span>
-            </td>
-            <td>Fuel Savings (%)</td>
-            <td>Annual Cost Savings</td>
-            <td>O<sub>2</sub> in Air (%)</td>
-            <td>Combustion Temp
-                 (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </td>
-            <td>Flue O2 (%)
-  
-            </td>
-            <td>Fuel Temp
-              (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-            </td> -->
           </tr>
-          <!-- <tr
-            *ngFor="let output of outputs; let index = index">
+          <tr>
+            <td>Motor Power</td>
+            <td >
+                {{result.motorPowerScore | number:'1.0-0'}} 
+            </td>
+        </tr>
+        <tr>
+            <td>Operating Hours</td>
             <td>
-                <a>
-                  {{ output.outputData.name }}
-                </a>
+                {{result.operatingHoursScore | number:'1.0-0'}} 
             </td>
+        </tr>
+        <tr>
+            <td>Control</td>
+            <td >
+                {{result.controlsScore | number:'1.0-0'}} 
+            </td>
+
+        </tr>
+        <tr>
+            <td>Production</td>
             <td>
-              <span *ngIf="output.outputData.availableHeatInput">
-                {{ output.outputData.availableHeatInput | number: "1.0-0" }}
-              </span>
-              <span *ngIf="!output.outputData.availableHeatInput">
-                &mdash; &mdash;
-              </span>
+                {{result.productionScore | number:'1.0-0'}} 
             </td>
+        </tr>
+        <tr>
+            <td>System</td>
             <td>
-              <span *ngIf="output.outputData.annualFuelCost">
-                {{
-                  output.outputData.annualFuelCost
-                    | currency: "USD":"symbol":"1.0-0"
-                }}
-              </span>
-              <span *ngIf="!output.outputData.annualFuelCost">
-                &mdash; &mdash;
-              </span>
+                {{result.systemScore | number:'1.0-0'}} 
             </td>
+        </tr>
+        <tr>
+            <td>Notes</td>
+            <td>
+                {{result.notes}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.motorOverloads}} </td>
             <td >
-              <span *ngIf="output.outputData.fuelConsumption">
-                {{ output.outputData.fuelConsumption | number: "1.1-1" }}
-              </span>
-              <span *ngIf="!output.outputData.fuelConsumption">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.motorOverloads}} 
             </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.spillOrBypass}} </td>
             <td >
-              <span *ngIf="output.outputData.fuelSavings">
-                {{ output.outputData.fuelSavings | number: "1.1-1" }}
-              </span>
-              <span *ngIf="!output.outputData.fuelSavings">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.spillOrBypass}} 
             </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.dischargeDamper}} </td>
             <td >
-              <span *ngIf="output.outputData.annualCostSavings">
-                {{ output.outputData.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
-              </span>
-              <span *ngIf="!output.outputData.annualCostSavings">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.dischargeDamper}} 
             </td>
-              <td >
-              <span *ngIf="output.inputData.o2CombAir">
-                {{ output.inputData.o2CombAir }}
-              </span>
-              <span *ngIf="!output.inputData.o2CombAir">
-                &mdash; &mdash;
-              </span>
-            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.inletDamper}} </td>
             <td >
-              <span *ngIf="output.inputData.combAirTemp">
-                {{ output.inputData.combAirTemp }}
-              </span>
-              <span *ngIf="!output.inputData.combAirTemp">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.inletDamper}} 
             </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.variableInletVane}} </td>
             <td >
-              <span *ngIf="output.inputData.o2FlueGas">
-                {{ output.inputData.o2FlueGas }}
-              </span>
-              <span *ngIf="!output.inputData.o2FlueGas">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.variableInletVane}} 
             </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.systemDamper}} </td>
             <td >
-              <span *ngIf="output.inputData.flueGasTemp">
-                {{ output.inputData.flueGasTemp }}
-              </span>
-              <span *ngIf="!output.inputData.flueGasTemp">
-                &mdash; &mdash;
-              </span>
+                {{result.checklistAnswers.systemDamper}} 
             </td>
-          </tr> -->
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.damperClosed}} </td>
+            <td >
+                {{result.checklistAnswers.damperClosed}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.turnRight}} </td>
+            <td >
+                {{result.checklistAnswers.turnRight}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.turnNear}} </td>
+            <td >
+                {{result.checklistAnswers.turnNear}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.dirtLeg}} </td>
+            <td >
+                {{result.checklistAnswers.dirtLeg}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.noOutletDuct}} </td>
+            <td >
+                {{result.checklistAnswers.noOutletDuct}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.restrictedInlet}} </td>
+            <td >
+                {{result.checklistAnswers.restrictedInlet}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.excessFlowOrPressure}} </td>
+            <td >
+                {{result.checklistAnswers.excessFlowOrPressure}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.unstableSystem}} </td>
+            <td >
+                {{result.checklistAnswers.unstableSystem}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.unreliableSystem}} </td>
+            <td >
+                {{result.checklistAnswers.unreliableSystem}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.lowFlowOrPressure}} </td>
+            <td >
+                {{result.checklistAnswers.lowFlowOrPressure}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.systemNoisy}} </td>
+            <td >
+                {{result.checklistAnswers.systemNoisy}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.fanBladeBuildup}} </td>
+            <td >
+                {{result.checklistAnswers.fanBladeBuildup}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.weldingDuctwork}} </td>
+            <td >
+                {{result.checklistAnswers.weldingDuctwork}} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{checklistQuestions.radialFanCleanAir}} </td>
+            <td >
+                {{result.checklistAnswers.radialFanCleanAir}} 
+            </td>
+        </tr>
         </tbody>
       </table>
     </div>

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FanSystemChecklistInput, FanSystemChecklistOutput, FanSystemChecklistResult } from '../../../shared/models/fans';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
@@ -34,30 +33,35 @@ export class FanSystemChecklistService {
     let emptyInput: FanSystemChecklistInput = {
       operatingHours: hoursPerYear,
       notes: '',
+      name: 'Equipment #' + index,
       motorPower: 0,
       fanType: 0,
-      motorOverloads: 0,
-      spillOrBypass: 0,
-      dischargeDamper: 0,
-      inletDamper: 0,
-      variableInletVane: 0,
-      systemDamper: 0,
-      damperClosed: 0,
-      turnRight: 0,
-      turnNear: 0,
-      dirtLeg: 0,
-      noOutletDuct: 0,
-      restrictedInlet: 0,
-
-      excessFlowOrPressure: 0,
-      unstableSystem: 0,
-      unreliableSystem: 0,
-      lowFlowOrPressure: 0,
-      systemNoisy: 0,
-      fanBladeBuildup: 0,
-      weldingDuctwork: 0,
-      radialFanCleanAir: 0,
-      name: 'Equipment #' + index
+      control: {
+        motorOverloads: 0,
+        spillOrBypass: 0,
+        dischargeDamper: 0,
+        inletDamper: 0,
+        variableInletVane: 0,
+        systemDamper: 0,
+        damperClosed: 0,
+      },
+      system: {
+        turnRight: 0,
+        turnNear: 0,
+        dirtLeg: 0,
+        noOutletDuct: 0,
+        restrictedInlet: 0,
+      },
+      production: {
+        excessFlowOrPressure: 0,
+        unstableSystem: 0,
+        unreliableSystem: 0,
+        lowFlowOrPressure: 0,
+        systemNoisy: 0,
+        fanBladeBuildup: 0,
+        weldingDuctwork: 0,
+        radialFanCleanAir: 0,
+      }
     };
     return emptyInput;
   }
@@ -126,7 +130,6 @@ export class FanSystemChecklistService {
     if(!validInputs) {
       this.initDefaultEmptyOutputs();
     } else {
-      console.log('inputs', inputsCopy);
       inputsCopy.forEach((equipmentInput: FanSystemChecklistInput) => {
         let results: FanSystemChecklistResult = {
           totalScore: 0,
@@ -137,69 +140,97 @@ export class FanSystemChecklistService {
           systemScore: 0,
           name: equipmentInput.name,
           hasMotorPowerPriority: false,
-          priority: 'Low'
+          priority: 'Low',
+          notes: equipmentInput.notes,
+          checklistAnswers: this.getDefaultChecklistAnswers()
         };
         results.operatingHoursScore = equipmentInput.operatingHours < 4000? -1 : 0;
         results.operatingHoursScore = equipmentInput.operatingHours > 6000? 1 : 0;
 
-        results.totalScore += equipmentInput.fanType === 1? -1 : 0;
-        results.controlsScore += this.getControlScore(equipmentInput);
-        results.productionScore += this.getProductionScore(equipmentInput);
-        results.systemScore += this.getSystemScore(equipmentInput);
+        results = this.setControlScore(equipmentInput, results);
+        results = this.setProductionScore(equipmentInput, results);
+        results = this.setSystemScore(equipmentInput, results);
         if (equipmentInput.motorPower > 100) {
           results.motorPowerScore = Math.floor(equipmentInput.motorPower / 100);
+          results.motorPowerScore += equipmentInput.fanType === 1? -1 : 0;
           if (equipmentInput.motorPower > 400) {
             results.hasMotorPowerPriority = true;
           }
         }
         
         results.totalScore += results.controlsScore + results.productionScore + results.systemScore + results.operatingHoursScore + results.motorPowerScore;
-        if (results.totalScore >= 2 || results.totalScore <= 4) {
+        if (results.totalScore >= 2 && results.totalScore <= 4) {
           results.priority = 'Medium';
         } else if (results.totalScore > 4) {
           results.priority = 'High';
         }
         output.equipmentResults.push(results);
-        this.fanSystemChecklistOutput.next(output);
+        this.fanSystemChecklistOutput.next(output); 
       });
     }
   }
 
-  getControlScore(equipmentInput: FanSystemChecklistInput) {
-    let total = 0;
-    total += this.getPointsFromInputValue2(equipmentInput.motorOverloads);
-    total += this.getPointsFromInputValue(equipmentInput.spillOrBypass);
-    total += this.getPointsFromInputValue(equipmentInput.dischargeDamper);
-    total += equipmentInput.inletDamper;
-    total += equipmentInput.variableInletVane;
-    total += equipmentInput.systemDamper;
-    total += equipmentInput.damperClosed;
-    return total;
-  }
+    setControlScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
+      let total = 0;
+      total += this.getPointsFromInputValue(equipmentInput.control.motorOverloads);
+      total += this.getPointsFromInputValue(equipmentInput.control.spillOrBypass);
+      total += this.getPointsFromInputValue(equipmentInput.control.dischargeDamper);
+      total += equipmentInput.control.inletDamper;
+      total += equipmentInput.control.variableInletVane;
+      total += equipmentInput.control.systemDamper;
+      total += equipmentInput.control.damperClosed;
 
-  getProductionScore(equipmentInput: FanSystemChecklistInput) {
-    let total = 0;
-    total += this.getIncreasedPointsFromInputValue(equipmentInput.excessFlowOrPressure);
-    total += this.getIncreasedPointsFromInputValue(equipmentInput.unstableSystem);
-    total += this.getIncreasedPointsFromInputValue(equipmentInput.unreliableSystem);
-    total += this.getPointsFromInputValue(equipmentInput.lowFlowOrPressure);
-    total += this.getPointsFromInputValue(equipmentInput.systemNoisy);
-    total += this.getPointsFromInputValue(equipmentInput.fanBladeBuildup);
-    total += this.getPointsFromInputValue(equipmentInput.weldingDuctwork);
-    total += this.getPointsFromInputValue(equipmentInput.radialFanCleanAir);
+      result.controlsScore = total;
+      for (let question in equipmentInput.control) {
+        if (equipmentInput.control.hasOwnProperty(question)) {
+          result.checklistAnswers[question] = this.getFormattedString(equipmentInput.control[question]);
+        }
+      }
+      return result;
+  
+    }
 
-    return total;
-  }
+    getFormattedString(boolInputField: boolean) {
+      let convertedBoolean = String(Boolean(boolInputField));
+      return convertedBoolean.charAt(0).toUpperCase() + convertedBoolean.slice(1)
+    }
+  
+    setProductionScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
+      let total = 0;
+      total += this.getIncreasedPointsFromInputValue(equipmentInput.production.excessFlowOrPressure);
+      total += this.getIncreasedPointsFromInputValue(equipmentInput.production.unstableSystem);
+      total += this.getIncreasedPointsFromInputValue(equipmentInput.production.unreliableSystem);
+      total += this.getPointsFromInputValue(equipmentInput.production.lowFlowOrPressure);
+      total += this.getPointsFromInputValue(equipmentInput.production.systemNoisy);
+      total += this.getPointsFromInputValue(equipmentInput.production.fanBladeBuildup);
+      total += this.getPointsFromInputValue(equipmentInput.production.weldingDuctwork);
+      total += this.getPointsFromInputValue(equipmentInput.production.radialFanCleanAir);
+  
+      result.productionScore = total;
+      for (let question in equipmentInput.production) {
+        if (equipmentInput.production.hasOwnProperty(question)) {
+          result.checklistAnswers[question] = this.getRadioAnswer(equipmentInput.production[question]);
+        }
+      }
+      return result;
+    }
+  
+    setSystemScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
+      let total = 0;
+      total += equipmentInput.system.turnRight;
+      total += equipmentInput.system.turnNear;
+      total += equipmentInput.system.dirtLeg;
+      total += equipmentInput.system.noOutletDuct;
+      total += equipmentInput.system.restrictedInlet;
 
-  getSystemScore(equipmentInput: FanSystemChecklistInput) {
-    let total = 0;
-    total += equipmentInput.turnRight;
-    total += equipmentInput.turnNear;
-    total += equipmentInput.dirtLeg;
-    total += equipmentInput.noOutletDuct;
-    total += equipmentInput.restrictedInlet;
-    return total;
-  }
+      result.systemScore = total;
+      for (var question in equipmentInput.system) {
+        if (equipmentInput.system.hasOwnProperty(question)) {
+          result.checklistAnswers[question] = this.getFormattedString(equipmentInput.system[question]);
+        }
+      }
+      return result;
+    }
 
 
   getIncreasedPointsFromInputValue(radioSelection: number) {
@@ -222,15 +253,39 @@ export class FanSystemChecklistService {
     }
   }
 
-  getPointsFromInputValue2(inputValue: boolean | number) {
-    inputValue = Number(inputValue);
-    if (inputValue === 0) {
-      return 0;
-    } else if (inputValue == 1) {
-      return 1;
+  getRadioAnswer(radioSelection: number): string {
+    if (radioSelection === 0) {
+      return 'No';
+    } else if (radioSelection == 1) {
+      return 'Yes';
     } else {
-      return 2;
+      return 'Severe';
     }
+  }
+
+  getDefaultChecklistAnswers() {
+    return {
+      motorOverloads: 'False',
+      spillOrBypass: 'False',
+      dischargeDamper: 'False',
+      inletDamper: 'False',
+      variableInletVane: 'False',
+      systemDamper: 'False',
+      damperClosed: 'False',
+      turnRight: 'False',
+      turnNear: 'False',
+      dirtLeg: 'False',
+      noOutletDuct: 'False',
+      restrictedInlet: 'False',
+      excessFlowOrPressure: 'No',
+      unstableSystem: 'No',
+      unreliableSystem: 'No',
+      lowFlowOrPressure: 'No',
+      systemNoisy: 'No',
+      fanBladeBuildup: 'No',
+      weldingDuctwork: 'No',
+      radialFanCleanAir: 'No',
+    };
   }
 
   generateExampleData(settings: Settings) {
@@ -238,26 +293,32 @@ export class FanSystemChecklistService {
       operatingHours: 8760,
       motorPower: 1,
       fanType: 1,
-      motorOverloads: 0,
-      spillOrBypass: 0,
-      dischargeDamper: 0,
-      inletDamper: 0,
-      variableInletVane: 0,
-      systemDamper: 0,
-      damperClosed: 0,
-      turnRight: 0,
-      turnNear: 0,
-      dirtLeg: 0,
-      noOutletDuct: 0,
-      restrictedInlet: 0,
-      excessFlowOrPressure: 0,
-      unstableSystem: 0,
-      unreliableSystem: 0,
-      lowFlowOrPressure: 0,
-      systemNoisy: 0,
-      fanBladeBuildup: 0,
-      weldingDuctwork: 0,
-      radialFanCleanAir: 0,
+      control: {
+        motorOverloads: 0,
+        spillOrBypass: 0,
+        dischargeDamper: 0,
+        inletDamper: 0,
+        variableInletVane: 0,
+        systemDamper: 0,
+        damperClosed: 0,
+      },
+      system: {
+        turnRight: 0,
+        turnNear: 0,
+        dirtLeg: 0,
+        noOutletDuct: 0,
+        restrictedInlet: 0,
+      },
+      production: {
+        excessFlowOrPressure: 0,
+        unstableSystem: 0,
+        unreliableSystem: 0,
+        lowFlowOrPressure: 0,
+        systemNoisy: 0,
+        fanBladeBuildup: 0,
+        weldingDuctwork: 0,
+        radialFanCleanAir: 0,
+      },
       notes: '',
       name: 'Equipment #1'
     };

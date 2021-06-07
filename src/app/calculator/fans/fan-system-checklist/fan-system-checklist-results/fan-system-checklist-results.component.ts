@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { FanSystemChecklistInput, FanSystemChecklistOutput } from '../../../../shared/models/fans';
+import { FanSystemChecklistOutput } from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
 import { FanSystemChecklistService } from '../fan-system-checklist.service';
 
@@ -25,7 +25,6 @@ export class FanSystemChecklistResultsComponent implements OnInit {
   ngOnInit() {
     this.fanSystemChecklistOutputSub = this.fanSystemChecklistService.fanSystemChecklistOutput.subscribe(value => {
       this.fanSystemChecklistOutput = value;
-      console.log('results', this.fanSystemChecklistOutput);
     })
   }
   
@@ -34,6 +33,5 @@ export class FanSystemChecklistResultsComponent implements OnInit {
   }
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;
-    console.log(this.table0String);
   }
 }

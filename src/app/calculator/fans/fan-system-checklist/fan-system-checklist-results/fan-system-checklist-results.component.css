@@ -2,10 +2,14 @@ td{
     font-size: small;
 }
 
+th {
+    font-size: small;
+}
+
 td{
     font-size: small;
-    border-right: solid 1px darkgray;
-    border-left: solid 1px darkgray;
+    /* border-right: solid 1px darkgray; */
+    /* border-left: solid 1px darkgray; */
     padding: 3px;
 }
 

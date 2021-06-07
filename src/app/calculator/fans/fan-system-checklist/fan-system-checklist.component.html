@@ -45,7 +45,13 @@
                         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                             <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                                 (click)="setTab('results')">
-                                <div>Results</div>
+                                <div>Report</div>
+                            </a>
+                        </div>
+                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'chart'}">
+                            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                (click)="setTab('chart')">
+                                <div>Chart</div>
                             </a>
                         </div>
                         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
@@ -59,6 +65,11 @@
                         <app-fan-system-checklist-results *ngIf="tabSelect === 'results'" class="mt-3 w-100"
                             [settings]="settings">
                         </app-fan-system-checklist-results>
+
+                        <app-fan-system-checklist-chart *ngIf="tabSelect === 'chart'" class="mt-3 w-100"
+                        [output]="fanSystemChecklistOutput"    
+                        [settings]="settings">
+                        </app-fan-system-checklist-chart>
 
                         <app-fan-system-checklist-help *ngIf="tabSelect === 'help'"></app-fan-system-checklist-help>
                     </div>

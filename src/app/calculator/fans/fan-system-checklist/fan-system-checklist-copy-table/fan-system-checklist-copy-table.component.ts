@@ -1,6 +1,6 @@
 import { ElementRef, Input, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FanSystemChecklistOutput, FanSystemChecklistResult } from '../../../../shared/models/fans';
+import { fanChecklistQuestions, FanSystemChecklistResult } from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -13,6 +13,8 @@ export class FanSystemChecklistCopyTableComponent implements OnInit {
   settings: Settings;
   @Input()
   result: FanSystemChecklistResult;
+
+  checklistQuestions: {[key: string]: string};
   
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   
@@ -21,6 +23,7 @@ export class FanSystemChecklistCopyTableComponent implements OnInit {
   constructor() { }
   
   ngOnInit() {
+    this.checklistQuestions = fanChecklistQuestions;
   }
   
   updateCopyTableString() {

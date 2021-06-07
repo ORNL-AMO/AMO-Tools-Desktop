@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { FanSystemChecklistInput } from '../../../../shared/models/fans';
+import { fanChecklistQuestions, FanSystemChecklistInput } from '../../../../shared/models/fans';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
 import { FanSystemChecklistFormService } from '../fan-system-checklist-form.service';
@@ -38,6 +38,7 @@ export class FanSystemChecklistFormComponent implements OnInit {
   displayNotes: boolean = false;
   formWidth: number;
   isCollapsed: boolean = false;
+  checklistQuestions: {[key: string]: string};
   productionStateOptions: Array<{value: number, display: string}> = [
     {display: 'No', value: 0},
     {display: 'Yes', value: 1},
@@ -48,6 +49,7 @@ export class FanSystemChecklistFormComponent implements OnInit {
               private fanSystemChecklistFormService: FanSystemChecklistFormService) { }
 
   ngOnInit() {
+    this.checklistQuestions = fanChecklistQuestions;
     this.initSubscriptions();
   }
 

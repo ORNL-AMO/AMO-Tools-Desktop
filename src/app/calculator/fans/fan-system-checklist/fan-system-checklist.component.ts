@@ -2,7 +2,7 @@ import { ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { FanSystemChecklistInput } from '../../../shared/models/fans';
+import { FanSystemChecklistInput, FanSystemChecklistOutput } from '../../../shared/models/fans';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { FanSystemChecklistService } from './fan-system-checklist.service';
@@ -34,7 +34,9 @@ export class FanSystemChecklistComponent implements OnInit {
   tabSelect: string = 'results';
   
   fanSystemChecklistInputs: Array<FanSystemChecklistInput>;
+  fanSystemChecklistOutput: FanSystemChecklistOutput;
   modificationData: Array<FanSystemChecklistInput>;
+  fanSystemChecklistOutputSub: Subscription;
   fanSystemChecklistInputsSub: Subscription;
   modificationDataSub: Subscription;
 
@@ -64,13 +66,17 @@ export class FanSystemChecklistComponent implements OnInit {
 
   ngOnDestroy() {
       this.fanSystemChecklistInputsSub.unsubscribe();
+      this.fanSystemChecklistOutputSub.unsubscribe();
   }
 
   initSubscriptions() {
     this.fanSystemChecklistInputsSub = this.fanSystemChecklistService.fanSystemChecklistInputs.subscribe(value => {
       this.fanSystemChecklistInputs = value;
       this.fanSystemChecklistService.calculate();
-    })
+    });
+    this.fanSystemChecklistOutputSub = this.fanSystemChecklistService.fanSystemChecklistOutput.subscribe(value => {
+      this.fanSystemChecklistOutput = value;
+    });
   }
 
   resizeTabs() {
