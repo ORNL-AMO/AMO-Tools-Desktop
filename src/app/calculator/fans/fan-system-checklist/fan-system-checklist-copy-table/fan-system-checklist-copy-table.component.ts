@@ -28,6 +28,5 @@ export class FanSystemChecklistCopyTableComponent implements OnInit {
   
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
-    console.log(this.copyTableString);
   }
 }

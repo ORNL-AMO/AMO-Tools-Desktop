@@ -53,7 +53,7 @@ export class FanSystemChecklistComponent implements OnInit {
 
     let existingInputs = this.fanSystemChecklistService.fanSystemChecklistInputs.getValue();
     if(!existingInputs) {
-      this.fanSystemChecklistService.initDefaultEmptyInputs(1, this.settings);
+      this.fanSystemChecklistService.initDefaultEmptyInputs(1);
     }
     this.initSubscriptions();
   }
@@ -95,7 +95,7 @@ export class FanSystemChecklistComponent implements OnInit {
 
   btnResetData() {
     this.fanSystemChecklistService.resetData.next(true);
-    this.fanSystemChecklistService.initDefaultEmptyInputs(1, this.settings);
+    this.fanSystemChecklistService.initDefaultEmptyInputs(1);
   }
 
   btnGenerateExample() {

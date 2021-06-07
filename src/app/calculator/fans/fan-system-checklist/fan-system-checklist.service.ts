@@ -5,8 +5,6 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { FanSystemChecklistFormService } from './fan-system-checklist-form.service';
 
-declare var fanAddon;
-
 @Injectable()
 export class FanSystemChecklistService {
 
@@ -14,7 +12,7 @@ export class FanSystemChecklistService {
   fanSystemChecklistOutput: BehaviorSubject<FanSystemChecklistOutput>;
   
   resetData: BehaviorSubject<boolean>;
-  generateExample: BehaviorSubject<boolean>;s
+  generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
   constructor(private fanSystemChecklistFormService: FanSystemChecklistFormService) { 
@@ -66,7 +64,7 @@ export class FanSystemChecklistService {
     return emptyInput;
   }
   
-  initDefaultEmptyInputs(index: number, settings: Settings) {
+  initDefaultEmptyInputs(index: number) {
     let emptyFanSystemChecklistInput: FanSystemChecklistInput = this.initEmptyObject(index);
     let fanSystemChecklistInput: Array<FanSystemChecklistInput> = [emptyFanSystemChecklistInput];
     this.fanSystemChecklistInputs.next(fanSystemChecklistInput);
@@ -80,8 +78,7 @@ export class FanSystemChecklistService {
   }
 
   updateInputsArray(updatedInput: FanSystemChecklistInput, index: number) {
-    let inputsArray: Array<FanSystemChecklistInput>;
-      inputsArray = this.fanSystemChecklistInputs.getValue();
+    let inputsArray: Array<FanSystemChecklistInput> = this.fanSystemChecklistInputs.getValue();
 
     if (inputsArray && inputsArray[index]) {
       inputsArray[index].name = updatedInput.name;
@@ -170,8 +167,8 @@ export class FanSystemChecklistService {
     }
   }
 
-    setControlScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
-      let total = 0;
+    setControlScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult): FanSystemChecklistResult {
+      let total: number = 0;
       total += this.getPointsFromInputValue(equipmentInput.control.motorOverloads);
       total += this.getPointsFromInputValue(equipmentInput.control.spillOrBypass);
       total += this.getPointsFromInputValue(equipmentInput.control.dischargeDamper);
@@ -190,13 +187,13 @@ export class FanSystemChecklistService {
   
     }
 
-    getFormattedString(boolInputField: boolean) {
+    getFormattedString(boolInputField: boolean): string {
       let convertedBoolean = String(Boolean(boolInputField));
       return convertedBoolean.charAt(0).toUpperCase() + convertedBoolean.slice(1)
     }
   
-    setProductionScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
-      let total = 0;
+    setProductionScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult): FanSystemChecklistResult {
+      let total: number = 0;
       total += this.getIncreasedPointsFromInputValue(equipmentInput.production.excessFlowOrPressure);
       total += this.getIncreasedPointsFromInputValue(equipmentInput.production.unstableSystem);
       total += this.getIncreasedPointsFromInputValue(equipmentInput.production.unreliableSystem);
@@ -216,7 +213,7 @@ export class FanSystemChecklistService {
     }
   
     setSystemScore(equipmentInput: FanSystemChecklistInput, result: FanSystemChecklistResult) {
-      let total = 0;
+      let total: number = 0;
       total += equipmentInput.system.turnRight;
       total += equipmentInput.system.turnNear;
       total += equipmentInput.system.dirtLeg;
@@ -233,7 +230,7 @@ export class FanSystemChecklistService {
     }
 
 
-  getIncreasedPointsFromInputValue(radioSelection: number) {
+  getIncreasedPointsFromInputValue(radioSelection: number): number {
     if (radioSelection === 0) {
       return 0;
     } else if (radioSelection == 1) {
@@ -243,7 +240,7 @@ export class FanSystemChecklistService {
     }
   }
 
-  getPointsFromInputValue(inputValue: number) {
+  getPointsFromInputValue(inputValue: number): number {
     if (inputValue === 0) {
       return 0;
     } else if (inputValue == 1) {
@@ -263,7 +260,7 @@ export class FanSystemChecklistService {
     }
   }
 
-  getDefaultChecklistAnswers() {
+  getDefaultChecklistAnswers(): {[key: string]: string} {
     return {
       motorOverloads: 'False',
       spillOrBypass: 'False',
