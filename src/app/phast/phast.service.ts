@@ -321,7 +321,7 @@ export class PhastService {
     };
   }
 
-  wallLosses(input: WallLoss, settings: Settings) {
+  wallLosses(input: WallLoss, settings: Settings, calculatorEnergyUnit: string = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -333,7 +333,8 @@ export class PhastService {
     } else {
       results = phastAddon.wallLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
