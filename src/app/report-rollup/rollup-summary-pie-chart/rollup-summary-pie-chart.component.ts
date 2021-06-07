@@ -14,7 +14,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
   @Input()
   dataOption: string;
   @Input()
-  energyUnit: string;
+  energyUnit: string; 
+  
 
   @ViewChild('rollupSummaryPieChart', { static: false }) rollupSummaryPieChart: ElementRef;
 
