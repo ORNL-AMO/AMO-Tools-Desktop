@@ -45,6 +45,7 @@ export class WallFormComponent implements OnInit {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;
+  defaultFlueGasModalEnergySource: string;
   
   showOperatingHoursModal: boolean;
   formWidth: number;
@@ -173,6 +174,7 @@ export class WallFormComponent implements OnInit {
     this.wallService.energySourceType.next(energySourceType);
 
     this.cd.detectChanges();
+    this.defaultFlueGasModalEnergySource = this.wallLossesForm.value.energySourceType;
     this.calculate();
   }
 
@@ -276,6 +278,7 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });
+      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

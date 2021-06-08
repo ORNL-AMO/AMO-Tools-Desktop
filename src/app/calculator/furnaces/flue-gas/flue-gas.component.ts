@@ -66,7 +66,11 @@ export class FlueGasComponent implements OnInit {
 
     let existingInputs = this.flueGasService.baselineData.getValue();
     if(!existingInputs) {
-      let treasureHuntHours: number = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+      let treasureHuntHours: number;
+      if (this.inTreasureHunt) {
+        treasureHuntHours = this.operatingHours.hoursPerYear;
+        this.method = 'By Volume';
+      }
       this.flueGasService.initDefaultEmptyOutput();
       this.flueGasService.initDefaultEmptyInputs(treasureHuntHours);
     } else {
