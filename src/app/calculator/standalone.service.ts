@@ -12,7 +12,7 @@ import {
   ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
   CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult,
   CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput,
-  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -356,19 +356,25 @@ export class StandaloneService {
   }
 
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
-    let input = {
-      kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
-      P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
-      P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
-      P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
-      P_atm: 14.7
+    if(inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0){
+      let input: CompEEM_kWAdjustedInput = {
+        kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
+        P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
+        P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
+        P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
+        P_atm: 14.7
+      }
+      let result: { kW_adjusted: number } = compressorAddon.CompEEM_kWAdjusted(input);
+      let annualEnergyUsage: number = result.kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
+      let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
+      return {
+        energyCost: annualEnergyCost,
+        energyUse: annualEnergyUsage
+      }
     }
-    let result: { kW_adjusted: number } = compressorAddon.CompEEM_kWAdjusted(input);
-    let annualEnergyUsage: number = result.kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
-    let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
     return {
-      energyCost: annualEnergyCost,
-      energyUse: annualEnergyUsage
+      energyCost: 0,
+      energyUse: 0
     }
   }
 

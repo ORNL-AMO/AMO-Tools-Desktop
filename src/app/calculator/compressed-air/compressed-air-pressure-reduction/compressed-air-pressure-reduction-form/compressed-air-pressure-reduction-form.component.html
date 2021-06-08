@@ -74,7 +74,7 @@
       </div>
 
       <div class="form-group" *ngIf="isBaseline">
-        <label class="small" for="{{'pressure_'+idString}}">Pressure</label>
+        <label class="small" for="{{'pressure_'+idString}}">Operating Pressure</label>
         <div class="input-group">
           <input class="form-control" type="number" name="pressure" id="{{'pressure_'+idString}}"
             formControlName="pressure" (input)="calculate()" (focus)="focusField('pressure')" (blur)="focusOut()">
