@@ -36,6 +36,7 @@ export class LeakageFormComponent implements OnInit {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;
+  defaultFlueGasModalEnergySource: string;
 
   showOperatingHoursModal: boolean;
   formWidth: number;
@@ -207,6 +208,7 @@ export class LeakageFormComponent implements OnInit {
     this.leakageService.energySourceType.next(energySourceType);
 
     this.cd.detectChanges();
+    this.defaultFlueGasModalEnergySource = this.leakageForm.value.energySourceType;
     this.calculate();
 
   }
@@ -244,6 +246,7 @@ export class LeakageFormComponent implements OnInit {
       this.leakageForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });
+      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

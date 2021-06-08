@@ -289,7 +289,7 @@
     </div>
   </div>
 
-  <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  <app-operating-hours-modal *ngIf="showOperatingHoursModal" [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
   [operatingHours]="operatingHours">
 </app-operating-hours-modal>
