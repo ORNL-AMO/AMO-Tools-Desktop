@@ -62,6 +62,7 @@
             <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
                 <a>Report Graphs</a>
             </li>
+            <!--New tab here-->
             <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
                 <a>Sankey</a>
             </li>
@@ -96,6 +97,9 @@
                 [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
             </app-fsat-report-graphs>
         </div>
+
+        <!-- Child componet  -->
+
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-fsat-report-sankey [settings]="settings" [assessment]="assessment">
