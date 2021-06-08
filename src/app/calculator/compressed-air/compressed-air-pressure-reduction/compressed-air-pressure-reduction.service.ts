@@ -93,8 +93,11 @@ export class CompressedAirPressureReductionService {
     };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify(modification));
+      if (modificationInpCpy.length > 0) {
+        modificationInpCpy[0].pressure = modificationInpCpy[0].proposedPressure;
+      }
       modificationResults = this.calculate(modificationInpCpy, settings);
-    }else{
+    } else {
       modificationResults = baselineResults;
     }
     let compressedAirPressureReductionResults: CompressedAirPressureReductionResults = {
@@ -149,7 +152,7 @@ export class CompressedAirPressureReductionService {
     let pressureRated: number = 100;
     let atmosphericPressure: number = 14.7;
 
-    if(settings.unitsOfMeasure != 'Imperial'){
+    if (settings.unitsOfMeasure != 'Imperial') {
       proposedPressure = this.convertUnitsService.value(proposedPressure).from('psig').to('barg');
       proposedPressure = Number(proposedPressure.toFixed(3));
       pressure = this.convertUnitsService.value(pressure).from('psig').to('barg');

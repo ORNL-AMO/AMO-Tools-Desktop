@@ -122,6 +122,9 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
 
   calculateIndividualResult() {
     let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
+    if(!this.isBaseline){
+      tmpObj.pressure = tmpObj.proposedPressure;
+    }
     this.individualResults = this.compressedAirPressureReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
