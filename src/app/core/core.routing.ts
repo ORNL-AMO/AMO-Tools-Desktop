@@ -98,6 +98,7 @@ import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
 
 export const coreRoutes: Routes = [
   {
@@ -233,6 +234,10 @@ export const coreRoutes: Routes = [
           {
             path: 'fan-analysis',
             component: FanAnalysisComponent
+          },
+          {
+            path: 'fan-system-checklist',
+            component: FanSystemChecklistComponent
           },
           {
             path: 'fan-efficiency',
