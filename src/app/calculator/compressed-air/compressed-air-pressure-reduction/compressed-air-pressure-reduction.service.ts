@@ -93,6 +93,7 @@ export class CompressedAirPressureReductionService {
     };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify(modification));
+      modificationInpCpy[0].pressure = modificationInpCpy[0].proposedPressure;
       modificationResults = this.calculate(modificationInpCpy, settings);
     }else{
       modificationResults = baselineResults;
