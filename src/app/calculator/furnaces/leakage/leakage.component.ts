@@ -72,7 +72,9 @@ export class LeakageComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     if (this.inTreasureHunt) {
-      this.leakageService.initDefaultEmptyInputs();
+      this.leakageService.modificationData.next(undefined);
+      this.leakageService.baselineData.next(undefined);
+      this.leakageService.energySourceType.next(undefined);
     }
   }
 
@@ -99,7 +101,10 @@ export class LeakageComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.leakageService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -164,7 +169,7 @@ export class LeakageComponent implements OnInit {
 
   resetLeakageInputs() {
     if (this.inTreasureHunt) {
-      this.leakageService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+      this.leakageService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
     } else {
       this.leakageService.initDefaultEmptyInputs();
     }

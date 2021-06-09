@@ -57,7 +57,7 @@ export class OpeningComponent implements OnInit {
     }
 
     let existingInputs = this.openingService.baselineData.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.resetOpeningInputs();
     }
     this.initSubscriptions();
@@ -71,7 +71,9 @@ export class OpeningComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     if (this.inTreasureHunt) {
-      this.openingService.initDefaultEmptyInputs();
+      this.openingService.modificationData.next(undefined);
+      this.openingService.baselineData.next(undefined);
+      this.openingService.energySourceType.next(undefined);
     }
   }
 
@@ -98,7 +100,10 @@ export class OpeningComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.openingService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -116,7 +121,7 @@ export class OpeningComponent implements OnInit {
 
   resetOpeningInputs() {
     if (this.inTreasureHunt) {
-      this.openingService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+      this.openingService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
     } else {
       this.openingService.initDefaultEmptyInputs();
     }

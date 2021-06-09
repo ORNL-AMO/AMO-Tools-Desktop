@@ -42,6 +42,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
                 Fan Speed
+                (rpm)
               </td>
               <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
                 {{fanSetup.baseline.fanSpeed}}
@@ -66,6 +67,7 @@
             <tr>
               <td>
                 Drive Efficiency
+                (%)
               </td>
               <td>
                 <span *ngIf="fanSetup.baseline.drive == 4">
@@ -99,6 +101,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
                 Fan Efficiency
+                (%)
               </td>
               <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
                 {{fanSetup.baseline.fanEfficiency | number: '1.0-2'}} %

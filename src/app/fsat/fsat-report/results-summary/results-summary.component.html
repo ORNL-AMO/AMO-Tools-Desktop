@@ -41,10 +41,10 @@
       <tr>
         <td>Fan Energy Index</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.fanEnergyIndex | number:'1.0-1'}}</td>
+          {{fsat.outputs.fanEnergyIndex | number:'1.0-2'}}</td>
         <td *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.fanEnergyIndex | number:'1.0-1'}}</td>
+          {{modification.fsat.outputs.fanEnergyIndex | number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td>Fan efficiency (%)</td>

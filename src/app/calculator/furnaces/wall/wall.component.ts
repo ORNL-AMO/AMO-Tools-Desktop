@@ -76,7 +76,9 @@ export class WallComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     if (this.inTreasureHunt) {
-      this.wallService.initDefaultEmptyInputs();
+      this.wallService.modificationData.next(undefined);
+      this.wallService.baselineData.next(undefined);
+      this.wallService.energySourceType.next(undefined);
     }
   }
 
@@ -106,9 +108,10 @@ export class WallComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt
-      ? this.operatingHours.hoursPerYear
-      : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.wallService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -126,7 +129,7 @@ export class WallComponent implements OnInit {
 
   resetWallLossInputs() {
     if (this.inTreasureHunt) {
-      this.wallService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+      this.wallService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
     } else {
       this.wallService.initDefaultEmptyInputs();
     }

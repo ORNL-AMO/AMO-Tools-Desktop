@@ -1,0 +1,33 @@
+<label class="group-label">Scorecard</label>
+<ng-container *ngFor="let result of fanSystemChecklistOutput.equipmentResults; let i = index;">    
+    <table class="table table-hover my-1">
+        <tbody>
+            <th class="p-1 text-center">Fan Equipment</th>
+            <th class="p-1 text-center">
+                Score
+            </th>
+            <th class="p-1 text-center">
+                Assessment Priority
+            </th>
+            <tr [ngClass]="{'alert-success': result.priority == 'Low', 'alert-warning': result.priority == 'Medium', 'alert-danger': result.priority == 'High'}">
+                <td class="bold w-50 text-center p-1">{{result.name}}</td>
+                <td *ngIf="result.totalScore >= 0" class="text-center bold p-1">
+                    {{result.totalScore | number:'1.0-0'}}
+                </td>
+                <td *ngIf="result.totalScore === undefined" class="text-center p-1">
+                    &mdash; &mdash;
+                </td>
+                <td class="text-center bold p-1">
+                    {{result.priority}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="result.hasMotorPowerPriority" class="alert-warning small w-100">
+      Priority rating solely due to size of motor.  Regular checkups or real-time monitoring of key parameters is recommended 
+    </div>
+
+    <app-fan-system-checklist-copy-table [result]="fanSystemChecklistOutput.equipmentResults[i]"></app-fan-system-checklist-copy-table>
+
+</ng-container>

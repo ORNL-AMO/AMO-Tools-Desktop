@@ -250,6 +250,10 @@ export interface OpeningLossTreasureHunt extends TreasureHuntOpportunity {
 
 export interface EnergySourceData {
     energySourceType: string,
+    fuelCost?: {
+        baseline: number,
+        modification: number
+    }
     unit: string
 }
 

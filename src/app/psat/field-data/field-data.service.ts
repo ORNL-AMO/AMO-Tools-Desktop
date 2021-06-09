@@ -35,7 +35,7 @@ export class FieldDataService {
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],
       measuredVoltage: [psatInputs.motor_field_voltage, measuredVoltageValidators],
-      implementationCosts: [psatInputs.cost]
+      implementationCosts: [psatInputs.implementationCosts]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
