@@ -50,18 +50,6 @@
         <hr>
       </small>
     </h6>
-    <div class="d-flex justify-content-center">
-      <table class="table table-hover table-striped w-50">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0 {{settings.flowMeasurement}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
   <!--SUCTION TANK ELEVATION-->
   <div *ngIf="headToolType == 'Suction tank elevation'">
@@ -76,18 +64,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionTankGasOverPressure'">
@@ -193,18 +169,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'dischargeGaugePressure'">
       <h6>
