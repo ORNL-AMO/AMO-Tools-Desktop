@@ -567,24 +567,7 @@ export class CompareService {
       return false;
     }
   }
-  //cost
-  isCostDifferent(baseline?: PSAT, modification?: PSAT) {
-    if (!baseline) {
-      baseline = this.baselinePSAT;
-    }
-    if (!modification) {
-      modification = this.modifiedPSAT;
-    }
-    if (baseline && modification) {
-      if (baseline.inputs.cost != modification.inputs.cost) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+ 
   //load factor
   isLoadFactorDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
