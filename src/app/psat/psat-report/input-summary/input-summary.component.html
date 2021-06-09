@@ -218,7 +218,7 @@
       </tr>
 
       <tr *ngIf="psat.inputs.load_estimation_method == 1">
-        <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">Motor Power (A)</td>
+        <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">Motor Current (A)</td>
         <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">{{psat.inputs.motor_field_current | number:'1.0-0'}}</td>
         <td *ngFor="let modification of psat.modifications"
           [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_current != psat.inputs.motor_field_current}">
