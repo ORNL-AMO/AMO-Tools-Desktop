@@ -129,8 +129,8 @@
                 </div>
 
                 <div class="checkbox" (mouseenter)="focusField('systemDamper')">
-                    <label for="{{'checkbox'+index}}">
-                        <input type="checkbox" formControlName="systemDamper" id="{{'variableInletVane'+index}}"
+                    <label for="{{'systemDamper'+index}}">
+                        <input type="checkbox" formControlName="systemDamper" id="{{'systemDamper'+index}}"
                             name="systemDamper" (input)="setFormControlCheckbox($event, 'systemDamper')"
                             onfocus="this.select();">
                         <span class="ml-2">{{checklistQuestions['systemDamper']}}</span>
