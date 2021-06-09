@@ -105,9 +105,12 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
-                Motor Power
-                (<span *ngIf="fieldData.baseline.loadEstimatedMethod == 0">kW</span>
-                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 1">A</span>)
+                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 0">
+                  Motor Power (kW)
+                </span>
+                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 1">
+                  Motor Current (A)
+                </span>
               </td>
               <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
                 {{fieldData.baseline.motorPower}}
