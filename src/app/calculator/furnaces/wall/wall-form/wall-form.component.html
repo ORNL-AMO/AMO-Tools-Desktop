@@ -3,7 +3,7 @@
     <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
       <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{wallLossesForm.controls.name.value}}</span>
-      <a *ngIf="isBaseline && index > 0" class="click-link pull-right add-loss text-danger small pl-2"
+      <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
         (click)="removeLoss(index)">+Remove Loss</a>
     </label>
     <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
