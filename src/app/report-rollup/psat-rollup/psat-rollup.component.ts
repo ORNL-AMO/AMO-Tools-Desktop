@@ -31,7 +31,12 @@ export class PsatRollupComponent implements OnInit {
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   settings: Settings;
+
+  rollupEnergyUnit: string = 'MWh';
+
   constructor(private psatReportRollupService: PsatReportRollupService, private reportRollupSettings: ReportRollupService) { }
+
+
 
   ngOnInit() {
     this.settings = this.reportRollupSettings.settings.getValue();
@@ -48,7 +53,7 @@ export class PsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
+      this.yAxisLabel = 'Annual Energy Usage (MWh)';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
@@ -67,7 +72,7 @@ export class PsatRollupComponent implements OnInit {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -149,7 +154,7 @@ export class PsatRollupComponent implements OnInit {
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annual_energy,
         modificationCost: dataItem.modificationResults.annual_cost,
-        modificationEnergyUse: dataItem.baselineResults.annual_energy,
+        modificationEnergyUse: dataItem.modificationResults.annual_energy,
         baselineCost: dataItem.baselineResults.annual_cost,
         costSavings: dataItem.baselineResults.annual_cost - dataItem.modificationResults.annual_cost,
         implementationCosts: dataItem.modification.inputs.implementationCosts,
@@ -161,7 +166,12 @@ export class PsatRollupComponent implements OnInit {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
       if (isNaN(val) === false) {
-        return val;
+        if(val <= 0){
+          return 0;
+        }else{
+          return val;
+        }
+        
       } else {
         return 0;
       }

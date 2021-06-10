@@ -27,10 +27,10 @@
           [ngClass]="{'active': pieChartDataOption == 'cost'}">Energy Cost</button>
       </div>
       <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
-        [energyUnit]="settings.powerMeasurement"></app-rollup-summary-pie-chart>
+        [energyUnit]="rollupEnergyUnit"></app-rollup-summary-pie-chart>
     </div>
     <div class="col-7">
-      <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
+      <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="rollupEnergyUnit"
         [equipmentType]="'Fan'"></app-rollup-summary-energy-table>
     </div>
   </div>
@@ -53,7 +53,7 @@
   <div class="row pt-2">
     <div class="col-12">
       <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Fan'"
-        [energyUnit]="settings.powerMeasurement">
+        [energyUnit]="rollupEnergyUnit">
       </app-rollup-summary-table>
     </div>
   </div>

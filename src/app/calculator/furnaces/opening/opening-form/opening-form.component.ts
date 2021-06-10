@@ -49,6 +49,7 @@ export class OpeningFormComponent implements OnInit {
 
   formWidth: number;
   energyUnit: string;
+  defaultFlueGasModalEnergySource: string;
   totalArea: number;
   idString: string;
   lossResult: OpeningLossResults;
@@ -158,6 +159,7 @@ export class OpeningFormComponent implements OnInit {
     this.openingService.energySourceType.next(energySourceType);
 
     this.cd.detectChanges();
+    this.defaultFlueGasModalEnergySource = this.openingLossesForm.value.energySourceType;
     this.calculate();
   }
 
@@ -321,6 +323,7 @@ export class OpeningFormComponent implements OnInit {
       this.openingLossesForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });
+      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();
