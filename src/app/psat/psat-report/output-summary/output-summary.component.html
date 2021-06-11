@@ -284,17 +284,26 @@
       <h5>Modification Notes</h5>
       <p>
         <small>
-          <span class="print-notes">
-            <b>New Pump and Motor &mdash; Pump Fluid:</b> {{notes.pumpFluidNotes.display}}
-            <br>
-          </span>
-          <span class="print-notes">
-            <b>New Pump and Motor &mdash; Motor:</b> {{notes.motorNotes}}
-            <br>
-          </span>
-          <span class="print-notes">
-            <b>New Pump and Motor &mdash; Field Data:</b> {{notes.fieldDataNotes}}
-            <br>
+          <span *ngFor="let modification of psat.modifications; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span>
+              <b>{{modification.psat.name}}:</b>
+            </span>
+            <div *ngFor="let modificationMade of getModificationsMadeList(modification.psat)">
+              <span>
+                <b> {{modificationMade}} &mdash; </b>
+                <span *ngIf="modificationMade == 'Pump and Fluid'">
+                  {{modification.notes.pumpFluidNotes}}
+                </span>
+                <span *ngIf="modificationMade == 'Motor'">
+                  {{modification.notes.motorNotes}}
+                </span>
+                <span *ngIf="modificationMade == 'Field Data'">
+                  {{modification.notes.fieldDataNotes}}
+                </span>
+                <br>
+              </span>
+            </div>
           </span>
         </small>
       </p>
