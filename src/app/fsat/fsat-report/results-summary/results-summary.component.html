@@ -231,7 +231,7 @@
       </tr>
     </tbody>
   </table>
-  <div class="row">
+  <div class="row" *ngIf="fsat.notes">
     <div class="col">
       <h5>Modification Notes</h5>
       <p>
@@ -242,7 +242,8 @@
               <b>{{modification.fsat.name}}:</b>
             </span>
             <div *ngFor="let modificationMade of getModificationsMadeList(modification.fsat)">
-              <span *ngIf="modificationMade != ' '">
+              <span *ngIf="modification.fsat.notes.fluidNotes || modification.fsat.notes.fanSetupNotes
+                            || modification.fsat.notes.fanMotorNotes || modification.fsat.notes.fieldDataNotes">
                 <b> {{modificationMade}} &mdash; </b>
                 <span *ngIf="modificationMade == 'Fluid'">
                   {{modification.fsat.notes.fluidNotes}}
