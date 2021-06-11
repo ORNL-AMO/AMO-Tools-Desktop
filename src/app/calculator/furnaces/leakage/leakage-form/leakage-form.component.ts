@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput, LeakageLossResults } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../../shared/models/settings';
+import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { LeakageFormService, LeakageWarnings } from '../leakage-form.service';
 import { LeakageService } from '../leakage.service';
 
@@ -14,6 +15,8 @@ import { LeakageService } from '../leakage.service';
   styleUrls: ['./leakage-form.component.css']
 })
 export class LeakageFormComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -33,6 +36,7 @@ export class LeakageFormComponent implements OnInit {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;
+  defaultFlueGasModalEnergySource: string;
 
   showOperatingHoursModal: boolean;
   formWidth: number;
@@ -45,6 +49,8 @@ export class LeakageFormComponent implements OnInit {
   trackingEnergySource: boolean;
   idString: string;
   outputSubscription: Subscription;
+  treasureHuntUtilityOptions: Array<string>;
+  treasureHuntFuelCostSub: Subscription;
 
   constructor(private leakageFormService: LeakageFormService,
     private cd: ChangeDetectorRef,
@@ -57,16 +63,12 @@ export class LeakageFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.index;
     }
-    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+    if (this.inTreasureHunt) {
+      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
+    }
 
     this.initSubscriptions();
     this.energyUnit = this.leakageService.getAnnualEnergyUnit(this.leakageForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.leakageService.energySourceType.next(this.leakageForm.controls.energySourceType.value);
-    } else {
-      let energySource = this.leakageService.energySourceType.getValue();
-      this.setEnergySource(energySource);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -84,8 +86,11 @@ export class LeakageFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
-    if (this.trackingEnergySource) {
+    if ((this.isBaseline && this.index > 0) || (!this.isBaseline)) {
       this.energySourceTypeSub.unsubscribe();
+      if (this.inTreasureHunt) {
+        this.treasureHuntFuelCostSub.unsubscribe();
+      }
     }
   }
 
@@ -106,16 +111,26 @@ export class LeakageFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSubscription = this.leakageService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
-      }
+     this.setLossResult(output);
     });
-    if (this.trackingEnergySource) {
+    if ((this.isBaseline && this.index > 0) || !this.isBaseline) {
       this.energySourceTypeSub = this.leakageService.energySourceType.subscribe(energySourceType => {
-        this.setEnergySource(energySourceType);
+        if (energySourceType) {
+          this.leakageForm.patchValue({ energySourceType: energySourceType });
+          this.cd.detectChanges();
+          this.calculate();
+        }
       });
+
+      if (this.inTreasureHunt) {
+        this.treasureHuntFuelCostSub = this.leakageService.treasureHuntFuelCost.subscribe(treasureHuntFuelCost => {
+          if (treasureHuntFuelCost) {
+            this.leakageForm.patchValue({ fuelCost: treasureHuntFuelCost });
+            this.cd.detectChanges();
+            this.calculate();
+          }
+        });
+      }
     }
 
   }
@@ -134,6 +149,9 @@ export class LeakageFormComponent implements OnInit {
     } else {
       this.leakageForm.enable();
     }
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.leakageForm.controls.energySourceType.disable();
+    }
   }
 
   editLossName() {
@@ -146,19 +164,6 @@ export class LeakageFormComponent implements OnInit {
 
   removeLoss() {
     this.leakageService.removeLoss(this.index);
-  }
-
-  setEnergySource(energySourceType: string) {
-    this.leakageForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.leakageService.getAnnualEnergyUnit(energySourceType, this.settings);
-
-    if (!this.trackingEnergySource) {
-      this.leakageService.energySourceType.next(energySourceType);
-    }
-    this.cd.detectChanges();
-    this.calculate();
   }
 
 
@@ -182,6 +187,30 @@ export class LeakageFormComponent implements OnInit {
 
     this.calculate();
     this.setFormState();
+  }
+
+  setEnergySourceFromToggle(energySourceType: string) {
+    this.leakageForm.patchValue({
+      energySourceType: energySourceType
+    });
+    this.setEnergyData();
+  }
+
+  setEnergyData() {
+    let energySourceType = this.leakageForm.controls.energySourceType.value;
+    this.energyUnit = this.leakageService.getAnnualEnergyUnit(energySourceType, this.settings);
+
+    if (this.inTreasureHunt) {
+      let treasureHuntFuelCost = this.leakageService.getTreasureHuntFuelCost(energySourceType, this.settings);
+      this.leakageForm.patchValue({fuelCost: treasureHuntFuelCost});
+      this.leakageService.treasureHuntFuelCost.next(treasureHuntFuelCost);
+    }
+    this.leakageService.energySourceType.next(energySourceType);
+
+    this.cd.detectChanges();
+    this.defaultFlueGasModalEnergySource = this.leakageForm.value.energySourceType;
+    this.calculate();
+
   }
 
   focusField(str: string) {
@@ -217,6 +246,7 @@ export class LeakageFormComponent implements OnInit {
       this.leakageForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });
+      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

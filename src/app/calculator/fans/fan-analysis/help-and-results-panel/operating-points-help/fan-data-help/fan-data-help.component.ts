@@ -13,7 +13,6 @@ export class FanDataHelpComponent implements OnInit {
   currentField: string;
   currentFieldSubscription: Subscription;
 
-
   planeType: string;
   planeStepSubscription: Subscription;
   planeStep: string;
@@ -28,6 +27,7 @@ export class FanDataHelpComponent implements OnInit {
 
     this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
       this.planeStep = val;
+      this.setPlaneType();
     });
 
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
@@ -36,7 +36,6 @@ export class FanDataHelpComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.planeTypeSub.unsubscribe();
     this.currentFieldSubscription.unsubscribe();
     this.planeStepSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();

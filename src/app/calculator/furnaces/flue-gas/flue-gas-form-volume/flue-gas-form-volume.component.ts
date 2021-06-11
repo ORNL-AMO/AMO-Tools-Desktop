@@ -16,7 +16,8 @@ import { FlueGasService } from '../flue-gas.service';
   styleUrls: ['./flue-gas-form-volume.component.css']
 })
 export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
-
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -25,6 +26,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   selected: boolean;
   @Input()
   inModal: boolean;
+  @Input()
+  treasureHuntEnergySource: string;
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
@@ -43,6 +47,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
+  baselineDataSub: Subscription;
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
@@ -58,6 +63,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    if (!this.isBaseline) {
+      this.baselineDataSub.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,13 +81,26 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
       this.initForm();
     })
+    if (!this.isBaseline) {
+      this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
+        if (baselineData && baselineData.flueGasByVolume) {
+          this.byVolumeForm.patchValue({gasTypeId: baselineData.flueGasByVolume.gasTypeId});
+          this.calculate();
+        }
+      })
+    }
   }
 
   initFormSetup() {
     this.setFormState();
+    // No change detection on this.treasureHuntEnergySource
+    let isTreasureHuntEnergySourceChange = this.treasureHuntEnergySource !== undefined &&
+      ((this.treasureHuntEnergySource == 'Other Fuel' && this.byVolumeForm.controls.gasTypeId.value == 1) ||
+      (this.treasureHuntEnergySource == 'Natural Gas' && this.byVolumeForm.controls.gasTypeId.value == 2));
+
     if (this.byVolumeForm.controls.gasTypeId.value && this.byVolumeForm.controls.gasTypeId.value !== '') {
-      if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value) {
-        this.setProperties();
+      if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value || isTreasureHuntEnergySourceChange) {
+        this.setProperties(this.treasureHuntEnergySource);
       }
     }
     this.setCalcMethod();
@@ -107,6 +128,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       this.byVolumeForm.disable();
     } else {
       this.byVolumeForm.enable();
+    }
+    if (this.inTreasureHunt && !this.isBaseline) {
+      this.byVolumeForm.controls.gasTypeId.disable();
     }
   }
 
@@ -167,7 +191,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   checkWarnings() {
     let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm).flueGasByVolume;
-    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss, this.settings);
   }
 
   calculate() {
@@ -203,8 +227,19 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.setCalcMethod();
   }
 
-  setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
+  setProperties(treasureHuntEnergySource?: string) {
+    let currentMaterial: number = this.byVolumeForm.controls.gasTypeId.value;
+
+    if (treasureHuntEnergySource) {
+      if (treasureHuntEnergySource === 'Natural Gas' || treasureHuntEnergySource === 'Steam') {
+        currentMaterial = 1;
+        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+      } else if (treasureHuntEnergySource === 'Other Fuel') {
+        currentMaterial = 2;
+        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+      }
+    } 
+    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(currentMaterial);
     if (tmpFlueGas) {
       this.byVolumeForm.patchValue({
         CH4: this.roundVal(tmpFlueGas.CH4, 4),

@@ -1,9 +1,10 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
+import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
+import { OpeningLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OpeningService } from './opening.service';
 
 @Component({
@@ -18,6 +19,10 @@ export class OpeningComponent implements OnInit {
   inTreasureHunt: boolean;
   @Input()
   operatingHours: OperatingHours;
+  @Output("emitSave")
+  emitSave = new EventEmitter<OpeningLossTreasureHunt>();
+  @Output("emitCancel")
+  emitCancel = new EventEmitter<boolean>();
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -52,9 +57,8 @@ export class OpeningComponent implements OnInit {
     }
 
     let existingInputs = this.openingService.baselineData.getValue();
-    if(!existingInputs) {
-      this.openingService.initDefaultEmptyInputs();
-      this.openingService.initDefaultEmptyOutput();
+    if (!existingInputs) {
+      this.resetOpeningInputs();
     }
     this.initSubscriptions();
     if(this.modificationData) {
@@ -66,19 +70,28 @@ export class OpeningComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.openingService.modificationData.next(undefined);
+      this.openingService.baselineData.next(undefined);
+      this.openingService.energySourceType.next(undefined);
+    }
   }
 
   initSubscriptions() {
     this.modalSubscription = this.openingService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
     })
-    this.baselineDataSub = this.openingService.baselineData.subscribe(value => {
-      this.baselineData = value;
-      this.openingService.calculate(this.settings);
+    this.baselineDataSub = this.openingService.baselineData.subscribe(baselineData => {
+      if (baselineData) {
+        this.baselineData = baselineData;
+        this.openingService.calculate(this.settings);
+      }
     })
-    this.modificationDataSub = this.openingService.modificationData.subscribe(value => {
-      this.modificationData = value;
-      this.openingService.calculate(this.settings);
+    this.modificationDataSub = this.openingService.modificationData.subscribe(modificationData => {
+      if (modificationData) {
+        this.modificationData = modificationData;
+        this.openingService.calculate(this.settings);
+      }
     })
   }
   
@@ -87,7 +100,10 @@ export class OpeningComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.openingService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -99,13 +115,21 @@ export class OpeningComponent implements OnInit {
 
    btnResetData() {
     this.modificationExists = false;
-    this.openingService.initDefaultEmptyInputs();
+    this.resetOpeningInputs();
     this.openingService.resetData.next(true);
+  }
+
+  resetOpeningInputs() {
+    if (this.inTreasureHunt) {
+      this.openingService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
+    } else {
+      this.openingService.initDefaultEmptyInputs();
+    }
   }
 
   btnGenerateExample() {
     this.modificationExists = true;
-    this.openingService.generateExampleData(this.settings);
+    this.openingService.generateExampleData(this.settings, this.inTreasureHunt);
   }
 
   setBaselineSelected() {
@@ -118,6 +142,24 @@ export class OpeningComponent implements OnInit {
 
   focusField(str: string) {
     this.openingService.currentField.next(str);
+  }
+
+  save() {
+    let output: OpeningLossOutput = this.openingService.output.getValue();
+    this.emitSave.emit({
+      baseline: this.baselineData,
+      modification: this.modificationData,
+      energySourceData: {
+        energySourceType: this.baselineData[0].energySourceType,
+        unit: output.energyUnit,
+      },
+      opportunityType: Treasure.openingLoss
+    });
+  }
+
+  cancel() {
+    this.openingService.initDefaultEmptyInputs();
+    this.emitCancel.emit(true);
   }
   
   ngAfterViewInit() {

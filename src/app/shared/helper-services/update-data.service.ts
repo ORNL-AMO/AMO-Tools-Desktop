@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
+import { LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 declare const packageJson;
@@ -156,8 +156,70 @@ export class UpdateDataService {
             if (assessment.treasureHunt.lightingReplacements) {
                 assessment.treasureHunt.lightingReplacements.forEach(replacement => {
                     replacement = this.updateLightingReplacementTreasureHunt(replacement);
-                })
+                    replacement.opportunityType = Treasure.lightingReplacement;
+                });
             }
+            if (assessment.treasureHunt.opportunitySheets) {
+                assessment.treasureHunt.opportunitySheets.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.opportunitySheet;
+                });
+            }
+            if (assessment.treasureHunt.replaceExistingMotors) {
+                assessment.treasureHunt.replaceExistingMotors.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.replaceExisting;
+                });
+            }
+            if (assessment.treasureHunt.motorDrives) {
+                assessment.treasureHunt.motorDrives.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.motorDrive;
+                });
+            }
+            if (assessment.treasureHunt.naturalGasReductions) {
+                assessment.treasureHunt.naturalGasReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.naturalGasReduction;
+                });
+            }
+            if (assessment.treasureHunt.electricityReductions) {
+                assessment.treasureHunt.electricityReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.electricityReduction;
+                });
+            }
+            if (assessment.treasureHunt.compressedAirReductions) {
+                assessment.treasureHunt.compressedAirReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.compressedAir;
+                });
+            }
+            if (assessment.treasureHunt.compressedAirPressureReductions) {
+                assessment.treasureHunt.compressedAirPressureReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.compressedAirPressure;
+                });
+            }
+            if (assessment.treasureHunt.waterReductions) {
+                assessment.treasureHunt.waterReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.waterReduction;
+                });
+            }
+            if (assessment.treasureHunt.steamReductions) {
+                assessment.treasureHunt.steamReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.steamReduction;
+                });
+            }
+            if (assessment.treasureHunt.pipeInsulationReductions) {
+                assessment.treasureHunt.pipeInsulationReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.pipeInsulation;
+                });
+            }
+            if (assessment.treasureHunt.tankInsulationReductions) {
+                assessment.treasureHunt.tankInsulationReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.tankInsulation;
+                });
+            }
+            if (assessment.treasureHunt.airLeakSurveys) {
+                assessment.treasureHunt.airLeakSurveys.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.airLeak;
+                });
+            }
+            
         }
         return assessment;
     }

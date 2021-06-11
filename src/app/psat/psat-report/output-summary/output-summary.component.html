@@ -210,7 +210,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.implementationCosts">{{getPaybackPeriod(modification.psat) |
             sigFigs:'5'}}</span>
-          <span *ngIf="!modification.psat.inputs.implementationCosts">&mdash;</span>
+          <span *ngIf="!modification.psat.inputs.implementationCosts">0</span>
         </td>
       </tr>
       <tr>
