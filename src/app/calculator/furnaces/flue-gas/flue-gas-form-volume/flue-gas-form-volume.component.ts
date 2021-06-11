@@ -93,13 +93,8 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   initFormSetup() {
     this.setFormState();
-    // No change detection on this.treasureHuntEnergySource
-    let isTreasureHuntEnergySourceChange = this.treasureHuntEnergySource !== undefined &&
-      ((this.treasureHuntEnergySource == 'Other Fuel' && this.byVolumeForm.controls.gasTypeId.value == 1) ||
-      (this.treasureHuntEnergySource == 'Natural Gas' && this.byVolumeForm.controls.gasTypeId.value == 2));
-
     if (this.byVolumeForm.controls.gasTypeId.value && this.byVolumeForm.controls.gasTypeId.value !== '') {
-      if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value || isTreasureHuntEnergySourceChange) {
+      if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value) {
         this.setProperties(this.treasureHuntEnergySource);
       }
     }
@@ -229,7 +224,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   setProperties(treasureHuntEnergySource?: string) {
     let currentMaterial: number = this.byVolumeForm.controls.gasTypeId.value;
-
     if (treasureHuntEnergySource) {
       if (treasureHuntEnergySource === 'Natural Gas' || treasureHuntEnergySource === 'Steam') {
         currentMaterial = 1;

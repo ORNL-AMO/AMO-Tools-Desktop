@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { OpeningLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { OpeningService } from './opening.service';
 
 @Component({
@@ -45,7 +46,7 @@ export class OpeningComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService,
               private openingService: OpeningService) { }
 
   ngOnInit() {
@@ -74,6 +75,8 @@ export class OpeningComponent implements OnInit {
       this.openingService.modificationData.next(undefined);
       this.openingService.baselineData.next(undefined);
       this.openingService.energySourceType.next(undefined);
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
     }
   }
 
