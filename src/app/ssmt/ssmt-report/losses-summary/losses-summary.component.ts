@@ -69,8 +69,8 @@ export class LossesSummaryComponent implements OnInit {
           this.checkCondensingLoss(loss.outputData);
           this.checkLowPressureVentedSteam(loss.outputData);
         }
-      })
-    }
+      }) 
+    } 
 
   }
 
@@ -79,25 +79,25 @@ export class LossesSummaryComponent implements OnInit {
   }
 
   checkCondensingTurbine(loss: SSMTLosses) {
-    if (loss.condensingTurbineEfficiencyLoss || loss.condensingTurbineUsefulEnergy) {
+    if (loss.condensingTurbineEfficiencyLoss >= 0|| loss.condensingTurbineUsefulEnergy) {
       this.showCondensingTurbine = true;
     }
   }
 
   checkHighToLowTurbine(loss: SSMTLosses) {
-    if (loss.highToLowTurbineEfficiencyLoss || loss.highToLowTurbineUsefulEnergy) {
+    if (loss.highToLowTurbineEfficiencyLoss >= 0|| loss.highToLowTurbineUsefulEnergy) {
       this.showHighToLowTurbine = true;
     }
   }
 
   checkHighToMediumTurbine(loss: SSMTLosses) {
-    if (loss.highToMediumTurbineEfficiencyLoss || loss.highToMediumTurbineUsefulEnergy) {
+    if (loss.highToMediumTurbineEfficiencyLoss >= 0 || loss.highToMediumTurbineUsefulEnergy) {
       this.showHighToMediumTurbine = true;
     }
   }
 
   checkMediumtoLowTurbine(loss: SSMTLosses) {
-    if (loss.mediumToLowTurbineEfficiencyLoss || loss.mediumToLowTurbineUsefulEnergy) {
+    if (loss.mediumToLowTurbineEfficiencyLoss >= 0|| loss.mediumToLowTurbineUsefulEnergy) {
       this.showMediumToLowTurbine = true;
     }
   }
