@@ -103,13 +103,13 @@ export class FsatRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
         projectedCosts.push(result.modificationResults.annualCost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualEnergy - result.modificationResults.annualEnergy);
@@ -134,6 +134,8 @@ export class FsatRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergy,
         annualCost: result.baselineResults.annualCost,
+        energySavings: result.baselineResults.annualEnergy - result.modificationResults.annualEnergy,
+        costSavings: result.baselineResults.annualCost - result.modificationResults.annualCost,
         percentCost: result.baselineResults.annualCost / totalCost * 100,
         percentEnergy: result.baselineResults.annualEnergy / totalEnergyUse * 100,
         color: graphColors[colorIndex]

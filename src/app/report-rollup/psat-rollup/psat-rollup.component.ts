@@ -107,13 +107,13 @@ export class PsatRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_cost - result.modificationResults.annual_cost);
         projectedCosts.push(result.modificationResults.annual_cost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_energy - result.modificationResults.annual_energy);
@@ -138,6 +138,8 @@ export class PsatRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.annual_energy,
         annualCost: result.baselineResults.annual_cost,
+        energySavings: result.baselineResults.annual_energy - result.modificationResults.annual_energy,
+        costSavings: result.baselineResults.annual_cost - result.modificationResults.annual_cost,
         percentCost: result.baselineResults.annual_cost / totalCost * 100,
         percentEnergy: result.baselineResults.annual_energy / totalEnergyUse * 100,
         color: graphColors[colorIndex]
