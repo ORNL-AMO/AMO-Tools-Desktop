@@ -20,10 +20,12 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
+  modArray: Array<string>;
   constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
+    this.modArray = new Array();
     if (this.inRollup) {
       this.psatReportRollupService.selectedPsats.forEach(val => {
         if (val) {
@@ -35,6 +37,18 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+    for( let mod of this.psat.modifications){
+      if(mod.notes.pumpFluidNotes){
+        this.modArray.push(mod.notes.pumpFluidNotes);
+      }
+      if(mod.notes.motorNotes){
+        this.modArray.push(mod.notes.motorNotes);
+      }
+      if(mod.notes.fieldDataNotes){
+        this.modArray.push(mod.notes.fieldDataNotes);
+      }
+    }
+
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {

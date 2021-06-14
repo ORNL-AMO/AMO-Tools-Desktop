@@ -21,10 +21,12 @@ export class ResultsSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   fsat: FSAT;
+  modArray: Array<string>;
   constructor(private fsatReportRollupService: FsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.fsat = this.assessment.fsat;
+    this.modArray = new Array();
     if (this.inRollup) {
       this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -35,6 +37,20 @@ export class ResultsSummaryComponent implements OnInit {
           });
         }
       });
+    }
+    for(let mod of this.fsat.modifications){
+      if(mod.fsat.notes.fluidNotes){
+        this.modArray.push(mod.fsat.notes.fluidNotes);
+      }
+      if(mod.fsat.notes.fanSetupNotes){
+        this.modArray.push(mod.fsat.notes.fanSetupNotes);
+      }
+      if(mod.fsat.notes.fanMotorNotes){
+        this.modArray.push(mod.fsat.notes.fanMotorNotes);
+      }
+      if(mod.fsat.notes.fieldDataNotes){
+        this.modArray.push(mod.fsat.notes.fieldDataNotes);
+      }
     }
   }
 

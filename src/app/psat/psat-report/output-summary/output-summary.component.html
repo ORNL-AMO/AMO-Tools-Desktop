@@ -279,18 +279,20 @@
       </tr>
     </tbody>
   </table>
-  <div class="row">
+  <div class="row" *ngIf = "modArray.length != 0">
     <div class="col">
       <h5>Modification Notes</h5>
       <p>
         <small>
-          <span *ngFor="let modification of psat.modifications; let index = index;"
-            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-            <span>
+          <span *ngFor="let modification of psat.modifications">
+            <span *ngIf = "modification.psat.name && (modification.notes.pumpFluidNotes ||
+            modification.notes.motorNotes || modification.notes.fieldDataNotes)">
               <b>{{modification.psat.name}}:</b>
             </span>
             <div *ngFor="let modificationMade of getModificationsMadeList(modification.psat)">
-              <span>
+              <span *ngIf = "(modificationMade == 'Pump and Fluid' && modification.notes.pumpFluidNotes) ||
+              (modificationMade == 'Motor' && modification.notes.motorNotes) ||
+              (modificationMade == 'Field Data' && modification.notes.fieldDataNotes)">
                 <b> {{modificationMade}} &mdash; </b>
                 <span *ngIf="modificationMade == 'Pump and Fluid'">
                   {{modification.notes.pumpFluidNotes}}
@@ -308,7 +310,6 @@
         </small>
       </p>
     </div>
-
   </div>
 
 </div>
