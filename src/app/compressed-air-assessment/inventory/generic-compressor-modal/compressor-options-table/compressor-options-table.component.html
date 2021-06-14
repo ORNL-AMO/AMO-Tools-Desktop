@@ -2,6 +2,7 @@
     <table class="table table-sm table-hover">
         <tr class="header-row">
             <th></th>
+            <th>ID</th>
             <th>
                 Compressor
             </th>
@@ -24,6 +25,9 @@
         <tr *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
+            </td>
+            <td>
+                {{compressor.IDCompLib}}
             </td>
             <td>
                 {{compressor.IDCompType | compressorType}}
