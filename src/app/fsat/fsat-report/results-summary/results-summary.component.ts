@@ -3,7 +3,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
 import { CompareService } from '../../compare.service';
-import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
+import { FsatReportRollupService, SummaryNote } from '../../../report-rollup/fsat-report-rollup.service';
 
 @Component({
   selector: 'app-results-summary',
@@ -21,12 +21,15 @@ export class ResultsSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   fsat: FSAT;
-  modArray: Array<string>;
+  
+
+  notes: Array<SummaryNote>;
+
   constructor(private fsatReportRollupService: FsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.fsat = this.assessment.fsat;
-    this.modArray = new Array();
+    this.notes = new Array();
     if (this.inRollup) {
       this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -38,20 +41,11 @@ export class ResultsSummaryComponent implements OnInit {
         }
       });
     }
-    for(let mod of this.fsat.modifications){
-      if(mod.fsat.notes.fluidNotes){
-        this.modArray.push(mod.fsat.notes.fluidNotes);
-      }
-      if(mod.fsat.notes.fanSetupNotes){
-        this.modArray.push(mod.fsat.notes.fanSetupNotes);
-      }
-      if(mod.fsat.notes.fanMotorNotes){
-        this.modArray.push(mod.fsat.notes.fanMotorNotes);
-      }
-      if(mod.fsat.notes.fieldDataNotes){
-        this.modArray.push(mod.fsat.notes.fieldDataNotes);
-      }
+
+    if(this.fsat.modifications){
+      this.notes = this.fsatReportRollupService.buildSummaryNotes(this.fsat);
     }
+
   }
 
   getModificationsMadeList(modifiedFsat: FSAT): Array<string> {

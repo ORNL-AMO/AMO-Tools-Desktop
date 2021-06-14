@@ -3,7 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { CompareService } from '../../compare.service';
-import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
+import { PsatReportRollupService, SummaryNote } from '../../../report-rollup/psat-report-rollup.service';
 
 @Component({
   selector: 'app-output-summary',
@@ -20,12 +20,15 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  modArray: Array<string>;
+  
+
+  notes: Array<SummaryNote>;
+
   constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
-    this.modArray = new Array();
+    this.notes = new Array();
     if (this.inRollup) {
       this.psatReportRollupService.selectedPsats.forEach(val => {
         if (val) {
@@ -37,16 +40,9 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
-    for( let mod of this.psat.modifications){
-      if(mod.notes.pumpFluidNotes){
-        this.modArray.push(mod.notes.pumpFluidNotes);
-      }
-      if(mod.notes.motorNotes){
-        this.modArray.push(mod.notes.motorNotes);
-      }
-      if(mod.notes.fieldDataNotes){
-        this.modArray.push(mod.notes.fieldDataNotes);
-      }
+
+    if(this.psat.modifications){
+      this.notes = this.psatReportRollupService.buildSummaryNotes(this.psat);
     }
 
   }

@@ -279,37 +279,19 @@
       </tr>
     </tbody>
   </table>
-  <div class="row" *ngIf = "modArray.length != 0">
+  <div class="row" *ngIf="notes.length != 0">
     <div class="col">
       <h5>Modification Notes</h5>
       <p>
         <small>
-          <span *ngFor="let modification of psat.modifications">
-            <span *ngIf = "modification.psat.name && (modification.notes.pumpFluidNotes ||
-            modification.notes.motorNotes || modification.notes.fieldDataNotes)">
-              <b>{{modification.psat.name}}:</b>
+          <span *ngFor="let note of notes">
+            <span *ngIf = "note.modNote">
+              <b>{{note.modName}} &mdash; {{note.modMade}}:</b> {{note.modNote}}
+              <br>
             </span>
-            <div *ngFor="let modificationMade of getModificationsMadeList(modification.psat)">
-              <span *ngIf = "(modificationMade == 'Pump and Fluid' && modification.notes.pumpFluidNotes) ||
-              (modificationMade == 'Motor' && modification.notes.motorNotes) ||
-              (modificationMade == 'Field Data' && modification.notes.fieldDataNotes)">
-                <b> {{modificationMade}} &mdash; </b>
-                <span *ngIf="modificationMade == 'Pump and Fluid'">
-                  {{modification.notes.pumpFluidNotes}}
-                </span>
-                <span *ngIf="modificationMade == 'Motor'">
-                  {{modification.notes.motorNotes}}
-                </span>
-                <span *ngIf="modificationMade == 'Field Data'">
-                  {{modification.notes.fieldDataNotes}}
-                </span>
-                <br>
-              </span>
-            </div>
           </span>
         </small>
       </p>
-    </div>
-  </div>
-
+    </div>   
+  </div> 
 </div>

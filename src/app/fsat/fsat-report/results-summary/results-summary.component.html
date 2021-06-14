@@ -231,42 +231,19 @@
       </tr>
     </tbody>
   </table>
-  <div class="row" *ngIf="modArray.length != 0">
+  <div class="row" *ngIf="notes.length != 0">
     <div class="col">
       <h5>Modification Notes</h5>
       <p>
         <small>
-          <span *ngFor="let modification of fsat.modifications">
-            <span *ngIf="modification.fsat.name && (modification.fsat.notes.fluidNotes || modification.fsat.notes.fanSetupNotes
-            || modification.fsat.notes.fanMotorNotes || modification.fsat.notes.fieldDataNotes)">
-              <b>{{modification.fsat.name}}:</b>
+          <span *ngFor="let note of notes">
+            <span *ngIf = "note.modNote">
+              <b>{{note.modName}} &mdash; {{note.modMade}}:</b> {{note.modNote}}
+              <br>
             </span>
-            <div *ngFor="let modificationMade of getModificationsMadeList(modification.fsat)">
-              <span *ngIf="(modificationMade == 'Fluid' && modification.fsat.notes.fluidNotes) ||
-              (modificationMade == 'Fan' && modification.fsat.notes.fanSetupNotes) ||
-              (modificationMade == 'Motor' && modification.fsat.notes.fanMotorNotes) ||
-              (modificationMade == 'Field Data' && modification.fsat.notes.fieldDataNotes)">
-                <b> {{modificationMade}} &mdash; </b>
-                <span *ngIf="modificationMade == 'Fluid'">
-                  {{modification.fsat.notes.fluidNotes}}
-                </span>
-                <span *ngIf="modificationMade == 'Fan'">
-                  {{modification.fsat.notes.fanSetupNotes}}
-                </span>
-                <span *ngIf="modificationMade == 'Motor'">
-                  {{modification.fsat.notes.fanMotorNotes}}
-                </span>
-                <span *ngIf="modificationMade == 'Field Data'">
-                  {{modification.fsat.notes.fieldDataNotes}}
-                </span>
-                <br>
-              </span>
-            </div>
           </span>
         </small>
       </p>
-    </div>
+    </div>   
   </div>
-
-
 </div>
