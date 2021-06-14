@@ -18,6 +18,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { DetailedResultsComponent } from './detailed-results/detailed-results.component';
 
 
 @NgModule({
@@ -33,7 +34,7 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     PieChartModule,
     SharedPipesModule
   ],
-  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent],
+  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent],
   exports: [FsatReportComponent]
 })
 export class FsatReportModule { }
