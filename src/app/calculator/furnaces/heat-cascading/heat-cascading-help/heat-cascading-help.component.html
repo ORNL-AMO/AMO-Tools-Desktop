@@ -33,6 +33,17 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'utilityType'">
+    <h6>
+      Utility Type
+      <small class="text-muted">
+        <br>
+        Choose the utility type to set the appropriate utility for calculating energy and cost savings
+        <hr>
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'materialTypeIdModal'">
     <h6>
       Fuel

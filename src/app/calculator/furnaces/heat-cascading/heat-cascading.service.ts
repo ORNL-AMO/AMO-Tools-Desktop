@@ -31,6 +31,7 @@ export class HeatCascadingService {
 
   initDefaultEmptyInputs() {
     let emptyInput: HeatCascadingInput = {
+      utilityType: 'Natural Gas',
       priFiringRate: undefined,
       priExhaustTemperature: undefined,
       priExhaustO2: undefined,
@@ -88,15 +89,19 @@ export class HeatCascadingService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
+      let output = processHeatAddon.cascadeHeatHighToLow(inputCopy);
       let heatCascadingOutput: HeatCascadingOutput = processHeatAddon.cascadeHeatHighToLow(inputCopy);
       heatCascadingOutput = this.convertResultUnits(heatCascadingOutput, settings);
       heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.secFuelCost;
+      heatCascadingOutput.baselineEnergy = inputCopy.secFiringRate * inputCopy.secOpHours;
+      heatCascadingOutput.modificationEnergy = inputCopy.secFiringRate * inputCopy.secOpHours - heatCascadingOutput.energySavings;
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }
 
   generateExampleData(settings: Settings) {
     let exampleInput: HeatCascadingInput = {
+      utilityType: 'Natural Gas',
       priFiringRate: 12,
       priExhaustTemperature: 1475,
       priExhaustO2: 7,
