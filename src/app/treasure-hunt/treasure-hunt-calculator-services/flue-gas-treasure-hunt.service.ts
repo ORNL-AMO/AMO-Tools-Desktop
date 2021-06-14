@@ -51,15 +51,9 @@ export class FlueGasTreasureHuntService {
       energySavings: results.fuelSavings,
       baselineCost: results.baseline.fuelCost,
       modificationCost: results.modification.fuelCost,
-      utilityType: '',
+      utilityType: flueGasTreasureHunt.baseline.flueGasType == 'By Volume'? flueGasTreasureHunt.baseline.flueGasByVolume.utilityType : 'Other Fuel',
     }
-
-    if (flueGasTreasureHunt.baseline.flueGasType == 'By Volume' && flueGasTreasureHunt.baseline.flueGasByVolume.gasTypeId == 1) {
-      treasureHuntOpportunityResults.utilityType = 'Natural Gas';
-    } else {
-      treasureHuntOpportunityResults.utilityType = 'Other Fuel';
-    }
-
+    
     return treasureHuntOpportunityResults;
   }
 
