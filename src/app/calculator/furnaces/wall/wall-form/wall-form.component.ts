@@ -203,6 +203,7 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm = this.wallFormService.initForm();
     }
 
+    this.defaultFlueGasModalEnergySource = this.wallLossesForm.value.energySourceType;
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     this.calculate();
     this.setFormState();

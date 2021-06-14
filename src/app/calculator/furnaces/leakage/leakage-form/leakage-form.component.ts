@@ -185,6 +185,8 @@ export class LeakageFormComponent implements OnInit {
       this.leakageForm = this.leakageFormService.initForm();
     }
 
+    this.defaultFlueGasModalEnergySource = this.leakageForm.value.energySourceType;
+
     this.calculate();
     this.setFormState();
   }

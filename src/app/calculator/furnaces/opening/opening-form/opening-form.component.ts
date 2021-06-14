@@ -258,6 +258,8 @@ export class OpeningFormComponent implements OnInit {
       this.openingLossesForm = this.openingFormService.initForm();
     }
 
+    this.defaultFlueGasModalEnergySource = this.openingLossesForm.value.energySourceType;
+    
     this.calculate();
     this.setFormState();
   }

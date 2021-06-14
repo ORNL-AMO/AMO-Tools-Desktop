@@ -43,11 +43,11 @@ export class FlueGasModalComponent implements OnInit {
     if (this.inTreasureHunt || this.hideSolidLiquidMaterial) {
       this.method = 'By Volume';
     }
-
     let existingInputs = this.flueGasService.baselineData.getValue();
-    if(!existingInputs) {
-      this.flueGasService.initDefaultEmptyOutput();
-      this.flueGasService.initDefaultEmptyInputs();
+
+    if (!existingInputs) {
+        this.flueGasService.initDefaultEmptyOutput();
+        this.flueGasService.initDefaultEmptyInputs();
     }
     this.initSubscriptions();
   }

@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { WallLoss, WallLossOutput } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
 import { Treasure, WallLossTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { WallService } from './wall.service';
 
 @Component({
@@ -50,7 +51,8 @@ export class WallComponent implements OnInit {
 
   constructor(
     private settingsDbService: SettingsDbService,
-    private wallService: WallService
+    private wallService: WallService,
+    private flueGasService: FlueGasService
   ) {}
 
   ngOnInit() {
@@ -79,6 +81,8 @@ export class WallComponent implements OnInit {
       this.wallService.modificationData.next(undefined);
       this.wallService.baselineData.next(undefined);
       this.wallService.energySourceType.next(undefined);
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
     }
   }
 
