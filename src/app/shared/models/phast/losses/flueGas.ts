@@ -28,6 +28,7 @@ export interface FlueGasByMass {
 
 export interface FlueGasByVolume {
     gasTypeId?: number;
+    utilityType?: string;
     flueGasTemperature?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
