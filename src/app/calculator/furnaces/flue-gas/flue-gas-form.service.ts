@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
+import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class FlueGasFormService {
 
-  flueGasTempMin: number = 212;
   constructor(private formBuilder: FormBuilder) { }
 
   initEmptyVolumeForm(loss?: number): FormGroup {
@@ -14,6 +14,7 @@ export class FlueGasFormService {
 
     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
+      'utilityType': ['Natural Gas'],
       'flueGasTemperature': ['', Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
       'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -82,6 +83,7 @@ export class FlueGasFormService {
   initByVolumeFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
     let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
+      'utilityType': [loss.flueGasByVolume.utilityType],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
       'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -209,6 +211,7 @@ export class FlueGasFormService {
       flueGasType: "By Volume",
       flueGasByVolume: {
         gasTypeId: form.controls.gasTypeId.value,
+        utilityType: form.controls.utilityType.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
         oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
         excessAirPercentage: form.controls.excessAirPercentage.value,
@@ -236,29 +239,33 @@ export class FlueGasFormService {
     return flueGas;
   }
 
-  checkFlueGasByVolumeWarnings(flueGas: FlueGasByVolume): FlueGasWarnings {
+  checkFlueGasByVolumeWarnings(flueGas: FlueGasByVolume, settings: Settings): FlueGasWarnings {
     return {
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
       o2Warning: this.checkO2Warning(flueGas),
-      flueGasTemp: this.checkFlueGasTemp(flueGas)
+      flueGasTemp: this.checkFlueGasTemp(flueGas, settings)
     };
   }
 
-  checkFlueGasByMassWarnings(flueGas: FlueGasByMass): FlueGasWarnings {
+  checkFlueGasByMassWarnings(flueGas: FlueGasByMass, settings: Settings): FlueGasWarnings {
     return {
       moistureInAirCompositionWarning: this.checkMoistureInAir(flueGas),
       unburnedCarbonInAshWarning: this.checkUnburnedCarbon(flueGas),
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
       o2Warning: this.checkO2Warning(flueGas),
-      flueGasTemp: this.checkFlueGasTemp(flueGas)
+      flueGasTemp: this.checkFlueGasTemp(flueGas, settings)
     };
   }
 
-  checkFlueGasTemp(flueGas: FlueGasByMass | FlueGasByVolume) {
-    if (flueGas.flueGasTemperature && flueGas.flueGasTemperature < this.flueGasTempMin) {
-      return `Flue Gas Temperature less than ${this.flueGasTempMin}, gases may be condensing in the
+  checkFlueGasTemp(flueGas: FlueGasByMass | FlueGasByVolume, settings: Settings) {
+    let flueGasTempMin: number = 212;
+    if (settings.unitsOfMeasure == 'Metric') {
+      flueGasTempMin = 100;
+    }
+    if (flueGas.flueGasTemperature && flueGas.flueGasTemperature < flueGasTempMin) {
+      return `Flue Gas Temperature less than ${flueGasTempMin}, gases may be condensing in the
                 flue and calculated efficiency may not be valid.`
     } else {
       return null;

@@ -15,7 +15,7 @@
             <span class="input-group-text hide-text">1</span>
           </div>
           <input *ngFor="let label of numLabels; let i=index; trackBy:trackByFn" id="{{'label_'+i}}"
-            name="{{'label_'+i}}" type="number" class="form-control disabled-input" [disabled]="true"
+            name="{{'label_'+i}}" type="text" class="form-control disabled-input" [disabled]="true" 
             [(ngModel)]="numLabels[i]">
         </div>
         <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
@@ -23,7 +23,7 @@
             <span class="input-group-text">{{index+1}}</span>
           </div>
           <input *ngFor="let traverseCol of traverseRow; let i=index; trackBy:trackByFn" id="{{'hole'+index+'_'+i}}"
-            name="{{'hole'+index+'_'+i}}" type="number" class="form-control" [(ngModel)]="traverseHoles[index][i]"
+            name="{{'hole'+index+'_'+i}}" type="text" class="form-control" [(ngModel)]="traverseHoles[index][i]"
             (input)="save()" [required]="pressureType != 'Static'">
         </div>
         <span class="alert-warning pull-right p-2 mt-2 small" *ngIf="traverseHoleWarning != undefined">{{ traverseHoleWarning }}</span>

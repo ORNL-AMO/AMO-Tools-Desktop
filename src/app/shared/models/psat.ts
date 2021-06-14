@@ -51,7 +51,6 @@ export interface PsatInputs {
   motor_field_current?: number;
   motor_field_voltage?: number;
   cost_kw_hour?: number;
-  cost?: number;
   load_factor?: number;
   // optimize_calculation?: boolean,
   implementationCosts?: number;

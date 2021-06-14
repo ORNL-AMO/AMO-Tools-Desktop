@@ -20,6 +20,10 @@ export class FlueGasModalComponent implements OnInit {
   settings: Settings;
   @Input()
   hideSolidLiquidMaterial: boolean;
+  @Input()
+  treasureHuntEnergySource: string;
+  @Input()
+  inTreasureHunt: boolean;
   
   method: string = 'By Mass';
   baselineData: FlueGas;
@@ -36,14 +40,14 @@ export class FlueGasModalComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    if (this.hideSolidLiquidMaterial) {
+    if (this.inTreasureHunt || this.hideSolidLiquidMaterial) {
       this.method = 'By Volume';
     }
-
     let existingInputs = this.flueGasService.baselineData.getValue();
-    if(!existingInputs) {
-      this.flueGasService.initDefaultEmptyOutput();
-      this.flueGasService.initDefaultEmptyInputs();
+
+    if (!existingInputs) {
+        this.flueGasService.initDefaultEmptyOutput();
+        this.flueGasService.initDefaultEmptyInputs();
     }
     this.initSubscriptions();
   }

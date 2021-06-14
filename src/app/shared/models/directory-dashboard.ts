@@ -26,5 +26,6 @@ export interface FilterDashboardBy {
     showSubFolders: boolean,
     showPreAssessments: boolean,
     showPhast: boolean,
-    showMotorInventory: boolean
+    showMotorInventory: boolean,
+    showWasteWater: boolean,
 }

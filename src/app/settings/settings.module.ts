@@ -15,6 +15,7 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
 import { ResetDataModalComponent } from './assessment-settings/reset-data-modal/reset-data-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-c
     ],
     imports: [
         CommonModule,
+        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         ModalModule,

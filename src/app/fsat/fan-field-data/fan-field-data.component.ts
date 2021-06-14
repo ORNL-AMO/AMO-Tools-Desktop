@@ -152,8 +152,11 @@ export class FanFieldDataComponent implements OnInit {
     });
   }
 
-  focusField(str: string) {
-    this.helpPanelService.currentField.next(str);
+  focusField(inputName: string) {
+    if (!this.baseline && inputName === 'measuredVoltage') {
+      inputName = 'modMeasuredVoltage';
+    }
+    this.helpPanelService.currentField.next(inputName);
   }
 
   save(usingModalVelocityPressure?: boolean) {
@@ -488,11 +491,11 @@ export class FanFieldDataComponent implements OnInit {
       return false;
     }
   }
-    // isMeasuredVoltageDifferent() {
-  //   if (this.canCompare()) {
-  //     return this.compareService.isMeasuredVoltageDifferent();
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  isMeasuredVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMeasuredVoltageDifferent();
+    } else {
+      return false;
+    }
+  }
 }

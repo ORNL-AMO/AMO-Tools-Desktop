@@ -4,6 +4,8 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { fluidProperties } from './psatConstants';
+import { FSAT } from '../shared/models/fans';
+import { CompareService } from './compare.service';
 
 
 //PSAT Warnings are messages for input fields
@@ -14,12 +16,15 @@ import { fluidProperties } from './psatConstants';
 export class PsatWarningService {
 
   updateFla: boolean = false;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, 
+    private compareService: CompareService, 
+    private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
   //warnings for field data form
   checkFieldData(psat: PSAT, settings: Settings, isBaseline?: boolean): FieldDataWarnings {
     let flowError: string = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
     let voltageError: string = this.checkVoltage(psat);
+    let suggestedVoltage: string = this.checkSuggestedVoltage(psat, isBaseline);
     let ratedPowerError: string = null;
     if (isBaseline) {
       ratedPowerError = this.checkRatedPower(psat);
@@ -27,6 +32,7 @@ export class PsatWarningService {
     return {
       flowError: flowError,
       voltageError: voltageError,
+      suggestedVoltage: suggestedVoltage,
       ratedPowerError: ratedPowerError,
     }
   }
@@ -52,6 +58,21 @@ export class PsatWarningService {
       return null;
     }
   }
+
+  checkSuggestedVoltage(psat: PSAT, isBaseline: boolean) {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT && !isBaseline) {
+      let ratedVoltage = this.compareService.modifiedPSAT.inputs.motor_rated_voltage;
+      if (this.compareService.isMotorRatedVoltageDifferent() && psat.inputs.motor_field_voltage != ratedVoltage) {
+        return `Motor modification Rated Voltage differs from baseline. Consider using ${ratedVoltage} (modification Rated Voltage) for Measured Voltage`;
+      } else {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+  
   //used by checkFlowRate()
   getFlowRateMinMax(pumpStyle: number): { min: number, max: number } {
     //min/max values from Daryl
@@ -374,6 +395,7 @@ export interface FieldDataWarnings {
   flowError: string;
   voltageError: string;
   ratedPowerError: string;
+  suggestedVoltage: string;
 }
 
 export interface MotorWarnings {

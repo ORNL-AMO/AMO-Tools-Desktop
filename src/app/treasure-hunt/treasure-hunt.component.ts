@@ -14,6 +14,7 @@ import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/t
 import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 import { SettingsService } from '../settings/settings.service';
 import { ConvertInputDataService } from './convert-input-data.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -59,7 +60,8 @@ export class TreasureHuntComponent implements OnInit {
     private convertInputDataService: ConvertInputDataService,
     private calculatorsService: CalculatorsService,
     private treasureChestMenuService: TreasureChestMenuService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private convertUnitsService: ConvertUnitsService
   ) { }
 
   ngOnInit() {
@@ -297,7 +299,7 @@ export class TreasureHuntComponent implements OnInit {
 
   updateData() {
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
-    let settings = this.convertInputDataService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    let settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.addSettings(settings);
     this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
     this.saveTreasureHunt(this.assessment.treasureHunt);

@@ -27,6 +27,10 @@
                     [ngClass]="{'active': pieChartDataOption == 'energy'}">Energy Use</button>
                 <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('cost')"
                     [ngClass]="{'active': pieChartDataOption == 'cost'}">Energy Cost</button>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('energySavings')"
+                    [ngClass]="{'active': pieChartDataOption == 'energySavings'}">Energy Savings</button>
+                  <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('costSavings')"
+                    [ngClass]="{'active': pieChartDataOption == 'costSavings'}">Energy Cost Savings</button>
             </div>
             <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
                 [energyUnit]="'MWh'"></app-rollup-summary-pie-chart>

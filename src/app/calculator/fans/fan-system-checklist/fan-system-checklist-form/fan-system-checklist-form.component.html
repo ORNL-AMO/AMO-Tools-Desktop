@@ -1,0 +1,323 @@
+<div class="mb-3 p-2 form-card">
+    <div class="d-flex w-100">
+        <label class="group-label bold my-1 mx-2 w-100" (click)="toggleCollapse()" [ngClass]="{'collapsed-border': isCollapsed === true}">
+            <span *ngIf="isCollapsed" class="fa fa-chevron-right collapse-icon"></span>
+            <span *ngIf="!isCollapsed" class="fa fa-chevron-down collapse-icon"></span>
+            Equipment # {{index + 1}}
+            <a *ngIf="index > 0" class="click-link pull-right text-danger small px-3"
+                (click)="removeEquipment()">Remove Equipment</a>
+            </label>
+        </div>
+
+    <ng-container *ngIf="!isCollapsed">
+    <div class="d-flex w-100 mt-2">
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form #formElement [formGroup]="form">
+                <div class="form-group">
+                    <label class="small" for="{{'motorPower'+index}}">Motor Power</label>
+                    <div class="input-group">
+                        <input class="form-control" name="motorPower" id="{{'motorPower'+index}}" formControlName="motorPower"
+                            type="number" (input)="calculate()" (focus)="focusField('motorPower')"
+                            onfocus="this.select();">
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+                        <span *ngIf="form.controls.motorPower.errors.required">Value required.</span>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fanType">Operating with VFD</label>
+                    <select class="form-control" formControlName="fanType" (change)="calculate()"
+                        (focus)="focusField('fanType')">
+                        <option [ngValue]="0">No</option>
+                        <option [ngValue]="1">Yes</option>
+                    </select>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="form-group">
+                    <label class="small" for="{{'operatingHours'+index}}">Annual Operating Hours</label>
+                    <div class="input-group">
+                        <span class="input-group-addon op-hour-addon units">
+                            <a class="click-link" (click)="openOperatingHoursModal()"><span
+                                    class="fa fa-calculator"></span></a>
+                        </span>
+                        <input class="form-control" name="operatingHours" id="{{'operatingHours'+index}}"
+                            formControlName="operatingHours" type="number" (input)="calculate()"
+                            (focus)="focusField('operatingHours')" onfocus="this.select();">
+                        <span class="units input-group-addon">hrs/yr</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+                        <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+                        <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+                            {{form.controls.operatingHours.errors.max.max}}.</span>
+                        <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+                            {{form.controls.operatingHours.errors.min.min}}.</span>
+                    </span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex w-100 mx-2">
+        <div class="w-50">
+            <label class="group-label">
+                Control
+            </label>
+        </div>
+        <div class="w-50">
+            <label class="group-label">
+                System Effect
+            </label>
+        </div>
+    </div>
+    <div class="d-flex w-100 my-1">
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="checkbox" (mouseenter)="focusField('motorOverloads')">
+                    <label for="{{'motorOverloads'+index}}">
+                        <input type="checkbox" formControlName="motorOverloads" id="{{'motorOverloads'+index}}"
+                            name="motorOverloads" (input)="setFormControlCheckbox($event, 'motorOverloads')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['motorOverloads']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('spillOrBypass')">
+                    <label for="{{'spillOrBypass'+index}}">
+                        <input type="checkbox" formControlName="spillOrBypass" id="{{'spillOrBypass'+index}}"
+                            name="spillOrBypass" (input)="setFormControlCheckbox($event, 'spillOrBypass')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['spillOrBypass']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('dischargeDamper')">
+                    <label for="{{'dischargeDamper'+index}}">
+                        <input type="checkbox" formControlName="dischargeDamper" id="{{'dischargeDamper'+index}}"
+                            name="dischargeDamper" (input)="setFormControlCheckbox($event, 'dischargeDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['dischargeDamper']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('inletDamper')">
+                    <label for="{{'inletDamper'+index}}">
+                        <input type="checkbox" formControlName="inletDamper" id="{{'inletDamper'+index}}"
+                            name="inletDamper" (input)="setFormControlCheckbox($event, 'inletDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['inletDamper']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('variableInletVane')">
+                    <label for="{{'variableInletVane'+index}}">
+                        <input type="checkbox" formControlName="variableInletVane" id="{{'variableInletVane'+index}}"
+                            name="variableInletVane" (input)="setFormControlCheckbox($event, 'variableInletVane')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['variableInletVane']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('systemDamper')">
+                    <label for="{{'systemDamper'+index}}">
+                        <input type="checkbox" formControlName="systemDamper" id="{{'systemDamper'+index}}"
+                            name="systemDamper" (input)="setFormControlCheckbox($event, 'systemDamper')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['systemDamper']}}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox" (mouseenter)="focusField('damperClosed')">
+                    <label for="{{'damperClosed'+index}}">
+                        <input type="checkbox" formControlName="damperClosed" id="{{'damperClosed'+index}}"
+                            name="damperClosed" (input)="setFormControlCheckbox($event, 'damperClosed')"
+                            onfocus="this.select();">
+                        <span class="ml-2">{{checklistQuestions['damperClosed']}}</span>
+                    </label>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div (mouseenter)="focusField('turnRight')">
+                    <label for="{{'turnRight'+index}}">
+                        <input type="checkbox" formControlName="turnRight" id="{{'turnRight'+index}}"
+                            name="turnRight" (input)="setFormControlCheckbox($event, 'turnRight')"
+                            onfocus="this.select();">
+                            {{checklistQuestions['turnRight']}}
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('turnNear')">
+                    <label for="{{'turnNear'+index}}">
+                        <input type="checkbox" formControlName="turnNear" id="{{'turnNear'+index}}"
+                            name="turnNear" (input)="setFormControlCheckbox($event, 'turnNear')"
+                            onfocus="this.select();">
+                            {{checklistQuestions['turnNear']}}
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('dirtLeg')">
+                    <label for="{{'dirtLeg'+index}}">
+                        <input type="checkbox" formControlName="dirtLeg" id="{{'dirtLeg'+index}}"
+                            name="dirtLeg" (input)="setFormControlCheckbox($event, 'dirtLeg')"
+                            onfocus="this.select();">
+                            {{checklistQuestions['dirtLeg']}}
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('noOutletDuct')">
+                    <label for="{{'noOutletDuct'+index}}">
+                        <input type="checkbox" formControlName="noOutletDuct" id="{{'noOutletDuct'+index}}"
+                            name="noOutletDuct" (input)="setFormControlCheckbox($event, 'noOutletDuct')"
+                            onfocus="this.select();">
+                            {{checklistQuestions['noOutletDuct']}}
+                    </label>
+                </div>
+                <div (mouseenter)="focusField('restrictedInlet')">
+                    <label for="{{'restrictedInlet'+index}}">
+                        <input type="checkbox" formControlName="restrictedInlet" id="{{'restrictedInlet'+index}}"
+                            name="restrictedInlet" (input)="setFormControlCheckbox($event, 'restrictedInlet')"
+                            onfocus="this.select();">
+                            {{checklistQuestions['restrictedInlet']}}
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <label class="group-label mx-2">Production and Maintenance</label>
+    <div class="d-flex w-100">
+        <div class="w-50 d-flex flex-column mx-3 mb-3">
+            <form [formGroup]="form">
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'excessFlowOrPressure'+index}}">{{checklistQuestions['excessFlowOrPressure']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'excessFlowOrPressure'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2" 
+                                (click)="setFormControlRadioValue('excessFlowOrPressure', option.value)" 
+                                [ngClass]="{'active':  form.controls.excessFlowOrPressure.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'unstableSystem'+index}}">{{checklistQuestions['unstableSystem']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'unstableSystem'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('unstableSystem', option.value)"
+                                [ngClass]="{'active':  form.controls.unstableSystem.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'unreliableSystem'+index}}">{{checklistQuestions['unreliableSystem']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'unreliableSystem'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('unreliableSystem', option.value)"
+                                [ngClass]="{'active':  form.controls.unreliableSystem.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'lowFlowOrPressure'+index}}">{{checklistQuestions['lowFlowOrPressure']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'lowFlowOrPressure'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('lowFlowOrPressure', option.value)"
+                                [ngClass]="{'active':  form.controls.lowFlowOrPressure.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+
+        <div class="w-50 d-flex flex-column mx-3 mb-2">
+            <form [formGroup]="form">
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'systemNoisy'+index}}">{{checklistQuestions['systemNoisy']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'systemNoisy'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('systemNoisy', option.value)"
+                                [ngClass]="{'active':  form.controls.systemNoisy.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'fanBladeBuildup'+index}}">{{checklistQuestions['fanBladeBuildup']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'fanBladeBuildup'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('fanBladeBuildup', option.value)"
+                                [ngClass]="{'active':  form.controls.fanBladeBuildup.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'weldingDuctwork'+index}}">{{checklistQuestions['weldingDuctwork']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'weldingDuctwork'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('weldingDuctwork', option.value)"
+                                [ngClass]="{'active':  form.controls.weldingDuctwork.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="small w-100 mb-1" for="{{'radialFanCleanAir'+index}}">{{checklistQuestions['radialFanCleanAir']}}</label>
+                    <div class="btn-group float-left btn-group-sm align-self-center">
+                        <ng-container *ngFor="let option of productionStateOptions; let i = index;">
+                            <button type="button" id="{{'radialFanCleanAir'+index}}" class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+                                (click)="setFormControlRadioValue('radialFanCleanAir', option.value)"
+                                [ngClass]="{'active':  form.controls.radialFanCleanAir.value === option.value}">
+                                {{option.display}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="mb-2">
+        <label (click)="toggleNotes()" class="group-label mx-2">
+            <span *ngIf="!displayNotes" (click)="toggleNotes()" class="fa fa-chevron-right collapse-icon"></span>
+            <span *ngIf="displayNotes" (click)="toggleNotes()" class="fa fa-chevron-down collapse-icon"></span>
+            <span>
+                Notes
+            </span>
+        </label>
+        <form [formGroup]="form" *ngIf="displayNotes" class="d-flex w-100">
+            <div class="mx-3 mt-2 w-100">
+                <textarea rows="6" cols="25" class="w-100" id="notes" (input)="calculate()" placeholder="Add detail about equipment opportunities" id="notes" formControlName="notes"
+                    (focus)="focusField('notes')" onfocus="this.select();"></textarea>
+            </div>
+        </form>
+    </div>
+
+</ng-container>
+</div>
+
+<app-operating-hours-modal *ngIf="showOpHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>

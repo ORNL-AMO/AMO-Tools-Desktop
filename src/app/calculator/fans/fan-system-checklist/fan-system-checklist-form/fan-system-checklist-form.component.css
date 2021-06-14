@@ -1,0 +1,65 @@
+.modal-header{
+    background: #fff;
+}
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+.collapsed-border {
+    border-bottom: none;
+}
+
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.label-offset {
+    margin-top: 2.5rem;
+}
+
+.modal-lg{
+    max-width: 90%; 
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
+
+.standalone-calculator .ng-invalid:not(form) {
+    border: initial;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.form-row-pad-fix {
+    margin-left: -15px !important;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+.btn-edit-name:hover {
+    cursor: pointer;
+}
+
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn {
+    padding: 1rem;
+}

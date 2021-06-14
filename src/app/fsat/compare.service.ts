@@ -578,23 +578,23 @@ export class CompareService {
       return false;
     }
   }
-  // isMeasuredVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
-  //   if (!baseline) {
-  //     baseline = this.baselineFSAT;
-  //   }
-  //   if (!modification) {
-  //     modification = this.modifiedFSAT;
-  //   }
-  //   if (baseline && modification) {
-  //     if (baseline.fieldData.measuredVoltage != modification.fieldData.measuredVoltage) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  isMeasuredVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.measuredVoltage != modification.fieldData.measuredVoltage) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   //Fan Motor
   checkFanMotorDifferent(baseline?: FSAT, modification?: FSAT) {

@@ -3,7 +3,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { ElectricityReductionService } from './electricity-reduction.service';
 import { Settings } from '../../../shared/models/settings';
 import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
-import { ElectricityReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { ElectricityReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
@@ -191,7 +191,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.electricityReduction });
   }
 
   cancel() {

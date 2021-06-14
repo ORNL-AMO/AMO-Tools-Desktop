@@ -39,9 +39,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     this.fanAnalysisService.pressureCalcResultType = this.fsat.fieldData.usingStaticPressure? 'static' : 'total';
     
-    if (this.fsat.baseGasDensity) {
-      this.fanAnalysisService.inputData.BaseGasDensity = this.fsat.baseGasDensity;
-    }
+
     if (this.fsat.fieldData.fanRatedInfo) {
       this.fanAnalysisService.inputData.FanRatedInfo = this.fsat.fieldData.fanRatedInfo;
       this.fanAnalysisService.inputData.FanRatedInfo.fanSpeedCorrected = this.fsat.fieldData.fanRatedInfo.fanSpeed
@@ -50,6 +48,15 @@ export class CalculateFlowPressureComponent implements OnInit {
     }
     if (this.fsat.fieldData.planeData) {
       this.fanAnalysisService.inputData.PlaneData = this.fsat.fieldData.planeData;
+    }
+
+    if (this.fsat.baseGasDensity) {
+      this.fanAnalysisService.inputData.BaseGasDensity = this.fsat.baseGasDensity;
+      if (this.fsat.baseGasDensity.inputType == 'custom') {
+        this.fanAnalysisService.inputData.PlaneData.FlowTraverse.dryBulbTemp = undefined;
+      } else {
+        this.fanAnalysisService.inputData.PlaneData.FlowTraverse.dryBulbTemp = this.fsat.baseGasDensity.dryBulbTemp;
+      }
     }
 
     this.fanAnalysisService.inputData.FanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
@@ -68,7 +75,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     });
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.getResults();
-    })
+    });
   }
 
   ngOnDestroy() {
