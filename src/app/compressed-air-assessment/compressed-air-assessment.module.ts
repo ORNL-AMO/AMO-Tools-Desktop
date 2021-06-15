@@ -45,6 +45,7 @@ import { ControlTypePipe } from './control-type.pipe';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
 import { InventoryPerformanceProfileComponent } from './results-panel/inventory-performance-profile/inventory-performance-profile.component';
+import { PerformancePointCalculationsService } from './inventory/performance-point-calculations.service';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { InventoryPerformanceProfileComponent } from './results-panel/inventory-
     InventoryService,
     SystemProfileService,
     CompressedAirCalculationService,
-    GenericCompressorDbService
+    GenericCompressorDbService,
+    PerformancePointCalculationsService
   ]
 })
 export class CompressedAirAssessmentModule { }

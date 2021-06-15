@@ -4,6 +4,7 @@ import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoints } f
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
+import { PerformancePointCalculationsService } from '../../performance-point-calculations.service';
 import { FilterCompressorOptions } from '../filter-compressors.pipe';
 
 @Component({
@@ -19,7 +20,7 @@ export class CompressorOptionsTableComponent implements OnInit {
   filterCompressorOptionsSub: Subscription;
   filterCompressorOptions: FilterCompressorOptions
   constructor(private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+    private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.genericCompressors = this.genericCompressorDbService.genericCompressors;
@@ -65,25 +66,22 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
-    if (selectedCompressor.compressorControls.controlType == 1) {
-      //lube mod without unloading
-      selectedCompressor.performancePoints = this.setWithoutUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 2) {
-      //lube mod with unloading
-      selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 3) {
-      //variable displacement
-      selectedCompressor.performancePoints = this.setVariableDisplacementPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType != 6) {
-      //load/unload non centrifugal
-      selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
-    }
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.setPerformancePoints(selectedCompressor, genericCompressor);
 
 
-
-
-
-
+    // if (selectedCompressor.compressorControls.controlType == 1) {
+    //   //lube mod without unloading
+    //   selectedCompressor.performancePoints = this.setWithoutUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    // } else if (selectedCompressor.compressorControls.controlType == 2) {
+    //   //lube mod with unloading
+    //   selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    // } else if (selectedCompressor.compressorControls.controlType == 3) {
+    //   //variable displacement
+    //   selectedCompressor.performancePoints = this.setVariableDisplacementPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    // } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType != 6) {
+    //   //load/unload non centrifugal
+    //   selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    // }
 
     //MaxFullFlowPressure = "cut-out" performance point
     // selectedCompressor.performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure;
@@ -195,7 +193,7 @@ export class CompressorOptionsTableComponent implements OnInit {
     performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
     performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
     performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
-    
+
     performancePoints.noLoad.dischargePressure = genericCompressor.RatedPressure + genericCompressor.ModulatingPressRange;
     performancePoints.noLoad.airflow = 0;
     performancePoints.noLoad.power = genericCompressor.NoLoadPowerFM / 100 * genericCompressor.TotPackageInputPower;
