@@ -66,12 +66,15 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
 
-    //lube mod with unloading
     if (selectedCompressor.compressorControls.controlType == 2) {
+      //lube mod with unloading
       selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 3) {
-      console.log('set variable displacement');
+      //variable displacement
       selectedCompressor.performancePoints = this.setVariableDisplacementPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType != 6) {
+      //load/unload non centrifugal
+      selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     }
 
 
@@ -164,4 +167,25 @@ export class CompressorOptionsTableComponent implements OnInit {
     }
     return performancePoints;
   }
+
+  setLubricatedLoadUnloadPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
+    performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
+    performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
+    performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
+
+    performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
+    //TODO: calculate airflow and power?
+    performancePoints.maxFullFlow.airflow = genericCompressor.RatedCapacity;
+    performancePoints.maxFullFlow.power = genericCompressor.TotPackageInputPower;
+
+    performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+    performancePoints.noLoad.airflow = 0
+    if (genericCompressor.NoLoadPowerUL < 25) {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / (genericCompressor.NoLoadPowerUL / (genericCompressor.NoLoadPowerUL - 25 + 2521.834 / genericCompressor.EffFL) / genericCompressor.EffFL) / 10000;
+    } else {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / 1 / 10000;
+    }
+    return performancePoints;
+  }
+
 }
