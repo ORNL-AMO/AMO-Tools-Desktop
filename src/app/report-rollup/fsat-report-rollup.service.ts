@@ -85,48 +85,5 @@ export class FsatReportRollupService {
       let modificationResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), false, val.settings);
       this.selectedFsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
-  }
-
-  buildSummaryNotes(fsat: FSAT): Array<SummaryNote>{
-    let tmpNotesArr: Array<SummaryNote> = new Array<SummaryNote>();
-    fsat.modifications.forEach(mod =>{
-      if(mod.fsat.notes){
-        if(mod.fsat.notes.fluidNotes){
-          let note = this.buildNoteObject(mod.fsat.name, 'Fluid', mod.fsat.notes.fluidNotes);
-          tmpNotesArr.push(note);
-        }
-        if(mod.fsat.notes.fluidNotes){
-          let note = this.buildNoteObject(mod.fsat.name, 'Fan', mod.fsat.notes.fanSetupNotes);
-          tmpNotesArr.push(note);
-        }
-        if(mod.fsat.notes.fluidNotes){
-          let note = this.buildNoteObject(mod.fsat.name, 'Motor', mod.fsat.notes.fanMotorNotes);
-          tmpNotesArr.push(note);
-        }
-        if(mod.fsat.notes.fluidNotes){
-          let note = this.buildNoteObject(mod.fsat.name, 'Field Data', mod.fsat.notes.fieldDataNotes);
-          tmpNotesArr.push(note);
-        }
-
-      }
-
-    });
-    return tmpNotesArr;
-  }
-
-  buildNoteObject(modName: string, modMade: string, modNote: string): SummaryNote {
-    let summaryNote: SummaryNote = {
-      modName: modName,
-      modMade: modMade,
-      modNote: modNote
-    };
-    return summaryNote;
-  }
-
-}
-
-export interface SummaryNote {
-  modName: string;
-  modMade: string;
-  modNote: string;
+  } 
 }

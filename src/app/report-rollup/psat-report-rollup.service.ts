@@ -87,41 +87,5 @@ export class PsatReportRollupService {
       this.selectedPsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
   }
-
-  buildSummaryNotes(psat: PSAT): Array<SummaryNote>{
-    let tmpNotesArr: Array<SummaryNote> = new Array<SummaryNote>();
-    psat.modifications.forEach(mod =>{
-      if(mod.notes){
-        if(mod.notes.pumpFluidNotes){
-          let note = this.buildNoteObject(mod.psat.name, 'Pump and Fluid', mod.notes.pumpFluidNotes);
-          tmpNotesArr.push(note);
-        }
-        if(mod.notes.motorNotes){
-          let note = this.buildNoteObject(mod.psat.name, 'Motor', mod.notes.motorNotes);
-          tmpNotesArr.push(note);
-        }
-        if(mod.notes.fieldDataNotes){
-          let note = this.buildNoteObject(mod.psat.name, 'Field Data', mod.notes.fieldDataNotes);
-          tmpNotesArr.push(note);
-        }
-      }
-    });
-    return tmpNotesArr;
-  }
-
-  buildNoteObject(modName: string, modMade: string, modNote: string): SummaryNote {
-    let summaryNote: SummaryNote = {
-      modName: modName,
-      modMade: modMade,
-      modNote: modNote
-    };
-    return summaryNote;
-  }
-
 }
 
-export interface SummaryNote {
-  modName: string;
-  modMade: string;
-  modNote: string;
-}
