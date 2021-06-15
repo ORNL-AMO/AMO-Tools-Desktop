@@ -9,6 +9,7 @@ import { LeakageLoss } from "./phast/losses/leakageLoss";
 import { WasteHeatInput } from "./phast/wasteHeat";
 import { OpeningLoss } from "./phast/losses/openingLoss";
 import { AirHeatingInput } from "./phast/airHeating";
+import { HeatCascadingInput } from "./phast/heatCascading";
 
 export interface TreasureHunt {
     name: string,
@@ -31,6 +32,7 @@ export interface TreasureHunt {
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
     openingLosses?: Array<OpeningLossTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -56,7 +58,8 @@ export enum Treasure {
     flueGas = 'flue-gas',
     leakageLoss = 'leakage-loss',
     wasteHeat = 'waste-heat',
-    openingLoss = 'opening-loss'
+    openingLoss = 'opening-loss',
+    heatCascading = 'heat-cascading'
 }
 
 export interface FilterOption {
@@ -257,6 +260,13 @@ export interface OpeningLossTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface HeatCascadingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: HeatCascadingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 
 export interface EnergySourceData {
     energySourceType: string,
@@ -402,4 +412,5 @@ export interface ImportExportOpportunities {
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
     wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>
 }

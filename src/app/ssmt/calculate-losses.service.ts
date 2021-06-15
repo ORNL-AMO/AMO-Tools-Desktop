@@ -27,7 +27,7 @@ export class CalculateLossesService {
       if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
         ssmtLosses.condensingTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.condensingTurbine);
         ssmtLosses.condensingTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.condensingTurbine);
-
+        ssmtLosses.showCondensingTurbine = true
       }
 
       if (inputCpy.headerInput.highPressureHeader.flashCondensateReturn === true) {
@@ -45,6 +45,7 @@ export class CalculateLossesService {
         if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
           ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToLowPressureTurbine);
           ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToLowPressureTurbine);
+          ssmtLosses.showHighToLowTurbine = true;
         }
 
         if (inputCpy.headerInput.numberOfHeaders === 3) {
@@ -53,10 +54,12 @@ export class CalculateLossesService {
           if (inputCpy.turbineInput.highToMediumTurbine.useTurbine === true) {
             ssmtLosses.highToMediumTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToMediumPressureTurbine);
             ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToMediumPressureTurbine);
+            ssmtLosses.showHighToMediumTurbine = true;
           }
           if (inputCpy.turbineInput.mediumToLowTurbine.useTurbine === true) {
             ssmtLosses.mediumToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.mediumPressureToLowPressureTurbine);
             ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.mediumPressureToLowPressureTurbine);
+            ssmtLosses.showMediumToLowTurbine = true;
           }
           ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(resultsCpy.mediumPressureProcessSteamUsage, resultsCpy.mediumPressureCondensate, settings);
         }
@@ -238,6 +241,10 @@ export class CalculateLossesService {
       highToMediumTurbineEfficiencyLoss: 0,
       highToLowTurbineEfficiencyLoss: 0,
       mediumToLowTurbineEfficiencyLoss: 0,
+      showCondensingTurbine: false,
+      showHighToLowTurbine: false,
+      showHighToMediumTurbine: false,
+      showMediumToLowTurbine: false,
       condensingLosses: 0,
       condensateLosses: 0,
       lowPressureVentLoss: 0,

@@ -1,4 +1,5 @@
-<form #formElement [formGroup]="form">
+<form #formElement [formGroup]="form" class="d-flex flex-direction-column">
+    <div class="w-50 px-4 py-1">
       <label class="group-label my-1">
         Primary Process
       </label>
@@ -22,6 +23,16 @@
           <span *ngIf="form.controls.priOpHours.errors.min">Value can't be less than
             {{form.controls.priOpHours.errors.min.min}}.</span>
         </span>
+      </div>
+
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="utilityType">Utility type
+        </label>
+        <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+          (change)="calculate()" (focus)="focusField('utilityType')" >
+          <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -139,9 +150,10 @@
         </span>
       </div>
 
-      
+    </div>
 
-      <label class="group-label mt-3 mb-1">
+    <div class="w-50 px-4 py-1">
+      <label class="group-label my-1">
         Secondary Process
       </label>
       
@@ -269,7 +281,8 @@
           *ngIf="form.controls.secCombAirTemperature.invalid && !form.controls.secCombAirTemperature.pristine">
           <span *ngIf="form.controls.secCombAirTemperature.errors.required">Value Required</span>
         </span>
-      </div>    
+      </div>
+    </div> 
 
   </form>
 

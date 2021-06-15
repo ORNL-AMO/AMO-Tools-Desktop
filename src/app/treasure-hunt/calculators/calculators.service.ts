@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Treasure, OpportunitySheet, TreasureHunt, OpportunitySummary, AirHeatingTreasureHunt } from '../../shared/models/treasure-hunt';
+import { Treasure, OpportunitySheet, TreasureHunt, OpportunitySummary, AirHeatingTreasureHunt, HeatCascadingTreasureHunt } from '../../shared/models/treasure-hunt';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
@@ -24,6 +24,7 @@ import { LeakageTreasureHuntService } from '../treasure-hunt-calculator-services
 import { WasteHeatTreasureHuntService } from '../treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
 import { OpeningTreasureHuntService } from '../treasure-hunt-calculator-services/opening-treasure-hunt.service';
 import { AirHeatingTreasureHuntService } from '../treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from '../treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -54,7 +55,8 @@ export class CalculatorsService {
     private openingTreasureHuntService: OpeningTreasureHuntService,
     private wallLossTreasureHuntService: WallTreasureHuntService,
     private leakageLossTreasureService: LeakageTreasureHuntService,
-    private flueGasTreasureHuntService: FlueGasTreasureHuntService
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService
     ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
@@ -105,6 +107,8 @@ export class CalculatorsService {
       this.openingTreasureHuntService.initNewCalculator();
     } else if (calculatorType === Treasure.airHeating) {
       this.airHeatingTreasureHuntService.initNewCalculator();
+    } else if (calculatorType === Treasure.heatCascading) {
+      this.heatCascadingTreasureHuntService.initNewCalculator();
     } 
     this.selectedCalc.next(calculatorType);
   }
@@ -223,6 +227,12 @@ export class CalculatorsService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.airHeating, settings);
       opportunityCardData = this.airHeatingTreasureHuntService.getAirHeatingOpportunityCardData(opportunityCardData.airHeating, opportunitySummary, settings, treasureHunt.airHeatingOpportunities.length - 1, treasureHunt.currentEnergyUsage);
     
+    } else if (opportunityCardData.opportunityType === Treasure.heatCascading) {
+      opportunityCardData.heatCascading.opportunitySheet = this.updateCopyName(opportunityCardData.heatCascading.opportunitySheet);
+      this.heatCascadingTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.heatCascading, treasureHunt);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.heatCascading, settings);
+      opportunityCardData = this.heatCascadingTreasureHuntService.getHeatCascadingOpportunityCardData(opportunityCardData.heatCascading, opportunitySummary, settings, treasureHunt.heatCascadingOpportunities.length - 1, treasureHunt.currentEnergyUsage);
+    
     }
     return opportunityCardData;
   }
@@ -270,7 +280,9 @@ export class CalculatorsService {
       this.openingTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.openingLoss);
     } else if (opportunityCardData.opportunityType === Treasure.airHeating) {
       this.airHeatingTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.airHeating);
-    }  
+    } else if (opportunityCardData.opportunityType === Treasure.heatCascading) {
+      this.heatCascadingTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.heatCascading);
+    }     
 
     this.selectedCalc.next(opportunityCardData.opportunityType);
   }
@@ -388,6 +400,12 @@ export class CalculatorsService {
       treasureHunt.airHeatingOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.airHeating;
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.airHeating, settings);
       updatedCard = this.airHeatingTreasureHuntService.getAirHeatingOpportunityCardData(opportunityCardData.airHeating, opportunitySummary, settings, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage);
+    
+    } else if (opportunityCardData.opportunityType === Treasure.heatCascading) {
+      opportunityCardData.heatCascading.selected = opportunityCardData.selected;
+      treasureHunt.heatCascadingOpportunities[opportunityCardData.opportunityIndex] = opportunityCardData.heatCascading;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.heatCascading, settings);
+      updatedCard = this.heatCascadingTreasureHuntService.getHeatCascadingOpportunityCardData(opportunityCardData.heatCascading, opportunitySummary, settings, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage);
     }
     
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
@@ -433,6 +451,8 @@ export class CalculatorsService {
       this.openingTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.airHeating) {
       this.airHeatingTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
+    } else if (deleteOpportunity.opportunityType === Treasure.heatCascading) {
+      this.heatCascadingTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } 
 
     return treasureHunt;

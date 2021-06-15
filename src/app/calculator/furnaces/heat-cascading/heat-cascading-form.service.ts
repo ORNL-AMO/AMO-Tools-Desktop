@@ -11,6 +11,7 @@ export class HeatCascadingFormService {
 
   getHeatCascadingForm(inputObj: HeatCascadingInput): FormGroup {
     let form: FormGroup = this.formBuilder.group({
+      utilityType: [inputObj.utilityType],
       priFiringRate: [inputObj.priFiringRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       priExhaustTemperature: [inputObj.priExhaustTemperature, Validators.required],
       priExhaustO2: [inputObj.priExhaustO2, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -49,6 +50,7 @@ export class HeatCascadingFormService {
 
   getHeatCascadingInput(form: FormGroup): HeatCascadingInput {
     let obj: HeatCascadingInput = {
+      utilityType: form.controls.utilityType.value,
       priFiringRate: form.controls.priFiringRate.value,
       priExhaustTemperature: form.controls.priExhaustTemperature.value,
       priExhaustO2: form.controls.priExhaustO2.value,

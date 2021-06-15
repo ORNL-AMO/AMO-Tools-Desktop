@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from '../psat/psat.service';
-import { PsatOutputs } from '../shared/models/psat';
+import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { AllPsatResultsData, PsatCompare, PsatResultsData, ReportItem } from './report-rollup-models';
 import * as _ from 'lodash';
 
@@ -87,5 +87,5 @@ export class PsatReportRollupService {
       this.selectedPsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
   }
-
 }
+
