@@ -43,4 +43,6 @@ export interface AirHeatingOutput {
     costSavings: number,
     heatCapacityFlue: number,
     heatCapacityAir: number
+    baselineEnergy: number,
+    modificationEnergy: number,
 }

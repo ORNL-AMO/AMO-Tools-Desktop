@@ -1,7 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { AirHeatingOutput } from '../../../shared/models/phast/airHeating';
 import { Settings } from '../../../shared/models/settings';
 import { AirHeatingService } from './air-heating.service';
 
@@ -15,11 +14,12 @@ export class AirHeatingComponent implements OnInit {
   settings: Settings;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
+  containerHeight: number;
   
   airFlowConversionInputSub: Subscription;
   modalSubscription: Subscription;
@@ -83,7 +83,7 @@ export class AirHeatingComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 

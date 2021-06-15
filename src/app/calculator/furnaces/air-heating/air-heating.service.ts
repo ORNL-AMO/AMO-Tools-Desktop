@@ -68,6 +68,8 @@ export class AirHeatingService {
       costSavings: 0,
       heatCapacityFlue: 0,
       heatCapacityAir: 0,
+      baselineEnergy: 0,
+      modificationEnergy: 0,
     };
     this.airHeatingOutput.next(emptyOutput);
   }
@@ -86,6 +88,8 @@ export class AirHeatingService {
         let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
         airHeatingOutput.costSavings = airHeatingOutput.energySavings * inputCopy.fuelCost;
+        airHeatingOutput.baselineEnergy = inputCopy.fireRate * inputCopy.operatingHours;
+        airHeatingOutput.modificationEnergy = inputCopy.fireRate * inputCopy.operatingHours - airHeatingOutput.energySavings;
         this.airHeatingOutput.next(airHeatingOutput);
     }
   }
