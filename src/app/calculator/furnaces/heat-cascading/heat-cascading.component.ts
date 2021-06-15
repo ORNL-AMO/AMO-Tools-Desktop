@@ -93,8 +93,7 @@ export class HeatCascadingComponent implements OnInit {
     this.emitSave.emit({
       inputData: inputData,
       energySourceData: {
-        // energySourceType: inputData.gasCompositionType,  
-        energySourceType: 'Natural Gas',  
+        energySourceType: inputData.utilityType,  
         unit: 'MMBtu'
       },
       opportunityType: Treasure.heatCascading
