@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoints } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
@@ -68,32 +68,10 @@ export class CompressorOptionsTableComponent implements OnInit {
 
     //lube mod with unloading
     if (selectedCompressor.compressorControls.controlType == 2) {
-      selectedCompressor.performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
-      selectedCompressor.performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
-      selectedCompressor.performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
-
-      selectedCompressor.performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
-      //TODO: calculated airflow and power
-      selectedCompressor.performancePoints.maxFullFlow.airflow = genericCompressor.RatedCapacity;
-      selectedCompressor.performancePoints.maxFullFlow.power = genericCompressor.TotPackageInputPower;
-
-
-      selectedCompressor.performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure + (genericCompressor.ModulatingPressRange * (1 - genericCompressor.UnloadPoint / 100));
-      selectedCompressor.performancePoints.unloadPoint.airflow = (genericCompressor.UnloadPoint / 100) * genericCompressor.RatedCapacity;
-      selectedCompressor.performancePoints.unloadPoint.power = ((genericCompressor.NoLoadPowerFM / 100) * (1 - (genericCompressor.UnloadPoint / 100)) + (genericCompressor.UnloadPoint / 100)) * selectedCompressor.performancePoints.maxFullFlow.power;
-
-
-
-      selectedCompressor.performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
-      selectedCompressor.performancePoints.noLoad.airflow = 0;
-
-      if (genericCompressor.NoLoadPowerUL < 25) {
-        //excel has /10000 at the end but this gives correct number...?
-        selectedCompressor.performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / (genericCompressor.TotPackageInputPower / (genericCompressor.TotPackageInputPower - 25 + 2521.834 / (genericCompressor.EffFL))) / 100;
-      } else {
-        selectedCompressor.performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / 1 / 1000
-      }
-
+      selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    } else if (selectedCompressor.compressorControls.controlType == 3) {
+      console.log('set variable displacement');
+      selectedCompressor.performancePoints = this.setVariableDisplacementPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     }
 
 
@@ -134,5 +112,56 @@ export class CompressorOptionsTableComponent implements OnInit {
     // }
 
     return selectedCompressor;
+  }
+
+
+  setWithUnloadingPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
+    performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
+    performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
+    performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
+
+    performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
+    //TODO: calculated airflow and power
+    performancePoints.maxFullFlow.airflow = genericCompressor.RatedCapacity;
+    performancePoints.maxFullFlow.power = genericCompressor.TotPackageInputPower;
+
+
+    performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure + (genericCompressor.ModulatingPressRange * (1 - genericCompressor.UnloadPoint / 100));
+    performancePoints.unloadPoint.airflow = (genericCompressor.UnloadPoint / 100) * genericCompressor.RatedCapacity;
+    performancePoints.unloadPoint.power = ((genericCompressor.NoLoadPowerFM / 100) * (1 - (genericCompressor.UnloadPoint / 100)) + (genericCompressor.UnloadPoint / 100)) * performancePoints.maxFullFlow.power;
+
+    performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+    performancePoints.noLoad.airflow = 0;
+
+    if (genericCompressor.NoLoadPowerUL < 25) {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / (genericCompressor.NoLoadPowerUL / (genericCompressor.NoLoadPowerUL - 25 + 2521.834 / genericCompressor.EffFL) / genericCompressor.EffFL) / 10000;
+    } else {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / 1 / 10000;
+    }
+    return performancePoints;
+  }
+
+  setVariableDisplacementPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
+    performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
+    performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
+    performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
+
+    performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
+    //TODO: calculate airflow and power?
+    performancePoints.maxFullFlow.airflow = genericCompressor.RatedCapacity;
+    performancePoints.maxFullFlow.power = genericCompressor.TotPackageInputPower;
+
+    performancePoints.unloadPoint.dischargePressure = genericCompressor.MaxFullFlowPressure + (genericCompressor.ModulatingPressRange * (1 - (genericCompressor.UnloadPoint / 100)));
+    performancePoints.unloadPoint.airflow = genericCompressor.RatedCapacity * (genericCompressor.UnloadPoint / 100);
+    performancePoints.unloadPoint.power = ((genericCompressor.NoLoadPowerFM / 100) * (1 - Math.pow((genericCompressor.UnloadPoint / 100), 2)) + Math.pow((genericCompressor.UnloadPoint / 100), 2)) * performancePoints.maxFullFlow.power;
+
+    performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+    performancePoints.noLoad.airflow = 0
+    if (genericCompressor.NoLoadPowerUL < 25) {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / (genericCompressor.NoLoadPowerUL / (genericCompressor.NoLoadPowerUL - 25 + 2521.834 / genericCompressor.EffFL) / genericCompressor.EffFL) / 10000;
+    } else {
+      performancePoints.noLoad.power = genericCompressor.NoLoadPowerUL * genericCompressor.TotPackageInputPower / 1 / 10000;
+    }
+    return performancePoints;
   }
 }
