@@ -65,8 +65,10 @@ export class CompressorOptionsTableComponent implements OnInit {
     selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
-
-    if (selectedCompressor.compressorControls.controlType == 2) {
+    if (selectedCompressor.compressorControls.controlType == 1) {
+      //lube mod without unloading
+      selectedCompressor.performancePoints = this.setWithoutUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    } else if (selectedCompressor.compressorControls.controlType == 2) {
       //lube mod with unloading
       selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 3) {
@@ -188,4 +190,15 @@ export class CompressorOptionsTableComponent implements OnInit {
     return performancePoints;
   }
 
+
+  setWithoutUnloadingPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
+    performancePoints.fullLoad.dischargePressure = genericCompressor.RatedPressure;
+    performancePoints.fullLoad.airflow = genericCompressor.RatedCapacity;
+    performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
+    
+    performancePoints.noLoad.dischargePressure = genericCompressor.RatedPressure + genericCompressor.ModulatingPressRange;
+    performancePoints.noLoad.airflow = 0;
+    performancePoints.noLoad.power = genericCompressor.NoLoadPowerFM / 100 * genericCompressor.TotPackageInputPower;
+    return performancePoints;
+  }
 }
