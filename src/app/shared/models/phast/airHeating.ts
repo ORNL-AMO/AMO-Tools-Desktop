@@ -1,4 +1,5 @@
 export interface AirHeatingInput {
+    utilityType?: string,
     operatingHours: number,
     gasFuelType: boolean,
     fuelCost: number,

@@ -8,6 +8,7 @@ import { EnergyData } from "./phast/losses/chargeMaterial";
 import { LeakageLoss } from "./phast/losses/leakageLoss";
 import { WasteHeatInput } from "./phast/wasteHeat";
 import { OpeningLoss } from "./phast/losses/openingLoss";
+import { AirHeatingInput } from "./phast/airHeating";
 
 export interface TreasureHunt {
     name: string,
@@ -25,6 +26,7 @@ export interface TreasureHunt {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
@@ -50,6 +52,7 @@ export enum Treasure {
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
     wallLoss = 'wall-loss',
+    airHeating = 'air-heating',
     flueGas = 'flue-gas',
     leakageLoss = 'leakage-loss',
     wasteHeat = 'waste-heat',
@@ -210,6 +213,13 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
 export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
     baseline: WasteHeatInput;
     modification: WasteHeatInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface AirHeatingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: AirHeatingInput;
+    energySourceData: EnergySourceData;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
@@ -387,6 +397,7 @@ export interface ImportExportOpportunities {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     openingLosses?: Array<OpeningLossTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;

@@ -34,6 +34,16 @@
       </select>
     </div>
 
+    <div *ngIf="inTreasureHunt" class="form-group">
+      <label class="small" for="utilityType">Utility type
+      </label>
+      <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+        (change)="calculate()" (focus)="focusField('utilityType')" >
+        <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+        <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label class="small" for="materialTypeId">Fuel
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New

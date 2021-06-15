@@ -33,6 +33,7 @@ export class AirHeatingService {
     let emptyInput: AirHeatingInput = {
       operatingHours: 8760,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
       fuelCost: 0,
       materialTypeId: 1,
       flueTemperature: 0,
@@ -99,6 +100,7 @@ export class AirHeatingService {
       operatingHours: 8760,
       materialTypeId: 1,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
       fuelCost: 3.50,
       flueTemperature: 400,
       flueGasO2: 5.8,

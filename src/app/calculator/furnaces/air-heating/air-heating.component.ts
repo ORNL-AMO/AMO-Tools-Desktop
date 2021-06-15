@@ -1,7 +1,9 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
+import { AirHeatingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { AirHeatingService } from './air-heating.service';
 
 @Component({
@@ -12,6 +14,14 @@ import { AirHeatingService } from './air-heating.service';
 export class AirHeatingComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Output("emitSave")
+  emitSave = new EventEmitter<AirHeatingTreasureHunt>();
+  @Output("emitCancel")
+  emitCancel = new EventEmitter<boolean>();
+  @Input()
+  operatingHours: OperatingHours;
+  @Input()
+  inTreasureHunt: boolean; 
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -55,8 +65,10 @@ export class AirHeatingComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(value => {
-      this.calculate();
+    this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(input => {
+      if (input) {
+        this.calculate();
+      }
     });
     this.modalSubscription = this.airHeatingService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
@@ -79,6 +91,24 @@ export class AirHeatingComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  save() {
+    let inputData = this.airHeatingService.airHeatingInput.getValue(); 
+    this.emitSave.emit({
+      inputData: inputData,
+      energySourceData: {
+        // energySourceType: inputData.gasCompositionType,  
+        energySourceType: 'Natural Gas',  
+        unit: 'MMBtu'
+      },
+      opportunityType: Treasure.airHeating
+    });
+  }
+
+  cancel() {
+    this.airHeatingService.initDefaultEmptyInputs();
+    this.emitCancel.emit(true);
   }
 
   resizeTabs() {

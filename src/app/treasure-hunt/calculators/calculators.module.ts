@@ -30,6 +30,7 @@ import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.modul
 import { LeakageModule } from '../../calculator/furnaces/leakage/leakage.module';
 import { WasteHeatModule } from '../../calculator/furnaces/waste-heat/waste-heat.module';
 import { OpeningModule } from '../../calculator/furnaces/opening/opening.module';
+import { AirHeatingModule } from '../../calculator/furnaces/air-heating/air-heating.module';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { OpeningModule } from '../../calculator/furnaces/opening/opening.module'
     CompressedAirReductionModule,
     TankInsulationReductionModule,
     WasteHeatModule,
+    AirHeatingModule,
     LeakageModule,
     AirLeakModule,
     OpeningModule,
