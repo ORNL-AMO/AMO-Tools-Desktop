@@ -47,6 +47,7 @@ import { WallTreasureHuntService } from './treasure-hunt-calculator-services/wal
 import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/leakage-treasure-hunt.service';
 import { WasteHeatTreasureHuntService } from './treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
 import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -101,7 +102,8 @@ import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/
     WallTreasureHuntService,
     LeakageTreasureHuntService,
     FlueGasTreasureHuntService,
-    OpeningTreasureHuntService
+    OpeningTreasureHuntService,
+    HeatCascadingTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

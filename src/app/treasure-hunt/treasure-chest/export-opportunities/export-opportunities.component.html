@@ -271,6 +271,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.heatCascadingOpportunities">
+                        <label>Heat Cascading</label>
+                        <ul>
+                            <li
+                                *ngFor="let heatCascading of exportOpportunities.heatCascadingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!heatCascading.opportunitySheet || !heatCascading.opportunitySheet.name">
+                                    Heat Cascading #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="heatCascading.opportunitySheet && heatCascading.opportunitySheet.name">
+                                    {{heatCascading.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

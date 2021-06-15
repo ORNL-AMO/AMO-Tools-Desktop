@@ -105,6 +105,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.leakageLosses = treasureHunt.leakageLosses.concat(data.leakageLosses);
     }
+    if(data.heatCascadingOpportunities){
+      if (treasureHunt.heatCascadingOpportunities == undefined) {
+        treasureHunt.heatCascadingOpportunities = new Array();
+      }
+      treasureHunt.heatCascadingOpportunities = treasureHunt.heatCascadingOpportunities.concat(data.heatCascadingOpportunities);
+    }
     return treasureHunt;
   }
 }
