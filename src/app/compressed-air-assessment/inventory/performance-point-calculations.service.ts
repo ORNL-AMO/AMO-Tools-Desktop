@@ -29,19 +29,21 @@ export class PerformancePointCalculationsService {
     } else if (selectedCompressor.compressorControls.controlType == 3) {
       //variable displacement
       selectedCompressor.performancePoints = this.setVariableDisplacementPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType != 6) {
-      //load/unload non centrifugal
+    } else if (selectedCompressor.compressorControls.controlType == 4) {
+      //load/unload
       selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 6) {
       //start/stop
       selectedCompressor.performancePoints = this.setStartStopPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
+    } else if (selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
+      //blowoff
+      selectedCompressor.performancePoints = this.setBlowoffPerformancePoints(selectedCompressor.performancePoints, genericCompressor);
     }
     return selectedCompressor.performancePoints;
   }
 
   setWithUnloadingPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
     performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
-    //TODO: calculated airflow and power
     performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(genericCompressor.RatedCapacity, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure);
     performancePoints.maxFullFlow.power = this.calculateMaxFullFlowPower(genericCompressor.IDCompType, genericCompressor.DesignInPressure, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure, genericCompressor.TotPackageInputPower);
 
@@ -60,7 +62,6 @@ export class PerformancePointCalculationsService {
 
   setVariableDisplacementPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
     performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
-    //TODO: calculate airflow and power?
     performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(genericCompressor.RatedCapacity, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure);
     performancePoints.maxFullFlow.power = this.calculateMaxFullFlowPower(genericCompressor.IDCompType, genericCompressor.DesignInPressure, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure, genericCompressor.TotPackageInputPower);
 
@@ -98,7 +99,6 @@ export class PerformancePointCalculationsService {
 
   setStartStopPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
     performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
-    //TODO: calculate airflow and power?
     performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(genericCompressor.RatedCapacity, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure);
     performancePoints.maxFullFlow.power = this.calculateMaxFullFlowPower(genericCompressor.IDCompType, genericCompressor.DesignInPressure, genericCompressor.MaxFullFlowPressure, genericCompressor.RatedPressure, genericCompressor.TotPackageInputPower);
 
@@ -107,6 +107,15 @@ export class PerformancePointCalculationsService {
     performancePoints.noLoad.power = 0;
 
     return performancePoints;
+  }
+
+  setBlowoffPerformancePoints(performancePoints: PerformancePoints, genericCompressor: GenericCompressor): PerformancePoints {
+    performancePoints.blowoff.airflow = genericCompressor.MaxPressSurgeFlow;
+    performancePoints.blowoff.dischargePressure = genericCompressor.MaxSurgePressure;
+    //TODO: Power
+    performancePoints.blowoff.power
+
+    return performancePoints
   }
 
 
