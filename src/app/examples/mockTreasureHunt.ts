@@ -1340,7 +1340,7 @@ export const MockTreasureHunt: Assessment = {
 
 export const MockTreasureHuntSettings: Settings = {
     "language": "English",
-    "currency": "$ - US Dollar",
+    "currency": "$",
     "unitsOfMeasure": "Imperial",
     "distanceMeasurement": "ft",
     "flowMeasurement": "gpm",

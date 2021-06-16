@@ -1148,7 +1148,7 @@ export const MockPhast: Assessment = {
 
 export const MockPhastSettings: Settings = {
     language: "English",
-    currency: "$ - US Dollar",
+    currency: "$",
     unitsOfMeasure: "Imperial",
     distanceMeasurement: "ft",
     flowMeasurement: "gpm",
