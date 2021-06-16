@@ -86,6 +86,11 @@ export class ConvertFsatService {
       results.motorRatedPower = this.convertUnitsService.value(results.motorRatedPower).from('hp').to(settings.fanPowerMeasurement);
       results.motorShaftPower = this.convertUnitsService.value(results.motorShaftPower).from('hp').to(settings.fanPowerMeasurement);
     }
+
+    if (settings.currency !== "$") {
+      results.annualCost = this.convertUnitsService.value(results.annualCost).from("$").to(settings.currency);
+      results.annualSavings = this.convertUnitsService.value(results.annualSavings).from("$").to(settings.currency);
+    }
     return results;
   }
 
