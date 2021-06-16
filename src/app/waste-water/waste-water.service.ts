@@ -83,6 +83,7 @@ export class WasteWaterService {
       if (baselineResults != undefined) {
         wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
       }
+      wasteWaterResults = this.convertWasteWaterService.convertResultsCosts(wasteWaterResults, settings);
       return wasteWaterResults;
     }
     return this.getEmptyResults();

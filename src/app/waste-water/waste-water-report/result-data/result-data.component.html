@@ -316,19 +316,19 @@
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Aerator Cost ($/yr)</th>
+                <th>Aerator Cost ({{settings.currency}}/yr)</th>
                 <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{wasteWater.baselineData.outputs.AeCost | currency:'USD':'symbol':'1.0-0'}}</th>
+                    {{wasteWater.baselineData.outputs.AeCost | number:'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeCost
-            | currency:'USD':'symbol':'1.0-0'}}</th>
+            | number:'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Cost Savings ($/yr)</th>
+                <th>Cost Savings ({{settings.currency}}/yr)</th>
                 <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10, 'selected-modification': index == selectedModificationIndex}">
-                    {{modification.outputs.costSavings | currency:'USD':'symbol':'1.0-0'}}
+                    {{modification.outputs.costSavings | number:'1.0-0'}}
                 </th>
             </tr>
             <!--  -->

@@ -90,6 +90,14 @@ export class ConvertWasteWaterService {
     return wasteWaterResults;
   }
 
+  convertResultsCosts(wasteWaterResults: WasteWaterResults, settings: Settings): WasteWaterResults {
+    if (settings.currency !== "$") {
+      wasteWaterResults.AeCost = this.convertUnitsService.value(wasteWaterResults.AeCost).from("$").to(settings.currency);
+      wasteWaterResults.costSavings = this.convertUnitsService.value(wasteWaterResults.costSavings).from("$").to(settings.currency);
+    }
+    return wasteWaterResults
+  }
+
   convertCalcTableRowResultToMetric(row: CalculationsTableRow): CalculationsTableRow {
     //metric = kg, imperial = lb
     row.BiomassProd = this.convertUnitsService.value(row.BiomassProd).from('lb').to('kg');
