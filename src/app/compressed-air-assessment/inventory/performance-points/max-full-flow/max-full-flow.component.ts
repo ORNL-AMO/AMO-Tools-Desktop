@@ -38,6 +38,9 @@ export class MaxFullFlowComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.performancePoints.maxFullFlow = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    //TODO: update performance points calculations when max full flow power changes
+    
+    
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;

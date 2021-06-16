@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../share
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory.service';
 import { CompressorTypeOptions } from '../inventoryOptions';
+import { PerformancePointCalculationsService } from '../performance-point-calculations.service';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -17,7 +18,8 @@ export class NameplateDataComponent implements OnInit {
   form: FormGroup;
   isFormChange: boolean = false;
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -35,9 +37,12 @@ export class NameplateDataComponent implements OnInit {
     this.selectedCompressorSub.unsubscribe();
   }
 
-  save() {
+  save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.nameplateData = this.inventoryService.getNameplateDataFromFrom(this.form);
+    if(updatePerformancePoints){
+      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    }
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
