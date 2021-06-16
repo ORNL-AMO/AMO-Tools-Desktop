@@ -50,9 +50,8 @@ export class MaxFullFlowComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.performancePoints.maxFullFlow = this.inventoryService.getPerformancePointObjFromForm(this.form);
-    //TODO: update performance points calculations when max full flow power changes
-
-
+    //re-calculate performance points on changes to max full flow
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
@@ -138,12 +137,12 @@ export class MaxFullFlowComponent implements OnInit {
 
   getExpectedAirFlow(): number {
     //TODO: use generic or nameplate data?
-    return this.performancePointCalculationsService.calculateMaxFullFlowAirFlow(this.selectedCompressor.nameplateData.fullLoadRatedCapacity, this.genericCompressor.MaxFullFlowPressure, this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
+    return this.performancePointCalculationsService.calculateMaxFullFlowAirFlow(this.selectedCompressor.nameplateData.fullLoadRatedCapacity, this.selectedCompressor.performancePoints.maxFullFlow.dischargePressure, this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
   }
 
   getExpectedPower(): number {
     //TODO: use generic or nameplate data?
-    return this.performancePointCalculationsService.calculateMaxFullFlowPower(this.selectedCompressor.nameplateData.compressorType, this.selectedCompressor.designDetails.inputPressure, this.genericCompressor.MaxFullFlowPressure, this.selectedCompressor.nameplateData.fullLoadOperatingPressure, this.genericCompressor.TotPackageInputPower);
+    return this.performancePointCalculationsService.calculateMaxFullFlowPower(this.selectedCompressor.nameplateData.compressorType, this.selectedCompressor.designDetails.inputPressure, this.selectedCompressor.performancePoints.maxFullFlow.dischargePressure, this.selectedCompressor.nameplateData.fullLoadOperatingPressure, this.genericCompressor.TotPackageInputPower);
   }
 
 }
