@@ -84,10 +84,11 @@ export interface PerformancePoints {
 
 export interface PerformancePoint {
     dischargePressure: number,
+    isDefaultPressure: boolean,
     airflow: number,
-    // defaultAirFlow: boolean,
+    isDefaultAirFlow: boolean,
     power: number,
-    // defaultPower: boolean
+    isDefaultPower: boolean
 }
 
 export interface SystemProfile {

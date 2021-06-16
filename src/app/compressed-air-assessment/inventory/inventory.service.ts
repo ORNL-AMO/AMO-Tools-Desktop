@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { stubTrue } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -56,38 +57,43 @@ export class InventoryService {
       performancePoints: {
         fullLoad: {
           dischargePressure: undefined,
+          isDefaultPower: true,
           airflow: undefined,
+          isDefaultAirFlow: true,
           power: undefined,
-          // defaultPower: true,
-          // defaultAirFlow: true
+          isDefaultPressure: true
         },
         maxFullFlow: {
           dischargePressure: undefined,
+          isDefaultPower: true,
           airflow: undefined,
+          isDefaultAirFlow: true,
           power: undefined,
-          // defaultPower: true,
-          // defaultAirFlow: true
+          isDefaultPressure: true
         },
         unloadPoint: {
           dischargePressure: undefined,
+          isDefaultPower: true,
           airflow: undefined,
+          isDefaultAirFlow: true,
           power: undefined,
-          // defaultPower: true,
-          // defaultAirFlow: true
+          isDefaultPressure: true
         },
         noLoad: {
-          dischargePressure: 15,
-          airflow: 0,
-          power: 0,
-          // defaultPower: true,
-          // defaultAirFlow: true
+          dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
+          isDefaultPressure: true
         },
         blowoff: {
           dischargePressure: undefined,
+          isDefaultPower: true,
           airflow: undefined,
+          isDefaultAirFlow: true,
           power: undefined,
-          // defaultPower: true,
-          // defaultAirFlow: true
+          isDefaultPressure: true
         }
       }
     }
@@ -281,10 +287,11 @@ export class InventoryService {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
       dischargePressure: [performancePoint.dischargePressure, Validators.required],
+      isDefaultPressure: [performancePoint.isDefaultPressure],
       airflow: [performancePoint.airflow, Validators.required],
+      isDefaultAirFlow: [performancePoint.isDefaultAirFlow],
       power: [performancePoint.power, Validators.required],
-      // defaultAirFlow: [performancePoint.defaultAirFlow],
-      // defaultPower: [performancePoint.defaultPower]
+      isDefaultPower: [performancePoint.isDefaultPower],
     });
     return form;
   }
@@ -292,10 +299,11 @@ export class InventoryService {
   getPerformancePointObjFromForm(form: FormGroup): PerformancePoint {
     return {
       dischargePressure: form.controls.dischargePressure.value,
+      isDefaultPressure: form.controls.isDefaultPressure.value,
       airflow: form.controls.airflow.value,
+      isDefaultAirFlow: form.controls.isDefaultAirFlow.value,
       power: form.controls.power.value,
-      // defaultAirFlow: form.controls.defaultAirFlow.value,
-      // defaultPower: form.controls.defaultPower.value
+      isDefaultPower: form.controls.isDefaultPower.value,
     }
   }
 
