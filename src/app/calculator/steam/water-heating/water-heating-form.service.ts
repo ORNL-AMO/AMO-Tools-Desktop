@@ -21,6 +21,8 @@ export class WaterHeatingFormService {
     }
 
     let form: FormGroup = this.formBuilder.group({
+      boilerUtilityType: [inputObj.boilerUtilityType],
+      hxUtilityType: [{value: inputObj.hxUtilityType, disabled: true}],
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [inputObj.fuelCost, [Validators.required, Validators.min(0)]],
       fuelCostBoiler: [inputObj.fuelCostBoiler, [Validators.required, Validators.min(0)]],
@@ -42,6 +44,8 @@ export class WaterHeatingFormService {
 
   getWaterHeatingInput(form: FormGroup): WaterHeatingInput {
     let obj: WaterHeatingInput = {
+      boilerUtilityType: form.controls.boilerUtilityType.value,
+      hxUtilityType: form.controls.hxUtilityType.value,
       operatingHours: form.controls.operatingHours.value,
       fuelCost: form.controls.fuelCost.value,
       fuelCostBoiler: form.controls.fuelCostBoiler.value,

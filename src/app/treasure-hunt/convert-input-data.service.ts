@@ -18,6 +18,7 @@ import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/
 import { WasteHeatTreasureHuntService } from './treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
 import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/opening-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -38,7 +39,8 @@ export class ConvertInputDataService {
     private openingTreasureService: OpeningTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
     private leakageTreasureHuntService: LeakageTreasureHuntService,
-    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -93,6 +95,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.heatCascadingOpportunities != undefined) {
       treasureHunt.heatCascadingOpportunities = this.heatCascadingTreasureHuntService.convertHeatCascadingOpportunities(treasureHunt.heatCascadingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.waterHeatingOpportunities != undefined) {
+      treasureHunt.waterHeatingOpportunities = this.waterHeatingTreasureHuntService.convertWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

@@ -114,6 +114,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Opening Loss'
       case Treasure.heatCascading:
         return 'Heat Cascading'
+      case Treasure.waterHeating:
+        return 'Water Heating'
     }
   }
 }

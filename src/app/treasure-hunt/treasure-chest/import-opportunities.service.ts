@@ -111,6 +111,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.heatCascadingOpportunities = treasureHunt.heatCascadingOpportunities.concat(data.heatCascadingOpportunities);
     }
+    if(data.waterHeatingOpportunities){
+      if (treasureHunt.waterHeatingOpportunities == undefined) {
+        treasureHunt.waterHeatingOpportunities = new Array();
+      }
+      treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
+    }
     return treasureHunt;
   }
 }

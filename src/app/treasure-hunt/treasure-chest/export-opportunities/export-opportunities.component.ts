@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -67,6 +67,7 @@ export class ExportOpportunitiesComponent implements OnInit {
       flueGasLosses: this.getSelectedFlueGasLosses(this.treasureHunt.flueGasLosses),
       wasteHeatReductions: this.getSelectedWasteHeatReductions(this.treasureHunt.wasteHeatReductions),
       heatCascadingOpportunities: this.getHeatCascadingOpportunities(this.treasureHunt.heatCascadingOpportunities),
+      waterHeatingOpportunities: this.getWaterHeatingOpportunities(this.treasureHunt.waterHeatingOpportunities),
     }
   }
   getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
@@ -191,6 +192,12 @@ export class ExportOpportunitiesComponent implements OnInit {
     return undefined;
   }
   getHeatCascadingOpportunities(opportunities: Array<HeatCascadingTreasureHunt>): Array<HeatCascadingTreasureHunt> {
+    if (opportunities) {
+      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getWaterHeatingOpportunities(opportunities: Array<WaterHeatingTreasureHunt>): Array<WaterHeatingTreasureHunt> {
     if (opportunities) {
       return _.filter(opportunities, (opportunity) => { return opportunity.selected });
     }
