@@ -26,6 +26,11 @@ export class ExecutiveSummaryService {
         tmpResultsSummary.paybackPeriod = 0;
       }
     }
+    if (settings.currency !== "$") {
+      tmpResultsSummary.annualCost = this.convertUnitsService.value(tmpResultsSummary.annualCost).from("$").to(settings.currency);
+      tmpResultsSummary.annualCostSavings = this.convertUnitsService.value(tmpResultsSummary.annualCostSavings).from("$").to(settings.currency);
+      tmpResultsSummary.implementationCosts = this.convertUnitsService.value(tmpResultsSummary.implementationCosts).from("$").to(settings.currency);
+    }
     return tmpResultsSummary;
   }
 
