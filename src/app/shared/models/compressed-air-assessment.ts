@@ -39,7 +39,8 @@ export interface CompressorInventoryItem {
     inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
-    centrifugalSpecifics: CentrifugalSpecifics
+    centrifugalSpecifics: CentrifugalSpecifics,
+    modifiedDate: Date
 
 }
 

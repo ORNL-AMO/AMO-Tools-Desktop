@@ -77,7 +77,7 @@ export class PerformancePointCalculationsService {
     if (selectedCompressor.compressorControls.controlType == 1) {
       //lube mod without unloading
       selectedCompressor.performancePoints = this.setWithoutUnloadingPerformancePoints(selectedCompressor, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 2) {
+    } else if (selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 9 || selectedCompressor.compressorControls.controlType == 11) {
       //lube mod with unloading
       selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor, genericCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 3) {
@@ -225,7 +225,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure =  this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
+      selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0
@@ -260,7 +260,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure =  this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
+      selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0

@@ -45,6 +45,7 @@ export class DesignDetailsComponent implements OnInit {
 
   save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.designDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
     if(updatePerformancePoints){
       selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);

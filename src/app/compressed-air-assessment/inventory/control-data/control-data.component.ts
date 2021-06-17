@@ -44,9 +44,7 @@ export class ControlDataComponent implements OnInit {
 
   setControlTypeOptions(compressorType: number) {
     if (compressorType) {
-      console.log(compressorType);
       this.controlTypeOptions = ControlTypes.filter(type => { return type.compressorTypes.includes(compressorType) });
-      console.log(this.controlTypeOptions);
     } else {
       this.controlTypeOptions = [];
     }
@@ -96,6 +94,7 @@ export class ControlDataComponent implements OnInit {
 
   save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.compressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
     if(updatePerformancePoints){
       selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);

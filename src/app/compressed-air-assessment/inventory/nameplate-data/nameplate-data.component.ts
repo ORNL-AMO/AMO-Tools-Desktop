@@ -39,6 +39,7 @@ export class NameplateDataComponent implements OnInit {
 
   save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.nameplateData = this.inventoryService.getNameplateDataFromFrom(this.form);
     if(updatePerformancePoints){
       selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);

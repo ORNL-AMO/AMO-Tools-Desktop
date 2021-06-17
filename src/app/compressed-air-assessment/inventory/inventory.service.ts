@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { stubTrue } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -20,6 +19,7 @@ export class InventoryService {
       itemId: Math.random().toString(36).substr(2, 9),
       name: 'New Compressor',
       description: undefined,
+      modifiedDate: new Date(),
       nameplateData: {
         compressorType: undefined,
         motorPower: undefined,
