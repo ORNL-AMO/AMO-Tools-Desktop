@@ -208,7 +208,7 @@ export class OpportunitySummaryService {
       treasureHuntOpportunityResults = this.openingTreasureService.getTreasureHuntOpportunityResults(openingLossOpportunity, settings);
     
     }
-
+    
     return treasureHuntOpportunityResults;
   }
 

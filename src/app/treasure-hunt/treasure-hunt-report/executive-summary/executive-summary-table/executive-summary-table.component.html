@@ -19,19 +19,19 @@
                 Projected Use
             </td>
             <td *ngIf="showFullSummary">
-                Utility Savings
+                Utility Savings 
             </td>
             <td *ngIf="showFullSummary">
-                Current Cost
+                Current Cost ({{settings.currency}})
             </td>
             <td *ngIf="showFullSummary">
-                Projected Cost
+                Projected Cost ({{settings.currency}})
             </td>
             <td>
-                Cost Savings
+                Cost Savings ({{settings.currency}})
             </td>
             <td>
-                Implementation Cost
+                Implementation Cost ({{settings.currency}})
             </td>
             <td>
                 Payback
@@ -58,16 +58,16 @@
                 {{treasureHuntResults.electricity.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.electricity.baselineEnergyCost | number:'.0-0'}}
+                {{treasureHuntResults.electricity.baselineEnergyCost | number:'.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.electricity.modifiedEnergyCost | number:'.0-0'}}
+                {{treasureHuntResults.electricity.modifiedEnergyCost | number:'.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.electricity.costSavings | number:'.0-0'}}
+                {{treasureHuntResults.electricity.costSavings | number:'.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.electricity.implementationCost | number:'.0-0'}}
+                {{treasureHuntResults.electricity.implementationCost | number:'.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
@@ -95,16 +95,16 @@
                 {{treasureHuntResults.naturalGas.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.naturalGas.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.naturalGas.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.naturalGas.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.naturalGas.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.naturalGas.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.naturalGas.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.naturalGas.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.naturalGas.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
@@ -132,16 +132,16 @@
                 {{treasureHuntResults.water.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.water.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.water.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.water.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.water.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.water.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.water.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.water.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.water.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
@@ -169,16 +169,16 @@
                 {{treasureHuntResults.wasteWater.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.wasteWater.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.wasteWater.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.wasteWater.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.wasteWater.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.wasteWater.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.wasteWater.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.wasteWater.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.wasteWater.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
@@ -206,16 +206,16 @@
                 {{treasureHuntResults.otherFuel.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.otherFuel.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.otherFuel.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.otherFuel.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.otherFuel.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.otherFuel.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.otherFuel.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.otherFuel.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.otherFuel.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
@@ -243,16 +243,16 @@
                 {{treasureHuntResults.compressedAir.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.compressedAir.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.compressedAir.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.compressedAir.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.compressedAir.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.compressedAir.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.compressedAir.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.compressedAir.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.compressedAir.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
@@ -280,16 +280,16 @@
                 {{treasureHuntResults.steam.energySavings | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.steam.baselineEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.steam.baselineEnergyCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.steam.modifiedEnergyCost | number:'1.0-0'}}
+                {{treasureHuntResults.steam.modifiedEnergyCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.steam.costSavings | number:'1.0-0'}}
+                {{treasureHuntResults.steam.costSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.steam.implementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.steam.implementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
@@ -325,13 +325,13 @@
 
 
             <td class="bold" *ngIf="!showFullSummary">
-                Mixed
+                Mixed ({{settings.currency}})
             </td>
             <td>
                 <!-- ${{treasureHuntResults.other.costSavings | number:'.0-0'}} -->
             </td>
             <td>
-                ${{treasureHuntResults.other.implementationCost | number:'.0-0'}}
+                {{treasureHuntResults.other.implementationCost | number:'.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
@@ -343,7 +343,7 @@
         <tr *ngIf="treasureHuntResults.totalAdditionalSavings != 0">
             <!--cant use colspan with copy table button (need 7)-->
             <td class="bold" *ngIf="showFullSummary">
-                Other
+                Other ({{settings.currency}})
             </td>
             <td *ngIf="showFullSummary">
 
@@ -364,10 +364,10 @@
 
             </td>
             <td class="bold" *ngIf="!showFullSummary">
-                Other
+                Other ({{settings.currency}})
             </td>
             <td>
-                ${{treasureHuntResults.totalAdditionalSavings | number:'.0-0'}}
+                {{treasureHuntResults.totalAdditionalSavings | number:'.0-0'}}
             </td>
             <td>
 
@@ -383,7 +383,7 @@
         <tr>
             <!--cant use colspan with copy table button (need 5)-->
             <td class="bold" *ngIf="showFullSummary">
-                Total
+                Total ({{settings.currency}})
             </td>
             <td *ngIf="showFullSummary">
 
@@ -401,16 +401,16 @@
                 Total
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.totalBaselineCost | number:'1.0-0'}}
+                {{treasureHuntResults.totalBaselineCost | number:'1.0-0'}}
             </td>
             <td *ngIf="showFullSummary">
-                ${{treasureHuntResults.totalModificationCost | number:'1.0-0'}}
+                {{treasureHuntResults.totalModificationCost | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.totalSavings | number:'1.0-0'}}
+                {{treasureHuntResults.totalSavings | number:'1.0-0'}}
             </td>
             <td>
-                ${{treasureHuntResults.totalImplementationCost | number:'1.0-0'}}
+                {{treasureHuntResults.totalImplementationCost | number:'1.0-0'}}
             </td>
             <td>
                 {{treasureHuntResults.paybackPeriod | number:'1.0-2'}}

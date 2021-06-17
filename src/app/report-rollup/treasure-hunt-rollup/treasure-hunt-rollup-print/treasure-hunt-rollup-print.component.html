@@ -10,13 +10,13 @@
         <div class="col-6">
             <label class="group-label w-100">Current Cost Status</label>
             <app-cost-pie-chart [isBaseline]="true" [treasureHuntResults]="combinedTreasureHuntResults"
-                [showPrint]="true">
+                [showPrint]="true" [settings] = "settings">
             </app-cost-pie-chart>
         </div>
         <div class="col-6">
             <label class="group-label w-100">Projected Cost Status</label>
             <app-cost-pie-chart [isBaseline]="false" [treasureHuntResults]="combinedTreasureHuntResults"
-                [showPrint]="true">
+                [showPrint]="true" [settings] = "settings">
             </app-cost-pie-chart>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-center">
                 <app-utility-bar-chart class="h-100" [treasureHuntResults]="combinedTreasureHuntResults"
-                    [inRollupPrintView]="true">
+                    [inRollupPrintView]="true" [settings]="settings">
                 </app-utility-bar-chart>
             </div>
         </div>

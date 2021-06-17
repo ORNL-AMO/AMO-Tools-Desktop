@@ -23,7 +23,7 @@
           <th class="bold w-25">Opportunity</th>
           <th class="bold w-25">Effort (1-10)</th>
           <th class="bold w-25">Payback (years)</th>
-          <th class="bold w-25">Savings </th>
+          <th class="bold w-25">Savings ({{settings.currency}})</th>
         </tr>
         <tr *ngFor="let opp of chartOpportunities; let index = index">
           <td *ngIf="!showPrint" class="text-center max-width-50">
@@ -33,7 +33,7 @@
           <td class="text-center">{{opp.name}}</td>
           <td class="text-center">{{opp.effort}}</td>
           <td class="text-center">{{opp.payback | number: '1.0-1'}}</td>
-          <td class="text-center">{{opp.savings | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td class="text-center">{{opp.savings | number: '1.0-0'}}</td>
         </tr>
       </tbody>
     </table>
@@ -49,8 +49,8 @@
       <tr>
         <th>Opportunity</th>
         <th>Effort (1-10)</th>
-        <th>Payback ($)</th>
-        <th>Savings ($)</th>
+        <th>Payback</th>
+        <th>Savings ({{settings.currency}})</th>
       </tr>
       <tr *ngFor="let opp of chartOpportunities; let index = index">
         <td>{{opp.name}}</td>

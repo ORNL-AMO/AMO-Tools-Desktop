@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SavingsItem, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
-
+import { Settings } from '../../../shared/models/settings'; 
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
@@ -11,7 +11,9 @@ export class ReportGraphsComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   showPrint: boolean;
-
+  @Input()
+  settings: Settings;
+  
   savingsItems: Array<SavingsItem>;
   constructor() { }
 

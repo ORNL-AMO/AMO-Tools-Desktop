@@ -1,17 +1,17 @@
 <div class="row">
   <div class="col-12 print-pad-top">
-    <app-opportunity-payback-table [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+    <app-opportunity-payback-table [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings] = "settings">
     </app-opportunity-payback-table>
   </div>
 </div>
 
 <div class="row">
   <div class="justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
-    <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
+    <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint" [settings] = "settings">
     </app-opportunity-payback-bar-chart>
   </div>
   <div class="justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
-    <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
+    <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint" [settings] = "settings">
     </app-opportunity-payback-donut>
   </div>
 </div>

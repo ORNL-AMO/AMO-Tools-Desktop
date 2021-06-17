@@ -96,7 +96,7 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs [treasureHuntResults]="treasureHuntResults"
+      <app-report-graphs [settings] = "settings" [treasureHuntResults]="treasureHuntResults"
         [showPrint]="showPrintView && printOptions.printReportGraphs">
       </app-report-graphs>
     </div>
@@ -115,7 +115,7 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>
       <app-opportunity-payback [showPrint]="showPrintView && printOptions.printReportOpportunityPayback"
-        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [settings]="settings">
       </app-opportunity-payback>
     </div>
   </div>
