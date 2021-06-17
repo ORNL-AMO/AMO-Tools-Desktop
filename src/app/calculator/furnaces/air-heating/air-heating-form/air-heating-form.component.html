@@ -34,7 +34,7 @@
       </select>
     </div>
 
-    <div *ngIf="inTreasureHunt" class="form-group">
+    <div *ngIf="inTreasureHunt && form.controls.gasFuelType.value === true" class="form-group">
       <label class="small" for="utilityType">Utility type
       </label>
       <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"

@@ -95,11 +95,11 @@ export class AirHeatingComponent implements OnInit {
 
   save() {
     let inputData = this.airHeatingService.airHeatingInput.getValue(); 
+    let treasureHuntEnergyType = inputData.gasFuelType? inputData.utilityType : 'Other Fuel';
     this.emitSave.emit({
       inputData: inputData,
       energySourceData: {
-        // energySourceType: inputData.gasCompositionType,  
-        energySourceType: 'Natural Gas',  
+        energySourceType: treasureHuntEnergyType,  
         unit: 'MMBtu'
       },
       opportunityType: Treasure.airHeating

@@ -56,11 +56,11 @@ export class AirHeatingTreasureHuntService {
 
   getAirHeatingOpportunityCardData(airHeatingOpportunity: AirHeatingTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let currentCosts: number = 0;
-    // if (airHeatingOpportunity.inputData.utilityType == 'Natural Gas') {
-    //   currentCosts = currentEnergyUsage.naturalGasCosts
-    // } else if (airHeatingOpportunity.inputData.utilityType == 'Other Fuel') {
-    //   currentCosts = currentEnergyUsage.otherFuelCosts;
-    // }
+    if (airHeatingOpportunity.energySourceData.energySourceType == 'Natural Gas') {
+      currentCosts = currentEnergyUsage.naturalGasCosts
+    } else if (airHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+    }
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,

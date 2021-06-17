@@ -92,6 +92,7 @@ export class AirHeatingFormService {
   getAirHeatingInputSolidMaterial(form: FormGroup): AirHeatingInput {
     let obj: AirHeatingInput = {
       operatingHours: form.controls.operatingHours.value,
+      utilityType: form.controls.utilityType.value,
       gasFuelType: form.controls.gasFuelType.value,
       fuelCost: form.controls.fuelCost.value,
       materialTypeId: form.controls.materialTypeId.value,
