@@ -23,15 +23,14 @@ export class WaterHeatingComponent implements OnInit {
   @Output("emitCancel")
   emitCancel = new EventEmitter<boolean>();
 
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef; 
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-
-  
   waterHeatingInputSub: Subscription;
-  headerHeight: number;
+  containerHeight: number;
   tabSelect: string = 'results';
   
   constructor(private waterHeatingService: WaterHeatingService,
@@ -104,7 +103,7 @@ export class WaterHeatingComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 
