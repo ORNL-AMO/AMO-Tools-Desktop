@@ -62,7 +62,11 @@
 <app-waste-heat *ngIf="selectedCalc == 'waste-heat'" [inTreasureHunt]="true"
   (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-waste-heat>
-  
+
+<app-air-heating *ngIf="selectedCalc == 'air-heating'" [inTreasureHunt]="true"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-air-heating>
+
 <app-opening *ngIf="selectedCalc == 'opening-loss'" [inTreasureHunt]="true"
   (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-opening>

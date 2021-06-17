@@ -17,6 +17,7 @@ import { WaterReductionTreasureHuntService } from './treasure-hunt-calculator-se
 import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/leakage-treasure-hunt.service';
 import { WasteHeatTreasureHuntService } from './treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
 import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
@@ -35,6 +36,7 @@ export class ConvertInputDataService {
     private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
     private wasteHeatTreasureHuntService: WasteHeatTreasureHuntService,
+    private airHeatingTreasureHuntService: AirHeatingTreasureHuntService,
     private wallTreasureService: WallTreasureHuntService,
     private openingTreasureService: OpeningTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
@@ -83,6 +85,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.wasteHeatReductions != undefined) {
       treasureHunt.wasteHeatReductions = this.wasteHeatTreasureHuntService.convertWasteHeatReductions(treasureHunt.wasteHeatReductions, oldSettings, newSettings);
+    }
+    if (treasureHunt.airHeatingOpportunities != undefined) {
+      treasureHunt.airHeatingOpportunities = this.airHeatingTreasureHuntService.convertAirHeatingOpportunities(treasureHunt.airHeatingOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.openingLosses != undefined) {
       treasureHunt.openingLosses = this.openingTreasureService.convertOpeningLosses(treasureHunt.openingLosses, oldSettings, newSettings);
