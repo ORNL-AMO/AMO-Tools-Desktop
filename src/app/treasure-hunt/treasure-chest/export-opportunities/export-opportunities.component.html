@@ -303,6 +303,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.waterHeatingOpportunities">
+                        <label>Water Heating </label>
+                        <ul>
+                            <li
+                                *ngFor="let waterHeating of exportOpportunities.waterHeatingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!waterHeating.opportunitySheet || !waterHeating.opportunitySheet.name">
+                                    Water Heating #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="waterHeating.opportunitySheet && waterHeating.opportunitySheet.name">
+                                    {{waterHeating.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

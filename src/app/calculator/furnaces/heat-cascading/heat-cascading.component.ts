@@ -55,6 +55,9 @@ export class HeatCascadingComponent implements OnInit {
   ngOnDestroy() {
     this.heatCascadingInputSub.unsubscribe();
     this.modalSubscription.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.heatCascadingService.heatCascadingInput.next(undefined);
+    }
   }
 
   ngAfterViewInit() {

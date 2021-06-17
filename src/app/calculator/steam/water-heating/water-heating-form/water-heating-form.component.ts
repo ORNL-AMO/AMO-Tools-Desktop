@@ -15,6 +15,8 @@ import { WaterHeatingService } from '../water-heating.service';
 export class WaterHeatingFormComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -69,7 +71,6 @@ export class WaterHeatingFormComponent implements OnInit {
     this.calculate();
   }
 
-
   focusField(str: string) {
     this.waterHeatingService.currentField.next(str);
   }
@@ -82,6 +83,11 @@ export class WaterHeatingFormComponent implements OnInit {
 
   closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
+  }
+
+  setUtilityType() {
+    this.form.controls.hxUtilityType.patchValue(this.form.controls.boilerUtilityType.value);
+    this.calculate();
   }
 
   openOperatingHoursModal() {

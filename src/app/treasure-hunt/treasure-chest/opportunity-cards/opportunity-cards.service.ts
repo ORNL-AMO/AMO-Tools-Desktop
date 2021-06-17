@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, AirHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
@@ -24,6 +24,7 @@ import { WasteHeatTreasureHuntService } from '../../treasure-hunt-calculator-ser
 import { OpeningTreasureHuntService } from '../../treasure-hunt-calculator-services/opening-treasure-hunt.service';
 import { AirHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from '../../treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -51,7 +52,8 @@ export class OpportunityCardsService {
     private wallLossTreasureHuntService: WallTreasureHuntService,
     private leakageLossTreasureService: LeakageTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
-    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
     ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -78,6 +80,7 @@ export class OpportunityCardsService {
     let wasteHeatData: Array<OpportunityCardData> = this.getWasteHeatReductions(treasureHunt.wasteHeatReductions, treasureHunt.currentEnergyUsage, settings);
     let airHeatingData: Array<OpportunityCardData> = this.getAirHeatingOpportunities(treasureHunt.airHeatingOpportunities, treasureHunt.currentEnergyUsage, settings);
     let heatCascadingData: Array<OpportunityCardData> = this.getHeatCascadingOpportunities(treasureHunt.heatCascadingOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let waterHeatingData: Array<OpportunityCardData> = this.getWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, treasureHunt.currentEnergyUsage, settings);
     let leakageLossData: Array<OpportunityCardData> = this.getLeakageLosses(treasureHunt.leakageLosses, treasureHunt.currentEnergyUsage, settings);
     let flueGasData: Array<OpportunityCardData> = this.getFlueGasLosses(treasureHunt.flueGasLosses, treasureHunt.currentEnergyUsage, settings);
     
@@ -101,6 +104,7 @@ export class OpportunityCardsService {
       leakageLossData,
       wasteHeatData,
       heatCascadingData,
+      waterHeatingData,
       flueGasData
       );
     let index: number = 0;
@@ -597,6 +601,21 @@ export class OpportunityCardsService {
     }
     return opportunityCardsData;
   }
+
+  getWaterHeatingOpportunities(waterHeatingOpportunities: Array<WaterHeatingTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (waterHeatingOpportunities) {
+      let index: number = 0;
+      waterHeatingOpportunities.forEach(waterHeating => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(waterHeating, settings);
+        let cardData: OpportunityCardData = this.waterHeatingTreasureHuntService.getWaterHeatingOpportunityCardData(waterHeating, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
 }
 
 
@@ -644,4 +663,5 @@ export interface OpportunityCardData {
   leakageLoss?: LeakageLossTreasureHunt;
   flueGas?: FlueGasTreasureHunt;
   heatCascading?: HeatCascadingTreasureHunt;
+  waterHeating?: WaterHeatingTreasureHunt;
 }

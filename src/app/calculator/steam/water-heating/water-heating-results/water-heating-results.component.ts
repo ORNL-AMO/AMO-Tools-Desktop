@@ -19,6 +19,8 @@ export class WaterHeatingResultsComponent implements OnInit {
   @ViewChild('copyTable2', { static: false }) energySavedTotal: ElementRef;
   table2String: any;
 
+  displayAdditionalResults: boolean = true;
+
   outputSubscription: Subscription;
   output: WaterHeatingOutput;
   

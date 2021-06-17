@@ -89,6 +89,11 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-heat-cascading>
 
+<app-water-heating *ngIf="selectedCalc == 'water-heating'" [inTreasureHunt]="true"
+  (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours">
+</app-water-heating>
+
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
