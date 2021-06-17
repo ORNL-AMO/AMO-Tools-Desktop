@@ -103,7 +103,8 @@ export class NoLoadComponent implements OnInit {
       }
 
       if (!this.selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != this.genericCompressor.MinULSumpPressure);
+        let expectedPressure: number = this.getExpectedPressure();
+        this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != expectedPressure);
       } else {
         this.showPressureCalc = false;
       }
@@ -128,7 +129,8 @@ export class NoLoadComponent implements OnInit {
   }
 
   setPressure() {
-    this.form.controls.dischargePressure.patchValue(this.genericCompressor.MinULSumpPressure);
+    let expectedPressure: number = this.getExpectedPressure();
+    this.form.controls.dischargePressure.patchValue(expectedPressure);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }
@@ -141,6 +143,10 @@ export class NoLoadComponent implements OnInit {
     }else{
        return this.performancePointCalculationsService.calculateNoLoadPowerWithoutUnloading(this.genericCompressor);
     }
+  }
+
+  getExpectedPressure(): number{
+    return this.performancePointCalculationsService.getNoLoadDischargePressure(this.selectedCompressor, this.genericCompressor);
   }
 
 }

@@ -44,7 +44,9 @@ export class ControlDataComponent implements OnInit {
 
   setControlTypeOptions(compressorType: number) {
     if (compressorType) {
+      console.log(compressorType);
       this.controlTypeOptions = ControlTypes.filter(type => { return type.compressorTypes.includes(compressorType) });
+      console.log(this.controlTypeOptions);
     } else {
       this.controlTypeOptions = [];
     }

@@ -92,10 +92,15 @@ export class PerformancePointCalculationsService {
     } else if (selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
       //blowoff
       selectedCompressor.performancePoints = this.setBlowoffPerformancePoints(selectedCompressor, genericCompressor);
+    } else if (selectedCompressor.compressorControls.controlType == 7) {
+      //multi-step unloading
+      selectedCompressor.performancePoints = this.setMultiStepUnloading(selectedCompressor, genericCompressor);
+
     }
     return selectedCompressor.performancePoints;
   }
 
+  //WITH UNLOADING
   setWithUnloadingPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     //maxFullFlow
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
@@ -119,7 +124,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+      selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0;
@@ -130,6 +135,7 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints;
   }
 
+  //VARIABLE DISPLACMENT
   setVariableDisplacementPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     //maxFullFlow
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
@@ -153,7 +159,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+      selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0
@@ -164,12 +170,14 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints;
   }
 
+  //LOAD/UNLOAD
   setLubricatedLoadUnloadPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     //maxFullFlow
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
       selectedCompressor.performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
     }
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow) {
+      console.log('calc');
       selectedCompressor.performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
     }
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPower) {
@@ -177,7 +185,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure = genericCompressor.MinULSumpPressure;
+      selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0
@@ -188,6 +196,7 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints;
   }
 
+  //WITHOUT UNLOADING
   setWithoutUnloadingPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
@@ -202,6 +211,7 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints;
   }
 
+  //START STOP
   setStartStopPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     //maxFullFlow
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
@@ -215,7 +225,7 @@ export class PerformancePointCalculationsService {
     }
     //noLoad
     if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      selectedCompressor.performancePoints.noLoad.dischargePressure = 0;
+      selectedCompressor.performancePoints.noLoad.dischargePressure =  this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
     }
     if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
       selectedCompressor.performancePoints.noLoad.airflow = 0
@@ -226,12 +236,38 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints;
   }
 
+  //BLOWOFF
   setBlowoffPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
     selectedCompressor.performancePoints.blowoff.airflow = genericCompressor.MaxPressSurgeFlow;
     selectedCompressor.performancePoints.blowoff.dischargePressure = genericCompressor.MaxSurgePressure;
     //TODO: Power
     selectedCompressor.performancePoints.blowoff.power
 
+    return selectedCompressor.performancePoints
+  }
+
+  //MULTI STEP UNLOADING
+  setMultiStepUnloading(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
+    //maxFullFlow
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
+      selectedCompressor.performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
+    }
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow) {
+      selectedCompressor.performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
+    }
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPower) {
+      selectedCompressor.performancePoints.maxFullFlow.power = this.calculateMaxFullFlowPower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, genericCompressor.TotPackageInputPower);
+    }
+    //noLoad
+    if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
+      selectedCompressor.performancePoints.noLoad.dischargePressure =  this.getNoLoadDischargePressure(selectedCompressor, genericCompressor);
+    }
+    if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
+      selectedCompressor.performancePoints.noLoad.airflow = 0
+    }
+    if (selectedCompressor.performancePoints.noLoad.isDefaultPower) {
+      selectedCompressor.performancePoints.noLoad.power = this.calculateNoLoadPower(genericCompressor.NoLoadPowerUL, genericCompressor.TotPackageInputPower, selectedCompressor.designDetails.designEfficiency);;
+    }
     return selectedCompressor.performancePoints
   }
 
@@ -286,8 +322,16 @@ export class PerformancePointCalculationsService {
     return Number(unloadPointDischargePressure.toFixed(3));
   }
 
-
-  calculateNoLoadPowerWithoutUnloading(genericCompressor: GenericCompressor): number{
+  calculateNoLoadPowerWithoutUnloading(genericCompressor: GenericCompressor): number {
     return genericCompressor.NoLoadPowerFM / 100 * genericCompressor.TotPackageInputPower;
+  }
+
+  getNoLoadDischargePressure(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): number {
+    //centrifugal or start/stop
+    if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 6) {
+      return 0
+    } else {
+      return genericCompressor.MinULSumpPressure;
+    }
   }
 }

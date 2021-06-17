@@ -97,7 +97,7 @@ export const ControlTypes: Array<ControlType> = [
     {
         value: 7,
         label: 'Multi-step unloading',
-        compressorTypes: [5],
+        compressorTypes: [5, 6],
         enumValue: 6
     },
     {
