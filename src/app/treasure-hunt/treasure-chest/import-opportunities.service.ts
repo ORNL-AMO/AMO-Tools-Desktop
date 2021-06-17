@@ -99,6 +99,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
     }
+    if(data.airHeatingOpportunities){
+      if (treasureHunt.airHeatingOpportunities == undefined) {
+        treasureHunt.airHeatingOpportunities = new Array();
+      }
+      treasureHunt.airHeatingOpportunities = treasureHunt.airHeatingOpportunities.concat(data.airHeatingOpportunities);
+    }
     if(data.leakageLosses){
       if (treasureHunt.leakageLosses == undefined) {
         treasureHunt.leakageLosses = new Array();

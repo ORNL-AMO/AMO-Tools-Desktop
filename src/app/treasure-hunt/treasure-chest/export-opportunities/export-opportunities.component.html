@@ -239,6 +239,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.airHeatingOpportunities">
+                        <label>Air Heating Opportunities</label>
+                        <ul>
+                            <li
+                                *ngFor="let airHeating of exportOpportunities.airHeatingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!airHeating.opportunitySheet || !airHeating.opportunitySheet.name">
+                                    Air Heating #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="airHeating.opportunitySheet && airHeating.opportunitySheet.name">
+                                    {{airHeating.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.flueGasLosses">
                         <label>Flue Gas Losses</label>
                         <ul>
