@@ -90,6 +90,10 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printWasteWaterRollup = !currentPrintOptions.printWasteWaterRollup;
         break;
       }
+      case "detailedResults": {
+        currentPrintOptions.printDetailedResults = !currentPrintOptions.printDetailedResults;
+        break;
+      }
       default: {
         break;
       }
@@ -115,6 +119,7 @@ export class PrintOptionsMenuService {
       printReportOpportunitySummary: bool,
       printSsmtRollup: bool,
       printWasteWaterRollup: bool,
+      printDetailedResults: bool,
       selectAll: bool
     }
   }
