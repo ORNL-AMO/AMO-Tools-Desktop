@@ -14,22 +14,17 @@ export class WasteHeatHelpComponent implements OnInit {
   
   currentFieldSub: Subscription;
   currentField: string;
-  displayDescription: boolean = true;
 
-  constructor(private wasteHeatService: WasteHeatService) { }
+  constructor(private airheatingService: WasteHeatService) { }
   
   ngOnInit(): void {
-    this.currentFieldSub = this.wasteHeatService.currentField.subscribe(val => {
+    this.currentFieldSub = this.airheatingService.currentField.subscribe(val => {
       this.currentField = val;
     });
   }
   
   ngOnDestroy(): void {
     this.currentFieldSub.unsubscribe();
-  }
-
-  toggleDescription() {
-    this.displayDescription = !this.displayDescription;
   }
 
 }

@@ -22,6 +22,11 @@
     border-bottom: #bbb dashed 1px;
 }
 
+
+.add-loss {
+    margin-bottom: 5px;
+}
+
 .form-row-pad-fix {
     margin-left: -15px !important;
 }

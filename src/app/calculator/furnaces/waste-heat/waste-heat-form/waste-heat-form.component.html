@@ -21,26 +21,9 @@
         </span>
       </div>
 
-      <div *ngIf="inTreasureHunt" class="form-group">
-        <label class="small" for="{{'energySourceType'+idString}}"> Energy Source Type
-        </label>
-        <select name="{{'energySourceType'+idString}}" class="form-control" id="{{'energySourceType'+idString}}"
-          formControlName="energySourceType" (change)="setEnergySource()" (focus)="focusField('energySourceType')">
-          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option">{{option}}</option>
-        </select>
-      </div>
-
       <div class="form-group">
         <label class="small" for="availableHeat">
-          <span *ngIf="!inTreasureHunt || form.controls.energySourceType.value == 'Other Fuel' || form.controls.energySourceType.value == 'Natural Gas'">
             Available Heat
-          </span>
-          <span *ngIf="form.controls.energySourceType.value == 'Steam'">
-            Boiler Efficiency
-          </span>
-          <span *ngIf="form.controls.energySourceType.value == 'Electricity'">
-            System Efficiency
-          </span>
           <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
         </label>
         <div class="input-group">
@@ -61,23 +44,14 @@
 
       <div class="form-group">
         <label class="small" for="cost">
-          <ng-container *ngIf="inTreasureHunt">
-          <span *ngIf="form.controls.energySourceType.value == 'Electricity'">
-            Energy Cost
-           </span>
-          <span *ngIf="form.controls.energySourceType.value != 'Electricity'">
-            Fuel Cost
-          </span>
-        </ng-container>
-        <ng-container *ngIf="!inTreasureHunt">
-          Electricity Cost
-        </ng-container>
+          Electricity Cost 
          </label>
         <div class="input-group">
           <input name="cost" type="number" class="form-control"
           formControlName="cost" id="cost" onfocus="this.select();"
           (input)="calculate()" (focus)="focusField('cost')" >
-          <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span></span>
+          <span class="input-group-addon units">$/kWh
+          </span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.cost.invalid && !form.controls.cost.pristine">

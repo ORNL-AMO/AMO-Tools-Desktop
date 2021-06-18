@@ -99,6 +99,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
     }
+    if(data.wasteHeatReductions){
+      if (treasureHunt.wasteHeatReductions == undefined) {
+        treasureHunt.wasteHeatReductions = new Array();
+      }
+      treasureHunt.wasteHeatReductions = treasureHunt.wasteHeatReductions.concat(data.wasteHeatReductions);
+    }
     if(data.airHeatingOpportunities){
       if (treasureHunt.airHeatingOpportunities == undefined) {
         treasureHunt.airHeatingOpportunities = new Array();
