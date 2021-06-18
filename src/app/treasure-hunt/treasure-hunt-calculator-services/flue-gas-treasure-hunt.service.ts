@@ -51,7 +51,7 @@ export class FlueGasTreasureHuntService {
       energySavings: results.fuelSavings,
       baselineCost: results.baseline.fuelCost,
       modificationCost: results.modification.fuelCost,
-      utilityType: flueGasTreasureHunt.baseline.flueGasType == 'By Volume'? flueGasTreasureHunt.baseline.flueGasByVolume.utilityType : 'Other Fuel',
+      utilityType: flueGasTreasureHunt.baseline.flueGasType == 'By Volume'? flueGasTreasureHunt.baselineEnergyData.utilityType : 'Other Fuel',
     }
     
     return treasureHuntOpportunityResults;
@@ -64,7 +64,7 @@ export class FlueGasTreasureHuntService {
       unitStr = 'GJ';
     }
 
-    if (flueGas.baseline.flueGasType == 'By Volume' && flueGas.baseline.flueGasByVolume.gasTypeId == 1) {
+    if (flueGas.baseline.flueGasType == 'By Volume' && flueGas.baselineEnergyData.utilityType === 'Natural Gas') {
       currentCosts = currentEnergyUsage.naturalGasCosts;
     } else {
       currentCosts = currentEnergyUsage.otherFuelCosts;
