@@ -217,8 +217,7 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
 }
 
 export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
-    baseline: WasteHeatInput;
-    modification: WasteHeatInput;
+    inputData: WasteHeatInput;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
