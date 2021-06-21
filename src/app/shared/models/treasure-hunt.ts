@@ -11,6 +11,7 @@ import { OpeningLoss } from "./phast/losses/openingLoss";
 import { AirHeatingInput } from "./phast/airHeating";
 import { HeatCascadingInput } from "./phast/heatCascading";
 import { WaterHeatingInput } from "./steam/waterHeating";
+import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
 
 export interface TreasureHunt {
     name: string,
@@ -217,8 +218,7 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
 }
 
 export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
-    baseline: WasteHeatInput;
-    modification: WasteHeatInput;
+    inputData: WasteHeatInput;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
@@ -249,8 +249,8 @@ export interface LeakageLossTreasureHunt extends TreasureHuntOpportunity {
 export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
     baseline: FlueGas;
     modification: FlueGas;
-    baselineEnergyData: EnergyData;
-    modificationEnergyData: EnergyData;
+    baselineEnergyData: FlueGasEnergyData;
+    modificationEnergyData: FlueGasEnergyData;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
