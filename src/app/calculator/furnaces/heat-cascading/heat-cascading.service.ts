@@ -36,7 +36,6 @@ export class HeatCascadingService {
       priExhaustTemperature: undefined,
       priExhaustO2: undefined,
       priCombAirTemperature: undefined,
-      priAvailableHeat: undefined,
       priOpHours: undefined,
       priFuelHV: 1032.44,
   
@@ -89,7 +88,6 @@ export class HeatCascadingService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy = this.convertPercentInputs(inputCopy);
-      let output = processHeatAddon.cascadeHeatHighToLow(inputCopy);
       let heatCascadingOutput: HeatCascadingOutput = processHeatAddon.cascadeHeatHighToLow(inputCopy);
       heatCascadingOutput = this.convertResultUnits(heatCascadingOutput, settings);
       heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.secFuelCost;
@@ -106,7 +104,6 @@ export class HeatCascadingService {
       priExhaustTemperature: 1475,
       priExhaustO2: 7,
       priCombAirTemperature: 80,
-      priAvailableHeat: 100,
       priOpHours: 8000,
       priFuelHV: 1032.44,
   
@@ -144,7 +141,6 @@ export class HeatCascadingService {
   convertPercentInputs(inputs: HeatCascadingInput): HeatCascadingInput {
     inputs.priExhaustO2 = inputs.priExhaustO2 > 0? inputs.priExhaustO2 / 100 : inputs.priExhaustO2;
     inputs.secExhaustO2 = inputs.secExhaustO2 > 0? inputs.secExhaustO2 / 100 : inputs.secExhaustO2;
-    inputs.priAvailableHeat = inputs.priAvailableHeat > 0? inputs.priAvailableHeat / 100 : inputs.priAvailableHeat;
     inputs.secAvailableHeat = inputs.secAvailableHeat > 0? inputs.secAvailableHeat / 100 : inputs.secAvailableHeat;
     return inputs;
   }

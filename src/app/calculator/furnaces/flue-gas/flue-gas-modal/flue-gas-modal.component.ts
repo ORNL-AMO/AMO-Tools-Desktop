@@ -24,6 +24,8 @@ export class FlueGasModalComponent implements OnInit {
   treasureHuntEnergySource: string;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  selectedFuelId: number;
   
   method: string = 'By Mass';
   baselineData: FlueGas;

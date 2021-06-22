@@ -28,6 +28,8 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   inModal: boolean;
   @Input()
   treasureHuntEnergySource: string;
+  @Input()
+  selectedFuelId: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
@@ -93,6 +95,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   initFormSetup() {
     this.setFormState();
+    if (this.selectedFuelId !== undefined) {
+      this.byVolumeForm.controls.gasTypeId.patchValue(this.selectedFuelId);
+      this.byVolumeForm.controls.gasTypeId.disable();
+    }
     if (this.byVolumeForm.controls.gasTypeId.value && this.byVolumeForm.controls.gasTypeId.value !== '') {
       if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value) {
         this.setProperties(this.treasureHuntEnergySource);

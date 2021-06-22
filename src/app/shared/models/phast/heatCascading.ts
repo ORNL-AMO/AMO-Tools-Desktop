@@ -4,7 +4,6 @@ export interface HeatCascadingInput {
     priExhaustTemperature: number,
     priExhaustO2: number,
     priCombAirTemperature: number,
-    priAvailableHeat: number,
     priOpHours: number,
     priFuelHV: number,
 

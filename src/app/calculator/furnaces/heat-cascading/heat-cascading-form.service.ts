@@ -16,7 +16,6 @@ export class HeatCascadingFormService {
       priExhaustTemperature: [inputObj.priExhaustTemperature, Validators.required],
       priExhaustO2: [inputObj.priExhaustO2, [Validators.required, Validators.min(0), Validators.max(100)]],
       priCombAirTemperature: [inputObj.priCombAirTemperature, Validators.required],
-      priAvailableHeat: [inputObj.priAvailableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       priOpHours: [inputObj.priOpHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       priFuelHV: [inputObj.priFuelHV, Validators.required],
      
@@ -55,7 +54,6 @@ export class HeatCascadingFormService {
       priExhaustTemperature: form.controls.priExhaustTemperature.value,
       priExhaustO2: form.controls.priExhaustO2.value,
       priCombAirTemperature: form.controls.priCombAirTemperature.value,
-      priAvailableHeat: form.controls.priAvailableHeat.value,
       priOpHours: form.controls.priOpHours.value,
       priFuelHV: form.controls.priFuelHV.value,
 
