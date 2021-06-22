@@ -68,7 +68,7 @@ import { TraversePlanesComponent } from './fan-analysis-form/plane-data-form/tra
     GasDensityResultsModule,
     ModalModule,
   ],
-  exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent],
+  exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent, PlanarResultsComponent],
   providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]
 })
 export class FanAnalysisModule { }

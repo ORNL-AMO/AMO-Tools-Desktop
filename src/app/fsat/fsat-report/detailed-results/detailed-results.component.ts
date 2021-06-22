@@ -3,11 +3,15 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-analysis.service';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { Calculator } from '../../../shared/models/calculators';
 import { Fan203Inputs, FieldData, FSAT, PlaneResults, PsychrometricResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';
+
+declare var fanAddon: any;
 
 @Component({
   selector: 'app-detailed-results',
@@ -30,18 +34,27 @@ export class DetailedResultsComponent implements OnInit {
   @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
   @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
   @HostListener('window:resize', ['$event'])
-  pressureCalcType: string;
+  pressureCalcType: string = 'flow';
   modalFsatCopy: FSAT;
+  fsatModal: FSAT;
   pressureModalSub: Subscription;
   bodyHeight: number;
   disableApplyData: boolean = true;
 
+  isSelected: boolean;
+
+  getResultsSubscription: Subscription;
+  pressureCalcResultType: string = 'static';
   showFull: boolean = false;
   planeResults: PlaneResults;
   inputs: Fan203Inputs;
 
+  calcExists: boolean;
+  calculator: Calculator;
+
   constructor(private fsatReportRollupService: FsatReportRollupService, private fsatService: FsatService,
-    private fanAnalysisService: FanAnalysisService, private convertFanAnalysis: ConvertFanAnalysisService) { }
+    private fanAnalysisService: FanAnalysisService, private convertFanAnalysis: ConvertFanAnalysisService,
+    private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit(): void {
     this.fsat = this.assessment.fsat;
@@ -57,24 +70,41 @@ export class DetailedResultsComponent implements OnInit {
       });
     }
 
-    // this.inputs = this.fanAnalysisService.getExampleData();
-
-    // this.planeResults = this.getTraverseData(this.inputs); 
-    //this.getAmcaModal(this.fsat)
+    // this.fsatModal = JSON.parse(JSON.stringify(this.fsat));
+    // if (this.fsat.modalFieldData) {
+    //   this.fsatModal.fieldData = this.fsat.modalFieldData;
+    // }
+    // this.pressureCalcType = 'flow';
+    
 
 
 
   }
-  ngAfterViewInit() {    
-    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
-      this.getBodyHeight();
-    });
+
+  getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults{
+    let inputCopy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+    inputCopy = this.convertFanAnalysis.convertFan203DataForCalculations(inputCopy, settings);
+    let results: PlaneResults = fanAddon.getPlaneResults(inputCopy);
+    results = this.convertFanAnalysis.convertPlaneResults(results, this.settings);
+    return results;
   }
 
-  ngOnDestroy() {
-    //this.hidePressureModal();
-    this.pressureModalSub.unsubscribe();
+  getResults() {
+    this.inputs = this.fanAnalysisService.inputData;
+    this.planeResults = this.fanAnalysisService.getPlaneResults(this.settings);
   }
+
+  // ngAfterViewInit() {    
+  //   this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
+  //     this.getBodyHeight();
+  //   });
+  // }
+
+  // ngOnDestroy() {
+  //   //this.hidePressureModal();
+  //   //this.getResultsSubscription.unsubscribe();
+  //   this.pressureModalSub.unsubscribe();
+  // }
 
   showAmcaModal(eachFsat: FSAT) {
     this.modalFsatCopy = JSON.parse(JSON.stringify(eachFsat));
@@ -85,25 +115,25 @@ export class DetailedResultsComponent implements OnInit {
     this.fsatService.modalOpen.next(true);
     this.pressureModal.show();
   }
+
   getAmcaModal(eachFsat: FSAT) {
     this.modalFsatCopy = JSON.parse(JSON.stringify(eachFsat));
     if (eachFsat.modalFieldData) {
       this.modalFsatCopy.fieldData = eachFsat.modalFieldData;
     }
     this.pressureCalcType = 'flow';
+    this.isSelected = true;
+    this.getBodyHeight();
     this.fsatService.modalOpen.next(true);
-    //this.pressureModal.show();
+    this.pressureModal.show();
   }
 
   setCalcInvalid(isCalcValid: boolean) {
     this.disableApplyData = isCalcValid;
-  }
-
-  updateFsatWithModalData(modalFieldData: FieldData) {
-    this.fsat.modalFieldData = JSON.parse(JSON.stringify(modalFieldData));
-  }
+  }  
 
   hidePressureModal() {
+    this.isSelected = false;
     this.pressureCalcType = undefined;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();

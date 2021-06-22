@@ -37,6 +37,7 @@ import { PlanarResultsComponent } from '../../calculator/fans/fan-analysis/help-
     PieChartModule,
     SharedPipesModule,
     CalculatePressuresModule,
+    FanAnalysisModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent],
   exports: [FsatReportComponent]
