@@ -5,6 +5,7 @@ import { SuiteApiEnumService } from './suite-api-enum.service';
 import { FansSuiteApiService } from './fans-suite-api.service';
 import { ProcessHeatingApiService } from './process-heating-api.service';
 import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
+import { ChillersSuiteApiService } from './chillers-suite-api.service';
 
 
 
@@ -18,6 +19,7 @@ import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
     SuiteApiEnumService,
     ProcessHeatingApiService,
     FansSuiteApiService,
+    ChillersSuiteApiService,
     WasteWaterSuiteApiService
   ]
 })
