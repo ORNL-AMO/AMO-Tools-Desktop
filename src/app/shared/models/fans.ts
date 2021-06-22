@@ -364,6 +364,7 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  planeResults?: PlaneResults;
 }
 
 export interface InletPressureData {

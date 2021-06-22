@@ -86,11 +86,23 @@ export class FsatService {
     return results;
   }
 
+  // getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
+  //   let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+  //   inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
+  //   let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
+  //   results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
+  //   return results;
+  // }
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
+    let results: PlaneResults;
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
+    } catch (err) {
+      console.log(err);
+    }
     return results;
   }
 
@@ -175,10 +187,31 @@ export class FsatService {
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
       results.annualCost = results.annualCost * 1000;
+      // Get traverse data/plane results
+      let fan203InputsForPlaneResult: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
+      if (fan203InputsForPlaneResult) {
+        results.planeResults = this.getPlaneResults(fan203InputsForPlaneResult, settings);
+      }
       return results;
     } else {
       return this.getEmptyResults();
     }
+  }
+
+  getFan203InputForPlaneResults(fsat: FSAT): Fan203Inputs {
+    let hasFanRatedInfo: boolean = fsat.fieldData.fanRatedInfo !== undefined;
+    let hasBaseGasDensity: boolean = fsat.baseGasDensity !== undefined;
+    let hasPlaneData: boolean = fsat.fieldData.planeData !== undefined;
+    let fan203Inputs: Fan203Inputs;
+    if (hasFanRatedInfo && hasBaseGasDensity && hasPlaneData) {
+      fan203Inputs = {
+        FanRatedInfo: fsat.fieldData.fanRatedInfo,
+        BaseGasDensity: fsat.baseGasDensity,
+        FanShaftPower: undefined,
+        PlaneData: fsat.fieldData.planeData,
+      }
+    }
+    return fan203Inputs;
   }
 
   fanResultsExisting(input: FsatInput): FsatOutput {
@@ -253,7 +286,7 @@ export class FsatService {
 
   calculateInletVelocityPressure(calculationInputs: InletVelocityPressureInputs): number {
     let inletVelocityPressure: number;
-    let flowRateCalc: number = (1/1096) * (calculationInputs.flowRate / calculationInputs.ductArea); 
+    let flowRateCalc: number = (1 / 1096) * (calculationInputs.flowRate / calculationInputs.ductArea);
     inletVelocityPressure = calculationInputs.gasDensity * Math.pow(flowRateCalc, 2);
     if (isNaN(inletVelocityPressure) || !isFinite(inletVelocityPressure)) {
       inletVelocityPressure = undefined;

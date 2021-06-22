@@ -19,9 +19,6 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { DetailedResultsComponent } from './detailed-results/detailed-results.component';
-import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
-import { FanAnalysisModule } from '../../calculator/fans/fan-analysis/fan-analysis.module';
-import { PlanarResultsComponent } from '../../calculator/fans/fan-analysis/help-and-results-panel/planar-results/planar-results.component';
 
 
 @NgModule({
@@ -36,8 +33,6 @@ import { PlanarResultsComponent } from '../../calculator/fans/fan-analysis/help-
     PercentGraphModule,
     PieChartModule,
     SharedPipesModule,
-    CalculatePressuresModule,
-    FanAnalysisModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent],
   exports: [FsatReportComponent]
