@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
-import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
-import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
-import { FlowCalculations } from '../shared/models/phast/flowCalculations';
+import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuel, EnergyEquivalencyFuelOutput } from '../shared/models/phast/energyEquivalency';
+import { O2Enrichment, RawO2Output } from '../shared/models/phast/o2Enrichment';
+import { FlowCalculations, FlowCalculationsOutput } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
@@ -39,8 +39,8 @@ import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.
 import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
+import { EnergyEAFOutput, EnergyExhaustGasOutput, HeatingValueByVolumeOutput, ProcessHeatingApiService } from '../tools-suite-api/process-heating-api.service';
 
-declare var phastAddon: any;
 
 @Injectable()
 export class PhastService {
@@ -65,6 +65,7 @@ export class PhastService {
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
+    private processHeatingApiService: ProcessHeatingApiService,
     private slagService: SlagService
   ) {
     this.initTabs();
@@ -87,10 +88,6 @@ export class PhastService {
   goToSpec(newSpec: number) {
     let newSpecTab = _.find(specTabs, (tab) => { return tab.step === newSpec; });
     this.specTab.next(newSpecTab);
-  }
-
-  test() {
-    console.log(phastAddon);
   }
 
   createInputCopy(inputs: any) {
@@ -119,9 +116,9 @@ export class PhastService {
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb');
-      results = phastAddon.fixtureLosses(inputs);
+      results = this.processHeatingApiService.fixtureLosses(inputs);
     } else {
-      results = phastAddon.fixtureLosses(inputs);
+      results = this.processHeatingApiService.fixtureLosses(inputs);
     }
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     results = this.convertResult(results, conversionUnit);
@@ -137,11 +134,8 @@ export class PhastService {
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.gasDensity = this.convertUnitsService.value(inputs.gasDensity).from('kgNm3').to('lbscf');
-      results = phastAddon.gasCoolingLosses(inputs);
     }
-    else {
-      results = phastAddon.gasCoolingLosses(inputs);
-    }
+    results = this.processHeatingApiService.gasCoolingLosses(inputs);
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     results = this.convertResult(results, conversionUnit);
     return results;
@@ -158,10 +152,8 @@ export class PhastService {
       inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJ').to('Btu');
       inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
       inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulbF');
-      netHeatLoss = phastAddon.gasLoadChargeMaterial(inputs);
-    } else {
-      netHeatLoss = phastAddon.gasLoadChargeMaterial(inputs);
     }
+    netHeatLoss = this.processHeatingApiService.gasLoadChargeMaterial(inputs);
 
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
@@ -189,10 +181,10 @@ export class PhastService {
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L').to('gal');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
-      results = phastAddon.liquidCoolingLosses(inputs);
+      results = this.processHeatingApiService.liquidCoolingLosses(inputs);
     }
     else {
-      results = phastAddon.liquidCoolingLosses(inputs);
+      results = this.processHeatingApiService.liquidCoolingLosses(inputs);
     }
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     // console.log(input, results);
@@ -213,10 +205,8 @@ export class PhastService {
       inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJ').to('Btu');
       inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
       inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
-      netHeatLoss = phastAddon.liquidLoadChargeMaterial(inputs);
-    } else {
-      netHeatLoss = phastAddon.liquidLoadChargeMaterial(inputs);
     }
+    netHeatLoss = this.processHeatingApiService.liquidLoadChargeMaterial(inputs);
 
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
@@ -249,7 +239,7 @@ export class PhastService {
         inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
       }
     }
-    results = phastAddon.viewFactorCalculation(inputs);
+    results = this.processHeatingApiService.viewFactorCalculation(inputs);
     return results;
   }
 
@@ -262,10 +252,8 @@ export class PhastService {
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
       inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
-      results = phastAddon.openingLossesQuad(inputs);
-    } else {
-      results = phastAddon.openingLossesQuad(inputs);
     }
+    results = this.processHeatingApiService.openingLossesQuad(inputs);
     return this.convertResult(results, settings.energyResultUnit);
   }
 
@@ -277,10 +265,8 @@ export class PhastService {
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
-      results = phastAddon.openingLossesCircular(inputs);
-    } else {
-      results = phastAddon.openingLossesCircular(inputs);
     }
+    results = this.processHeatingApiService.openingLossesCircular(inputs);
     return this.convertResult(results, settings.energyResultUnit);
   }
 
@@ -298,10 +284,8 @@ export class PhastService {
       inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
       inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulbF');
       inputs.latentHeat = this.convertUnitsService.value(inputs.latentHeat).from('kJkg').to('btuLb');
-      netHeatLoss = phastAddon.solidLoadChargeMaterial(inputs);
-    } else {
-      netHeatLoss = phastAddon.solidLoadChargeMaterial(inputs);
     }
+    netHeatLoss = this.processHeatingApiService.solidLoadChargeMaterial(inputs);
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
     const bindingResult = netHeatLoss;
@@ -327,10 +311,8 @@ export class PhastService {
       inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('C').to('F');
       inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('km/h').to('mph');
       inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('m2').to('ft2');
-      results = phastAddon.wallLosses(inputs);
-    } else {
-      results = phastAddon.wallLosses(inputs);
     }
+    results = this.processHeatingApiService.wallLosses(inputs);
     results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
@@ -344,10 +326,8 @@ export class PhastService {
       inputs.openingArea = this.convertUnitsService.value(inputs.openingArea).from('m2').to('ft2');
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
       inputs.leakageGasTemperature = this.convertUnitsService.value(inputs.leakageGasTemperature).from('C').to('F');
-      results = phastAddon.leakageLosses(inputs);
-    } else {
-      results = phastAddon.leakageLosses(inputs);
     }
+    results = this.processHeatingApiService.leakageLosses(inputs);
 
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     results = this.convertResult(results, conversionUnit);
@@ -361,10 +341,8 @@ export class PhastService {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
       inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
-      results = phastAddon.flueGasLossesByVolume(inputs);
-    } else {
-      results = phastAddon.flueGasLossesByVolume(inputs);
     }
+    results = this.processHeatingApiService.flueGasLossesByVolume(inputs);
 
     return results;
   }
@@ -377,27 +355,25 @@ export class PhastService {
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
       inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from('C').to('F');
       inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
-      results = phastAddon.flueGasLossesByMass(inputs);
-    } else {
-      results = phastAddon.flueGasLossesByMass(inputs);
     }
+    results = this.processHeatingApiService.flueGasLossesByMass(inputs);
     return results;
   }
 
-  flueGasCalculateExcessAir(input: MaterialInputProperties) {
-    return phastAddon.flueGasCalculateExcessAir(input);
+  flueGasCalculateExcessAir(input: MaterialInputProperties): number {
+    return this.processHeatingApiService.flueGasCalculateExcessAir(input);
   }
 
-  flueGasCalculateO2(input: MaterialInputProperties) {
-    return phastAddon.flueGasCalculateO2(input);
+  flueGasCalculateO2(input: MaterialInputProperties): number {
+    return this.processHeatingApiService.flueGasCalculateO2(input);
   }
 
-  flueGasByMassCalculateExcessAir(input: MaterialInputProperties) {
-    return phastAddon.flueGasByMassCalculateExcessAir(input);
+  flueGasByMassCalculateExcessAir(input: MaterialInputProperties): number {
+    return this.processHeatingApiService.flueGasByMassCalculateExcessAir(input);
   }
 
-  flueGasByMassCalculateO2(input: MaterialInputProperties) {
-    return phastAddon.flueGasByMassCalculateO2(input);
+  flueGasByMassCalculateO2(input: MaterialInputProperties): number {
+    return this.processHeatingApiService.flueGasByMassCalculateO2(input);
   }
 
   atmosphere(input: AtmosphereLoss, settings: Settings, calculatorEnergyUnit = '') {
@@ -408,10 +384,8 @@ export class PhastService {
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('ft3/h');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJm3C').to('btuScfF');
-      results = phastAddon.atmosphere(inputs);
-    } else {
-      results = phastAddon.atmosphere(inputs);
-    }
+    } 
+    results = this.processHeatingApiService.atmosphere(inputs);
 
     let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
     results = this.convertResult(results, conversionUnit);
@@ -426,10 +400,8 @@ export class PhastService {
       inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
-      results = phastAddon.slagOtherMaterialLosses(inputs);
-    } else {
-      results = phastAddon.slagOtherMaterialLosses(inputs);
     }
+    results = this.processHeatingApiService.slagOtherMaterialLosses(inputs);
     results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
@@ -437,25 +409,25 @@ export class PhastService {
   auxiliaryPowerLoss(inputs: AuxiliaryPowerLoss, settings?: Settings) {
     if (settings !== undefined && settings !== null) {
       if (settings.energyResultUnit === 'Btu') {
-        inputs.powerUsed = phastAddon.auxiliaryPowerLoss(inputs);
+        inputs.powerUsed = this.processHeatingApiService.auxiliaryPowerLoss(inputs);
       }
       else if (settings.energyResultUnit === 'kWh') {
-        inputs.powerUsed = this.convertUnitsService.value(phastAddon.auxiliaryPowerLoss(inputs)).from('btuhr').to('kW');
+        inputs.powerUsed = this.convertUnitsService.value(this.processHeatingApiService.auxiliaryPowerLoss(inputs)).from('btuhr').to('kW');
       }
       else {
-        inputs.powerUsed = this.convertUnitsService.value(phastAddon.auxiliaryPowerLoss(inputs)).from('Btu').to(settings.energyResultUnit);
+        inputs.powerUsed = this.convertUnitsService.value(this.processHeatingApiService.auxiliaryPowerLoss(inputs)).from('Btu').to(settings.energyResultUnit);
       }
       return inputs.powerUsed;
     }
     else {
-      return phastAddon.auxiliaryPowerLoss(inputs);
+      return this.processHeatingApiService.auxiliaryPowerLoss(inputs);
     }
   }
 
   //Electric Arc Furnace
-  energyInputEAF(input: EnergyInputEAF, settings: Settings) {
+  energyInputEAF(input: EnergyInputEAF, settings: Settings): EnergyEAFOutput {
     let inputs = this.createInputCopy(input);
-    let results = {
+    let results: EnergyEAFOutput = {
       heatDelivered: 0,
       totalChemicalEnergyInput: 0
     };
@@ -467,54 +439,50 @@ export class PhastService {
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeUse = this.convertUnitsService.value(inputs.electrodeUse).from('kg').to('lb');
       inputs.flowRateInput = this.convertUnitsService.value(inputs.flowRateInput).from('m3').to('ft3');
-      results = phastAddon.energyInputEAF(inputs);
-    } else {
-      results = phastAddon.energyInputEAF(inputs);
     }
+    results = this.processHeatingApiService.energyInputEAF(inputs);
     results.totalChemicalEnergyInput = this.convertResult(results.totalChemicalEnergyInput, settings.energyResultUnit);
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     return results;
   }
 
   //Electric Arc Furnace
-  exhaustGasEAF(input: ExhaustGasEAF, settings: Settings) {
+  exhaustGasEAF(input: ExhaustGasEAF, settings: Settings): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
       inputs.offGasTemp = this.convertUnitsService.value(inputs.offGasTemp).from('C').to('F');
       inputs.vfr = this.convertUnitsService.value(inputs.vfr).from('m3').to('ft3');
       inputs.dustLoading = this.convertUnitsService.value(inputs.dustLoading).from('kgNm3').to('lbscf');
-      results = phastAddon.exhaustGasEAF(inputs);
-    } else {
-      results = phastAddon.exhaustGasEAF(inputs);
     }
+    results = this.processHeatingApiService.exhaustGasEAF(inputs);
     results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
   //energy input for non-EAF Electric process heating
-  energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings) {
+  energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings): EnergyExhaustGasOutput {
     let inputs = this.createInputCopy(input);
-    let results: any = {
+    let results: EnergyExhaustGasOutput = {
       heatDelivered: 0,
-      exhaustGasLosses: 0
+      exhaustGasLosses: 0,
+      availableHeat: 0
     };
     if (settings.unitsOfMeasure === 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('GJ').to('Btu');
-      results = phastAddon.energyInputExhaustGasLosses(inputs);
     } else {
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
-      results = phastAddon.energyInputExhaustGasLosses(inputs);
     }
+    results = this.processHeatingApiService.energyInputExhaustGasLosses(inputs);
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
 
     return results;
   }
 
-  efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings) {
+  efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings): EfficiencyImprovementOutputs {
     let inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
       inputs.currentCombustionAirTemp = this.convertUnitsService.value(inputs.currentCombustionAirTemp).from('C').to('F');
@@ -522,31 +490,31 @@ export class PhastService {
       inputs.newCombustionAirTemp = this.convertUnitsService.value(inputs.newCombustionAirTemp).from('C').to('F');
       inputs.newFlueGasTemp = this.convertUnitsService.value(inputs.newFlueGasTemp).from('C').to('F');
       inputs.currentEnergyInput = this.convertUnitsService.value(inputs.currentEnergyInput).from('GJ').to('MMBtu');
-      let results: EfficiencyImprovementOutputs = phastAddon.efficiencyImprovement(inputs);
+      let results: EfficiencyImprovementOutputs = this.processHeatingApiService.efficiencyImprovement(inputs);
       results.newEnergyInput = this.convertUnitsService.value(results.newEnergyInput).from('MMBtu').to('GJ');
       return results;
     } else {
-      return phastAddon.efficiencyImprovement(inputs);
+      return this.processHeatingApiService.efficiencyImprovement(inputs);
     }
   }
 
-  energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {
+  energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings): EnergyEquivalencyElectricOutput {
     let inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
       inputs.fuelFiredHeatInput = this.convertUnitsService.value(inputs.fuelFiredHeatInput).from('GJ').to('MMBtu');
     }
-    return phastAddon.energyEquivalencyElectric(inputs);
+    return this.processHeatingApiService.energyEquivalencyElectric(inputs);
   }
 
-  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings) {
-    let results = phastAddon.energyEquivalencyFuel(inputs);
+  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings): EnergyEquivalencyFuelOutput {
+    let results = this.processHeatingApiService.energyEquivalencyFuel(inputs);
     if (settings.unitsOfMeasure === 'Metric') {
       results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to('GJ');
     }
     return results;
   }
 
-  flowCalculations(input: FlowCalculations, settings: Settings) {
+  flowCalculations(input: FlowCalculations, settings: Settings): FlowCalculationsOutput {
     let inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
       //cm -> in
@@ -559,17 +527,17 @@ export class PhastService {
       inputs.gasPressure = this.convertUnitsService.value(inputs.gasPressure).from('kPa').to('psi');
       //kJNm3 -> btuSCF
       inputs.gasHeatingValue = this.convertUnitsService.value(inputs.gasHeatingValue).from('kJNm3').to('btuSCF');
-      let results = phastAddon.flowCalculations(inputs);
+      let results: FlowCalculationsOutput = this.processHeatingApiService.flowCalculations(inputs);
       results.flow = this.convertUnitsService.value(results.flow).from('ft3').to('m3');
       results.totalFlow = this.convertUnitsService.value(results.totalFlow).from('ft3').to('m3');
       results.heatInput = this.convertUnitsService.value(results.heatInput).from('MMBtu').to('GJ');
       return results;
     } else {
-      return phastAddon.flowCalculations(inputs);
+      return this.processHeatingApiService.flowCalculations(inputs);
     }
   }
 
-  o2Enrichment(input: O2Enrichment, settings: Settings) {
+  o2Enrichment(input: O2Enrichment, settings: Settings): RawO2Output {
     let inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
       inputs.combAirTemp = this.convertUnitsService.value(inputs.combAirTemp).from('C').to('F');
@@ -577,21 +545,21 @@ export class PhastService {
       inputs.combAirTempEnriched = this.convertUnitsService.value(inputs.combAirTempEnriched).from('C').to('F');
       inputs.flueGasTempEnriched = this.convertUnitsService.value(inputs.flueGasTempEnriched).from('C').to('F');
       inputs.fuelConsumption = this.convertUnitsService.value(inputs.fuelConsumption).from('GJ').to('MMBtu');
-      let results = phastAddon.o2Enrichment(inputs);
+      let results: RawO2Output = this.processHeatingApiService.o2Enrichment(inputs);
       results.fuelConsumption = this.convertUnitsService.value(results.fuelConsumption).from('MMBtu').to('GJ');
       results.fuelConsumptionEnriched = this.convertUnitsService.value(results.fuelConsumptionEnriched).from('MMBtu').to('GJ');
       return results;
     } else {
-      return phastAddon.o2Enrichment(inputs);
+      return this.processHeatingApiService.o2Enrichment(inputs);
     }
   }
 
-  flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial) {
-    return phastAddon.flueGasByVolumeCalculateHeatingValue(inputs);
+  flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): HeatingValueByVolumeOutput {
+    return this.processHeatingApiService.flueGasByVolumeCalculateHeatingValue(inputs);
   }
 
-  flueGasByMassCalculateHeatingValue(inputs: SolidLiquidFlueGasMaterial) {
-    return phastAddon.flueGasByMassCalculateHeatingValue(inputs);
+  flueGasByMassCalculateHeatingValue(inputs: SolidLiquidFlueGasMaterial): number {
+    return this.processHeatingApiService.flueGasByMassCalculateHeatingValue(inputs);
   }
 
   //TODO:Functions in addon need to be implemented

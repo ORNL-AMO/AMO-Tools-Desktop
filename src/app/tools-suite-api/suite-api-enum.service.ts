@@ -11,10 +11,10 @@ export class SuiteApiEnumService {
   constructor() {
     console.log('init');
     // var Module = {
-		// 	onRuntimeInitialized: function () {
-		// 		console.log('Tools Suite Module Initialized');
-		// 	}
-		// }
+    // 	onRuntimeInitialized: function () {
+    // 		console.log('Tools Suite Module Initialized');
+    // 	}
+    // }
     // fetch("assets/client.js");
     // let config: WebAssembly.Module = {
 
@@ -145,6 +145,68 @@ export class SuiteApiEnumService {
         return Module.FanType.BackwardInclinedDIDW;
       case 8:
         return Module.FanType.VaneAxial;
+    }
+  }
+
+  getFlowCalculationGasTypeEnum(gasType: number) {
+    switch (gasType) {
+      case 0:
+        return Module.Gas.AIR;
+      case 1:
+        return Module.Gas.AMMONIA_DISSOCIATED;
+      case 2:
+        return Module.Gas.ARGON;
+      case 3:
+        return Module.Gas.BUTANE;
+      case 4:
+        return Module.Gas.ENDOTHERMIC_AMMONIA;
+      case 5:
+        return Module.Gas.EXOTHERMIC_CRACKED_LEAN;
+      case 6:
+        return Module.Gas.EXOTHERMIC_CRACKED_RICH;
+      case 7:
+        return Module.Gas.HELIUM;
+      case 8:
+        return Module.Gas.NATURAL_GAS;
+      case 9:
+        return Module.Gas.NITROGEN;
+      case 10:
+        return Module.Gas.OXYGEN;
+      case 11:
+        return Module.Gas.PROPANE;
+      case 12:
+        return Module.Gas.OTHER;
+    }
+  }
+
+  getOpeningShapeEnum(openingShape: number) {
+    switch (openingShape) {
+      case 0:
+        return Module.OpeningShape.CIRCULAR;
+      case 1:
+        return Module.OpeningShape.SQUARE;
+    }
+  }
+
+  getFlowCalculationSectionEnum(section: number) {
+    switch (section) {
+      case 0:
+        return Module.Section.SQUARE_EDGE;
+      case 1:
+        return Module.Section.SHARP_EDGE;
+      case 2:
+        return Module.Section.VENTURI;
+    }
+  }
+
+  getMaterialThermicReactionType(thermicReactionType: number) {
+    switch (thermicReactionType) {
+      case 0:
+        return Module.ThermicReactionType.ENDOTHERMIC;
+      case 1:
+        return Module.ThermicReactionType.EXOTHERMIC;
+      case 2:
+        return Module.ThermicReactionType.NONE;
     }
   }
 
