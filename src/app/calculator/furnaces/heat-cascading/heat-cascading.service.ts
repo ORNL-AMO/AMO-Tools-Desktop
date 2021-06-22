@@ -74,7 +74,8 @@ export class HeatCascadingService {
       eqEnergSupply: 0,
       effOppHours: 0,
       energySavings: 0,
-      costSavings: 0
+      costSavings: 0,
+      hourlySavings: 0
     };
     this.heatCascadingOutput.next(emptyOutput);
   }
