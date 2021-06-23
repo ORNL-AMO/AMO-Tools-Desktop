@@ -38,6 +38,7 @@ export interface HeatCascadingOutput {
     eqEnergSupply: number,
     effOppHours: number,
     energySavings: number,
+    hourlySavings: number,
     costSavings: number
 }
 

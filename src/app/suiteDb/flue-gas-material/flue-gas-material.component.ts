@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast/phast.service';
 import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
+import { HeatingValueByVolumeOutput } from '../../tools-suite-api/process-heating-api.service';
 
 
 @Component({
@@ -231,7 +232,7 @@ export class FlueGasMaterialComponent implements OnInit {
     this.getTotalOfFlueGasses();
     this.isValidForm = true;
     for (let property in this.newMaterial) {
-      if(this.newMaterial[property] === null) {
+      if (this.newMaterial[property] === null) {
         this.isValidForm = false;
       }
     }
@@ -242,20 +243,22 @@ export class FlueGasMaterialComponent implements OnInit {
         this.isValidHHVResult = true;
         this.newMaterial.heatingValue = vals.heatingValue;
         this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
-      this.newMaterial.specificGravity = vals.specificGravity;
-      
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
-        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
+        this.newMaterial.specificGravity = vals.specificGravity;
+
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
+          this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
+        }
+      } else {
+        this.isValidHHVResult = false;
+        this.newMaterial.heatingValue = 0;
+        this.newMaterial.heatingValueVolume = 0;
+        this.newMaterial.specificGravity = 0;
       }
-    } else {
-      this.isValidHHVResult = false;
-      this.newMaterial.heatingValue = 0;
-      this.newMaterial.heatingValueVolume = 0;
-      this.newMaterial.specificGravity = 0;
     }
   }
-  }
+
+
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {

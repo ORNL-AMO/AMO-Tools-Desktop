@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { WasteHeatInput, WasteHeatOutput } from '../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../shared/models/settings';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { WasteHeatFormService } from './waste-heat-form.service';
 
 declare var processHeatAddon;
@@ -18,7 +19,8 @@ export class WasteHeatService {
   currentField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private wasteHeatFormService: WasteHeatFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private processHeatingApiService: ProcessHeatingApiService, private wasteHeatFormService: WasteHeatFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.wasteHeatInput = new BehaviorSubject<WasteHeatInput>(undefined);
     this.wasteHeatOutput = new BehaviorSubject<WasteHeatOutput>(undefined);
@@ -66,7 +68,7 @@ export class WasteHeatService {
       this.initDefaultEmptyOutputs();
     } else {
         inputCopy = this.convertInputUnits(inputCopy, settings);
-        let wasteHeatOutput: WasteHeatOutput = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
+        let wasteHeatOutput: WasteHeatOutput = this.processHeatingApiService.waterHeatingUsingExhaust(inputCopy);
         wasteHeatOutput = this.convertResultUnits(wasteHeatOutput, settings);
 
         wasteHeatOutput.annualEnergy = wasteHeatOutput.electricalEnergy * inputCopy.oppHours;
