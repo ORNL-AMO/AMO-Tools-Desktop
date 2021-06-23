@@ -2,12 +2,12 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementR
 import { SsmtService } from '../../../ssmt.service';
 import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-boiler-form',
@@ -47,8 +47,8 @@ export class BoilerFormComponent implements OnInit {
   baselineForm: FormGroup;
   modificationForm: FormGroup;
 
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
-    private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private boilerService: BoilerService,
+    private ssmtService: SsmtService, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.init();
@@ -71,14 +71,14 @@ export class BoilerFormComponent implements OnInit {
 
   setFuelTypes(save?: boolean) {
     if (this.baselineForm.controls.fuelType.value === 0) {
-      this.baselineFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.baselineFuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     } else if (this.baselineForm.controls.fuelType.value === 1) {
-      this.baselineFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.baselineFuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
     if (this.modificationForm.controls.fuelType.value === 0) {
-      this.modificationFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.modificationFuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     } else if (this.modificationForm.controls.fuelType.value === 1) {
-      this.modificationFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.modificationFuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
     if (save) {
       this.save();

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Injectable()
 export class CustomMaterialsService {
@@ -18,7 +18,9 @@ export class CustomMaterialsService {
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) {
+  constructor(
+    private sqlDbApiService: SqlDbApiService,
+    private indexedDbService: IndexedDbService) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedGasLoadCharge = new Array<GasLoadChargeMaterial>();
@@ -73,7 +75,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       delete material.id;
       material.selected = false;
-      let test: boolean = this.suiteDbService.insertAtmosphereSpecificHeat(material);
+      let test: boolean = this.sqlDbApiService.insertAtmosphereSpecificHeat(material);
       if (test === true) {
         this.indexedDbService.addAtmosphereSpecificHeat(material);
       }
@@ -84,7 +86,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       delete material.id;
       material.selected = false;
-      let test: boolean = this.suiteDbService.insertGasFlueGasMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertGasFlueGasMaterial(material);
       if (test === true) {
         this.indexedDbService.addFlueGasMaterial(material);
       }
@@ -95,7 +97,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       material.selected = false;
       delete material.id;
-      let test: boolean = this.suiteDbService.insertGasLoadChargeMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertGasLoadChargeMaterial(material);
       if (test === true) {
         this.indexedDbService.addGasLoadChargeMaterial(material);
       }
@@ -106,7 +108,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       material.selected = false;
       delete material.id;
-      let test: boolean = this.suiteDbService.insertLiquidLoadChargeMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertLiquidLoadChargeMaterial(material);
       if (test === true) {
         this.indexedDbService.addLiquidLoadChargeMaterial(material);
       }
@@ -117,7 +119,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       material.selected = false;
       delete material.id;
-      let test: boolean = this.suiteDbService.insertSolidLiquidFlueGasMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(material);
       if (test === true) {
         this.indexedDbService.addSolidLiquidFlueGasMaterial(material);
       }
@@ -128,7 +130,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       material.selected = false;
       delete material.id;
-      let test: boolean = this.suiteDbService.insertSolidLoadChargeMaterial(material);
+      let test: boolean = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
       if (test === true) {
         this.indexedDbService.addSolidLoadChargeMaterial(material);
       }
@@ -139,7 +141,7 @@ export class CustomMaterialsService {
     data.forEach(material => {
       material.selected = false;
       delete material.id;
-      let test: boolean = this.suiteDbService.insertWallLossesSurface(material);
+      let test: boolean = this.sqlDbApiService.insertWallLossesSurface(material);
       if (test === true) {
         this.indexedDbService.addWallLossesSurface(material);
       }
@@ -172,65 +174,65 @@ export class CustomMaterialsService {
 
 
   deleteAtmosphere(data: Array<AtmosphereSpecificHeat>) {
-    let sdbMaterials: Array<AtmosphereSpecificHeat> = this.suiteDbService.selectAtmosphereSpecificHeat();
+    let sdbMaterials: Array<AtmosphereSpecificHeat> = this.sqlDbApiService.selectAtmosphereSpecificHeat();
     data.forEach(material => {
       this.indexedDbService.deleteAtmosphereSpecificHeat(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteAtmosphereSpecificHeat(sdbId);
+      this.sqlDbApiService.deleteAtmosphereSpecificHeat(sdbId);
     });
   }
 
   deleteFlueGas(data: Array<FlueGasMaterial>) {
-    let sdbMaterials: Array<FlueGasMaterial> = this.suiteDbService.selectGasFlueGasMaterials();
+    let sdbMaterials: Array<FlueGasMaterial> = this.sqlDbApiService.selectGasFlueGasMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteFlueGasMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteGasFlueGasMaterial(sdbId);
+      this.sqlDbApiService.deleteGasFlueGasMaterial(sdbId);
     });
   }
 
   deleteGasLoadCharge(data: Array<GasLoadChargeMaterial>) {
-    let sdbMaterials: Array<GasLoadChargeMaterial> = this.suiteDbService.selectGasLoadChargeMaterials();
+    let sdbMaterials: Array<GasLoadChargeMaterial> = this.sqlDbApiService.selectGasLoadChargeMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteGasLoadChargeMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteGasLoadChargeMaterial(sdbId);
+      this.sqlDbApiService.deleteGasLoadChargeMaterial(sdbId);
     });
   }
 
   deleteLiquidLoadCharge(data: Array<LiquidLoadChargeMaterial>) {
-    let sdbMaterials: Array<LiquidLoadChargeMaterial> = this.suiteDbService.selectLiquidLoadChargeMaterials();
+    let sdbMaterials: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteLiquidLoadChargeMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteLiquidLoadChargeMaterial(sdbId);
+      this.sqlDbApiService.deleteLiquidLoadChargeMaterial(sdbId);
     });
   }
 
   deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
-    let sdbMaterials: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    let sdbMaterials: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteSolidLiquidFlueGasMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteSolidLiquidFlueGasMaterial(sdbId);
+      this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(sdbId);
     });
   }
 
   deleteSolidLoadChargeMaterial(data: Array<SolidLoadChargeMaterial>) {
-    let sdbMaterials: Array<SolidLoadChargeMaterial> = this.suiteDbService.selectSolidLoadChargeMaterials();
+    let sdbMaterials: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     data.forEach(material => {
       this.indexedDbService.deleteSolidLoadChargeMaterial(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.suiteDbService.deleteSolidLoadChargeMaterial(sdbId);
+      this.sqlDbApiService.deleteSolidLoadChargeMaterial(sdbId);
     });
   }
 
   deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
-    let sdbMaterials: Array<WallLossesSurface> = this.suiteDbService.selectWallLossesSurface();
+    let sdbMaterials: Array<WallLossesSurface> = this.sqlDbApiService.selectWallLossesSurface();
     data.forEach(material => {
       this.indexedDbService.deleteWallLossesSurface(material.id);
       let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.surface === sdbMaterial.surface; }).id;
-      this.suiteDbService.deleteWallLossesSurface(sdbId);
+      this.sqlDbApiService.deleteWallLossesSurface(sdbId);
     });
   }
 

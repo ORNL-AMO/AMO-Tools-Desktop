@@ -6,7 +6,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { ChargeMaterialService } from '../charge-material.service';
 import { SolidMaterialFormService, SolidMaterialWarnings } from './solid-material-form.service';
 
@@ -44,7 +44,8 @@ export class SolidMaterialFormComponent implements OnInit {
   collapseMaterial: boolean = false;
   collapseMaterialSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService,
+  constructor(
+    private sqlDbApiService: SqlDbApiService, 
     private chargeMaterialService: ChargeMaterialService,
     private convertUnitsService: ConvertUnitsService,
     private solidMaterialFormService: SolidMaterialFormService,
@@ -60,7 +61,7 @@ export class SolidMaterialFormComponent implements OnInit {
       let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
       this.chargeMaterialType = baselineData[this.index].chargeMaterialType;
     }
-    this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
         if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value === '') {
@@ -154,7 +155,7 @@ export class SolidMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
@@ -191,7 +192,7 @@ export class SolidMaterialFormComponent implements OnInit {
   }
 
   checkSpecificHeatOfSolid() {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -205,7 +206,7 @@ export class SolidMaterialFormComponent implements OnInit {
     }
   }
   checkLatentHeatOfFusion() {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
@@ -219,7 +220,7 @@ export class SolidMaterialFormComponent implements OnInit {
     }
   }
   checkHeatOfLiquid() {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
@@ -233,7 +234,7 @@ export class SolidMaterialFormComponent implements OnInit {
     }
   }
   checkMeltingPoint() {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.meltingPoint).from('F').to('C');
@@ -255,7 +256,7 @@ export class SolidMaterialFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.chargeMaterialForm.patchValue({

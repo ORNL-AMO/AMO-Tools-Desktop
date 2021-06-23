@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -39,7 +39,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
   allCustomMaterials: Array<SolidLiquidFlueGasMaterial>;
-  isValid: boolean;
+  isValidHHVResult: boolean;
+  isValidForm: boolean;
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
@@ -48,11 +49,11 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   differenceError: boolean = false;
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private sqlDbApiService: SqlDbApiService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.allMaterials = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
       this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
         this.allCustomMaterials = idbResults;
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
@@ -64,7 +65,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.allMaterials = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
       this.checkMaterialName();
       this.setHHV();
     }
@@ -77,7 +78,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
-      let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
@@ -92,7 +93,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -104,7 +105,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
         this.indexedDbService.deleteSolidLiquidFlueGasMaterial(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);
@@ -162,17 +163,26 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   setHHV() {
-    const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
-    this.getDiff();
-    if (isNaN(tmpHeatingVals) === false) {
-      this.isValid = true;
-      this.newMaterial.heatingValue = tmpHeatingVals;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+    this.isValidForm = true;
+    for (let property in this.newMaterial) {
+      if(this.newMaterial[property] === null) {
+        this.isValidForm = false;
       }
-    } else {
-      this.isValid = false;
-      this.newMaterial.heatingValue = 0;
+    }
+
+    if (this.isValidForm) {
+      const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+      this.getDiff();
+      if (isNaN(tmpHeatingVals) === false) {
+        this.isValidHHVResult = true;
+        this.newMaterial.heatingValue = tmpHeatingVals;
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+        }
+      } else {
+        this.isValidHHVResult = false;
+        this.newMaterial.heatingValue = 0;
+      }
     }
   }
 
@@ -207,13 +217,16 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
-    if (test.length > 0) {
+    this.isNameValid = true;
+    this.nameError = null;
+
+    let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
+    if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;
-    } else {
-      this.isNameValid = true;
-      this.nameError = null;
+    } else if (this.newMaterial.substance === '') {
+      this.isNameValid = false;
+      this.nameError = 'Please enter a name';
     }
   }
 

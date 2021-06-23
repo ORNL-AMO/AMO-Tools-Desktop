@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
@@ -9,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -51,7 +51,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationFlueGasO2 = 0.0;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService,
+  constructor(private sqlDbApiService: SqlDbApiService,
     private flueGasCompareService: FlueGasCompareService,
     private flueGasFormService: FlueGasFormService,
     private lossesService: LossesService, private phastService: PhastService) { }
@@ -63,7 +63,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.options = this.suiteDbService.selectGasFlueGasMaterials();
+    this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
         if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
@@ -165,7 +165,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.flueGasLossForm.patchValue({
         CH4: this.roundVal(tmpFlueGas.CH4, 4),
@@ -203,7 +203,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.flueGasLossForm.patchValue({

@@ -62,6 +62,16 @@ export class SuiteApiEnumService {
     return lineFrequency;
   }
 
+  // Frontend forms use values 50, 60. Backend uses 0,1
+  getLineFrequencyFromSuiteEnumValue(lineFrequency: number): number {
+    switch (lineFrequency) {
+      case 0:
+        return 50;
+      case 1:
+        return 60;
+    }
+  }
+
   getMotorEfficiencyEnum(motorEffVal: number): any {
     switch (motorEffVal) {
       case 0:

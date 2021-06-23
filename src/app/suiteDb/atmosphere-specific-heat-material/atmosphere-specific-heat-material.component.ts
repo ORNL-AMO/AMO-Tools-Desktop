@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { AtmosphereSpecificHeat } from '../../shared/models/materials';
-import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-atmosphere-specific-heat-material',
   templateUrl: './atmosphere-specific-heat-material.component.html',
@@ -38,7 +38,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   currentField: string = "selectedMaterial";
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private settingsDbService: SettingsDbService, private sqlDbApiService: SqlDbApiService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -46,7 +46,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
 
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
+      this.allMaterials = this.sqlDbApiService.selectAtmosphereSpecificHeat();
       this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
         this.allCustomMaterials = idbResults;
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
@@ -56,7 +56,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
+      this.allMaterials = this.sqlDbApiService.selectAtmosphereSpecificHeat();
       this.checkMaterialName();
     }
   }
@@ -67,7 +67,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
       }
-      let suiteDbResult = this.suiteDbService.insertAtmosphereSpecificHeat(this.newMaterial);
+      let suiteDbResult = this.sqlDbApiService.insertAtmosphereSpecificHeat(this.newMaterial);
       if (suiteDbResult === true) {
         this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
@@ -81,7 +81,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.suiteDbService.updateAtmosphereSpecificHeat(this.newMaterial);
+    let suiteDbResult = this.sqlDbApiService.updateAtmosphereSpecificHeat(this.newMaterial);
     if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
@@ -93,7 +93,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.suiteDbService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
+      let suiteDbResult = this.sqlDbApiService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         this.indexedDbService.deleteAtmosphereSpecificHeat(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);

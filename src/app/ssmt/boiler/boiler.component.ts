@@ -3,13 +3,13 @@ import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
 import { BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
-import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
+import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 
 @Component({
   selector: 'app-boiler',
@@ -50,8 +50,9 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: FormGroup;
   lowPressureHeaderForm: FormGroup;
-  constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
+  constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
+    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService,
+    private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -94,9 +95,9 @@ export class BoilerComponent implements OnInit {
 
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
-      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     } else if (this.boilerForm.controls.fuelType.value === 1) {
-      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
     }
   }
 

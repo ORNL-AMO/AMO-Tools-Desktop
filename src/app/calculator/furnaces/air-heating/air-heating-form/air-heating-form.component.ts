@@ -8,7 +8,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { AirHeatingInput } from '../../../../shared/models/phast/airHeating';
 import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { AirHeatingFormService } from '../air-heating-form.service';
 import { AirHeatingService } from '../air-heating.service';
 
@@ -49,10 +49,11 @@ export class AirHeatingFormComponent implements OnInit {
   showOperatingHoursModal: boolean;
   o2Warning: string;
 
-  constructor(private suiteDbService: SuiteDbService,
+  constructor(
               private airHeatingService: AirHeatingService, 
               private airHeatingFormService: AirHeatingFormService,
-              private phastService: PhastService) { }
+              private phastService: PhastService,
+              private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -108,9 +109,9 @@ export class AirHeatingFormComponent implements OnInit {
 
   setFuelOptions() {
     if (this.form.controls.gasFuelType.value == true) {
-      this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     } else {
-      this.fuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.fuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     }
   }
 
@@ -173,7 +174,7 @@ export class AirHeatingFormComponent implements OnInit {
 
   setMaterialProperties() {
     if (this.form.controls.gasFuelType.value == true) {
-      let material = this.suiteDbService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
+      let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
       this.form.patchValue({
         CH4: this.airHeatingService.roundVal(material.CH4, 4),
         C2H6: this.airHeatingService.roundVal(material.C2H6, 4),
@@ -189,7 +190,7 @@ export class AirHeatingFormComponent implements OnInit {
         substance: material.substance
       });
     } else {
-      let material = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
+      let material = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
       this.form.patchValue({
         carbon: this.airHeatingService.roundVal(material.carbon, 4),
         hydrogen: this.airHeatingService.roundVal(material.hydrogen, 4),
