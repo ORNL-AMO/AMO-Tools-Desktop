@@ -53,6 +53,15 @@ export class SuiteApiEnumService {
     }
   }
 
+  getPistonTypeEnum(pistonType: number): any {
+    switch (pistonType) {
+      case 0:
+        return Module.PistonType.SingleActing;
+      case 1:
+        return Module.PistonType.DoubleActing;
+    }
+  }
+
   getLineFrequencyEnum(lineFreq: number) {
     let lineFrequency = Module.LineFrequency.FREQ50;
     if (lineFreq == 60) {
@@ -132,6 +141,14 @@ export class SuiteApiEnumService {
       return Module.GasType.AIR;
     } else if (type == 'OTHER') {
       return Module.GasType.OTHER;
+    }
+  }
+
+  getCHPOptionEnum(option: number) {
+    if (option === 0) {
+      return Module.CHPOption.PercentAvgkWhElectricCostAvoided;
+    } else if (option === 1) {
+      return Module.CHPOption.StandbyRate;
     }
   }
 
