@@ -77,6 +77,25 @@ export class FsatService {
     return psychrometricResults;
   }
 
+  getPsychrometricResults(fsat: FSAT, settings: Settings): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
+    if (fsat.baseGasDensity.inputType === 'relativeHumidity') {
+      psychrometricResults = this.getPsychrometricRelativeHumidity(fsat.baseGasDensity, settings);
+    } else if (fsat.baseGasDensity.inputType === 'wetBulb') {
+      psychrometricResults = this.getPsychrometricWetBulb(fsat.baseGasDensity, settings);
+    } else if (fsat.baseGasDensity.inputType === 'dewPoint') {
+      psychrometricResults = this.getPsychrometricDewPoint(fsat.baseGasDensity, settings);
+    }
+
+    if (psychrometricResults) {
+      psychrometricResults.dryBulbTemp = fsat.baseGasDensity.dryBulbTemp;
+      psychrometricResults.barometricPressure = fsat.baseGasDensity.barometricPressure;
+    }
+
+
+    return psychrometricResults;
+  }
+
   getVelocityPressureData(inputs: Plane, settings: Settings): VelocityResults {
     inputs = this.convertFanAnalysisService.convertPlaneForCalculations(inputs, settings);
     let results: VelocityResults = fanAddon.getVelocityPressureData(inputs);
@@ -86,13 +105,6 @@ export class FsatService {
     return results;
   }
 
-  // getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
-  //   let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-  //   inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
-  //   let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-  //   results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
-  //   return results;
-  // }
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);

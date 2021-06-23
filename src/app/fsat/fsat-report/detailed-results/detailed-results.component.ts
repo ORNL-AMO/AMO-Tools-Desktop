@@ -26,11 +26,11 @@ export class DetailedResultsComponent implements OnInit {
   pressureCalcResultType: string = 'static';
   
 
-  constructor(private fsatReportRollupService: FsatReportRollupService, private fsatService: FsatService,
-    private fanAnalysisService: FanAnalysisService) { }
+  constructor(private fsatReportRollupService: FsatReportRollupService, private fsatService: FsatService) { }
 
   ngOnInit(): void {
     this.fsat = this.assessment.fsat;
+    this.fsatService = this.fsatService;
     if (this.inRollup) {
       this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -45,31 +45,4 @@ export class DetailedResultsComponent implements OnInit {
 
 
   }
-
-  getPsychrometricResults(fsat: FSAT): PsychrometricResults {
-    let psychrometricResults: PsychrometricResults;
-    if (fsat.baseGasDensity.inputType === 'relativeHumidity') {
-      psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(fsat.baseGasDensity, this.settings);
-    } else if (fsat.baseGasDensity.inputType === 'wetBulb') {
-      psychrometricResults = this.fsatService.getPsychrometricWetBulb(fsat.baseGasDensity, this.settings);
-    } else if (fsat.baseGasDensity.inputType === 'dewPoint') {
-      psychrometricResults = this.fsatService.getPsychrometricDewPoint(fsat.baseGasDensity, this.settings);
-    }
-
-    if (psychrometricResults) {
-      psychrometricResults.dryBulbTemp = fsat.baseGasDensity.dryBulbTemp;
-      psychrometricResults.barometricPressure = fsat.baseGasDensity.barometricPressure;
-    }
-
-
-    return psychrometricResults;
-  }
-
- 
-  setPressureCalcType(str: string) {
-    this.fanAnalysisService.pressureCalcResultType = str;
-    this.fanAnalysisService.getResults.next(true);
-  }
-
-
 }

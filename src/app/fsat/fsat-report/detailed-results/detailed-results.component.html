@@ -1,5 +1,5 @@
 <div class="output-summary">
-    <h3>Psychrometric Data</h3>
+    <h5>Psychrometric Data</h5>
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -18,19 +18,19 @@
                     Dry Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).dryBulbTemp | number:'1.0-4' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).dryBulbTemp | number:'1.0-4' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).dryBulbTemp | number:'1.0-4' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).dryBulbTemp | number:'1.0-4' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
 
@@ -42,19 +42,19 @@
                     Relative Humidity (%)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).relativeHumidity | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).relativeHumidity | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).relativeHumidity | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).relativeHumidity | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
 
@@ -66,19 +66,19 @@
                     Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).wetBulbTemp | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).wetBulbTemp | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).wetBulbTemp | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).wetBulbTemp | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -89,19 +89,19 @@
                     Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).dewPoint | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).dewPoint | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).dewPoint | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).dewPoint | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -114,19 +114,19 @@
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).enthalpy | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).enthalpy | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).enthalpy | number:'1.0-1' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).enthalpy | number:'1.0-1' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -138,19 +138,19 @@
                     Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).gasDensity | sigFigs: '4'}}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).gasDensity | sigFigs: '4'}}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).gasDensity | sigFigs: '4'}}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).gasDensity | sigFigs: '4'}}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -163,19 +163,19 @@
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).specificVolume | number:'1.0-2' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).specificVolume | number:'1.0-2' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).specificVolume | number:'1.0-2' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).specificVolume | number:'1.0-2' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -186,19 +186,19 @@
                     Barometric Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).barometricPressure | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).barometricPressure | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).barometricPressure | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).barometricPressure | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -209,19 +209,19 @@
                     Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).saturationPressure | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).saturationPressure | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).saturationPressure | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).saturationPressure | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -232,19 +232,19 @@
                     Saturation Humidity Ratio
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).saturatedHumidity | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).saturatedHumidity | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).saturatedHumidity | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).saturatedHumidity | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -255,19 +255,19 @@
                     Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).absolutePressure | number:'1.0-2' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).absolutePressure | number:'1.0-2' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).absolutePressure | number:'1.0-2' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).absolutePressure | number:'1.0-2' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -278,19 +278,19 @@
                     Degree of Saturation
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).saturationDegree | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).saturationDegree | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).saturationDegree | number:'1.0-3' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).saturationDegree | number:'1.0-3' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -301,19 +301,19 @@
                     Humidity Ratio
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="getPsychrometricResults(fsat)">
-                        {{getPsychrometricResults(fsat).humidityRatio | number:'1.0-4' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(fsat, settings)">
+                        {{fsatService.getPsychrometricResults(fsat, settings).humidityRatio | number:'1.0-4' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(fsat, settings)">
                         &mdash;
                     </span>
                 </td>
                 <td *ngFor="let modification of fsat.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="getPsychrometricResults(modification.fsat)">
-                        {{getPsychrometricResults(modification.fsat).humidityRatio | number:'1.0-4' }}
+                    <span *ngIf="fsatService.getPsychrometricResults(modification.fsat, settings)">
+                        {{fsatService.getPsychrometricResults(modification.fsat, settings).humidityRatio | number:'1.0-4' }}
                     </span>
-                    <span *ngIf="!getPsychrometricResults(modification.fsat)">
+                    <span *ngIf="!fsatService.getPsychrometricResults(modification.fsat, settings)">
                         &mdash;
                     </span>
                 </td>
@@ -322,511 +322,10 @@
     </table>
 </div>
 
-<div class="d-flex flex-column w-100 align-items-center pt-2 pb-2" *ngIf="fsat.outputs.planeResults">
-    <div class="btn-group">
-        <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')"
-            [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'static'}">Use Static Pressure</button>
-        <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('total')"
-            [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'total'}">Use Total Pressure</button>
-    </div>
-
-    <label class="group-label">Baseline Assessment Data</label>
-    <table class="table table-hover table-striped">
-        <tbody>
-            <tr>
-                <td>Inlet Pressure</td>
-                <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
-                    {{fsat.outputs.planeResults.FanInletFlange.staticPressure | sigFigs: '6'}} <span
-                        [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-                <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
-                    {{fsat.outputs.planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}} <span
-                        [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>Outlet Pressure</td>
-                <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
-                    {{fsat.outputs.planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}} <span
-                        [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-                <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
-                    {{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}} <span
-                        [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>Flow Rate</td>
-                <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
-                    {{fsat.outputs.planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}} <span
-                        [innerHTML]="settings.fanFlowRate|  settingsLabel"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="fsat.outputs.planeResults && !fsat.outputs.planeResults.error">
-    <label class="group-label">Baseline Plane Data Table</label>
-    <table class="table table-hover table-striped">
-        <tbody>
-            <tr>
-                <td><span>Plane #</span></td>
-                <td *ngIf="showFull"><span>Plane Description</span></td>
-                <td><span>Gas Density</span>
-                    <br>
-                    <span [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
-                </td>
-                <td *ngIf="showFull"><span>Planar Area</span>
-                    <br>
-                    <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
-                    <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
-                </td>
-                <td><span>Volume Flow</span>
-                    <br>
-                    <span [innerHTML]="settings.fanFlowRate |  settingsLabel"></span>
-                </td>
-                <td><span>Gas Velocity</span>
-                    <br>
-                    <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft/min</span>
-                    <span *ngIf="settings.fanFlowRate == 'm3/s'">m/s</span>
-                </td>
-                <td *ngIf="showFull"><span>Dry Bulb Temp</span>
-                    <br>
-                    <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
-                </td>
-                <td><span>Static Pressure</span>
-                    <br>
-                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-                <td><span>Velocity Pressure</span>
-                    <br>
-                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-                <td><span>Total Pressure</span>
-                    <br>
-                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                </td>
-                <td *ngIf="showFull"><span>Barometric Pressure</span>
-                    <br>
-                    <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>3a</td>
-                <td *ngIf="showFull">Flow Traverse</td>
-                <td>{{fsat.outputs.planeResults.FlowTraverse.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FlowTraverse.area |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FlowTraverse.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FlowTraverse.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FlowTraverse.dryBulbTemp | sigFigs:
-                    '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FlowTraverse.staticPressure | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FlowTraverse.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FlowTraverse.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FlowTraverse.barometricPressure |
-                    sigFigs: '6'}}</td>
-            </tr>
-            <tr *ngIf="fsatService.getFan203InputForPlaneResults(fsat).FanRatedInfo.traversePlanes > 1">
-                <td>3b</td>
-                <td *ngIf="showFull">Add'l Traverse Plane 1</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[0].gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[0].area | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[0].gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[0].gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[0].dryBulbTemp |
-                    sigFigs: '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[0].staticPressure |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[0].gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[0].gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[0].barometricPressure
-                    | sigFigs: '6'}}</td>
-            </tr>
-            <tr *ngIf="fsatService.getFan203InputForPlaneResults(fsat).FanRatedInfo.traversePlanes > 2">
-                <td>3c</td>
-                <td *ngIf="showFull">Add'l Traverse Plane 2</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[1].gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[1].area | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[1].gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[1].gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[1].dryBulbTemp |
-                    sigFigs: '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[1].staticPressure |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[1].gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.AddlTraversePlanes[1].gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.AddlTraversePlanes[1].barometricPressure
-                    | sigFigs: '6'}}</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td *ngIf="showFull">Inlet Measurement Plane</td>
-                <td>{{fsat.outputs.planeResults.InletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.InletMstPlane.area |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.InletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.InletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.InletMstPlane.dryBulbTemp | sigFigs:
-                    '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.InletMstPlane.staticPressure | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.InletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.InletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.InletMstPlane.barometricPressure |
-                    sigFigs: '6'}}</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td *ngIf="showFull">Fan Inlet Flange</td>
-                <td>{{fsat.outputs.planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanInletFlange.area |
-                    sigFigs: '6'}}</td>
-                <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
-                    {{fsat.outputs.planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}
-                </td>
-                <td>{{fsat.outputs.planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanInletFlange.dryBulbTemp | sigFigs:
-                    '6'}}</td>
-                <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
-                    {{fsat.outputs.planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
-                    {{fsat.outputs.planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanInletFlange.barometricPressure |
-                    sigFigs: '6'}}</td>
-            </tr>
-            <tr *ngIf="fsatService.getFan203InputForPlaneResults(fsat).FanRatedInfo.upDownStream != 'Downstream'">
-                <td>5</td>
-                <td *ngIf="showFull">Outlet Measurement Plane</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.area |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.dryBulbTemp | sigFigs:
-                    '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.staticPressure | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.barometricPressure |
-                    sigFigs: '6'}}</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td *ngIf="showFull">Fan or Evase Outlet Flange</td>
-                <td>{{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanEvaseOrOutletFlange.area | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanEvaseOrOutletFlange.dryBulbTemp |
-                    sigFigs: '6'}}</td>
-                <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
-                    {{fsat.outputs.planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
-                    {{fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.FanEvaseOrOutletFlange.barometricPressure
-                    | sigFigs: '6'}}</td>
-            </tr>
-            <tr *ngIf="fsatService.getFan203InputForPlaneResults(fsat).FanRatedInfo.upDownStream == 'Downstream'">
-                <td>5</td>
-                <td *ngIf="showFull">Outlet Measurement Plane</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.area |
-                    sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.dryBulbTemp | sigFigs:
-                    '6'}}</td>
-                <td>{{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.staticPressure | sigFigs:
-                    '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                <td>{{fsat.outputs.planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                <td *ngIf="showFull">
-                    {{fsatService.getFan203InputForPlaneResults(fsat).PlaneData.OutletMstPlane.barometricPressure |
-                    sigFigs: '6'}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div *ngFor="let modification of fsat.modifications; let index = index;"
-    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-    <div class="d-flex flex-column w-100 align-items-center pt-2 pb-2" *ngIf="modification.fsat.outputs.planeResults">
-        <div class="btn-group">
-            <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')"
-                [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'static'}">Use Static
-                Pressure</button>
-            <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('total')"
-                [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'total'}">Use Total Pressure</button>
-        </div>
-
-        <label class="group-label">{{modification.fsat.name}} Assessment Data</label>
-        <table class="table table-hover table-striped">
-            <tbody>
-                <tr>
-                    <td>Inlet Pressure</td>
-                    <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.staticPressure | sigFigs: '6'}} <span
-                            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}} <span
-                            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Outlet Pressure</td>
-                    <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
-                        {{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}
-                        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
-                        {{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs:
-                        '6'}} <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Flow Rate</td>
-                    <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}} <span
-                            [innerHTML]="settings.fanFlowRate|  settingsLabel"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="modification.fsat.outputs.planeResults && !modification.fsat.outputs.planeResults.error">
-        <label class="group-label">{{modification.fsat.name}} Plane Data Table</label>
-        <table class="table table-hover table-striped">
-            <tbody>
-                <tr>
-                    <td><span>Plane #</span></td>
-                    <td *ngIf="showFull"><span>Plane Description</span></td>
-                    <td><span>Gas Density</span>
-                        <br>
-                        <span [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
-                    </td>
-                    <td *ngIf="showFull"><span>Planar Area</span>
-                        <br>
-                        <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
-                        <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
-                    </td>
-                    <td><span>Volume Flow</span>
-                        <br>
-                        <span [innerHTML]="settings.fanFlowRate |  settingsLabel"></span>
-                    </td>
-                    <td><span>Gas Velocity</span>
-                        <br>
-                        <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft/min</span>
-                        <span *ngIf="settings.fanFlowRate == 'm3/s'">m/s</span>
-                    </td>
-                    <td *ngIf="showFull"><span>Dry Bulb Temp</span>
-                        <br>
-                        <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td><span>Static Pressure</span>
-                        <br>
-                        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td><span>Velocity Pressure</span>
-                        <br>
-                        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td><span>Total Pressure</span>
-                        <br>
-                        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-                    </td>
-                    <td *ngIf="showFull"><span>Barometric Pressure</span>
-                        <br>
-                        <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3a</td>
-                    <td *ngIf="showFull">Flow Traverse</td>
-                    <td>{{modification.fsat.outputs.planeResults.FlowTraverse.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FlowTraverse.area |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FlowTraverse.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FlowTraverse.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FlowTraverse.dryBulbTemp | sigFigs:
-                        '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FlowTraverse.staticPressure |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FlowTraverse.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FlowTraverse.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FlowTraverse.barometricPressure |
-                        sigFigs: '6'}}</td>
-                </tr>
-                <tr *ngIf="fsatService.getFan203InputForPlaneResults(modification.fsat).FanRatedInfo.traversePlanes > 1">
-                    <td>3b</td>
-                    <td *ngIf="showFull">Add'l Traverse Plane 1</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[0].gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[0].area |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[0].gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[0].gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[0].dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[0].staticPressure
-                        | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[0].gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[0].gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[0].barometricPressure
-                        | sigFigs: '6'}}</td>
-                </tr>
-                <tr *ngIf="fsatService.getFan203InputForPlaneResults(modification.fsat).FanRatedInfo.traversePlanes > 2">
-                    <td>3c</td>
-                    <td *ngIf="showFull">Add'l Traverse Plane 2</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[1].gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[1].area |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[1].gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[1].gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[1].dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[1].staticPressure
-                        | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[1].gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.AddlTraversePlanes[1].gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.AddlTraversePlanes[1].barometricPressure
-                        | sigFigs: '6'}}</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td *ngIf="showFull">Inlet Measurement Plane</td>
-                    <td>{{modification.fsat.outputs.planeResults.InletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.InletMstPlane.area
-                        | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.InletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.InletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.InletMstPlane.dryBulbTemp | sigFigs:
-                        '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.InletMstPlane.staticPressure |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.InletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.InletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.InletMstPlane.barometricPressure |
-                        sigFigs: '6'}}</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td *ngIf="showFull">Fan Inlet Flange</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanInletFlange.area
-                        | sigFigs: '6'}}</td>
-                    <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}
-                    </td>
-                    <td>{{modification.fsat.outputs.planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanInletFlange.dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
-                        {{modification.fsat.outputs.planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanInletFlange.barometricPressure |
-                        sigFigs: '6'}}</td>
-                </tr>
-                <tr *ngIf="fsatService.getFan203InputForPlaneResults(modification.fsat).FanRatedInfo.upDownStream != 'Downstream'">
-                    <td>5</td>
-                    <td *ngIf="showFull">Outlet Measurement Plane</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.area
-                        | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.staticPressure |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.barometricPressure |
-                        sigFigs: '6'}}</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td *ngIf="showFull">Fan or Evase Outlet Flange</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanEvaseOrOutletFlange.area |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanEvaseOrOutletFlange.dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
-                        {{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
-                        {{modification.fsat.outputs.planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.FanEvaseOrOutletFlange.barometricPressure
-                        | sigFigs: '6'}}</td>
-                </tr>
-                <tr *ngIf="fsatService.getFan203InputForPlaneResults(modification.fsat).FanRatedInfo.upDownStream == 'Downstream'">
-                    <td>5</td>
-                    <td *ngIf="showFull">Outlet Measurement Plane</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.area
-                        | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.dryBulbTemp |
-                        sigFigs: '6'}}</td>
-                    <td>{{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.staticPressure |
-                        sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
-                    <td>{{modification.fsat.outputs.planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
-                    <td *ngIf="showFull">
-                        {{fsatService.getFan203InputForPlaneResults(modification.fsat).PlaneData.OutletMstPlane.barometricPressure |
-                        sigFigs: '6'}}</td>
-                </tr>
-            </tbody>
-        </table>
+<h5>Traverse Data Results</h5>
+<div>
+    <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatService]="fsatService" [fsatName]="'Baseline'"></app-traverse-results>
+    <div *ngFor="let modification of fsat.modifications;">
+        <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatService]="fsatService" [fsatName]="modification.fsat.name"></app-traverse-results>
     </div>
 </div>
-
