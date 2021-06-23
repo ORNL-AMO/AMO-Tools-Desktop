@@ -14,8 +14,6 @@ export class TraverseResultsComponent implements OnInit {
   @Input()
   fsat: FSAT;
   @Input()
-  fsatService: FsatService;
-  @Input()
   fsatName: string;
 
   showFull: boolean = false;
@@ -25,7 +23,7 @@ export class TraverseResultsComponent implements OnInit {
   inputs: Fan203Inputs;
 
   
-  constructor() { }
+  constructor(private fsatService: FsatService) { }
 
   ngOnInit(): void {    
     this.planeResults = this.fsat.outputs.planeResults;

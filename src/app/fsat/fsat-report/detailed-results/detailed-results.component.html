@@ -324,8 +324,8 @@
 
 <h5>Traverse Data Results</h5>
 <div>
-    <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatService]="fsatService" [fsatName]="'Baseline'"></app-traverse-results>
+    <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatName]="'Baseline'"></app-traverse-results>
     <div *ngFor="let modification of fsat.modifications;">
-        <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatService]="fsatService" [fsatName]="modification.fsat.name"></app-traverse-results>
+        <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatName]="modification.fsat.name"></app-traverse-results>
     </div>
 </div>

@@ -1,8 +1,6 @@
 td{
     font-size: small;
-    text-align: center;
-    border-right: solid 1px darkgray;
-    border-left: solid 1px darkgray;
+    text-align: center;   
     padding: 3px;
 }
 
@@ -10,19 +8,14 @@ td > span {
     font-weight: bold;
 }
 
-tbody{
-    box-shadow: 0 4px 8px 0 grey
-}
 
 
-.group-label{
+label{
     font-weight: bold;
+    text-align: center;
+    font-size: small;
 }
 
-tr.active{
-    background-color: #FFE400 !important;
-}
-
-.btn-padding{
-    padding: 6px !important;
+table{
+    font-size: small;
 }
