@@ -151,6 +151,19 @@ export interface PneumaticValve {
   flowRate: number;
 }
 
+export interface PneumaticValveFlowRateInput {
+  inletPressure: number, 
+  outletPressure: number
+}
+
+export interface PneumaticValveFlowRateOutput {
+  flowRate: number
+}
+
+export interface PneumaticValveFlowCoefficient {
+  flowCoefficient: number;
+}
+
 export interface BagMethodInput {
   operatingTime: number;
   bagFillTime: number;
