@@ -97,13 +97,13 @@ export class WasteWaterRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.AeCost - result.modificationResults.AeCost);
         projectedCosts.push(result.modificationResults.AeCost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual);
@@ -128,6 +128,8 @@ export class WasteWaterRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.AeEnergyAnnual,
         annualCost: result.baselineResults.AeCost,
+        energySavings: result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual,
+        costSavings: result.baselineResults.AeCost - result.modificationResults.AeCost,
         percentCost: result.baselineResults.AeCost / totalCost * 100,
         percentEnergy: result.baselineResults.AeEnergyAnnual / totalEnergyUse * 100,
         color: graphColors[colorIndex]

@@ -34,7 +34,7 @@ export class Co2SavingsService {
   calculate(data: Co2SavingsData, settings: Settings): Co2SavingsData {
     //use copy for conversion data
     let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
-    if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'Fuel') {
+    if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
       dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
       dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');

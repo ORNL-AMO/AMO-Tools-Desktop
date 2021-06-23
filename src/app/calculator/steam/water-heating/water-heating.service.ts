@@ -31,6 +31,8 @@ export class WaterHeatingService {
 
   initDefaultEmptyInputs() {
     let emptyInput: WaterHeatingInput = {
+      boilerUtilityType: 'Natural Gas',
+      hxUtilityType: 'Natural Gas',
       operatingHours: 8760,
       fuelCost: undefined,
       fuelCostBoiler: undefined,
@@ -100,6 +102,8 @@ export class WaterHeatingService {
 
   generateExampleData(settings: Settings) {
     let exampleInput: WaterHeatingInput = {
+      boilerUtilityType: 'Natural Gas',
+      hxUtilityType: 'Natural Gas',
       operatingHours: 7000,
       fuelCost: 6,
       fuelCostBoiler: 6,
@@ -222,6 +226,9 @@ export class WaterHeatingService {
 
       output.energySavedTotal = this.convertUnitsService.value(output.energySavedTotal).from('kJ').to('GJ');
       output.energySavedTotal = this.roundVal(output.energySavedTotal, 2);
+
+      output.waterSaved = this.convertUnitsService.value(output.waterSaved).from('m3').to('gal');
+      output.waterSaved = this.roundVal(output.waterSaved, 2);
     }
     return output;
   }

@@ -18,8 +18,12 @@ export class WallTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(wallLoss: WallLossTreasureHunt) {
-    this.wallService.baselineData.next(wallLoss.baseline);
+    // Use copy. on cancel energysource reset will change reference before form destroys
+    wallLoss = JSON.parse(JSON.stringify(wallLoss));
+    this.wallService.energySourceType.next(wallLoss.baseline[0].energySourceType);
+    this.wallService.treasureHuntFuelCost.next(undefined);
     this.wallService.modificationData.next(wallLoss.modification);
+    this.wallService.baselineData.next(wallLoss.baseline);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -38,6 +42,8 @@ export class WallTreasureHuntService {
   resetCalculatorInputs() {
     this.wallService.baselineData.next(undefined);
     this.wallService.modificationData.next(undefined);
+    this.wallService.energySourceType.next(undefined);
+    this.wallService.treasureHuntFuelCost.next(undefined);
   }
 
 
@@ -45,7 +51,6 @@ export class WallTreasureHuntService {
     this.setCalculatorInputFromOpportunity(wallLossTreasureHunt);
     this.wallService.calculate(settings);
     let output: WallLossOutput = this.wallService.output.getValue();
-    this.resetCalculatorInputs()
 
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavings,

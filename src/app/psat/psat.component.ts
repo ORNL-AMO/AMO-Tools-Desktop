@@ -296,7 +296,6 @@ export class PsatComponent implements OnInit {
         mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
         mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
         mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
-        mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
       })
     } else {
       this.modificationExists = false;

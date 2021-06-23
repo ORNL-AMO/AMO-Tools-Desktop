@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasHeatingValue, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -243,7 +243,7 @@ export class PhastService {
     return results;
   }
 
-  openingLossesQuad(input: QuadOpeningLoss, settings: Settings): number {
+  openingLossesQuad(input: QuadOpeningLoss, settings: Settings, calculatorEnergyUnit: string = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -254,10 +254,11 @@ export class PhastService {
       inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
     }
     results = this.processHeatingApiService.openingLossesQuad(inputs);
-    return this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    return this.convertResult(results, conversionUnit);
   }
 
-  openingLossesCircular(input: CircularOpeningLoss, settings: Settings): number {
+  openingLossesCircular(input: CircularOpeningLoss, settings: Settings, calculatorEnergyUnit: string = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -267,7 +268,8 @@ export class PhastService {
       inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
     }
     results = this.processHeatingApiService.openingLossesCircular(inputs);
-    return this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    return this.convertResult(results, conversionUnit);
   }
 
   solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings, calculatorEnergyUnit = '') {
@@ -303,7 +305,7 @@ export class PhastService {
     };
   }
 
-  wallLosses(input: WallLoss, settings: Settings) {
+  wallLosses(input: WallLoss, settings: Settings, calculatorEnergyUnit: string = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -313,8 +315,8 @@ export class PhastService {
       inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('m2').to('ft2');
     }
     results = this.processHeatingApiService.wallLosses(inputs);
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results;
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    return this.convertResult(results, conversionUnit);
   }
 
 
@@ -557,6 +559,9 @@ export class PhastService {
   flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): HeatingValueByVolumeOutput {
     return this.processHeatingApiService.flueGasByVolumeCalculateHeatingValue(inputs);
   }
+  // flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): FlueGasHeatingValue {
+  //   return phastAddon.flueGasByVolumeCalculateHeatingValue(inputs);
+  // }
 
   flueGasByMassCalculateHeatingValue(inputs: SolidLiquidFlueGasMaterial): number {
     return this.processHeatingApiService.flueGasByMassCalculateHeatingValue(inputs);

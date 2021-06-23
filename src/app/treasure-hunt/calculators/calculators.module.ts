@@ -27,6 +27,12 @@ import { TankInsulationReductionModule } from '../../calculator/steam/tank-insul
 import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak.module';
 import { WallModule } from '../../calculator/furnaces/wall/wall.module';
 import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.module';
+import { LeakageModule } from '../../calculator/furnaces/leakage/leakage.module';
+import { WasteHeatModule } from '../../calculator/furnaces/waste-heat/waste-heat.module';
+import { OpeningModule } from '../../calculator/furnaces/opening/opening.module';
+import { AirHeatingModule } from '../../calculator/furnaces/air-heating/air-heating.module';
+import { HeatCascadingModule } from '../../calculator/furnaces/heat-cascading/heat-cascading.module';
+import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-heating.module';
 
 @NgModule({
   declarations: [
@@ -54,9 +60,15 @@ import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.modul
     PipeInsulationReductionModule,
     CompressedAirReductionModule,
     TankInsulationReductionModule,
+    WasteHeatModule,
+    AirHeatingModule,
+    LeakageModule,
     AirLeakModule,
+    OpeningModule,
     WallModule,
-    FlueGasModule
+    FlueGasModule,
+    HeatCascadingModule,
+    WaterHeatingModule
   ],
   providers: [
     CalculatorsService,

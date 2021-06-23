@@ -26,6 +26,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   selected: boolean;
   @Input()
   inModal: boolean;
+  @Input()
+  treasureHuntEnergySource: string;
+  @Input()
+  selectedFuelId: number;
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
@@ -90,9 +95,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   initFormSetup() {
     this.setFormState();
+    if (this.selectedFuelId !== undefined) {
+      this.byVolumeForm.controls.gasTypeId.patchValue(this.selectedFuelId);
+      this.byVolumeForm.controls.gasTypeId.disable();
+    }
     if (this.byVolumeForm.controls.gasTypeId.value && this.byVolumeForm.controls.gasTypeId.value !== '') {
       if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value) {
-        this.setProperties();
+        this.setProperties(this.treasureHuntEnergySource);
       }
     }
     this.setCalcMethod();
@@ -219,8 +228,18 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.setCalcMethod();
   }
 
-  setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
+  setProperties(treasureHuntEnergySource?: string) {
+    let currentMaterial: number = this.byVolumeForm.controls.gasTypeId.value;
+    if (treasureHuntEnergySource) {
+      if (treasureHuntEnergySource === 'Natural Gas' || treasureHuntEnergySource === 'Steam') {
+        currentMaterial = 1;
+        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+      } else if (treasureHuntEnergySource === 'Other Fuel') {
+        currentMaterial = 2;
+        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+      }
+    } 
+    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(currentMaterial);
     if (tmpFlueGas) {
       this.byVolumeForm.patchValue({
         CH4: this.roundVal(tmpFlueGas.CH4, 4),

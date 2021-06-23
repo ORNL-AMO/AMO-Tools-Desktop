@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AllFsatResultsData, FsatCompare, FsatResultsData, ReportItem } from './report-rollup-models';
 import * as _ from 'lodash';
 import { FsatService } from '../fsat/fsat.service';
-import { FsatOutput } from '../shared/models/fans';
+import { FSAT, FsatOutput } from '../shared/models/fans';
 
 @Injectable()
 export class FsatReportRollupService {
@@ -85,5 +85,5 @@ export class FsatReportRollupService {
       let modificationResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), false, val.settings);
       this.selectedFsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
-  }
+  } 
 }
