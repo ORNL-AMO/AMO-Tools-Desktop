@@ -1,4 +1,4 @@
-//====== process-cooling objects ======
+//====== Cooling Tower ======
 export interface CoolingTowerData {
     name: string;
     operationalHours: number;
@@ -48,5 +48,63 @@ export interface CoolingTowerData {
     cyclesOfConcentration: number;
   }
   
-  //====== end process-cooling objects =======
-  
+
+  //====== Chiller Performance and Temperature ======
+
+  export interface ChillerPerformanceInput {
+    // chiller characteristics
+    chillerType: number,
+    condenserCoolingType: number,
+    motorDriveType: number,
+    compressorConfigType: number
+    // chiller rated conditions
+    ariCapacity: number,
+    ariEfficiency: number,
+    maxCapacityRatio: number,
+    // chiller operating conditions
+    waterDeltaT: number,
+    waterFlowRate: number,
+    operatingHours: number,
+    // chilled water temperature reset
+    baselineWaterSupplyTemp: number,
+    baselineWaterEnteringTemp: number
+    modWaterSupplyTemp: number,
+    modWaterEnteringTemp: number
+  }
+
+
+  export interface ChillerPerformanceOutput {
+    baselineActualEfficiency: number,
+    baselineActualCapacity: number,
+    baselinePower: number,
+    baselineEnergy: number,
+    modActualEfficiency: number,
+    modActualCapacity: number,
+    modPower: number,
+    modEnergy: number,
+    savingsEnergy: number,
+  }
+
+  //====== Cooling Tower Fan Energy ======
+
+export interface CoolingTowerFanInput {
+  towerType: number,
+  numCells: number,
+  waterFlowRate: number,
+  ratedFanPower: number,
+  waterLeavingTemp: number,
+  waterEnteringTemp: number,
+  operatingTempWetBulb: number,
+  operatingHours: number,
+  baselineSpeedType: number,
+  modSpeedType: number,
+}
+
+
+export interface CoolingTowerFanOutput {
+  baselinePower: number,
+  baselineEnergy: number,
+  modPower: number,
+  modEnergy: number,
+  savingsEnergy: number,
+}

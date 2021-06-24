@@ -68,6 +68,8 @@ export class CashFlowDiagramComponent implements OnInit {
     this.cashFlowChart.data = chartTraces;
     let chartLayout = JSON.parse(JSON.stringify(this.cashFlowChart.layout));
     Plotly.newPlot(this.currentChartId, this.cashFlowChart.data, chartLayout, this.cashFlowChart.config);
+    console.log(this.cashFlowData);
+    console.log(this.cashFlowChart);
   }
 
   buildTraces() {

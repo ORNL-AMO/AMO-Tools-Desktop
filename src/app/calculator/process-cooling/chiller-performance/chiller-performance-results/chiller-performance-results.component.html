@@ -1,0 +1,114 @@
+<app-chiller-performance-chart [output]="output"></app-chiller-performance-chart>
+
+<label class="group-label">Baseline</label>
+<table *ngIf="output" #copyTable0 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+        <td class="bold w-50">Actual Chiller Capacity</td>
+        <td *ngIf="output.baselineActualCapacity" class="text-center w-50">
+          {{output.baselineActualCapacity | number:'1.0-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >tons</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+        </td>
+        <td *ngIf="!output.baselineActualCapacity" class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Actual Chiller Efficiency</td>
+        <td *ngIf="output.baselineActualEfficiency" class="text-center w-50">
+          {{output.baselineActualEfficiency | number:'1.0-4'}} kW/ton
+        </td>
+        <td *ngIf="!output.baselineActualEfficiency" class="text-center w-50">
+          &mdash; &mdash;
+        </td>
+      </tr>
+      
+    <tr>
+      <td class="bold w-50">Power Consumption</td>
+      <td *ngIf="output.baselinePower" class="text-center w-50">
+        {{output.baselinePower | number:'1.0-2'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+      </td>
+      <td *ngIf="!output.baselinePower" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Consumption</td>
+      <td *ngIf="output.baselineEnergy" class="text-center w-50">
+        {{output.baselineEnergy | number:'1.0-2'}} kWh
+      </td>
+      <td *ngIf="!output.baselineEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label">Modification</label>
+<table *ngIf="output" #copyTable1 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Actual Chiller Capacity</td>
+      <td *ngIf="output.modActualCapacity" class="text-center w-50">
+        {{output.modActualCapacity | number:'1.0-2'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >tons</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+      </td>
+      <td *ngIf="!output.modActualCapacity" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Actual Chiller Efficiency</td>
+      <td *ngIf="output.modActualEfficiency" class="text-center w-50">
+        {{output.modActualEfficiency | number:'1.0-4'}} kW/ton
+      </td>
+      <td *ngIf="!output.modActualEfficiency" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Power Consumption</td>
+      <td *ngIf="output.modPower" class="text-center w-50">
+        {{output.modPower | number:'1.0-2'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+      </td>
+      <td *ngIf="!output.modPower" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Consumption</td>
+      <td *ngIf="output.modEnergy" class="text-center w-50">
+        {{output.modEnergy | number:'1.0-2'}} kWh
+      </td>
+      <td *ngIf="!output.modEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<label class="group-label">Savings</label>
+<table *ngIf="output" #copyTable2 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Annual Energy Savings</td>
+      <td *ngIf="output.savingsEnergy" class="text-center w-50">
+        {{output.savingsEnergy | number:'1.0-0'}} kWh
+      </td>
+      <td *ngIf="!output.savingsEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- export table component -->
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>
