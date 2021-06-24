@@ -640,12 +640,12 @@ export class ProcessHeatingApiService {
       input.priCombAirTemperature, 
       input.priOpHours, 
       input.priFuelHV,
-      input.secFiringRate,
       input.secExhaustTemperature, 
       input.secCombAirTemperature, 
       input.secOpHours, 
       input.secFuelCost
     );
+
     let output: HeatCascadingOutput = cascadeHeatHighToLowInstance.calculate();
     cascadeHeatHighToLowInstance.delete();
     return output;
