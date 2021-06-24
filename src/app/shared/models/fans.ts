@@ -8,6 +8,7 @@ export interface FSAT {
   fieldData?: FieldData;
   fanMotor?: FanMotor;
   fanSetup?: FanSetup;
+  fan203InputsForPlaneResults?: Fan203Inputs;
   baseGasDensity?: BaseGasDensity;
   notes: Notes;
   implementationCosts?: number;
@@ -364,6 +365,8 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  planeResults?: PlaneResults;
+  psychrometricResults?: PsychrometricResults;
 }
 
 export interface InletPressureData {
