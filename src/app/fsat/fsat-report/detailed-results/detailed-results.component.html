@@ -3,15 +3,14 @@
     <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
-                <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
-                    Baseline
-                </th>
-                <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
-                    {{mod.fsat.name}}
-                </th>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
+                [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
+                *ngFor="let modification of fsat.modifications; let index = index;"
+                [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
             </tr>
-        </thead>
+          </thead>
         <tbody>
             <tr>
                 <td>
