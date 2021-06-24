@@ -35,8 +35,7 @@ export class CalculateFlowPressureComponent implements OnInit {
 
   ngOnInit() {
     this.fanAnalysisService.inAssessmentModal = true;
-    this.fanAnalysisService.inputData = this.fanAnalysisService.getExampleData();
-    //this.fanAnalysisService.inputData = this.fanAnalysisService.getFlowPressureModalDefaults();
+    this.fanAnalysisService.inputData = this.fanAnalysisService.getFlowPressureModalDefaults();
     this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     this.fanAnalysisService.pressureCalcResultType = this.fsat.fieldData.usingStaticPressure? 'static' : 'total';
     

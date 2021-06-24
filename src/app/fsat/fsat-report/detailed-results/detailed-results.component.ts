@@ -3,7 +3,6 @@ import { FsatReportRollupService } from '../../../report-rollup/fsat-report-roll
 import { Assessment } from '../../../shared/models/assessment';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { FsatService } from '../../fsat.service';
 
 @Component({
   selector: 'app-detailed-results',
@@ -22,11 +21,10 @@ export class DetailedResultsComponent implements OnInit {
   fsat: FSAT; 
   
 
-  constructor(private fsatReportRollupService: FsatReportRollupService, private fsatService: FsatService) { }
+  constructor(private fsatReportRollupService: FsatReportRollupService) { }
 
   ngOnInit(): void {
     this.fsat = this.assessment.fsat;
-    this.fsatService;
     if (this.inRollup) {
       this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {

@@ -199,10 +199,17 @@ export class FsatService {
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
       results.annualCost = results.annualCost * 1000;
+
+      let psychrometricResults: PsychrometricResults = this.getPsychrometricResults(fsat, settings);
+      if(psychrometricResults){
+        results.psychrometricResults = psychrometricResults;
+      }
+
       // Get traverse data/plane results
-      let fan203InputsForPlaneResult: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
-      if (fan203InputsForPlaneResult) {
-        results.planeResults = this.getPlaneResults(fan203InputsForPlaneResult, settings);
+      let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
+      if (fan203InputsForPlaneResults) {
+        fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;
+        results.planeResults = this.getPlaneResults(fan203InputsForPlaneResults, settings);
       }
       return results;
     } else {
