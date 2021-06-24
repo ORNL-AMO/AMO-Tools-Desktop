@@ -33,6 +33,7 @@ export class AirHeatingService {
     let emptyInput: AirHeatingInput = {
       operatingHours: 8760,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
       fuelCost: 0,
       materialTypeId: 1,
       flueTemperature: 0,
@@ -68,6 +69,8 @@ export class AirHeatingService {
       costSavings: 0,
       heatCapacityFlue: 0,
       heatCapacityAir: 0,
+      baselineEnergy: 0,
+      modificationEnergy: 0,
     };
     this.airHeatingOutput.next(emptyOutput);
   }
@@ -86,6 +89,8 @@ export class AirHeatingService {
         let airHeatingOutput: AirHeatingOutput = this.processHeatingApiService.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
         airHeatingOutput.costSavings = airHeatingOutput.energySavings * inputCopy.fuelCost;
+        airHeatingOutput.baselineEnergy = inputCopy.fireRate * inputCopy.operatingHours;
+        airHeatingOutput.modificationEnergy = inputCopy.fireRate * inputCopy.operatingHours - airHeatingOutput.energySavings;
         this.airHeatingOutput.next(airHeatingOutput);
     }
   }
@@ -95,6 +100,7 @@ export class AirHeatingService {
       operatingHours: 8760,
       materialTypeId: 1,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
       fuelCost: 3.50,
       flueTemperature: 400,
       flueGasO2: 5.8,

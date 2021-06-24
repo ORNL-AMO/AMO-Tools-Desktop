@@ -2,9 +2,11 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { HeatCascadingInput } from '../../../../shared/models/phast/heatCascading';
+import { FlueGasHeatingValue } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { HeatCascadingFormService } from '../heat-cascading-form.service';
@@ -20,6 +22,8 @@ export class HeatCascadingFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inModal: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
@@ -33,17 +37,18 @@ export class HeatCascadingFormComponent implements OnInit {
   
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
+  selectedFuelId: number;
   
   formWidth: number;
   
   showPriOpHoursModal: boolean = false;
   showSecOpHoursModal: boolean = false;
-  showSecFlueGasModal: boolean = false;
-  showPriFlueGasModal: boolean = false;
+  showFlueGasModal: boolean = false;
 
-  constructor(private heatCascadingService: HeatCascadingService, 
-              private heatCascadingFormService: HeatCascadingFormService,
-              private sqlDbApiService: SqlDbApiService) { }
+  constructor(private sqlDbApiService: SqlDbApiService,
+              private heatCascadingService: HeatCascadingService, 
+              private phastService: PhastService,
+              private heatCascadingFormService: HeatCascadingFormService) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -87,6 +92,10 @@ export class HeatCascadingFormComponent implements OnInit {
 
   setMaterialProperties() {
     let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
+    this.selectedFuelId = this.form.controls.materialTypeId.value;
+    let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
+    this.form.controls.priFuelHV.patchValue(this.heatCascadingService.roundVal(flueGasMaterialHeatingValue.heatingValueVolume, 2));
+  
     this.form.patchValue({
       CH4: this.heatCascadingService.roundVal(material.CH4, 4),
       C2H6: this.heatCascadingService.roundVal(material.C2H6, 4),
@@ -117,12 +126,9 @@ export class HeatCascadingFormComponent implements OnInit {
     this.heatCascadingService.heatCascadingInput.next(updatedInput)
   }
 
-  initFlueGasModal(processName: string) {
-    if (processName == 'primary') {
-      this.showPriFlueGasModal = true;
-    } else {
-      this.showSecFlueGasModal = true;
-    }
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.selectedFuelId = this.form.controls.materialTypeId.value;
     this.heatCascadingService.modalOpen.next(true);
     this.flueGasModal.show();
   }
@@ -130,20 +136,13 @@ export class HeatCascadingFormComponent implements OnInit {
   hideFlueGasModal(calculatedAvailableHeat?: any) {
     if (calculatedAvailableHeat) {
       calculatedAvailableHeat = this.heatCascadingService.roundVal(calculatedAvailableHeat, 1);
-      if (this.showPriFlueGasModal) {
-        this.form.patchValue({
-          priAvailableHeat: calculatedAvailableHeat
-        });
-      } else if (this.showSecFlueGasModal) {
-        this.form.patchValue({
-          secAvailableHeat: calculatedAvailableHeat
-        });
-      }
+      this.form.patchValue({
+        secAvailableHeat: calculatedAvailableHeat
+      });
     }
     this.calculate();
     this.flueGasModal.hide();
-    this.showPriFlueGasModal = false;
-    this.showSecFlueGasModal = false;
+    this.showFlueGasModal = false;
     this.heatCascadingService.modalOpen.next(false);
   }
 

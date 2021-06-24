@@ -3,11 +3,13 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
+import { CompressedAirPressureReductionData } from '../models/standalone';
 import { environment } from '../../../environments/environment';
 
+declare const packageJson;
 
 @Injectable()
 export class UpdateDataService {
@@ -192,6 +194,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.compressedAirPressureReductions) {
                 assessment.treasureHunt.compressedAirPressureReductions.forEach(opportunity => {
+                    opportunity = this.updateCompressedAirPressureReductionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.compressedAirPressure;
                 });
             }
@@ -239,6 +242,7 @@ export class UpdateDataService {
         return lightingReplacementTreasureHunt;
     }
 
+
     updateLightingReplacement(lightingReplacement: LightingReplacementData): LightingReplacementData {
         if (lightingReplacement.ballastFactor == undefined) {
             lightingReplacement.ballastFactor = 1;
@@ -253,5 +257,27 @@ export class UpdateDataService {
             lightingReplacement.category = 0;
         }
         return lightingReplacement;
+    }
+
+    updateCompressedAirPressureReductionTreasureHunt(compressedAirPressureReductionTreasureHunt: CompressedAirPressureReductionTreasureHunt): CompressedAirPressureReductionTreasureHunt {
+        if (compressedAirPressureReductionTreasureHunt.baseline) {
+            compressedAirPressureReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        if (compressedAirPressureReductionTreasureHunt.modification) {
+            compressedAirPressureReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        return compressedAirPressureReductionTreasureHunt;
+    }
+
+
+    updateCompressedAirPressureReduction(compressedAirPressureReduction: CompressedAirPressureReductionData): CompressedAirPressureReductionData {
+        if (compressedAirPressureReduction.powerType === undefined) {
+            compressedAirPressureReduction.powerType = 'Measured';
+        }
+        return compressedAirPressureReduction;
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage,  } from '../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet, EnergyUseItem, EnergyUsage, HeatCascadingTreasureHunt,  } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { AirLeakTreasureHuntService } from './treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -14,6 +14,12 @@ import { SteamReductionTreasureHuntService } from './treasure-hunt-calculator-se
 import { TankInsulationTreasureHuntService } from './treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
 import { WallTreasureHuntService } from './treasure-hunt-calculator-services/wall-treasure-hunt.service';
 import { WaterReductionTreasureHuntService } from './treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/leakage-treasure-hunt.service';
+import { WasteHeatTreasureHuntService } from './treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
+import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -29,8 +35,14 @@ export class ConvertInputDataService {
     private compressedAirPressureTreasureHuntService: CaPressureReductionTreasureHuntService,
     private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
     private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
+    private wasteHeatTreasureHuntService: WasteHeatTreasureHuntService,
+    private airHeatingTreasureHuntService: AirHeatingTreasureHuntService,
     private wallTreasureService: WallTreasureHuntService,
+    private openingTreasureService: OpeningTreasureHuntService,
     private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private leakageTreasureHuntService: LeakageTreasureHuntService,
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -71,8 +83,26 @@ export class ConvertInputDataService {
     if (treasureHunt.wallLosses != undefined) {
       treasureHunt.wallLosses = this.wallTreasureService.convertWallLosses(treasureHunt.wallLosses, oldSettings, newSettings);
     }
+    if (treasureHunt.wasteHeatReductions != undefined) {
+      treasureHunt.wasteHeatReductions = this.wasteHeatTreasureHuntService.convertWasteHeatReductions(treasureHunt.wasteHeatReductions, oldSettings, newSettings);
+    }
+    if (treasureHunt.airHeatingOpportunities != undefined) {
+      treasureHunt.airHeatingOpportunities = this.airHeatingTreasureHuntService.convertAirHeatingOpportunities(treasureHunt.airHeatingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.openingLosses != undefined) {
+      treasureHunt.openingLosses = this.openingTreasureService.convertOpeningLosses(treasureHunt.openingLosses, oldSettings, newSettings);
+    }
     if (treasureHunt.airLeakSurveys != undefined) {
       treasureHunt.airLeakSurveys = this.airLeakTreasureService.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
+    }
+    if (treasureHunt.leakageLosses != undefined) {
+      treasureHunt.leakageLosses = this.leakageTreasureHuntService.convertLeakageLosses(treasureHunt.leakageLosses, oldSettings, newSettings);
+    }
+    if (treasureHunt.heatCascadingOpportunities != undefined) {
+      treasureHunt.heatCascadingOpportunities = this.heatCascadingTreasureHuntService.convertHeatCascadingOpportunities(treasureHunt.heatCascadingOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.waterHeatingOpportunities != undefined) {
+      treasureHunt.waterHeatingOpportunities = this.waterHeatingTreasureHuntService.convertWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);

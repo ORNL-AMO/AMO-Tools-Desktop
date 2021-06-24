@@ -30,6 +30,9 @@ export class FsatRollupComponent implements OnInit {
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   settings: Settings;
+
+  rollupEnergyUnit: string = 'MWh';
+  
   constructor(private fsatReportRollupService: FsatReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -47,7 +50,7 @@ export class FsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
+      this.yAxisLabel = 'Annual Energy Usage (MWh)';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
@@ -66,7 +69,7 @@ export class FsatRollupComponent implements OnInit {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -100,13 +103,13 @@ export class FsatRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
         projectedCosts.push(result.modificationResults.annualCost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualEnergy - result.modificationResults.annualEnergy);
@@ -131,6 +134,8 @@ export class FsatRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergy,
         annualCost: result.baselineResults.annualCost,
+        energySavings: result.baselineResults.annualEnergy - result.modificationResults.annualEnergy,
+        costSavings: result.baselineResults.annualCost - result.modificationResults.annualCost,
         percentCost: result.baselineResults.annualCost / totalCost * 100,
         percentEnergy: result.baselineResults.annualEnergy / totalEnergyUse * 100,
         color: graphColors[colorIndex]
@@ -147,7 +152,7 @@ export class FsatRollupComponent implements OnInit {
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annualEnergy,
         modificationCost: dataItem.modificationResults.annualCost,
-        modificationEnergyUse: dataItem.baselineResults.annualEnergy,
+        modificationEnergyUse: dataItem.modificationResults.annualEnergy,
         baselineCost: dataItem.baselineResults.annualCost,
         costSavings: dataItem.baselineResults.annualCost - dataItem.modificationResults.annualCost,
         implementationCosts: dataItem.modification.implementationCosts,

@@ -25,13 +25,17 @@
           [ngClass]="{'active': pieChartDataOption == 'energy'}">Energy Use</button>
         <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('cost')"
           [ngClass]="{'active': pieChartDataOption == 'cost'}">Energy Cost</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('energySavings')"
+          [ngClass]="{'active': pieChartDataOption == 'energySavings'}">Energy Savings</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('costSavings')"
+          [ngClass]="{'active': pieChartDataOption == 'costSavings'}">Energy Cost Savings</button>
       </div>
       <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
-        [energyUnit]="settings.powerMeasurement"></app-rollup-summary-pie-chart>
+        [energyUnit]="rollupEnergyUnit" ></app-rollup-summary-pie-chart>
     </div>
     <div class="col-7">
-      <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
-        [equipmentType]="'Pump'"></app-rollup-summary-energy-table>
+      <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="rollupEnergyUnit"
+        [equipmentType]="'Pump'" ></app-rollup-summary-energy-table>
     </div>
   </div>
   <!--system summary bar chart-->
@@ -53,7 +57,7 @@
   <div class="row pt-2">
     <div class="col-12">
       <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Pump'"
-        [energyUnit]="settings.powerMeasurement">
+        [energyUnit]="rollupEnergyUnit">
       </app-rollup-summary-table>
     </div>
   </div>

@@ -3,17 +3,17 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
 import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
+import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasFormService } from './flue-gas-form.service';
 
 @Injectable()
 export class FlueGasService {
   baselineData: BehaviorSubject<FlueGas>;
   modificationData: BehaviorSubject<FlueGas>;
-  baselineEnergyData: BehaviorSubject<EnergyData>;
-  modificationEnergyData: BehaviorSubject<EnergyData>;
+  baselineEnergyData: BehaviorSubject<FlueGasEnergyData>;
+  modificationEnergyData: BehaviorSubject<FlueGasEnergyData>;
   output: BehaviorSubject<FlueGasOutput>;
   
   currentField: BehaviorSubject<string>;
@@ -29,8 +29,8 @@ export class FlueGasService {
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
     this.modificationData = new BehaviorSubject<FlueGas>(undefined);
-    this.baselineEnergyData = new BehaviorSubject<EnergyData>(undefined);
-    this.modificationEnergyData = new BehaviorSubject<EnergyData>(undefined);
+    this.baselineEnergyData = new BehaviorSubject<FlueGasEnergyData>(undefined);
+    this.modificationEnergyData = new BehaviorSubject<FlueGasEnergyData>(undefined);
 
     this.output = new BehaviorSubject<FlueGasOutput>(undefined);
 
@@ -45,8 +45,8 @@ export class FlueGasService {
     
     let baselineFlueGas: FlueGas = this.baselineData.getValue();
     let modificationFlueGas: FlueGas = this.modificationData.getValue();
-    let baselineEnergyData: EnergyData = this.baselineEnergyData.getValue();
-    let modificationEnergyData: EnergyData = this.modificationEnergyData.getValue();
+    let baselineEnergyData: FlueGasEnergyData = this.baselineEnergyData.getValue();
+    let modificationEnergyData: FlueGasEnergyData = this.modificationEnergyData.getValue();
 
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
     output.baseline = baselineResults;
@@ -60,7 +60,7 @@ export class FlueGasService {
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, energyData: EnergyData, settings: Settings, inModal: boolean): FlueGasResult {
+  getFlueGasResult(flueGasData: FlueGas, energyData: FlueGasEnergyData, settings: Settings, inModal: boolean): FlueGasResult {
     let result: FlueGasResult = {
       availableHeat: 0,
       availableHeatError: undefined,
@@ -120,9 +120,10 @@ export class FlueGasService {
       name: undefined
     };
 
-    let energyData: EnergyData = {
+    let energyData: FlueGasEnergyData = {
       fuelCost: 0,
-      hoursPerYear: treasureHuntHours? treasureHuntHours : 8760
+      hoursPerYear: treasureHuntHours? treasureHuntHours : 8760,
+      utilityType: 'Natural Gas',
     }
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
@@ -169,9 +170,9 @@ export class FlueGasService {
       };
     }
 
-    let currentBaselineEnergy: EnergyData = this.baselineEnergyData.getValue();
-    let baselineEnergyCopy: EnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
-    let modificationEnergy: EnergyData = {
+    let currentBaselineEnergy: FlueGasEnergyData = this.baselineEnergyData.getValue();
+    let baselineEnergyCopy: FlueGasEnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
+    let modificationEnergy: FlueGasEnergyData = {
       fuelCost: baselineEnergyCopy.fuelCost,
       hoursPerYear: baselineEnergyCopy.hoursPerYear
     }
@@ -259,9 +260,10 @@ export class FlueGasService {
       name: 'Modification Flue Gas'
     }
     
-    let energyExample: EnergyData = {
+    let energyExample: FlueGasEnergyData = {
       hoursPerYear: 8760,
-      fuelCost: 3.99
+      fuelCost: 3.99,
+      utilityType: 'Natural Gas',
     };
     
     this.baselineEnergyData.next(energyExample);

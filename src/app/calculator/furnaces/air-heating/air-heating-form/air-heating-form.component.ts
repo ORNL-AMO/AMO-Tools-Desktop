@@ -22,6 +22,8 @@ export class AirHeatingFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inModal: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('gasMaterialModal', { static: false }) public gasMaterialModal: ModalDirective;
