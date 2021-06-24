@@ -78,16 +78,32 @@ export class FsatService {
   }
 
   getPsychrometricResults(fsat: FSAT, settings: Settings): PsychrometricResults {
-    let psychrometricResults: PsychrometricResults;
+    let psychrometricResults: PsychrometricResults = {
+      gasDensity: undefined,
+      absolutePressure: undefined,
+      saturatedHumidity: undefined,
+      saturationDegree: undefined,
+      humidityRatio: undefined,
+      specificVolume: undefined,
+      enthalpy: undefined,
+      dewPoint: undefined,
+      relativeHumidity: undefined,
+      saturationPressure: undefined,
+      wetBulbTemp: undefined,
+      barometricPressure:undefined,
+      dryBulbTemp:undefined,
+    };
+    let results: PsychrometricResults;
     if (fsat.baseGasDensity.inputType === 'relativeHumidity') {
-      psychrometricResults = this.getPsychrometricRelativeHumidity(fsat.baseGasDensity, settings);
+      results = this.getPsychrometricRelativeHumidity(fsat.baseGasDensity, settings);
     } else if (fsat.baseGasDensity.inputType === 'wetBulb') {
-      psychrometricResults = this.getPsychrometricWetBulb(fsat.baseGasDensity, settings);
+      results = this.getPsychrometricWetBulb(fsat.baseGasDensity, settings);
     } else if (fsat.baseGasDensity.inputType === 'dewPoint') {
-      psychrometricResults = this.getPsychrometricDewPoint(fsat.baseGasDensity, settings);
+      results = this.getPsychrometricDewPoint(fsat.baseGasDensity, settings);
     }
 
-    if (psychrometricResults) {
+    if (results) {
+      psychrometricResults = results;
       psychrometricResults.dryBulbTemp = fsat.baseGasDensity.dryBulbTemp;
       psychrometricResults.barometricPressure = fsat.baseGasDensity.barometricPressure;
     }
@@ -200,12 +216,8 @@ export class FsatService {
       results = this.convertFsatService.convertFsatOutput(results, settings);
       results.annualCost = results.annualCost * 1000;
 
-      let psychrometricResults: PsychrometricResults = this.getPsychrometricResults(fsat, settings);
-      if(psychrometricResults){
-        results.psychrometricResults = psychrometricResults;
-      }
+      results.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
-      // Get traverse data/plane results
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
       if (fan203InputsForPlaneResults) {
         fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;

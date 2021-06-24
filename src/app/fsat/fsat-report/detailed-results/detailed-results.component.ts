@@ -17,6 +17,8 @@ export class DetailedResultsComponent implements OnInit {
   inRollup: boolean;
   @Input()
   assessment: Assessment;
+
+  showPlaneResults: boolean = false;
   selectedModificationIndex: number;
   fsat: FSAT; 
   
@@ -25,6 +27,7 @@ export class DetailedResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fsat = this.assessment.fsat;
+    this.checkShowPlaneResults();
     if (this.inRollup) {
       this.fsatReportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -36,7 +39,12 @@ export class DetailedResultsComponent implements OnInit {
         }
       });
     }
-
-
   }
+
+
+checkShowPlaneResults() {
+  let showModPlaneResults: boolean = this.fsat.modifications.some(modification => modification.fsat.outputs.planeResults !== undefined);
+  this.showPlaneResults = this.fsat.outputs.planeResults !== undefined || showModPlaneResults;
+}
+
 }

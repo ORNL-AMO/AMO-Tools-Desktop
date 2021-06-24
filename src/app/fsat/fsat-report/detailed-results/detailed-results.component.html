@@ -322,11 +322,13 @@
     </table>
 </div>
 
-<h6>Traverse Data Results</h6>
-<div>
-    <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatName]="'Baseline'"></app-traverse-results>
-    <div *ngFor="let modification of fsat.modifications;">
-        <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatName]="modification.fsat.name">
-        </app-traverse-results>
+<ng-container *ngIf="showPlaneResults">
+    <h6>Traverse Data Results</h6>
+    <div>
+        <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatName]="'Baseline'"></app-traverse-results>
+        <div *ngFor="let modification of fsat.modifications;">
+            <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatName]="modification.fsat.name">
+            </app-traverse-results>
+        </div>
     </div>
-</div>
+</ng-container>
