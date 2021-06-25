@@ -9,12 +9,12 @@
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true"
-        [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
-        [baseline]="true" [fsat]="_fsat"></app-fsat-fluid>
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
         [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"
         (emitSave)="saveFanSetup($event)"></app-fan-setup>
+      <app-fsat-fluid *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true"
+        [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
+        [baseline]="true" [fsat]="_fsat"></app-fsat-fluid>
       <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true"
         [fanMotor]="_fsat.fanMotor" [baseline]="true" (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"
         [fsat]="_fsat"></app-fan-motor>
