@@ -1,7 +1,6 @@
 // @ts-ignore
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-declare var calculatorAddon: any;
 declare var compressorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
@@ -11,17 +10,18 @@ import {
   ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
   CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult,
   CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput,
-  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { StandaloneSuiteApiService } from '../tools-suite-api/standalone-suite-api.service';
+import { CalculatorSuiteApiService } from '../tools-suite-api/calculator-suite-api.service';
 
 @Injectable()
 export class StandaloneService {
 
 
-  constructor(private convertUnitsService: ConvertUnitsService, private standaloneSuiteApiService: StandaloneSuiteApiService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private standaloneSuiteApiService: StandaloneSuiteApiService, private calculatorSuiteApiService: CalculatorSuiteApiService) { }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput, settings: Settings): PneumaticAirRequirementOutput {
     const inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
@@ -320,20 +320,20 @@ export class StandaloneService {
   }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
-    return calculatorAddon.electricityReduction(inputObj);
+    return this.calculatorSuiteApiService.electricityReduction(inputObj);
   }
 
   naturalGasReduction(inputObj: NaturalGasReductionInput): NaturalGasReductionResult {
-    return calculatorAddon.naturalGasReduction(inputObj);
+    return this.calculatorSuiteApiService.naturalGasReduction(inputObj);
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    let results: CompressedAirReductionResult = this.calculatorSuiteApiService.compressedAirReduction(inputObj);
     return results;
   }
 
   airLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
-    let results: AirLeakSurveyResult = calculatorAddon.compressedAirLeakSurvey(inputObj);
+    let results: AirLeakSurveyResult = this.calculatorSuiteApiService.compressedAirLeakSurvey(inputObj);
     return results;
   }
 
@@ -361,19 +361,19 @@ export class StandaloneService {
   }
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
-    return calculatorAddon.waterReduction(inputObj);
+    return this.calculatorSuiteApiService.waterReduction(inputObj);
   }
 
-  steamReduction(inputObj: SteamReductionInput): any {
-    let result = calculatorAddon.steamReduction(inputObj);
+  steamReduction(inputObj: SteamReductionInput): SteamReductionResult {
+    let result: SteamReductionResult = this.calculatorSuiteApiService.steamReduction(inputObj);
     return result;
   }
 
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
-    return calculatorAddon.pipeInsulationReduction(inputObj);
+    return this.calculatorSuiteApiService.pipeInsulationReduction(inputObj);
   }
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
-    return calculatorAddon.tankInsulationReduction(inputObj);
+    return this.calculatorSuiteApiService.tankInsulationReduction(inputObj);
   }
 }

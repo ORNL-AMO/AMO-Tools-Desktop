@@ -552,6 +552,12 @@ export interface SteamReductionInput {
   steamReductionInputVec: Array<SteamReductionData>
 };
 
+export interface SteamReductionOutput {
+  energyCost?: number,
+  energyUse: number,
+  steamUse: number
+};
+
 export interface SteamReductionData {
   name: string,
   hoursPerYear: number,
