@@ -60,7 +60,7 @@ export class PlotlyBarChartComponent implements OnInit {
         title: {
           text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 16
           }
         },
@@ -96,7 +96,7 @@ export class PlotlyBarChartComponent implements OnInit {
         title: {
           text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 16
           }
         },

@@ -34,7 +34,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
           title: {
             text: 'Number of Motors',
             font: {
-              family: 'Arial',
+              family: 'Roboto',
               size: 16
             }
           },

@@ -56,7 +56,7 @@ export class EnergyCostBarChartComponent implements OnInit {
           title: {
             text: 'Energy Cost ($/yr)',
             font: {
-              family: 'Arial',
+              family: 'Roboto',
               size: 16
             }
           },
