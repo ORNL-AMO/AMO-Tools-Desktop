@@ -64,9 +64,9 @@ export class NoLoadComponent implements OnInit {
   }
 
   setNoLoadLabel(controlType: number) {
-    if (controlType == 4 || controlType == 7 || controlType == 2 || controlType == 3 || controlType == 9 || controlType == 11) {
+    if (controlType == 4 || controlType == 6 || controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10) {
       this.noLoadLabel = "(unloaded)";
-    } else if (controlType == 6) {
+    } else if (controlType == 5) {
       this.noLoadLabel = "(off)";
     } else if (controlType == 1) {
       this.noLoadLabel = "(modulated)";

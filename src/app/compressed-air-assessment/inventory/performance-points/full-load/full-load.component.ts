@@ -63,7 +63,7 @@ export class FullLoadComponent implements OnInit {
   }
 
   setFullLoadLabel(controlType: number) {
-    if (controlType == 1 || controlType == 8 || controlType == 10) {
+    if (controlType == 1 || controlType == 7 || controlType == 9) {
       this.fullLoadLabel = "";
     } else {
       this.fullLoadLabel = "(cut-in)";
