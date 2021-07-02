@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 
 @Component({
@@ -16,11 +17,21 @@ export class FullLoadComponent implements OnInit {
   form: FormGroup;
   isFormChange: boolean = false;
   fullLoadLabel: string;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+
+  showPressureCalc: boolean;
+  showAirflowCalc: boolean;
+  showPowerCalc: boolean;
+  selectedCompressor: CompressorInventoryItem;
+  genericCompressor: GenericCompressor;
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private genericCompressorDbService: GenericCompressorDbService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
+        this.selectedCompressor = val;
+        this.genericCompressor = this.genericCompressorDbService.genericCompressors.find(genericCompressor => { return genericCompressor.IDCompLib == this.selectedCompressor.compressorLibId });
+        this.checkShowCalc();
         if (this.isFormChange == false) {
           this.setFullLoadLabel(val.compressorControls.controlType);
           this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.fullLoad);
@@ -37,6 +48,7 @@ export class FullLoadComponent implements OnInit {
 
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.fullLoad = this.inventoryService.getPerformancePointObjFromForm(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
@@ -51,11 +63,76 @@ export class FullLoadComponent implements OnInit {
   }
 
   setFullLoadLabel(controlType: number) {
-    if (controlType == 1 || controlType == 8 || controlType == 10) {
+    if (controlType == 1 || controlType == 7 || controlType == 9) {
       this.fullLoadLabel = "";
     } else {
       this.fullLoadLabel = "(cut-in)";
     }
+  }
+
+  saveDischargePressure() {
+    this.form.controls.isDefaultPressure.patchValue(false);
+    this.save();
+  }
+
+  saveAirFlow() {
+    this.form.controls.isDefaultAirFlow.patchValue(false);
+    this.save();
+  }
+
+  savePower() {
+    this.form.controls.isDefaultPower.patchValue(false);
+    this.save();
+  }
+
+  checkShowCalc() {
+    if (this.genericCompressor) {
+      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
+        //TODO: use generic or nameplate data?
+        //genericCompressor.RatedCapacity
+        this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != this.selectedCompressor.nameplateData.fullLoadRatedCapacity);
+      } else {
+        this.showAirflowCalc = false;
+      }
+
+      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
+        this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != this.genericCompressor.TotPackageInputPower);
+      } else {
+        this.showPowerCalc = false;
+      }
+
+      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
+        //TODO: use generic or nameplate data?
+        //genericCompressor.RatedPressure
+        this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
+      } else {
+        this.showPressureCalc = false;
+      }
+    } else {
+      this.showAirflowCalc = false;
+      this.showPowerCalc = false;
+      this.showPressureCalc = false;
+    }
+  }
+
+  setAirFlow() {
+    //TODO: use generic or nameplate data?
+    this.form.controls.airflow.patchValue(this.selectedCompressor.nameplateData.fullLoadRatedCapacity);
+    this.form.controls.isDefaultAirFlow.patchValue(true);
+    this.save();
+  }
+
+  setPower() {
+    this.form.controls.power.patchValue(this.genericCompressor.TotPackageInputPower);
+    this.form.controls.isDefaultPower.patchValue(true);
+    this.save();
+  }
+
+  setPressure() {
+    //TODO: use generic or nameplate data?
+    this.form.controls.dischargePressure.patchValue(this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
+    this.form.controls.isDefaultPressure.patchValue(true);
+    this.save();
   }
 
 }

@@ -5,8 +5,11 @@
     <div class="form-group">
         <label for="fullLoadDischargePressure">Discharge Pressure</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="fullLoadDischargePressure" type="number" step="any" class="form-control"
-                id="fullLoadDischargePressure" formControlName="dischargePressure" (input)="save()"
+                id="fullLoadDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                 (focus)="focusField('fullLoadDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -22,8 +25,11 @@
     <div class="form-group">
         <label for="fullLoadAirflow">Air Flow</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
+                <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="fullLoadAirflow" type="number" step="any" class="form-control" id="fullLoadAirflow"
-                formControlName="airflow" (input)="save()" (focus)="focusField('fullLoadAirflow')">
+                formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('fullLoadAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -37,8 +43,11 @@
     <div class="form-group">
         <label for="fullLoadPower">Power</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
+                <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="fullLoadPower" type="number" step="any" class="form-control" id="fullLoadPower"
-                formControlName="power" (input)="save()" (focus)="focusField('fullLoadPower')">
+                formControlName="power" (input)="savePower()" (focus)="focusField('fullLoadPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

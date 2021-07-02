@@ -3,3 +3,7 @@
     text-transform: none;
     padding-bottom: 0px;
 }
+
+.input-group-addon.calc-addon{
+    border-left: solid 1px;
+}

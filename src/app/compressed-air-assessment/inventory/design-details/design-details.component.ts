@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory.service';
+import { PerformancePointCalculationsService } from '../performance-point-calculations.service';
 
 @Component({
   selector: 'app-design-details',
@@ -19,7 +20,8 @@ export class DesignDetailsComponent implements OnInit {
   displayUnloadSumpPressure: boolean;
   displayModulation: boolean;
 
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -41,9 +43,13 @@ export class DesignDetailsComponent implements OnInit {
     this.selectedCompressorSub.unsubscribe();
   }
 
-  save() {
+  save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.designDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
+    if(updatePerformancePoints){
+      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    }
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;

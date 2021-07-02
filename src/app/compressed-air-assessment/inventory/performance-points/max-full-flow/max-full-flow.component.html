@@ -4,8 +4,11 @@
     <div class="form-group">
         <label for="maxFullFlowDischargePressure">Discharge Pressure</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
-                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="save()"
+                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                 (focus)="focusField('maxFullFlowDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -20,8 +23,11 @@
     <div class="form-group">
         <label for="maxFullFlowAirflow">Air Flow</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
+                <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
-                formControlName="airflow" (input)="save()" (focus)="focusField('maxFullFlowAirflow')">
+                formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('maxFullFlowAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -35,8 +41,11 @@
     <div class="form-group">
         <label for="maxFullFlowPower">Power</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
+                <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
-                formControlName="power" (input)="save()" (focus)="focusField('maxFullFlowPower')">
+                formControlName="power" (input)="savePower()" (focus)="focusField('maxFullFlowPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

@@ -39,7 +39,8 @@ export interface CompressorInventoryItem {
     inletConditions: InletConditions,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
-    centrifugalSpecifics: CentrifugalSpecifics
+    centrifugalSpecifics: CentrifugalSpecifics,
+    modifiedDate: Date
 
 }
 
@@ -84,10 +85,11 @@ export interface PerformancePoints {
 
 export interface PerformancePoint {
     dischargePressure: number,
+    isDefaultPressure: boolean,
     airflow: number,
-    // defaultAirFlow: boolean,
+    isDefaultAirFlow: boolean,
     power: number,
-    // defaultPower: boolean
+    isDefaultPower: boolean
 }
 
 export interface SystemProfile {

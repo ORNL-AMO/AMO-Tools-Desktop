@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from './inventory.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -26,6 +26,7 @@ export class InventoryComponent implements OnInit {
     this.initializeInventory();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
+        this.hasInventoryItems = true;
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
@@ -33,6 +34,10 @@ export class InventoryComponent implements OnInit {
         } else {
           this.isFormChange = false;
         }
+      } else {
+        this.compressorType = undefined;
+        this.controlType = undefined;
+        this.hasInventoryItems = false;
       }
     });
   }
@@ -49,16 +54,19 @@ export class InventoryComponent implements OnInit {
       if (selectedCompressor) {
         let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
         if (!compressorExist) {
-          this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
+          let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
+          this.inventoryService.selectedCompressor.next(lastItemModified);
         }
       } else {
-        this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
+        let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
+        this.inventoryService.selectedCompressor.next(lastItemModified);
       }
     }
   }
 
   addInventoryItem() {
     let newInventoryItem: CompressorInventoryItem = this.inventoryService.getNewInventoryItem();
+    newInventoryItem.modifiedDate = new Date();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
@@ -68,6 +76,7 @@ export class InventoryComponent implements OnInit {
 
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.name = this.form.controls.name.value;
     selectedCompressor.description = this.form.controls.description.value;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -78,12 +87,12 @@ export class InventoryComponent implements OnInit {
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }
 
-  openCompressorModal(){
+  openCompressorModal() {
     this.showCompressorModal = true;
     this.cd.detectChanges();
   }
 
-  closeCompressorModal(){
+  closeCompressorModal() {
     this.showCompressorModal = false;
     this.cd.detectChanges();
   }

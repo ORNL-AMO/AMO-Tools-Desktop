@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../share
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory.service';
 import { ControlTypes } from '../inventoryOptions';
+import { PerformancePointCalculationsService } from '../performance-point-calculations.service';
 
 @Component({
   selector: 'app-control-data',
@@ -19,7 +20,8 @@ export class ControlDataComponent implements OnInit {
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   displayUnload: boolean;
   displayAutomaticShutdown: boolean;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -66,7 +68,8 @@ export class ControlDataComponent implements OnInit {
     }
     this.toggleDisableControls();
     this.setDisplayValues();
-    this.save();
+
+    this.save(true);
   }
 
   toggleDisableControls() {
@@ -89,9 +92,13 @@ export class ControlDataComponent implements OnInit {
     this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
   }
 
-  save() {
+  save(updatePerformancePoints?: boolean) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+    selectedCompressor.modifiedDate = new Date();
     selectedCompressor.compressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
+    if(updatePerformancePoints){
+      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    }
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
