@@ -77,7 +77,7 @@ export class PerformancePointCalculationsService {
     if (selectedCompressor.compressorControls.controlType == 1) {
       //lube mod without unloading
       selectedCompressor.performancePoints = this.setWithoutUnloadingPerformancePoints(selectedCompressor, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 9 || selectedCompressor.compressorControls.controlType == 11) {
+    } else if (selectedCompressor.compressorControls.controlType == 2 || selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
       //lube mod with unloading
       selectedCompressor.performancePoints = this.setWithUnloadingPerformancePoints(selectedCompressor, genericCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 3) {
@@ -86,13 +86,13 @@ export class PerformancePointCalculationsService {
     } else if (selectedCompressor.compressorControls.controlType == 4) {
       //load/unload
       selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 6) {
+    } else if (selectedCompressor.compressorControls.controlType == 5) {
       //start/stop
       selectedCompressor.performancePoints = this.setStartStopPerformancePoints(selectedCompressor, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 8 || selectedCompressor.compressorControls.controlType == 10) {
+    } else if (selectedCompressor.compressorControls.controlType == 7 || selectedCompressor.compressorControls.controlType == 9) {
       //blowoff
       selectedCompressor.performancePoints = this.setBlowoffPerformancePoints(selectedCompressor, genericCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 7) {
+    } else if (selectedCompressor.compressorControls.controlType == 6) {
       //multi-step unloading
       selectedCompressor.performancePoints = this.setMultiStepUnloading(selectedCompressor, genericCompressor);
 
@@ -328,7 +328,7 @@ export class PerformancePointCalculationsService {
 
   getNoLoadDischargePressure(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): number {
     //centrifugal or start/stop
-    if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 6) {
+    if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 5) {
       return 0
     } else {
       return genericCompressor.MinULSumpPressure;
