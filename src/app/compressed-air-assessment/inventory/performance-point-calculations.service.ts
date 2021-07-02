@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoints } from '../../shared/models/compressed-air-assessment';
 import { GenericCompressor, GenericCompressorDbService } from '../generic-compressor-db.service';
+import * as regression from 'regression';
 
 @Injectable()
 export class PerformancePointCalculationsService {
@@ -64,6 +65,9 @@ export class PerformancePointCalculationsService {
   }
 
   setPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
+    if (selectedCompressor.nameplateData.compressorType == 6) {
+      return this.setCentrifugal(selectedCompressor, genericCompressor);
+    }
     if (selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
       selectedCompressor.performancePoints.fullLoad.dischargePressure = selectedCompressor.nameplateData.fullLoadOperatingPressure;
     }
@@ -177,7 +181,6 @@ export class PerformancePointCalculationsService {
       selectedCompressor.performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
     }
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow) {
-      console.log('calc');
       selectedCompressor.performancePoints.maxFullFlow.airflow = this.calculateMaxFullFlowAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
     }
     if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPower) {
@@ -271,6 +274,67 @@ export class PerformancePointCalculationsService {
     return selectedCompressor.performancePoints
   }
 
+  //CENTRIFUGAL
+  setCentrifugal(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
+    //x1 = MaxPressSurgeFlow, y1 = MaxSurgePressure
+    //x2 = RatedCapacity, y2 = RatedPressure
+    //x3 = MinPressureStonewallFlow, y3 = MinStonewallPressure
+    let regressionData: Array<Array<number>> = [
+      [selectedCompressor.centrifugalSpecifics.maxFullLoadPressure, selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity],
+      [selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.fullLoadRatedCapacity],
+      [selectedCompressor.centrifugalSpecifics.minFullLoadPressure, selectedCompressor.centrifugalSpecifics.minFullLoadCapacity]
+    ];
+    let regressionEquation;
+    if (selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
+      selectedCompressor.performancePoints.fullLoad.dischargePressure = selectedCompressor.nameplateData.fullLoadOperatingPressure;
+    }
+    if (selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
+      regressionEquation = regression.polynomial(regressionData, { order: 2, precision: 50 });
+      let regressionValue = regressionEquation.predict(selectedCompressor.performancePoints.fullLoad.dischargePressure);
+      selectedCompressor.performancePoints.fullLoad.airflow = regressionValue[1];
+    }
+    if (selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
+      selectedCompressor.performancePoints.fullLoad.power = genericCompressor.TotPackageInputPower;
+    }
+    //maxFullFlow
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
+      selectedCompressor.performancePoints.maxFullFlow.dischargePressure = genericCompressor.MaxFullFlowPressure;
+    }
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow) {
+      if (!regressionEquation) {
+        regressionEquation = regression.polynomial(regressionData, { order: 2, precision: 50 });
+      }
+      let regressionValue = regressionEquation.predict(selectedCompressor.performancePoints.maxFullFlow.dischargePressure);
+      selectedCompressor.performancePoints.maxFullFlow.airflow = regressionValue[1];
+    }
+    if (selectedCompressor.performancePoints.maxFullFlow.isDefaultPower) {
+      selectedCompressor.performancePoints.maxFullFlow.power = selectedCompressor.performancePoints.fullLoad.power;
+    }
+    //unloadPoint
+    if (selectedCompressor.performancePoints.unloadPoint.isDefaultPressure) {
+      selectedCompressor.performancePoints.unloadPoint.dischargePressure = selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
+    }
+    if (selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow) {
+      selectedCompressor.performancePoints.unloadPoint.airflow = this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
+    }
+    if (selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
+      let unloadPointCapacity: number = selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.maxFullFlow.airflow;
+      selectedCompressor.performancePoints.unloadPoint.power = this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
+    }
+    //noLoad
+    if (selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
+      selectedCompressor.performancePoints.noLoad.dischargePressure = 0;
+    }
+    if (selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
+      selectedCompressor.performancePoints.noLoad.airflow = 0
+    }
+    if (selectedCompressor.performancePoints.noLoad.isDefaultPower) {
+      selectedCompressor.performancePoints.noLoad.power = this.calculateNoLoadPower(genericCompressor.NoLoadPowerUL, genericCompressor.TotPackageInputPower, selectedCompressor.designDetails.designEfficiency);;
+    }
+
+    return selectedCompressor.performancePoints;
+  }
+
   //Variables tarting w/ capital are from generic compressor db
   //other variables linked to input fields for compressors
   calculateNoLoadPower(NoLoadPowerUL: number, TotPackageInputPower: number, designEfficiency: number): number {
@@ -333,5 +397,10 @@ export class PerformancePointCalculationsService {
     } else {
       return genericCompressor.MinULSumpPressure;
     }
+  }
+
+
+  calculateCentrifugalUnloadPointAirFlow(selectedCompressor: CompressorInventoryItem, pressure: number): number {
+    return (pressure - (selectedCompressor.centrifugalSpecifics.minFullLoadPressure - (((selectedCompressor.centrifugalSpecifics.maxFullLoadPressure - selectedCompressor.centrifugalSpecifics.minFullLoadPressure) / (selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity - selectedCompressor.centrifugalSpecifics.surgeAirflow)) * selectedCompressor.centrifugalSpecifics.surgeAirflow)) / ((selectedCompressor.centrifugalSpecifics.maxFullLoadPressure - selectedCompressor.centrifugalSpecifics.minFullLoadPressure) / (selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity - selectedCompressor.centrifugalSpecifics.surgeAirflow)))
   }
 }
