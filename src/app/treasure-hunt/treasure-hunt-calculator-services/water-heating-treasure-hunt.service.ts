@@ -48,7 +48,7 @@ export class WaterHeatingTreasureHuntService {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavingsTotal,
       energySavings: output.energySavedTotal,
-      baselineCost: waterHeatingTreasureHunt.inputData.fuelCost,
+      baselineCost: output.costSavingsTotal,
       modificationCost: 0,
       utilityType: waterHeatingTreasureHunt.inputData.boilerUtilityType,
     }

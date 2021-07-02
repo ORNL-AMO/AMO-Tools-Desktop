@@ -27,10 +27,10 @@ export class WasteHeatService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(treasureHuntElectricityCost?: number) {
     let emptyInput: WasteHeatInput = {
       oppHours: 8760,
-      cost: undefined,
+      cost: treasureHuntElectricityCost,
       availableHeat: undefined,
       heatInput: undefined,
       hxEfficiency: undefined,
