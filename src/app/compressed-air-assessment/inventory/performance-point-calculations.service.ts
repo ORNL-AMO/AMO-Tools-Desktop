@@ -276,9 +276,9 @@ export class PerformancePointCalculationsService {
 
   //CENTRIFUGAL
   setCentrifugal(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoints {
-    //x1 = MaxPressSurgeFlow, y1 = MaxSurgePressure
-    //x2 = RatedCapacity, y2 = RatedPressure
-    //x3 = MinPressureStonewallFlow, y3 = MinStonewallPressure
+    //y1 = MaxPressSurgeFlow, x1 = MaxSurgePressure
+    //y2 = RatedCapacity, x2 = RatedPressure
+    //y3 = MinPressureStonewallFlow, x3 = MinStonewallPressure
     let regressionData: Array<Array<number>> = [
       [selectedCompressor.centrifugalSpecifics.maxFullLoadPressure, selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity],
       [selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.fullLoadRatedCapacity],
@@ -318,7 +318,7 @@ export class PerformancePointCalculationsService {
       selectedCompressor.performancePoints.unloadPoint.airflow = this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
     }
     if (selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
-      let unloadPointCapacity: number = selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.maxFullFlow.airflow;
+      let unloadPointCapacity: number = (selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.maxFullFlow.airflow) * 100;
       selectedCompressor.performancePoints.unloadPoint.power = this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
     }
     //noLoad
@@ -401,6 +401,11 @@ export class PerformancePointCalculationsService {
 
 
   calculateCentrifugalUnloadPointAirFlow(selectedCompressor: CompressorInventoryItem, pressure: number): number {
-    return (pressure - (selectedCompressor.centrifugalSpecifics.minFullLoadPressure - (((selectedCompressor.centrifugalSpecifics.maxFullLoadPressure - selectedCompressor.centrifugalSpecifics.minFullLoadPressure) / (selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity - selectedCompressor.centrifugalSpecifics.surgeAirflow)) * selectedCompressor.centrifugalSpecifics.surgeAirflow)) / ((selectedCompressor.centrifugalSpecifics.maxFullLoadPressure - selectedCompressor.centrifugalSpecifics.minFullLoadPressure) / (selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity - selectedCompressor.centrifugalSpecifics.surgeAirflow)))
+    let C37: number = pressure;
+    let C24: number = selectedCompressor.centrifugalSpecifics.minFullLoadPressure;
+    let C22: number = selectedCompressor.centrifugalSpecifics.maxFullLoadPressure;
+    let C23: number = selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity;
+    let C26: number = selectedCompressor.centrifugalSpecifics.surgeAirflow;
+    return (C37 - (C24 - (((C22 - C24) / (C23 - C26)) * C26))) / ((C22 - C24) / (C23 - C26))
   }
 }
