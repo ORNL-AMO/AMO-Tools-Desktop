@@ -84,42 +84,36 @@ export const ControlTypes: Array<ControlType> = [
     },
     {
         value: 5,
-        label: 'VFD',
-        compressorTypes: [1, 2, 3],
-        enumValue: 7
-    },
-    {
-        value: 6,
         label: 'Start/Stop',
         compressorTypes: [1, 2, 3, 4, 5],
         enumValue: 4
     },
     {
-        value: 7,
+        value: 6,
         label: 'Multi-step unloading',
-        compressorTypes: [5, 6],
+        compressorTypes: [4, 5],
         enumValue: 6
     },
     {
-        value: 8,
+        value: 7,
         label: 'Inlet butterfly modulation with blowoff',
         compressorTypes: [6],
         enumValue: 2
     },
     {
-        value: 9,
+        value: 8,
         label: 'Inlet butterfly modulation with unloading',
         compressorTypes: [6],
         enumValue: 1
     },
     {
-        value: 10,
+        value: 9,
         label: 'Inlet guide vane modulation with blowoff',
         compressorTypes: [6],
         enumValue: 2
     },
     {
-        value: 11,
+        value: 10,
         label: 'Inlet guide vane modulation with unloading',
         compressorTypes: [6],
         enumValue: 1

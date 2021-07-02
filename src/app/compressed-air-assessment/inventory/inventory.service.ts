@@ -153,19 +153,19 @@ export class InventoryService {
   }
 
   checkDisplayUnloadCapacity(controlType: number): boolean {
-    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 6 || controlType == 7);
+    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 5 || controlType == 6);
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 7);
+    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 6);
   }
 
   setCompressorControlValidators(form: FormGroup): FormGroup {
     if (form.controls.controlType.value && (form.controls.controlType.value == 2 || form.controls.controlType.value == 3
-      || form.controls.controlType.value == 4 || form.controls.controlType.value == 6 || form.controls.controlType.value == 7)) {
+      || form.controls.controlType.value == 4 || form.controls.controlType.value == 5 || form.controls.controlType.value == 6)) {
       form.controls.unloadPointCapacity.setValidators([Validators.required]);
       form.controls.numberOfUnloadSteps.setValidators([Validators.required]);
-      if (form.controls.controlType.value != 6) {
+      if (form.controls.controlType.value != 5) {
         form.controls.automaticShutdown.setValidators([Validators.required]);
       } else {
         form.controls.automaticShutdown.setValidators([]);
@@ -275,7 +275,7 @@ export class InventoryService {
 
   checkDisplayModulation(controlType: number): boolean {
     //any control type with "modulation"
-    if (controlType == 1 || controlType == 2 || controlType == 8 || controlType == 9 || controlType == 10 || controlType == 11) {
+    if (controlType == 1 || controlType == 2 || controlType == 7 || controlType == 8 || controlType == 9 || controlType == 10) {
       return true;
     }
     return false;
@@ -369,7 +369,7 @@ export class InventoryService {
   }
 
   checkShowMaxFlowPerformancePoint(compressorType: number, controlType: number): boolean {
-    if (compressorType == 6 && (controlType == 8 || controlType == 10)) {
+    if (compressorType == 6 && (controlType == 7 || controlType == 9)) {
       return false;
     } else if (compressorType == 1 || compressorType == 2) {
       if (controlType == 1) {
@@ -384,7 +384,7 @@ export class InventoryService {
       if (controlType == 2 || controlType == 3) {
         return true;
       }
-    } else if (compressorType == 6 && (controlType == 9 || controlType == 11)) {
+    } else if (compressorType == 6 && (controlType == 8 || controlType == 10)) {
       return true;
     }
     return false;
@@ -392,7 +392,7 @@ export class InventoryService {
 
   checkShowNoLoadPerformancePoint(compressorType: number, controlType: number): boolean {
     if (compressorType == 6) {
-      if (controlType == 8 || controlType == 10) {
+      if (controlType == 7 || controlType == 9) {
         return false
       }
     }
@@ -403,7 +403,7 @@ export class InventoryService {
     //centrifugal
     if (compressorType == 6) {
       //"with blowoff"
-      if (controlType == 8 || controlType == 10) {
+      if (controlType == 7 || controlType == 9) {
         return true;
       }
     }
