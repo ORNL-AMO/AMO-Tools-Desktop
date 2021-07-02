@@ -25,6 +25,16 @@
       </span>
     </div>
 
+    <div *ngIf="inTreasureHunt && form.controls.gasFuelType.value === true" class="form-group">
+      <label class="small" for="utilityType">Utility type
+      </label>
+      <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+        (change)="setTreasureHuntFuelCost()" (focus)="focusField('utilityType')" >
+        <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+        <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label class="small" for="method">Type of fuel</label>
       <select name="gasFuelType" class="form-control" formControlName="gasFuelType" id="gasFuelType"
@@ -34,15 +44,6 @@
       </select>
     </div>
 
-    <div *ngIf="inTreasureHunt && form.controls.gasFuelType.value === true" class="form-group">
-      <label class="small" for="utilityType">Utility type
-      </label>
-      <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
-        (change)="calculate()" (focus)="focusField('utilityType')" >
-        <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
-        <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
-      </select>
-    </div>
 
     <div class="form-group">
       <label class="small" for="materialTypeId">Fuel
