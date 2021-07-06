@@ -45,7 +45,12 @@ import { ControlTypePipe } from './control-type.pipe';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
 import { InventoryPerformanceProfileComponent } from './results-panel/inventory-performance-profile/inventory-performance-profile.component';
-import { PerformancePointCalculationsService } from './inventory/performance-point-calculations.service';
+import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
+import { BlowoffCalculationsService } from './inventory/performance-points/calculations/blowoff-calculations.service';
+import { FullLoadCalculationsService } from './inventory/performance-points/calculations/full-load-calculations.service';
+import { MaxFullFlowCalculationsService } from './inventory/performance-points/calculations/max-full-flow-calculations.service';
+import { NoLoadCalculationsService } from './inventory/performance-points/calculations/no-load-calculations.service';
+import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 
 @NgModule({
   declarations: [
@@ -100,7 +105,12 @@ import { PerformancePointCalculationsService } from './inventory/performance-poi
     SystemProfileService,
     CompressedAirCalculationService,
     GenericCompressorDbService,
-    PerformancePointCalculationsService
+    PerformancePointCalculationsService,
+    BlowoffCalculationsService,
+    FullLoadCalculationsService,
+    MaxFullFlowCalculationsService,
+    NoLoadCalculationsService,
+    UnloadPointCalculationsService
   ]
 })
 export class CompressedAirAssessmentModule { }

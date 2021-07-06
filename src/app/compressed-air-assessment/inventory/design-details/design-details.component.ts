@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory.service';
-import { PerformancePointCalculationsService } from '../performance-point-calculations.service';
+import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-design-details',

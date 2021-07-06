@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../sh
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
+import { FullLoadCalculationsService } from '../calculations/full-load-calculations.service';
 
 @Component({
   selector: 'app-full-load',
@@ -24,7 +25,7 @@ export class FullLoadComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   genericCompressor: GenericCompressor;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private fullLoadCalculationsService: FullLoadCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -88,23 +89,23 @@ export class FullLoadComponent implements OnInit {
   checkShowCalc() {
     if (this.genericCompressor) {
       if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
-        //TODO: use generic or nameplate data?
-        //genericCompressor.RatedCapacity
-        this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != this.selectedCompressor.nameplateData.fullLoadRatedCapacity);
+        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
+        this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != defaultValue);
       } else {
         this.showAirflowCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
-        this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != this.genericCompressor.TotPackageInputPower);
+        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, this.genericCompressor, true);
+        this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != defaultValue);
       } else {
         this.showPowerCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
-        //TODO: use generic or nameplate data?
-        //genericCompressor.RatedPressure
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
+        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
+        this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != defaultValue);
+        console.log(this.showPressureCalc);
       } else {
         this.showPressureCalc = false;
       }
@@ -116,21 +117,22 @@ export class FullLoadComponent implements OnInit {
   }
 
   setAirFlow() {
-    //TODO: use generic or nameplate data?
-    this.form.controls.airflow.patchValue(this.selectedCompressor.nameplateData.fullLoadRatedCapacity);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
+    this.form.controls.airflow.patchValue(defaultValue);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    this.form.controls.power.patchValue(this.genericCompressor.TotPackageInputPower);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, this.genericCompressor, true);
+    this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    //TODO: use generic or nameplate data?
-    this.form.controls.dischargePressure.patchValue(this.selectedCompressor.nameplateData.fullLoadOperatingPressure);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
+    this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }

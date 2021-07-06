@@ -5,8 +5,11 @@
     <div class="form-group">
         <label for="blowoffDischargePressure">Discharge Pressure</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="blowoffDischargePressure" type="number" step="any" class="form-control"
-                id="blowoffDischargePressure" formControlName="dischargePressure" (input)="save()"
+                id="blowoffDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                 (focus)="focusField('blowoffDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -21,8 +24,11 @@
     <div class="form-group">
         <label for="blowoffAirflow">Air Flow</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
+                <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="blowoffAirflow" type="number" step="any" class="form-control" id="blowoffAirflow"
-                formControlName="airflow" (input)="save()" (focus)="focusField('blowoffAirflow')">
+                formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('blowoffAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -36,8 +42,11 @@
     <div class="form-group">
         <label for="blowoffPower">Power</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
+                <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input name="blowoffPower" type="number" step="any" class="form-control" id="blowoffPower"
-                formControlName="power" (input)="save()" (focus)="focusField('blowoffPower')">
+                formControlName="power" (input)="savePower()" (focus)="focusField('blowoffPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

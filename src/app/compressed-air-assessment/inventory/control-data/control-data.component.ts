@@ -5,7 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../share
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory.service';
 import { ControlTypes } from '../inventoryOptions';
-import { PerformancePointCalculationsService } from '../performance-point-calculations.service';
+import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-control-data',
