@@ -4,7 +4,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../sh
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
-import { PerformancePointCalculationsService } from '../../performance-point-calculations.service';
+import { PerformancePointCalculationsService } from '../../performance-points/calculations/performance-point-calculations.service';
 import { FilterCompressorOptions } from '../filter-compressors.pipe';
 
 @Component({

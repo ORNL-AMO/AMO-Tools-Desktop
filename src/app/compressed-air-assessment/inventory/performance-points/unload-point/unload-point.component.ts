@@ -5,7 +5,8 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../sh
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
-import { PerformancePointCalculationsService } from '../../performance-point-calculations.service';
+import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
+import { UnloadPointCalculationsService } from '../calculations/unload-point-calculations.service';
 
 @Component({
   selector: 'app-unload-point',
@@ -23,7 +24,8 @@ export class UnloadPointComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   genericCompressor: GenericCompressor;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private performancePointCalculationsService: PerformancePointCalculationsService,
+    private unloadPointCalculationsService: UnloadPointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -78,22 +80,22 @@ export class UnloadPointComponent implements OnInit {
   checkShowCalc() {
     if (this.genericCompressor) {
       if (!this.selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow) {
-        let expectedAirFlow: number = this.getExpectedAirFlow();
-        this.showAirflowCalc = (this.selectedCompressor.performancePoints.unloadPoint.airflow != expectedAirFlow);
+        let defaultValue: number = this.unloadPointCalculationsService.getUnloadAirFlow(this.selectedCompressor, true);
+        this.showAirflowCalc = (this.selectedCompressor.performancePoints.unloadPoint.airflow != defaultValue);
       } else {
         this.showAirflowCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
-        let expectedPower: number = this.getExpectedPower();
-        this.showPowerCalc = (this.selectedCompressor.performancePoints.unloadPoint.power != expectedPower);
+        let defaultValue: number = this.unloadPointCalculationsService.getUnloadPower(this.selectedCompressor, this.genericCompressor, true);
+        this.showPowerCalc = (this.selectedCompressor.performancePoints.unloadPoint.power != defaultValue);
       } else {
         this.showPowerCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.unloadPoint.isDefaultPressure) {
-        let expectedPressure: number = this.getExpectedPressure();
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.unloadPoint.dischargePressure != expectedPressure);
+        let defaultValue: number = this.unloadPointCalculationsService.getUnloadPressure(this.selectedCompressor, true);
+        this.showPressureCalc = (this.selectedCompressor.performancePoints.unloadPoint.dischargePressure != defaultValue);
       } else {
         this.showPressureCalc = false;
       }
@@ -105,42 +107,23 @@ export class UnloadPointComponent implements OnInit {
   }
 
   setAirFlow() {
-    let expectedAirFlow: number = this.getExpectedAirFlow();
-    this.form.controls.airflow.patchValue(expectedAirFlow);
+    let defaultValue: number = this.unloadPointCalculationsService.getUnloadAirFlow(this.selectedCompressor, true);
+    this.form.controls.airflow.patchValue(defaultValue);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let expectedPower: number = this.getExpectedPower();
-    this.form.controls.power.patchValue(expectedPower);
+    let defaultValue: number = this.unloadPointCalculationsService.getUnloadPower(this.selectedCompressor, this.genericCompressor, true);
+    this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let expectedPressure: number = this.getExpectedPressure();
-    this.form.controls.dischargePressure.patchValue(expectedPressure);
+    let defaultValue: number = this.unloadPointCalculationsService.getUnloadPressure(this.selectedCompressor, true);
+    this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
-  }
-
-  getExpectedPower(): number {
-    //TODO: use generic or nameplate data?
-    if (this.selectedCompressor.compressorControls.controlType == 3) {
-      return this.performancePointCalculationsService.calculateUnloadPointPower(this.genericCompressor.NoLoadPowerFM, this.selectedCompressor.compressorControls.unloadPointCapacity, 2, this.selectedCompressor.performancePoints.maxFullFlow.power);
-    } else if (this.selectedCompressor.compressorControls.controlType == 2) {
-      return this.performancePointCalculationsService.calculateUnloadPointPower(this.genericCompressor.NoLoadPowerFM, this.selectedCompressor.compressorControls.unloadPointCapacity, 1, this.selectedCompressor.performancePoints.maxFullFlow.power);
-    }
-  }
-
-  getExpectedPressure(): number {
-    //TODO: use generic or nameplate data?
-    return this.performancePointCalculationsService.calculateUnloadPointDischargePressure(this.genericCompressor.MaxFullFlowPressure, this.selectedCompressor.designDetails.modulatingPressureRange, this.selectedCompressor.compressorControls.unloadPointCapacity);
-  }
-
-  getExpectedAirFlow(): number {
-    //TODO: use generic or nameplate data?
-    return this.performancePointCalculationsService.calculateUnloadPointAirFlow(this.selectedCompressor.nameplateData.fullLoadRatedCapacity, this.selectedCompressor.compressorControls.unloadPointCapacity);
   }
 }

@@ -5,7 +5,8 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../sh
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
-import { PerformancePointCalculationsService } from '../../performance-point-calculations.service';
+import { NoLoadCalculationsService } from '../calculations/no-load-calculations.service';
+import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-no-load',
@@ -24,7 +25,8 @@ export class NoLoadComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   genericCompressor: GenericCompressor;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private performancePointCalculationsService: PerformancePointCalculationsService,
+    private noLoadCalculationsService: NoLoadCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -91,21 +93,22 @@ export class NoLoadComponent implements OnInit {
   checkShowCalc() {
     if (this.genericCompressor) {
       if (!this.selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
-        this.showAirflowCalc = (this.selectedCompressor.performancePoints.noLoad.airflow != 0);
+        let defaultValue: number = this.noLoadCalculationsService.getNoLoadAirFlow(this.selectedCompressor, true);
+        this.showAirflowCalc = (this.selectedCompressor.performancePoints.noLoad.airflow != defaultValue);
       } else {
         this.showAirflowCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.noLoad.isDefaultPower) {
-        let expectedPower: number = this.getExpectedPower();
-        this.showPowerCalc = (this.selectedCompressor.performancePoints.noLoad.power != expectedPower);
+        let defaultValue: number = this.noLoadCalculationsService.getNoLoadPower(this.selectedCompressor, this.genericCompressor, true);
+        this.showPowerCalc = (this.selectedCompressor.performancePoints.noLoad.power != defaultValue);
       } else {
         this.showPowerCalc = false;
       }
 
       if (!this.selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-        let expectedPressure: number = this.getExpectedPressure();
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != expectedPressure);
+        let defaultValue: number = this.noLoadCalculationsService.getNoLoadPressure(this.selectedCompressor, this.genericCompressor, true);
+        this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != defaultValue);
       } else {
         this.showPressureCalc = false;
       }
@@ -117,37 +120,23 @@ export class NoLoadComponent implements OnInit {
   }
 
   setAirFlow() {
-    this.form.controls.airflow.patchValue(0);
+    let defaultValue: number = this.noLoadCalculationsService.getNoLoadAirFlow(this.selectedCompressor, true);
+    this.form.controls.airflow.patchValue(defaultValue);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let expectedPower: number = this.getExpectedPower();
-    this.form.controls.power.patchValue(expectedPower);
+    let defaultValue: number = this.noLoadCalculationsService.getNoLoadPower(this.selectedCompressor, this.genericCompressor, true);
+    this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let expectedPressure: number = this.getExpectedPressure();
-    this.form.controls.dischargePressure.patchValue(expectedPressure);
+    let defaultValue: number = this.noLoadCalculationsService.getNoLoadPressure(this.selectedCompressor, this.genericCompressor, true);
+    this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }
-
-
-  getExpectedPower(): number {
-    //TODO: use generic or nameplate data?
-    if(this.selectedCompressor.compressorControls.controlType != 1){
-      return this.performancePointCalculationsService.calculateNoLoadPower(this.genericCompressor.NoLoadPowerUL, this.genericCompressor.TotPackageInputPower, this.selectedCompressor.designDetails.designEfficiency);
-    }else{
-       return this.performancePointCalculationsService.calculateNoLoadPowerWithoutUnloading(this.genericCompressor);
-    }
-  }
-
-  getExpectedPressure(): number{
-    return this.performancePointCalculationsService.getNoLoadDischargePressure(this.selectedCompressor, this.genericCompressor);
-  }
-
 }
