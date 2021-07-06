@@ -39,8 +39,8 @@ export class AirLeakSurveyResultsComponent implements OnInit {
 
   updateTableString() {
     this.allTablesString = 
-    this.baselineTable.nativeElement.innerText +
-    this.modTable.nativeElement.innerText +
+    this.baselineTable.nativeElement.innerText + '\n' +
+    this.modTable.nativeElement.innerText + '\n' +
     this.savingsTable.nativeElement.innerText;
   }
 
