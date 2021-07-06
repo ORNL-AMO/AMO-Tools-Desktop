@@ -43,13 +43,11 @@ export class DesignDetailsComponent implements OnInit {
     this.selectedCompressorSub.unsubscribe();
   }
 
-  save(updatePerformancePoints?: boolean) {
+  save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.designDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
-    if(updatePerformancePoints){
       selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    }
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;

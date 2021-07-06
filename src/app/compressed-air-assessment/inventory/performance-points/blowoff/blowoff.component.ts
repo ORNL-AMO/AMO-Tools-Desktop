@@ -6,6 +6,7 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { BlowoffCalculationsService } from '../calculations/blowoff-calculations.service';
+import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-blowoff',
@@ -23,7 +24,8 @@ export class BlowoffComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   genericCompressor: GenericCompressor;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private blowoffCalculationsService: BlowoffCalculationsService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private blowoffCalculationsService: BlowoffCalculationsService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -48,6 +50,7 @@ export class BlowoffComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.blowoff = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;

@@ -6,6 +6,7 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { FullLoadCalculationsService } from '../calculations/full-load-calculations.service';
+import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-full-load',
@@ -25,7 +26,8 @@ export class FullLoadComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   genericCompressor: GenericCompressor;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private fullLoadCalculationsService: FullLoadCalculationsService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private fullLoadCalculationsService: FullLoadCalculationsService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -51,6 +53,7 @@ export class FullLoadComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.fullLoad = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
@@ -105,7 +108,6 @@ export class FullLoadComponent implements OnInit {
       if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
         let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
         this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != defaultValue);
-        console.log(this.showPressureCalc);
       } else {
         this.showPressureCalc = false;
       }

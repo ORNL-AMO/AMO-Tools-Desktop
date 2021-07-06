@@ -37,7 +37,7 @@
         <label for="modulatingPressureRange">Proportional Modulating Pressure Range</label>
         <div class="input-group">
             <input name="modulatingPressureRange" type="number" step="any" class="form-control"
-                id="modulatingPressureRange" formControlName="modulatingPressureRange" (input)="save(true)"
+                id="modulatingPressureRange" formControlName="modulatingPressureRange" (input)="save()"
                 (focus)="focusField('modulatingPressureRange')">
             <span class="units input-group-addon">psig</span>
         </div>
@@ -55,7 +55,7 @@
         <label for="inputPressure">Design Inlet Pressure</label>
         <div class="input-group">
             <input name="inputPressure" type="number" step="any" class="form-control" id="inputPressure"
-                formControlName="inputPressure" (input)="save(true)" (focus)="focusField('inputPressure')">
+                formControlName="inputPressure" (input)="save()" (focus)="focusField('inputPressure')">
             <span class="units input-group-addon">psia</span>
         </div>
         <!-- <span class="alert-danger pull-right small"
@@ -71,7 +71,7 @@
         <label for="designEfficiency">Design Efficiency</label>
         <div class="input-group">
             <input name="designEfficiency" type="number" step="any" class="form-control" id="designEfficiency"
-                formControlName="designEfficiency" (input)="save(true)" (focus)="focusField('designEfficiency')">
+                formControlName="designEfficiency" (input)="save()" (focus)="focusField('designEfficiency')">
             <span class="units input-group-addon">%</span>
         </div>
         <!-- <span class="alert-danger pull-right small"

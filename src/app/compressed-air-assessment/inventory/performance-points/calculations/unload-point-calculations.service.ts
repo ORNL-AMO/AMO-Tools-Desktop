@@ -59,53 +59,7 @@ export class UnloadPointCalculationsService {
       return selectedCompressor.performancePoints.unloadPoint.power;
     }
   }
-  //WITH UNLOADING
-  // setWithUnloadingPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoint {
-  //   //unloadPoint
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPressure) {
-  //     selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.calculateUnloadPointDischargePressure(selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.designDetails.modulatingPressureRange, selectedCompressor.compressorControls.unloadPointCapacity);
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow) {
-  //     selectedCompressor.performancePoints.unloadPoint.airflow = this.calculateUnloadPointAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.compressorControls.unloadPointCapacity);
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
-  //     selectedCompressor.performancePoints.unloadPoint.power = this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
-  //   }
-  //   return selectedCompressor.performancePoints.unloadPoint;
-  // }
-
-  // //VARIABLE DISPLACMENT
-  // setVariableDisplacementPerformancePoints(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoint {
-  //   //unloadPoint
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPressure) {
-  //     selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.calculateUnloadPointDischargePressure(selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.designDetails.modulatingPressureRange, selectedCompressor.compressorControls.unloadPointCapacity);
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow) {
-  //     selectedCompressor.performancePoints.unloadPoint.airflow = this.calculateUnloadPointAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.compressorControls.unloadPointCapacity);
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
-  //     selectedCompressor.performancePoints.unloadPoint.power = this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 2, selectedCompressor.performancePoints.maxFullFlow.power);
-  //   }
-  //   return selectedCompressor.performancePoints.unloadPoint;
-  // }
-
-  // //CENTRIFUGAL
-  // //inlet buterfly modulation with unloading
-  // setInletButterflyModulationWithUnloading(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoint {
-  //   //unloadPoint
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPressure) {
-  //     selectedCompressor.performancePoints.unloadPoint.dischargePressure = selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow) {
-  //     selectedCompressor.performancePoints.unloadPoint.airflow = this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
-  //   }
-  //   if (selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
-  //     let unloadPointCapacity: number = (selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.maxFullFlow.airflow) * 100;
-  //     selectedCompressor.performancePoints.unloadPoint.power = this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
-  //   }
-  //   return selectedCompressor.performancePoints.unloadPoint;
-  // }
-
+  
   calculateUnloadPointPower(NoLoadPowerFM: number, unloadPointCapacity: number, exponent: number, maxFullFlowPower: number): number {
     let unloadPointPower: number = ((NoLoadPowerFM / 100) * (1 - Math.pow((unloadPointCapacity / 100), exponent)) + Math.pow((unloadPointCapacity / 100), exponent)) * maxFullFlowPower;
     return Number(unloadPointPower.toFixed(3));

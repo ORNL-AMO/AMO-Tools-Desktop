@@ -33,17 +33,15 @@ export class NameplateDataComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
   }
 
-  save(updatePerformancePoints?: boolean) {
+  save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.nameplateData = this.inventoryService.getNameplateDataFromFrom(this.form);
-    if(updatePerformancePoints){
-      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    }
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
@@ -52,7 +50,7 @@ export class NameplateDataComponent implements OnInit {
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 

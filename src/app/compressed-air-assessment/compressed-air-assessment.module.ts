@@ -51,6 +51,7 @@ import { FullLoadCalculationsService } from './inventory/performance-points/calc
 import { MaxFullFlowCalculationsService } from './inventory/performance-points/calculations/max-full-flow-calculations.service';
 import { NoLoadCalculationsService } from './inventory/performance-points/calculations/no-load-calculations.service';
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
+import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { UnloadPointCalculationsService } from './inventory/performance-points/c
     FullLoadCalculationsService,
     MaxFullFlowCalculationsService,
     NoLoadCalculationsService,
-    UnloadPointCalculationsService
+    UnloadPointCalculationsService,
+    SharedPointCalculationsService
   ]
 })
 export class CompressedAirAssessmentModule { }
