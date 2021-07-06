@@ -51,7 +51,7 @@
               {
                 "glob": "**/*",
                 "input": "./node_modules/amo-tools-suite/bin/",
-                "output": "./assets/"
+                "output": "."
               }
             ],
             "styles": [
