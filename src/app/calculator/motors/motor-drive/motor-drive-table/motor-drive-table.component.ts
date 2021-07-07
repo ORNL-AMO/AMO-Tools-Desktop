@@ -14,7 +14,7 @@ export class MotorDriveTableComponent implements OnInit {
   
   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
 
-  tableString: any;
+  tableString: string;
   constructor() { }
 
   ngOnInit() {

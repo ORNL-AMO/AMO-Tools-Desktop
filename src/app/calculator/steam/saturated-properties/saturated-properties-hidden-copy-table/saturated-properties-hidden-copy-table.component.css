@@ -1,6 +1,6 @@
 .hidden-copy-table {
     z-index: -10;
-    position: absolute;
+    position: fixed;
     opacity: 0;
     top: 0;
     height: 0;

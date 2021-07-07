@@ -22,13 +22,13 @@ export class LightingReplacementResultsComponent implements OnInit {
 
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
-  table0String: any;
+  table0String: string;
   @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
-  table1String: any;
+  table1String: string;
   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
-  table2String: any;
+  table2String: string;
   @ViewChild('copyTable3', { static: false }) copyTable3: ElementRef;
-  table3String: any;
+  table3String: string;
 
   constructor() { }
 

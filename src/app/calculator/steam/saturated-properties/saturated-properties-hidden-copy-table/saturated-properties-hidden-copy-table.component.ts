@@ -17,7 +17,7 @@ export class SaturatedPropertiesHiddenCopyTableComponent implements OnInit {
 
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  tableString: any;
+  tableString: string;
 
   constructor(private steamService: SteamService) { }
 
