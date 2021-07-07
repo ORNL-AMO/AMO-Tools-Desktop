@@ -1,9 +1,8 @@
-
 .hidden-copy-table {
     z-index: -10;
     position: fixed;
     opacity: 0;
-    top: -1000px;
+    top: 0;
     height: 0;
     width: 0;
-  }
+}
