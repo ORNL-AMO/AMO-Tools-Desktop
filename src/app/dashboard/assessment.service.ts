@@ -361,9 +361,11 @@ export class AssessmentService {
         systemProfileSetup: {
           dayType: undefined,
           numberOfHours: 24,
-          dataInterval: 1
+          dataInterval: 1,
+          profileDataType: "percentCapacity",
         },
-        compressorOrdering: new Array()
+        compressorOrdering: new Array(),
+        profileSummary: new Array()
       }
     }
   }

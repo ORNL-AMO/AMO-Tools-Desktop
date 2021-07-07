@@ -13,7 +13,8 @@ export class SystemProfileService {
     let form: FormGroup = this.formBuilder.group({
       dayType: [systemProfileSetup.dayType],
       numberOfHours: [systemProfileSetup.numberOfHours, [Validators.required, Validators.min(24)]],
-      dataInterval: [systemProfileSetup.dataInterval, [Validators.required]]
+      dataInterval: [systemProfileSetup.dataInterval, [Validators.required]],
+      profileDataType: [systemProfileSetup.profileDataType]
     })
     return form;
   }
@@ -22,7 +23,8 @@ export class SystemProfileService {
     return {
       dayType: form.controls.dayType.value,
       numberOfHours: form.controls.numberOfHours.value,
-      dataInterval: form.controls.dataInterval.value
+      dataInterval: form.controls.dataInterval.value,
+      profileDataType: form.controls.profileDataType.value
     }
   }
 
