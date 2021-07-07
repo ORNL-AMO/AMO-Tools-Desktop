@@ -1,7 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, ElementRef, OnInit, Input, ViewChildren, ViewChild } from '@angular/core';
 import { Plane } from '../../../../../../shared/models/fans';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
+import * as XLSX from 'xlsx';
+import { ConstantPool } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-pressure-readings-form',
@@ -13,6 +16,8 @@ export class PressureReadingsFormComponent implements OnInit {
   planeNum: string;
   @Input()
   pressureType: string = 'Velocity';
+  @ViewChildren('inputs') inputs;
+  @ViewChild("importFile") importFile: ElementRef;
 
   traverseHoles: Array<Array<number>>;
   numLabels: Array<number>;
@@ -20,10 +25,14 @@ export class PressureReadingsFormComponent implements OnInit {
   resetFormSubscription: Subscription;
   updateTraverseDataSubscription: Subscription;
   traverseHoleWarning: string;
+  filesUploaded: boolean;
+  fileReferences: Array<any>;
+  hasErrorData: boolean;
 
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    console.log("ININIT");
     this.numLabels = new Array();
     this.setPlaneData();
     this.initializeData();
@@ -48,6 +57,67 @@ export class PressureReadingsFormComponent implements OnInit {
     this.updateTraverseDataSubscription.unsubscribe();
   }
 
+  setImportFile(files: FileList) {
+    this.fileReferences = new Array();
+    if (files) {
+      if (files.length !== 0) {
+        let regex3 = /.xlsx$/;
+        for (let index = 0; index < files.length; index++) {
+          if (regex3.test(files[index].name)) {
+            this.fileReferences.push(files[index]);
+          }
+        }
+        if (this.fileReferences.length != 0) {
+          this.importFiles();
+        }
+      }
+    }
+  }
+
+  importFiles() {
+    this.fileReferences.forEach(fileReference => {
+      let excelTest = /.xlsx$/;
+      if (excelTest.test(fileReference.name)) {
+        const reader: FileReader = new FileReader();
+        reader.onload = (e: any) => {
+          /* read workbook */
+          const bstr: string = e.target.result;
+          let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true });
+          var rowObject  =  XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
+          /* let isTemplate: boolean = this.checkSheetNamesForTemplate(workBook.SheetNames);
+          if (isTemplate) {
+            this.uploadDataService.addTemplateWorkBook(workBook, fileReference.name);
+          } else {
+            this.uploadDataService.addExcelFile(fileReference);
+          } */
+          var nTraverseHoles = new Array();
+          var rowIndex = 0;
+          var oldColLength = -1;
+          for (rowIndex = 0; rowIndex < rowObject.length; rowIndex++) {
+            var colIndex = 0;
+            var propArray = Object.keys(rowObject[rowIndex] as Object);
+            nTraverseHoles.push([]);
+            for (colIndex = 0; colIndex < propArray.length; colIndex++) {
+              nTraverseHoles[rowIndex].push(rowObject[rowIndex][propArray[colIndex].toString()]);
+            }
+            if (oldColLength !== -1 && oldColLength !== colIndex) {
+              console.log("BAD DATA");
+              this.hasErrorData = true;
+              return;
+            }
+            oldColLength = colIndex;
+            this.planeData.numTraverseHoles = colIndex;
+          }
+          this.planeData.numInsertionPoints = rowIndex;
+          this.setTraverseHoles(nTraverseHoles);
+          this.updateForm();
+        };
+        reader.readAsBinaryString(fileReference);
+      }
+    });
+    this.filesUploaded = true;
+  }
+
   setPlaneData() {
     this.planeData = this.fanAnalysisService.getPlane(this.planeNum);
   }
@@ -61,6 +131,7 @@ export class PressureReadingsFormComponent implements OnInit {
   }
 
   setTraverseHoles(currentTraverseData: Array<Array<number>>) {
+      this.hasErrorData = false;
       this.traverseHoles = currentTraverseData;
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
         this.numLabels.push(i + 1);
@@ -90,6 +161,36 @@ export class PressureReadingsFormComponent implements OnInit {
     this.save();
   }
 
+  focusInput(rowIndex: number, colIndex: number, rowLength: number) {
+    // convert ViewChildren querylist to an array to access by index
+    let inputEls = this.inputs.toArray();
+    // get the flat index from row/cols
+    let flatIdx = (rowIndex * rowLength) + colIndex;
+    // get that reference from the input array and use the native element focus() method
+    inputEls[flatIdx].nativeElement.focus();
+  }
+
+  shiftFocusDown(rowIndex: number, colIndex: number, rowLength: number) {
+    var newIndex = Math.min(rowIndex + 1, this.traverseHoles.length - 1);
+    this.focusInput(newIndex, colIndex, rowLength);
+  }
+
+  shiftFocusUp(rowIndex: number, colIndex: number, rowLength: number) {
+    var newIndex = Math.max(0, rowIndex - 1);
+    this.focusInput(newIndex, colIndex, rowLength);
+  }
+
+  shiftFocusLeft(rowIndex: number, colIndex: number, rowLength: number) {
+    var newIndex = Math.max(0, colIndex - 1);
+    this.focusInput(rowIndex, newIndex, rowLength);
+  }
+
+  shiftFocusRight(rowIndex: number, colIndex: number, rowLength: number) {
+    var newIndex = Math.min(colIndex+1, rowLength - 1);
+    this.focusInput(rowIndex, newIndex, rowLength);
+  }
+
+
   setStaticPressure() {
     // Static pressure result is avg of all traverse holes/insertion points
     let row: Array<number>;
@@ -116,6 +217,12 @@ export class PressureReadingsFormComponent implements OnInit {
     } else {
       this.planeData.staticPressure = holesAverage;
     }
+  }
+
+  updateForm() {
+    this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
+    this.fanAnalysisService.updateTraverseData.next(true);
+    this.fanAnalysisService.updateTraverseData.next(false);
   }
 
   save() {

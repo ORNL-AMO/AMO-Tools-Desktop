@@ -18,6 +18,7 @@ export class PlaneThreeFormComponent implements OnInit {
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
   resetFormSubscription: Subscription;
+  updateTraverseDataSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
@@ -29,6 +30,12 @@ export class PlaneThreeFormComponent implements OnInit {
         this.resetData();
       }
     })
+    this.updateTraverseDataSubscription = this.fanAnalysisService.updateTraverseData.subscribe(val => {
+      if (val == true) {
+        this.setPlaneData();
+        this.resetData();
+      }
+    });
   }
 
   ngOnDestroy() {
