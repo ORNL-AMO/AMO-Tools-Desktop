@@ -32,7 +32,6 @@ export class PressureReadingsFormComponent implements OnInit {
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    console.log("ININIT");
     this.numLabels = new Array();
     this.setPlaneData();
     this.initializeData();
@@ -91,24 +90,27 @@ export class PressureReadingsFormComponent implements OnInit {
             this.uploadDataService.addExcelFile(fileReference);
           } */
           var nTraverseHoles = new Array();
-          var rowIndex = 0;
+          var rowIndex = 1;
           var oldColLength = -1;
-          for (rowIndex = 0; rowIndex < rowObject.length; rowIndex++) {
-            var colIndex = 0;
+          for (rowIndex = 1; rowIndex < rowObject.length; rowIndex++) {
+            var colIndex = 1;
             var propArray = Object.keys(rowObject[rowIndex] as Object);
             nTraverseHoles.push([]);
-            for (colIndex = 0; colIndex < propArray.length; colIndex++) {
-              nTraverseHoles[rowIndex].push(rowObject[rowIndex][propArray[colIndex].toString()]);
+            for (colIndex = 1; colIndex < propArray.length; colIndex++) {
+              if (!(/^[0-9.-]*$/.test(rowObject[rowIndex][propArray[colIndex].toString()]))) {
+                this.hasErrorData = true;
+                return;
+              }
+              nTraverseHoles[rowIndex-1].push(rowObject[rowIndex][propArray[colIndex].toString()]);
             }
             if (oldColLength !== -1 && oldColLength !== colIndex) {
-              console.log("BAD DATA");
               this.hasErrorData = true;
               return;
             }
             oldColLength = colIndex;
-            this.planeData.numTraverseHoles = colIndex;
+            this.planeData.numTraverseHoles = colIndex - 1;
           }
-          this.planeData.numInsertionPoints = rowIndex;
+          this.planeData.numInsertionPoints = rowIndex - 1;
           this.setTraverseHoles(nTraverseHoles);
           this.updateForm();
         };
