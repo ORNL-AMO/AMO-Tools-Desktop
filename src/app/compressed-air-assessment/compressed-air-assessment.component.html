@@ -5,8 +5,8 @@
   </div>
   <!--end header-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'w-50': setupTab != 'system-profile', 'w-75': setupTab == 'system-profile'}"
+    <div class="w-50 panel-column modification scroll-item" *ngIf="setupTab !='system-profile'"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
@@ -14,16 +14,20 @@
       <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
       <app-end-uses *ngIf="setupTab == 'end-uses'"></app-end-uses>
       <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>
-      <app-system-profile-setup *ngIf="setupTab == 'system-profile' && profileTab == 'setup'">
-      </app-system-profile-setup>
-      <app-system-profile-summary *ngIf="setupTab == 'system-profile' && profileTab == 'summary'">
-      </app-system-profile-summary>
-      <app-system-profile-graphs *ngIf="setupTab == 'system-profile' && profileTab == 'graphs'">
-      </app-system-profile-graphs>
     </div>
-    <div class="scroll-item" [ngClass]="{'w-50': setupTab != 'system-profile', 'w-25': setupTab == 'system-profile'}"
+    <div *ngIf="setupTab != 'system-profile'" class="scroll-item" [ngClass]="{'w-50': setupTab != 'system-profile'}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-results-panel></app-results-panel>
+    </div>
+    <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-system-profile-setup class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'setup'">
+      </app-system-profile-setup>
+      <app-system-profile-summary class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'summary'">
+      </app-system-profile-summary>
+      <app-system-profile-graphs class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'graphs'">
+      </app-system-profile-graphs>
     </div>
   </div>
 

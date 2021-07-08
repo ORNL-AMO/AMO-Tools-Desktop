@@ -1,1 +1,43 @@
-<p>operating-profile-table works!</p>
+<label class="group-label">
+    Profile Data
+</label>
+
+<table class="table table-striped bg-white">
+    <thead>
+        <tr>
+            <th>
+                <!-- Compressor Name -->
+
+            </th>
+            <td>
+                
+            </td>
+            <th *ngFor="let interval of hourIntervals">
+                {{interval}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let summary of profileSummary; let compressorIndex = index;">
+            <td class="bold">
+                {{summary.compressorName}}
+            </td>
+            <td>
+                <span *ngIf="profileDataType == 'power'">Power</span>
+                <span *ngIf="profileDataType == 'percentCapacity'">% Capacity</span>
+                <span *ngIf="profileDataType == 'airflow'">Airflow</span>
+            </td>
+            <td *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
+                <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
+                    id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].power">
+                <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
+                    id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].airflow">
+                <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
+                    id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].percentCapacity">
+            </td>
+        </tr>
+    </tbody>
+</table>
