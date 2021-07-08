@@ -40,6 +40,7 @@ export class PlaneThreeFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.updateTraverseDataSubscription.unsubscribe();
   }
 
   resetData() {

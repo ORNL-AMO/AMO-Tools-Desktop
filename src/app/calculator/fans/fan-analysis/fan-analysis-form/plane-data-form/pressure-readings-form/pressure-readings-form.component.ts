@@ -3,7 +3,6 @@ import { Plane } from '../../../../../../shared/models/fans';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
-import { ConstantPool } from '@angular/compiler';
 
 
 @Component({
@@ -82,21 +81,16 @@ export class PressureReadingsFormComponent implements OnInit {
           /* read workbook */
           const bstr: string = e.target.result;
           let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true });
-          var rowObject  =  XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
-          /* let isTemplate: boolean = this.checkSheetNamesForTemplate(workBook.SheetNames);
-          if (isTemplate) {
-            this.uploadDataService.addTemplateWorkBook(workBook, fileReference.name);
-          } else {
-            this.uploadDataService.addExcelFile(fileReference);
-          } */
-          var nTraverseHoles = new Array();
-          var rowIndex = 1;
-          var oldColLength = -1;
+          let rowObject  =  XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
+          let nTraverseHoles = new Array();
+          let rowIndex = 1;
+          let oldColLength = -1;
           for (rowIndex = 1; rowIndex < rowObject.length; rowIndex++) {
-            var colIndex = 1;
-            var propArray = Object.keys(rowObject[rowIndex] as Object);
+            let colIndex = 1;
+            let propArray = Object.keys(rowObject[rowIndex] as Object);
             nTraverseHoles.push([]);
             for (colIndex = 1; colIndex < propArray.length; colIndex++) {
+              // checks if value in cell is numeric (contains only digits, negative sign, or decimal point)
               if (!(/^[0-9.-]*$/.test(rowObject[rowIndex][propArray[colIndex].toString()]))) {
                 this.hasErrorData = true;
                 return;
@@ -173,22 +167,22 @@ export class PressureReadingsFormComponent implements OnInit {
   }
 
   shiftFocusDown(rowIndex: number, colIndex: number, rowLength: number) {
-    var newIndex = Math.min(rowIndex + 1, this.traverseHoles.length - 1);
+    let newIndex = Math.min(rowIndex + 1, this.traverseHoles.length - 1);
     this.focusInput(newIndex, colIndex, rowLength);
   }
 
   shiftFocusUp(rowIndex: number, colIndex: number, rowLength: number) {
-    var newIndex = Math.max(0, rowIndex - 1);
+    let newIndex = Math.max(0, rowIndex - 1);
     this.focusInput(newIndex, colIndex, rowLength);
   }
 
   shiftFocusLeft(rowIndex: number, colIndex: number, rowLength: number) {
-    var newIndex = Math.max(0, colIndex - 1);
+    let newIndex = Math.max(0, colIndex - 1);
     this.focusInput(rowIndex, newIndex, rowLength);
   }
 
   shiftFocusRight(rowIndex: number, colIndex: number, rowLength: number) {
-    var newIndex = Math.min(colIndex+1, rowLength - 1);
+    let newIndex = Math.min(colIndex+1, rowLength - 1);
     this.focusInput(rowIndex, newIndex, rowLength);
   }
 
