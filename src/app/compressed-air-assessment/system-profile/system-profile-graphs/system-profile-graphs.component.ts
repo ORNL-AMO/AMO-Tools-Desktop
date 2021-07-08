@@ -46,15 +46,24 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.airflowGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
+      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => { return data.airflow }),
           type: 'bar',
-          name: compressorProfile.compressorName
+          name: compressorProfile.compressorName,
+          marker: {
+            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            line: {
+              width: 3
+            }
+          },
 
         }
         traceData.push(trace);
+        rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         barmode: 'stack',
@@ -66,7 +75,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         },
         xaxis: {
           // ticksuffix: '%',
-          // autotick: false,
+          autotick: false,
           title: {
             text: 'Hour',
             font: {
@@ -110,15 +119,24 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.powerGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
+      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaOpacity: number = 1;
+
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
           y: compressorProfile.profileSummaryData.map(data => { return data.power }),
           type: 'bar',
-          name: compressorProfile.compressorName
-
+          name: compressorProfile.compressorName,
+          marker: {
+            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            line: {
+              width: 3
+            }
+          }
         }
         traceData.push(trace);
+        rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         barmode: 'stack',
@@ -171,15 +189,23 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.capacityGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
+      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => { return data.percentCapacity }),
+          y: compressorProfile.profileSummaryData.map(data => { return data.percentSystemCapacity }),
           type: 'bar',
-          name: compressorProfile.compressorName
-
+          name: compressorProfile.compressorName,
+          marker: {
+            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            line: {
+              width: 3
+            }
+          }
         }
         traceData.push(trace);
+        rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         barmode: 'stack',
@@ -201,7 +227,7 @@ export class SystemProfileGraphsComponent implements OnInit {
           automargin: true
         },
         yaxis: {
-          // range: [0, 105],
+          range: [0, 105],
           ticksuffix: '%',
           title: {
             text: 'Capacity (%)',

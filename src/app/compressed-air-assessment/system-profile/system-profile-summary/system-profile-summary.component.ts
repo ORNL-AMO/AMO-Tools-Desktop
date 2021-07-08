@@ -25,7 +25,7 @@ export class SystemProfileSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.profileSummary = this.systemProfileService.calculateProfileSummary(val);
-      this.totals = this.systemProfileService.calculateProfileSummaryTotals(this.profileSummary);
+      this.totals = this.systemProfileService.calculateProfileSummaryTotals(val);
     });
   }
 

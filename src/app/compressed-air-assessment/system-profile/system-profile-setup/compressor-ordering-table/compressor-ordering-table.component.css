@@ -4,6 +4,7 @@ td, th{
     border-right: solid 1px darkgray;
     border-left: solid 1px darkgray;
     padding: 3px;
+    white-space: nowrap;
   }
   
   /* tr > td:first-child {
@@ -15,3 +16,7 @@ td, th{
     box-shadow: 0 4px 8px 0 grey
   }
   
+
+  select.form-control{
+    width: 100%;
+  }

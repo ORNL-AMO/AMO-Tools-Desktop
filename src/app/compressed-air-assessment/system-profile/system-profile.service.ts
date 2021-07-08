@@ -32,6 +32,9 @@ export class SystemProfileService {
 
 
   calculateProfileSummary(compressedAirAssessment: CompressedAirAssessment): Array<ProfileSummary> {
+    let totalFullLoadCapacity: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
+      return inventoryItem.nameplateData.fullLoadRatedCapacity;
+    });
     compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
       summary.profileSummaryData.forEach(summaryData => {
@@ -52,29 +55,33 @@ export class SystemProfileService {
         summaryData.power = calcResult.powerCalculated;
         summaryData.percentCapacity = calcResult.percentageCapacity;
         summaryData.percentPower = calcResult.percentagePower;
+        summaryData.percentSystemCapacity = (calcResult.capacityCalculated / totalFullLoadCapacity) * 100;
       });
     });
     return compressedAirAssessment.systemProfile.profileSummary;
   }
 
-  calculateProfileSummaryTotals(profileSummary: Array<ProfileSummary>): Array<{ airflow: number, power: number, percentCapacity: number, percentPower: number }> {
+  calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment): Array<{ airflow: number, power: number, percentCapacity: number, percentPower: number }> {
+    let totalSystemCapacity: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
+      return inventoryItem.nameplateData.fullLoadRatedCapacity;
+    });
+
+    let totalFullLoadPower: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
+      return inventoryItem.performancePoints.fullLoad.power;
+    });
     let totals: Array<{ airflow: number, power: number, percentCapacity: number, percentPower: number }> = new Array();
-    let intervals: Array<number> = profileSummary[0].profileSummaryData.map(data => { return data.timeInterval });
-    let allData: Array<ProfileSummaryData> = _.flatMap(profileSummary, (summary) => { return summary.profileSummaryData });
+    let intervals: Array<number> = compressedAirAssessment.systemProfile.profileSummary[0].profileSummaryData.map(data => { return data.timeInterval });
+    let allData: Array<ProfileSummaryData> = _.flatMap(compressedAirAssessment.systemProfile.profileSummary, (summary) => { return summary.profileSummaryData });
 
     intervals.forEach(interval => {
       let filteredData: Array<ProfileSummaryData> = allData.filter(data => { return data.timeInterval == interval });
       let totalAirFlow: number = _.sumBy(filteredData, 'airflow');
       let totalPower: number = _.sumBy(filteredData, 'power');
-      let totalPercentCapacity: number = _.sumBy(filteredData, 'percentCapacity');
-      let percentCapacity: number = totalPercentCapacity / filteredData.length;
-      let totalPercentPower: number = _.sumBy(filteredData, 'percentPower');
-      let percentPower: number = totalPercentPower / filteredData.length;
       totals.push({
         airflow: totalAirFlow,
         power: totalPower,
-        percentCapacity: percentCapacity,
-        percentPower: percentPower
+        percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
+        percentPower: (totalPower / totalFullLoadPower) * 100
       });
     });
     return totals;

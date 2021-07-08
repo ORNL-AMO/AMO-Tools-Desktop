@@ -37,7 +37,7 @@ export class OperatingProfileTableComponent implements OnInit {
   }
 
   initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup) {
-    if (this.profileSummary.length != compressorInventoryItems.length) {
+    // if (this.profileSummary.length != compressorInventoryItems.length) {
       this.profileSummary = new Array();
       compressorInventoryItems.forEach(item => {
         this.hourIntervals = new Array();
@@ -48,7 +48,8 @@ export class OperatingProfileTableComponent implements OnInit {
             airflow: undefined,
             percentCapacity: Math.floor(Math.random() * 100),
             timeInterval: timeInterval,
-            percentPower: undefined
+            percentPower: undefined,
+            percentSystemCapacity: 0
           })
           this.hourIntervals.push(timeInterval);
           timeInterval = timeInterval + systemProfileSetup.dataInterval;
@@ -60,27 +61,28 @@ export class OperatingProfileTableComponent implements OnInit {
         })
       });
       this.save();
-    } else {
-      this.profileSummary.forEach(summaryItem => {
-        this.hourIntervals = new Array();
-        let profileSummaryData: Array<ProfileSummaryData> = new Array();
-        for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
-          profileSummaryData.push({
-            power: undefined,
-            airflow: undefined,
-            percentCapacity: Math.floor(Math.random() * 100),
-            timeInterval: timeInterval,
-            percentPower: undefined
-          })
-          this.hourIntervals.push(timeInterval);
-          timeInterval = timeInterval + systemProfileSetup.dataInterval;
-        }
-        if (summaryItem.profileSummaryData.length != profileSummaryData.length) {
-          summaryItem.profileSummaryData = profileSummaryData;
-        }
-      });
-      this.save();
-    }
+    // } else {
+    //   this.profileSummary.forEach(summaryItem => {
+    //     this.hourIntervals = new Array();
+    //     let profileSummaryData: Array<ProfileSummaryData> = new Array();
+    //     for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
+    //       profileSummaryData.push({
+    //         power: undefined,
+    //         airflow: undefined,
+    //         percentCapacity: Math.floor(Math.random() * 100),
+    //         timeInterval: timeInterval,
+    //         percentPower: undefined,
+    //         percentSystemCapacity: 0
+    //       })
+    //       this.hourIntervals.push(timeInterval);
+    //       timeInterval = timeInterval + systemProfileSetup.dataInterval;
+    //     }
+    //     if (summaryItem.profileSummaryData.length != profileSummaryData.length) {
+    //       summaryItem.profileSummaryData = profileSummaryData;
+    //     }
+    //   });
+    //   this.save();
+    // }
   }
 
   save() {

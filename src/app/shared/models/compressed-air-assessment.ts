@@ -132,5 +132,6 @@ export interface ProfileSummaryData {
     airflow: number,
     percentCapacity: number,
     timeInterval: number,
-    percentPower: number
+    percentPower: number,
+    percentSystemCapacity: number
 }
