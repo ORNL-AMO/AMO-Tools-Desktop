@@ -12,4 +12,8 @@ export class DayTypesComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  openDataExplorer() {
+
+  }
 }

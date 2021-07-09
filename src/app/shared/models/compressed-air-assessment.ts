@@ -1,3 +1,4 @@
+import { LogToolDbData } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
     name?: string;
@@ -6,7 +7,8 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
-    systemProfile: SystemProfile
+    systemProfile: SystemProfile,
+    logToolDbData?: LogToolDbData
 }
 
 export interface Modification {

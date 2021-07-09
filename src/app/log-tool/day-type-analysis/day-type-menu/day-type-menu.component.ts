@@ -22,6 +22,7 @@ export class DayTypeMenuComponent implements OnInit {
   selectedGraphTypeSub: Subscription;
   dataDisplayType: string;
   dataDisplayTypeSub: Subscription;
+  showAssessmentModal: boolean = false;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, private dayTypeGraphService: DayTypeGraphService) { }
 
   ngOnInit() {
@@ -69,5 +70,13 @@ export class DayTypeMenuComponent implements OnInit {
 
   setDataDisplayType(str: string) {
     this.dayTypeAnalysisService.dataDisplayType.next(str);
+  }
+
+  applyToAssessment(){
+    this.showAssessmentModal = true;
+  }
+
+  hideAssessmentModal(){
+    this.showAssessmentModal = false;
   }
 }
