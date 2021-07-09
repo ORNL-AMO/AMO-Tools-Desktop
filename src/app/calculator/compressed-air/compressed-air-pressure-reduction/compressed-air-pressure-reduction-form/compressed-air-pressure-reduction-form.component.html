@@ -106,7 +106,7 @@
       </div>
 
 
-      <div *ngIf="isBaseline && powerType === 'Measured'" class="form-group">
+      <div *ngIf="isBaseline && form.controls.powerType.value === 'Rated'" class="form-group">
         <label class="small" for="{{'pressureRated_'+idString}}">Rated Pressure</label>
         <div class="input-group">
           <input class="form-control" type="number" name="pressureRated" id="{{'pressureRated_'+idString}}"
