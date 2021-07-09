@@ -47,7 +47,11 @@ export class AirHeatingComponent implements OnInit {
     }
     let existingInputs = this.airHeatingService.airHeatingInput.getValue();
     if(!existingInputs) {
-      this.airHeatingService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.airHeatingService.initDefaultEmptyInputs(this.settings.fuelCost);
+      } else {
+        this.airHeatingService.initDefaultEmptyInputs();
+      }
       this.airHeatingService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();

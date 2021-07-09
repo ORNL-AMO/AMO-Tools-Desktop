@@ -42,7 +42,11 @@ export class WaterHeatingComponent implements OnInit {
     }
     let existingInputs = this.waterHeatingService.waterHeatingInput.getValue();
     if(!existingInputs) {
-      this.waterHeatingService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.waterHeatingService.initDefaultEmptyInputs(this.settings.fuelCost);
+      } else {
+        this.waterHeatingService.initDefaultEmptyInputs();
+      }
       this.waterHeatingService.initDefaultEmptyOutputs();
     }
     

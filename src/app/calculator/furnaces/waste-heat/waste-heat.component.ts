@@ -49,7 +49,11 @@ export class WasteHeatComponent implements OnInit {
     }
     let existingInputs = this.wasteHeatService.wasteHeatInput.getValue();
     if(!existingInputs) {
-      this.wasteHeatService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.wasteHeatService.initDefaultEmptyInputs(this.settings.electricityCost);
+      } else {
+        this.wasteHeatService.initDefaultEmptyInputs();
+      }
       this.wasteHeatService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
