@@ -23,6 +23,8 @@
         >
       <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
     </div>
+    <!-- Need button blue link button here 'Add Multiple Fuel Costs' or other wording -->
+     
   </div>
   <div class="form-group">
     <label for="{{'steamCost_'+idString}}">Steam Costs</label>
@@ -60,3 +62,5 @@
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
   [operatingHours]="phast.operatingHours">
 </app-operating-hours-modal>
+
+<!-- add operating fuels modal here and emit cost of type number back to a property on this component (and set to the fuelCost on close) -->

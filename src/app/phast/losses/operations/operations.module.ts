@@ -7,6 +7,7 @@ import { OperationsService } from './operations.service';
 import { OperationsCompareService } from './operations-compare.service';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { OperatingCostsModalComponent } from './operating-costs-modal/operating-costs-modal.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -14,7 +15,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     OperatingHoursModalModule,
     SharedPipesModule
   ],
-  declarations: [OperationsFormComponent, OperationsComponent],
+  declarations: [OperationsFormComponent, OperationsComponent, OperatingCostsModalComponent],
   providers: [OperationsService, OperationsCompareService],
   exports: [OperationsComponent]
 })
