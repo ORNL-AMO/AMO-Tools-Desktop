@@ -67,6 +67,6 @@ export class NoLoadCalculationsService {
 
   //Without unloading
   calculateNoLoadPowerWithoutUnloading(selectedCompressor: CompressorInventoryItem): number {
-    return selectedCompressor.designDetails.noLoadPowerFM / 100 * selectedCompressor.nameplateData.totalPackageInputPower;
+    return selectedCompressor.designDetails.noLoadPowerFM / 100 * selectedCompressor.performancePoints.fullLoad.power;
   }
 }

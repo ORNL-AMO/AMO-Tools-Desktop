@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressorInventoryItem, PerformancePoint, PerformancePoints } from '../../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import * as regression from 'regression';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
 
@@ -48,9 +48,14 @@ export class FullLoadCalculationsService {
 
   getFullLoadPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
-      return selectedCompressor.nameplateData.totalPackageInputPower;
+      if (selectedCompressor.nameplateData.compressorType == 6) {
+        //centrifugal
+        return selectedCompressor.nameplateData.totalPackageInputPower;
+      } else {
+        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.compressorControls.controlType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower);
+      }
     } else {
-      return this.sharedPointCalculationsService.calculatePower(selectedCompressor.compressorControls.controlType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower);
+      return selectedCompressor.performancePoints.fullLoad.power;
     }
   }
 }
