@@ -1,19 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FsatService } from '../fsat.service';
+import { FsatService } from '../../../../fsat/fsat.service';
 import { FormGroup } from '@angular/forms';
-import { FSAT, BaseGasDensity, PsychrometricResults } from '../../shared/models/fans';
-import { FsatFluidService, GasDensityValidators } from './fsat-fluid.service';
-import { Settings } from '../../shared/models/settings';
-import { HelpPanelService } from '../help-panel/help-panel.service';
-import { CompareService } from '../compare.service';
-import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { FSAT, BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
+import { FsatFluidService, GasDensityValidators } from '../../../../fsat/fsat-fluid/fsat-fluid.service';
+import { Settings } from '../../../../shared/models/settings';
+import { CompareService } from '../../../../fsat/compare.service';
+import { GasDensityFormService } from '../../../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 @Component({
-  selector: 'app-fsat-fluid',
-  templateUrl: './fsat-fluid.component.html',
-  styleUrls: ['./fsat-fluid.component.css']
+  selector: 'app-flue-gas-losses-moisture',
+  templateUrl: './flue-gas-losses-moisture.component.html',
+  styleUrls: ['./flue-gas-losses-moisture.component.css']
 })
-export class FsatFluidComponent implements OnInit {
+export class FlueGasLossesMoistureComponent implements OnInit {
   @Input()
   baseGasDensity: BaseGasDensity;
   @Input()
@@ -32,6 +32,8 @@ export class FsatFluidComponent implements OnInit {
   baseline: boolean;
   @Input()
   fsat: FSAT;
+  @Output('hideModal')
+  hideModal = new EventEmitter<number>();
 
   gasDensityForm: FormGroup;
 
@@ -52,12 +54,10 @@ export class FsatFluidComponent implements OnInit {
   constructor(private compareService: CompareService,
     private fsatService: FsatService,
     private fsatFluidService: FsatFluidService,
-    private helpPanelService: HelpPanelService,
+    private flueGasCompareService: FlueGasCompareService,
     private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
-    console.log("Base Gas Density: ");
-    console.log(this.baseGasDensity);
     if (!this.baseline) {
       this.idString = 'fsat_modification_' + this.modificationIndex;
     }
@@ -65,9 +65,6 @@ export class FsatFluidComponent implements OnInit {
       this.idString = 'fsat_baseline';
     }
     this.init();
-    if (!this.selected) {
-      this.disableForm();
-    }
     this.getResults();
   }
 
@@ -127,7 +124,7 @@ export class FsatFluidComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.helpPanelService.currentField.next(str);
+    this.flueGasCompareService.currentField.next(str);
   }
 
   changeGasType() {
@@ -141,7 +138,7 @@ export class FsatFluidComponent implements OnInit {
     }
   }
 
-  getResults() {
+  getResults(): PsychrometricResults {
     let psychrometricResults: PsychrometricResults;
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
       psychrometricResults = this.calcPsychrometricRelativeHumidity();
@@ -176,6 +173,8 @@ export class FsatFluidComponent implements OnInit {
       this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
     }
     this.save();
+    this.flueGasCompareService.setPsychrometricResults(psychrometricResults);
+    return psychrometricResults;
   }
 
   calcPsychrometricWetBulb(): PsychrometricResults {
@@ -328,6 +327,16 @@ export class FsatFluidComponent implements OnInit {
       return this.compareService.isWetBulbTempDifferent();
     } else {
       return false;
+    }
+  }
+
+  
+  hideMoistureModal(action: string) {
+    if (action !== 'cancel') {
+    this.hideModal.emit(this.getResults().humidityRatio * 100);
+    }
+    else {
+    this.hideModal.emit(-150);
     }
   }
 

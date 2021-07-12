@@ -1,12 +1,27 @@
 import { Injectable } from '@angular/core';
 import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 import { PHAST } from '../../../shared/models/phast/phast';
+import { PsychrometricResults } from '../../../shared/models/fans';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class FlueGasCompareService {
   baselineFlueGasLoss: FlueGas[];
   modifiedFlueGasLoss: FlueGas[];
+  moistureSubject: BehaviorSubject<PsychrometricResults>;
+  currentField: BehaviorSubject<string>;
+
   constructor() {
+    this.moistureSubject = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);
+  }
+
+  setPsychrometricResults(results: PsychrometricResults) {
+    this.moistureSubject.next(results);
+  }
+
+  setCurrentField(currField: string) {
+    this.currentField.next(currField);
   }
 
   compareAllLosses() {
