@@ -6,8 +6,8 @@
                     <!-- Compressor Name -->
 
                 </th>
-                <th *ngFor="let summaryData of profileSummary[0].profileSummaryData">
-                    {{summaryData.timeInterval}}
+                <th *ngFor="let data of profileSummary[0].profileSummaryData">
+                    {{data.timeInterval}}
                 </th>
             </tr>
         </thead>
@@ -19,32 +19,32 @@
                 <td class="pl-2">
                     Calc Power, kW
                 </td>
-                <td *ngFor="let summaryData of summary.profileSummaryData;">
-                    {{summaryData.power | number:'1.0-2'}}
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    {{data.power | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>
                 <td class="pl-2">
                     Calc Airflow, acfm
                 </td>
-                <td *ngFor="let summaryData of summary.profileSummaryData;">
-                    {{summaryData.airflow | number:'1.0-2'}}
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    {{data.airflow | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>
                 <td class="pl-2">
                     % Capacity
                 </td>
-                <td *ngFor="let summaryData of summary.profileSummaryData;">
-                    {{summaryData.percentCapacity | number:'1.0-2'}}
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    {{data.percentCapacity | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>
                 <td class="pl-2">
                     % Power
                 </td>
-                <td *ngFor="let summaryData of summary.profileSummaryData;">
-                    {{summaryData.percentPower | number:'1.0-2'}}
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    {{data.percentPower | number:'1.0-2'}}
                 </td>
             </tr>
         </tbody>

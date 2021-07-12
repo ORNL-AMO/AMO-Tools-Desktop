@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
 import * as Plotly from 'plotly.js';
@@ -21,7 +21,7 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateProfileSummary(val);
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
       this.drawCharts();
     });
   }

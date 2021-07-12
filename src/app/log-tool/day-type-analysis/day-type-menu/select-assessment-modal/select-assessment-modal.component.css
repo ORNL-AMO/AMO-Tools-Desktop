@@ -1,0 +1,17 @@
+.card{
+    position: fixed;
+    z-index: 8000;
+    border-style: solid;
+    border-width: 4px;
+    top: -100%;
+  }
+
+  .btn{
+      padding-top: 6px;
+      padding-bottom: 6px;
+      font-size: small;
+  }
+
+.card-body, .card-header, .card-footer{
+      padding: .5rem;
+  }

@@ -1,3 +1,4 @@
+import { LogToolDbData } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
     name?: string;
@@ -6,7 +7,9 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
-    systemProfile: SystemProfile
+    systemProfile: SystemProfile,
+    logToolDbData?: LogToolDbData,
+    compressedAirDayTypes: Array<CompressedAirDayType>
 }
 
 export interface Modification {
@@ -100,7 +103,7 @@ export interface SystemProfile {
 
 
 export interface SystemProfileSetup {
-    dayType: string,
+    dayTypeId: string,
     numberOfHours: number,
     dataInterval: 2 | 1 | .5 | .25,
     profileDataType: "power" | "percentCapacity" | "airflow"
@@ -124,6 +127,7 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     compressorName: string,
     compressorId: string,
+    dayTypeId: string,
     profileSummaryData: Array<ProfileSummaryData>
 }
 
@@ -133,5 +137,12 @@ export interface ProfileSummaryData {
     percentCapacity: number,
     timeInterval: number,
     percentPower: number,
-    percentSystemCapacity: number
+    percentSystemCapacity: number,
+}
+
+
+export interface CompressedAirDayType {
+    dayTypeId: string,
+    name: string,
+    numberOfDays: number
 }

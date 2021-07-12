@@ -8,7 +8,8 @@ export interface LogToolField {
     unit: string,
     invalidField: boolean,
     csvId: string,
-    csvName: string
+    csvName: string,
+    compressorId?: string
 }
 
 export interface LogToolDay {

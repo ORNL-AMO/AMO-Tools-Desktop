@@ -1,0 +1,25 @@
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+  }
+  
+  /* tr > td:first-child {
+    border-right: none;
+  }
+   */
+  
+  table {
+    box-shadow: 0 4px 8px 0 grey
+  }
+
+  .btn.btn-sm{
+    padding: 4px;
+    font-size: small;
+  }
+
+  .w-45{
+      width: 45%;
+  }

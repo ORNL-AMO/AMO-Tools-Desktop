@@ -23,7 +23,7 @@ import { DesignDetailsComponent } from './inventory/design-details/design-detail
 import { InventoryService } from './inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
-import { ProfileSetupFormComponent } from './system-profile/system-profile-setup/profile-setup-form/profile-setup-form.component';
+import { ProfileSetupFormComponent } from './system-profile/profile-setup-form/profile-setup-form.component';
 import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
 import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
 import { SystemProfileService } from './system-profile/system-profile.service';
@@ -52,6 +52,7 @@ import { MaxFullFlowCalculationsService } from './inventory/performance-points/c
 import { NoLoadCalculationsService } from './inventory/performance-points/calculations/no-load-calculations.service';
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
+import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { SharedPointCalculationsService } from './inventory/performance-points/c
     ControlTypePipe,
     FilterCompressorsPipe,
     InletConditionsComponent,
-    InventoryPerformanceProfileComponent
+    InventoryPerformanceProfileComponent,
+    DayTypeFilterPipe
   ],
   imports: [
     CommonModule,
