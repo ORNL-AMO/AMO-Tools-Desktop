@@ -54,14 +54,18 @@ export interface CompressorNameplateData {
     fullLoadRatedCapacity: number,
     ratedLoadPower: number,
     ploytropicCompressorExponent: number,
-    fullLoadAmps: number
+    fullLoadAmps: number,
+    //ADDED TO REMOVE GENERIC COMPRESSOR FOR PP CALCS
+    totalPackageInputPower: number
 }
 
 export interface CompressorControls {
     controlType: number,
     unloadPointCapacity: number,
     numberOfUnloadSteps: number,
-    automaticShutdown: boolean
+    automaticShutdown: boolean,
+    //ADDED TO REMOVE GENERIC COMPRESSOR FOR PP CALCS
+    unloadSumpPressure: number,
 }
 
 export interface InletConditions {
@@ -71,11 +75,14 @@ export interface InletConditions {
 
 export interface DesignDetails {
     blowdownTime: number,
-    unloadSlumpPressure: number,
     modulatingPressureRange: number,
     inputPressure: number,
     designEfficiency: number,
-    serviceFactor: number
+    serviceFactor: number,
+    //ADDED TO REMOVE GENERIC COMPRESSOR FOR PP CALCS
+    noLoadPowerFM: number,
+    noLoadPowerUL: number,
+    maxFullFlowPressure: number
 }
 
 export interface PerformancePoints {

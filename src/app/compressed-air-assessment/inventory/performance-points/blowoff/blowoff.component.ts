@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { BlowoffCalculationsService } from '../calculations/blowoff-calculations.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
@@ -22,16 +21,13 @@ export class BlowoffComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  genericCompressor: GenericCompressor;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private blowoffCalculationsService: BlowoffCalculationsService,
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.selectedCompressor = val;
-        this.genericCompressor = this.genericCompressorDbService.genericCompressors.find(genericCompressor => { return genericCompressor.IDCompLib == this.selectedCompressor.compressorLibId });
         this.checkShowCalc();
         if (this.isFormChange == false) {
           this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.blowoff);
@@ -79,30 +75,24 @@ export class BlowoffComponent implements OnInit {
   }
 
   checkShowCalc() {
-    if (this.genericCompressor) {
-      if (!this.selectedCompressor.performancePoints.blowoff.isDefaultAirFlow) {
-        let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true);
-        this.showAirflowCalc = (this.selectedCompressor.performancePoints.blowoff.airflow != defaultValue);
-      } else {
-        this.showAirflowCalc = false;
-      }
-
-      if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPower) {
-        let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, this.genericCompressor, true);
-        this.showPowerCalc = (this.selectedCompressor.performancePoints.blowoff.power != defaultValue);
-      } else {
-        this.showPowerCalc = false;
-      }
-
-      if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPressure) {
-        let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true);
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.blowoff.dischargePressure != defaultValue);
-      } else {
-        this.showPressureCalc = false;
-      }
+    if (!this.selectedCompressor.performancePoints.blowoff.isDefaultAirFlow) {
+      let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.blowoff.airflow != defaultValue);
     } else {
       this.showAirflowCalc = false;
+    }
+
+    if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPower) {
+      let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, true);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.blowoff.power != defaultValue);
+    } else {
       this.showPowerCalc = false;
+    }
+
+    if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPressure) {
+      let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.blowoff.dischargePressure != defaultValue);
+    } else {
       this.showPressureCalc = false;
     }
   }
@@ -115,7 +105,7 @@ export class BlowoffComponent implements OnInit {
   }
 
   setPower() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, this.genericCompressor, true);
+    let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, true);
     this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();

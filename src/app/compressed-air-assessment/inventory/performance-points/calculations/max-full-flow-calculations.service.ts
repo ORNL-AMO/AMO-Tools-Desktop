@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
-import { GenericCompressor } from '../../../generic-compressor-db.service';
 import * as regression from 'regression';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
 
@@ -9,17 +8,17 @@ export class MaxFullFlowCalculationsService {
 
   constructor(private sharedPointCalculationsService: SharedPointCalculationsService) { }
 
-  setMaxFullFlow(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoint {
-    selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, genericCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure);
+  setMaxFullFlow(selectedCompressor: CompressorInventoryItem): PerformancePoint {
+    selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure);
     selectedCompressor.performancePoints.maxFullFlow.airflow = this.getMaxFullFlowAirFlow(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow);
-    selectedCompressor.performancePoints.maxFullFlow.power = this.getMaxFullFlowPower(selectedCompressor, genericCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPower);
+    selectedCompressor.performancePoints.maxFullFlow.power = this.getMaxFullFlowPower(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPower);
     return selectedCompressor.performancePoints.maxFullFlow;
   }
 
-  getMaxFullFlowPressure(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor, isDefault: boolean): number {
+  getMaxFullFlowPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       //all control types the same
-      return genericCompressor.MaxFullFlowPressure;
+      return selectedCompressor.designDetails.maxFullFlowPressure;
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
     }
@@ -39,11 +38,11 @@ export class MaxFullFlowCalculationsService {
     }
   }
 
-  getMaxFullFlowPower(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor, isDefault: boolean): number {
+  getMaxFullFlowPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, genericCompressor.TotPackageInputPower);
+        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.totalPackageInputPower);
       } else {
         //centrifugal
         return selectedCompressor.performancePoints.fullLoad.power;

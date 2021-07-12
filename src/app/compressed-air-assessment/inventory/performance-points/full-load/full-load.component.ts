@@ -24,16 +24,13 @@ export class FullLoadComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  genericCompressor: GenericCompressor;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private genericCompressorDbService: GenericCompressorDbService, private fullLoadCalculationsService: FullLoadCalculationsService,
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private fullLoadCalculationsService: FullLoadCalculationsService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.selectedCompressor = val;
-        this.genericCompressor = this.genericCompressorDbService.genericCompressors.find(genericCompressor => { return genericCompressor.IDCompLib == this.selectedCompressor.compressorLibId });
         this.checkShowCalc();
         if (this.isFormChange == false) {
           this.setFullLoadLabel(val.compressorControls.controlType);
@@ -90,30 +87,24 @@ export class FullLoadComponent implements OnInit {
   }
 
   checkShowCalc() {
-    if (this.genericCompressor) {
-      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
-        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
-        this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != defaultValue);
-      } else {
-        this.showAirflowCalc = false;
-      }
-
-      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
-        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, this.genericCompressor, true);
-        this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != defaultValue);
-      } else {
-        this.showPowerCalc = false;
-      }
-
-      if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
-        let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
-        this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != defaultValue);
-      } else {
-        this.showPressureCalc = false;
-      }
+    if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != defaultValue);
     } else {
       this.showAirflowCalc = false;
+    }
+
+    if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != defaultValue);
+    } else {
       this.showPowerCalc = false;
+    }
+
+    if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPressure) {
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadDischargePressure(this.selectedCompressor, true);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.fullLoad.dischargePressure != defaultValue);
+    } else {
       this.showPressureCalc = false;
     }
   }
@@ -126,7 +117,7 @@ export class FullLoadComponent implements OnInit {
   }
 
   setPower() {
-    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, this.genericCompressor, true);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true);
     this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
