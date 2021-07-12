@@ -23,7 +23,7 @@ import { DesignDetailsComponent } from './inventory/design-details/design-detail
 import { InventoryService } from './inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
-import { ProfileSetupFormComponent } from './system-profile/system-profile-setup/profile-setup-form/profile-setup-form.component';
+import { ProfileSetupFormComponent } from './system-profile/profile-setup-form/profile-setup-form.component';
 import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
 import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
 import { SystemProfileService } from './system-profile/system-profile.service';

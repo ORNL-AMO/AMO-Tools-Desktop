@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, CompressorOrderItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorOrderItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile.service';
 
@@ -25,7 +25,7 @@ export class OperatingProfileTableComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.profileSummary = val.systemProfile.profileSummary;
-        this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup);
+        // this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup);
       } else {
         this.isFormChange = false;
       }
@@ -36,54 +36,59 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup) {
-    // if (this.profileSummary.length != compressorInventoryItems.length) {
-      this.profileSummary = new Array();
-      compressorInventoryItems.forEach(item => {
-        this.hourIntervals = new Array();
-        let profileSummaryData: Array<ProfileSummaryData> = new Array();
-        for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
-          profileSummaryData.push({
-            power: undefined,
-            airflow: undefined,
-            percentCapacity: Math.floor(Math.random() * 100),
-            timeInterval: timeInterval,
-            percentPower: undefined,
-            percentSystemCapacity: 0
-          })
-          this.hourIntervals.push(timeInterval);
-          timeInterval = timeInterval + systemProfileSetup.dataInterval;
-        }
-        this.profileSummary.push({
-          compressorName: item.name,
-          compressorId: item.itemId,
-          profileSummaryData: profileSummaryData
-        })
-      });
-      this.save();
-    // } else {
-    //   this.profileSummary.forEach(summaryItem => {
-    //     this.hourIntervals = new Array();
-    //     let profileSummaryData: Array<ProfileSummaryData> = new Array();
-    //     for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
-    //       profileSummaryData.push({
-    //         power: undefined,
-    //         airflow: undefined,
-    //         percentCapacity: Math.floor(Math.random() * 100),
-    //         timeInterval: timeInterval,
-    //         percentPower: undefined,
-    //         percentSystemCapacity: 0
-    //       })
-    //       this.hourIntervals.push(timeInterval);
-    //       timeInterval = timeInterval + systemProfileSetup.dataInterval;
-    //     }
-    //     if (summaryItem.profileSummaryData.length != profileSummaryData.length) {
-    //       summaryItem.profileSummaryData = profileSummaryData;
-    //     }
-    //   });
-    //   this.save();
-    // }
-  }
+  // initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>) {
+  //   // if (this.profileSummary.length != compressorInventoryItems.length) {
+  //     this.profileSummary = new Array();
+  //     dayTypes.forEach(dayType => {
+
+  //     })
+  //     compressorInventoryItems.forEach(item => {
+  //       this.hourIntervals = new Array();
+  //       let profileSummaryData: Array<ProfileSummaryData> = new Array();
+  //       for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
+  //         profileSummaryData.push({
+  //           power: undefined,
+  //           airflow: undefined,
+  //           percentCapacity: Math.floor(Math.random() * 100),
+  //           timeInterval: timeInterval,
+  //           percentPower: undefined,
+  //           percentSystemCapacity: 0
+  //         })
+  //         this.hourIntervals.push(timeInterval);
+  //         timeInterval = timeInterval + systemProfileSetup.dataInterval;
+  //       }
+  //       this.profileSummary.push({
+  //         compressorName: item.name,
+  //         compressorId: item.itemId,
+  //         dayTypeSummarries: [{
+  //           dayTypeId: 
+  //         }]
+  //       })
+  //     });
+  //     this.save();
+  //   // } else {
+  //   //   this.profileSummary.forEach(summaryItem => {
+  //   //     this.hourIntervals = new Array();
+  //   //     let profileSummaryData: Array<ProfileSummaryData> = new Array();
+  //   //     for (let timeInterval = 1; timeInterval <= systemProfileSetup.numberOfHours;) {
+  //   //       profileSummaryData.push({
+  //   //         power: undefined,
+  //   //         airflow: undefined,
+  //   //         percentCapacity: Math.floor(Math.random() * 100),
+  //   //         timeInterval: timeInterval,
+  //   //         percentPower: undefined,
+  //   //         percentSystemCapacity: 0
+  //   //       })
+  //   //       this.hourIntervals.push(timeInterval);
+  //   //       timeInterval = timeInterval + systemProfileSetup.dataInterval;
+  //   //     }
+  //   //     if (summaryItem.profileSummaryData.length != profileSummaryData.length) {
+  //   //       summaryItem.profileSummaryData = profileSummaryData;
+  //   //     }
+  //   //   });
+  //   //   this.save();
+  //   // }
+  // }
 
   save() {
     this.isFormChange = true;

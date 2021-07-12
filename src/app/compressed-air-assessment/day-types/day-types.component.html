@@ -4,6 +4,65 @@
         <br>
     </div>
     <div class="p-2">
-        <button (click)="openDataExplorer()">Use Data Explorer</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Day Type
+                    </th>
+                    <th>
+                        Operating Days
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes; let index = index;">
+                    <td class="w-45">
+                        <input type="text" [(ngModel)]="dayType.name" name="{'name_'+index}" id="{'name_'+index}"
+                            class="form-control w-100" (input)="save()">
+                    </td>
+                    <td class="w-45">
+                        <input type="number" [(ngModel)]="dayType.numberOfDays" name="{'numberOfDays_'+index}"
+                            id="{'numberOfDays_'+index}" class="form-control w-100" (input)="save()" max="365" min="0">
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
+                            <button class="btn btn-sm btn-danger" (click)="removeDayType(index)">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
     </div>
+    <div class="p-2">
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td class="w-50">
+                        Total Annual Days
+                    </td>
+                    <td class="w-50" [ngClass]="{'red': totalAnnualDays > 365}">
+                        {{totalAnnualDays}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-50">
+                        Total Down Days
+                    </td>
+                    <td class="w-50">
+                        {{totalDownDays}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- <div class="p-2">
+        <button (click)="openDataExplorer()">Use Data Explorer</button>
+    </div> -->
 </div>

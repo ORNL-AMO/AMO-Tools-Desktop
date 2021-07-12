@@ -339,6 +339,7 @@ export class AssessmentService {
   }
 
   getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
+    let initDayTypeId: string = Math.random().toString(36).substr(2, 9);
     return {
       name: 'Baseline',
       modifications: new Array(),
@@ -359,14 +360,19 @@ export class AssessmentService {
       compressorInventoryItems: new Array(),
       systemProfile: {
         systemProfileSetup: {
-          dayType: undefined,
+          dayTypeId: initDayTypeId,
           numberOfHours: 24,
           dataInterval: 1,
           profileDataType: "percentCapacity",
         },
         compressorOrdering: new Array(),
         profileSummary: new Array()
-      }
+      },
+      compressedAirDayTypes: [{
+        dayTypeId: initDayTypeId,
+        name: 'Standard Day Type',
+        numberOfDays: 365
+      }]
     }
   }
 

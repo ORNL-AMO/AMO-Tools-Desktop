@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 export class SystemProfileSummaryComponent implements OnInit {
 
   compressedAirAssessmentSub: Subscription;
-  profileSummary: Array<ProfileSummary>;
+  profileSummary: Array<{compressorName: string, summaryData: Array<ProfileSummaryData>}>;
   totals: Array<{
     airflow: number;
     power: number;

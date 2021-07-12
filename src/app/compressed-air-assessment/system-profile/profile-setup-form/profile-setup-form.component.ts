@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { SystemProfileService } from '../../system-profile.service';
+import { CompressedAirAssessment, CompressedAirDayType, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { SystemProfileService } from '../system-profile.service';
 
 @Component({
   selector: 'app-profile-setup-form',
@@ -15,12 +15,14 @@ export class ProfileSetupFormComponent implements OnInit {
   form: FormGroup;
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
+  dayTypes: Array<CompressedAirDayType>;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      this.dayTypes = val.compressedAirDayTypes;
       if (val && this.isFormChange == false) {
-        this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup);
+        this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup, this.dayTypes);
       } else {
         this.isFormChange = false;
       }

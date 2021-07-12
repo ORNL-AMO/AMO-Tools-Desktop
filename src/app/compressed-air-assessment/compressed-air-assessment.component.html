@@ -22,12 +22,13 @@
     <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-profile-setup class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'setup'">
+      <app-profile-setup-form></app-profile-setup-form>
+      <!-- <app-system-profile-setup class="w-100" *ngIf="profileTab == 'setup'">
       </app-system-profile-setup>
-      <app-system-profile-summary class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'summary'">
+      <app-system-profile-summary class="w-100" *ngIf="profileTab == 'summary'">
       </app-system-profile-summary>
-      <app-system-profile-graphs class="w-100" *ngIf="setupTab == 'system-profile' && profileTab == 'graphs'">
-      </app-system-profile-graphs>
+      <app-system-profile-graphs class="w-100" *ngIf="profileTab == 'graphs'">
+      </app-system-profile-graphs> -->
     </div>
   </div>
 

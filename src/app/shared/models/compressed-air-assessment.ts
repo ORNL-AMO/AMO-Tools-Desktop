@@ -8,7 +8,8 @@ export interface CompressedAirAssessment {
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
-    logToolDbData?: LogToolDbData
+    logToolDbData?: LogToolDbData,
+    compressedAirDayTypes: Array<CompressedAirDayType>
 }
 
 export interface Modification {
@@ -102,7 +103,7 @@ export interface SystemProfile {
 
 
 export interface SystemProfileSetup {
-    dayType: string,
+    dayTypeId: string,
     numberOfHours: number,
     dataInterval: 2 | 1 | .5 | .25,
     profileDataType: "power" | "percentCapacity" | "airflow"
@@ -126,7 +127,10 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     compressorName: string,
     compressorId: string,
-    profileSummaryData: Array<ProfileSummaryData>
+    dayTypeSummarries: Array<{
+        dayTypeId: string,
+        profileSummaryData: Array<ProfileSummaryData>
+    }>,
 }
 
 export interface ProfileSummaryData {
@@ -135,5 +139,12 @@ export interface ProfileSummaryData {
     percentCapacity: number,
     timeInterval: number,
     percentPower: number,
-    percentSystemCapacity: number
+    percentSystemCapacity: number,
+}
+
+
+export interface CompressedAirDayType {
+    dayTypeId: string,
+    name: string,
+    numberOfDays: number
 }
