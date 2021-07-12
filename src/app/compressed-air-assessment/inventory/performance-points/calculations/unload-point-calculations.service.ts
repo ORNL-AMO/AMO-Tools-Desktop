@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
-import { GenericCompressor } from '../../../generic-compressor-db.service';
 
 @Injectable()
 export class UnloadPointCalculationsService {
 
   constructor() { }
 
-  setUnload(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): PerformancePoint {
+  setUnload(selectedCompressor: CompressorInventoryItem): PerformancePoint {
     selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor,selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
     selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow);
-    selectedCompressor.performancePoints.unloadPoint.power = this.getUnloadPower(selectedCompressor, genericCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPower);
+    selectedCompressor.performancePoints.unloadPoint.power = this.getUnloadPower(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPower);
     return selectedCompressor.performancePoints.unloadPoint;
   }
 
@@ -33,7 +32,7 @@ export class UnloadPointCalculationsService {
         //centrifugal
         return this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
       } else {
-        return this.calculateUnloadPointAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.compressorControls.unloadPointCapacity);
+        return this.calculateUnloadPointAirFlow(selectedCompressor.performancePoints.unloadPoint.dischargePressure, selectedCompressor.compressorControls.unloadPointCapacity);
       }
 
     } else {
@@ -41,18 +40,18 @@ export class UnloadPointCalculationsService {
     }
   }
 
-  getUnloadPower(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor, isDefault: boolean): number {
+  getUnloadPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       //centrifugal
       if (selectedCompressor.nameplateData.compressorType == 6) {
         let unloadPointCapacity: number = (selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.maxFullFlow.airflow) * 100;
-        return this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
+        return this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
       } else if (selectedCompressor.compressorControls.controlType == 2) {
         //with unloading
-        return this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
+        return this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
       } else if (selectedCompressor.compressorControls.controlType == 3) {
         //variable displacement
-        return this.calculateUnloadPointPower(genericCompressor.NoLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 2, selectedCompressor.performancePoints.maxFullFlow.power);
+        return this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 2, selectedCompressor.performancePoints.maxFullFlow.power);
       }
     }
     else {

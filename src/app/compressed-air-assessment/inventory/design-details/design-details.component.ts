@@ -19,6 +19,9 @@ export class DesignDetailsComponent implements OnInit {
   displayBlowdownTime: boolean;
   displayUnloadSumpPressure: boolean;
   displayModulation: boolean;
+  displayNoLoadPowerFM: boolean;
+  displayNoLoadPowerUL: boolean;
+  displayMaxFullFlow: boolean;
 
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
@@ -31,7 +34,9 @@ export class DesignDetailsComponent implements OnInit {
           this.setDisplayBlowdownTime(val.nameplateData.compressorType, val.compressorControls.controlType);
           this.setDisplayUnloadSumpPressure(val.nameplateData.compressorType, val.compressorControls.controlType);
           this.setDisplayModulation(val.compressorControls.controlType)
-
+          this.setDisplayMaxFullFlow(val.nameplateData.compressorType, val.compressorControls.controlType);
+          this.setDisplayNoLoadPowerFM(val.nameplateData.compressorType, val.compressorControls.controlType);
+          this.setDisplayNoLoadPowerUL(val.nameplateData.compressorType, val.compressorControls.controlType);
         } else {
           this.isFormChange = false;
         }
@@ -47,7 +52,7 @@ export class DesignDetailsComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.designDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
-      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
@@ -72,4 +77,34 @@ export class DesignDetailsComponent implements OnInit {
     this.displayModulation = this.inventoryService.checkDisplayModulation(controlType);
   }
 
+  setDisplayNoLoadPowerFM(compressorType: number, controlType: number) {
+    let showNoLoad: boolean = this.inventoryService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    if (showNoLoad) {
+      if (controlType == 1) {
+        this.displayNoLoadPowerFM = true;
+      } else {
+        this.displayNoLoadPowerFM = false;
+      }
+    } else {
+      this.displayNoLoadPowerFM = false;
+
+    }
+  }
+
+  setDisplayNoLoadPowerUL(compressorType: number, controlType: number) {
+    let showNoLoad: boolean = this.inventoryService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    if (showNoLoad) {
+      if (controlType != 1 && controlType != 5) {
+        this.displayNoLoadPowerUL = true;
+      } else {
+        this.displayNoLoadPowerUL = false;
+      }
+    } else {
+      this.displayNoLoadPowerUL = false;
+    }
+  }
+
+  setDisplayMaxFullFlow(compressorType: number, controlType: number) {
+    this.displayMaxFullFlow = this.inventoryService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
+  }
 }

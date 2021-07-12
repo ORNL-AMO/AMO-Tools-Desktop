@@ -59,4 +59,20 @@
             <option [value]="false">No</option>
         </select>
     </div>
+    <!-- unloadSumpPressure -->
+    <div class="form-group" *ngIf="displayUnloadSumpPressure">
+        <label for="unloadSumpPressure">Unload Sump Pressure</label>
+        <div class="input-group">
+            <input name="unloadSumpPressure" type="number" step="any" class="form-control" id="unloadSumpPressure"
+                formControlName="unloadSumpPressure" (input)="save()" (focus)="focusField('unloadSumpPressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+
 </form>

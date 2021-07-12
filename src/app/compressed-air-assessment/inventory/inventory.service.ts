@@ -27,13 +27,15 @@ export class InventoryService {
         fullLoadRatedCapacity: undefined,
         ratedLoadPower: undefined,
         ploytropicCompressorExponent: 1.4,
-        fullLoadAmps: undefined
+        fullLoadAmps: undefined,
+        totalPackageInputPower: undefined
       },
       compressorControls: {
         controlType: undefined,
         unloadPointCapacity: 100,
         numberOfUnloadSteps: 2,
-        automaticShutdown: false
+        automaticShutdown: false,
+        unloadSumpPressure: 15
       },
       inletConditions: {
         atmosphericPressure: 14.7,
@@ -41,11 +43,13 @@ export class InventoryService {
       },
       designDetails: {
         blowdownTime: 40,
-        unloadSlumpPressure: 15,
         modulatingPressureRange: undefined,
         inputPressure: undefined,
         designEfficiency: undefined,
-        serviceFactor: 1.15
+        serviceFactor: 1.15,
+        noLoadPowerFM: undefined,
+        noLoadPowerUL: undefined,
+        maxFullFlowPressure: undefined
       },
       centrifugalSpecifics: {
         surgeAirflow: undefined,
@@ -117,7 +121,8 @@ export class InventoryService {
       fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity, Validators.required],
       ratedLoadPower: [nameplateData.ratedLoadPower],
       ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
-      fullLoadAmps: [nameplateData.fullLoadAmps]
+      fullLoadAmps: [nameplateData.fullLoadAmps],
+      totalPackageInputPower: [nameplateData.totalPackageInputPower]
     });
     return form;
   }
@@ -130,7 +135,8 @@ export class InventoryService {
       fullLoadRatedCapacity: form.controls.fullLoadRatedCapacity.value,
       ratedLoadPower: form.controls.ratedLoadPower.value,
       ploytropicCompressorExponent: form.controls.ploytropicCompressorExponent.value,
-      fullLoadAmps: form.controls.fullLoadAmps.value
+      fullLoadAmps: form.controls.fullLoadAmps.value,
+      totalPackageInputPower: form.controls.totalPackageInputPower.value
     }
   }
 
@@ -146,7 +152,8 @@ export class InventoryService {
       controlType: [compressorControls.controlType, Validators.required],
       unloadPointCapacity: [compressorControls.unloadPointCapacity],
       numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
-      automaticShutdown: [compressorControls.automaticShutdown]
+      automaticShutdown: [compressorControls.automaticShutdown],
+      unloadSumpPressure: [compressorControls.unloadSumpPressure]
     });
     form = this.setCompressorControlValidators(form);
     return form;
@@ -187,7 +194,8 @@ export class InventoryService {
       controlType: form.controls.controlType.value,
       unloadPointCapacity: form.controls.unloadPointCapacity.value,
       numberOfUnloadSteps: form.controls.numberOfUnloadSteps.value,
-      automaticShutdown: form.controls.automaticShutdown.value
+      automaticShutdown: form.controls.automaticShutdown.value,
+      unloadSumpPressure: form.controls.unloadSumpPressure.value
     };
   }
 
@@ -220,11 +228,7 @@ export class InventoryService {
     if (displayBlowdownTime) {
       blowdownTimeValidators = [Validators.required];
     }
-    let unloadSlumpPressureValidators: Array<ValidatorFn> = [];
-    let displaySlumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType, controlType);
-    if (displaySlumpPressure) {
-      unloadSlumpPressureValidators = [Validators.required];
-    }
+
     let modulatingPressureValidators: Array<Validators> = [];
     let displayModulation: boolean = this.checkDisplayModulation(controlType);
     if (displayModulation) {
@@ -233,11 +237,13 @@ export class InventoryService {
     //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
-      unloadSlumpPressure: [designDetails.unloadSlumpPressure, unloadSlumpPressureValidators],
       modulatingPressureRange: [designDetails.modulatingPressureRange, modulatingPressureValidators],
       inputPressure: [designDetails.inputPressure],
       designEfficiency: [designDetails.designEfficiency],
-      serviceFactor: [designDetails.serviceFactor]
+      serviceFactor: [designDetails.serviceFactor],
+      noLoadPowerFM: [designDetails.noLoadPowerFM],
+      noLoadPowerUL: [designDetails.noLoadPowerUL],
+      maxFullFlowPressure: [designDetails.maxFullFlowPressure]
     });
     return form;
   }
@@ -245,11 +251,13 @@ export class InventoryService {
   getDesignDetailsObjFromForm(form: FormGroup): DesignDetails {
     return {
       blowdownTime: form.controls.blowdownTime.value,
-      unloadSlumpPressure: form.controls.unloadSlumpPressure.value,
       modulatingPressureRange: form.controls.modulatingPressureRange.value,
       inputPressure: form.controls.inputPressure.value,
       designEfficiency: form.controls.designEfficiency.value,
-      serviceFactor: form.controls.serviceFactor.value
+      serviceFactor: form.controls.serviceFactor.value,
+      noLoadPowerFM: form.controls.noLoadPowerFM.value,
+      noLoadPowerUL: form.controls.noLoadPowerUL.value,
+      maxFullFlowPressure: form.controls.maxFullFlowPressure.value
     }
   }
 
