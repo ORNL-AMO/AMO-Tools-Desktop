@@ -8,6 +8,7 @@ import { ProcessHeatingApiService } from './process-heating-api.service';
 import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
 import { ChillersSuiteApiService } from './chillers-suite-api.service';
 import { StandaloneSuiteApiService } from './standalone-suite-api.service';
+import { SteamSuiteApiService } from './steam-suite-api.service';
 
 
 
@@ -24,7 +25,8 @@ import { StandaloneSuiteApiService } from './standalone-suite-api.service';
     SqlDbApiService,
     ChillersSuiteApiService,
     WasteWaterSuiteApiService,
-    StandaloneSuiteApiService
+    StandaloneSuiteApiService,
+    SteamSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }
