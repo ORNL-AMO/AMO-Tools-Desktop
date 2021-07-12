@@ -20,7 +20,7 @@
     <tbody>
         <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
             <td class="bold">
-                {{summary.compressorName}} {{summary.dayTypeId}}
+                {{summary.compressorName}}
             </td>
             <td>
                 <span *ngIf="profileDataType == 'power'">Power</span>

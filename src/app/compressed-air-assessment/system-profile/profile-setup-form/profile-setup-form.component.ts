@@ -16,6 +16,8 @@ export class ProfileSetupFormComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
   dayTypes: Array<CompressedAirDayType>;
+  profileTab: string;
+  profileTabSub: Subscription;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -23,14 +25,21 @@ export class ProfileSetupFormComponent implements OnInit {
       this.dayTypes = val.compressedAirDayTypes;
       if (val && this.isFormChange == false) {
         this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup, this.dayTypes);
+        this.enableDisableForm();
       } else {
         this.isFormChange = false;
       }
+    });
+
+    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
+      this.profileTab = val;
+      this.enableDisableForm();
     });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+    this.profileTabSub.unsubscribe();
   }
 
 
@@ -44,6 +53,17 @@ export class ProfileSetupFormComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+  }
+
+  enableDisableForm(){
+    if(this.profileTab != 'setup'){
+      this.form.controls.profileDataType.disable();
+      this.form.controls.dataInterval.disable();
+    }else{
+      this.form.controls.profileDataType.enable();
+      this.form.controls.dataInterval.enable();
+    }
+
   }
 
 }
