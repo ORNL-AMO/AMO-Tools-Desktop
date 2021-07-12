@@ -16,12 +16,12 @@ export class SystemProfileGraphsComponent implements OnInit {
   @ViewChild("capacityGraph", { static: false }) capacityGraph: ElementRef;
 
   compressedAirAssessmentSub: Subscription;
-  profileSummary: Array<{compressorName: string, summaryData: Array<ProfileSummaryData>}>;
+  profileSummary: Array<ProfileSummary>;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateProfileSummary(val);
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
       this.drawCharts();
     });
   }
@@ -50,8 +50,8 @@ export class SystemProfileGraphsComponent implements OnInit {
       let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.summaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.summaryData.map(data => { return data.airflow }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
+          y: compressorProfile.profileSummaryData.map(data => { return data.airflow }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {
@@ -124,8 +124,8 @@ export class SystemProfileGraphsComponent implements OnInit {
 
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.summaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.summaryData.map(data => { return data.power }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
+          y: compressorProfile.profileSummaryData.map(data => { return data.power }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {
@@ -193,8 +193,8 @@ export class SystemProfileGraphsComponent implements OnInit {
       let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
-          x: compressorProfile.summaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.summaryData.map(data => { return data.percentSystemCapacity }),
+          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
+          y: compressorProfile.profileSummaryData.map(data => { return data.percentSystemCapacity }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {

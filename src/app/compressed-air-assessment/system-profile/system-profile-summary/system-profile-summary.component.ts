@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 export class SystemProfileSummaryComponent implements OnInit {
 
   compressedAirAssessmentSub: Subscription;
-  profileSummary: Array<{compressorName: string, summaryData: Array<ProfileSummaryData>}>;
+  profileSummary: Array<ProfileSummary>;
   totals: Array<{
     airflow: number;
     power: number;
@@ -24,7 +24,7 @@ export class SystemProfileSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateProfileSummary(val);
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
       this.totals = this.systemProfileService.calculateProfileSummaryTotals(val);
     });
   }

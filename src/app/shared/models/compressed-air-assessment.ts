@@ -127,10 +127,8 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     compressorName: string,
     compressorId: string,
-    dayTypeSummarries: Array<{
-        dayTypeId: string,
-        profileSummaryData: Array<ProfileSummaryData>
-    }>,
+    dayTypeId: string,
+    profileSummaryData: Array<ProfileSummaryData>
 }
 
 export interface ProfileSummaryData {

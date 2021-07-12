@@ -52,6 +52,7 @@ import { MaxFullFlowCalculationsService } from './inventory/performance-points/c
 import { NoLoadCalculationsService } from './inventory/performance-points/calculations/no-load-calculations.service';
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
+import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { SharedPointCalculationsService } from './inventory/performance-points/c
     ControlTypePipe,
     FilterCompressorsPipe,
     InletConditionsComponent,
-    InventoryPerformanceProfileComponent
+    InventoryPerformanceProfileComponent,
+    DayTypeFilterPipe
   ],
   imports: [
     CommonModule,

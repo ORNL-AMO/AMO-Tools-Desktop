@@ -10,7 +10,7 @@
 
             </th>
             <td>
-                
+
             </td>
             <th *ngFor="let interval of hourIntervals">
                 {{interval}}
@@ -18,9 +18,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let summary of profileSummary; let compressorIndex = index;">
+        <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
             <td class="bold">
-                {{summary.compressorName}}
+                {{summary.compressorName}} {{summary.dayTypeId}}
             </td>
             <td>
                 <span *ngIf="profileDataType == 'power'">Power</span>
@@ -30,13 +30,13 @@
             <td *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
                 <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                     id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].power">
+                    [(ngModel)]="summaryData.power">
                 <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                     id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].airflow">
+                    [(ngModel)]="summaryData.airflow">
                 <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                     id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                    [(ngModel)]="profileSummary[compressorIndex].profileSummaryData[dataIndex].percentCapacity">
+                    [(ngModel)]="summaryData.percentCapacity">
             </td>
         </tr>
     </tbody>
