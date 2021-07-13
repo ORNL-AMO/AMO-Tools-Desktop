@@ -35,7 +35,8 @@ export class DayTypesComponent implements OnInit {
     this.compressedAirAssessment.compressedAirDayTypes.push({
       dayTypeId: Math.random().toString(36).substr(2, 9),
       name: 'Day Type',
-      numberOfDays: 0
+      numberOfDays: 0,
+      profileDataType: "percentCapacity"
     });
     this.save();
   }

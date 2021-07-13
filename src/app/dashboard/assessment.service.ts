@@ -371,7 +371,8 @@ export class AssessmentService {
       compressedAirDayTypes: [{
         dayTypeId: initDayTypeId,
         name: 'Standard Day Type',
-        numberOfDays: 365
+        numberOfDays: 365,
+        profileDataType: "percentCapacity"
       }]
     }
   }
