@@ -33,6 +33,8 @@ export class FanSetupComponent implements OnInit {
   @Input()
   baseline: boolean;
   @Input()
+  compareTwo: boolean;
+  @Input()
   containerHeight: number;
 
   condenseDropDown: boolean;

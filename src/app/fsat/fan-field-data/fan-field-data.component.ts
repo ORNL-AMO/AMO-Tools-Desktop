@@ -31,6 +31,8 @@ export class FanFieldDataComponent implements OnInit {
   loadEstimationMethod: string;
   @Input()
   baseline: boolean;
+  @Input()
+  compareTwo: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FieldData>();
   @Input()

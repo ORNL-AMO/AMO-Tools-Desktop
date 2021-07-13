@@ -355,6 +355,7 @@ export class FsatService {
     tmpModification.fsat.fanSetup.fanType = 12;
     tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    tmpModification.whatIfScenario = true;
     return tmpModification;
   }
 }

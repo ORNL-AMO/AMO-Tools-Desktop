@@ -40,7 +40,8 @@ export interface Modification {
   exploreOppsShowMotorEff?: SavingsOpportunity,
   exploreOppsShowFlowRate?: SavingsOpportunity,
   exploreOppsShowReducePressure?: SavingsOpportunity,
-  exploreOppsShowOpData?: SavingsOpportunity
+  exploreOppsShowOpData?: SavingsOpportunity,
+  whatIfScenario?: boolean
 }
 
 export interface Notes {
