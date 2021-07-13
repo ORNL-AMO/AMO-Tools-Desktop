@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { LogToolDbData } from '../log-tool/log-tool-models';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 
@@ -15,7 +16,7 @@ export class CompressedAirAssessmentService {
   profileTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
-  constructor() { 
+  constructor() {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
