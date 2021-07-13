@@ -10,6 +10,7 @@ import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { RemoveCommasPipe } from '../../../../shared/shared-pipes/remove-commas.pipe';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',

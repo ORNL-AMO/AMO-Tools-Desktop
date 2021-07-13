@@ -1,4 +1,10 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+    Moisture in Combustion Air Help
+    <br>
+    <small class="text-muted">Enter measured data to calculate moisture percentage in combustion air</small>
+  </h5>
+  <hr class="my-1 hr-spacer">
     <div class="my-2" *ngIf="currentField == 'barometricPressure'">
       <h6>
         Barometric Pressure
@@ -6,18 +12,6 @@
         <small class="text-muted">
           The total atmospheric air pressure. Standard Atmosphere is 101325 Pa, 1.01325 bar, 760 mmHg (torr), 29.92 in Hg and 14.696
           psi.
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'gasType'">
-      <h6>
-        Gas Type
-        <br>
-        <small class="text-muted">
-          Select either 'Air' or 'Other Gases' depending on the type of gas. If using other gases, several fields (Gas Relative Density,
-          Specific Heat on the Fluid page and Specific Heat Ratio and Comprehensibility Factor in Field Data) will need to
-          be reviewed, as they default to the values for standard air. 
-          <br>For Standard Air, the gas density is 0.075 lbm/ft<sup>3</sup>.
         </small>
       </h6>
     </div>

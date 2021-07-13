@@ -118,7 +118,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareMassMoistureInAirComposition(), 'error': warnings.moistureInAirCompositionWarning !== null, 'invalid': flueGasLossForm.controls.moistureInAirComposition.invalid}">
         <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" 
           min="0" max="100" class="form-control" formControlName="moistureInAirComposition" id="{{'moistureInAirComposition'+idString}}"
-          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" [(ngModel)] = "humidityRatio">
+          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" [ngModel] = "humidityRatio | number:'1.0-2' | removeCommas" (ngModelChange) = "humidityRatio=$event">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small"
@@ -184,8 +184,8 @@
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <app-flue-gas-losses-moisture *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
-      [settings]="settings" [baseGasDensity]="baseGasDensity"></app-flue-gas-losses-moisture>
+      <app-flue-gas-moisture-modal *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
+      [settings]="settings"></app-flue-gas-moisture-modal>
     </div>
   </div>
 </div>

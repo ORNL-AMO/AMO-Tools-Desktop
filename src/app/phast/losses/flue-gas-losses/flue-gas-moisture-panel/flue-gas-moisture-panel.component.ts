@@ -12,7 +12,7 @@ import { Settings } from '../../../../shared/models/settings';
     settings: Settings;
     tabSelect: string;
     constructor() {
-       
+       this.tabSelect = "results";
     }
     
     ngOnInit() {

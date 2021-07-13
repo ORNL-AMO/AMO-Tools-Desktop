@@ -3,6 +3,7 @@ import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 import { PHAST } from '../../../shared/models/phast/phast';
 import { PsychrometricResults } from '../../../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
+import { BaseGasDensity } from '../../../shared/models/fans';
 
 @Injectable()
 export class FlueGasCompareService {
@@ -10,8 +11,23 @@ export class FlueGasCompareService {
   modifiedFlueGasLoss: FlueGas[];
   moistureSubject: BehaviorSubject<PsychrometricResults>;
   currentField: BehaviorSubject<string>;
+  baseGasDensity: BaseGasDensity; 
 
   constructor() {
+    this.baseGasDensity = {
+      barometricPressure: 29.92,
+      dewPoint: 0,
+      dryBulbTemp: 68,
+      gasDensity: 0.07516579558441701,
+      gasType: "AIR",
+      inputType: "relativeHumidity",
+      relativeHumidity: 0,
+      specificGravity: 1,
+      specificHeatGas: 0.24,
+      specificHeatRatio: 1.4,
+      staticPressure: 0,
+      wetBulbTemp: 118.999
+    };
     this.moistureSubject = new BehaviorSubject<PsychrometricResults>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
   }
@@ -22,6 +38,10 @@ export class FlueGasCompareService {
 
   setCurrentField(currField: string) {
     this.currentField.next(currField);
+  }
+
+  setCurrentDensity(currDensity: BaseGasDensity) {
+    this.baseGasDensity = currDensity;
   }
 
   compareAllLosses() {

@@ -46,7 +46,7 @@
         </span>
       </div>
   
-      <div class="form-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
+      <div class="form-group d-none" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
         <label for="{{'gasType_'+idString}}">Gas Type</label>
         <div class="input-group">
           <select class="form-control" name="gasType" formControlName="gasType" id="{{'gasType_'+idString}}"
@@ -197,10 +197,11 @@
             Value must be greater than 0 <span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>.</span>
         </span>
       </div>
-  
+      <br>
+      <div class = "d-flex">
+        <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMoistureModal('cancel')">Cancel</button>
+        <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMoistureModal('submit')">Submit</button>
+      </div>
     </div>
-    <div class="modal-btn-container">
-      <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMoistureModal('cancel')">Cancel</button>
-      <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMoistureModal('submit')">Submit</button>
-    </div>
+    
   </form>

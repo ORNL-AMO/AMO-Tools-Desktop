@@ -1,0 +1,10 @@
+
+<div class = "d-flex h-100">
+    <div class = "w-50 h-100" [ngStyle] = "{'height.px': containerHeight}">
+        <app-flue-gas-losses-moisture (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
+        [settings]="settings"></app-flue-gas-losses-moisture>
+    </div>
+    <div class = "w-50 h-100" [ngStyle] = "{'height.px': containerHeight}">
+        <app-flue-gas-moisture-panel [settings]="settings"></app-flue-gas-moisture-panel>
+    </div>
+</div>

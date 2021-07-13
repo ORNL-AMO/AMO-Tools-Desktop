@@ -7,6 +7,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompareService } from '../../../../fsat/compare.service';
 import { GasDensityFormService } from '../../../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flue-gas-losses-moisture',
@@ -14,7 +15,6 @@ import { FlueGasCompareService } from '../flue-gas-compare.service';
   styleUrls: ['./flue-gas-losses-moisture.component.css']
 })
 export class FlueGasLossesMoistureComponent implements OnInit {
-  @Input()
   baseGasDensity: BaseGasDensity;
   @Input()
   gasDone: boolean;
@@ -64,6 +64,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
+    this.baseGasDensity = this.flueGasCompareService.baseGasDensity;
     this.init();
     this.getResults();
   }
@@ -107,6 +108,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   save() {
     //save is always called on input so add check for warnings call here
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.flueGasCompareService.setCurrentDensity(this.baseGasDensity);
     this.updateFormValidators();
     this.emitSave.emit(this.baseGasDensity);
   }

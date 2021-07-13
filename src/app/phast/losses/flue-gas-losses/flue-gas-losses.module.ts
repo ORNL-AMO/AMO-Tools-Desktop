@@ -12,6 +12,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { FlueGasMoistureResultsComponent } from './flue-gas-moisture-results/flue-gas-moisture-results.component';
 import { FlueGasMoistureHelpComponent } from './flue-gas-moisture-help/flue-gas-moisture-help.component';
 import { FlueGasMoisturePanelComponent } from './flue-gas-moisture-panel/flue-gas-moisture-panel.component';
+import { FlueGasMoistureModalComponent } from './flue-gas-moisture-modal/flue-gas-moisture-modal.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { FlueGasMoisturePanelComponent } from './flue-gas-moisture-panel/flue-ga
     FlueGasMoistureResultsComponent,
     FlueGasMoistureHelpComponent,
     FlueGasMoisturePanelComponent,
+    FlueGasMoistureModalComponent,
   ],
   providers: [
     FlueGasCompareService,
