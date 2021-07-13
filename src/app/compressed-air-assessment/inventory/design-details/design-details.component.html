@@ -8,12 +8,12 @@
                 formControlName="blowdownTime" (input)="save()" (focus)="focusField('blowdownTime')">
             <span class="units input-group-addon">sec.</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.blowdownTime.invalid && !form.controls.blowdownTime.pristine">
+          <span *ngIf="form.controls.blowdownTime.errors.required">Value Required</span>
+          <span *ngIf="form.controls.blowdownTime.errors.min">Value can't be less than
+            {{form.controls.blowdownTime.errors.min.min}} sec.</span>
+        </span>
     </div>
 
     <!-- modulatingPressureRange -->
@@ -25,12 +25,12 @@
                 (focus)="focusField('modulatingPressureRange')">
             <span class="units input-group-addon">psig</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.modulatingPressureRange.invalid && !form.controls.modulatingPressureRange.pristine">
+          <span *ngIf="form.controls.modulatingPressureRange.errors.required">Value Required</span>
+          <span *ngIf="form.controls.modulatingPressureRange.errors.min">Value can't be less than
+            {{form.controls.modulatingPressureRange.errors.min.min}} psig</span>
+        </span>
     </div>
 
 
@@ -42,12 +42,14 @@
                 formControlName="inputPressure" (input)="save()" (focus)="focusField('inputPressure')">
             <span class="units input-group-addon">psia</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.inputPressure.invalid && !form.controls.inputPressure.pristine">
+          <span *ngIf="form.controls.inputPressure.errors.required">Value Required</span>
+          <span *ngIf="form.controls.inputPressure.errors.min">Value can't be less than
+            {{form.controls.inputPressure.errors.min.min}} psia.</span>
+            <span *ngIf="form.controls.inputPressure.errors.max">Value can't be greater than
+            {{form.controls.inputPressure.errors.max.max}} psia.</span>
+        </span>
     </div>
 
     <!-- designEfficiency -->
@@ -58,12 +60,14 @@
                 formControlName="designEfficiency" (input)="save()" (focus)="focusField('designEfficiency')">
             <span class="units input-group-addon">%</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.designEfficiency.invalid && !form.controls.designEfficiency.pristine">
+          <span *ngIf="form.controls.designEfficiency.errors.required">Value Required</span>
+          <span *ngIf="form.controls.designEfficiency.errors.min">Value can't be less than
+            {{form.controls.designEfficiency.errors.min.min}}</span>
+          <span *ngIf="form.controls.designEfficiency.errors.max">Value can't be greater than
+              {{form.controls.designEfficiency.errors.max.max}}</span>
+        </span>
     </div>
 
     <!-- serviceFactor -->
@@ -74,12 +78,14 @@
                 formControlName="serviceFactor" (input)="save()" (focus)="focusField('serviceFactor')">
             <!-- <span class="units input-group-addon">%</span> -->
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.serviceFactor.invalid && !form.controls.serviceFactor.pristine">
+          <span *ngIf="form.controls.serviceFactor.errors.required">Value Required</span>
+          <span *ngIf="form.controls.serviceFactor.errors.min">Value can't be less than
+            {{form.controls.serviceFactor.errors.min.min}}.</span>
+            
+        </span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.serviceFactor !== null">{{warnings.serviceFactor}}</span>
     </div>
 
     <!-- noLoadPowerFM -->

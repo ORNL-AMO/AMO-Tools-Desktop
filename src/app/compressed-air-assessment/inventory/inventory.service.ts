@@ -116,14 +116,15 @@ export class InventoryService {
   getNameplateDataFormFromObj(nameplateData: CompressorNameplateData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       compressorType: [nameplateData.compressorType, Validators.required],
-      motorPower: [nameplateData.motorPower, Validators.required],
-      fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure, Validators.required],
-      fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity, Validators.required],
+      motorPower: [nameplateData.motorPower, [Validators.required, Validators.min(0)]],
+      fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure, [Validators.required, Validators.min(0)]],
+      fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity, [Validators.required, Validators.min(0)]],
       ratedLoadPower: [nameplateData.ratedLoadPower],
       ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
-      fullLoadAmps: [nameplateData.fullLoadAmps],
+      fullLoadAmps: [nameplateData.fullLoadAmps, Validators.min(0)],
       totalPackageInputPower: [nameplateData.totalPackageInputPower]
     });
+    this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
@@ -156,6 +157,7 @@ export class InventoryService {
       unloadSumpPressure: [compressorControls.unloadSumpPressure]
     });
     form = this.setCompressorControlValidators(form);
+    this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
@@ -170,8 +172,8 @@ export class InventoryService {
   setCompressorControlValidators(form: FormGroup): FormGroup {
     if (form.controls.controlType.value && (form.controls.controlType.value == 2 || form.controls.controlType.value == 3
       || form.controls.controlType.value == 4 || form.controls.controlType.value == 5 || form.controls.controlType.value == 6)) {
-      form.controls.unloadPointCapacity.setValidators([Validators.required]);
-      form.controls.numberOfUnloadSteps.setValidators([Validators.required]);
+      form.controls.unloadPointCapacity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      form.controls.numberOfUnloadSteps.setValidators([Validators.required, Validators.min(0), Validators.max(5)]);
       if (form.controls.controlType.value != 5) {
         form.controls.automaticShutdown.setValidators([Validators.required]);
       } else {
@@ -200,16 +202,71 @@ export class InventoryService {
   }
 
 
-  getCentrifugalFormFromObj(centrifugalSpecifics: CentrifugalSpecifics): FormGroup {
+  getCentrifugalFormFromObj(compressor: CompressorInventoryItem): FormGroup {
     //todo set validators base on compressor type
+    let surgeAirFlowValidators: Array<ValidatorFn> = this.setSurgeAirFlowValidators(compressor);
+    let maxFullLoadPressureValidators: Array<ValidatorFn> = this.setMaxFullLoadPressureValidators(compressor.centrifugalSpecifics);
+    let maxFullLoadCapacityValidators: Array<ValidatorFn> = this.setMaxFullLoadCapacityValidators(compressor);
+    let minFullLoadPressureValidators: Array<ValidatorFn> = this.setMinFullLoadPressureValidators(compressor.centrifugalSpecifics);
+
     let form: FormGroup = this.formBuilder.group({
-      surgeAirflow: [centrifugalSpecifics.surgeAirflow, [Validators.required]],
-      maxFullLoadPressure: [centrifugalSpecifics.maxFullLoadPressure, [Validators.required]],
-      maxFullLoadCapacity: [centrifugalSpecifics.maxFullLoadCapacity, [Validators.required]],
-      minFullLoadPressure: [centrifugalSpecifics.minFullLoadPressure, [Validators.required]],
-      minFullLoadCapacity: [centrifugalSpecifics.minFullLoadCapacity, [Validators.required]],
+      surgeAirflow: [compressor.centrifugalSpecifics.surgeAirflow, surgeAirFlowValidators],
+      maxFullLoadPressure: [compressor.centrifugalSpecifics.maxFullLoadPressure, maxFullLoadPressureValidators],
+      maxFullLoadCapacity: [compressor.centrifugalSpecifics.maxFullLoadCapacity, maxFullLoadCapacityValidators],
+      minFullLoadPressure: [compressor.centrifugalSpecifics.minFullLoadPressure, minFullLoadPressureValidators],
+      minFullLoadCapacity: [compressor.centrifugalSpecifics.minFullLoadCapacity, [Validators.required, Validators.min(0)]]
     });
+
+    this.markFormDirtyToDisplayValidation(form);
     return form;
+  }
+
+  markFormDirtyToDisplayValidation(form: FormGroup) {
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
+  }
+  
+  setSurgeAirFlowValidators(compressor: CompressorInventoryItem) {
+    let surgeAirFlowValidators: Array<ValidatorFn>;
+    if (compressor.centrifugalSpecifics.surgeAirflow) {
+      surgeAirFlowValidators = [Validators.required, Validators.min(0), Validators.max(compressor.nameplateData.fullLoadRatedCapacity)];
+    } else {
+      surgeAirFlowValidators = [Validators.required]
+    }
+    return surgeAirFlowValidators;
+  }
+
+  setMaxFullLoadPressureValidators(centrifugalSpecifics: CentrifugalSpecifics) {
+    let maxFullLoadPressureValidators: Array<ValidatorFn>;
+    if (centrifugalSpecifics.maxFullLoadPressure) {
+      maxFullLoadPressureValidators = [Validators.required, Validators.min(centrifugalSpecifics.minFullLoadPressure)];
+    } else {
+      maxFullLoadPressureValidators = [Validators.required]
+    }
+    return maxFullLoadPressureValidators;
+  }
+
+  setMaxFullLoadCapacityValidators(compressor: CompressorInventoryItem) {
+    let maxFullLoadCapacityValidators: Array<ValidatorFn>;
+    if (compressor.centrifugalSpecifics.maxFullLoadCapacity) {
+      maxFullLoadCapacityValidators = [Validators.required, Validators.min(0), Validators.max(compressor.nameplateData.fullLoadRatedCapacity)];
+    } else {
+      maxFullLoadCapacityValidators = [Validators.required]
+    }
+    return maxFullLoadCapacityValidators;
+  }
+
+  setMinFullLoadPressureValidators(centrifugalSpecifics: CentrifugalSpecifics) {
+    let minFullLoadPressureValidators: Array<ValidatorFn>;
+    if (centrifugalSpecifics.surgeAirflow) {
+      minFullLoadPressureValidators = [Validators.required, Validators.min(0), Validators.max(centrifugalSpecifics.surgeAirflow)];
+    } else {
+      minFullLoadPressureValidators = [Validators.required]
+    }
+    return minFullLoadPressureValidators;
   }
 
   getCentrifugalObjFromForm(form: FormGroup): CentrifugalSpecifics {
@@ -226,26 +283,38 @@ export class InventoryService {
     let blowdownTimeValidators: Array<ValidatorFn> = [];
     let displayBlowdownTime: boolean = this.checkDisplayBlowdownTime(compressorType, controlType);
     if (displayBlowdownTime) {
-      blowdownTimeValidators = [Validators.required];
+      blowdownTimeValidators = [Validators.required, Validators.min(0)];
     }
 
     let modulatingPressureValidators: Array<Validators> = [];
     let displayModulation: boolean = this.checkDisplayModulation(controlType);
     if (displayModulation) {
-      modulatingPressureValidators = [Validators.required];
+      modulatingPressureValidators = [Validators.required, Validators.min(0)];
     }
     //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
       modulatingPressureRange: [designDetails.modulatingPressureRange, modulatingPressureValidators],
-      inputPressure: [designDetails.inputPressure],
-      designEfficiency: [designDetails.designEfficiency],
-      serviceFactor: [designDetails.serviceFactor],
+      inputPressure: [designDetails.inputPressure, [Validators.min(0), Validators.max(16)]],
+      designEfficiency: [designDetails.designEfficiency, [Validators.min(0), Validators.max(100)]],
+      serviceFactor: [designDetails.serviceFactor, [Validators.min(1)]],
       noLoadPowerFM: [designDetails.noLoadPowerFM],
       noLoadPowerUL: [designDetails.noLoadPowerUL],
       maxFullFlowPressure: [designDetails.maxFullFlowPressure]
     });
+    this.markFormDirtyToDisplayValidation(form);
     return form;
+  }
+
+  
+  checkWarnings(compressor: CompressorInventoryItem): CompressorInventoryItemWarnings {
+    let serviceFactorWarning: string = null;
+    if (compressor.designDetails.serviceFactor > 2) {
+      serviceFactorWarning = 'Service factor is typically around 1.15 or less than 2';
+    } 
+    return {
+      serviceFactor: serviceFactorWarning,
+    }
   }
 
   getDesignDetailsObjFromForm(form: FormGroup): DesignDetails {
@@ -318,9 +387,10 @@ export class InventoryService {
   getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
-      atmosphericPressure: [inletConditions.atmosphericPressure, Validators.required],
-      temperature: [inletConditions.temperature],
+      atmosphericPressure: [inletConditions.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
+      temperature: [inletConditions.temperature, [Validators.min(0), Validators.max(1000)]],
     });
+    this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
@@ -330,7 +400,6 @@ export class InventoryService {
       temperature: form.controls.temperature.value
     }
   }
-
 
   isCompressorValid(compressor: CompressorInventoryItem): boolean {
     let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
@@ -344,7 +413,7 @@ export class InventoryService {
 
   checkCentrifugalSpecsValid(compressor: CompressorInventoryItem): boolean {
     if (compressor.nameplateData.compressorType == 6) {
-      let form: FormGroup = this.getCentrifugalFormFromObj(compressor.centrifugalSpecifics);
+      let form: FormGroup = this.getCentrifugalFormFromObj(compressor);
       return form.valid;
     }
     return true;
@@ -417,4 +486,8 @@ export class InventoryService {
     }
     return false;
   }
+}
+
+export interface CompressorInventoryItemWarnings {
+  serviceFactor: string;
 }
