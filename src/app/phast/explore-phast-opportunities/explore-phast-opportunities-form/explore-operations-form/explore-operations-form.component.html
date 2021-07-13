@@ -69,6 +69,7 @@
       <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineFuelCosts" class="baseline-value-label"> Fuel Costs</label>
+          <a id="materialHelp" class="form-text small click-link" (click)="showOperatingCostModal()" *ngIf="!inModal">Calculate Net Fuel Cost</a>
           <div class="text-muted text-center baseline-value-input">{{ phast.operatingCosts.fuelCost }}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>

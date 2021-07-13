@@ -11,7 +11,7 @@ import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
-import { OperatingCostModule } from './operating-cost/operating-cost.module';
+//import { OperatingCostModule } from './operating-cost/operating-cost.module';
 
 @NgModule({
     declarations: [
@@ -31,7 +31,7 @@ import { OperatingCostModule } from './operating-cost/operating-cost.module';
         ElectricityReductionModule,
         NaturalGasReductionModule,
         CashFlowModule,
-        OperatingCostModule,
+        //OperatingCostModule,
         UnitConverterModule,
         RouterModule,
     ]
