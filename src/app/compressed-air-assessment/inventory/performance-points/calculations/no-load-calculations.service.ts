@@ -21,7 +21,7 @@ export class NoLoadCalculationsService {
         return 0
       } else if (selectedCompressor.compressorControls.controlType == 1) {
         //without unloading
-        return selectedCompressor.nameplateData.fullLoadOperatingPressure + selectedCompressor.designDetails.modulatingPressureRange;
+        return selectedCompressor.performancePoints.fullLoad.dischargePressure + selectedCompressor.designDetails.modulatingPressureRange;
       } else {
         //rest of options
         return selectedCompressor.compressorControls.unloadSumpPressure;
