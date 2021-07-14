@@ -1,9 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OperatingSrcInput, OperatingSrcOutput } from "../../../../shared/models/standalone";
-import { ModalDirective } from 'ngx-bootstrap';
-import { LossesService } from './losses.service';
-
-//import { Settings } from '../../../shared/models/settings';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-operating-costs-modal',
@@ -12,122 +8,59 @@ import { LossesService } from './losses.service';
 })
 export class OperatingCostsModalComponent implements OnInit {
 
-  //@Input()
-  //settings: Settings;
   @Input()
-  inputs: OperatingSrcInput;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<OperatingSrcInput>();
+  settings: Settings;
+  @Output('closeModal')
+  closeModal = new EventEmitter<number>();
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
-  showModal: boolean = false;
+  // result to emit back to parent
+  mixedFuelCostsResult: number;
 
-  @ViewChild('operatingCostModal', { static: false }) public operatingCostModal: ModalDirective;
-
+  // Initial array with first fuel
   fuels: Array<OperatingFuel> = [
     {
-      name: 'string',
+      name: 'New Fuel',
       usage: 0,
       cost: 0
-  }
-  ];
-  /*
-  steams: Array<OperatingSteam> = [
-    {
-      name: 'string',
-      usage: 0,
-      cost: 0
-  }
-  ];
-
-  electrics: Array<OperatingElectric> = [
-    {
-      name: 'string',
-      usage: 0,
-      cost: 0
-  }
-  ];
-  */
+  }];
+  
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   addFuel() {
     let newFuel = {
-      name: 'string',
+      name: 'New Fuel',
       usage: 0,
       cost: 0,
     };
-    if (!this.fuels) {
-      this.fuels = new Array<OperatingFuel>();
-    }
     this.fuels.push(newFuel);
   }
 
   deleteFuel(i: number) {
     this.fuels.splice(i, 1);
-    this.emitChange();
-  }
-  
-  changeField(str: string) {
-    this.emitChangeField.emit(str);
   }
 
-
+  // called every time a fuel field changes
   calculateMixedFuelCosts() {
     let length = this.fuels.length;
     let sum = 0;
     for (let i = 0; i < length; i++){
       sum += this.fuels[i].usage * this.fuels[i].cost;
     }
-    return sum;
-  }
-  // Emit reuslt back to operating costs page/assessment
-  getFuelCost() {
-    this.operatingCostModal.patchValue({
-      fuelCost: this.calculateMixedFuelCosts()
-    });
-    this.save();
-  }
-/*
-  calculateMixedSteamCosts() {
-    var length = this.steams.length;
-    var sum = 0;
-    for (let i = 0; i < length; i++){
-      sum += this.steams[i].usage * this.steams[i].cost;
-    }
-    // Emit reuslt back to operating costs page/assessment
+    this.mixedFuelCostsResult = sum;
   }
 
-
-calculateMixedElectricCosts() {
-    var length = this.electrics.length;
-    var sum = 0;
-    for (let i = 0; i < length; i++){
-      sum += this.electrics[i].usage * this.electrics[i].cost;
-    }
-    // Emit reuslt back to operating costs page/assessment
-  }
-*/
-  emitChange() {
-    this.emitCalculate.emit(this.inputs);
+  // sum up our mixed fuels and emit them back to parent. See operations-form.html ln 73
+  setMixedFuelCosts() {
+    this.closeModal.emit(this.mixedFuelCostsResult);
   }
 
-  showOperatingCostModal() {
-    this.showModal = true;
-    this.lossesService.modalOpen.next(true);
-    this.operatingCostModal.show();
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
-
-  hideOperatingCostModal(event?: any) {
-    this.materialModal.hide();
-    this.showModal = false;
-    this.lossesService.modalOpen.next(false);
-  }
-
-
 }
 
 export interface OperatingFuel {
@@ -135,16 +68,3 @@ export interface OperatingFuel {
     usage: number,
     cost: number
 }
-/*
-export interface OperatingSteam {
-    name: string,
-    usage: number,
-    cost: number
-}
-
-export interface OperatingElectric {
-    name: string,
-    usage: number,
-    cost: number
-}
-*/

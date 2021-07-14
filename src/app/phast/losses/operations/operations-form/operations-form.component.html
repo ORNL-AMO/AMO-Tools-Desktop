@@ -24,7 +24,7 @@
       <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
     </div>
     <!-- Need button blue link button here 'Add Multiple Fuel Costs' or other wording -->
-     
+    <a id="materialHelp" class="form-text small click-link" (click)="initOperatingCostsModal()">Calculate Net Fuel Cost</a>
   </div>
   <div class="form-group">
     <label for="{{'steamCost_'+idString}}">Steam Costs</label>
@@ -64,3 +64,15 @@
 </app-operating-hours-modal>
 
 <!-- add operating fuels modal here and emit cost of type number back to a property on this component (and set to the fuelCost on close) -->
+<div bsModal #operatingCostsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="operatingCostsLabel"
+aria-hidden="true" [config]="{backdrop: 'static'}">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div>
+      <app-operating-costs-modal *ngIf="showOperatingCostsModal" 
+      (closeModal)="hideOperatingCostsModal($event)" (hideModal)="hideOperatingCostsModal($event)"
+        [settings]="settings"></app-operating-costs-modal>
+    </div>
+  </div>
+</div>
+</div>
