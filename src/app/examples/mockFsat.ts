@@ -112,7 +112,8 @@ export const MockFsat: Assessment = {
                         measuredVoltage: 460
                     }
                 },
-                exploreOpportunities: true
+                exploreOpportunities: true,
+                whatIfScenario: true
             },
             {
                 fsat: {
@@ -167,7 +168,8 @@ export const MockFsat: Assessment = {
                         measuredVoltage: 460
                     }
                 },
-                exploreOpportunities: true
+                exploreOpportunities: true,
+                whatIfScenario: true
             }
         ]
     }

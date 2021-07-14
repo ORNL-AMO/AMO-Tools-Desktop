@@ -7,8 +7,7 @@ import * as _ from 'lodash';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SimpleChanges } from '@angular/core';
-import { values } from 'lodash';
+
 @Component({
   selector: 'app-modification-list',
   templateUrl: './modification-list.component.html',
@@ -32,8 +31,8 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   assessmentTab: string;
   assessmentTabSubscription: Subscription;
-  reactiveForm: FormGroup = new FormGroup({
-    whatcaDoing: new FormControl(true)
+  scenarioForm: FormGroup = new FormGroup({
+    setScenario: new FormControl(true)
   });
 
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService, private fsatService: FsatService) { }
@@ -43,48 +42,23 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
-    // this.reactiveForm.disable();
-    // if (this.assessmentTab == 'modify-conditions'){
-    //   this.reactiveForm.enable();
-    // }
-    // this.fsat.modifications.forEach(mod => {
-    //   if (mod.whatIfScenario == true){
-    //     this.reactiveForm.patchValue({
-    //       whatcaDoing: 'whatIf'
-    //     });
-    //   }
-    //   if (mod.whatIfScenario == false){
-    //     this.reactiveForm.patchValue({
-    //       whatcaDoing: 'compareTwo'
-    //     });
-    //   };
-    // });
   }
 
   ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
   }
 
-  setWhatchaDoing(choice: String, index: number){
-    if (choice =='twoExisting'){
-      this.fsat.modifications[index].whatIfScenario = false;
-      this.save.emit(true);
-    } else if (choice == 'whatIf'){      
-      this.fsat.modifications[index].whatIfScenario = true;
-      this.save.emit(true);
-    }
-  }
-
-  onSubmit(index: number) {
-    //alert(JSON.stringify(this.reactiveForm.value));
-    if (this.reactiveForm.value == "whatIf"){
-      this.fsat.modifications[index].whatIfScenario = true;
-      console.log(this.fsat.modifications[index].whatIfScenario);
-      this.save.emit(true);
-    } else if (this.reactiveForm.value == "compareTwo"){
-      this.fsat.modifications[index].whatIfScenario = false;
-      console.log(this.fsat.modifications[index].whatIfScenario);
-      this.save.emit(true);
+  changeScenario(choice: string, index: number) {
+    if (index == this.modificationIndex) {
+      if (choice == 'twoExisting') {
+        this.fsat.modifications[this.modificationIndex].whatIfScenario = false;
+        this.save.emit(true);
+        this.selectModification(this.modificationIndex, true);
+      } else if (choice == 'whatIf') {
+        this.fsat.modifications[this.modificationIndex].whatIfScenario = true;
+        this.save.emit(true);
+        this.selectModification(this.modificationIndex, true);
+      }
     }
   }
 

@@ -52,76 +52,37 @@
           </div>
           <div class="col-3 border-right text-center">
             <div class="align-self-center small text-left">
-              <form [formGroup]="reactiveForm">
-                <span *ngIf="assessmentTab == 'modify-conditions' && getBadges(modification.fsat).length == 0">
-                  <div class="form-check">
+              <form [formGroup]="scenarioForm"  [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
+                
+                <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
+                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
+
                     <span *ngIf="modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" value="compareTwo"
-                        formControlName="whatcaDoing" (change)="setWhatchaDoing('twoExisting', index)" [value]="false">
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" value="whatIf" formControlName="whatcaDoing"
-                      (change)="setWhatchaDoing('whatIf', index)" [value]="true">
-                      <label for="whatIf">What-if scenario</label>
-                      <!-- <button type="submit">Save Choice</button> -->
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting" 
+                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="false">
+                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
+                      formControlName="setScenario" (input)="changeScenario('whatIf', index)" [value]="true">
+                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
+
                     </span>
 
                     <span *ngIf="!modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" value="compareTwo"
-                        formControlName="whatcaDoing" [value]="true">
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" value="whatIf" formControlName="whatcaDoing"
-                        [value]="false">
-                      <label for="whatIf">What-if scenario</label>
-                      <!-- <button type="submit">Save Choice</button> -->
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting"
+                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="true">
+                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
+                        formControlName="setScenario" (input)="changeScenario('whatIf', index)"[value]="false">
+                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
+
                     </span>
+                    
                   </div>
-                </span>
-
-                <span *ngIf="assessmentTab == 'modify-conditions' && getBadges(modification.fsat).length > 0">
-                  <div class="form-check">
-                    <span *ngIf="modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" formControlName="whatcaDoing"
-                        [value]="false" disabled>
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" formControlName="whatcaDoing" [value]="true"
-                        disabled>
-                      <label for="whatIf">What-if scenario</label>
-                      <!-- <button type="submit">Save Choice</button> -->
-                    </span>
-
-                    <span *ngIf="!modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" formControlName="whatcaDoing"
-                        [value]="true" disabled>
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" formControlName="whatcaDoing" [value]="false"
-                        disabled>
-                      <label for="whatIf">What-if scenario</label>
-                      <!-- <button type="submit">Save Choice</button> -->
-                    </span>
-                  </div>
-                </span>
-
-                <span *ngIf="assessmentTab == 'explore-opportunities'">
-                  <div class="form-check">
-                    <span *ngIf="modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" formControlName="whatcaDoing"
-                        [value]="false" disabled>
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" formControlName="whatcaDoing" [value]="true"
-                        disabled>
-                      <label for="whatIf">What-if scenario</label>
-                    </span>
-
-                    <span *ngIf="!modification.whatIfScenario">
-                      <input type="radio" id="twoExisting" name="whatcaDoing" formControlName="whatcaDoing"
-                        [value]="true" disabled>
-                      <label for="twoExisting">Two existing Fans</label><br>
-                      <input type="radio" id="whatIf" name="whatcaDoing" formControlName="whatcaDoing" [value]="false"
-                        disabled>
-                      <label for="whatIf">What-if scenario</label>
-                    </span>
-                  </div>
-                </span>
+                </span>                
               </form>
             </div>
           </div>
