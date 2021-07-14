@@ -27,13 +27,13 @@ export class MaxFullFlowComponent implements OnInit {
     private maxFullFlowCalculationsService: MaxFullFlowCalculationsService) { }
 
   ngOnInit(): void {
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
-        this.selectedCompressor = val;
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.selectedCompressor = compressor;
         this.checkShowCalc();
         if (this.isFormChange == false) {
-          this.setMaxFullFlowLabel(val.compressorControls.controlType);
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.maxFullFlow);
+          this.setMaxFullFlowLabel(compressor.compressorControls.controlType);
+          this.form = this.inventoryService.getMaxLoadPerformancePointForm(compressor.performancePoints);
         } else {
           this.isFormChange = false;
         }

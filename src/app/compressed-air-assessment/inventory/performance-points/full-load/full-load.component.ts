@@ -28,13 +28,13 @@ export class FullLoadComponent implements OnInit {
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
-        this.selectedCompressor = val;
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.selectedCompressor = compressor;
         this.checkShowCalc();
         if (this.isFormChange == false) {
-          this.setFullLoadLabel(val.compressorControls.controlType);
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.fullLoad);
+          this.setFullLoadLabel(compressor.compressorControls.controlType);
+          this.form = this.inventoryService.getFullLoadPerformancePointForm(compressor.performancePoints);
         } else {
           this.isFormChange = false;
         }
