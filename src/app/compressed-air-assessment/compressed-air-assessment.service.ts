@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LogToolDbData } from '../log-tool/log-tool-models';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 

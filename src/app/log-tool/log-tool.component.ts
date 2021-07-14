@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LogToolDbService } from './log-tool-db.service';
-import { LogToolService } from './log-tool.service';
 
 @Component({
   selector: 'app-log-tool',
@@ -17,8 +16,7 @@ export class LogToolComponent implements OnInit {
   onResize(event) {
     this.getContainerHeight();
   }
-  constructor(private activatedRoute: ActivatedRoute, private logToolDbService: LogToolDbService,
-    private logToolService: LogToolService) { }
+  constructor(private activatedRoute: ActivatedRoute, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.logToolDbService.initLogToolData();
@@ -26,10 +24,6 @@ export class LogToolComponent implements OnInit {
       this.getContainerHeight();
     });
 
-  }
-
-  ngOnDestroy(){
-    // this.logToolService.resetData();
   }
 
   ngAfterViewInit() {
