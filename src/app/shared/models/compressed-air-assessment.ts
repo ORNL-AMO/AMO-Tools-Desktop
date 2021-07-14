@@ -1,4 +1,4 @@
-import { LogToolDbData } from "../../log-tool/log-tool-models";
+import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
     name?: string;
@@ -8,7 +8,11 @@ export interface CompressedAirAssessment {
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
-    logToolDbData?: LogToolDbData,
+    // logToolDbData?: LogToolDbData,
+    logToolData?: {
+        dayTypeSummaries: Array<DayTypeSummary>,
+        logToolFields: Array<LogToolField>
+    },
     compressedAirDayTypes: Array<CompressedAirDayType>
 }
 
@@ -135,7 +139,8 @@ export interface ProfileSummary {
     compressorName: string,
     compressorId: string,
     dayTypeId: string,
-    profileSummaryData: Array<ProfileSummaryData>
+    profileSummaryData: Array<ProfileSummaryData>,
+    logToolFieldId?: string
 }
 
 export interface ProfileSummaryData {
@@ -151,5 +156,6 @@ export interface ProfileSummaryData {
 export interface CompressedAirDayType {
     dayTypeId: string,
     name: string,
-    numberOfDays: number
+    numberOfDays: number,
+    profileDataType: "power" | "percentCapacity" | "airflow"
 }

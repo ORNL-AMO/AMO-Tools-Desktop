@@ -9,7 +9,7 @@ export interface LogToolField {
     invalidField: boolean,
     csvId: string,
     csvName: string,
-    compressorId?: string
+    fieldId: string
 }
 
 export interface LogToolDay {
@@ -45,6 +45,7 @@ export interface GraphDataObj {
 
 
 export interface DayType {
+    dayTypeId: string,
     color: string,
     label: string,
     useDayType: boolean,

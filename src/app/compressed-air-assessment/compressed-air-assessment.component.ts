@@ -93,6 +93,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.setupTab.next('system-basics');
+    this.compressedAirAssessmentService.profileTab.next('setup');
   }
 
   ngAfterViewInit() {

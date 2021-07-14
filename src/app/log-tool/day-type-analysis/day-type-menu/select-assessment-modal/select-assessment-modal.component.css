@@ -1,17 +1,21 @@
-.card{
-    position: fixed;
-    z-index: 8000;
-    border-style: solid;
-    border-width: 4px;
-    top: -100%;
-  }
-
   .btn{
       padding-top: 6px;
       padding-bottom: 6px;
       font-size: small;
+      color: white;
+      background: #117A65;
   }
 
-.card-body, .card-header, .card-footer{
+.header{
       padding: .5rem;
+  }
+
+
+ table th, table td{
+    padding: .35rem;
+  }
+
+
+  table{
+    font-size: small;
   }

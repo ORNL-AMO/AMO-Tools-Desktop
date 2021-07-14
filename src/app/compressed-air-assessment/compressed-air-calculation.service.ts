@@ -137,9 +137,14 @@ export class CompressedAirCalculationService {
   getCentrifugalInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
+    if(computeFrom == 0 || computeFrom == 1){
+      computeFromVal = computeFromVal / 100;
+    }
+
+
     return {
       computeFrom: computeFrom,
-      computeFromVal: computeFromVal / 100,
+      computeFromVal: computeFromVal,
       computeFromPFVoltage: 0,
       computeFromPFAmps: 0,
 

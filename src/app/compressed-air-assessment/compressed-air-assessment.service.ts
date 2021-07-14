@@ -15,7 +15,7 @@ export class CompressedAirAssessmentService {
   profileTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
-  constructor() { 
+  constructor() {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');

@@ -8,7 +8,7 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { HelpPanelComponent } from './system-setup/help-panel/help-panel.component';
 import { VisualizeComponent } from './visualize/visualize.component';
 import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
 import { DayTypeAnalysisComponent } from './day-type-analysis/day-type-analysis.component';
 import { DayTypesComponent } from './day-type-analysis/day-types/day-types.component';
@@ -79,6 +79,7 @@ import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-men
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbDatepickerModule,
     ModalModule,
     ExportableResultsTableModule,
