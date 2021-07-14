@@ -1,0 +1,58 @@
+<form [formGroup]="form">
+    <label class="group-label secondary-group">Max Full Load {{maxFullFlowLabel}}</label>
+    <!-- fullLoadDischargePressure -->
+    <div class="form-group">
+        <label for="maxFullFlowDischargePressure">Discharge Pressure</label>
+        <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
+                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
+                (focus)="focusField('maxFullFlowDischargePressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- maxFullFlowAirflow -->
+    <div class="form-group">
+        <label for="maxFullFlowAirflow">Air Flow</label>
+        <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
+                <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
+                formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('maxFullFlowAirflow')">
+            <span class="units input-group-addon">acfm</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+    <!-- maxFullFlowPower -->
+    <div class="form-group">
+        <label for="maxFullFlowPower">Power</label>
+        <div class="input-group">
+            <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
+                <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
+                formControlName="power" (input)="savePower()" (focus)="focusField('maxFullFlowPower')">
+            <span class="units input-group-addon">kW</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+</form>

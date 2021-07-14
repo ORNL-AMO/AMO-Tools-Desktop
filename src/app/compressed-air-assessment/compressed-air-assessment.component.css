@@ -1,0 +1,7 @@
+.compressed-air-container{
+    height: 100vh;
+}
+
+.modal-open {
+    z-index: initial !important;
+}
