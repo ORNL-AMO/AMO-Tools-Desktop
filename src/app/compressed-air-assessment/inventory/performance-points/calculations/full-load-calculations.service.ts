@@ -32,7 +32,7 @@ export class FullLoadCalculationsService {
         //y3 = MinPressureStonewallFlow, x3 = MinStonewallPressure
         let regressionData: Array<Array<number>> = [
           [selectedCompressor.centrifugalSpecifics.maxFullLoadPressure, selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity],
-          [selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadRatedCapacity],
+          [selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.fullLoadRatedCapacity],
           [selectedCompressor.centrifugalSpecifics.minFullLoadPressure, selectedCompressor.centrifugalSpecifics.minFullLoadCapacity]
         ];
         let regressionEquation = regression.polynomial(regressionData, { order: 2, precision: 50 });
