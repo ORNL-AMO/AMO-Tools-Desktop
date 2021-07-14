@@ -43,12 +43,12 @@ export class CompressorOrderingTableComponent implements OnInit {
   setOrderingOptions(systemProfileSetup: SystemProfileSetup, compressorInventoryItems: Array<CompressorInventoryItem>) {
     if (this.compressorOrdering.length != compressorInventoryItems.length) {
      this.hourIntervals = new Array();
-      for (let index = 1; index <= systemProfileSetup.numberOfHours;) {
+      for (let index = 0; index < systemProfileSetup.numberOfHours;) {
         this.hourIntervals.push(index)
         index = index + systemProfileSetup.dataInterval;
       }
       this.compressorOrdering = new Array();
-      let itemIndex: number = 1;
+      let itemIndex: number = 0;
       compressorInventoryItems.forEach(item => {
         this.compressorOrdering.push({
           compressorName: item.name,

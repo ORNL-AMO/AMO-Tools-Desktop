@@ -19,4 +19,5 @@ td, th{
 
   input.form-control{
       width: 100%;
+      min-width: 60px;
   }

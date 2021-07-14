@@ -115,27 +115,6 @@ export class OperatingProfileTableComponent implements OnInit {
     return profileSummaryData;
   }
 
-  populateDummyData() {
-    this.profileSummary.forEach(summary => {
-      if (summary.dayTypeId == this.selectedDayTypeId) {
-        if (this.profileDataType == 'airflow') {
-          summary.profileSummaryData.forEach(data => {
-            data.airflow = Math.floor(Math.random() * 100);
-          })
-        } else if (this.profileDataType == 'percentCapacity') {
-          summary.profileSummaryData.forEach(data => {
-            data.percentCapacity = Math.floor(Math.random() * 100);
-          })
-        } else {
-          summary.profileSummaryData.forEach(data => {
-            data.power = Math.floor(Math.random() * 100);
-          })
-        }
-      }
-    });
-    this.save();
-  }
-
   showDataFromExplorer() {
     this.showSelectField = true;
   }

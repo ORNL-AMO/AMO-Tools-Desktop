@@ -74,6 +74,7 @@ export class SelectAssessmentModalComponent implements OnInit {
 
   selectAssessment(assessment: Assessment) {
     assessment.compressedAirAssessment = this.setDayTypesFromLogTool(assessment.compressedAirAssessment, this.logToolDbService.logToolDbData[0])
+    console.log(assessment.compressedAirAssessment);
     this.indexedDbService.putAssessment(assessment).then(() => {
       this.assessmentDbService.setAll().then(() => {
         this.compressedAirAssessmentService.mainTab.next('system-setup');
@@ -100,12 +101,12 @@ export class SelectAssessmentModalComponent implements OnInit {
     });
     compressedAirAssessment.compressedAirDayTypes = new Array();
     logToolDbData.dayTypeData.dayTypes.forEach(logToolDayType => {
-      if (logToolDayType.useDayType) {
+      if (logToolDayType.useDayType && logToolDayType.label != 'Excluded') {
         compressedAirAssessment.compressedAirDayTypes.push({
           dayTypeId: logToolDayType.dayTypeId,
           name: logToolDayType.label,
           numberOfDays: 0,
-          profileDataType: undefined
+          profileDataType: 'percentCapacity'
         });
       }
     });
