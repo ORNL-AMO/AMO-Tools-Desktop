@@ -53,6 +53,8 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +92,9 @@ import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
     FilterCompressorsPipe,
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
-    DayTypeFilterPipe
+    DayTypeFilterPipe,
+    HelpPanelComponent,
+    SystemBasicsHelpComponent
   ],
   imports: [
     CommonModule,
