@@ -25,7 +25,7 @@
                         <tbody>
                             <tr *ngFor="let assessment of compressedAirAssessments">
                                 <td>
-                                    <span>{{getParentDirStr(assessment.directoryId)}}</span>
+                                    <!-- <span>{{getParentDirStr(assessment.directoryId)}}</span> -->
                                     <a class="click-link" (click)="selectAssessment(assessment)">
                                         {{assessment.name}}
                                     </a>

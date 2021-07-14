@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class DayTypesComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   totalAnnualDays: number;
   totalDownDays: number;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -28,7 +29,7 @@ export class DayTypesComponent implements OnInit {
   }
 
   openDataExplorer() {
-
+    this.router.navigateByUrl('/log-tool');
   }
 
   addDayType() {

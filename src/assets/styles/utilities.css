@@ -69,6 +69,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-color: #003087;
 }
 
+.compressed-air .btn-primary{
+  background-color: #7030A0;
+}
+
 .fan-block i{
     color:#FFE400
   }
