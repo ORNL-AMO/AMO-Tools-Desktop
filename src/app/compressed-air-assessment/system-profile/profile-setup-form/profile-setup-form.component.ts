@@ -47,6 +47,8 @@ export class ProfileSetupFormComponent implements OnInit {
     this.isFormChange = true;
     let systemProfileSetup: SystemProfileSetup = this.systemProfileService.getProfileSetupFromForm(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let dayTypeIndex: number = compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
+    compressedAirAssessment.compressedAirDayTypes[dayTypeIndex].profileDataType = systemProfileSetup.profileDataType;
     compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
@@ -55,15 +57,21 @@ export class ProfileSetupFormComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  enableDisableForm(){
-    if(this.profileTab != 'setup'){
+  enableDisableForm() {
+    if (this.profileTab != 'setup') {
       this.form.controls.profileDataType.disable();
       this.form.controls.dataInterval.disable();
-    }else{
+    } else {
       this.form.controls.profileDataType.enable();
       this.form.controls.dataInterval.enable();
     }
+  }
 
+  changeDayType() {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let selectedDayType: CompressedAirDayType = compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.form.controls.dayTypeId.value });
+    this.form.controls.profileDataType.patchValue(selectedDayType.profileDataType);
+    this.save();
   }
 
 }

@@ -360,10 +360,10 @@ export class AssessmentService {
       compressorInventoryItems: new Array(),
       systemProfile: {
         systemProfileSetup: {
-          dayTypeId: initDayTypeId,
+          dayTypeId: undefined,
           numberOfHours: 24,
           dataInterval: 1,
-          profileDataType: "percentCapacity",
+          profileDataType: undefined,
         },
         compressorOrdering: new Array(),
         profileSummary: new Array()
@@ -371,7 +371,8 @@ export class AssessmentService {
       compressedAirDayTypes: [{
         dayTypeId: initDayTypeId,
         name: 'Standard Day Type',
-        numberOfDays: 365
+        numberOfDays: 365,
+        profileDataType: "percentCapacity"
       }]
     }
   }
