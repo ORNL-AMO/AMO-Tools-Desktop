@@ -1,0 +1,43 @@
+<div class="pt-2 d-flex flex-column help-info">
+
+    <!-- Blowoff Help -->
+    <div class="my-2" *ngIf="focusedField == 'blowoffDischargePressure'">
+        <h6>
+            Discharge Pressure
+            <br>
+            <small class="text-muted">
+                ** Ask Mark / Kristina **
+                The preassure at the compressor's no load point
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'blowoffAirflow'">
+        <h6>
+            Air Flow
+            <br>
+            <small class="text-muted">
+                ** ask **
+                The air flow at no load.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'blowoffPower'">
+        <h6>
+            Power
+            <br>
+            <small class="text-muted">
+                **ask**
+                Power measured when a compressor is unloaded and completely blown down. For compressors with on-off
+                control, this value is zero.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+
+</div>

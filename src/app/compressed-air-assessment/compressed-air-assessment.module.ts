@@ -57,6 +57,17 @@ import { HelpPanelComponent } from './results-panel/help-panel/help-panel.compon
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
+import { NameplateDataHelpComponent } from './results-panel/help-panel/inventory-help/nameplate-data-help/nameplate-data-help.component';
+import { ControlDataHelpComponent } from './results-panel/help-panel/inventory-help/control-data-help/control-data-help.component';
+import { InletConditionsHelpComponent } from './results-panel/help-panel/inventory-help/inlet-conditions-help/inlet-conditions-help.component';
+import { DesignDetailsHelpComponent } from './results-panel/help-panel/inventory-help/design-details-help/design-details-help.component';
+import { CentrifugalSpecificsHelpComponent } from './results-panel/help-panel/inventory-help/centrifugal-specifics-help/centrifugal-specifics-help.component';
+import { PerformancePointsHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/performance-points-help.component';
+import { NoLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/no-load-help/no-load-help.component';
+import { UnloadPointHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/unload-point-help/unload-point-help.component';
+import { BlowoffHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/blowoff-help/blowoff-help.component';
+import { FullLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/full-load-help/full-load-help.component';
+import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +109,18 @@ import { InventoryHelpComponent } from './results-panel/help-panel/inventory-hel
     HelpPanelComponent,
     SystemBasicsHelpComponent,
     SystemInformationHelpComponent,
-    InventoryHelpComponent
+    InventoryHelpComponent,
+    NameplateDataHelpComponent,
+    ControlDataHelpComponent,
+    InletConditionsHelpComponent,
+    DesignDetailsHelpComponent,
+    CentrifugalSpecificsHelpComponent,
+    PerformancePointsHelpComponent,
+    NoLoadHelpComponent,
+    UnloadPointHelpComponent,
+    BlowoffHelpComponent,
+    FullLoadHelpComponent,
+    MaxFullFlowHelpComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,81 @@
+<div class="pt-2 d-flex flex-column help-info">
+
+    <!-- cut-in -->
+    <div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '(cut-in)'">
+        <h6>
+            Discharge Pressure
+            <br>
+            <small class="text-muted">
+                cut-in
+                <!-- ask mark / kristina -->
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'fullLoadAirflow' && fullLoadLabel == '(cut-in)'">
+        <h6>
+            Air Flow
+            <br>
+            <small class="text-muted">
+                cut-in
+                <!-- ask mark / kristina -->
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'fullLoadPower' && fullLoadLabel == '(cut-in)'">
+        <h6>
+            Power
+            <br>
+            <small class="text-muted">
+                cut-in
+                Power required when a compressor is at capacity (maximum airflow) and full load pressure; it is the
+                maximum power experienced by the compressor. Full load discharge pressure must be achieved before full
+                load power can be measured.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+     <!-- no label -->
+     <div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == ''">
+        <h6>
+            Discharge Pressure
+            <br>
+            <small class="text-muted">
+                no label
+                <!-- ask mark / kristina -->
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'fullLoadAirflow' && fullLoadLabel == ''">
+        <h6>
+            Air Flow
+            <br>
+            <small class="text-muted">
+                no label
+                <!-- ask mark / kristina -->
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'fullLoadPower' && fullLoadLabel == ''">
+        <h6>
+            Power
+            <br>
+            <small class="text-muted">
+                no label
+                Power required when a compressor is at capacity (maximum airflow) and full load pressure; it is the
+                maximum power experienced by the compressor. Full load discharge pressure must be achieved before full
+                load power can be measured.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

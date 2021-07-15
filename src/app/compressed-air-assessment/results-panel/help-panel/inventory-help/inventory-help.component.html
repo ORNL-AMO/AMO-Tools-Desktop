@@ -1,56 +1,37 @@
 <div class="pt-2 d-flex flex-column help-info">
     <h5>
         Inventory Help
-        
+
     </h5>
-    <hr class="my-1 hr-spacer">
+    <hr class="my-1 hr-spacer">  
 
-
-    <div class="my-2" *ngIf="focusedField == 'nominalPressure'">
+    <div class="my-2" *ngIf="focusedField == 'compresorName'">
         <h6>
-            Nominal Pressure
+            Compressor Name
             <br>
             <small class="text-muted">
-                The user-assumed average compressed air system operating pressure
+                The identifier for the compressor
                 <hr>
             </small>
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'systemElevation'">
+    <div class="my-2" *ngIf="focusedField == 'compresorDescription'">
         <h6>
-            System Elevation
+            Compressor Description
             <br>
             <small class="text-muted">
-                The height above mean sea level at which the compressed air system is located
+                Give a short description about the compresor
                 <hr>
             </small>
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'totalAirStorage'">
-        <h6>
-            Total Air Storage
-            <br>
-            <small class="text-muted">
-                The volume of air that the entire compressed air system can store, including receivers and distribution
-                pipes.
-                <hr>
-            </small>
-        </h6>
-    </div>
-
-    <div class="my-2" *ngIf="focusedField == 'isSequencerUsed'">
-        <h6>
-            Is a target pressure sequencer used?
-            <br>
-            <small class="text-muted">
-                Mark this box if the system air compressors are controlled by an automatic sequencer. A sequencer is a
-                device used to bring air compressors on line according to a programmed schedule
-                <hr>
-            </small>
-        </h6>
-    </div>
-
+    <app-nameplate-data-help></app-nameplate-data-help>
+    <app-control-data-help></app-control-data-help>
+    <app-inlet-conditions-help></app-inlet-conditions-help>
+    <app-design-details-help></app-design-details-help>
+    <app-centrifugal-specifics-help></app-centrifugal-specifics-help>
+    <app-performance-points-help></app-performance-points-help>
 
 </div>
