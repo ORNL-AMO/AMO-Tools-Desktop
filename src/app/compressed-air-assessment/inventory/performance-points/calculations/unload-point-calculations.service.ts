@@ -32,7 +32,7 @@ export class UnloadPointCalculationsService {
         //centrifugal
         return this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
       } else {
-        return this.calculateUnloadPointAirFlow(selectedCompressor.performancePoints.unloadPoint.dischargePressure, selectedCompressor.compressorControls.unloadPointCapacity);
+        return this.calculateUnloadPointAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.compressorControls.unloadPointCapacity);
       }
 
     } else {

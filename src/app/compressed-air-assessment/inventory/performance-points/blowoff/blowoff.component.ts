@@ -15,7 +15,6 @@ import { PerformancePointCalculationsService } from '../calculations/performance
 export class BlowoffComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
-  isFormChange: boolean = false;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -29,11 +28,7 @@ export class BlowoffComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.checkShowCalc();
-        if (this.isFormChange == false) {
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.blowoff);
-        } else {
-          this.isFormChange = false;
-        }
+        this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.blowoff);
       }
     });
   }
@@ -50,7 +45,6 @@ export class BlowoffComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }

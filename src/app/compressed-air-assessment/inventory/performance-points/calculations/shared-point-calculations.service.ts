@@ -11,8 +11,8 @@ export class SharedPointCalculationsService {
     return Number(maxFullFlowAirFlow.toFixed(3));
   }
 
-  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number): number {
-    let atmosphericPressure: number = 14.7;
+  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number, atmosphericPressure: number): number {
+    // let atmosphericPressure: number = 14.7;
     let polytropicExponent: number = (1.4 - 1) / 1.4;
     let p1: number;
     let p2: number;

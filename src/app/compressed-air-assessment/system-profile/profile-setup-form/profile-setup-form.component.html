@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="dayType">Select Day Type</label>
                 <select class="form-control" id="dayTypeId" formControlName="dayTypeId" (focus)="focusField('dayType')"
-                    (change)="save()">
+                    (change)="changeDayType()">
                     <option *ngFor="let dayType of dayTypes" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
                 </select>
             </div>

@@ -3,10 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { NoLoadCalculationsService } from '../calculations/no-load-calculations.service';
-import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-no-load',
@@ -16,7 +14,6 @@ import { PerformancePointCalculationsService } from '../calculations/performance
 export class NoLoadComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
-  isFormChange: boolean = false;
   noLoadLabel: string;
 
   showPressureCalc: boolean;
@@ -31,13 +28,8 @@ export class NoLoadComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.checkShowCalc();
-        if (this.isFormChange == false) {
-          this.setNoLoadLabel(val.compressorControls.controlType);
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.noLoad);
-          // this.form.controls.airflow.disable();
-        } else {
-          this.isFormChange = false;
-        }
+        this.setNoLoadLabel(val.compressorControls.controlType);
+        this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.noLoad);
       }
     });
   }
@@ -53,7 +45,6 @@ export class NoLoadComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }

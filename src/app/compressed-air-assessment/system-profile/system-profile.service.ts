@@ -3,23 +3,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import * as _ from 'lodash';
-import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
 export class SystemProfileService {
 
 
-  // selectedProfileSummary: BehaviorSubject<Array<ProfileSummary>>;
-  constructor(private formBuilder: FormBuilder, private compressedAirCalculationService: CompressedAirCalculationService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService) {
-    // this.selectedProfileSummary = new BehaviorSubject<Array<ProfileSummary>>([]);
+  constructor(private formBuilder: FormBuilder, private compressedAirCalculationService: CompressedAirCalculationService) {
   }
 
   getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): FormGroup {
     let dayTypeExists: CompressedAirDayType = dayTypes.find(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
     if (!dayTypeExists && dayTypes.length != 0) {
       systemProfileSetup.dayTypeId = dayTypes[0].dayTypeId;
+      systemProfileSetup.profileDataType = dayTypes[0].profileDataType;
     }
     let form: FormGroup = this.formBuilder.group({
       dayTypeId: [systemProfileSetup.dayTypeId],

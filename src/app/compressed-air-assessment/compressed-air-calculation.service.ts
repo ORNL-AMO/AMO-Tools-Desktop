@@ -91,7 +91,7 @@ export class CompressedAirCalculationService {
   // 1 = PercentageCapacity,
   // 2 = PowerMeasured,
   // 3 = CapacityMeasured,
-  // 4 = PowerFactor
+  // 4 = PowerFactor (Volt amps and powerfactor)
 
   compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorCalcResult {
     // let inputData: CentrifugalBlowOffInput = this.getCentrifugalBlowOffInput(compressor, computeFrom, computeFromVal)
@@ -137,9 +137,14 @@ export class CompressedAirCalculationService {
   getCentrifugalInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
+    if(computeFrom == 0 || computeFrom == 1){
+      computeFromVal = computeFromVal / 100;
+    }
+
+
     return {
       computeFrom: computeFrom,
-      computeFromVal: computeFromVal / 100,
+      computeFromVal: computeFromVal,
       computeFromPFVoltage: 0,
       computeFromPFAmps: 0,
 
@@ -173,19 +178,17 @@ export class CompressedAirCalculationService {
   }
 
   getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorsCalcInput {
-    //TODO: double check input mapping
-    //TODO: figure out computeFrom meaning...
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
     let lubricantTypeEnumValue: number = this.getLubricantTypeEnumVal(compressor);
-    //TODO: number should come from DB
-    // let ratedDischargePressure: number = 0;
-    // let ratedInletPressure: number = 0;
+
+    if(computeFrom == 0 || computeFrom == 1){
+      computeFromVal = computeFromVal / 100;
+    }
     return {
-      //TODO: Figure out compute stuff
       computeFrom: computeFrom,
-      computeFromVal: computeFromVal / 100,
+      computeFromVal: computeFromVal,
       computeFromPFVoltage: 0,
       computeFromPFAmps: 0,
 
@@ -198,12 +201,6 @@ export class CompressedAirCalculationService {
       dischargePsiFullLoad: compressor.performancePoints.fullLoad.dischargePressure,
       fullLoadPower: compressor.performancePoints.fullLoad.power,
       fullLoadDischargePressure: compressor.performancePoints.fullLoad.dischargePressure,
-
-      // capacityAtMinFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadCapacity,
-      // capacityAtMaxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadCapacity,
-      // minFullLoadPressure: compressor.centrifugalSpecifics.minFullLoadPressure,
-      // maxFullLoadPressure: compressor.centrifugalSpecifics.maxFullLoadPressure,
-
       powerAtNoLoad: compressor.performancePoints.noLoad.power,
       capacityAtMaxFullFlow: compressor.performancePoints.maxFullFlow.airflow,
       powerAtUnload: compressor.performancePoints.unloadPoint.power,
@@ -229,15 +226,10 @@ export class CompressedAirCalculationService {
 
       //TODO: Sort out correct pressure mapping
       atmosphericPsi: compressor.inletConditions.atmosphericPressure,
-      inletPressure: compressor.inletConditions.atmosphericPressure,
       atmosphericPressure: compressor.inletConditions.atmosphericPressure,
 
-      //centrifugal
-      // powerAtBlowOff: compressor.performancePoints.blowoff.power,
-      // surgeFlow: compressor.performancePoints.blowoff.airflow,
-      //TODO: percentageBlowOff
-      // percentageBlowOff: 100 / 100,
-      // maxPressure: compressor.performancePoints.maxFullFlow.dischargePressure,
+      //design details inlet pressure
+      inletPressure: compressor.designDetails.inputPressure,
 
       //Modulation w/ unload
       powerAtNolLoad: compressor.performancePoints.noLoad.power,
@@ -245,7 +237,9 @@ export class CompressedAirCalculationService {
       //TODO: VFD, Multi step unloading
 
       //Start stop
-      powerMaxPercentage: 1,
+      // max power / full load power
+      powerMaxPercentage: (compressor.performancePoints.maxFullFlow.power / compressor.performancePoints.fullLoad.power),
+
       powerAtFullLoadPercentage: 1
 
     }
