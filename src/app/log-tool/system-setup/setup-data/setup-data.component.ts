@@ -84,7 +84,6 @@ export class SetupDataComponent implements OnInit {
   setExcelImport($event) {
     this.fileReference = $event.target.files[0];
     this.importExcel();
-    console.log("Here");
   }
 
   importFile() {
