@@ -55,6 +55,8 @@ import { SharedPointCalculationsService } from './inventory/performance-points/c
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-bas
     InventoryPerformanceProfileComponent,
     DayTypeFilterPipe,
     HelpPanelComponent,
-    SystemBasicsHelpComponent
+    SystemBasicsHelpComponent,
+    SystemInformationHelpComponent,
+    InventoryHelpComponent
   ],
   imports: [
     CommonModule,
