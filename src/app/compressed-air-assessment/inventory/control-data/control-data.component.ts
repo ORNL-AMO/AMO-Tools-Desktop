@@ -60,10 +60,10 @@ export class ControlDataComponent implements OnInit {
   changeControlType() {
     this.form = this.inventoryService.setCompressorControlValidators(this.form);
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6) {
+      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 5) {
       this.form.controls.numberOfUnloadSteps.patchValue(2);
     }
-    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7) {
+    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7 || this.form.controls.controlType.value == 5) {
       this.form.controls.unloadPointCapacity.patchValue(100);
     }
     this.toggleDisableControls();
@@ -72,14 +72,14 @@ export class ControlDataComponent implements OnInit {
   }
 
   toggleDisableControls() {
-    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7) {
+    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7 || this.form.controls.controlType.value == 5) {
       this.form.controls.unloadPointCapacity.disable();
     } else {
       this.form.controls.unloadPointCapacity.enable();
     }
 
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4) {
+      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 5) {
       this.form.controls.numberOfUnloadSteps.disable();
     } else {
       this.form.controls.numberOfUnloadSteps.enable();

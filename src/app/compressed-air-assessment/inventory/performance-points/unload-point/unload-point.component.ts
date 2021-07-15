@@ -14,7 +14,6 @@ import { UnloadPointCalculationsService } from '../calculations/unload-point-cal
 export class UnloadPointComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
-  isFormChange: boolean = false;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -28,11 +27,7 @@ export class UnloadPointComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.checkShowCalc();
-        if (this.isFormChange == false) {
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.unloadPoint);
-        } else {
-          this.isFormChange = false;
-        }
+        this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.unloadPoint);
       }
     });
   }
@@ -48,7 +43,6 @@ export class UnloadPointComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }

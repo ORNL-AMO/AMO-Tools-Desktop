@@ -17,7 +17,6 @@ export class FullLoadComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
   form: FormGroup;
-  isFormChange: boolean = false;
   fullLoadLabel: string;
 
   showPressureCalc: boolean;
@@ -32,12 +31,8 @@ export class FullLoadComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.checkShowCalc();
-        if (this.isFormChange == false) {
-          this.setFullLoadLabel(val.compressorControls.controlType);
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.fullLoad);
-        } else {
-          this.isFormChange = false;
-        }
+        this.setFullLoadLabel(val.compressorControls.controlType);
+        this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.fullLoad);
       }
     });
   }
@@ -54,7 +49,6 @@ export class FullLoadComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }
