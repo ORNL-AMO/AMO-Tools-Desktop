@@ -111,6 +111,7 @@ export interface Modification {
   exploreOppsShowSystemData?: SavingsOpportunity;
   exploreOppsShowFlowRate?: SavingsOpportunity;
   exploreOppsShowHead?: SavingsOpportunity;
+  whatIfScenario?: boolean;
 }
 
 

@@ -3,13 +3,16 @@
     <ul class="list-group">
       <li class="list-group-item title-item">
         <div class="row">
-          <div class="col-6 border-right">
+          <div class="col-4 border-right">
             <span class="bold">Name</span>
+          </div>
+          <div class="col-3 border-right">
+            <span class="bold">Compare two existing pumps or what-if scenario?</span>
           </div>
           <div class="col-1 border-right">
 
           </div>
-          <div class="col-5">
+          <div class="col-3">
             <span class="bold">Modifications</span>
           </div>
         </div>
@@ -17,7 +20,7 @@
 
       <li class="list-group-item modification-item" *ngFor="let modification of psat.modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
         <div class="row">
-          <div class="col-6 border-right">
+          <div class="col-4 border-right">
             <div *ngIf="!rename[index] && !deleteArr[index]">
               <a class="click-link small" (click)="selectModificationBadge(modification.psat, index)">{{modification.psat.name}}</a>
             </div>
@@ -45,6 +48,42 @@
               </div>
             </div>
           </div>
+          <div class="col-3 border-right text-center">
+            <div class="align-self-center small text-left">
+              <form [formGroup]="scenarioForm"  [ngClass]="{'disabled-link': asssessmentTab == 'explore-opportunities'}">
+                
+                <span [ngClass]="{'disabled-link': getBadges(modification.psat).length > 0}">
+                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
+
+                    <span *ngIf="modification.whatIfScenario">
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting" 
+                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="false">
+                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
+                      formControlName="setScenario" (input)="changeScenario('whatIf', index)" [value]="true">
+                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
+
+                    </span>
+
+                    <span *ngIf="!modification.whatIfScenario">
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting"
+                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="true">
+                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
+                        formControlName="setScenario" (input)="changeScenario('whatIf', index)"[value]="false">
+                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
+
+                    </span>
+                    
+                  </div>
+                </span>                
+              </form>
+            </div>
+          </div>
           <div class="col-1 border-right text-center">
             <div class="btn-group">
               <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
@@ -56,7 +95,7 @@
               </div>
             </div>
           </div>
-          <div class="col-5">
+          <div class="col-4">
             <div class="d-flex flex-wrap">
               <div *ngFor="let badge of getBadges(modification.psat)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
               <!-- <div *ngIf="modification.psat.inputs.optimize_calculation" class="badge badge-secondary ml-auto">Optimized</div> -->
