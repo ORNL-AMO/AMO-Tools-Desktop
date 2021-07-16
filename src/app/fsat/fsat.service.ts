@@ -171,7 +171,7 @@ export class FsatService {
   }
 
   //fsat results
-  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
+  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings, compareTwoFansAsBaseline?: boolean): FsatOutput {
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
@@ -205,7 +205,7 @@ export class FsatService {
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (isBaseline) {
+      if (isBaseline || compareTwoFansAsBaseline) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);

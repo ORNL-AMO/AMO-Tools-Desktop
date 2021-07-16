@@ -362,7 +362,8 @@ export class PsatComponent implements OnInit {
         pumpFluidNotes: '',
         systemBasicsNotes: ''
       },
-      exploreOpportunities: this.currentTab == 'explore-opportunities'
+      exploreOpportunities: this.currentTab == 'explore-opportunities',
+      whatIfScenario: true
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;

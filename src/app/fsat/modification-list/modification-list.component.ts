@@ -6,7 +6,6 @@ import { FsatService } from '../fsat.service';
 import * as _ from 'lodash';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
-import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-modification-list',
@@ -31,10 +30,7 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   assessmentTab: string;
   assessmentTabSubscription: Subscription;
-  scenarioForm: FormGroup = new FormGroup({
-    setScenario: new FormControl(true)
-  });
-
+  
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService, private fsatService: FsatService) { }
 
   ngOnInit() {

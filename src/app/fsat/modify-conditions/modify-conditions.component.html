@@ -29,7 +29,7 @@
 
 
     <!-- Modifications Start -->
-    <!-- What If Scenario -->
+    <!-- Compare Two Fans as baseline -->
     <div *ngIf="modificationExists && assessment.fsat.modifications[modificationIndex].whatIfScenario == false"
       class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
@@ -40,27 +40,13 @@
       </div>
 
       <!-- Forms -->
-
-      <!-- <app-fsat-fluid *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="baselineSelected"
-        [baseGasDensity]="assessment.fsat.baseGasDensity" [modificationIndex]="modificationIndex"
-        (emitSave)="saveBaselineGasDensity($event)" [baseline]="true" [fsat]="assessment.fsat"></app-fsat-fluid>
-      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="baselineSelected"
-        [fanSetup]="assessment.fsat.fanSetup" [modificationIndex]="modificationIndex"
-        (emitSave)="saveBaselineFanSetup($event)" [baseline]="true" [fsat]="assessment.fsat"></app-fan-setup>
-      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected"
-        [fanMotor]="assessment.fsat.fanMotor" [modificationIndex]="modificationIndex" [baseline]="true"
-        (emitSave)="saveBaselineFanMotor($event)" [fieldData]="assessment.fsat.fieldData" [fsat]="assessment.fsat">
-      </app-fan-motor> -->
-
-
-      <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected"
         [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
         [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)" [compareTwo]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fsat-fluid>
       <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected"
         [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
-        [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)" [compareTwo]="true"
+        [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)" [compareTwoFansAsBaseline]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-setup>
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"
         [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
@@ -70,19 +56,11 @@
       </app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"
         [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
-        [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)" [compareTwo]="true"
+        [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)" [compareTwoFansAsBaseline]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-field-data>
-
-      <!-- <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"
-        [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData" [modificationIndex]="modificationIndex"
-        (emitSave)="saveBaselineFieldData($event)" [baseline]="true" [fsat]="assessment.fsat"></app-fan-field-data> -->
-
-      <!-- <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"
-        [selected]="modifiedSelected" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"
-        [modificationIndex]="modificationIndex" (emitSave)="saveModExtra($event)"></app-modify-field-data-form> -->
     </div>
 
-    <!-- Compare Two Exsisting -->
+    <!-- What If Scenario -->
     <div *ngIf="modificationExists && assessment.fsat.modifications[modificationIndex].whatIfScenario == true"
       class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
