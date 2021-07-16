@@ -7,7 +7,7 @@ export class SharedPointCalculationsService {
 
   calculateAirFlow(capacity: number, pointPressure: number, potentialPressure: number, atmosphericPressure: number): number {
     let maxFullFlowAirFlow: number = (0.000258 * Math.pow(atmosphericPressure, 3) - 0.0116 * Math.pow(atmosphericPressure, 2) + .176 * atmosphericPressure + 0.09992) * capacity * (1 - 0.00075 * (pointPressure - potentialPressure));
-    return Number(maxFullFlowAirFlow.toFixed(3));
+    return Number(maxFullFlowAirFlow.toFixed(0));
   }
 
   calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number, atmosphericPressure: number): number {
@@ -24,6 +24,6 @@ export class SharedPointCalculationsService {
     }
     let p3: number = Math.pow(((ratedFullLoadOperatingPressure + inputPressure) / inputPressure), polytropicExponent) - 1;
     let maxFullFlowPower: number = p1 * (Math.pow(p2, polytropicExponent) - 1) / p3 * TotPackageInputPower;
-    return Number(maxFullFlowPower.toFixed(3));
+    return Number(maxFullFlowPower.toFixed(1));
   }
 }

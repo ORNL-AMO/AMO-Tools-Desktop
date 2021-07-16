@@ -68,7 +68,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       var layout = {
         barmode: 'stack',
         title: {
-          text: 'System Air Flow',
+          text: 'System Airflow',
           font: {
             size: 18
           },
