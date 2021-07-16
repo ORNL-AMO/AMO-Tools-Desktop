@@ -27,7 +27,7 @@ export class MaxFullFlowCalculationsService {
     if (isDefault) {
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        return this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure);
+        return this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.inletConditions.atmosphericPressure);
       } else {
         //centrifugal
         return selectedCompressor.performancePoints.fullLoad.airflow;
