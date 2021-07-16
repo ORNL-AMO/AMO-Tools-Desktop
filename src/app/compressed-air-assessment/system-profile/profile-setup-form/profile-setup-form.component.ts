@@ -60,10 +60,11 @@ export class ProfileSetupFormComponent implements OnInit {
   enableDisableForm() {
     if (this.profileTab != 'setup') {
       this.form.controls.profileDataType.disable();
+      this.form.controls.dataInterval.disable();
     } else {
       this.form.controls.profileDataType.enable();
+      this.form.controls.dataInterval.enable();
     }
-    this.form.controls.dataInterval.disable();
   }
 
   changeDayType() {
