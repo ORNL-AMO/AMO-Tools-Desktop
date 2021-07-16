@@ -39,14 +39,15 @@
         </h6>
     </div>
 
-     <!-- no label -->
-     <div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == ''">
+    <!-- no label -->
+    <div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == ''">
         <h6>
             Discharge Pressure
             <br>
             <small class="text-muted">
-                no label
-                <!-- ask mark / kristina -->
+                **ask** <br>
+                The pressure at which the air compressor begins to deliver air; at this point, the compressor may reload
+                or turn on, and is delivering full flow.
                 <hr>
             </small>
         </h6>
@@ -69,7 +70,7 @@
             Power
             <br>
             <small class="text-muted">
-                no label
+                **ask** <br>
                 Power required when a compressor is at capacity (maximum airflow) and full load pressure; it is the
                 maximum power experienced by the compressor. Full load discharge pressure must be achieved before full
                 load power can be measured.
