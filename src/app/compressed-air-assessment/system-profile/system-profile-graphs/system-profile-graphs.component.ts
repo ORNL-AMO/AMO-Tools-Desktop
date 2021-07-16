@@ -66,6 +66,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
+        showlegend: true,
         barmode: 'stack',
         title: {
           text: 'System Airflow',
@@ -139,6 +140,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
+        showlegend: true,
         barmode: 'stack',
         title: {
           text: 'System Power',
@@ -208,6 +210,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
+        showlegend: true,
         barmode: 'stack',
         title: {
           text: 'System Capacity',
