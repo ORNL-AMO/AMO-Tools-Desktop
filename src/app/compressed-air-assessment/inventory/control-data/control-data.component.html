@@ -1,5 +1,8 @@
-<label class="group-label">Controls</label>
-<form [formGroup]="form">
+<label class="group-label" (click)="toggleCollapse()">
+    <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
+    Controls
+</label>
+<form [formGroup]="form" *ngIf="!contentCollapsed">
     <!-- controlType -->
     <div class="form-group">
         <label for="controlType">Control Type</label>

@@ -1,5 +1,8 @@
-<label class="group-label">Inlet Conditions</label>
-<form [formGroup]="form">
+<label class="group-label" (click)="toggleCollapse()">
+    <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
+    Inlet Conditions
+</label>
+<form [formGroup]="form" *ngIf="!contentCollapsed">
     <!-- atmosphericPressure -->
     <div class="form-group">
         <label for="atmosphericPressure">Atmospheric Pressure</label>

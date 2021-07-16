@@ -9,6 +9,10 @@ export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
+  collapseControls: boolean = true;
+  collapseDesignDetails: boolean = true;
+  collapseInletConditions: boolean = true;
+  collapsePerformancePoints: boolean = true;
   constructor(private formBuilder: FormBuilder) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
