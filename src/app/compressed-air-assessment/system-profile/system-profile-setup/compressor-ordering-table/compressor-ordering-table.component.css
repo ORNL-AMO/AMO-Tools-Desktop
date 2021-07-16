@@ -19,5 +19,5 @@ td, th{
 
   select.form-control{
     width: 100%;
-    min-width: 60px;
+    min-width: 50px;
   }

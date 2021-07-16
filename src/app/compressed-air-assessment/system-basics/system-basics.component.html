@@ -49,7 +49,7 @@
       <div class="input-group">
         <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
           formControlName="demandCost" (change)="saveSystemBasics()" (focus)="focusField('demandCost')">
-        <span class="units input-group-addon">$/kWh</span>
+        <span class="units input-group-addon">$/kW-month</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="systemBasicsForm.controls.demandCost.invalid && !systemBasicsForm.controls.demandCost.pristine">
