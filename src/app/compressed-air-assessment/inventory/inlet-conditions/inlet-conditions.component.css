@@ -1,0 +1,4 @@
+.group-label:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}
