@@ -40,6 +40,7 @@ export const MockPsat: Assessment = {
         "modifications": [{
             "psat": {
                 "name": "New Pump and Motor",
+                "whatIfScenario": true,
                 "inputs": {
                     "pump_style": 6,
                     "pump_specified": 87.52,
@@ -76,11 +77,11 @@ export const MockPsat: Assessment = {
                 "motorNotes": "",
                 "pumpFluidNotes": "",
                 "systemBasicsNotes": ""
-            },
-            "whatIfScenario": true
+            }            
         }, {
             "psat": {
                 "name": "VFD reduce speed to 90%",
+                "whatIfScenario": true,
                 "inputs": {
                     "pump_style": 11,
                     "pump_specified": 67,
@@ -119,8 +120,7 @@ export const MockPsat: Assessment = {
                 "pumpFluidNotes": "Using Manuf.'s pump curve - Efficiency at 1800 rpm, 2237 gpm, 330 ft is ~ 67%",
                 "systemBasicsNotes": ""
             },
-            "exploreOpportunities": true,
-            "whatIfScenario": true
+            "exploreOpportunities": true
         }],
         "name": "Baseline",
         "setupDone": true

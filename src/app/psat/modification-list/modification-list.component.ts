@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
@@ -48,19 +48,32 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
   }
 
-  changeScenario(choice: string, index: number) {
-    if (index == this.modificationIndex) {
-      if (choice == 'twoExisting') {
-        this.psat.modifications[this.modificationIndex].whatIfScenario = false;
-        this.save.emit(true);
-        this.selectModification(this.modificationIndex, true);
-      } else if (choice == 'whatIf') {
-        this.psat.modifications[this.modificationIndex].whatIfScenario = true;
-        this.save.emit(true);
-        this.selectModification(this.modificationIndex, true);
-      }
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.psat){
+
     }
   }
+
+  saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
+    //we should be able to bind directly to the ngModel instead of doing this, but this will do
+    this.psat.modifications[modIndex].psat.whatIfScenario = isWhatIfScenario;
+    this.save.emit(true);
+    this.selectModification(modIndex, true);
+  }
+
+  // changeScenario(choice: string, index: number) {
+  //   if (index == this.modificationIndex) {
+  //     if (choice == 'twoExisting') {
+  //       this.psat.modifications[this.modificationIndex].psat.whatIfScenario = false;
+  //       this.save.emit(true);
+  //       this.selectModification(this.modificationIndex, true);
+  //     } else if (choice == 'whatIf') {
+  //       this.psat.modifications[this.modificationIndex].psat.whatIfScenario = true;
+  //       this.save.emit(true);
+  //       this.selectModification(this.modificationIndex, true);
+  //     }
+  //   }
+  // }
 
   initDropdown() {
     this.dropdown = Array<boolean>(this.psat.modifications.length);
@@ -156,14 +169,14 @@ export class ModificationListComponent implements OnInit {
     let tmpModification: Modification = {
       psat: {
         name: this.newModificationName,
+        whatIfScenario: true,
       },
       notes: {
         fieldDataNotes: '',
         motorNotes: '',
         pumpFluidNotes: '',
         systemBasicsNotes: ''
-      },
-      whatIfScenario: true,
+      },      
     }
     if (this.asssessmentTab == 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
@@ -171,7 +184,7 @@ export class ModificationListComponent implements OnInit {
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(psat.inputs)));
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    tmpModification.whatIfScenario = true;
+    tmpModification.psat.whatIfScenario = true;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);

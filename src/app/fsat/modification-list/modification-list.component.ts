@@ -45,7 +45,7 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
   }
 
-  ngOnChnages(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat){
     
     }

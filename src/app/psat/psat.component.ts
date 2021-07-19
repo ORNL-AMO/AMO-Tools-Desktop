@@ -355,6 +355,7 @@ export class PsatComponent implements OnInit {
     let tmpModification: Modification = {
       psat: {
         name: modName,
+        whatIfScenario: true
       },
       notes: {
         fieldDataNotes: '',
@@ -362,8 +363,7 @@ export class PsatComponent implements OnInit {
         pumpFluidNotes: '',
         systemBasicsNotes: ''
       },
-      exploreOpportunities: this.currentTab == 'explore-opportunities',
-      whatIfScenario: true
+      exploreOpportunities: this.currentTab == 'explore-opportunities'
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;

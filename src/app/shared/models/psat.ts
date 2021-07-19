@@ -13,6 +13,7 @@ export interface PSAT {
   operatingHours?: OperatingHours;
   valid?: PsatValid;
   existingDataUnits?: string;
+  whatIfScenario?: boolean;
 }
 
 export interface PsatValid {
@@ -111,7 +112,6 @@ export interface Modification {
   exploreOppsShowSystemData?: SavingsOpportunity;
   exploreOppsShowFlowRate?: SavingsOpportunity;
   exploreOppsShowHead?: SavingsOpportunity;
-  whatIfScenario?: boolean;
 }
 
 
