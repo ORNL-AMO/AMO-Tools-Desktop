@@ -5,6 +5,7 @@ export interface LogToolField {
     alias: string,
     useField: boolean,
     isDateField: boolean,
+    isTimeField?: boolean,
     unit: string,
     invalidField: boolean,
     csvId: string,
@@ -71,7 +72,9 @@ export interface IndividualDataFromCsv {
     endDate?: string,
     dataPointsPerColumn?: number,
     hasDateField: boolean,
-    dateField?: LogToolField
+    hasTimeField?: boolean,
+    dateField?: LogToolField,
+    timeField?: LogToolField,
 }
 
 export interface HourlyAverage {
