@@ -205,15 +205,16 @@ export class FanFieldDataComponent implements OnInit {
       specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
     };
 
-    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput);
+    //change here
+    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, this.baseline, fsatOutput, this.compareTwoFansAsBaseline);
     this.fieldDataForm.patchValue({
       compressibilityFactor: Number(compressibilityFactor.toFixed(3))
     });
   }
 
-  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
+  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput, compareAsBaseline: boolean) {
     let compressibilityFactor: number;
-    if (isBaseline) {
+    if (isBaseline || compareAsBaseline) {
       compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
     } else {
       let currentMoverShaftPower;

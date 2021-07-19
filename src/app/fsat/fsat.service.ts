@@ -171,7 +171,7 @@ export class FsatService {
   }
 
   //fsat results
-  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings, compareTwoFansAsBaseline?: boolean): FsatOutput {
+  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
@@ -205,11 +205,13 @@ export class FsatService {
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (isBaseline || compareTwoFansAsBaseline) {
+      if (isBaseline || !fsat.whatIfScenario) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
       } else {
+        console.log('calculating as modified results', fsat.whatIfScenario);
+        console.log('modification', fsat);
         input.fanType = fsat.fanSetup.fanType;
         results = this.fanResultsModified(input);
       }
@@ -355,7 +357,7 @@ export class FsatService {
     tmpModification.fsat.fanSetup.fanType = 12;
     tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
-    tmpModification.whatIfScenario = true;
+    tmpModification.fsat.whatIfScenario = true;
     return tmpModification;
   }
 }

@@ -31,7 +31,7 @@ export class FsatFluidComponent implements OnInit {
   @Input()
   baseline: boolean;
   @Input()
-  compareTwo: boolean;
+  compareTwoFansAsBaseline: boolean;
   @Input()
   fsat: FSAT;
 

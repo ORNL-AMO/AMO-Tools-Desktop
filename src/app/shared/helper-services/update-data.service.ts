@@ -63,9 +63,17 @@ export class UpdateDataService {
         if(assessment.fsat.modifications){
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+                mod.fsat = this.addWhatIfScenario(mod.fsat);
             });
         }
         return assessment;
+    }
+
+    addWhatIfScenario(fsat: FSAT): FSAT {
+        if(!fsat.whatIfScenario) {
+            fsat.whatIfScenario = true;
+        }
+        return fsat;
     }
 
     updateSpecificHeatRatio(fsat: FSAT): FSAT {

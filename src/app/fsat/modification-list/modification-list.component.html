@@ -50,7 +50,33 @@
               </div>
             </div>
           </div>
+
           <div class="col-3 border-right text-center">
+            <div class="align-self-center small text-left">
+              <form [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
+
+                <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
+                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
+                    <span>
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
+                      (input)="saveScenarioChange(false, index)"
+                        [(ngModel)]="modification.fsat.whatIfScenario">
+                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
+                       [(ngModel)]="modification.fsat.whatIfScenario"
+                        (input)="saveScenarioChange(true, index)">
+                      <label for="{{'whatIf_'+index}}">What If Scenario</label><br>
+                    </span>
+
+                  </div>
+                </span>
+                </form>
+            </div>
+          </div>
+
+          <!-- <div class="col-3 border-right text-center">
             <div class="align-self-center small text-left">
             
               <span [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
@@ -69,44 +95,9 @@
 
                   </div>            
                 </span>
-              </span>
-
-              
-
-              <!-- <form [formGroup]="scenarioForm"  [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
-                
-                <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
-                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
-
-                    <span *ngIf="modification.whatIfScenario">
-
-                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting" 
-                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="false">
-                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
-
-                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
-                      formControlName="setScenario" (input)="changeScenario('whatIf', index)" [value]="true">
-                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
-
-                    </span>
-
-                    <span *ngIf="!modification.whatIfScenario">
-
-                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting"
-                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="true">
-                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
-
-                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
-                        formControlName="setScenario" (input)="changeScenario('whatIf', index)"[value]="false">
-                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
-
-                    </span>
-                    
-                  </div>
-                </span>                
-              </form> -->
+              </span>              
             </div>
-          </div>
+          </div> -->
 
           <div class="col-1 border-right text-center">
             <div class="btn-group">

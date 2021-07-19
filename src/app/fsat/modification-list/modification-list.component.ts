@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FSAT, Modification } from '../../shared/models/fans';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
@@ -6,6 +6,7 @@ import { FsatService } from '../fsat.service';
 import * as _ from 'lodash';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-modification-list',
@@ -44,19 +45,32 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
   }
 
-  changeScenario(choice: string, index: number) {
-    if (index == this.modificationIndex) {
-      if (choice == 'twoExisting') {
-        this.fsat.modifications[this.modificationIndex].whatIfScenario = false;
-        this.save.emit(true);
-        this.selectModification(this.modificationIndex, true);
-      } else if (choice == 'whatIf') {
-        this.fsat.modifications[this.modificationIndex].whatIfScenario = true;
-        this.save.emit(true);
-        this.selectModification(this.modificationIndex, true);
-      }
+  ngOnChnages(changes: SimpleChanges) {
+    if (changes.fsat){
+    
     }
   }
+
+  saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
+    //we should be able to bind directly to the ngModel instead of doing this, but this will do
+    this.fsat.modifications[modIndex].fsat.whatIfScenario = isWhatIfScenario;
+    this.save.emit(true);
+    this.selectModification(modIndex, true);
+  }
+
+  // changeScenario(choice: string, index: number) {
+  //   if (index == this.modificationIndex) {
+  //     if (choice == 'twoExisting') {
+  //       this.fsat.modifications[this.modificationIndex].whatIfScenario = false;
+  //       this.save.emit(true);
+  //       this.selectModification(this.modificationIndex, true);
+  //     } else if (choice == 'whatIf') {
+  //       this.fsat.modifications[this.modificationIndex].whatIfScenario = true;
+  //       this.save.emit(true);
+  //       this.selectModification(this.modificationIndex, true);
+  //     }
+  //   }
+  // }
 
   initDropdown() {
     this.dropdown = Array<boolean>(this.fsat.modifications.length);

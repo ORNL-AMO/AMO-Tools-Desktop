@@ -19,6 +19,7 @@ export interface FSAT {
   valid?: FsatValid;
   modalFieldData?: FieldData;
   existingDataUnits?: string;
+  whatIfScenario?: boolean;
 }
 
 export interface FsatValid {
@@ -40,8 +41,7 @@ export interface Modification {
   exploreOppsShowMotorEff?: SavingsOpportunity,
   exploreOppsShowFlowRate?: SavingsOpportunity,
   exploreOppsShowReducePressure?: SavingsOpportunity,
-  exploreOppsShowOpData?: SavingsOpportunity,
-  whatIfScenario?: boolean
+  exploreOppsShowOpData?: SavingsOpportunity
 }
 
 export interface Notes {
