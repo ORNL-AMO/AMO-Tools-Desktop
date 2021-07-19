@@ -21,3 +21,16 @@ td, th{
     width: 100%;
     min-width: 50px;
   }
+
+
+  .btn.btn-sm{
+    background-color: gray;
+    color: white;
+    padding: 2px;
+    width: 100%;
+    min-width: 50px;
+  }
+
+  .btn.btn-sm.btn-active{
+    background-color: #7030a0;
+  }

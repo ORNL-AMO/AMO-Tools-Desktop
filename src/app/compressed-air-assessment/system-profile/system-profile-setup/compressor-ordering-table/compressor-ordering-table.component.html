@@ -9,20 +9,27 @@
                 <th>
                     <!-- Compressor Name -->
                 </th>
-                <th *ngFor="let interval of hourIntervals">
+                <th>
+                    FLP
+                </th>
+                <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval}}
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="isSequencerUsed">
             <tr *ngFor="let compressor of compressorOrdering; let compressorIndex = index;">
                 <td class="bold">
                     {{compressor.compressorName}}
+                </td>
+                <td>
+                    {{compressor.fullLoadPressure}}
                 </td>
                 <td *ngFor="let compressorOrder of compressor.orders; let orderIndex = index;">
                     <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
                         name="{{'order_'+compressorIndex+orderIndex}}"
                         [(ngModel)]="compressorOrdering[compressorIndex].orders[orderIndex]">
+                        <option [value]=0>Off</option>
                         <option *ngFor="let orderingOption of orderingOptions" [value]="orderingOption">
                             {{orderingOption}}
                         </option>
@@ -30,5 +37,31 @@
                 </td>
             </tr>
         </tbody>
+        <tbody *ngIf="!isSequencerUsed">
+            <tr *ngFor="let compressor of compressorOrdering; let compressorIndex = index;">
+                <td class="bold">
+                    {{compressor.compressorName}}
+                </td>
+                <td>
+                    {{compressor.fullLoadPressure}}
+                </td>
+                <td *ngFor="let compressorOrder of compressor.orders; let orderIndex = index;">
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm" *ngIf="compressorOrdering[compressorIndex].orders[orderIndex] == 0"
+                        (click)="toggleOn(compressorIndex, orderIndex)">Off</button>
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm btn-active"
+                        *ngIf="compressorOrdering[compressorIndex].orders[orderIndex] != 0"
+                        (click)="toggleOn(compressorIndex, orderIndex)">{{compressorOrdering[compressorIndex].orders[orderIndex]}}</button>
+                </td>
+            </tr>
+        </tbody>
     </table>
+</div>
+
+<div class="p-2 d-flex pull-right">
+    <a class="click-link small" (click)="resetOrdering()">Reset Ordering</a>
+</div>
+<div class="p-2 d-flex pull-right">
+    <a class="click-link small" (click)="turnAllOn()">Turn All On</a>
 </div>

@@ -124,6 +124,7 @@ export interface SystemProfileSetup {
 export interface CompressorOrderItem {
     compressorName: string,
     compressorId: string,
+    fullLoadPressure: number,
     orders: Array<number>
 }
 
