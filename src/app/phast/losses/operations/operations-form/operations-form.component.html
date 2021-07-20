@@ -56,7 +56,16 @@
 </form>
 
 
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="phast.operatingHours">
-</app-operating-hours-modal>
+<div bsModal #operatingCostsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="operatingCostsLabel"
+aria-hidden="true" [config]="{backdrop: 'static'}">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div>
+      <app-operating-costs-modal *ngIf="showOperatingCostsModal" 
+      (closeModal)="hideOperatingCostsModal($event)" (hideModal)="hideOperatingCostsModal($event)"
+        [settings]="settings"></app-operating-costs-modal>
+    </div>
+  </div>
+</div>
+</div>
+>>>>>>> Stashed changes
