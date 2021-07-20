@@ -53,7 +53,7 @@ export class UnloadPointComponent implements OnInit {
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.unloadPoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    this.updateForm(selectedCompressor.performancePoints.noLoad);
+    this.updateForm(selectedCompressor.performancePoints.unloadPoint);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
