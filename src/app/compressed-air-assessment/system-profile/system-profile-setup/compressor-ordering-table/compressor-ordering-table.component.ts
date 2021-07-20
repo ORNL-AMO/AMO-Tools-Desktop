@@ -18,15 +18,15 @@ export class CompressorOrderingTableComponent implements OnInit {
   compressorOrdering: Array<CompressorOrderItem>
   hourIntervals: Array<number>;
   isSequencerUsed: boolean;
-  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private cd: ChangeDetectorRef) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.isFormChange == false) {
         this.isSequencerUsed = val.systemInformation.isSequencerUsed;
         this.compressorOrdering = val.systemProfile.compressorOrdering;
-        this.setOrderingOptions(val.systemProfile.systemProfileSetup, val.compressorInventoryItems);
+        this.setHourIntervals(val.systemProfile.systemProfileSetup);
+        this.setOrderingOptions(val.compressorInventoryItems);
         this.orderingOptions = [0];
         let optionIndex: number = 1;
         val.compressorInventoryItems.forEach(item => {
@@ -43,13 +43,16 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  setOrderingOptions(systemProfileSetup: SystemProfileSetup, compressorInventoryItems: Array<CompressorInventoryItem>) {
+  setHourIntervals(systemProfileSetup: SystemProfileSetup) {
+    this.hourIntervals = new Array();
+    for (let index = 0; index < systemProfileSetup.numberOfHours;) {
+      this.hourIntervals.push(index)
+      index = index + systemProfileSetup.dataInterval;
+    }
+  }
+
+  setOrderingOptions(compressorInventoryItems: Array<CompressorInventoryItem>) {
     if (this.compressorOrdering.length != compressorInventoryItems.length) {
-      this.hourIntervals = new Array();
-      for (let index = 0; index < systemProfileSetup.numberOfHours;) {
-        this.hourIntervals.push(index)
-        index = index + systemProfileSetup.dataInterval;
-      }
       this.compressorOrdering = new Array();
       let itemIndex: number = 0;
       compressorInventoryItems.forEach(item => {
@@ -70,6 +73,7 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.compressorOrdering[compressorIndex].orders[orderIndex] = 0;
       }
     }
+    this.save();
   }
 
   turnAllOn() {
@@ -89,6 +93,7 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.compressorOrdering[compressorIndex].orders[orderIndex] = order;
       }
     }
+    this.save();
   }
 
 
@@ -102,10 +107,15 @@ export class CompressorOrderingTableComponent implements OnInit {
 
   toggleOn(compressorIndex: number, orderIndex: number) {
     if (this.compressorOrdering[compressorIndex].orders[orderIndex] != 0) {
-      this.updateCompressorOrdering(compressorIndex, orderIndex);
+      for(let index = orderIndex; index <= this.hourIntervals[this.hourIntervals.length-1]; index++){
+        this.updateCompressorOrdering(compressorIndex, index);
+      }
     } else {
-      this.setCompressorOrdering(compressorIndex, orderIndex)
+      for(let index = orderIndex; index <= this.hourIntervals[this.hourIntervals.length-1]; index++){
+        this.setCompressorOrdering(compressorIndex, index)
+      }
     }
+    this.save();
   }
 
   setCompressorOrdering(compressorIndex: number, orderIndex: number) {

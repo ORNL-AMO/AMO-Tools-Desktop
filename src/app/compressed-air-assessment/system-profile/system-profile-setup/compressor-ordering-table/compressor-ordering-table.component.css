@@ -31,6 +31,10 @@ td, th{
     min-width: 50px;
   }
 
+  .input-cell{
+    width: 60px;
+  }
+
   .btn.btn-sm.btn-active{
     background-color: black;
   }

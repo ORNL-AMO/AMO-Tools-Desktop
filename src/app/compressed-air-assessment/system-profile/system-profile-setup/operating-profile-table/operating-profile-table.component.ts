@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorOrderItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
@@ -26,11 +26,13 @@ export class OperatingProfileTableComponent implements OnInit {
   logToolDayTypeSummaries: Array<DayTypeSummary>;
   showSelectField: boolean = false;
   assessmentDayTypes: Array<CompressedAirDayType>
+  compressorOrdering: Array<CompressorOrderItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.isFormChange == false) {
+        this.compressorOrdering = val.systemProfile.compressorOrdering;
         this.displayLogToolLink = (val.logToolData != undefined)
         if (this.displayLogToolLink) {
           this.logToolDayTypeSummaries = val.logToolData.dayTypeSummaries;
