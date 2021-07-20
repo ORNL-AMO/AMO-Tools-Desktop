@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
-import { EqualToValidator } from '../../shared/validators/equal-to';
-import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
+import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
 
 @Injectable()
 export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
@@ -149,8 +148,14 @@ export class InventoryService {
     // control type: 2 Inlet modulation with unloading
     // control type: 3 Variable displacement with unloading
     // control type: 4 Load/unload
-    // control type: 6 Start/Stop
-    // control type: 7 Multi-step unloading
+    // control type: 5 Start/Stop
+    // control type: 6 Multi-step unloading
+
+    // Centrifugal
+    // control type: 7 Inlet Butterfly modulation with blowoff
+    // control type: 8 Inlet Butterfly modulation with unloading
+    // control type: 9 Inlet guide vane modulatio with blowoff
+    // control type: 10 Inlet guide vane modulation with unloading
     let form: FormGroup = this.formBuilder.group({
       controlType: [compressorControls.controlType, Validators.required],
       unloadPointCapacity: [compressorControls.unloadPointCapacity],
@@ -360,173 +365,6 @@ export class InventoryService {
     return false;
   }
 
-  getFullLoadPerformancePointForm(performancePoints: PerformancePoints): FormGroup {
-    let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoints, 'fullLoad');
-
-    let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoints.fullLoad.dischargePressure, [Validators.required, Validators.min(0)]],
-      isDefaultPressure: [performancePoints.fullLoad.isDefaultPressure],
-      airflow: [performancePoints.fullLoad.airflow, [Validators.required, Validators.min(0)]],
-      isDefaultAirFlow: [performancePoints.fullLoad.isDefaultAirFlow],
-      power: [performancePoints.fullLoad.power, powerValidators],
-      isDefaultPower: [performancePoints.fullLoad.isDefaultPower],
-    });
-    return form;
-  }
-
-  getNoLoadPerformancePointForm(performancePoints: PerformancePoints): FormGroup {
-    // let dischargeValidators: Array<ValidatorFn> = this.setDischargeValidators(compressor);
-    // let airflowValidators: Array<ValidatorFn> = this.setAirflowValidators(compressor);
-    // let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoints);
-
-    let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoints.fullLoad.dischargePressure, Validators.required],
-      isDefaultPressure: [performancePoints.fullLoad.isDefaultPressure],
-      airflow: [performancePoints.fullLoad.airflow, Validators.required],
-      isDefaultAirFlow: [performancePoints.fullLoad.isDefaultAirFlow],
-      power: [performancePoints.fullLoad.power, powerValidators],
-      isDefaultPower: [performancePoints.fullLoad.isDefaultPower],
-    });
-    return form;
-  }
-
-  getUnloadPerformancePointForm(performancePoints: PerformancePoints): FormGroup {
-    // let dischargeValidators: Array<ValidatorFn> = this.setDischargeValidators(compressor);
-    // let airflowValidators: Array<ValidatorFn> = this.setAirflowValidators(compressor);
-    // let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoints);
-
-    let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoints.fullLoad.dischargePressure, Validators.required],
-      isDefaultPressure: [performancePoints.fullLoad.isDefaultPressure],
-      airflow: [performancePoints.fullLoad.airflow, Validators.required],
-      isDefaultAirFlow: [performancePoints.fullLoad.isDefaultAirFlow],
-      power: [performancePoints.fullLoad.power, powerValidators],
-      isDefaultPower: [performancePoints.fullLoad.isDefaultPower],
-    });
-    return form;
-  }
-
-  getBlowoffPerformancePointForm(performancePoints: PerformancePoints): FormGroup {
-    // let dischargeValidators: Array<ValidatorFn> = this.setDischargeValidators(compressor);
-    // let airflowValidators: Array<ValidatorFn> = this.setAirflowValidators(compressor);
-    // let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoints);
-
-    let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoints.fullLoad.dischargePressure, Validators.required],
-      isDefaultPressure: [performancePoints.fullLoad.isDefaultPressure],
-      airflow: [performancePoints.fullLoad.airflow, Validators.required],
-      isDefaultAirFlow: [performancePoints.fullLoad.isDefaultAirFlow],
-      power: [performancePoints.fullLoad.power, powerValidators],
-      isDefaultPower: [performancePoints.fullLoad.isDefaultPower],
-    });
-    return form;
-  }
-
-  getMaxLoadPerformancePointForm(performancePoints: PerformancePoints): FormGroup {
-    // let dischargeValidators: Array<ValidatorFn> = this.setDischargeValidators(compressor);
-    // let airflowValidators: Array<ValidatorFn> = this.setAirflowValidators(compressor);
-    let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoints, 'maxFullFlow');
-
-    let form: FormGroup = this.formBuilder.group({
-      dischargePressure: [performancePoints.fullLoad.dischargePressure, Validators.required],
-      isDefaultPressure: [performancePoints.fullLoad.isDefaultPressure],
-      airflow: [performancePoints.fullLoad.airflow, Validators.required],
-      isDefaultAirFlow: [performancePoints.fullLoad.isDefaultAirFlow],
-      power: [performancePoints.fullLoad.power, powerValidators],
-      isDefaultPower: [performancePoints.fullLoad.isDefaultPower],
-    });
-    return form;
-  }
-
-  setPowerValidators(performancePoints: PerformancePoints, loadLevel: string) {
-    let powerValidators: Array<ValidatorFn> = [Validators.required];
-    let compressor: CompressorInventoryItem = this.selectedCompressor.getValue();
-
-    if (performancePoints[loadLevel].power) {
-      switch(loadLevel) {
-        case 'fullLoad':
-          powerValidators = [Validators.required, GreaterThanValidator.greaterThan(0)];
-          break;
-        case 'maxFullFlow':
-          if (compressor.nameplateData.compressorType == 6 && 
-            // inlet butterfly unloading OR inlet guide vane unloaading
-            compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
-            powerValidators.push(EqualToValidator.equalTo(performancePoints.fullLoad.power))
-          } else {
-            if (performancePoints.fullLoad.power) {
-              powerValidators.push(GreaterThanValidator.greaterThan(performancePoints.fullLoad.power));
-            } else {
-              powerValidators.push(GreaterThanValidator.greaterThan(0));  
-            }
-          }
-          break;
-        case 'noLoad':
-          // code block
-          break;
-        case 'unloadPoint':
-          // code block
-          break;
-        case 'blowoff':
-          // code block
-          break;
-        default:
-          // code block
-      }
-    } else {
-      powerValidators.push(Validators.min(0));
-    }
-    return powerValidators;
-  }
-
-  setDischargePressureValidators(performancePoint: PerformancePoint) {
-    let powerValidators: Array<ValidatorFn>;
-    let compressor: CompressorInventoryItem = this.selectedCompressor.getValue();
-    if (performancePoint.power) {
-      let greaterThan: ValidatorFn;
-      let min: ValidatorFn;
-      let max: ValidatorFn;
-      if (compressor.nameplateData.compressorType == 6) {
-
-      }else {
-        greaterThan = GreaterThanValidator.greaterThan(0);
-      }
-      powerValidators = [];
-    } else {
-      powerValidators = [Validators.required]
-    }
-    return powerValidators;
-  }
-
-  setAirFlowValidators(performancePoint: PerformancePoint) {
-    let powerValidators: Array<ValidatorFn>;
-    let compressor: CompressorInventoryItem = this.selectedCompressor.getValue();
-    if (performancePoint.power) {
-      let greaterThan: ValidatorFn;
-      let min: ValidatorFn;
-      let max: ValidatorFn;
-      if (compressor.nameplateData.compressorType == 6) {
-
-      }else {
-        greaterThan = GreaterThanValidator.greaterThan(0);
-      }
-      powerValidators = [];
-    } else {
-      powerValidators = [Validators.required]
-    }
-    return powerValidators;
-  }
-
-  getPerformancePointObjFromForm(form: FormGroup): PerformancePoint {
-    return {
-      dischargePressure: form.controls.dischargePressure.value,
-      isDefaultPressure: form.controls.isDefaultPressure.value,
-      airflow: form.controls.airflow.value,
-      isDefaultAirFlow: form.controls.isDefaultAirFlow.value,
-      power: form.controls.power.value,
-      isDefaultPower: form.controls.isDefaultPower.value,
-    }
-  }
-
   getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
@@ -550,7 +388,7 @@ export class InventoryService {
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.checkPerformancePointsValid(compressor);
+    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
@@ -561,104 +399,9 @@ export class InventoryService {
     }
     return true;
   }
-
-  checkPerformancePointsValid(compressor: CompressorInventoryItem): boolean {
-    let fullLoadForm: FormGroup = this.getFullLoadPerformancePointForm(compressor.performancePoints);
-    let isValid: boolean = fullLoadForm.valid;
-    let showMaxFullFlow: boolean = this.checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-    if (isValid && showMaxFullFlow) {
-      let maxFlowForm: FormGroup = this.getMaxLoadPerformancePointForm(compressor.performancePoints);
-      isValid = maxFlowForm.valid;
-    }
-    let showUnloadForm: boolean = this.checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-    if (isValid && showUnloadForm) {
-      let unloadForm: FormGroup = this.getUnloadPerformancePointForm(compressor.performancePoints);
-      isValid = unloadForm.valid;
-    }
-    let showNoLoadForm: boolean = this.checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-    if (isValid && showNoLoadForm) {
-      let noLoadForm: FormGroup = this.getNoLoadPerformancePointForm(compressor.performancePoints);
-      isValid = noLoadForm.valid;
-    }
-    let showBlowoff: boolean = this.checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-    if (isValid && showBlowoff) {
-      let blowoffForm: FormGroup = this.getBlowoffPerformancePointForm(compressor.performancePoints);
-      isValid = blowoffForm.valid;
-    }
-    return isValid;
-  }
-
-  checkShowMaxFlowPerformancePoint(compressorType: number, controlType: number): boolean {
-    if (compressorType == 6 && (controlType == 7 || controlType == 9)) {
-      return false;
-    } else if (compressorType == 1 || compressorType == 2) {
-      if (controlType == 1) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  checkShowUnloadPerformancePoint(compressorType: number, controlType: number): boolean {
-    if (compressorType == 1 || compressorType == 2) {
-      if (controlType == 2 || controlType == 3) {
-        return true;
-      }
-    } else if (compressorType == 6 && (controlType == 8 || controlType == 10)) {
-      return true;
-    }
-    return false;
-  }
-
-  checkShowNoLoadPerformancePoint(compressorType: number, controlType: number): boolean {
-    if (compressorType == 6) {
-      if (controlType == 7 || controlType == 9) {
-        return false
-      }
-    }
-    return true;
-  }
-
-  checkShowBlowoffPerformancePoint(compressorType: number, controlType: number): boolean {
-    //centrifugal
-    if (compressorType == 6) {
-      //"with blowoff"
-      if (controlType == 7 || controlType == 9) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
 
 export interface CompressorInventoryItemWarnings {
-  serviceFactor: string;
+  serviceFactor?: string;
 }
 
-// export interface PerformancePointRange {
-//   fullLoad: {
-//     greaterThan?: number,
-//     min?: number,
-//     max?: number
-//   },
-//   maxLoad: {
-//     greaterThan?: number,
-//     min?: number,
-//     max?: number
-//   },
-//   noLoad: {
-//     greaterThan?: number,
-//     min?: number,
-//     max?: number
-//   }
-// }
-
-// // // Control types 1-6
-// const NonCentrifugalControlValidationMap: Record<1 | 2 | 3 | 4 | 5 | 6, PerformancePointRange> = {
-//   1: {greaterThan: undefined, min: undefined, max: undefined},
-//   2: {greaterThan: undefined, min: undefined, max: undefined},
-//   3: {greaterThan: undefined, min: undefined, max: undefined},
-//   4: {greaterThan: undefined, min: undefined, max: undefined},
-//   5: {greaterThan: undefined, min: undefined, max: undefined},
-//   6: {greaterThan: undefined, min: undefined, max: undefined},
-// }

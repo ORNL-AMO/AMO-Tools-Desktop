@@ -7,6 +7,7 @@ import { GenericCompressor, GenericCompressorDbService } from '../../../generic-
 import { InventoryService } from '../../inventory.service';
 import { FullLoadCalculationsService } from '../calculations/full-load-calculations.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
+import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
   selector: 'app-full-load',
@@ -18,12 +19,17 @@ export class FullLoadComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
   fullLoadLabel: string;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private fullLoadCalculationsService: FullLoadCalculationsService,
+  constructor(private inventoryService: InventoryService, 
+    private performancePointsFormService: PerformancePointsFormService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService, 
+    private fullLoadCalculationsService: FullLoadCalculationsService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
@@ -32,7 +38,9 @@ export class FullLoadComponent implements OnInit {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
         this.setFullLoadLabel(compressor.compressorControls.controlType);
-        this.form = this.inventoryService.getPerformancePointFormFromObj(compressor.performancePoints);
+        this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad')
+        this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
       }
     });
   }
@@ -44,7 +52,7 @@ export class FullLoadComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.performancePoints.fullLoad = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    selectedCompressor.performancePoints.fullLoad = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });

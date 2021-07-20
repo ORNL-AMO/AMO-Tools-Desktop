@@ -53,6 +53,7 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
     MaxFullFlowCalculationsService,
     NoLoadCalculationsService,
     UnloadPointCalculationsService,
-    SharedPointCalculationsService
+    SharedPointCalculationsService,
+    PerformancePointsFormService
   ]
 })
 export class CompressedAirAssessmentModule { }

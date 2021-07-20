@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../sh
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory.service';
 import { UnloadPointCalculationsService } from '../calculations/unload-point-calculations.service';
+import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
   selector: 'app-unload-point',
@@ -14,20 +15,26 @@ import { UnloadPointCalculationsService } from '../calculations/unload-point-cal
 export class UnloadPointComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private inventoryService: InventoryService,
+    private performancePointsFormService: PerformancePointsFormService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private unloadPointCalculationsService: UnloadPointCalculationsService) { }
 
   ngOnInit(): void {
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
-        this.selectedCompressor = val;
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.selectedCompressor = compressor;
         this.checkShowCalc();
-        this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.unloadPoint);
+        this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.unloadPoint.power, compressor);
+        this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint, compressor, 'unloadPoint');
+        this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
       }
     });
   }
@@ -39,7 +46,7 @@ export class UnloadPointComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.performancePoints.unloadPoint = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    selectedCompressor.performancePoints.unloadPoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;

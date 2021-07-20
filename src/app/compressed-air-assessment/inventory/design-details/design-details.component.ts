@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressorInventoryItem } from '../../../share
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressorInventoryItemWarnings, InventoryService } from '../inventory.service';
 import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
+import { PerformancePointsFormService } from '../performance-points/performance-points-form.service';
 
 @Component({
   selector: 'app-design-details',
@@ -24,7 +25,7 @@ export class DesignDetailsComponent implements OnInit {
   displayNoLoadPowerUL: boolean;
   displayMaxFullFlow: boolean;
 
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
@@ -81,7 +82,7 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayNoLoadPowerFM(compressorType: number, controlType: number) {
-    let showNoLoad: boolean = this.inventoryService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
     if (showNoLoad) {
       if (controlType == 1) {
         this.displayNoLoadPowerFM = true;
@@ -95,7 +96,7 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayNoLoadPowerUL(compressorType: number, controlType: number) {
-    let showNoLoad: boolean = this.inventoryService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
     if (showNoLoad) {
       if (controlType != 1 && controlType != 5) {
         this.displayNoLoadPowerUL = true;
@@ -108,6 +109,6 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayMaxFullFlow(compressorType: number, controlType: number) {
-    this.displayMaxFullFlow = this.inventoryService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
+    this.displayMaxFullFlow = this.performancePointsFormService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
   }
 }
