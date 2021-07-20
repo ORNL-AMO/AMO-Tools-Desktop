@@ -24,7 +24,7 @@ td, th{
 
 
   .btn.btn-sm{
-    background-color: gray;
+    background-color: #ABB2B9;
     color: white;
     padding: 2px;
     width: 100%;
@@ -32,5 +32,9 @@ td, th{
   }
 
   .btn.btn-sm.btn-active{
-    background-color: #7030a0;
+    background-color: black;
+  }
+
+  .btn.btn-sm:hover{
+    background-color: #566573;
   }

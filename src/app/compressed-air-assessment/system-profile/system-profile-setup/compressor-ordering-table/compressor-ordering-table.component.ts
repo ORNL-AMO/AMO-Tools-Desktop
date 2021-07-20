@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem, CompressorOrderItem, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, CompressorOrderItem, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile.service';
 
@@ -18,7 +18,8 @@ export class CompressorOrderingTableComponent implements OnInit {
   compressorOrdering: Array<CompressorOrderItem>
   hourIntervals: Array<number>;
   isSequencerUsed: boolean;
-  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -26,7 +27,7 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.isSequencerUsed = val.systemInformation.isSequencerUsed;
         this.compressorOrdering = val.systemProfile.compressorOrdering;
         this.setOrderingOptions(val.systemProfile.systemProfileSetup, val.compressorInventoryItems);
-        this.orderingOptions = new Array();
+        this.orderingOptions = [0];
         let optionIndex: number = 1;
         val.compressorInventoryItems.forEach(item => {
           this.orderingOptions.push(optionIndex);
@@ -92,7 +93,10 @@ export class CompressorOrderingTableComponent implements OnInit {
 
 
   save() {
-
+    this.isFormChange = true;
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment.systemProfile.compressorOrdering = this.compressorOrdering;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
 
@@ -132,4 +136,49 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.compressorOrdering[compressorIndex].orders[orderIndex] = 0;
   }
 
+  setOrder(selectedCompressorIndex: number, orderIndex: number) {
+    //THIS IS NOT REALLY WORKING...
+    let orders: Array<number> = new Array();
+    this.compressorOrdering.forEach(compressor => {
+      if (compressor.orders[orderIndex] != 0) {
+        orders.push(compressor.orders[orderIndex]);
+      }
+    });
+
+    if (this.compressorOrdering[selectedCompressorIndex].orders[orderIndex] != 0) {
+      //sets lowest needed
+      for (let i = this.compressorOrdering[selectedCompressorIndex].orders[orderIndex] - 1; i > 0; i--) {
+        if (!orders.includes(i)) {
+          this.compressorOrdering[selectedCompressorIndex].orders[orderIndex]--;
+        }
+      }
+      for (let i = 0; i < this.compressorOrdering.length; i++) {
+        if (i != selectedCompressorIndex && this.compressorOrdering[i].orders[orderIndex] >= this.compressorOrdering[selectedCompressorIndex].orders[orderIndex]) {
+          let checkOrder: boolean = this.orderingOptions.includes(this.compressorOrdering[i].orders[orderIndex] + 1);
+          if (checkOrder) {
+            this.compressorOrdering[i].orders[orderIndex]++;
+          } else {
+            let tmpOrders: Array<number> = new Array();
+            this.compressorOrdering.forEach(compressor => {
+              if (compressor.orders[orderIndex] != 0) {
+                tmpOrders.push(compressor.orders[orderIndex]);
+              }
+            });
+            this.orderingOptions.forEach(order => {
+              let checkOrder: boolean = tmpOrders.includes(order);
+              if (!checkOrder) {
+                this.compressorOrdering[i].orders[orderIndex] = order;
+              }
+            });
+          }
+        }
+      }
+    }
+    this.save();
+  }
+
+
+  trackByIdx(index: number, obj: any): any {
+    return index;
+  }
 }
