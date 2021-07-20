@@ -17,6 +17,8 @@ export class GraphBasicsComponent implements OnInit {
   ]
   selectedGraphObj: GraphObj;
   selectedGraphObjSub: Subscription;
+  markerTypes: Array<string>;
+  markerType: string;
 
   constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
 
@@ -32,6 +34,8 @@ export class GraphBasicsComponent implements OnInit {
         }
       }
     });
+    this.markerTypes = ["lines+markers", "lines", "markers"];
+    this.markerType = "markers";
   }
 
   ngOnDestroy() {
@@ -40,6 +44,14 @@ export class GraphBasicsComponent implements OnInit {
 
   saveChanges() {
     this.visualizeMenuService.save(this.selectedGraphObj);
+  }
+
+  setLinesMarkers() {
+    this.visualizeService.plotFunctionType = 'update';
+    this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
+      option.linesOrMarkers = this.markerType;
+    });
+    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
   setGraphType() {

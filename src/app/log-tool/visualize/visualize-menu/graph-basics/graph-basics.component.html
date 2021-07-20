@@ -11,6 +11,11 @@
             <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
             </option>
         </select>
+        <select *ngIf = "selectedGraphObj.data[0].type == 'scattergl'" class="form-control w-100" name="markerType" (ngModelChange) = "markerType = $event" [ngModel]="selectedGraphObj.data[0].mode"
+            (change)="setLinesMarkers()" (focus)="focusField()" (blur)="focusOut()">
+            <option *ngFor="let markerTypeValue of markerTypes" [ngValue]="markerTypeValue">{{markerTypeValue}}
+            </option>
+        </select>
     </div>
     <!--% vs # of poitns-->
     <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
