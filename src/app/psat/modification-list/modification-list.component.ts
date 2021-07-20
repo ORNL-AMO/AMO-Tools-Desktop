@@ -32,9 +32,7 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
-  scenarioForm: FormGroup = new FormGroup({
-    setScenario: new FormControl(true)
-  });
+  
   constructor(private compareService: CompareService, private psatService: PsatService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {

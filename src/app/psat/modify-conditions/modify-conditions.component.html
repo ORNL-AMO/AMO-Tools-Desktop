@@ -21,7 +21,7 @@
 
     <!-- Modifications Start / Compare Two Pumps as baseline -->
     <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" 
-      *ngIf="modificationExists && assessment.psat.modifications[modificationIndex].psat.whatIfScenario == false"
+      *ngIf="modificationExists && psat.modifications[modificationIndex].psat.whatIfScenario == false"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
 
       <!-- Modification Header -->
@@ -34,22 +34,22 @@
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="assessment.psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-pump-fluid>
+          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="assessment.psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-motor>
+          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
           [selected]="modifiedSelected" (saved)="save()" [settings]="settings" [assessment]="assessment"
           [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="assessment.psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-field-data>
+          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-field-data>
       </div>
     </div>
 
 
     <!-- Modifications Start / What If Scenario -->
     <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" 
-      *ngIf="modificationExists && assessment.psat.modifications[modificationIndex].psat.whatIfScenario == true"
+      *ngIf="modificationExists && psat.modifications[modificationIndex].psat.whatIfScenario == true"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
 
       <!-- Modification Header -->

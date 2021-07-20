@@ -270,7 +270,7 @@ export class PsatComponent implements OnInit {
       let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.whatIfScenario);
       return tmpForm.valid;
     }
   }
@@ -278,7 +278,7 @@ export class PsatComponent implements OnInit {
   save() {
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.whatIfScenario);
     if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();
