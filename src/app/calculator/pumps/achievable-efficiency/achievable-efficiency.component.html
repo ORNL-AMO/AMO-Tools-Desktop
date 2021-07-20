@@ -10,7 +10,7 @@
 		</div>
 		<div class="d-flex flex-column m-4">
 			<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings"
-				(calculate)="calculate()"></app-achievable-efficiency-form>
+				(calculate)="calculate()" (changeField)="changeField($event)"></app-achievable-efficiency-form>
 			<div class="w-100 justify-content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
 					Reset Data
