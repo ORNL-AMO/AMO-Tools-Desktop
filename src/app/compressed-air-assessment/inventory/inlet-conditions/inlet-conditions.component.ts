@@ -16,10 +16,12 @@ export class InletConditionsComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
+  contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
+    this.contentCollapsed = this.inventoryService.collapseInletConditions;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
@@ -33,6 +35,7 @@ export class InletConditionsComponent implements OnInit {
 
   ngOnDestroy(){
     this.selectedCompressorSub.unsubscribe();
+    this.inventoryService.collapseInletConditions = this.contentCollapsed;
   }
 
   save() {
@@ -52,5 +55,8 @@ export class InletConditionsComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
+  toggleCollapse(){
+    this.contentCollapsed = !this.contentCollapsed;
+  }
 
 }

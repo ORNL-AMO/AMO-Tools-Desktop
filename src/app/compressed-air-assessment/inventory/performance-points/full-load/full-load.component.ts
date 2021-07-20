@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
@@ -18,6 +18,7 @@ export class FullLoadComponent implements OnInit {
 
   selectedCompressorSub: Subscription;
   form: FormGroup;
+  isFormChange: boolean = false;
   fullLoadLabel: string;
   validationMessages: ValidationMessageMap;
   warnings: PerformancePointWarnings;
@@ -37,10 +38,14 @@ export class FullLoadComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        this.setFullLoadLabel(compressor.compressorControls.controlType);
-        this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
-        this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad')
-        this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+        if (this.isFormChange == false) {
+          this.setFullLoadLabel(compressor.compressorControls.controlType);
+          this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad')
+          this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+        } else {
+          this.isFormChange = false;
+        }
       }
     });
   }
@@ -54,9 +59,11 @@ export class FullLoadComponent implements OnInit {
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.fullLoad = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    this.updateForm(selectedCompressor.performancePoints.fullLoad);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }
@@ -130,6 +137,18 @@ export class FullLoadComponent implements OnInit {
     this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
+  }
+
+  updateForm(performancePoint: PerformancePoint){
+    if(performancePoint.airflow != this.form.controls.airflow.value){
+      this.form.controls.airflow.patchValue(performancePoint.airflow);
+    }
+    if(performancePoint.dischargePressure != this.form.controls.dischargePressure.value){
+      this.form.controls.dischargePressure.patchValue(performancePoint.dischargePressure);
+    }
+    if(performancePoint.power != this.form.controls.power.value){
+      this.form.controls.power.patchValue(performancePoint.power);
+    }
   }
 
 }

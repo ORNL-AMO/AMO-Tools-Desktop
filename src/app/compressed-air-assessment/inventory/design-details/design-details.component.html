@@ -1,5 +1,8 @@
-<label class="group-label">Design Details</label>
-<form [formGroup]="form">
+<label class="group-label" (click)="toggleCollapse()">
+    <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
+    Design Details
+</label>
+<form [formGroup]="form" *ngIf="!contentCollapsed">
     <!-- blowdownTime -->
     <div class="form-group" *ngIf="displayBlowdownTime">
         <label for="blowdownTime">Blowdown Time</label>
