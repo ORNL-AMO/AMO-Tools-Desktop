@@ -14,7 +14,8 @@ export class HeatCascadingHelpComponent implements OnInit {
   
   currentFieldSub: Subscription;
   currentField: string;
-
+  displayDescription: boolean = true;
+  
   constructor(private heatCascadingService: HeatCascadingService) { }
   
   ngOnInit(): void {
@@ -27,4 +28,7 @@ export class HeatCascadingHelpComponent implements OnInit {
     this.currentFieldSub.unsubscribe();
   }
 
+  toggleDescription() {
+    this.displayDescription = !this.displayDescription;
+  }
 }

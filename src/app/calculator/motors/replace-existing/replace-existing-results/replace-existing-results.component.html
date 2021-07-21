@@ -33,34 +33,37 @@
       <td>{{results.newEnergyCost | currency:'USD': 'symbol': '1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td colspan="2" class="bold">
+      <td>&nbsp;</td>
+      <td class="bold">
         Annual Energy Savings
       </td>
       <td *ngIf="!inTreasureHunt">
         {{results.existingEnergyUse - results.rewoundEnergyUse | number : '1.0-0'}} kWh/yr
       </td>
-      <td colspan="2" *ngIf="inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh/yr</td>
+      <td *ngIf="inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh/yr</td>
       <td *ngIf="!inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh/yr</td>
     </tr>
     <tr>
-      <td colspan="2" class="bold">
+      <td>&nbsp;</td>
+      <td class="bold">
         Cost Savings
       </td>
       <td *ngIf="!inTreasureHunt">
         {{results.existingEnergyCost - results.rewoundEnergyCost | currency:'USD':'symbol':'1.0-0'}} /yr
       </td>
-      <td colspan="2" *ngIf="inTreasureHunt">{{results.costSavings | currency:'USD':'symbol':'1.0-0'}} /yr</td>
+      <td *ngIf="inTreasureHunt">{{results.costSavings | currency:'USD':'symbol':'1.0-0'}} /yr</td>
       <td *ngIf="!inTreasureHunt">{{results.costSavings | currency:'USD':'symbol':'1.0-0'}} /yr</td>
 
     </tr>
     <tr>
-      <td colspan="2" class="bold">
+      <td>&nbsp;</td>
+      <td class="bold">
         Simple Payback
       </td>
       <td *ngIf="!inTreasureHunt">
         &mdash;
       </td>
-      <td colspan="2" *ngIf="inTreasureHunt">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+      <td *ngIf="inTreasureHunt">{{results.simplePayback | number : '1.0-2'}} yrs</td>
       <td *ngIf="!inTreasureHunt">{{results.simplePayback | number : '1.0-2'}} yrs</td>
     </tr>
   </tbody>
@@ -105,6 +108,6 @@
   </tbody>
 </table>
 
-<app-exportable-results-table *ngIf="!inTreasureHunt" [tableString]="tableString2"
-  (updateTableString2)="updateTableString2()">
+<app-exportable-results-table *ngIf="!inTreasureHunt" [tableString]="table2String"
+  (updateTableString)="updateTable2String()">
 </app-exportable-results-table>

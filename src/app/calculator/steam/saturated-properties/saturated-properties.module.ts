@@ -10,6 +10,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SaturatedPropertiesPhChartComponent } from './saturated-properties-ph-chart/saturated-properties-ph-chart.component';
 import { SaturatedPropertiesChartComponent } from './saturated-properties-chart/saturated-properties-chart.component';
+import { SaturatedPropertiesHiddenCopyTableComponent } from './saturated-properties-hidden-copy-table/saturated-properties-hidden-copy-table.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import { SaturatedPropertiesChartComponent } from './saturated-properties-chart/
     SaturatedPropertiesHelpComponent, 
     SaturatedPropertiesTableComponent, 
     SaturatedPropertiesChartComponent, 
-    SaturatedPropertiesPhChartComponent
+    SaturatedPropertiesPhChartComponent, SaturatedPropertiesHiddenCopyTableComponent
   ],
   exports: [
     SaturatedPropertiesComponent
