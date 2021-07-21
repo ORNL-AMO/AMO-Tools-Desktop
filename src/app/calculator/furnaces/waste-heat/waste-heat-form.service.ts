@@ -15,7 +15,6 @@ export class WasteHeatFormService {
     let form: FormGroup = this.formBuilder.group({
       oppHours: [inputObj.oppHours, [Validators.required, Validators.max(8760)]],
       cost: [inputObj.cost, Validators.required],
-      energySourceType: [inputObj.energySourceType],
       availableHeat: [inputObj.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       heatInput: [inputObj.heatInput, Validators.required],
       hxEfficiency: [inputObj.hxEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -36,7 +35,6 @@ export class WasteHeatFormService {
       oppHours: form.controls.oppHours.value,
       cost: form.controls.cost.value,
       availableHeat: form.controls.availableHeat.value,
-      energySourceType: form.controls.energySourceType.value,
       heatInput: form.controls.heatInput.value,
       hxEfficiency: form.controls.hxEfficiency.value,
       chillerInTemperature: form.controls.chillerInTemperature.value,

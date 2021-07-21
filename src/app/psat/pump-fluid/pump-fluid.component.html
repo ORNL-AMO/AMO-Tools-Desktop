@@ -1,7 +1,7 @@
 <form [formGroup]="psatForm">
   <div *ngIf="inSetup" class="d-flex flex-column">
     <div class="header mr-2 ml-2">
-      <h3>Pump &amp; Fluid</h3>
+      <h3>Pump</h3>
     </div>
   </div>
 
@@ -96,7 +96,14 @@
           {{psatForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
+  </div>
 
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Fluid</h3>
+    </div>
+  </div>
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group" [ngClass]="{'indicate-different': isFluidTypeDifferent()}">
       <label for="{{'fluidType_'+idString}}">Fluid Type</label>
       <select class="form-control" name="fluidType" formControlName="fluidType" id="{{'fluidType_'+idString}}"

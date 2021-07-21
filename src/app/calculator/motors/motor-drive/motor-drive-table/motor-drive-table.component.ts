@@ -11,14 +11,18 @@ export class MotorDriveTableComponent implements OnInit {
   results: MotorDriveOutputs;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  tableString: any;
+  
   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
+
+  tableString: string;
   constructor() { }
 
   ngOnInit() {
   }
 
   updateTableString() {
-    this.tableString = this.copyTable.nativeElement.innerText + this.copyTable2.nativeElement.innerText;
+    this.tableString = 
+    this.copyTable2.nativeElement.innerText + '\n' +
+    this.copyTable.nativeElement.innerText;
   }
 }

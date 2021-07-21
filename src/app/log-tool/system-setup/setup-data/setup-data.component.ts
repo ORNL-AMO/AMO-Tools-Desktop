@@ -8,6 +8,8 @@ import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-
 import { IndividualDataFromCsv } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { Subscription } from 'rxjs';
+import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -79,6 +81,11 @@ export class SetupDataComponent implements OnInit {
     }
   }
 
+  setExcelImport($event) {
+    this.fileReference = $event.target.files[0];
+    this.importExcel();
+  }
+
   importFile() {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference);
@@ -86,6 +93,32 @@ export class SetupDataComponent implements OnInit {
       this.importData = JSON.parse(JSON.stringify(fr.result));
       this.parsePreviewData();
     };
+  }
+
+  parseExcel() {
+    setTimeout(() => {
+      this.logToolService.addCsvData(this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow)), this.fileReference.name);
+      this.importSuccesful = true;
+      this.importData = undefined;
+      this.importingData = false;
+      this.logToolService.dataSubmitted.next(true);
+      this.previousDataAvailable = undefined;
+      this.logToolDbService.saveData();
+      this.cd.detectChanges();
+      }, 100);
+    
+  }
+
+  importExcel() {
+    let fr: FileReader = new FileReader();
+    fr.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true });
+      let rowObject  =  XLSX.utils.sheet_to_csv(workBook.Sheets[workBook.SheetNames[0]]);
+      this.importData = rowObject;
+      this.parsePreviewData();
+    }
+    fr.readAsBinaryString(this.fileReference);
   }
 
 
