@@ -10,7 +10,6 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 })
 export class CompressorOrderingTableComponent implements OnInit {
 
-  // form: FormGroup;
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
   orderingOptions: Array<number>;
@@ -18,6 +17,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   hourIntervals: Array<number>;
   isSequencerUsed: boolean;
   selectedDayTypeId: string;
+  fillRight: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -28,12 +28,6 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.profileSummary = val.systemProfile.profileSummary;
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         this.setOrderingOptions(val.compressorInventoryItems);
-        this.orderingOptions = [0];
-        let optionIndex: number = 1;
-        val.compressorInventoryItems.forEach(item => {
-          this.orderingOptions.push(optionIndex);
-          optionIndex++;
-        });
       } else {
         this.isFormChange = false;
       }
@@ -53,47 +47,43 @@ export class CompressorOrderingTableComponent implements OnInit {
   }
 
   setOrderingOptions(compressorInventoryItems: Array<CompressorInventoryItem>) {
-    // if (this.compressorOrdering.length != compressorInventoryItems.length) {
-    //   this.compressorOrdering = new Array();
-    //   let itemIndex: number = 0;
-    //   compressorInventoryItems.forEach(item => {
-    //     this.compressorOrdering.push({
-    //       compressorName: item.name,
-    //       compressorId: item.itemId,
-    //       orders: this.hourIntervals.map(() => { return 0 }),
-    //       fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
-    //     });
-    //     itemIndex++;
-    //   });
-    // }
+    this.orderingOptions = [0];
+    let optionIndex: number = 1;
+    compressorInventoryItems.forEach(() => {
+      this.orderingOptions.push(optionIndex);
+      optionIndex++;
+    });
   }
 
   resetOrdering() {
-    // for (let compressorIndex = 0; compressorIndex < this.compressorOrdering.length; compressorIndex++) {
-    //   for (let orderIndex = 0; orderIndex < this.compressorOrdering[0].orders.length; orderIndex++) {
-    //     this.compressorOrdering[compressorIndex].orders[orderIndex] = 0;
-    //   }
-    // }
+    for (let summaryIndex = 0; summaryIndex < this.profileSummary.length; summaryIndex++) {
+      if (this.profileSummary[summaryIndex].dayTypeId == this.selectedDayTypeId) {
+        for (let i = 0; i < this.profileSummary[summaryIndex].profileSummaryData.length; i++) {
+          this.profileSummary[summaryIndex].profileSummaryData[i].order = 0;
+        }
+      }
+    }
     this.save();
   }
 
   turnAllOn() {
-    // for (let compressorIndex = 0; compressorIndex < this.compressorOrdering.length; compressorIndex++) {
-    //   let order: number = 1;
-    //   for (let compressorOrderIndex = 0; compressorOrderIndex < this.compressorOrdering.length; compressorOrderIndex++) {
-    //     if (compressorOrderIndex != compressorIndex) {
-    //       if (this.compressorOrdering[compressorIndex].fullLoadPressure < this.compressorOrdering[compressorOrderIndex].fullLoadPressure) {
-    //         order++;
-    //       } else if (this.compressorOrdering[compressorOrderIndex].fullLoadPressure == this.compressorOrdering[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
-    //         order++;
-    //       }
-    //     }
-    //   }
-
-    //   for (let orderIndex = 0; orderIndex < this.compressorOrdering[0].orders.length; orderIndex++) {
-    //     this.compressorOrdering[compressorIndex].orders[orderIndex] = order;
-    //   }
-    // }
+    let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+    for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
+      let order: number = 1;
+      for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
+        if (compressorOrderIndex != compressorIndex) {
+          if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
+            order++;
+          } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+            order++;
+          }
+        }
+      }
+      let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
+      for (let orderIndex = 0; orderIndex < this.hourIntervals.length; orderIndex++) {
+        this.profileSummary[summaryIndex].profileSummaryData[orderIndex].order = order;
+      }
+    }
     this.save();
   }
 
@@ -106,45 +96,56 @@ export class CompressorOrderingTableComponent implements OnInit {
   }
 
 
-  toggleOn(compressorIndex: number, orderIndex: number) {
-    // if (this.compressorOrdering[compressorIndex].orders[orderIndex] != 0) {
-    //   for(let index = orderIndex; index <= this.hourIntervals[this.hourIntervals.length-1]; index++){
-    //     this.updateCompressorOrdering(compressorIndex, index);
-    //   }
-    // } else {
-    //   for(let index = orderIndex; index <= this.hourIntervals[this.hourIntervals.length-1]; index++){
-    //     this.setCompressorOrdering(compressorIndex, index)
-    //   }
-    // }
+  toggleOn(summaryData: ProfileSummary, hourIndex: number) {
+    if (summaryData.profileSummaryData[hourIndex].order != 0) {
+      if (this.fillRight) {
+        for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+          this.updateCompressorOrdering(summaryData, index);
+        }
+      } else {
+        this.updateCompressorOrdering(summaryData, hourIndex);
+      }
+    } else {
+      if (this.fillRight) {
+        for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+          this.setCompressorOrdering(summaryData, index);
+        }
+      } else {
+        this.setCompressorOrdering(summaryData, hourIndex);
+      }
+    }
     this.save();
   }
 
-  setCompressorOrdering(compressorIndex: number, orderIndex: number) {
-    // this.compressorOrdering[compressorIndex].orders[orderIndex] = 1;
-    // this.compressorOrdering.forEach((compressor, index) => {
-    //   if (index != compressorIndex) {
-    //     if (compressor.orders[orderIndex] != 0) {
-    //       if (compressor.fullLoadPressure < this.compressorOrdering[compressorIndex].fullLoadPressure) {
-    //         compressor.orders[orderIndex]++;
-    //       } else if (compressor.fullLoadPressure == this.compressorOrdering[compressorIndex].fullLoadPressure && compressorIndex < index) {
-    //         compressor.orders[orderIndex]++;
-    //       } else {
-    //         this.compressorOrdering[compressorIndex].orders[orderIndex]++;
-    //       }
-    //     }
-    //   }
-    // });
+  setCompressorOrdering(changedSummary: ProfileSummary, orderIndex: number) {
+    let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+    let summaryIndex: number = dayTypeSummaries.findIndex(summary => { return summary.compressorId == changedSummary.compressorId });
+    changedSummary.profileSummaryData[orderIndex].order = 1;
+    dayTypeSummaries.forEach((summary, index) => {
+      if (summary.compressorId != changedSummary.compressorId) {
+        if (summary.profileSummaryData[orderIndex].order != 0) {
+          if (summary.fullLoadPressure < changedSummary.fullLoadPressure) {
+            summary.profileSummaryData[orderIndex].order++;
+          } else if (summary.fullLoadPressure == changedSummary.fullLoadPressure && summaryIndex < index) {
+            summary.profileSummaryData[orderIndex].order++;
+          } else {
+            changedSummary.profileSummaryData[orderIndex].order++;
+          }
+        }
+      }
+    });
   }
 
-  updateCompressorOrdering(compressorIndex: number, orderIndex: number) {
-    // this.compressorOrdering.forEach((compressor, index) => {
-    //   if (index != compressorIndex) {
-    //     if (compressor.orders[orderIndex] != 0 && compressor.orders[orderIndex] > this.compressorOrdering[compressorIndex].orders[orderIndex]) {
-    //       compressor.orders[orderIndex]--;
-    //     }
-    //   }
-    // });
-    // this.compressorOrdering[compressorIndex].orders[orderIndex] = 0;
+  updateCompressorOrdering(changedSummary: ProfileSummary, orderIndex: number) {
+    let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+    dayTypeSummaries.forEach((summary, index) => {
+      if (summary.compressorId != changedSummary.compressorId) {
+        if (summary.profileSummaryData[orderIndex].order != 0 && summary.profileSummaryData[orderIndex].order > changedSummary.profileSummaryData[orderIndex].order) {
+          summary.profileSummaryData[orderIndex].order--;
+        }
+      }
+    });
+    changedSummary.profileSummaryData[orderIndex].order = 0;
   }
 
   setOrder(selectedCompressorIndex: number, orderIndex: number) {
