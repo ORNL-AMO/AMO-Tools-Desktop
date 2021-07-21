@@ -17,7 +17,7 @@ export class GraphBasicsComponent implements OnInit {
   ]
   selectedGraphObj: GraphObj;
   selectedGraphObjSub: Subscription;
-  markerTypes: Array<string>;
+  markerTypes: Array<Object>;
   markerType: string;
 
   constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
@@ -34,7 +34,7 @@ export class GraphBasicsComponent implements OnInit {
         }
       }
     });
-    this.markerTypes = ["lines+markers", "lines", "markers"];
+    this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
     this.markerType = "markers";
   }
 
