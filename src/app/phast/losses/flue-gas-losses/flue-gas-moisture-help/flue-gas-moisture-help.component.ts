@@ -12,12 +12,13 @@ export class FlueGasMoistureHelpComponent implements OnInit {
   currentField: string;
   fieldSubscription: Subscription;
   constructor(private flueGasCompareService: FlueGasCompareService) {
-    this.fieldSubscription = this.flueGasCompareService.currentField.subscribe(val => {
-        this.currentField = val;
-      });
+    
    }
 
   ngOnInit() {
+    this.fieldSubscription = this.flueGasCompareService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
   }
 
   ngOnDestroy() {

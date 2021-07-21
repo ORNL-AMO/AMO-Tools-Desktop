@@ -56,8 +56,6 @@ export class FsatFluidComponent implements OnInit {
     private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
-    console.log("Base Gas Density: ");
-    console.log(this.baseGasDensity);
     if (!this.baseline) {
       this.idString = 'fsat_modification_' + this.modificationIndex;
     }
