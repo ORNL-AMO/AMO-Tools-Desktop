@@ -29,20 +29,18 @@
         <h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3>
       </div>
 
+      <!-- [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false" -->
       <!-- Forms -->
       <div class="psat-losses-container">
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-pump-fluid>
+          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-motor>
+          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
           [selected]="modifiedSelected" (saved)="save()" [settings]="settings" [assessment]="assessment"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"
-          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"></app-field-data>
+          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-field-data>
       </div>
     </div>
 

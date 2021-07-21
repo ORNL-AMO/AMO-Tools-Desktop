@@ -46,19 +46,16 @@
 
       
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected"
-        [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
         [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)" [compareTwoFansAsBaseline]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fsat-fluid>
 
       <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected"
-        [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
         [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)" [compareTwoFansAsBaseline]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-setup>
 
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"
-        [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
         [modificationIndex]="modificationIndex"
         [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
@@ -66,7 +63,6 @@
       </app-fan-motor>
 
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"
-        [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
         [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)" [compareTwoFansAsBaseline]="true"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-field-data>
