@@ -68,6 +68,7 @@ import { UnloadPointHelpComponent } from './results-panel/help-panel/inventory-h
 import { BlowoffHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/blowoff-help/blowoff-help.component';
 import { FullLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/full-load-help/full-load-help.component';
 import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
+import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help/day-types-help.component';
 
 @NgModule({
   declarations: [
@@ -120,7 +121,8 @@ import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-h
     UnloadPointHelpComponent,
     BlowoffHelpComponent,
     FullLoadHelpComponent,
-    MaxFullFlowHelpComponent
+    MaxFullFlowHelpComponent,
+    DayTypesHelpComponent
   ],
   imports: [
     CommonModule,
