@@ -56,5 +56,7 @@
 </form>
 
 
-<div bsModal #operatingCostsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="operatingCostsLabel"
-aria-hidden="true" [config]="{backdrop: 'static'}">
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="phast.operatingHours">
+</app-operating-hours-modal>
