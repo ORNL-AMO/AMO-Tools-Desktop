@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
@@ -65,14 +65,10 @@ export class InventoryComponent implements OnInit {
   }
 
   addInventoryItem() {
-    let newInventoryItem: CompressorInventoryItem = this.inventoryService.getNewInventoryItem();
-    newInventoryItem.modifiedDate = new Date();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(newInventoryItem);
+    this.inventoryService.addNewCompressor();
     this.hasInventoryItems = true;
   }
+
 
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();

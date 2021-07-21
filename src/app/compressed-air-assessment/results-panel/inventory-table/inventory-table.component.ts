@@ -41,17 +41,15 @@ export class InventoryTableComponent implements OnInit {
   }
 
   addNewCompressor() {
-    let newInventoryItem: CompressorInventoryItem = this.inventoryService.getNewInventoryItem();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(newInventoryItem);
+    this.inventoryService.addNewCompressor();
   }
 
   deleteItem(item: CompressorInventoryItem) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == item.itemId });
     compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
+    itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => {return summary.compressorId == item.itemId});
+    compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
   }

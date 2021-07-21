@@ -103,4 +103,28 @@ export class SystemProfileService {
     });
     return totals;
   }
+
+
+  // updateCompressorOrdering(compressorOrdering: Array<CompressorOrderItem>) {
+  //   for (let compressorIndex = 0; compressorIndex < compressorOrdering.length; compressorIndex++) {
+  //     let order: number = 1;
+  //     for (let compressorOrderIndex = 0; compressorOrderIndex < compressorOrdering.length; compressorOrderIndex++) {
+  //       if (compressorOrdering[compressorIndex].orders[compressorOrderIndex] != 0) {
+  //         if (compressorOrderIndex != compressorIndex) {
+  //           if (compressorOrdering[compressorIndex].fullLoadPressure < compressorOrdering[compressorOrderIndex].fullLoadPressure) {
+  //             order++;
+  //           } else if (compressorOrdering[compressorOrderIndex].fullLoadPressure == compressorOrdering[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+  //             order++;
+  //           }
+  //         }
+  //       }
+  //     }
+
+  //     for (let orderIndex = 0; orderIndex < compressorOrdering[0].orders.length; orderIndex++) {
+  //       if (compressorOrdering[compressorIndex].orders[orderIndex] != 0) {
+  //         compressorOrdering[compressorIndex].orders[orderIndex] = order;
+  //       }
+  //     }
+  //   }
+  // }
 }

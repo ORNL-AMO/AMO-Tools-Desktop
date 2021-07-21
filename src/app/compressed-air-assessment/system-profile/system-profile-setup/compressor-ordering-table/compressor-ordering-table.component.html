@@ -24,18 +24,17 @@
             </tr>
         </thead>
         <tbody *ngIf="isSequencerUsed">
-            <tr *ngFor="let compressor of compressorOrdering; let compressorIndex = index;">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{compressor.compressorName}}
+                    {{summary.compressorName}}
                 </td>
                 <td class="text-center">
-                    {{compressor.fullLoadPressure}}
+                    {{summary.fullLoadPressure}}
                 </td>
                 <td class="input-cell"
-                    *ngFor="let compressorOrder of compressor.orders; let orderIndex = index; trackBy:trackByIdx">
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
                     <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
-                        name="{{'order_'+compressorIndex+orderIndex}}"
-                        [(ngModel)]="compressorOrdering[compressorIndex].orders[orderIndex]"
+                        name="{{'order_'+compressorIndex+orderIndex}}" [(ngModel)]="summaryData.order"
                         (change)="setOrder(compressorIndex, orderIndex)">
                         <option *ngFor="let orderingOption of orderingOptions; let optionIndex = index;"
                             [ngValue]="orderingOption" id="{{'order_'+compressorIndex+orderIndex+optionIndex}}">
@@ -51,22 +50,21 @@
             </tr>
         </tbody>
         <tbody *ngIf="!isSequencerUsed">
-            <tr *ngFor="let compressor of compressorOrdering; let compressorIndex = index;">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{compressor.compressorName}}
+                    {{summary.compressorName}}
                 </td>
                 <td class="text-center">
-                    {{compressor.fullLoadPressure}}
+                    {{summary.fullLoadPressure}}
                 </td>
                 <td class="input-cell"
-                    *ngFor="let compressorOrder of compressor.orders; let orderIndex = index; trackBy:trackByIdx">
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
-                        class="btn btn-sm" *ngIf="compressorOrdering[compressorIndex].orders[orderIndex] == 0"
+                        class="btn btn-sm" *ngIf="summaryData.order == 0"
                         (click)="toggleOn(compressorIndex, orderIndex)">Off</button>
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
-                        class="btn btn-sm btn-active"
-                        *ngIf="compressorOrdering[compressorIndex].orders[orderIndex] != 0"
-                        (click)="toggleOn(compressorIndex, orderIndex)">{{compressorOrdering[compressorIndex].orders[orderIndex]}}</button>
+                        class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
+                        (click)="toggleOn(compressorIndex, orderIndex)">{{summaryData.order}}</button>
                 </td>
             </tr>
         </tbody>

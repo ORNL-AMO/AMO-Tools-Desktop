@@ -5,7 +5,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
-import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
@@ -146,9 +146,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  save(compressedAirAssessment: CompressedAirAssessment) {
+  save(compressedAirAssessment: CompressedAirAssessment) {    
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    this.indexedDbService.putAssessment(this.assessment).then(() => {
+        this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });
   }

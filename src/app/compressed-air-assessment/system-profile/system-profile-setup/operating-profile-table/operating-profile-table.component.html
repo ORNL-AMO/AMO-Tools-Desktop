@@ -50,7 +50,7 @@
                     </select>
                 </td>
                 <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
-                    <span *ngIf="compressorOrdering[compressorIndex].orders[dataIndex] != 0">
+                    <span *ngIf="summaryData.order != 0">
                         <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}" [(ngModel)]="summaryData.power">
@@ -63,7 +63,7 @@
                             [(ngModel)]="summaryData.percentCapacity">
                     </span>
                     <div class="w-100 bold text-center"
-                        *ngIf="compressorOrdering[compressorIndex].orders[dataIndex] == 0">
+                        *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
                     </div>
                 </td>
