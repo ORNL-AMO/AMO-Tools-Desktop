@@ -52,25 +52,10 @@ export class ModificationListComponent implements OnInit {
   }
 
   saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
-    //we should be able to bind directly to the ngModel instead of doing this, but this will do
     this.fsat.modifications[modIndex].fsat.whatIfScenario = isWhatIfScenario;
     this.save.emit(true);
     this.selectModification(modIndex, true);
   }
-
-  // changeScenario(choice: string, index: number) {
-  //   if (index == this.modificationIndex) {
-  //     if (choice == 'twoExisting') {
-  //       this.fsat.modifications[this.modificationIndex].whatIfScenario = false;
-  //       this.save.emit(true);
-  //       this.selectModification(this.modificationIndex, true);
-  //     } else if (choice == 'whatIf') {
-  //       this.fsat.modifications[this.modificationIndex].whatIfScenario = true;
-  //       this.save.emit(true);
-  //       this.selectModification(this.modificationIndex, true);
-  //     }
-  //   }
-  // }
 
   initDropdown() {
     this.dropdown = Array<boolean>(this.fsat.modifications.length);

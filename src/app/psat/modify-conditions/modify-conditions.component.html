@@ -20,8 +20,7 @@
     </div>
 
     <!-- Modifications Start / Compare Two Pumps as baseline -->
-    <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" 
-      *ngIf="modificationExists && psat.modifications[modificationIndex].psat.whatIfScenario == false"
+    <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="modificationExists"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
 
       <!-- Modification Header -->
@@ -33,40 +32,20 @@
       <!-- Forms -->
       <div class="psat-losses-container">
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
+          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-pump-fluid>
-        <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
-          [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-motor>
-        <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
-          [selected]="modifiedSelected" (saved)="save()" [settings]="settings" [assessment]="assessment"
-          [modificationIndex]="modificationIndex" [compareTwoPumpsAsBaseline]="true"></app-field-data>
-      </div>
-    </div>
-
-
-    <!-- Modifications Start / What If Scenario -->
-    <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" 
-      *ngIf="modificationExists && psat.modifications[modificationIndex].psat.whatIfScenario == true"
-      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
-
-      <!-- Modification Header -->
-      <div class="header mr-2 ml-2">
-        <h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3>
-      </div>
-
-      <!-- Forms -->
-      <div class="psat-losses-container">
-        <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
-          [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex"></app-pump-fluid>
+          [modificationIndex]="modificationIndex"
+          [compareTwoPumpsAsBaseline]="psat.modifications[modificationIndex].psat.whatIfScenario"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
-          [selected]="modifiedSelected" (saved)="save()" [settings]="settings" [assessment]="assessment"
-          [modificationIndex]="modificationIndex"></app-field-data>
+          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false" [selected]="modifiedSelected"
+          (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
+          [compareTwoPumpsAsBaseline]="psat.modifications[modificationIndex].psat.whatIfScenario"></app-field-data>
       </div>
+
+
     </div>
     <!-- No content message -->
     <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">

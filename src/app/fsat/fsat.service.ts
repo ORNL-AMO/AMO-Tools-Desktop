@@ -210,8 +210,6 @@ export class FsatService {
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
       } else {
-        // console.log('calculating as modified results', fsat.whatIfScenario);
-        // console.log('modification', fsat);
         input.fanType = fsat.fanSetup.fanType;
         results = this.fanResultsModified(input);
       }

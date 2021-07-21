@@ -28,8 +28,6 @@ export class MotorComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modificationIndex: number;
-  @Input()
-  compareTwoPumpsAsBaseline: boolean;
 
   efficiencyClasses: Array<{ value: number, display: string }>;
   frequencies: Array<number> = [

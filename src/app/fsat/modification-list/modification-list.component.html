@@ -73,30 +73,6 @@
               </form>
             </div>
           </div>
-
-          <!-- <div class="col-3 border-right text-center">
-            <div class="align-self-center small text-left">
-            
-              <span [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
-            
-                <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
-            
-                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
-            
-                    <input name="{{'twoExisting_'+index}}" type="radio" (input)="changeScenario('twoExisting', index)"
-                      [value]="false" [(ngModel)]="modification.whatIfScenario">
-                    <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
-            
-                    <input name="{{'whatIf_'+index}}" type="radio" (input)="changeScenario('whatIf', index)" [value]="true"
-                      [(ngModel)]="modification.whatIfScenario">
-                    <label for="{{'whatIf_'+index}}">What-if scenario</label><br>
-
-                  </div>            
-                </span>
-              </span>              
-            </div>
-          </div> -->
-
           <div class="col-1 border-right text-center">
             <div class="btn-group">
               <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">

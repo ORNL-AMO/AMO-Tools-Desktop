@@ -73,43 +73,6 @@
               </form>
             </div>
           </div>
-
-          <!-- <div class="col-3 border-right text-center">
-            <div class="align-self-center small text-left">
-              <form [formGroup]="scenarioForm"  [ngClass]="{'disabled-link': asssessmentTab == 'explore-opportunities'}">
-                
-                <span [ngClass]="{'disabled-link': getBadges(modification.psat).length > 0}">
-                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
-
-                    <span *ngIf="modification.whatIfScenario">
-
-                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting" 
-                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="false">
-                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
-
-                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
-                      formControlName="setScenario" (input)="changeScenario('whatIf', index)" [value]="true">
-                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
-
-                    </span>
-
-                    <span *ngIf="!modification.whatIfScenario">
-
-                      <input type="radio" id="{{'twoExisting_'+index}}" name="setScenario" value="twoExisting"
-                        formControlName="setScenario" (input)="changeScenario('twoExisting', index)" [value]="true">
-                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
-
-                      <input type="radio" id="{{'whatIf_'+index}}" name="setScenario" value="whatIf"
-                        formControlName="setScenario" (input)="changeScenario('whatIf', index)"[value]="false">
-                      <label for="{{'whatIf_'+index}}">What-if scenario</label>
-
-                    </span>
-                    
-                  </div>
-                </span>                
-              </form>
-            </div>
-          </div> -->
           <div class="col-1 border-right text-center">
             <div class="btn-group">
               <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
