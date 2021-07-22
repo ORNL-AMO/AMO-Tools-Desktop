@@ -87,22 +87,14 @@
       <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fanMotorForm.controls.motorRatedVoltage.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.voltageError}}</span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null, 'invalid':fanMotorForm.controls.fullLoadAmps.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null, 'invalid':fanMotorForm.controls.fullLoadAmps.invalid}">
       <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
         Full-Load Amps
-        <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group">
-        <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}"
-          formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();"
-          [readonly]="!selected">
-        <span class="input-group-addon units">A</span>
+      <div class="small text-center">
+        {{fanMotorForm.controls.fullLoadAmps.value}} A
       </div>
-      <span *ngIf="fanMotorForm.controls.fullLoadAmps.invalid && !fanMotorForm.controls.fullLoadAmps.pristine">
-        <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.fullLoadAmps.errors.required">Value
-          Required</span>
-      </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span>
     </div>
   </div>
 </form>

@@ -152,7 +152,6 @@ export class FanMotorComponent implements OnInit {
       this.fanMotorForm.patchValue({
         fullLoadAmps: this.calcFla()
       });
-      this.save();
     }
   }
 
@@ -192,6 +191,7 @@ export class FanMotorComponent implements OnInit {
   }
 
   save() {
+    this.getFullLoadAmps();
     this.fanMotor = this.fanMotorService.getObjFromForm(this.fanMotorForm);
     this.emitSave.emit(this.fanMotor);
     this.checkWarnings();

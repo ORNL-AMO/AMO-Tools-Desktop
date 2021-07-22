@@ -103,22 +103,10 @@
       [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
       <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
         Full-Load Amps
-        <!-- <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()"
-          id="flaHelp" (click)="getFullLoadAmps()">Estimate
-          Full-Load Amps</a> -->
       </label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="fullLoadAmps" type="number" min="0" step="any"
-          class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps"
-          (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
-        <span class="input-group-addon units">A</span>
+      <div class="small text-center">
+        {{psatForm.controls.fullLoadAmps.value}} A
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.fullLoadAmps.invalid && !psatForm.controls.fullLoadAmps.pristine">
-        <span *ngIf="psatForm.controls.fullLoadAmps.errors.required">Value Required</span>
-      </span>
-      <span class="alert-warning small pull-right"
-        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.flaError}}</span>
-      </div>
+    </div>
   </div>
 </form>

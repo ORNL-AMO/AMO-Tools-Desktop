@@ -104,7 +104,6 @@ export class MotorComponent implements OnInit {
   getFullLoadAmps() {
     if (!this.disableFLA()) {
       this.psatForm = this.psatService.setFormFullLoadAmps(this.psatForm, this.settings);
-      //this.save();
     }
   }
 
