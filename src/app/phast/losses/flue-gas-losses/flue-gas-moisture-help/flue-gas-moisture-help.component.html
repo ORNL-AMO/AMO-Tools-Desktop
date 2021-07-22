@@ -1,0 +1,130 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+    Moisture in Combustion Air Help
+    <br>
+    <small class="text-muted">Enter measured data to calculate moisture percentage in combustion air</small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="currentField == 'barometricPressure'">
+      <h6>
+        Barometric Pressure
+        <br>
+        <small class="text-muted">
+          The total atmospheric air pressure. Standard Atmosphere is 101325 Pa, 1.01325 bar, 760 mmHg (torr), 29.92 in Hg and 14.696
+          psi.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'specificHeatRatio'">	
+      <h6>	
+        Specific Heat Ratio	
+        <br>	
+        <small class="text-muted">	
+          The ratio of the specific heat capacity at constant pressure to that at constant volume. Also known as the heat capacity	
+          ratio, adiabatic index, the isentropic expansion factor and &gamma;. For all diatomic gases (N	
+          <sub>2</sub>, O	
+          <sub>2</sub>) this is 1.4. The Specific Heat Ratio for a mixture is ratio of the weighted averages of the heat capacity	
+          at constant pressure to constant volume.	
+          <hr> For flue gases this would be calculated as such:	
+          <br>	
+          <img class="w-100 p-1" src="assets/images/specific-heat-ratio-calc.png">	
+          <br> And can be approximated as 1.37.	
+        </small>	
+      </h6>	
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'inputType'">
+      <h6>
+        Method to Establish Gas Density
+        <br>
+        <small class="text-muted">
+          Method to Establish Gas Density has 4 options for the determination of gas density: using relative humidity, wet bulb temperature,
+          dew point temperature or already knowing the gas density. Choose which option is appropriate for what is known.
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+      <h6>
+        Dry Bulb Temperature
+        <br>
+        <small class="text-muted">
+          The true thermodynamic temperature, measured shielded from radiation and moisture. This indicates the amount of heat in the
+          air without including the amount of moisture. Taken with a standard thermometer.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'staticPressure'">
+      <h6>
+        Static Pressure
+        <br>
+        <small class="text-muted">
+          The portion of the air pressure due to compression of the gas at the inlet of the fan.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'wetBulbTemp'">
+      <h6>
+        Wet Bulb Temperature
+        <br>
+        <small class="text-muted">
+          The lowest temperature that is achieved by using evaporative cooling on a water-soaked surface. Read using a thermometer
+          covered in a water-soaked cloth over which air is passed, such as a sling psychrometer. When obtaining Wet Bulb temperature,
+          care should be taken to assure an air velocity of 700 – 2000 ft/min (3.6-10.2 m/s) over the wet bulb and that evaporative
+          equilibrium has been attained.</small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'specificGravity'">
+      <h6>
+        Specific Gravity
+        <br>
+        <small class="text-muted">
+          Ratio of the density of the gas at the inlet of the Fan to the density of air at normal/standard temperature and pressure
+          (68 &#8457;, 1 atm). The Specific Gravity for Air is 1.</small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'specificHeatGas'">
+      <h6>
+        Specific Heat Gas (Cp)
+        <br>
+        <small class="text-muted">
+          The amount of heat required to raise the temperature of the gas one degree for each unit of mass. For air this is 0.24 Btu/lb
+          &#8457;, for flue gases, this ranges between 0.248 and 0.320 Btu/lb &#8457;, depending on temperature and composition.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'relativeHumidity'">
+      <h6>
+        Relative Humidity
+        <br>
+        <small class="text-muted">
+          The relative humidity is the ratio of the partial pressure of water vapor in the air to the equilibrium vapor pressure of
+          water. Can be measured with a hygrometer or found via a weather report.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'dewPoint'">
+      <h6>
+        Dew Point
+        <br>
+        <small class="text-muted">
+          The temperature that air is cooled enough to become saturated with water vapor. Can be found via weather reports.
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'gasDensity'">
+      <h6>
+        Gas Density
+        <br>
+        <small class="text-muted">
+          The total density of the gas at the inlet of the Fan. To convert from relative density to actual density, multiply relative density by the density of air at STP (1.2 kg/m^3 or 0.075 lb/ft^3) </small>
+      </h6>
+    </div>
+  </div>
