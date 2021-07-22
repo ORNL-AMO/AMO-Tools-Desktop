@@ -102,6 +102,9 @@ export class InventoryComponent implements OnInit {
     this.cd.detectChanges();
   }
 
+  focusField(str: string) {
+    this.compressedAirAssessmentService.focusedField.next(str);
+  }
 
   checkSystemProfile() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();

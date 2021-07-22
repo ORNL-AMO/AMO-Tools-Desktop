@@ -1,0 +1,57 @@
+<!-- Centrifugal Specifics Help -->
+<div class="my-2" *ngIf="focusedField == 'surgeAirflow'">
+    <h6>
+        Surge airflow at design conditions
+        <br>
+        <small class="text-muted">
+            The air flow at the surge point, aka the blow-off point
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'maxFullLoadPressure'">
+    <h6>
+        Max. full load (surge) pressure
+        <br>
+        <small class="text-muted">
+            For Centrifugal compressors, this the preassure at max load, aka surge pressure
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'maxFullLoadCapacity'">
+    <h6>
+        Capacity at max full load pressure
+        <br>
+        <small class="text-muted">
+            Full load airflow for a centrifugal compressor when operating the compressor at its maximum stable
+            discharge pressure.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'minFullLoadPressure'">
+    <h6>
+        Min. full load (stonewall) pressure
+        <br>
+        <small class="text-muted">
+            For Centrifugal compressors, this the preassure at min load, aka stonewall pressure
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'minFullLoadCapacity'">
+    <h6>
+        Capacity at min. full load pressure
+        <br>
+        <small class="text-muted">
+            Maximum airflow delivery capability of a centrifugal compressor. Reduction of discharge pressure will
+            not increase airflow since the air has reached sonic speed.
+            <hr>
+        </small>
+    </h6>
+</div>
