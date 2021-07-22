@@ -105,26 +105,28 @@ export class SystemProfileService {
   }
 
 
-  // updateCompressorOrdering(compressorOrdering: Array<CompressorOrderItem>) {
-  //   for (let compressorIndex = 0; compressorIndex < compressorOrdering.length; compressorIndex++) {
-  //     let order: number = 1;
-  //     for (let compressorOrderIndex = 0; compressorOrderIndex < compressorOrdering.length; compressorOrderIndex++) {
-  //       if (compressorOrdering[compressorIndex].orders[compressorOrderIndex] != 0) {
-  //         if (compressorOrderIndex != compressorIndex) {
-  //           if (compressorOrdering[compressorIndex].fullLoadPressure < compressorOrdering[compressorOrderIndex].fullLoadPressure) {
-  //             order++;
-  //           } else if (compressorOrdering[compressorOrderIndex].fullLoadPressure == compressorOrdering[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
-  //             order++;
-  //           }
-  //         }
-  //       }
-  //     }
-
-  //     for (let orderIndex = 0; orderIndex < compressorOrdering[0].orders.length; orderIndex++) {
-  //       if (compressorOrdering[compressorIndex].orders[orderIndex] != 0) {
-  //         compressorOrdering[compressorIndex].orders[orderIndex] = order;
-  //       }
-  //     }
-  //   }
-  // }
+  updateCompressorOrdering(profileSummary: Array<ProfileSummary>, dayTypes: Array<CompressedAirDayType>): Array<ProfileSummary> {
+    dayTypes.forEach(dayType => {
+      let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
+      for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
+        for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
+          let order: number = 1;
+          for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
+            if (compressorOrderIndex != compressorIndex && dayTypeSummaries[compressorOrderIndex].profileSummaryData[orderIndex].order != 0) {
+              if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
+                order++;
+              } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+                order++;
+              }
+            }
+          }
+          if (dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order != 0) {
+            let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
+            profileSummary[summaryIndex].profileSummaryData[orderIndex].order = order;
+          }
+        }
+      }
+    });
+    return profileSummary;
+  }
 }

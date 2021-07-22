@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 
@@ -423,7 +423,7 @@ export class InventoryService {
     return false;
   }
 
-  addNewCompressor(){
+  addNewCompressor() {
     let newInventoryItem: CompressorInventoryItem = this.getNewInventoryItem();
     newInventoryItem.modifiedDate = new Date();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -440,10 +440,33 @@ export class InventoryService {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.selectedCompressor.next(newInventoryItem);
   }
-  
-  getEmptyProfileSummaryData(): Array<ProfileSummaryData>{
+
+  addNewDayType(compressedAirAssessment: CompressedAirAssessment, dayTypeName: string, dayTypeId?: string): CompressedAirAssessment {
+    if (!dayTypeId) {
+      dayTypeId = Math.random().toString(36).substr(2, 9);
+    }
+    let newDayType: CompressedAirDayType = {
+      dayTypeId: dayTypeId,
+      name: dayTypeName,
+      numberOfDays: 0,
+      profileDataType: "percentCapacity"
+    };
+    compressedAirAssessment.compressedAirDayTypes.push(newDayType);
+    compressedAirAssessment.compressorInventoryItems.forEach(item => {
+      compressedAirAssessment.systemProfile.profileSummary.push({
+        compressorId: item.itemId,
+        compressorName: item.name,
+        dayTypeId: newDayType.dayTypeId,
+        profileSummaryData: this.getEmptyProfileSummaryData(),
+        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
+      })
+    });
+    return compressedAirAssessment;
+  }
+
+  getEmptyProfileSummaryData(): Array<ProfileSummaryData> {
     let summaryData: Array<ProfileSummaryData> = new Array();
-    for(let i = 0; i < 24; i++){
+    for (let i = 0; i < 24; i++) {
       summaryData.push({
         power: undefined,
         airflow: undefined,
@@ -457,9 +480,9 @@ export class InventoryService {
     return summaryData;
   }
 
-  getEmptyOrders():Array<number> {
+  getEmptyOrders(): Array<number> {
     let emptyOrders: Array<number> = new Array();
-    for(let i = 0; i < 24; i++){
+    for (let i = 0; i < 24; i++) {
       emptyOrders.push(0)
     }
     return emptyOrders;

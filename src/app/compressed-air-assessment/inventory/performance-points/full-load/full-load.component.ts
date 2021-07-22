@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
+import { SystemProfileService } from '../../../system-profile/system-profile.service';
 import { InventoryService } from '../../inventory.service';
 import { FullLoadCalculationsService } from '../calculations/full-load-calculations.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
@@ -25,7 +26,7 @@ export class FullLoadComponent implements OnInit {
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private fullLoadCalculationsService: FullLoadCalculationsService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private performancePointCalculationsService: PerformancePointCalculationsService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -131,14 +132,14 @@ export class FullLoadComponent implements OnInit {
     this.save();
   }
 
-  updateForm(performancePoint: PerformancePoint){
-    if(performancePoint.airflow != this.form.controls.airflow.value){
+  updateForm(performancePoint: PerformancePoint) {
+    if (performancePoint.airflow != this.form.controls.airflow.value) {
       this.form.controls.airflow.patchValue(performancePoint.airflow);
     }
-    if(performancePoint.dischargePressure != this.form.controls.dischargePressure.value){
+    if (performancePoint.dischargePressure != this.form.controls.dischargePressure.value) {
       this.form.controls.dischargePressure.patchValue(performancePoint.dischargePressure);
     }
-    if(performancePoint.power != this.form.controls.power.value){
+    if (performancePoint.power != this.form.controls.power.value) {
       this.form.controls.power.patchValue(performancePoint.power);
     }
   }

@@ -146,9 +146,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
-  save(compressedAirAssessment: CompressedAirAssessment) {    
+  save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-        this.indexedDbService.putAssessment(this.assessment).then(() => {
+    this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });
   }
