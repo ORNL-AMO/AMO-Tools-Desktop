@@ -10,6 +10,7 @@ import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
+import { InventoryService } from './inventory/inventory.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -41,7 +42,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
-    private genericCompressorDbService: GenericCompressorDbService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.genericCompressorDbService.getAllCompressors();
@@ -93,6 +94,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.setupTab.next('system-basics');
+    this.compressedAirAssessmentService.profileTab.next('setup');
+    this.inventoryService.selectedCompressor.next(undefined);
   }
 
   ngAfterViewInit() {

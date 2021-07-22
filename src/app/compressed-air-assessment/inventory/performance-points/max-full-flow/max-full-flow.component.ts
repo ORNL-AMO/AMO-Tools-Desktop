@@ -1,39 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory.service';
 import { MaxFullFlowCalculationsService } from '../calculations/max-full-flow-calculations.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
+import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 @Component({
   selector: 'app-max-full-flow',
   templateUrl: './max-full-flow.component.html',
   styleUrls: ['./max-full-flow.component.css']
 })
 export class MaxFullFlowComponent implements OnInit {
-
-
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
   maxFullFlowLabel: string;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointCalculationsService: PerformancePointCalculationsService,
+  constructor(private inventoryService: InventoryService,
+    private performancePointsFormService: PerformancePointsFormService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointCalculationsService: PerformancePointCalculationsService,
     private maxFullFlowCalculationsService: MaxFullFlowCalculationsService) { }
 
   ngOnInit(): void {
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
-        this.selectedCompressor = val;
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.selectedCompressor = compressor;
         this.checkShowCalc();
         if (this.isFormChange == false) {
-          this.setMaxFullFlowLabel(val.compressorControls.controlType);
-          this.form = this.inventoryService.getPerformancePointFormFromObj(val.performancePoints.maxFullFlow);
+          this.setMaxFullFlowLabel(compressor.compressorControls.controlType);
+          this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.maxFullFlow.power, compressor);
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow');
+          this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.isFormChange = false;
         }
@@ -48,9 +53,10 @@ export class MaxFullFlowComponent implements OnInit {
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.performancePoints.maxFullFlow = this.inventoryService.getPerformancePointObjFromForm(this.form);
+    selectedCompressor.performancePoints.maxFullFlow = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     //re-calculate performance points on changes to max full flow
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    this.updateForm(selectedCompressor.performancePoints.maxFullFlow);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
@@ -128,5 +134,16 @@ export class MaxFullFlowComponent implements OnInit {
     this.form.controls.dischargePressure.patchValue(defaultValue);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
+  }
+  updateForm(performancePoint: PerformancePoint){
+    if(performancePoint.airflow != this.form.controls.airflow.value){
+      this.form.controls.airflow.patchValue(performancePoint.airflow);
+    }
+    if(performancePoint.dischargePressure != this.form.controls.dischargePressure.value){
+      this.form.controls.dischargePressure.patchValue(performancePoint.dischargePressure);
+    }
+    if(performancePoint.power != this.form.controls.power.value){
+      this.form.controls.power.patchValue(performancePoint.power);
+    }
   }
 }

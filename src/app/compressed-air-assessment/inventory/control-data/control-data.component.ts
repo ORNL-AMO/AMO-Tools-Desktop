@@ -20,10 +20,12 @@ export class ControlDataComponent implements OnInit {
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   displayUnload: boolean;
   displayAutomaticShutdown: boolean;
+  contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
+    this.contentCollapsed = this.inventoryService.collapseControls;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
@@ -40,6 +42,7 @@ export class ControlDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.inventoryService.collapseControls = this.contentCollapsed;
   }
 
   setControlTypeOptions(compressorType: number) {
@@ -60,10 +63,10 @@ export class ControlDataComponent implements OnInit {
   changeControlType() {
     this.form = this.inventoryService.setCompressorControlValidators(this.form);
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6) {
+      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 5) {
       this.form.controls.numberOfUnloadSteps.patchValue(2);
     }
-    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7) {
+    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 7 || this.form.controls.controlType.value == 5) {
       this.form.controls.unloadPointCapacity.patchValue(100);
     }
     this.toggleDisableControls();
@@ -72,14 +75,14 @@ export class ControlDataComponent implements OnInit {
   }
 
   toggleDisableControls() {
-    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7) {
+    if (this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 7 || this.form.controls.controlType.value == 5) {
       this.form.controls.unloadPointCapacity.disable();
     } else {
       this.form.controls.unloadPointCapacity.enable();
     }
 
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
-      || this.form.controls.controlType.value == 4) {
+      || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 5) {
       this.form.controls.numberOfUnloadSteps.disable();
     } else {
       this.form.controls.numberOfUnloadSteps.enable();
@@ -106,5 +109,9 @@ export class ControlDataComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+  }
+
+  toggleCollapse(){
+    this.contentCollapsed = !this.contentCollapsed;
   }
 }

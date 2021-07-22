@@ -13,16 +13,17 @@
                 (focus)="focusField('unloadPointDischargePressure')">
             <span class="units input-group-addon">psig</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-       *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-       <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-       <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-         {{form.controls.motorPower.errors.min.min}} hp.</span>
-     </span> -->
+        <span class="alert-danger pull-right small" *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
+            <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
+            <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
+                Max Full Flow Discharge Pressure {{form.controls.dischargePressure.errors.min.min}} psig.</span>
+            <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
+                Max Full Flow Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig.</span>
+        </span>
     </div>
     <!-- unloadPointAirflow -->
     <div class="form-group">
-        <label for="unloadPointAirflow">Air Flow</label>
+        <label for="unloadPointAirflow">Airflow</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
                 <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
@@ -31,12 +32,10 @@
                 formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('unloadPointAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-       *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-       <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-       <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-         {{form.controls.motorPower.errors.min.min}} hp.</span>
-     </span> -->
+        <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
+            <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
+            <span *ngIf="form.controls.airflow.errors.min">Value can't be less than {{form.controls.airflow.errors.min.min}} acfm.</span>
+        </span>
     </div>
     <!-- unloadPointPower -->
     <div class="form-group">
@@ -49,11 +48,18 @@
                 formControlName="power" (input)="savePower()" (focus)="focusField('unloadPointPower')">
             <span class="units input-group-addon">kW</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-       *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-       <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-       <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-         {{form.controls.motorPower.errors.min.min}} hp.</span>
-     </span> -->
+        <span class="alert-danger pull-right small" *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
+            <span *ngIf="form.controls.power.errors.required">Value Required</span>
+            <span *ngIf="form.controls.power.errors.min">Value can't be less than
+                {{form.controls.power.errors.min.min}} kW.</span>
+            <span *ngIf="form.controls.power.errors.max !== undefined">Value cannot be greater than Full Load Power
+                ({{form.controls.power.errors.max.max}}) kW.</span>
+                <span *ngIf="form.controls.power.errors.lessThan !== undefined">Value must be less than Unload Point Power
+                    ({{form.controls.power.errors.lessThan}}) kW.</span>
+            <span *ngIf="form.controls.power.errors.greaterThan !== undefined">Value must be greater than
+                {{form.controls.power.errors.greaterThan}} kW.</span>
+        </span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
+
     </div>
 </form>

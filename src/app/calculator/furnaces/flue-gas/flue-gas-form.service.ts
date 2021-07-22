@@ -14,7 +14,6 @@ export class FlueGasFormService {
 
     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'utilityType': ['Natural Gas'],
       'flueGasTemperature': ['', Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
       'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -83,7 +82,6 @@ export class FlueGasFormService {
   initByVolumeFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
     let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
-      'utilityType': [loss.flueGasByVolume.utilityType],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
       'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -211,7 +209,6 @@ export class FlueGasFormService {
       flueGasType: "By Volume",
       flueGasByVolume: {
         gasTypeId: form.controls.gasTypeId.value,
-        utilityType: form.controls.utilityType.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
         oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
         excessAirPercentage: form.controls.excessAirPercentage.value,

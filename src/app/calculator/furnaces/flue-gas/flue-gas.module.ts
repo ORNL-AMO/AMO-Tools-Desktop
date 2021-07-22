@@ -15,6 +15,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { EnergyFormComponent } from './energy-form/energy-form.component';
 import { FlueGasFormService } from './flue-gas-form.service';
+import { EnergyFormService } from './energy-form.service';
 
 
 
@@ -44,7 +45,8 @@ import { FlueGasFormService } from './flue-gas-form.service';
   ],
   providers: [
     FlueGasService,
-    FlueGasFormService
+    FlueGasFormService,
+    EnergyFormService
   ]
 })
 export class FlueGasModule { }

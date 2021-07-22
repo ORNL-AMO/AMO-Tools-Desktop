@@ -32,7 +32,7 @@ export class UnloadPointCalculationsService {
         //centrifugal
         return this.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.dischargePressure);
       } else {
-        return this.calculateUnloadPointAirFlow(selectedCompressor.performancePoints.unloadPoint.dischargePressure, selectedCompressor.compressorControls.unloadPointCapacity);
+        return this.calculateUnloadPointAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.compressorControls.unloadPointCapacity);
       }
 
     } else {
@@ -61,17 +61,17 @@ export class UnloadPointCalculationsService {
   
   calculateUnloadPointPower(NoLoadPowerFM: number, unloadPointCapacity: number, exponent: number, maxFullFlowPower: number): number {
     let unloadPointPower: number = ((NoLoadPowerFM / 100) * (1 - Math.pow((unloadPointCapacity / 100), exponent)) + Math.pow((unloadPointCapacity / 100), exponent)) * maxFullFlowPower;
-    return Number(unloadPointPower.toFixed(3));
+    return Number(unloadPointPower.toFixed(1));
   }
 
   calculateUnloadPointAirFlow(fullLoadRatedCapacity: number, unloadPointCapacity: number): number {
     let unloadPointAirFlow: number = fullLoadRatedCapacity * (unloadPointCapacity / 100);
-    return Number(unloadPointAirFlow.toFixed(3));
+    return Number(unloadPointAirFlow.toFixed(0));
   }
 
   calculateUnloadPointDischargePressure(maxFullFlowPressure: number, modulatingPressureRange: number, unloadPointCapacity: number): number {
     let unloadPointDischargePressure: number = maxFullFlowPressure + (modulatingPressureRange * (1 - (unloadPointCapacity / 100)));
-    return Number(unloadPointDischargePressure.toFixed(3));
+    return Number(unloadPointDischargePressure.toFixed(0));
   }
 
   calculateCentrifugalUnloadPointAirFlow(selectedCompressor: CompressorInventoryItem, pressure: number): number {
@@ -80,6 +80,7 @@ export class UnloadPointCalculationsService {
     let C22: number = selectedCompressor.centrifugalSpecifics.maxFullLoadPressure;
     let C23: number = selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity;
     let C26: number = selectedCompressor.centrifugalSpecifics.surgeAirflow;
-    return (C37 - (C24 - (((C22 - C24) / (C23 - C26)) * C26))) / ((C22 - C24) / (C23 - C26))
+    let result: number =  (C37 - (C24 - (((C22 - C24) / (C23 - C26)) * C26))) / ((C22 - C24) / (C23 - C26));
+    return Number(result.toFixed(0));
   }
 }

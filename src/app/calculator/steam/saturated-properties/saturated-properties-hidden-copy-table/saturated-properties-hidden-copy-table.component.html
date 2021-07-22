@@ -1,0 +1,62 @@
+<div class="hidden-copy-table">
+    <table #copyTable class="steam-table calculator-table">
+        <thead>
+            <tr>
+                <th>Pressure(<span [innerHTML]="settings.steamPressureMeasurement|settingsLabel"></span>)
+                </th>
+                <th>Temp.
+                    (<span [innerHTML]="settings.steamTemperatureMeasurement|settingsLabel"></span>)
+                </th>
+                <th>Specific Enthalpy
+                    (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement|settingsLabel"></span>)
+                </th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Specific Entropy
+                    (<span [innerHTML]="settings.steamSpecificEntropyMeasurement|settingsLabel"></span>)
+                </th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Specific Volume
+                    (<span [innerHTML]="settings.steamSpecificVolumeMeasurement|settingsLabel"></span>)
+                </th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Saturated Liquid</th>
+                <th>Evap.</th>
+                <th>Saturated Gas</th>
+                <th>Saturated Liquid</th>
+                <th>Evap.</th>
+                <th>Saturated Gas</th>
+                <th>Saturated Liquid</th>
+                <th>Evap.</th>
+                <th>Saturated Gas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rowData; let i = index">
+                <td>{{row.pressure | number:'1.0-4'}}</td>
+                <td class="parent-col">{{row.temperature | number:'1.0-2'}}</td>
+
+                <td class="parent-col">{{row.satLiquidEnthalpy | number:'1.0-2'}}</td>
+                <td class="child-col">{{row.evapEnthalpy | number:'1.0-2'}}</td>
+                <td class="child-col">{{row.satGasEnthalpy | number:'1.0-2'}}</td>
+
+                <td class="parent-col">{{row.satLiquidEntropy | number:'1.0-4'}}</td>
+                <td class="child-col">{{row.evapEntropy | number:'1.0-4'}}</td>
+                <td class="child-col">{{row.satGasEntropy | number:'1.0-4'}}</td>
+
+                <td class="parent-col">{{row.satLiquidVolume | number:'1.0-4'}}</td>
+                <td class="child-col">{{row.evapVolume | number:'1.0-4'}}</td>
+                <td class="child-col">{{row.satGasVolume | number:'1.0-4'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

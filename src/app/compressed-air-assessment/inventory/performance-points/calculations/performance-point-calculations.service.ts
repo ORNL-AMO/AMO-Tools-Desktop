@@ -22,7 +22,7 @@ export class PerformancePointCalculationsService {
 
     selectedCompressor.nameplateData.motorPower = genericCompressor.HP;
 
-    selectedCompressor.nameplateData.totalPackageInputPower = genericCompressor.TotPackageInputPower;
+    selectedCompressor.nameplateData.totalPackageInputPower = Number(genericCompressor.TotPackageInputPower.toFixed(1));
     selectedCompressor.designDetails.noLoadPowerFM = genericCompressor.NoLoadPowerFM;
     selectedCompressor.compressorControls.unloadSumpPressure = genericCompressor.MinULSumpPressure;
     selectedCompressor.designDetails.noLoadPowerUL = genericCompressor.NoLoadPowerUL;

@@ -1284,6 +1284,7 @@ export const MockTreasureHunt: Assessment = {
         "compressedAirPressureReductions": [{
             "baseline": [{
                 "name": "Equipment #1",
+                "powerType": "Measured",
                 "isBaseline": true,
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
@@ -1295,6 +1296,7 @@ export const MockTreasureHunt: Assessment = {
             }],
             "modification": [{
                 "name": "Equipment #1",
+                "powerType": "Measured",
                 "isBaseline": false,
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,

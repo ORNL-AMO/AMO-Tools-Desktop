@@ -73,7 +73,14 @@ export class CleanDataComponent implements OnInit {
       return field.isDateField == true;
     });
     csvData.hasDateField = csvData.dateField != undefined;
-    console.log(this.individualDataFromCsv);
+    this.cd.detectChanges();
+  }
+
+  setTimeField(csvData: IndividualDataFromCsv) {
+    csvData.timeField = csvData.fields.find(field => {
+      return field.isTimeField == true;
+    });
+    csvData.hasTimeField = csvData.timeField != undefined;
     this.cd.detectChanges();
   }
 }

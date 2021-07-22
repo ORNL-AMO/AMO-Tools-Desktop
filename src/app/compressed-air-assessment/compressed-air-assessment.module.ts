@@ -69,6 +69,7 @@ import { BlowoffHelpComponent } from './results-panel/help-panel/inventory-help/
 import { FullLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/full-load-help/full-load-help.component';
 import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
 import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help/day-types-help.component';
+import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help
     MaxFullFlowCalculationsService,
     NoLoadCalculationsService,
     UnloadPointCalculationsService,
-    SharedPointCalculationsService
+    SharedPointCalculationsService,
+    PerformancePointsFormService
   ]
 })
 export class CompressedAirAssessmentModule { }

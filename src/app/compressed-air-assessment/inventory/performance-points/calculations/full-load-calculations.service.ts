@@ -37,9 +37,10 @@ export class FullLoadCalculationsService {
         ];
         let regressionEquation = regression.polynomial(regressionData, { order: 2, precision: 50 });
         let regressionValue = regressionEquation.predict(selectedCompressor.performancePoints.fullLoad.dischargePressure);
-        return regressionValue[1];
+        let result: number =  regressionValue[1];
+        return Number(result.toFixed(0));
       } else {
-        return this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
+        return this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.inletConditions.atmosphericPressure);
       }
     } else {
       return selectedCompressor.performancePoints.fullLoad.airflow;
@@ -52,7 +53,7 @@ export class FullLoadCalculationsService {
         //centrifugal
         return selectedCompressor.nameplateData.totalPackageInputPower;
       } else {
-        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.compressorControls.controlType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower);
+        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.compressorControls.controlType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.inletConditions.atmosphericPressure);
       }
     } else {
       return selectedCompressor.performancePoints.fullLoad.power;

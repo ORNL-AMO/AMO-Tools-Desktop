@@ -29,7 +29,6 @@ export class LogToolService {
   }
 
   addCsvData(data: CsvImportData, csvName: string,) {
-    console.log(data)
     let csvId: string = Math.random().toString(36).substr(2, 9);
     let fields: Array<LogToolField> = data.meta.fields.map(field => {
       return {
@@ -40,7 +39,8 @@ export class LogToolService {
         unit: '',
         invalidField: false,
         csvId: csvId,
-        csvName: csvName
+        csvName: csvName,
+        fieldId: Math.random().toString(36).substr(2, 9)
       }
     });
     this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });

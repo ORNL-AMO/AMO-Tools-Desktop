@@ -27,11 +27,14 @@ export class WaterHeatingService {
     this.currentField = new BehaviorSubject<string>(undefined);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(treasureHuntFuelCost?: number) {
+    let fuelCost: number = treasureHuntFuelCost? treasureHuntFuelCost : 0;
     let emptyInput: WaterHeatingInput = {
+      boilerUtilityType: 'Natural Gas',
+      hxUtilityType: 'Natural Gas',
       operatingHours: 8760,
-      fuelCost: undefined,
-      fuelCostBoiler: undefined,
+      fuelCost: fuelCost,
+      fuelCostBoiler: fuelCost,
       effBoiler: undefined,
       waterCost: undefined,
       treatCost: undefined,
@@ -98,6 +101,8 @@ export class WaterHeatingService {
 
   generateExampleData(settings: Settings) {
     let exampleInput: WaterHeatingInput = {
+      boilerUtilityType: 'Natural Gas',
+      hxUtilityType: 'Natural Gas',
       operatingHours: 7000,
       fuelCost: 6,
       fuelCostBoiler: 6,
@@ -220,6 +225,9 @@ export class WaterHeatingService {
 
       output.energySavedTotal = this.convertUnitsService.value(output.energySavedTotal).from('kJ').to('GJ');
       output.energySavedTotal = this.roundVal(output.energySavedTotal, 2);
+
+      output.waterSaved = this.convertUnitsService.value(output.waterSaved).from('m3').to('gal');
+      output.waterSaved = this.roundVal(output.waterSaved, 2);
     }
     return output;
   }
@@ -227,6 +235,19 @@ export class WaterHeatingService {
   roundVal(val: number, digits: number): number {
     let rounded = Number(val.toFixed(digits));
     return rounded;
+  }
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+      case 'Electricity':
+        return settings.electricityCost;
+      case 'Steam':
+        return settings.steamCost;
+    }
   }
 
 }

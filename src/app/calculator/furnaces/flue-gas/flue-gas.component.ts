@@ -2,10 +2,10 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, I
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
 import { FlueGas, FlueGasOutput } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { FlueGasTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasService } from './flue-gas.service';
 
 @Component({
@@ -89,6 +89,12 @@ export class FlueGasComponent implements OnInit {
     this.baselineEnergySub.unsubscribe();
     this.modificationEnergySub.unsubscribe();
     this.outputSubscription.unsubscribe();
+    if (this.inTreasureHunt) {
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
+      this.flueGasService.baselineEnergyData.next(undefined);
+      this.flueGasService.modificationEnergyData.next(undefined);
+    }
   }
 
   initSubscriptions() {
@@ -165,9 +171,9 @@ export class FlueGasComponent implements OnInit {
 
   save() {
     let baselineData: FlueGas = this.flueGasService.baselineData.getValue();
-    let baselineEnergyData: EnergyData = this.flueGasService.baselineEnergyData.getValue();
+    let baselineEnergyData: FlueGasEnergyData = this.flueGasService.baselineEnergyData.getValue();
     let modificationData: FlueGas = this.flueGasService.modificationData.getValue();
-    let modificationEnergyData: EnergyData = this.flueGasService.modificationEnergyData.getValue();
+    let modificationEnergyData: FlueGasEnergyData = this.flueGasService.modificationEnergyData.getValue();
     this.emitSave.emit({ 
       baseline: baselineData, 
       modification: modificationData, 

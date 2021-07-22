@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { InventoryService } from '../inventory.service';
+import { PerformancePointsFormService } from './performance-points-form.service';
 
 @Component({
   selector: 'app-performance-points',
@@ -15,10 +16,11 @@ export class PerformancePointsComponent implements OnInit {
   showUnload: boolean;
   showNoLoad: boolean;
   showBlowoff: boolean;
-
-  constructor(private inventoryService: InventoryService) { }
+  contentCollapsed: boolean;
+  constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
+    this.contentCollapsed = this.inventoryService.collapsePerformancePoints;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.setShowMaxFlow(val);
@@ -31,23 +33,28 @@ export class PerformancePointsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.inventoryService.collapsePerformancePoints = this.contentCollapsed;
   }
 
 
   setShowMaxFlow(selectedCompressor: CompressorInventoryItem) {
-    this.showMaxFullFlow = this.inventoryService.checkShowMaxFlowPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
+    this.showMaxFullFlow = this.performancePointsFormService.checkShowMaxFlowPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowUnload(selectedCompressor: CompressorInventoryItem) {
-    this.showUnload = this.inventoryService.checkShowUnloadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
+    this.showUnload = this.performancePointsFormService.checkShowUnloadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowNoLoad(selectedCompressor: CompressorInventoryItem) {
-    this.showNoLoad = this.inventoryService.checkShowNoLoadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
+    this.showNoLoad = this.performancePointsFormService.checkShowNoLoadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
   }
 
   setShowBlowoff(selectedCompressor: CompressorInventoryItem) {
-    this.showBlowoff = this.inventoryService.checkShowBlowoffPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
+    this.showBlowoff = this.performancePointsFormService.checkShowBlowoffPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
 
+  }
+
+  toggleCollapse(){
+    this.contentCollapsed = !this.contentCollapsed;
   }
 }

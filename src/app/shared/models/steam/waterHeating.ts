@@ -1,5 +1,7 @@
 export interface WaterHeatingInput {
     operatingHours: number,
+    boilerUtilityType?: string,
+    hxUtilityType?: string,
     fuelCost: number,
     fuelCostBoiler: number,
     effBoiler: number,
