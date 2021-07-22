@@ -10,7 +10,7 @@ export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
-  collapseControls: boolean = true;
+  collapseControls: boolean = false;
   collapseDesignDetails: boolean = true;
   collapseInletConditions: boolean = true;
   collapsePerformancePoints: boolean = true;

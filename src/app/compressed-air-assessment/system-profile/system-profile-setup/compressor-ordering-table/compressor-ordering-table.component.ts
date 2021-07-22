@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-compressor-ordering-table',
   templateUrl: './compressor-ordering-table.component.html',
@@ -17,7 +17,7 @@ export class CompressorOrderingTableComponent implements OnInit {
   hourIntervals: Array<number>;
   isSequencerUsed: boolean;
   selectedDayTypeId: string;
-  fillRight: boolean = true;
+  fillRight: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -149,46 +149,63 @@ export class CompressorOrderingTableComponent implements OnInit {
   }
 
   setOrder(selectedCompressorIndex: number, orderIndex: number) {
-    //THIS IS NOT REALLY WORKING...
-    // let orders: Array<number> = new Array();
-    // this.compressorOrdering.forEach(compressor => {
-    //   if (compressor.orders[orderIndex] != 0) {
-    //     orders.push(compressor.orders[orderIndex]);
-    //   }
-    // });
+    let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+    //get orders that are currently selected
+    let selectedOrders: Array<number> = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+    //iterate all orders for hour interval and make sure there isn't a higher selected order
+    //then total number of selected orders
+    //set to highest possible if so and update selected orders
+    for (let index = 0; index < dayTypeSummaries.length; index++) {
+      if (dayTypeSummaries[index].profileSummaryData[orderIndex].order > selectedOrders.length) {
+        dayTypeSummaries[index].profileSummaryData[orderIndex].order = selectedOrders.length;
+        selectedOrders = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+      }
+    }
+    //find missing orders
+    let missingOrders: Array<number> = this.getMissingOrders(selectedOrders);
+    //until there are no missing orders
+    while (missingOrders.length != 0) {
+      for (let index = 0; index < dayTypeSummaries.length; index++) {
+        //don't update changed order
+        if (index != selectedCompressorIndex) {
+          let orderCount: Array<number> = selectedOrders.filter(order => { return order == dayTypeSummaries[index].profileSummaryData[orderIndex].order })
+          if (orderCount.length > 1) {
+            //update duplicate order with first missing values
+            let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[index].compressorId && summary.dayTypeId == dayTypeSummaries[index].dayTypeId })
+            this.profileSummary[summaryIndex].profileSummaryData[orderIndex].order = missingOrders[0];
+            //exist for loop
+            index = dayTypeSummaries.length + 1;
+          }
+        }
+      }
+      //update our selected and missing orders
+      dayTypeSummaries = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+      selectedOrders = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+      missingOrders = this.getMissingOrders(selectedOrders);
+    }
 
-    // if (this.compressorOrdering[selectedCompressorIndex].orders[orderIndex] != 0) {
-    //   //sets lowest needed
-    //   for (let i = this.compressorOrdering[selectedCompressorIndex].orders[orderIndex] - 1; i > 0; i--) {
-    //     if (!orders.includes(i)) {
-    //       this.compressorOrdering[selectedCompressorIndex].orders[orderIndex]--;
-    //     }
-    //   }
-    //   for (let i = 0; i < this.compressorOrdering.length; i++) {
-    //     if (i != selectedCompressorIndex && this.compressorOrdering[i].orders[orderIndex] >= this.compressorOrdering[selectedCompressorIndex].orders[orderIndex]) {
-    //       let checkOrder: boolean = this.orderingOptions.includes(this.compressorOrdering[i].orders[orderIndex] + 1);
-    //       if (checkOrder) {
-    //         this.compressorOrdering[i].orders[orderIndex]++;
-    //       } else {
-    //         let tmpOrders: Array<number> = new Array();
-    //         this.compressorOrdering.forEach(compressor => {
-    //           if (compressor.orders[orderIndex] != 0) {
-    //             tmpOrders.push(compressor.orders[orderIndex]);
-    //           }
-    //         });
-    //         this.orderingOptions.forEach(order => {
-    //           let checkOrder: boolean = tmpOrders.includes(order);
-    //           if (!checkOrder) {
-    //             this.compressorOrdering[i].orders[orderIndex] = order;
-    //           }
-    //         });
-    //       }
-    //     }
-    //   }
-    // }
     this.save();
   }
 
+  getMissingOrders(selectedOrders: Array<number>): Array<number> {
+    let missingOrders: Array<number> = new Array();
+    for (let index = 1; index <= selectedOrders.length; index++) {
+      if (!selectedOrders.includes(index)) {
+        missingOrders.push(index);
+      }
+    }
+    return missingOrders;
+  }
+
+  getSelectedOrders(dayTypeSummaries: Array<ProfileSummary>, orderIndex: number): Array<number> {
+    let selectedOrders: Array<number> = new Array();
+    for (let index = 0; index < dayTypeSummaries.length; index++) {
+      if (dayTypeSummaries[index].profileSummaryData[orderIndex].order != 0) {
+        selectedOrders.push(dayTypeSummaries[index].profileSummaryData[orderIndex].order);
+      }
+    }
+    return selectedOrders;
+  }
 
   trackByIdx(index: number, obj: any): any {
     return index;
