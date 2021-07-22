@@ -55,7 +55,7 @@
         <!--Is a target pressure sequencer used?-->
         <div class="form-group">
             <label for="utilityType">Is a target pressure sequencer used?</label>
-            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="save()"
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="changeIsSequencerUsed()"
                 (focus)="focusField('isSequencerUsed')">
                 <option [ngValue]="true">Yes</option>
                 <option [ngValue]="false">No</option>
