@@ -91,7 +91,7 @@ export class SystemProfileService {
     let intervals: Array<number> = allData.map(data => { return data.timeInterval });
     intervals = _.uniq(intervals);
     intervals.forEach(interval => {
-      let filteredData: Array<ProfileSummaryData> = allData.filter(data => { return data.timeInterval == interval });
+      let filteredData: Array<ProfileSummaryData> = allData.filter(data => { return data.timeInterval == interval && data.order != 0 });
       let totalAirFlow: number = _.sumBy(filteredData, 'airflow');
       let totalPower: number = _.sumBy(filteredData, 'power');
       totals.push({
@@ -133,7 +133,7 @@ export class SystemProfileService {
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
       for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
-        if(dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order > removedSummary.profileSummaryData[orderIndex].order){
+        if (dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order > removedSummary.profileSummaryData[orderIndex].order) {
           let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
           profileSummary[summaryIndex].profileSummaryData[orderIndex].order--;
         }
