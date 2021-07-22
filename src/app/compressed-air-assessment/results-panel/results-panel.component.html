@@ -47,12 +47,12 @@
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
                 <app-inventory-table *ngIf="tabSelect == 'current-inventory'"></app-inventory-table>
-                <hr>
+                <hr  *ngIf="tabSelect == 'current-inventory'">
                 <app-inventory-performance-profile *ngIf="tabSelect == 'current-inventory'"></app-inventory-performance-profile>
                 <app-help-panel *ngIf="(tabSelect == 'help' && displayInventory) || !displayInventory">
                 </app-help-panel>
-                <app-results-table *ngIf="tabSelect == 'results' && displayInventory">
-                </app-results-table>
+                <!-- <app-results-table *ngIf="tabSelect == 'results' && displayInventory">
+                </app-results-table> -->
             </div>
         </div>
     </div>
