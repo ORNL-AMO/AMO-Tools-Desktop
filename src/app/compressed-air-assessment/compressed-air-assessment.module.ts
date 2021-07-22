@@ -53,6 +53,15 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/compressed-air-calculators.component';
+import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs/calculator-tabs.component';
+import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
+import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
+import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';
+import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
+import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
+import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
+import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 
 @NgModule({
   declarations: [
@@ -90,13 +99,22 @@ import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
     FilterCompressorsPipe,
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
-    DayTypeFilterPipe
+    DayTypeFilterPipe,
+    CompressedAirCalculatorsComponent,
+    CalculatorTabsComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     SettingsModule,
     ReactiveFormsModule,
+    AirFlowConversionModule,
+    ReceiverTankModule,
+    AirLeakModule,
+    SystemCapacityModule,
+    PipeSizingModule,
+    CompressedAirPressureReductionModule,
+    AirVelocityModule,
     FormsModule,
     ModalModule
   ],

@@ -13,6 +13,7 @@ export class CompressedAirAssessmentService {
   setupTab: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
   profileTab: BehaviorSubject<string>;
+  calcTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
   constructor() {
@@ -21,6 +22,7 @@ export class CompressedAirAssessmentService {
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.focusedField = new BehaviorSubject<string>('default');
     this.profileTab = new BehaviorSubject<string>('setup');
+    this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
