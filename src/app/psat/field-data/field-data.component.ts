@@ -32,8 +32,6 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
-  @Input()
-  compareTwoPumpsAsBaseline: boolean;
 
   @ViewChild('headToolModal', { static: false }) public headToolModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;

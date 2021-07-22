@@ -32,8 +32,6 @@ export class PumpFluidComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modificationIndex: number;
-  @Input()
-  compareTwoPumpsAsBaseline: boolean;
 
   //Arrays holding <select> form data
   pumpTypes: Array<{ display: string, value: number }>;

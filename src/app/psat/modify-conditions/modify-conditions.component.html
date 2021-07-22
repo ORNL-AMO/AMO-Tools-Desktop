@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <!-- Modifications Start / Compare Two Pumps as baseline -->
+    <!-- Modifications Start -->
     <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="modificationExists"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
 
@@ -28,21 +28,18 @@
         <h3 *ngIf="psat.modifications[modificationIndex]">{{psat.modifications[modificationIndex].psat.name}}</h3>
       </div>
 
-      <!-- [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false" -->
       <!-- Forms -->
       <div class="psat-losses-container">
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
           [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
-          [modificationIndex]="modificationIndex"
-          [compareTwoPumpsAsBaseline]="psat.modifications[modificationIndex].psat.whatIfScenario"></app-pump-fluid>
+          [modificationIndex]="modificationIndex"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
           [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false" [selected]="modifiedSelected"
-          (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
-          [compareTwoPumpsAsBaseline]="psat.modifications[modificationIndex].psat.whatIfScenario"></app-field-data>
+          (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"></app-field-data>
       </div>
 
 
