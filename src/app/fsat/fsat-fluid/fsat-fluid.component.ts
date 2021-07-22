@@ -31,8 +31,6 @@ export class FsatFluidComponent implements OnInit {
   @Input()
   baseline: boolean;
   @Input()
-  compareTwoFansAsBaseline: boolean;
-  @Input()
   fsat: FSAT;
 
   gasDensityForm: FormGroup;

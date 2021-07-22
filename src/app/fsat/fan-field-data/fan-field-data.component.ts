@@ -31,8 +31,6 @@ export class FanFieldDataComponent implements OnInit {
   loadEstimationMethod: string;
   @Input()
   baseline: boolean;
-  @Input()
-  compareTwoFansAsBaseline: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FieldData>();
   @Input()
@@ -205,15 +203,15 @@ export class FanFieldDataComponent implements OnInit {
       specificHeatRatio: fsatCopy.baseGasDensity.specificHeatRatio
     };
 
-    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput, this.compareTwoFansAsBaseline);
+    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, true, fsatOutput);
     this.fieldDataForm.patchValue({
       compressibilityFactor: Number(compressibilityFactor.toFixed(3))
     });
   }
 
-  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput, compareAsBaseline: boolean) {
+  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
     let compressibilityFactor: number;
-    if (isBaseline || compareAsBaseline) {
+    if (isBaseline) {
       compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
     } else {
       let currentMoverShaftPower;

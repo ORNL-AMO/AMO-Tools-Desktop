@@ -44,13 +44,11 @@
         [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
         [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)"
-        [compareTwoFansAsBaseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fsat-fluid>
       <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected"
         [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
         [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)"
-        [compareTwoFansAsBaseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-setup>
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"
         [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
@@ -62,7 +60,6 @@
         [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
         [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
         [modificationIndex]="modificationIndex"
-        [compareTwoFansAsBaseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario"
         (emitSave)="saveModFieldData($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat">
       </app-fan-field-data>
       <app-modify-field-data-form
