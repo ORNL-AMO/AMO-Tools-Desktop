@@ -113,14 +113,15 @@ export class SetupDataComponent implements OnInit {
     let fr: FileReader = new FileReader();
     fr.onload = (e: any) => {
       const bstr: string = e.target.result;
-      let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true });
-      let rowObject  =  XLSX.utils.sheet_to_csv(workBook.Sheets[workBook.SheetNames[0]]);
+      let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true, cellText: false, cellNF: false });
+      let rowObject  =  XLSX.utils.sheet_to_csv(workBook.Sheets[workBook.SheetNames[0]], {dateNF: "mm/dd/yyyy hh:mm:ss"});
       this.importData = rowObject;
       this.parsePreviewData();
     }
     fr.readAsBinaryString(this.fileReference);
   }
 
+ 
 
   parsePreviewData() {
     this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);
