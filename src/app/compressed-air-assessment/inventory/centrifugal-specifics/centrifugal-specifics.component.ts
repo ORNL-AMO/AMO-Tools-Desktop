@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
@@ -17,7 +17,6 @@ export class CentrifugalSpecificsComponent implements OnInit {
   form: FormGroup;
   isFormChange: boolean = false;
   constructor(private inventoryService: InventoryService, 
-    private cd: ChangeDetectorRef, 
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
