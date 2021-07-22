@@ -105,28 +105,40 @@ export class SystemProfileService {
   }
 
 
-  updateCompressorOrdering(profileSummary: Array<ProfileSummary>, dayTypes: Array<CompressedAirDayType>): Array<ProfileSummary> {
-    dayTypes.forEach(dayType => {
-      let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
-      for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
-        for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
-          let order: number = 1;
-          for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
-            if (compressorOrderIndex != compressorIndex && dayTypeSummaries[compressorOrderIndex].profileSummaryData[orderIndex].order != 0) {
-              if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
-                order++;
-              } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
-                order++;
-              }
+  //no sequencer
+  updateCompressorOrderingNoSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType): Array<ProfileSummary> {
+    let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
+    for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
+      for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
+        let order: number = 1;
+        for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
+          if (compressorOrderIndex != compressorIndex && dayTypeSummaries[compressorOrderIndex].profileSummaryData[orderIndex].order != 0) {
+            if (dayTypeSummaries[compressorIndex].fullLoadPressure < dayTypeSummaries[compressorOrderIndex].fullLoadPressure) {
+              order++;
+            } else if (dayTypeSummaries[compressorOrderIndex].fullLoadPressure == dayTypeSummaries[compressorIndex].fullLoadPressure && compressorOrderIndex < compressorIndex) {
+              order++;
             }
           }
-          if (dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order != 0) {
-            let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
-            profileSummary[summaryIndex].profileSummaryData[orderIndex].order = order;
-          }
+        }
+        if (dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order != 0) {
+          let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
+          profileSummary[summaryIndex].profileSummaryData[orderIndex].order = order;
         }
       }
-    });
+    }
+    return profileSummary;
+  }
+
+  updateCompressorOrderingSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, removedSummary: ProfileSummary): Array<ProfileSummary> {
+    let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
+    for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
+      for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
+        if(dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order > removedSummary.profileSummaryData[orderIndex].order){
+          let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
+          profileSummary[summaryIndex].profileSummaryData[orderIndex].order--;
+        }
+      }
+    }
     return profileSummary;
   }
 }

@@ -148,17 +148,35 @@ export class CompressorOrderingTableComponent implements OnInit {
     changedSummary.profileSummaryData[orderIndex].order = 0;
   }
 
-  setOrder(selectedCompressorIndex: number, orderIndex: number) {
+
+  changeOrderSequencer(selectedCompressorIndex: number, hourIndex: number) {
+    if (this.fillRight) {
+      for (let index = hourIndex; index <= this.hourIntervals[this.hourIntervals.length - 1]; index++) {
+        if (hourIndex != index) {
+          let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
+          let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[selectedCompressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[selectedCompressorIndex].dayTypeId })
+          this.profileSummary[summaryIndex].profileSummaryData[index].order = this.profileSummary[summaryIndex].profileSummaryData[hourIndex].order;
+        }
+        this.setOrder(selectedCompressorIndex, index);
+      }
+    } else {
+      this.setOrder(selectedCompressorIndex, hourIndex);
+    }
+    this.save();
+  }
+
+
+  setOrder(selectedCompressorIndex: number, hourIndex: number) {
     let dayTypeSummaries: Array<ProfileSummary> = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
     //get orders that are currently selected
-    let selectedOrders: Array<number> = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+    let selectedOrders: Array<number> = this.getSelectedOrders(dayTypeSummaries, hourIndex);
     //iterate all orders for hour interval and make sure there isn't a higher selected order
     //then total number of selected orders
     //set to highest possible if so and update selected orders
     for (let index = 0; index < dayTypeSummaries.length; index++) {
-      if (dayTypeSummaries[index].profileSummaryData[orderIndex].order > selectedOrders.length) {
-        dayTypeSummaries[index].profileSummaryData[orderIndex].order = selectedOrders.length;
-        selectedOrders = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+      if (dayTypeSummaries[index].profileSummaryData[hourIndex].order > selectedOrders.length) {
+        dayTypeSummaries[index].profileSummaryData[hourIndex].order = selectedOrders.length;
+        selectedOrders = this.getSelectedOrders(dayTypeSummaries, hourIndex);
       }
     }
     //find missing orders
@@ -168,11 +186,11 @@ export class CompressorOrderingTableComponent implements OnInit {
       for (let index = 0; index < dayTypeSummaries.length; index++) {
         //don't update changed order
         if (index != selectedCompressorIndex) {
-          let orderCount: Array<number> = selectedOrders.filter(order => { return order == dayTypeSummaries[index].profileSummaryData[orderIndex].order })
+          let orderCount: Array<number> = selectedOrders.filter(order => { return order == dayTypeSummaries[index].profileSummaryData[hourIndex].order })
           if (orderCount.length > 1) {
             //update duplicate order with first missing values
             let summaryIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[index].compressorId && summary.dayTypeId == dayTypeSummaries[index].dayTypeId })
-            this.profileSummary[summaryIndex].profileSummaryData[orderIndex].order = missingOrders[0];
+            this.profileSummary[summaryIndex].profileSummaryData[hourIndex].order = missingOrders[0];
             //exist for loop
             index = dayTypeSummaries.length + 1;
           }
@@ -180,11 +198,10 @@ export class CompressorOrderingTableComponent implements OnInit {
       }
       //update our selected and missing orders
       dayTypeSummaries = this.profileSummary.filter(summary => { return summary.dayTypeId == this.selectedDayTypeId });
-      selectedOrders = this.getSelectedOrders(dayTypeSummaries, orderIndex);
+      selectedOrders = this.getSelectedOrders(dayTypeSummaries, hourIndex);
       missingOrders = this.getMissingOrders(selectedOrders);
     }
 
-    this.save();
   }
 
   getMissingOrders(selectedOrders: Array<number>): Array<number> {

@@ -115,7 +115,9 @@ export class InventoryComponent implements OnInit {
       }
     });
     if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
-      compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrdering(compressedAirAssessment.systemProfile.profileSummary, compressedAirAssessment.compressedAirDayTypes);
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
+      })
       this.isFormChange = true;
       this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
       this.inventoryService.selectedCompressor.next(this.selectedCompressor);

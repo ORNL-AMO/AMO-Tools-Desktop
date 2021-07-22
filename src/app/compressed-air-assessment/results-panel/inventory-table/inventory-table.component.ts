@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
 import { SystemProfileService } from '../../system-profile/system-profile.service';
@@ -49,9 +49,15 @@ export class InventoryTableComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == item.itemId });
     compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
-    itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == item.itemId });
-    compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
-    compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrdering(compressedAirAssessment.systemProfile.profileSummary, compressedAirAssessment.compressedAirDayTypes);
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == item.itemId && summary.dayTypeId == dayType.dayTypeId });
+      let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
+      if (compressedAirAssessment.systemInformation.isSequencerUsed) {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0]);
+      } else {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
+      }
+    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
   }
