@@ -62,6 +62,7 @@ import { SystemCapacityModule } from '../calculator/compressed-air/system-capaci
 import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
+import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 
 @NgModule({
   declarations: [
@@ -132,7 +133,8 @@ import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air
     MaxFullFlowCalculationsService,
     NoLoadCalculationsService,
     UnloadPointCalculationsService,
-    SharedPointCalculationsService
+    SharedPointCalculationsService,
+    PerformancePointsFormService
   ]
 })
 export class CompressedAirAssessmentModule { }
