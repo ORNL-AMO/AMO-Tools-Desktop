@@ -108,7 +108,6 @@ export interface PerformancePoint {
 
 export interface SystemProfile {
     systemProfileSetup: SystemProfileSetup,
-    compressorOrdering: Array<CompressorOrderItem>;
     profileSummary: Array<ProfileSummary>
 }
 
@@ -118,13 +117,6 @@ export interface SystemProfileSetup {
     numberOfHours: number,
     dataInterval: 2 | 1 | .5 | .25,
     profileDataType: "power" | "percentCapacity" | "airflow"
-}
-
-
-export interface CompressorOrderItem {
-    compressorName: string,
-    compressorId: string,
-    orders: Array<number>
 }
 
 export interface CentrifugalSpecifics {
@@ -137,6 +129,7 @@ export interface CentrifugalSpecifics {
 
 export interface ProfileSummary {
     compressorName: string,
+    fullLoadPressure: number,
     compressorId: string,
     dayTypeId: string,
     profileSummaryData: Array<ProfileSummaryData>,
@@ -150,6 +143,7 @@ export interface ProfileSummaryData {
     timeInterval: number,
     percentPower: number,
     percentSystemCapacity: number,
+    order: number,
 }
 
 
