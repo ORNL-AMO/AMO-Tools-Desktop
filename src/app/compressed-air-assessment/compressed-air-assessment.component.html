@@ -59,6 +59,8 @@
         </app-waste-water-report>
       </div>
     </div> -->
+<app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+  [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
 
 
   <!--footer-->
