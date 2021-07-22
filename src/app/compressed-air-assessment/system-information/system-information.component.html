@@ -33,7 +33,10 @@
                 <span *ngIf="form.controls.systemElevation.errors.required">Value Required</span>
                 <span *ngIf="form.controls.systemElevation.errors.min">Value can't be less than
                     {{form.controls.systemElevation.errors.min.min}} ft.</span>
+                <span *ngIf="form.controls.systemElevation.errors.max">Value can't
+                    be greater than {{form.controls.systemElevation.errors.max.max}} ft.</span>
             </span>
+            
         </div>
         <!--Total Air Storage-->
         <div class="form-group">

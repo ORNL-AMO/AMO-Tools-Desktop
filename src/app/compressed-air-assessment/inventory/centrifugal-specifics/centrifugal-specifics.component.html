@@ -9,12 +9,13 @@
                 formControlName="surgeAirflow" (input)="save()" (focus)="focusField('surgeAirflow')">
             <span class="units input-group-addon">acfm</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.surgeAirflow.invalid && !form.controls.surgeAirflow.pristine">
+          <span *ngIf="form.controls.surgeAirflow.errors.required">Value Required</span>
+          <span *ngIf="form.controls.surgeAirflow.errors.min">Value can't be less than
+            {{form.controls.surgeAirflow.errors.min.min}} acfm.</span>
+          <span *ngIf="form.controls.surgeAirflow.errors.max">Value must be less than Rated Capacity at Full Load Pressure</span>
+        </span>
     </div>
 
     <!-- maxFullLoadPressure -->
@@ -25,12 +26,11 @@
                 formControlName="maxFullLoadPressure" (input)="save()" (focus)="focusField('maxFullLoadPressure')">
             <span class="units input-group-addon">psig</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.maxFullLoadPressure.invalid && !form.controls.maxFullLoadPressure.pristine">
+          <span *ngIf="form.controls.maxFullLoadPressure.errors.required">Value Required</span>
+          <span *ngIf="form.controls.maxFullLoadPressure.errors.min">Value can't be less than Min. full load (stonewall) pressure</span>
+        </span>
     </div>
 
     <!-- maxFullLoadCapacity -->
@@ -41,12 +41,14 @@
                 formControlName="maxFullLoadCapacity" (input)="save()" (focus)="focusField('maxFullLoadCapacity')">
             <span class="units input-group-addon">acfm</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.maxFullLoadCapacity.invalid && !form.controls.maxFullLoadCapacity.pristine">
+          <span *ngIf="form.controls.maxFullLoadCapacity.errors.required">Value Required</span>
+          <span *ngIf="form.controls.maxFullLoadCapacity.errors.min">Value can't be less than
+            {{form.controls.maxFullLoadCapacity.errors.min.min}} acfm</span>
+          <span *ngIf="form.controls.maxFullLoadCapacity.errors.max">Value can't be greater than Rated Capacity at Full Load Pressure
+              {{form.controls.maxFullLoadCapacity.errors.max.max}}</span>
+        </span>
     </div>
 
     <!-- minFullLoadPressure -->
@@ -57,12 +59,13 @@
                 formControlName="minFullLoadPressure" (input)="save()" (focus)="focusField('minFullLoadPressure')">
             <span class="units input-group-addon">psig</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.minFullLoadPressure.invalid && !form.controls.minFullLoadPressure.pristine">
+          <span *ngIf="form.controls.minFullLoadPressure.errors.required">Value Required</span>
+          <span *ngIf="form.controls.minFullLoadPressure.errors.min">Value can't be less than
+            {{form.controls.minFullLoadPressure.errors.min.min}} psig.</span>
+          <span *ngIf="form.controls.minFullLoadPressure.errors.min">Value can't be greater than Max full load (surge) pressure</span>
+        </span>
     </div>
 
     <!-- minFullLoadCapacity -->
@@ -73,12 +76,12 @@
                 formControlName="minFullLoadCapacity" (input)="save()" (focus)="focusField('minFullLoadCapacity')">
             <span class="units input-group-addon">acfm</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.minFullLoadCapacity.invalid && !form.controls.minFullLoadCapacity.pristine">
+          <span *ngIf="form.controls.minFullLoadCapacity.errors.required">Value Required</span>
+          <span *ngIf="form.controls.minFullLoadCapacity.errors.min">Value can't be less than
+            {{form.controls.minFullLoadCapacity.errors.min.min}} acfm.</span>
+        </span>
     </div>
 
 </form>
