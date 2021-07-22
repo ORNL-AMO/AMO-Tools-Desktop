@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js/dist/plotly';
 import { AnnotationData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 
