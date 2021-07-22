@@ -103,9 +103,9 @@
       [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
       <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
         Full-Load Amps
-        <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()"
+        <!-- <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()"
           id="flaHelp" (click)="getFullLoadAmps()">Estimate
-          Full-Load Amps</a>
+          Full-Load Amps</a> -->
       </label>
       <div class="input-group">
         <input [readonly]="!selected" name="fullLoadAmps" type="number" min="0" step="any"
