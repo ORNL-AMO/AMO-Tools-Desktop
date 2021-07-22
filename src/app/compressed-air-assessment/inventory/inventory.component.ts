@@ -96,4 +96,8 @@ export class InventoryComponent implements OnInit {
     this.showCompressorModal = false;
     this.cd.detectChanges();
   }
+
+  focusField(str: string) {
+    this.compressedAirAssessmentService.focusedField.next(str);
+  }
 }

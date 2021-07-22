@@ -1,0 +1,64 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        System Basics Help
+        <br>
+        <small class="text-muted">Set system options for modeling
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2">
+        <h6>
+            <small class="text-muted">
+                Your system basics help define the units of measure and other information related to the system you are
+                modeling for this assessment. These settings are inherited by default from your directory or
+                applications
+                settings and can be customized for this assessment.
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'utilityType'">
+        <h6>
+            Utility Type
+            <br>
+            <small class="text-muted">
+                Select the appropriate utility type to determine energy use and cost.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'electricityCost'">
+        <h6>
+            Electricity Cost
+            <br>
+            <small class="text-muted">
+                Per unit cost of electricity or compressed air.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'demandCost'">
+        <h6>
+            Demand Cost
+            <br>
+            <small class="text-muted">
+                Average peak cost per unit of power ($/kW-month)
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'equipmentNotes'">
+        <h6>
+            Equipment Notes
+            <br>
+            <small class="text-muted">
+                Add equipment or assessment condition notes for the report.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>
