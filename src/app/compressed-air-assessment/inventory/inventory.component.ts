@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
+import { SystemProfileService } from '../system-profile/system-profile.service';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -19,18 +20,21 @@ export class InventoryComponent implements OnInit {
   compressorType: number;
   controlType: number;
   showCompressorModal: boolean = false;
+  selectedCompressor: CompressorInventoryItem;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private inventoryService: InventoryService, private cd: ChangeDetectorRef) { }
+    private inventoryService: InventoryService, private cd: ChangeDetectorRef, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.initializeInventory();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
+        this.selectedCompressor = val;
         this.hasInventoryItems = true;
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
           this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name, val.description);
+          this.checkSystemProfile();
         } else {
           this.isFormChange = false;
         }
@@ -65,14 +69,10 @@ export class InventoryComponent implements OnInit {
   }
 
   addInventoryItem() {
-    let newInventoryItem: CompressorInventoryItem = this.inventoryService.getNewInventoryItem();
-    newInventoryItem.modifiedDate = new Date();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(newInventoryItem);
+    this.inventoryService.addNewCompressor();
     this.hasInventoryItems = true;
   }
+
 
   save() {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
@@ -82,6 +82,11 @@ export class InventoryComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
+      if (summary.compressorId == this.selectedCompressor.itemId) {
+        summary.compressorName = this.selectedCompressor.name;
+      }
+    });
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
@@ -99,5 +104,26 @@ export class InventoryComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+  }
+
+  checkSystemProfile() {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let recalculateOrdering: boolean = false;
+    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
+      if (summary.compressorId == this.selectedCompressor.itemId) {
+        if (summary.fullLoadPressure != this.selectedCompressor.performancePoints.fullLoad.dischargePressure) {
+          summary.fullLoadPressure = this.selectedCompressor.performancePoints.fullLoad.dischargePressure;
+          recalculateOrdering = true;
+        }
+      }
+    });
+    if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
+      })
+      this.isFormChange = true;
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+      this.inventoryService.selectedCompressor.next(this.selectedCompressor);
+    }
   }
 }

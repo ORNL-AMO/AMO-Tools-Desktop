@@ -365,7 +365,6 @@ export class AssessmentService {
           dataInterval: 1,
           profileDataType: undefined,
         },
-        compressorOrdering: new Array(),
         profileSummary: new Array()
       },
       compressedAirDayTypes: [{

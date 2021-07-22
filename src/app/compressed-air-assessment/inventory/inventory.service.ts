@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
 
@@ -10,11 +11,11 @@ export class InventoryService {
 
   selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
-  collapseControls: boolean = true;
+  collapseControls: boolean = false;
   collapseDesignDetails: boolean = true;
   collapseInletConditions: boolean = true;
   collapsePerformancePoints: boolean = true;
-  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService) {
+  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
@@ -403,8 +404,72 @@ export class InventoryService {
     }
     return true;
   }
-}
 
+  addNewCompressor() {
+    let newInventoryItem: CompressorInventoryItem = this.getNewInventoryItem();
+    newInventoryItem.modifiedDate = new Date();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      compressedAirAssessment.systemProfile.profileSummary.push({
+        compressorId: newInventoryItem.itemId,
+        compressorName: newInventoryItem.name,
+        dayTypeId: dayType.dayTypeId,
+        profileSummaryData: this.getEmptyProfileSummaryData(),
+        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure
+      });
+    })
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.selectedCompressor.next(newInventoryItem);
+  }
+
+  addNewDayType(compressedAirAssessment: CompressedAirAssessment, dayTypeName: string, dayTypeId?: string): CompressedAirAssessment {
+    if (!dayTypeId) {
+      dayTypeId = Math.random().toString(36).substr(2, 9);
+    }
+    let newDayType: CompressedAirDayType = {
+      dayTypeId: dayTypeId,
+      name: dayTypeName,
+      numberOfDays: 0,
+      profileDataType: "percentCapacity"
+    };
+    compressedAirAssessment.compressedAirDayTypes.push(newDayType);
+    compressedAirAssessment.compressorInventoryItems.forEach(item => {
+      compressedAirAssessment.systemProfile.profileSummary.push({
+        compressorId: item.itemId,
+        compressorName: item.name,
+        dayTypeId: newDayType.dayTypeId,
+        profileSummaryData: this.getEmptyProfileSummaryData(),
+        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
+      })
+    });
+    return compressedAirAssessment;
+  }
+
+  getEmptyProfileSummaryData(): Array<ProfileSummaryData> {
+    let summaryData: Array<ProfileSummaryData> = new Array();
+    for (let i = 0; i < 24; i++) {
+      summaryData.push({
+        power: undefined,
+        airflow: undefined,
+        percentCapacity: undefined,
+        timeInterval: i,
+        percentPower: undefined,
+        percentSystemCapacity: undefined,
+        order: 0
+      })
+    }
+    return summaryData;
+  }
+
+  getEmptyOrders(): Array<number> {
+    let emptyOrders: Array<number> = new Array();
+    for (let i = 0; i < 24; i++) {
+      emptyOrders.push(0)
+    }
+    return emptyOrders;
+  }
+}
 export interface CompressorInventoryItemWarnings {
   serviceFactor?: string;
 }

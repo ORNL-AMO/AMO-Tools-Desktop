@@ -58,7 +58,7 @@
         <!--Is a target pressure sequencer used?-->
         <div class="form-group">
             <label for="utilityType">Is a target pressure sequencer used?</label>
-            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="save()"
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="changeIsSequencerUsed()"
                 (focus)="focusField('isSequencerUsed')">
                 <option [ngValue]="true">Yes</option>
                 <option [ngValue]="false">No</option>
@@ -78,22 +78,6 @@
                 <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
                     {{form.controls.targetPressure.errors.min.min}} psig.</span>
-            </span>
-        </div>
-        <!--Target Pressure-->
-        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
-            <label for="variance">Target Pressure
-            </label>
-            <div class="input-group">
-                <input name="variance" type="number" step="any" class="form-control" id="variance"
-                    formControlName="variance" (change)="save()" (focus)="focusField('variance')">
-                <span class="units input-group-addon">psig</span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
-                <span *ngIf="form.controls.variance.errors.required">Value Required</span>
-                <span *ngIf="form.controls.variance.errors.min">Value can't be less than
-                    {{form.controls.variance.errors.min.min}} psig.</span>
             </span>
         </div>
     </form>

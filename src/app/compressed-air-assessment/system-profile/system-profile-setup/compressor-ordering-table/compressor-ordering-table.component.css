@@ -21,3 +21,24 @@ td, th{
     width: 100%;
     min-width: 50px;
   }
+
+
+  .btn.btn-sm{
+    background-color: #ABB2B9;
+    color: white;
+    padding: 2px;
+    width: 100%;
+    min-width: 50px;
+  }
+
+  .input-cell{
+    width: 60px;
+  }
+
+  .btn.btn-sm.btn-active{
+    background-color: #7030A0;
+  }
+
+  .btn.btn-sm:hover{
+    background-color: #566573;
+  }

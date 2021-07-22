@@ -40,9 +40,9 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
+        this.setHourIntervals(val.systemProfile.systemProfileSetup);
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
-          this.hourIntervals = this.profileSummary[0].profileSummaryData.map(data => { return data.timeInterval });
         }
       } else {
         this.isFormChange = false;
@@ -52,6 +52,15 @@ export class OperatingProfileTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+  }
+
+
+  setHourIntervals(systemProfileSetup: SystemProfileSetup) {
+    this.hourIntervals = new Array();
+    for (let index = 0; index < systemProfileSetup.numberOfHours;) {
+      this.hourIntervals.push(index)
+      index = index + systemProfileSetup.dataInterval;
+    }
   }
 
   initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>) {
@@ -93,7 +102,8 @@ export class OperatingProfileTableComponent implements OnInit {
         compressorId: inventoryItem.itemId,
         compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
-        profileSummaryData: profileSummaryData
+        profileSummaryData: profileSummaryData,
+        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure
       }
     }
     return profileSummary;
@@ -108,7 +118,8 @@ export class OperatingProfileTableComponent implements OnInit {
         percentCapacity: undefined,
         timeInterval: timeInterval,
         percentPower: undefined,
-        percentSystemCapacity: 0
+        percentSystemCapacity: 0,
+        order: undefined
       })
       timeInterval = timeInterval + dataInterval;
     }

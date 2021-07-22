@@ -69,6 +69,15 @@ import { BlowoffHelpComponent } from './results-panel/help-panel/inventory-help/
 import { FullLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/full-load-help/full-load-help.component';
 import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
 import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help/day-types-help.component';
+import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/compressed-air-calculators.component';
+import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs/calculator-tabs.component';
+import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
+import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
+import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';
+import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
+import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
+import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
+import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 
 @NgModule({
@@ -123,13 +132,22 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
     BlowoffHelpComponent,
     FullLoadHelpComponent,
     MaxFullFlowHelpComponent,
-    DayTypesHelpComponent
+    DayTypesHelpComponent,
+    CompressedAirCalculatorsComponent,
+    CalculatorTabsComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     SettingsModule,
     ReactiveFormsModule,
+    AirFlowConversionModule,
+    ReceiverTankModule,
+    AirLeakModule,
+    SystemCapacityModule,
+    PipeSizingModule,
+    CompressedAirPressureReductionModule,
+    AirVelocityModule,
     FormsModule,
     ModalModule
   ],

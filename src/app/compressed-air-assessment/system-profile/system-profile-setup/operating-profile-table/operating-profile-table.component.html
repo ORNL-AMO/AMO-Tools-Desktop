@@ -1,12 +1,14 @@
 <label class="group-label w-100">
     Profile Data
-    <a class="click-link small pull-right" *ngIf="displayLogToolLink && !showSelectField" (click)="showDataFromExplorer()">
+    <a class="click-link small pull-right" *ngIf="displayLogToolLink && !showSelectField"
+        (click)="showDataFromExplorer()">
         Set Data From Data Explorer
     </a>
-    <a class="click-link small pull-right" *ngIf="displayLogToolLink && showSelectField" (click)="hideDataFromExplorer()">
+    <a class="click-link small pull-right" *ngIf="displayLogToolLink && showSelectField"
+        (click)="hideDataFromExplorer()">
         Hide Data Explorer Options
     </a>
-    
+
 </label>
 
 <div class="scroll-item">
@@ -23,17 +25,17 @@
                 <td *ngIf="showSelectField">
                     Explorer
                 </td>
-                <th *ngFor="let interval of hourIntervals">
+                <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval}}
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
-                <td class="bold">
+                <td class="bold text-center">
                     {{summary.compressorName}}
                 </td>
-                <td>
+                <td class="text-center">
                     <span *ngIf="profileDataType == 'power'">Power</span>
                     <span *ngIf="profileDataType == 'percentCapacity'">% Capacity</span>
                     <span *ngIf="profileDataType == 'airflow'">Airflow</span>
@@ -47,16 +49,23 @@
                         </option>
                     </select>
                 </td>
-                <td *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
-                    <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
-                        id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                        [(ngModel)]="summaryData.power">
-                    <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
-                        id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                        [(ngModel)]="summaryData.airflow">
-                    <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
-                        id="{{'order_'+compressorIndex+dataIndex}}" name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                        [(ngModel)]="summaryData.percentCapacity">
+                <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
+                    <span *ngIf="summaryData.order != 0">
+                        <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}" [(ngModel)]="summaryData.power">
+                        <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}" [(ngModel)]="summaryData.airflow">
+                        <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            [(ngModel)]="summaryData.percentCapacity">
+                    </span>
+                    <div class="w-100 bold text-center"
+                        *ngIf="summaryData.order == 0">
+                        &mdash; &mdash;
+                    </div>
                 </td>
             </tr>
         </tbody>
