@@ -60,11 +60,11 @@
                     <span>
 
                       <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
-                        (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.psat.whatIfScenario">
+                        (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.psat.inputs.whatIfScenario">
                       <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
 
                       <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
-                        [(ngModel)]="modification.psat.whatIfScenario" (input)="saveScenarioChange(true, index)">
+                        [(ngModel)]="modification.psat.inputs.whatIfScenario" (input)="saveScenarioChange(true, index)">
                       <label for="{{'whatIf_'+index}}">What If Scenario</label><br>
                     </span>
 

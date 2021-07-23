@@ -53,7 +53,7 @@ export class ModificationListComponent implements OnInit {
   }
 
   saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
-    this.psat.modifications[modIndex].psat.whatIfScenario = isWhatIfScenario;
+    this.psat.modifications[modIndex].psat.inputs.whatIfScenario = isWhatIfScenario;
     this.save.emit(true);
     this.selectModification(modIndex, true);
   }
@@ -152,7 +152,6 @@ export class ModificationListComponent implements OnInit {
     let tmpModification: Modification = {
       psat: {
         name: this.newModificationName,
-        whatIfScenario: true,
       },
       notes: {
         fieldDataNotes: '',
@@ -167,7 +166,7 @@ export class ModificationListComponent implements OnInit {
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(psat.inputs)));
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    tmpModification.psat.whatIfScenario = true;
+    tmpModification.psat.inputs.whatIfScenario = true;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);

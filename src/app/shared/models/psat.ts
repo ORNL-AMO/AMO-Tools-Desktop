@@ -13,7 +13,6 @@ export interface PSAT {
   operatingHours?: OperatingHours;
   valid?: PsatValid;
   existingDataUnits?: string;
-  whatIfScenario?: boolean;
 }
 
 export interface PsatValid {
@@ -58,7 +57,8 @@ export interface PsatInputs {
   isVFD?: boolean;
   fluidType: string;
   fluidTemperature: number;
-  useCustomEfficiency?: boolean;
+  useCustomEfficiency?: boolean;  
+  whatIfScenario?: boolean;
 }
 
 export interface PsatOutputs {

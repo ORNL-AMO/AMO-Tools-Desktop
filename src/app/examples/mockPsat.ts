@@ -35,12 +35,12 @@ export const MockPsat: Assessment = {
             "fluidType": "Water",
             "fluidTemperature": 68,
             "specifiedDriveEfficiency": null,
-            "implementationCosts": null
+            "implementationCosts": null,
+            "whatIfScenario": true,
         },
         "modifications": [{
             "psat": {
-                "name": "New Pump and Motor",
-                "whatIfScenario": true,
+                "name": "New Pump and Motor",                
                 "inputs": {
                     "pump_style": 6,
                     "pump_specified": 87.52,
@@ -81,7 +81,6 @@ export const MockPsat: Assessment = {
         }, {
             "psat": {
                 "name": "VFD reduce speed to 90%",
-                "whatIfScenario": true,
                 "inputs": {
                     "pump_style": 11,
                     "pump_specified": 67,
@@ -111,7 +110,8 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": 95,
                     "implementationCosts": null,
-                    "isVFD": true
+                    "isVFD": true,
+                    "whatIfScenario": true,
                 }
             },
             "notes": {

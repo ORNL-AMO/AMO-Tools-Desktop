@@ -157,16 +157,16 @@ export class PsatReportComponent implements OnInit {
     this.assessment.psat.outputs = this.getResults(this.assessment.psat, this.settings, true);
     this.assessment.psat.outputs.percent_annual_savings = 0;
     this.assessment.psat.modifications.forEach(modification => {
-      modification.psat.outputs = this.getResults(modification.psat, this.settings, false, modification.psat.whatIfScenario);
+      modification.psat.outputs = this.getResults(modification.psat, this.settings, false);
       modification.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.assessment.psat, modification.psat);
     });
   }
 
-  getResults(psat: PSAT, settings: Settings, isBaseline: boolean, isWhatIfScenario?: boolean): PsatOutputs {
+  getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
     psat.valid = this.psatService.isPsatValid(psatInputs, isBaseline)
     if (psat.valid.isValid) {
-      if (isBaseline || !isWhatIfScenario) {
+      if (isBaseline || !psat.inputs.whatIfScenario){
         return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
       } else {
         return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);

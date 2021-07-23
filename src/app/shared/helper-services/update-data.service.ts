@@ -60,8 +60,8 @@ export class UpdateDataService {
     }
 
     addWhatIfScenarioPsat(psat: PSAT): PSAT {
-        if(!psat.whatIfScenario) {
-            psat.whatIfScenario = true;
+        if(!psat.inputs.whatIfScenario) {
+            psat.inputs.whatIfScenario = true;
         }
         return psat;
     }

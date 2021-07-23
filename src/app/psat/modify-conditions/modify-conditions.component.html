@@ -31,14 +31,14 @@
       <!-- Forms -->
       <div class="psat-losses-container">
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
-          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false"
+          [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"
-          [baseline]="psat.modifications[modificationIndex].psat.whatIfScenario == false" [selected]="modifiedSelected"
+          [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false" [selected]="modifiedSelected"
           (saved)="save()" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"></app-field-data>
       </div>
 
