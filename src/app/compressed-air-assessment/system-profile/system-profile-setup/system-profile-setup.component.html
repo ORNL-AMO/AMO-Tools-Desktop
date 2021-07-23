@@ -1,9 +1,9 @@
 <div class="p-2">
     <div class="bg-white">
-        <div class="p-2">
+        <div class="p-2" *ngIf="displayCompressorOrdering">
             <app-compressor-ordering-table></app-compressor-ordering-table>
         </div>
-        <hr>
+        <hr *ngIf="displayCompressorOrdering">
         <div class="p-2 scroll-item">
             <app-operating-profile-table></app-operating-profile-table>
         </div>

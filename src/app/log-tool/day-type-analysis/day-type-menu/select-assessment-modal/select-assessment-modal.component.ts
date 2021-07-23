@@ -6,8 +6,7 @@ import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
-import { LogToolDbService } from '../../../log-tool-db.service';
-import { LogToolDbData, LogToolField } from '../../../log-tool-models';
+import { LogToolField } from '../../../log-tool-models';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Directory } from '../../../../shared/models/directory';
@@ -17,6 +16,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
+import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
 
 @Component({
   selector: 'app-select-assessment-modal',
@@ -38,7 +38,7 @@ export class SelectAssessmentModalComponent implements OnInit {
     private indexedDbService: IndexedDbService, private router: Router,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
     private formBuilder: FormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
-    private dayTypeAnalysisService: DayTypeAnalysisService) { }
+    private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.directories = this.directoryDbService.getAll();
@@ -104,14 +104,10 @@ export class SelectAssessmentModalComponent implements OnInit {
       delete summary.data
     });
     compressedAirAssessment.compressedAirDayTypes = new Array();
+
     compressedAirAssessment.logToolData.dayTypeSummaries.forEach(dayTypeSummary => {
       if (dayTypeSummary.dayType.useDayType && dayTypeSummary.dayType.label != 'Excluded') {
-        compressedAirAssessment.compressedAirDayTypes.push({
-          dayTypeId: dayTypeSummary.dayType.dayTypeId,
-          name: dayTypeSummary.dayType.label,
-          numberOfDays: 0,
-          profileDataType: 'percentCapacity'
-        });
+        compressedAirAssessment = this.inventoryService.addNewDayType(compressedAirAssessment, dayTypeSummary.dayType.label, dayTypeSummary.dayType.dayTypeId);
       }
     });
     return compressedAirAssessment;

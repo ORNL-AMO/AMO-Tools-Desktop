@@ -46,12 +46,18 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.airflowGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
       let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => { return data.airflow }),
+          y: compressorProfile.profileSummaryData.map(data => {
+            if (data.order != 0) {
+              return data.airflow
+            } else {
+              return 0;
+            }
+          }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {
@@ -120,13 +126,19 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.powerGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
       let rgbaOpacity: number = 1;
 
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => { return data.power }),
+          y: compressorProfile.profileSummaryData.map(data => {
+            if (data.order != 0) {
+              return data.power
+            } else {
+              return 0;
+            }
+          }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {
@@ -191,12 +203,18 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.capacityGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number =  1 / (this.profileSummary.length + 1);
+      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
       let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => { return data.percentSystemCapacity }),
+          y: compressorProfile.profileSummaryData.map(data => {
+            if (data.order != 0) {
+              return data.percentSystemCapacity
+            } else {
+              return 0;
+            }
+          }),
           type: 'bar',
           name: compressorProfile.compressorName,
           marker: {
