@@ -54,6 +54,8 @@ import { UnloadPointCalculationsService } from './inventory/performance-points/c
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
+import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
+import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,8 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
     FilterCompressorsPipe,
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
-    DayTypeFilterPipe
+    DayTypeFilterPipe,
+    SystemCapacityModalComponent
   ],
   imports: [
     CommonModule,
@@ -99,7 +102,8 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
     SettingsModule,
     ReactiveFormsModule,
     FormsModule,
-    ModalModule
+    ModalModule,
+    SystemCapacityModule
   ],
   providers: [
     CompressedAirAssessmentService,

@@ -41,7 +41,7 @@
         <!--Total Air Storage-->
         <div class="form-group">
             <label for="totalAirStorage">Total Air Storage
-                <a class="form-text small click-link disabled-link" >Calculate Air Storage Capacity</a>
+                <a class="form-text small click-link" (click)="openSystemCapacityModal()">Calculate Air Storage Capacity</a>
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
@@ -98,3 +98,5 @@
         </div>
     </form>
 </div>
+
+<app-system-capacity-modal *ngIf="showSystemCapacityModal" (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>

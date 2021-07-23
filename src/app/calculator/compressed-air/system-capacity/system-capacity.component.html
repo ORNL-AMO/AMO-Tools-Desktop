@@ -1,5 +1,5 @@
-<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator" #contentContainer>
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item" [ngStyle]="{'height.px': bodyHeight}">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
         <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png" class="ico-size5">
@@ -22,10 +22,10 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+  <div class="d-flex flex-column w-50 mh-100 scroll-item" [ngStyle]="{'height.px': bodyHeight}">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
       <div class="flex-fill panel-tab-item h-100 active">
-        <a class="h-100 d-flex justify-content-center align-items-center">
+        <a class="h-100 d-flex justify-content-center align-items-center" [ngStyle]="{'height.px': headerHeight}">
           <div>Help</div>
         </a>
       </div>

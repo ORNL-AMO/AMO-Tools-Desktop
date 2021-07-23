@@ -1,5 +1,8 @@
+import { ViewChild } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap';
 import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { SystemInformationFormService } from './system-information-form.service';
@@ -11,9 +14,11 @@ import { SystemInformationFormService } from './system-information-form.service'
 })
 export class SystemInformationComponent implements OnInit {
 
+  @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
+
+  showSystemCapacityModal: boolean = false;
   form: FormGroup;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private systemInformationFormService: SystemInformationFormService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemInformationFormService: SystemInformationFormService) { }
 
   ngOnInit(): void {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -29,5 +34,21 @@ export class SystemInformationComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+  }
+
+  openSystemCapacityModal() {
+    this.compressedAirAssessmentService.modalOpen.next(true);
+    this.showSystemCapacityModal = true;
+  }
+
+  closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
+    if (totalCapacityOfCompressedAirSystem) {
+        this.form.patchValue({
+          totalAirStorage: totalCapacityOfCompressedAirSystem
+        });
+    }
+    this.compressedAirAssessmentService.modalOpen.next(false);
+    this.showSystemCapacityModal = false;
+    this.save();
   }
 }
