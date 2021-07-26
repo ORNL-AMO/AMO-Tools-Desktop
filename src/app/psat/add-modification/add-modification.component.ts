@@ -58,6 +58,7 @@ export class AddModificationComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.whatIfScenario = true;
     tmpModification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;

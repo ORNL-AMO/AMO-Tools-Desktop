@@ -48,6 +48,7 @@ export class AddModificationComponent implements OnInit {
   addModification() {
     let tmpModification: Modification = this.fsatService.getNewMod(this.fsat, this.settings);
     tmpModification.fsat.name = this.newModificationName;
+    tmpModification.fsat.whatIfScenario = true;
     tmpModification.exploreOpportunities = (this.assessmentTab == 'explore-opportunities');
     this.save.emit(tmpModification);
   }

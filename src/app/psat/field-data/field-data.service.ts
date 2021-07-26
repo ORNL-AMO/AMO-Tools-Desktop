@@ -12,7 +12,7 @@ export class FieldDataService {
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
     let measuredVoltageValidators: Array<ValidatorFn> = [];
-    if (isBaseline || !isWhatIfScenario) {
+    if (isBaseline || !psatInputs.whatIfScenario) {
       loadEstimationMethodValidators = [Validators.required];
       measuredVoltageValidators = [Validators.required];
       if (psatInputs.load_estimation_method == 0) {

@@ -35,6 +35,7 @@
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected"
+        [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
           [modificationIndex]="modificationIndex"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat"

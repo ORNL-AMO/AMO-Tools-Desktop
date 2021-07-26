@@ -51,7 +51,8 @@
         [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)"
         [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-setup>
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"
-        [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
+      [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"  
+      [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
         [modificationIndex]="modificationIndex"
         [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
         (emitSave)="saveModFanMotor($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat">

@@ -39,17 +39,11 @@ export class ModificationListComponent implements OnInit {
     this.initDropdown();
     this.assessmentTabSubscription = this.psatTabService.secondaryTab.subscribe(val => {
       this.asssessmentTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
-  }
-
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.psat){
-
-    }
   }
 
   saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){

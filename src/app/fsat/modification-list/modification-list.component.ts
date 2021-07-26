@@ -45,12 +45,6 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.fsat){
-    
-    }
-  }
-
   saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
     this.fsat.modifications[modIndex].fsat.whatIfScenario = isWhatIfScenario;
     this.save.emit(true);
