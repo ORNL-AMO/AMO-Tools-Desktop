@@ -2,7 +2,7 @@ import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-
 
 export interface CompressedAirAssessment {
     name?: string;
-    modifications?: Modification[];
+    modifications: Array<Modification>;
     selected?: boolean;
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
@@ -17,7 +17,8 @@ export interface CompressedAirAssessment {
 }
 
 export interface Modification {
-    compressedAirAssessment: CompressedAirAssessment
+    name: string,
+    modificationId: string
 }
 
 export interface CASystemBasics {
