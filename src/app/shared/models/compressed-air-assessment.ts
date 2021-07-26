@@ -40,7 +40,18 @@ export interface ReduceAirLeaks {
 }
 
 export interface ImproveEndUseEfficiency {
-    selected: boolean
+    selected: boolean,
+    reductionType: "Fixed" | "Variable",
+    airflowReduction: number,
+    reductionData: Array<{
+        dayTypeId: string,
+        dayTypeName: string,
+        data: Array<{
+            hourInterval: number,
+            applyReduction: boolean
+            reductionAmount: number
+        }>
+    }>
 }
 
 export interface ReduceSystemAirPressure {

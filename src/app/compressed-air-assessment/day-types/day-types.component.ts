@@ -40,6 +40,13 @@ export class DayTypesComponent implements OnInit {
   }
 
   save() {
+    //update modification day type names on changes
+    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+        let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
+        this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData[dayTypeIndex].dayTypeName = dayType.name;
+      }
+    })
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -58,6 +65,10 @@ export class DayTypesComponent implements OnInit {
     let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[index];
     this.compressedAirAssessment.systemProfile.profileSummary = this.compressedAirAssessment.systemProfile.profileSummary.filter(summary => { return summary.dayTypeId != dayTypeToRemove.dayTypeId });
     this.compressedAirAssessment.compressedAirDayTypes.splice(index, 1);
+    for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+      let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayTypeToRemove.dayTypeId });
+      this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.splice(dayTypeIndex, 1)
+    }
     this.save();
   }
 }

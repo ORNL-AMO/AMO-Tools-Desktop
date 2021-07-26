@@ -7,7 +7,26 @@ export class ExploreOpportunitiesService {
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
-  getNewModification():Modification {
+  getNewModification(): Modification {
+    let reductionData: Array<{
+      dayTypeId: string,
+      dayTypeName: string,
+      data: Array<{
+        hourInterval: number,
+        applyReduction: boolean
+        reductionAmount: number
+      }>
+    }> = new Array();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      reductionData.push({
+        dayTypeId: dayType.dayTypeId,
+        dayTypeName: dayType.name,
+        data: this.getDefaultReductionData()
+      })
+    });
+
+
     return {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
@@ -19,7 +38,10 @@ export class ExploreOpportunitiesService {
         leakReduction: undefined
       },
       improveEndUseEfficiency: {
-        selected: false
+        selected: false,
+        reductionType: "Fixed",
+        airflowReduction: undefined,
+        reductionData: reductionData
       },
       reduceSystemAirPressure: {
         selected: false,
@@ -45,10 +67,23 @@ export class ExploreOpportunitiesService {
     }
   }
 
-  saveModification(modification: Modification){
+  saveModification(modification: Modification) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => {return mod.modificationId = modification.modificationId});
+    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId = modification.modificationId });
     compressedAirAssessment.modifications[modIndex] = modification;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
+
+
+  getDefaultReductionData(): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
+    let reductionData: Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> = new Array();
+    for (let i = 0; i < 24; i++) {
+      reductionData.push({
+        hourInterval: i,
+        applyReduction: false,
+        reductionAmount: undefined
+      });
+    }
+    return reductionData;
   }
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
 
@@ -15,7 +16,8 @@ export class InventoryService {
   collapseDesignDetails: boolean = true;
   collapseInletConditions: boolean = true;
   collapsePerformancePoints: boolean = true;
-  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService) {
+  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
@@ -443,6 +445,13 @@ export class InventoryService {
         fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
       })
     });
+    compressedAirAssessment.modifications.forEach(modification => {
+      modification.improveEndUseEfficiency.reductionData.push({
+        dayTypeName: dayTypeName,
+        dayTypeId: dayTypeId,
+        data: this.exploreOpportunitiesService.getDefaultReductionData()
+      })
+    })
     return compressedAirAssessment;
   }
 
