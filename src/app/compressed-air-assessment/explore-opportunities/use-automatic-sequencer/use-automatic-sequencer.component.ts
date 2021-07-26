@@ -12,4 +12,12 @@ export class UseAutomaticSequencerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+  focusField(str: string) {
+
+  }
+
+  setUseAutomaticSequencer() {
+
+  }
 }

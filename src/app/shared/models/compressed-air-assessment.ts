@@ -18,7 +18,7 @@ export interface CompressedAirAssessment {
 
 export interface Modification {
     name: string,
-    modificationId: string
+    modificationId: string,
 }
 
 export interface CASystemBasics {

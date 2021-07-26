@@ -12,4 +12,11 @@ export class ReduceRunTimeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  focusField(str: string) {
+
+  }
+
+  setReduceRunTime() {
+
+  }
 }

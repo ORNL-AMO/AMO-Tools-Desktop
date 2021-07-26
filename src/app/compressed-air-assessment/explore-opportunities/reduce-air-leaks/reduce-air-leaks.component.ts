@@ -12,4 +12,12 @@ export class ReduceAirLeaksComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  focusField(str: string) {
+
+  }
+
+  setReduceAirLeaks() {
+
+  }
 }

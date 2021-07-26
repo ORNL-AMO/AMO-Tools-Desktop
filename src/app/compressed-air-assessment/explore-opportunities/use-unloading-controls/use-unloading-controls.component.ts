@@ -12,4 +12,11 @@ export class UseUnloadingControlsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  focusField(str: string) {
+
+  }
+
+  setUseUnloadingControls() {
+
+  }
 }

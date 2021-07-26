@@ -12,4 +12,12 @@ export class FlowReallocationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  focusField(str: string) {
+
+  }
+
+  setFlowReallocation() {
+
+  }
+
 }

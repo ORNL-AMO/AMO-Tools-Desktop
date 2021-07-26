@@ -12,4 +12,12 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+  focusField(str: string) {
+
+  }
+
+  setReduceAirSystemAirPressure() {
+
+  }
 }

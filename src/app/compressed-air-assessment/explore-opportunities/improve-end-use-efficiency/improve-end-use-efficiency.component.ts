@@ -12,4 +12,12 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  focusField(str: string) {
+
+  }
+
+  setImproveEndUseEfficiency() {
+
+  }
 }

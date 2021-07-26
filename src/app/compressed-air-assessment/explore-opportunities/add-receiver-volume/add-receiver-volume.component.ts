@@ -12,4 +12,11 @@ export class AddReceiverVolumeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  focusField(str: string) {
+
+  }
+
+  setAddPrimaryReceiverVolume() {
+
+  }
 }

@@ -16,19 +16,29 @@
                     <input name="modificatonName" type="text" id="modificatonName" class="form-control"
                         [(ngModel)]="modification.name" (input)="save()" />
                 </div>
-              <div>
-        </div>
+                <hr>
+                <app-flow-reallocation></app-flow-reallocation>
+                <app-reduce-air-leaks></app-reduce-air-leaks>
+                <app-improve-end-use-efficiency></app-improve-end-use-efficiency>
+                <app-reduce-system-air-pressure></app-reduce-system-air-pressure>
+                <app-use-unloading-controls></app-use-unloading-controls>
+                <app-adjust-cascading-set-points></app-adjust-cascading-set-points>
+                <app-use-automatic-sequencer></app-use-automatic-sequencer>
+                <app-reduce-run-time></app-reduce-run-time>
+                <app-add-receiver-volume></app-add-receiver-volume>
+            </div>
 
-    </div>
-    <div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
-        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
-            find efficiency
-            opportunities.
-        </h3>
-        <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
-        <p>Data will be copied from your current baseline condition.</p>
-    </div>
-    <!--<div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
+        </div>
+        <div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+            <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions
+                to
+                find efficiency
+                opportunities.
+            </h3>
+            <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
+            <p>Data will be copied from your current baseline condition.</p>
+        </div>
+        <!--<div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
         <app-results-panel *ngIf="modificationExists"></app-results-panel>
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
@@ -36,4 +46,5 @@
 
         <!-- End .help-panel --
     </div>-->
+    </div>
 </div>

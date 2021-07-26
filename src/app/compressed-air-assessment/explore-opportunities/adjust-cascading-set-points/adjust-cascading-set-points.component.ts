@@ -12,4 +12,11 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  focusField(str: string) {
+
+  }
+
+  setAdjustCascadingSetPoints() {
+
+  }
 }
