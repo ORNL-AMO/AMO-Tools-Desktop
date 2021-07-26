@@ -65,7 +65,7 @@ export class SetupDataComponent implements OnInit {
     }
   }
 
-  setImportFile($event) {
+  setCSVImport($event) {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {
         let regex = /.csv$/;
@@ -78,6 +78,16 @@ export class SetupDataComponent implements OnInit {
           this.validFile = false;
         }
       }
+    }
+  }
+
+  setImport($event) {
+    let splitName = $event.target.files[0].name.split(".");
+    if (splitName[splitName.length - 1] == "xlsx") {
+      this.setExcelImport($event);
+    }
+    else {
+      this.setCSVImport($event);
     }
   }
 
