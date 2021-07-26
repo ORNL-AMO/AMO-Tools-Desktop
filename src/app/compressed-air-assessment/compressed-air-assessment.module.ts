@@ -79,6 +79,7 @@ import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
+import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 
 @NgModule({
   declarations: [
@@ -149,6 +150,7 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
     CompressedAirPressureReductionModule,
     AirVelocityModule,
     FormsModule,
+    ConfirmDeleteModalModule,
     ModalModule
   ],
   providers: [

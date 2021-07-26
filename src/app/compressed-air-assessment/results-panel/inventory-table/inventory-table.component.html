@@ -27,7 +27,7 @@
                         {{compressorInventoryItem.compressorControls.controlType | controlType}}
                     </td>
                     <td>
-                        <a class="fa fa-trash danger" (click)="deleteItem(compressorInventoryItem)"></a>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
                     </td>
                 </tr>
             </tbody>
@@ -37,3 +37,7 @@
         </div>
     </div>
 </div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressorInventoryData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>
