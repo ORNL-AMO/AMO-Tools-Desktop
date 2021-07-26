@@ -366,6 +366,7 @@ export class PsatComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.whatIfScenario = true;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)

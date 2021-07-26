@@ -42,6 +42,12 @@ export class ModificationListComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
   }
 
+  saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
+    this.fsat.modifications[modIndex].fsat.whatIfScenario = isWhatIfScenario;
+    this.save.emit(true);
+    this.selectModification(modIndex, true);
+  }
+
   initDropdown() {
     this.dropdown = Array<boolean>(this.fsat.modifications.length);
     this.rename = Array<boolean>(this.fsat.modifications.length);
