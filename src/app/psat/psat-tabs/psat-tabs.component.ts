@@ -104,7 +104,7 @@ export class PsatTabsComponent implements OnInit {
   }
 
   checkFieldDataInvalid(): boolean {
-    let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true);
+    let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
     return tmpForm.invalid;
   }
 

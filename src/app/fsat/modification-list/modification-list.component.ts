@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FSAT, Modification } from '../../shared/models/fans';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
@@ -6,6 +6,8 @@ import { FsatService } from '../fsat.service';
 import * as _ from 'lodash';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-modification-list',
   templateUrl: './modification-list.component.html',
@@ -29,6 +31,7 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   assessmentTab: string;
   assessmentTabSubscription: Subscription;
+  
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -40,6 +43,12 @@ export class ModificationListComponent implements OnInit {
 
   ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
+  }
+
+  saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
+    this.fsat.modifications[modIndex].fsat.whatIfScenario = isWhatIfScenario;
+    this.save.emit(true);
+    this.selectModification(modIndex, true);
   }
 
   initDropdown() {

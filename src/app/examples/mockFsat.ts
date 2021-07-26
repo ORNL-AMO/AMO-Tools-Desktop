@@ -61,7 +61,8 @@ export const MockFsat: Assessment = {
         modifications: [
             {
                 fsat: {
-                    name: "Optimize Fan & Motor Combo",
+                    name: "Optimize Fan & Motor Combo",                    
+                    whatIfScenario: true,
                     notes: {
                         fieldDataNotes: "",
                         fanMotorNotes: "",
@@ -117,6 +118,7 @@ export const MockFsat: Assessment = {
             {
                 fsat: {
                     name: "Reduce pressure & flow",
+                    whatIfScenario: true,
                     notes: {
                         fieldDataNotes: "",
                         fanMotorNotes: "",
