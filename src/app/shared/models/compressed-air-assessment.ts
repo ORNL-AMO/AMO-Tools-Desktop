@@ -19,6 +19,51 @@ export interface CompressedAirAssessment {
 export interface Modification {
     name: string,
     modificationId: string,
+    flowReallocation: FlowReallocation,
+    reduceAirLeaks: ReduceAirLeaks,
+    improveEndUseEfficiency: ImproveEndUseEfficiency,
+    reduceSystemAirPressure: ReduceSystemAirPressure,
+    useUnloadingControls: UseUnloadingControls,
+    adjustCascadingSetPoints: AdjustCascadingSetPoints,
+    useAutomaticSequencer: UseAutomaticSequencer,
+    reduceRuntime: ReduceRuntime,
+    addPrimaryReceiverVolume: AddPrimaryReceiverVolume
+}
+
+export interface FlowReallocation {
+    selected: boolean
+}
+
+export interface ReduceAirLeaks {
+    selected: boolean
+}
+
+export interface ImproveEndUseEfficiency {
+    selected: boolean
+}
+
+export interface ReduceSystemAirPressure {
+    selected: boolean
+}
+
+export interface UseUnloadingControls {
+    selected: boolean
+}
+
+export interface AdjustCascadingSetPoints {
+    selected: boolean
+}
+
+export interface UseAutomaticSequencer {
+    selected: boolean
+}
+
+export interface ReduceRuntime {
+    selected: boolean
+}
+
+export interface AddPrimaryReceiverVolume {
+    selected: boolean
 }
 
 export interface CASystemBasics {

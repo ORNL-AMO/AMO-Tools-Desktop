@@ -1,6 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="addPrimaryReceiverVolume">
-        <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')" (change)="setAddPrimaryReceiverVolume()" />
+        <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
+            (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" />
         Add Primary Receiver Volume
     </label>
 </div>

@@ -1,6 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="improveEndUseEfficiency">
-        <input type="checkbox" id="improveEndUseEfficiency" (focus)="focusField('improveEndUseEfficiency')" (change)="setImproveEndUseEfficiency()" />
+        <input type="checkbox" id="improveEndUseEfficiency" (focus)="focusField('improveEndUseEfficiency')"
+            (change)="setImproveEndUseEfficiency()" [(ngModel)]="improveEndUseEfficiency.selected" />
         Improve End Use Efficiency
     </label>
 </div>

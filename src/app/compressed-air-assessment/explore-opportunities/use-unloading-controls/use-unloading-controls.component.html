@@ -1,7 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="useUnloadingControls">
         <input type="checkbox" id="useUnloadingControls" (focus)="focusField('useUnloadingControls')"
-            (change)="setUseUnloadingControls()" />
+            (change)="setUseUnloadingControls()" [(ngModel)]="useUnloadingControls.selected" />
         Use Unloading Controls
     </label>
 </div>

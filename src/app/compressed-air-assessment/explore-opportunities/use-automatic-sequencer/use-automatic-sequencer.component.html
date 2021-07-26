@@ -1,7 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="useAutomaticSequencer">
         <input type="checkbox" id="useAutomaticSequencer" (focus)="focusField('useAutomaticSequencer')"
-            (change)="setUseAutomaticSequencer()" />
-            Use Automatic Sequencer
+            (change)="setUseAutomaticSequencer()" [(ngModel)]="useAutomaticSequencer.selected" />
+        Use Automatic Sequencer
     </label>
 </div>

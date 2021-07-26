@@ -1,6 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="reduceRunTime">
-        <input type="checkbox" id="reduceRunTime" (focus)="focusField('reduceRunTime')" (change)="setReduceRunTime()" />
+        <input type="checkbox" id="reduceRunTime" (focus)="focusField('reduceRunTime')" (change)="setReduceRunTime()"
+            [(ngModel)]="reduceRuntime.selected" />
         Reduce Run Time
     </label>
 </div>

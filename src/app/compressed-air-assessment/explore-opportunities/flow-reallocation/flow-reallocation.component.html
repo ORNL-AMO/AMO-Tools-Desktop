@@ -1,6 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="flowReallocation">
-        <input type="checkbox" id="flowReallocation" (focus)="focusField('flowReallocation')" (change)="setFlowReallocation()" />
+        <input type="checkbox" id="flowReallocation" (focus)="focusField('flowReallocation')" (change)="setFlowReallocation()"
+        [(ngModel)]="flowReallocation.selected" />
         Flow Reallocation
     </label>
 </div>

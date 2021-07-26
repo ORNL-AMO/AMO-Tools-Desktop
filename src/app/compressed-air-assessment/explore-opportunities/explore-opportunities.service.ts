@@ -10,7 +10,34 @@ export class ExploreOpportunitiesService {
   getNewModification():Modification {
     return {
       name: 'Modification',
-      modificationId: Math.random().toString(36).substr(2, 9)
+      modificationId: Math.random().toString(36).substr(2, 9),
+      flowReallocation: {
+        selected: false
+      },
+      reduceAirLeaks: {
+        selected: false
+      },
+      improveEndUseEfficiency: {
+        selected: false
+      },
+      reduceSystemAirPressure: {
+        selected: false
+      },
+      useUnloadingControls: {
+        selected: false
+      },
+      adjustCascadingSetPoints: {
+        selected: false
+      },
+      useAutomaticSequencer: {
+        selected: false
+      },
+      reduceRuntime: {
+        selected: false
+      },
+      addPrimaryReceiverVolume: {
+        selected: false
+      }
     }
   }
 
