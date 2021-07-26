@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
@@ -16,6 +17,11 @@ export class DayTypesComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   totalAnnualDays: number;
   totalDownDays: number;
+
+  showConfirmDeleteModal: boolean = false;
+  
+  deleteSelectedIndex: number;
+  confirmDeleteDayTypeData: ConfirmDeleteData;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router,
     private inventoryService: InventoryService) { }
 
@@ -54,10 +60,29 @@ export class DayTypesComponent implements OnInit {
     }
   }
 
-  removeDayType(index: number) {
-    let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[index];
+  removeDayType() {
+    let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[this.deleteSelectedIndex];
     this.compressedAirAssessment.systemProfile.profileSummary = this.compressedAirAssessment.systemProfile.profileSummary.filter(summary => { return summary.dayTypeId != dayTypeToRemove.dayTypeId });
-    this.compressedAirAssessment.compressedAirDayTypes.splice(index, 1);
+    this.compressedAirAssessment.compressedAirDayTypes.splice(this.deleteSelectedIndex, 1);
+    this.deleteSelectedIndex = undefined;
     this.save();
+  }
+
+  openConfirmDeleteModal(index: number) {
+    this.confirmDeleteDayTypeData = {
+      modalTitle: 'Delete Day Type',
+      confirmMessage: `Are you sure you want to delete '${this.compressedAirAssessment.compressedAirDayTypes[index].name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteSelectedIndex = index;
+    this.compressedAirAssessmentService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(deleteDayType: boolean) {
+    if (deleteDayType) {
+     this.removeDayType();
+    }
+    this.showConfirmDeleteModal = false;
+    this.compressedAirAssessmentService.modalOpen.next(false);
   }
 }
