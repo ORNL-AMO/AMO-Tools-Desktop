@@ -32,6 +32,7 @@ export class CleanDataComponent implements OnInit {
       this.dataExists = true;
     }
   }
+  
 
   submit() {
     this.cleaningData = true;
@@ -45,7 +46,7 @@ export class CleanDataComponent implements OnInit {
       this.cleaningData = false;
       this.dataSubmitted = true;
       this.logToolDbService.saveData();
-    }, 100)
+    }, 100);
   }
 
   resetData() {
@@ -81,6 +82,14 @@ export class CleanDataComponent implements OnInit {
       return field.isTimeField == true;
     });
     csvData.hasTimeField = csvData.timeField != undefined;
+    csvData.csvImportData.data.map(dataItem => { 
+      if (dataItem[csvData.timeField.fieldName]) {
+        let splitTime = dataItem[csvData.timeField.fieldName].toString().split(" ");
+        if (splitTime.length > 1) {
+          dataItem[csvData.timeField.fieldName] = splitTime[1];
+        }
+      }
+    });
     this.cd.detectChanges();
   }
 }
