@@ -35,7 +35,8 @@ export interface FlowReallocation {
 }
 
 export interface ReduceAirLeaks {
-    selected: boolean
+    selected: boolean,
+    leakReduction: number
 }
 
 export interface ImproveEndUseEfficiency {
@@ -43,7 +44,8 @@ export interface ImproveEndUseEfficiency {
 }
 
 export interface ReduceSystemAirPressure {
-    selected: boolean
+    selected: boolean,
+    averageSystemPressureReduction: number
 }
 
 export interface UseUnloadingControls {
@@ -55,7 +57,9 @@ export interface AdjustCascadingSetPoints {
 }
 
 export interface UseAutomaticSequencer {
-    selected: boolean
+    selected: boolean,
+    targetPressure: number,
+    variance: number
 }
 
 export interface ReduceRuntime {

@@ -15,13 +15,15 @@ export class ExploreOpportunitiesService {
         selected: false
       },
       reduceAirLeaks: {
-        selected: false
+        selected: false,
+        leakReduction: undefined
       },
       improveEndUseEfficiency: {
         selected: false
       },
       reduceSystemAirPressure: {
-        selected: false
+        selected: false,
+        averageSystemPressureReduction: undefined
       },
       useUnloadingControls: {
         selected: false
@@ -30,7 +32,9 @@ export class ExploreOpportunitiesService {
         selected: false
       },
       useAutomaticSequencer: {
-        selected: false
+        selected: false,
+        targetPressure: undefined,
+        variance: undefined
       },
       reduceRuntime: {
         selected: false

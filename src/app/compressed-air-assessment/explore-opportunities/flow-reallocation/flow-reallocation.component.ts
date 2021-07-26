@@ -35,10 +35,6 @@ export class FlowReallocationComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  setFlowReallocation() {
-    this.save();
-  }
-
   save() {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -46,6 +42,12 @@ export class FlowReallocationComponent implements OnInit {
     let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
     compressedAirAssessment.modifications[modificationIndex].flowReallocation = this.flowReallocation;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
+
+  toggleFlowReallocation() {
+    this.focusField('flowReallocation');
+    this.flowReallocation.selected = !this.flowReallocation.selected;
+    this.save();
   }
 
 }
