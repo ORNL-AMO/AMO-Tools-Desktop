@@ -89,6 +89,7 @@ import { AdjustCascadingSetPointsComponent } from './explore-opportunities/adjus
 import { UseAutomaticSequencerComponent } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.component';
 import { ReduceRunTimeComponent } from './explore-opportunities/reduce-run-time/reduce-run-time.component';
 import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver-volume/add-receiver-volume.component';
+import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 
 @NgModule({
   declarations: [
@@ -186,7 +187,8 @@ import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver
     NoLoadCalculationsService,
     UnloadPointCalculationsService,
     SharedPointCalculationsService,
-    PerformancePointsFormService
+    PerformancePointsFormService,
+    ExploreOpportunitiesService
   ]
 })
 export class CompressedAirAssessmentModule { }

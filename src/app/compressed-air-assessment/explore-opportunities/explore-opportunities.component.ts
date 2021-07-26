@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -18,7 +19,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment
   modificationExists: boolean;
   selectedModificationSub: Subscription;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  modification: Modification;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -32,8 +34,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (!val && this.modificationExists) {
         this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
       } else if (val && this.modificationExists) {
-        let checkModInAssessment: Modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
-        if (!checkModInAssessment) {
+        this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
+        if (!this.modification) {
           this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
         } 
       }
@@ -46,10 +48,14 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   addExploreOpp() {
-    let newModification: Modification = this.compressedAirAssessmentService.getNewModification();
+    let newModification: Modification = this.exploerOpportunitiesService.getNewModification();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.modifications.push(newModification);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.compressedAirAssessmentService.selectedModificationId.next(newModification.modificationId);
+  }
+
+  save(){
+    this.exploerOpportunitiesService.saveModification(this.modification);
   }
 }

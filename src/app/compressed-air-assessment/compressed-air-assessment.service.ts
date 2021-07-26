@@ -40,10 +40,4 @@ export class CompressedAirAssessmentService {
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
 
-  getNewModification():Modification {
-    return {
-      name: 'Modification',
-      modificationId: Math.random().toString(36).substr(2, 9)
-    }
-  }
 }
