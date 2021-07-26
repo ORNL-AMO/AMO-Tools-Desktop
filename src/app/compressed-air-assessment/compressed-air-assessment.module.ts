@@ -80,6 +80,7 @@ import { CompressedAirPressureReductionModule } from '../calculator/compressed-a
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 
 @NgModule({
   declarations: [
@@ -135,7 +136,8 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
     MaxFullFlowHelpComponent,
     DayTypesHelpComponent,
     CompressedAirCalculatorsComponent,
-    CalculatorTabsComponent
+    CalculatorTabsComponent,
+    CompressedAirDiagramComponent
   ],
   imports: [
     CommonModule,
