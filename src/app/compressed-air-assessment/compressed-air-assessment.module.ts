@@ -90,6 +90,8 @@ import { UseAutomaticSequencerComponent } from './explore-opportunities/use-auto
 import { ReduceRunTimeComponent } from './explore-opportunities/reduce-run-time/reduce-run-time.component';
 import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver-volume/add-receiver-volume.component';
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
+import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 
 @NgModule({
   declarations: [
@@ -155,7 +157,8 @@ import { ExploreOpportunitiesService } from './explore-opportunities/explore-opp
     AdjustCascadingSetPointsComponent,
     UseAutomaticSequencerComponent,
     ReduceRunTimeComponent,
-    AddReceiverVolumeComponent
+    AddReceiverVolumeComponent,
+    CompressedAirDiagramComponent
   ],
   imports: [
     CommonModule,
@@ -170,6 +173,7 @@ import { ExploreOpportunitiesService } from './explore-opportunities/explore-opp
     CompressedAirPressureReductionModule,
     AirVelocityModule,
     FormsModule,
+    ConfirmDeleteModalModule,
     ModalModule
   ],
   providers: [
