@@ -34,14 +34,14 @@
 
 
   <!--Assessment-->
-  <!-- <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" class="tab-content"
-      [ngStyle]="{'height.px': containerHeight}">
-      <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
-      </app-modify-conditions>
-      <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+    class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <!-- <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
+    </app-modify-conditions> -->
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
       (exploreOppsToast)="hideToast($event)">
-      </app-explore-opportunities>
-    </div> -->
+    </app-explore-opportunities>
+  </div>
 
   <!--Analysis-->
   <!-- <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
@@ -59,8 +59,8 @@
         </app-waste-water-report>
       </div>
     </div> -->
-<app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
-  [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
+  <app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+    [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
 
 
   <!--footer-->

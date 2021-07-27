@@ -46,6 +46,13 @@ export class DayTypesComponent implements OnInit {
   }
 
   save() {
+    //update modification day type names on changes
+    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+        let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
+        this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData[dayTypeIndex].dayTypeName = dayType.name;
+      }
+    })
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -63,6 +70,10 @@ export class DayTypesComponent implements OnInit {
   removeDayType() {
     let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[this.deleteSelectedIndex];
     this.compressedAirAssessment.systemProfile.profileSummary = this.compressedAirAssessment.systemProfile.profileSummary.filter(summary => { return summary.dayTypeId != dayTypeToRemove.dayTypeId });
+    for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+      let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayTypeToRemove.dayTypeId });
+      this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.splice(dayTypeIndex, 1)
+    }
     this.compressedAirAssessment.compressedAirDayTypes.splice(this.deleteSelectedIndex, 1);
     this.deleteSelectedIndex = undefined;
     this.save();

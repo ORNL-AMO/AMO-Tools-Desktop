@@ -2,7 +2,7 @@ import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-
 
 export interface CompressedAirAssessment {
     name?: string;
-    modifications?: Modification[];
+    modifications: Array<Modification>;
     selected?: boolean;
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
@@ -17,7 +17,68 @@ export interface CompressedAirAssessment {
 }
 
 export interface Modification {
-    compressedAirAssessment: CompressedAirAssessment
+    name: string,
+    modificationId: string,
+    flowReallocation: FlowReallocation,
+    reduceAirLeaks: ReduceAirLeaks,
+    improveEndUseEfficiency: ImproveEndUseEfficiency,
+    reduceSystemAirPressure: ReduceSystemAirPressure,
+    useUnloadingControls: UseUnloadingControls,
+    adjustCascadingSetPoints: AdjustCascadingSetPoints,
+    useAutomaticSequencer: UseAutomaticSequencer,
+    reduceRuntime: ReduceRuntime,
+    addPrimaryReceiverVolume: AddPrimaryReceiverVolume
+}
+
+export interface FlowReallocation {
+    selected: boolean
+}
+
+export interface ReduceAirLeaks {
+    selected: boolean,
+    leakReduction: number
+}
+
+export interface ImproveEndUseEfficiency {
+    selected: boolean,
+    reductionType: "Fixed" | "Variable",
+    airflowReduction: number,
+    reductionData: Array<{
+        dayTypeId: string,
+        dayTypeName: string,
+        data: Array<{
+            hourInterval: number,
+            applyReduction: boolean
+            reductionAmount: number
+        }>
+    }>
+}
+
+export interface ReduceSystemAirPressure {
+    selected: boolean,
+    averageSystemPressureReduction: number
+}
+
+export interface UseUnloadingControls {
+    selected: boolean
+}
+
+export interface AdjustCascadingSetPoints {
+    selected: boolean
+}
+
+export interface UseAutomaticSequencer {
+    selected: boolean,
+    targetPressure: number,
+    variance: number
+}
+
+export interface ReduceRuntime {
+    selected: boolean
+}
+
+export interface AddPrimaryReceiverVolume {
+    selected: boolean
 }
 
 export interface CASystemBasics {
