@@ -4,6 +4,7 @@ import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../shared
 import { Settings } from '../../../shared/models/settings';
 import { SystemCapacityService } from './system-capacity.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-system-capacity',
@@ -13,16 +14,21 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 export class SystemCapacityComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @Input()
+  inModal: boolean
+  @Output('emitTotalCapacity')
+  emitTotalCapacity = new EventEmitter<number>();
+  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-
+  
+  bodyHeight: number;
   headerHeight: number;
-
   inputs: AirSystemCapacityInput;
   outputs: AirSystemCapacityOutput;
   currentField: string = 'default';
@@ -42,7 +48,7 @@ export class SystemCapacityComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
-    }, 100);
+    }, 200);
   }
 
   ngOnDestroy(){
@@ -55,13 +61,17 @@ export class SystemCapacityComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.bodyHeight = this.contentContainer.nativeElement.offsetHeight;
     }
   }
 
   calculate() {
     this.outputs = this.standaloneService.airSystemCapacity(this.inputs, this.settings);
+    if (this.inModal) {
+      this.emitTotalCapacity.emit(this.outputs.totalCapacityOfCompressedAirSystem);
+    }
   }
 
   changeField($event) {
@@ -73,4 +83,5 @@ export class SystemCapacityComponent implements OnInit {
     this.inputs = this.systemCapacityService.convertAirSystemCapacityExample(tempInputs, this.settings);
     this.calculate();
   }
+
 }

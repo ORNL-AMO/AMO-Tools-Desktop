@@ -74,11 +74,12 @@ import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs
 import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
 import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
 import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';
-import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
+import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
+import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { FlowReallocationComponent } from './explore-opportunities/flow-reallocation/flow-reallocation.component';
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
@@ -130,6 +131,7 @@ import { CompressedAirDiagramComponent } from './compressed-air-diagram/compress
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
     DayTypeFilterPipe,
+    SystemCapacityModalComponent,
     HelpPanelComponent,
     SystemBasicsHelpComponent,
     SystemInformationHelpComponent,
@@ -173,6 +175,7 @@ import { CompressedAirDiagramComponent } from './compressed-air-diagram/compress
     CompressedAirPressureReductionModule,
     AirVelocityModule,
     FormsModule,
+    ModalModule,
     ConfirmDeleteModalModule,
     ModalModule
   ],

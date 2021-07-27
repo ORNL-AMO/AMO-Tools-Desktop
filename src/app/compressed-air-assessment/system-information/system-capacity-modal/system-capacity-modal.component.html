@@ -1,0 +1,23 @@
+<div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="systemCapacityModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <button class="close" aria-label="Close" (click)="closeSystemCapacityModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <app-system-capacity [inModal]="true" (emitTotalCapacity)="setSystemCapacity($event)"></app-system-capacity>
+      </div>
+      <div class="modal-footer">
+        <span>
+          <button type="button" class="btn btn-secondary btn-sm modal-btn"
+            (click)="closeSystemCapacityModal()">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="saveSystemCapacity()"
+            [disabled]="!totalCapacityOfCompressedAirSystem">Save</button>
+        </span>
+      </div>
+      </div>
+  </div>
+</div>
