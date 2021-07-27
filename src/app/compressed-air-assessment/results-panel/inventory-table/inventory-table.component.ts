@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
@@ -17,6 +18,10 @@ export class InventoryTableComponent implements OnInit {
 
   selectedCompressor: CompressorInventoryItem;
   selectedCompressorSub: Subscription;
+  
+  showConfirmDeleteModal: boolean = false;
+  deleteSelectedId: string;
+  confirmDeleteCompressorInventoryData: ConfirmDeleteData;
 
 
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
@@ -45,12 +50,12 @@ export class InventoryTableComponent implements OnInit {
     this.inventoryService.addNewCompressor();
   }
 
-  deleteItem(item: CompressorInventoryItem) {
+  deleteItem() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == item.itemId });
+    let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId});
     compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == item.itemId && summary.dayTypeId == dayType.dayTypeId });
+      itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
       let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
       if (compressedAirAssessment.systemInformation.isSequencerUsed) {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0]);
@@ -60,5 +65,23 @@ export class InventoryTableComponent implements OnInit {
     });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
+  }
+
+  openConfirmDeleteModal(item: CompressorInventoryItem) {
+    this.confirmDeleteCompressorInventoryData = {
+      modalTitle: 'Delete Compressor Inventory Item',
+      confirmMessage: `Are you sure you want to delete '${item.name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteSelectedId = item.itemId;
+    this.compressedAirAssessmentService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(deleteInventoryItem: boolean) {
+    if (deleteInventoryItem) {
+     this.deleteItem();
+    }
+    this.showConfirmDeleteModal = false;
+    this.compressedAirAssessmentService.modalOpen.next(false);
   }
 }

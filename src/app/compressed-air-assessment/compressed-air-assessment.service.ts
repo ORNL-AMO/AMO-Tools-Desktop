@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 
 @Injectable({
@@ -14,8 +14,10 @@ export class CompressedAirAssessmentService {
   focusedField: BehaviorSubject<string>;
   profileTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
+  assessmentTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
+  selectedModificationId: BehaviorSubject<string>;
   constructor() {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -23,8 +25,10 @@ export class CompressedAirAssessmentService {
     this.focusedField = new BehaviorSubject<string>('default');
     this.profileTab = new BehaviorSubject<string>('setup');
     this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
+    this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.selectedModificationId = new BehaviorSubject<string>(undefined);
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment) {
@@ -35,4 +39,5 @@ export class CompressedAirAssessmentService {
     // });
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
+
 }

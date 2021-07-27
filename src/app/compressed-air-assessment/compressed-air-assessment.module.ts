@@ -80,6 +80,19 @@ import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
 import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
+import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { FlowReallocationComponent } from './explore-opportunities/flow-reallocation/flow-reallocation.component';
+import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
+import { ImproveEndUseEfficiencyComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.component';
+import { ReduceSystemAirPressureComponent } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.component';
+import { UseUnloadingControlsComponent } from './explore-opportunities/use-unloading-controls/use-unloading-controls.component';
+import { AdjustCascadingSetPointsComponent } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.component';
+import { UseAutomaticSequencerComponent } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.component';
+import { ReduceRunTimeComponent } from './explore-opportunities/reduce-run-time/reduce-run-time.component';
+import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver-volume/add-receiver-volume.component';
+import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
+import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 
 @NgModule({
   declarations: [
@@ -136,7 +149,18 @@ import { SystemCapacityModule } from '../calculator/compressed-air/system-capaci
     MaxFullFlowHelpComponent,
     DayTypesHelpComponent,
     CompressedAirCalculatorsComponent,
-    CalculatorTabsComponent
+    CalculatorTabsComponent,
+    ExploreOpportunitiesComponent,
+    FlowReallocationComponent,
+    ReduceAirLeaksComponent,
+    ImproveEndUseEfficiencyComponent,
+    ReduceSystemAirPressureComponent,
+    UseUnloadingControlsComponent,
+    AdjustCascadingSetPointsComponent,
+    UseAutomaticSequencerComponent,
+    ReduceRunTimeComponent,
+    AddReceiverVolumeComponent,
+    CompressedAirDiagramComponent
   ],
   imports: [
     CommonModule,
@@ -152,6 +176,8 @@ import { SystemCapacityModule } from '../calculator/compressed-air/system-capaci
     AirVelocityModule,
     FormsModule,
     ModalModule,
+    ConfirmDeleteModalModule,
+    ModalModule
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -168,7 +194,8 @@ import { SystemCapacityModule } from '../calculator/compressed-air/system-capaci
     NoLoadCalculationsService,
     UnloadPointCalculationsService,
     SharedPointCalculationsService,
-    PerformancePointsFormService
+    PerformancePointsFormService,
+    ExploreOpportunitiesService
   ]
 })
 export class CompressedAirAssessmentModule { }
