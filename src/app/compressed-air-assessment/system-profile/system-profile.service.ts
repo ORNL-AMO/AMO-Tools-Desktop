@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import * as _ from 'lodash';
 
@@ -72,7 +72,7 @@ export class SystemProfileService {
     return selectedDayTypeSummary;
   }
 
-  calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment): Array<{ airflow: number, power: number, percentCapacity: number, percentPower: number }> {
+  calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment): Array<ProfileSummaryTotal> {
     let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
     let totalSystemCapacity: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
       return inventoryItem.nameplateData.fullLoadRatedCapacity;
@@ -87,7 +87,7 @@ export class SystemProfileService {
         allData = allData.concat(summary.profileSummaryData);
       }
     });
-    let totals: Array<{ airflow: number, power: number, percentCapacity: number, percentPower: number }> = new Array();
+    let totals: Array<ProfileSummaryTotal> = new Array();
     let intervals: Array<number> = allData.map(data => { return data.timeInterval });
     intervals = _.uniq(intervals);
     intervals.forEach(interval => {
@@ -98,7 +98,8 @@ export class SystemProfileService {
         airflow: totalAirFlow,
         power: totalPower,
         percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
-        percentPower: (totalPower / totalFullLoadPower) * 100
+        percentPower: (totalPower / totalFullLoadPower) * 100,
+        timeInterval: interval
       });
     });
     return totals;
@@ -141,4 +142,84 @@ export class SystemProfileService {
     }
     return profileSummary;
   }
+
+
+  flowReallocation(compressedAirAssessment: CompressedAirAssessment): Array<ProfileSummary> {
+    // let profileSummaryData: Array<ProfileSummary> = this.calculateDayTypeProfileSummary(compressedAirAssessment);
+    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment);
+
+    let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary));
+    adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+    adjustedProfileSummary.forEach(summary => {
+      summary.profileSummaryData = new Array();
+    });
+
+
+    totals.forEach(total => {
+      adjustedProfileSummary = this.calculatedNeededAirFlow(total, compressedAirAssessment, adjustedProfileSummary);
+    });
+    return adjustedProfileSummary;
+  }
+
+  calculatedNeededAirFlow(total: ProfileSummaryTotal, compressedAirAssessment: CompressedAirAssessment, adjustedProfileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
+    // console.log('interval: ' + total.timeInterval);
+    let neededAirFlow: number = total.airflow;
+    let intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }> = new Array();
+    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
+      if (summary.dayTypeId == compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId) {
+        intervalData.push({
+          compressorId: summary.compressorId,
+          summaryData: summary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == total.timeInterval })
+        });
+      }
+    });
+
+    intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
+    intervalData.forEach(data => {
+      if (data.summaryData.order != 0 && Math.abs(neededAirFlow) > 0.01) {
+        let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == data.compressorId });
+        // console.log(compressor.name);
+        let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
+        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow);
+        let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
+        // console.log(tmpNeededAirFlow);
+        if (tmpNeededAirFlow < 0) {
+          // console.log('re-calc')
+          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow);
+          tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
+          // console.log(tmpNeededAirFlow)
+        }
+        neededAirFlow = tmpNeededAirFlow;
+        let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+        adjustedProfileSummary[adjustedIndex].profileSummaryData.push({
+          power: calculateFullLoad.powerCalculated,
+          airflow: calculateFullLoad.capacityCalculated,
+          percentCapacity: calculateFullLoad.percentageCapacity,
+          timeInterval: data.summaryData.timeInterval,
+          percentPower: calculateFullLoad.percentagePower,
+          //TODO
+          percentSystemCapacity: 0,
+          order: data.summaryData.order,
+        });
+      } else {
+        let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+        adjustedProfileSummary[adjustedIndex].profileSummaryData.push({
+          power: 0,
+          airflow: 0,
+          percentCapacity: 0,
+          timeInterval: data.summaryData.timeInterval,
+          percentPower: 0,
+          //TODO
+          percentSystemCapacity: 0,
+          order: data.summaryData.order,
+        });
+      }
+    });
+    // console.log('final air flow: ' + neededAirFlow);
+    // console.log('===');
+    return adjustedProfileSummary;
+  }
+
+
+
 }

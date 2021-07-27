@@ -93,6 +93,7 @@ import { ExploreOpportunitiesService } from './explore-opportunities/explore-opp
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 import { CompressorNamePipe } from './compressor-name.pipe';
+import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +161,8 @@ import { CompressorNamePipe } from './compressor-name.pipe';
     ReduceRunTimeComponent,
     AddReceiverVolumeComponent,
     CompressedAirDiagramComponent,
-    CompressorNamePipe
+    CompressorNamePipe,
+    ExploreOpportunitiesResultsComponent
   ],
   imports: [
     CommonModule,

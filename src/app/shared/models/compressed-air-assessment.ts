@@ -202,6 +202,7 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     compressorName: string,
     fullLoadPressure: number,
+    fullLoadCapacity: number,
     compressorId: string,
     dayTypeId: string,
     profileSummaryData: Array<ProfileSummaryData>,
@@ -216,6 +217,14 @@ export interface ProfileSummaryData {
     percentPower: number,
     percentSystemCapacity: number,
     order: number,
+}
+
+export interface ProfileSummaryTotal {
+    airflow: number, 
+    power: number, 
+    percentCapacity: number, 
+    percentPower: number,
+    timeInterval: number
 }
 
 
