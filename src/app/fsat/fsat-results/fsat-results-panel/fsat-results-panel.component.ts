@@ -24,6 +24,7 @@ export class FsatResultsPanelComponent implements OnInit {
     this.hideResults();
   }
 
+  isWhatIfScenario: boolean;
 
   baselineResults: FsatOutput;
   modificationResults: FsatOutput;
@@ -36,6 +37,7 @@ export class FsatResultsPanelComponent implements OnInit {
 
   ngOnInit() {
     this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); });
+    this.isWhatIfScenario = this.fsat.modifications[this.modificationIndex].fsat.whatIfScenario;
   }
 
   ngOnDestroy() {

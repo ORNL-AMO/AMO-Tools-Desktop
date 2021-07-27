@@ -12,6 +12,23 @@
       <input name="newAssessmentName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
     </div>
   </div>
+
+  <div *ngIf="currentTab != 'explore-opportunities'">
+    <span class="small text-left bold">Compare two existing pumps or what-if scenario?</span>
+  
+    <div class="form-check">
+      <span>
+        <input type="radio" id="twoExisting" name="twoExisting" [value]="false" 
+          (input)="saveScenarioChange(false)" [(ngModel)]="isWhatIfScenario">
+        <label for="twoExisting">Two Existing Pumps</label><br>
+      
+        <input type="radio" id="whatIf" name="whatIf" [value]="true"
+          (input)="saveScenarioChange(true)" [(ngModel)]="isWhatIfScenario">
+        <label for="whatIf">What If Scenario</label><br>
+      </span>
+    </div>
+  </div>
+
 </form>
 <hr>
 <button class="btn btn-primary pull-right" (click)="addModification()">Create</button>
