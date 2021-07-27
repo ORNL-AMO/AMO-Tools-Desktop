@@ -20,7 +20,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -48,14 +48,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   addExploreOpp() {
-    let newModification: Modification = this.exploerOpportunitiesService.getNewModification();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.modifications.push(newModification);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.compressedAirAssessmentService.selectedModificationId.next(newModification.modificationId);
+    this.compressedAirAssessmentService.showAddModificationModal.next(true);
   }
 
   save(){
-    this.exploerOpportunitiesService.saveModification(this.modification);
+    this.exploreOpportunitiesService.saveModification(this.modification);
   }
 }

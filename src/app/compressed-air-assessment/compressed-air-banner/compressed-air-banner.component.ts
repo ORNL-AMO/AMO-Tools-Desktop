@@ -28,10 +28,8 @@ export class CompressedAirBannerComponent implements OnInit {
     });
 
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
-      if (val) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         this.selectedModification = compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
-      }
     });
 
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
@@ -51,8 +49,8 @@ export class CompressedAirBannerComponent implements OnInit {
     }
   }
 
-  selectModification(){
-
+  selectModification() {
+    this.compressedAirAssessmentService.showModificationListModal.next(true);
   }
 
   changeAssessmentTab(str: string){
