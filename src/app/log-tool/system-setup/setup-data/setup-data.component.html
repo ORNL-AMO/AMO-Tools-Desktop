@@ -15,6 +15,12 @@
                 </label>
                 <input type="file" class="form-control" id="importFile" (change)="setImport($event)" accept=".xlsx,.csv">
             </div>
+            <div class="form-group">
+                <label *ngIf = "workSheetsAvailable" for = "workSheetInput">Choose Worksheet</label>
+                <select *ngIf = "workSheetsAvailable" class="form-control" (change)="finishImportExcel()" name = "workSheetInput" [(ngModel)]="selectedSheet">
+                  <option *ngFor="let workSheet of workSheets">{{workSheet}}</option>
+                </select>
+            </div>
             <div class="p-2" *ngIf="previewDataFromCsv">
                 <table class="table table-condensed table-striped table-sm">
                     <thead>
