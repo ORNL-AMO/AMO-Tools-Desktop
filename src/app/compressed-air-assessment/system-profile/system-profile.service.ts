@@ -72,8 +72,11 @@ export class SystemProfileService {
     return selectedDayTypeSummary;
   }
 
-  calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment): Array<ProfileSummaryTotal> {
-    let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
+  calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment, profileSummary?: Array<ProfileSummary>): Array<ProfileSummaryTotal> {
+    let selectedProfileSummary: Array<ProfileSummary> = profileSummary;
+    if (!profileSummary) {
+      selectedProfileSummary = compressedAirAssessment.systemProfile.profileSummary;
+    }
     let totalSystemCapacity: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
       return inventoryItem.nameplateData.fullLoadRatedCapacity;
     });
