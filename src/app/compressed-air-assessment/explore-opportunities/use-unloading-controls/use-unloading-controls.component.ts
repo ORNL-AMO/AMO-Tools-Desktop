@@ -16,7 +16,6 @@ export class UseUnloadingControlsComponent implements OnInit {
   isFormChange: boolean = false;
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   inventoryItems: Array<CompressorInventoryItem>;
-  canAddUnloadingControls: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -27,7 +26,7 @@ export class UseUnloadingControlsComponent implements OnInit {
         this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.useUnloadingControls = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls;
-        this.checkCanAddUnloadingControls(compressedAirAssessment);
+        // this.checkCanAddUnloadingControls(compressedAirAssessment);
       } else {
         this.isFormChange = false;
       }
@@ -55,25 +54,25 @@ export class UseUnloadingControlsComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
-  checkCanAddUnloadingControls(compressedAirAssessment: CompressedAirAssessment) {
-    let selectedCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == this.useUnloadingControls.compressorId });
-    if (selectedCompressor && (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2)) {
-      this.canAddUnloadingControls = true;
-    } else {
-      this.canAddUnloadingControls = false;
-    }
-  }
+  // checkCanAddUnloadingControls(compressedAirAssessment: CompressedAirAssessment) {
+  //   let selectedCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == this.useUnloadingControls.compressorId });
+  //   if (selectedCompressor && (selectedCompressor.nameplateData.compressorType == 1 || selectedCompressor.nameplateData.compressorType == 2)) {
+  //     this.canAddUnloadingControls = true;
+  //   } else {
+  //     this.canAddUnloadingControls = false;
+  //   }
+  // }
 
-  changeCompressor() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.checkCanAddUnloadingControls(compressedAirAssessment);
-    let selectedCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == this.useUnloadingControls.compressorId });
-    if (selectedCompressor) {
-      let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(selectedCompressor));
-      this.useUnloadingControls.performancePoints = compressorCopy.performancePoints;
-      this.useUnloadingControls.unloadPointCapacity = compressorCopy.compressorControls.unloadPointCapacity;
-    }
-    this.save();
-  }
+  // changeCompressor() {
+  //   let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+  //   this.checkCanAddUnloadingControls(compressedAirAssessment);
+  //   let selectedCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == this.useUnloadingControls.compressorId });
+  //   if (selectedCompressor) {
+  //     let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(selectedCompressor));
+  //     this.useUnloadingControls.performancePoints = compressorCopy.performancePoints;
+  //     this.useUnloadingControls.unloadPointCapacity = compressorCopy.compressorControls.unloadPointCapacity;
+  //   }
+  //   this.save();
+  // }
 
 }

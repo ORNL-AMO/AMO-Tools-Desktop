@@ -11,3 +11,8 @@
 	cursor: pointer;
 	background-color: lightgray;
 }
+
+.group-label-2{
+	width: auto;
+    padding-bottom: 0px;
+}

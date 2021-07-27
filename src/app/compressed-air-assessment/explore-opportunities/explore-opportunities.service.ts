@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
@@ -26,6 +26,17 @@ export class ExploreOpportunitiesService {
       })
     });
 
+    let adjustedCompressors: Array<AdjustedUnloadingCompressor> = new Array();
+    compressedAirAssessment.compressorInventoryItems.forEach(item => {
+      let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(item));
+      adjustedCompressors.push({
+        selected: false,
+        compressorId: compressorCopy.itemId,
+        unloadPointCapacity: compressorCopy.compressorControls.unloadPointCapacity,
+        controlType: compressorCopy.compressorControls.controlType,
+        performancePoints: compressorCopy.performancePoints
+      })
+    })
 
     return {
       name: 'Modification',
@@ -49,10 +60,7 @@ export class ExploreOpportunitiesService {
       },
       useUnloadingControls: {
         selected: false,
-        compressorId: undefined,
-        unloadPointCapacity: undefined,
-        controlType: undefined,
-        performancePoints: undefined
+        adjustedCompressors: adjustedCompressors
       },
       adjustCascadingSetPoints: {
         selected: false

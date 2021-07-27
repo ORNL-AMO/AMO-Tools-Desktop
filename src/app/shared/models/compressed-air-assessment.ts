@@ -61,11 +61,17 @@ export interface ReduceSystemAirPressure {
 
 export interface UseUnloadingControls {
     selected: boolean,
+    adjustedCompressors: Array<AdjustedUnloadingCompressor>
+}
+
+export interface AdjustedUnloadingCompressor {
+    selected: boolean,
     compressorId: string,
     unloadPointCapacity: number,
     controlType: number,
     performancePoints: PerformancePoints
 }
+
 
 export interface AdjustCascadingSetPoints {
     selected: boolean
