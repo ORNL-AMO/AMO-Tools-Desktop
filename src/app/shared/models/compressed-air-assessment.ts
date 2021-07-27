@@ -60,7 +60,11 @@ export interface ReduceSystemAirPressure {
 }
 
 export interface UseUnloadingControls {
-    selected: boolean
+    selected: boolean,
+    compressorId: string,
+    unloadPointCapacity: number,
+    controlType: number,
+    performancePoints: PerformancePoints
 }
 
 export interface AdjustCascadingSetPoints {
@@ -78,7 +82,8 @@ export interface ReduceRuntime {
 }
 
 export interface AddPrimaryReceiverVolume {
-    selected: boolean
+    selected: boolean,
+    increasedVolume: number
 }
 
 export interface CASystemBasics {

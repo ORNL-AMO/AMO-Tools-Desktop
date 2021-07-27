@@ -48,7 +48,11 @@ export class ExploreOpportunitiesService {
         averageSystemPressureReduction: undefined
       },
       useUnloadingControls: {
-        selected: false
+        selected: false,
+        compressorId: undefined,
+        unloadPointCapacity: undefined,
+        controlType: undefined,
+        performancePoints: undefined
       },
       adjustCascadingSetPoints: {
         selected: false
@@ -62,7 +66,8 @@ export class ExploreOpportunitiesService {
         selected: false
       },
       addPrimaryReceiverVolume: {
-        selected: false
+        selected: false,
+        increasedVolume: 0
       }
     }
   }
