@@ -23,7 +23,7 @@ export class AddModificationComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  isWhatIfScenario: boolean;
+  isWhatIfScenario: boolean = true;
 
   newModificationName: string;
   currentTab: string;
@@ -39,8 +39,6 @@ export class AddModificationComponent implements OnInit {
     this.tabSubscription = this.psatTabService.secondaryTab.subscribe(val => {
       this.currentTab = val;
     })
-
-    this.isWhatIfScenario = true;
 
   }
 

@@ -21,7 +21,7 @@ export class AddModificationComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  isWhatIfScenario: boolean;
+  isWhatIfScenario: boolean = true;
 
   newModificationName: string;
   assessmentTab: string;
@@ -37,9 +37,7 @@ export class AddModificationComponent implements OnInit {
     // this.tabSubscription = this.psatService.secondaryTab.subscribe(val => {
     //   this.currentTab = val;
     // })
-
-    this.isWhatIfScenario = true;
-
+    
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });

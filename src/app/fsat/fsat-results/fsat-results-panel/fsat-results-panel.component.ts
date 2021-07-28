@@ -37,15 +37,17 @@ export class FsatResultsPanelComponent implements OnInit {
 
   ngOnInit() {
     this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); });
-    this.isWhatIfScenario = this.fsat.modifications[this.modificationIndex].fsat.whatIfScenario;
+    if (this.fsat.modifications && this.fsat.modifications.length > 0) {
+      this.isWhatIfScenario = this.fsat.modifications[this.modificationIndex].fsat.whatIfScenario;
+    }
   }
 
   ngOnDestroy() {
     this.updateDataSub.unsubscribe();
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.modificationIndex && !changes.modificationIndex.firstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.getResults();
     }
   }
