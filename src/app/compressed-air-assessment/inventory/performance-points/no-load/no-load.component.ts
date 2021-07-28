@@ -40,7 +40,7 @@ export class NoLoadComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setNoLoadLabel(compressor.compressorControls.controlType);
           this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.noLoad.power, compressor);
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.noLoad, compressor, 'noLoad');
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.noLoad, compressor, 'noLoad', this.inModification);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.isFormChange = false;

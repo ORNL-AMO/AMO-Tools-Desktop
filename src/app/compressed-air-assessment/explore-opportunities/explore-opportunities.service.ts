@@ -36,7 +36,8 @@ export class ExploreOpportunitiesService {
         controlType: compressorCopy.compressorControls.controlType,
         performancePoints: compressorCopy.performancePoints,
         originalControlType: compressorCopy.compressorControls.controlType,
-        compressorType: compressorCopy.nameplateData.compressorType
+        compressorType: compressorCopy.nameplateData.compressorType,
+        automaticShutdown: compressorCopy.compressorControls.automaticShutdown
       })
     })
 

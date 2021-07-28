@@ -72,7 +72,8 @@ export interface AdjustedUnloadingCompressor {
     compressorType: number,
     unloadPointCapacity: number,
     controlType: number,
-    performancePoints: PerformancePoints
+    performancePoints: PerformancePoints,
+    automaticShutdown: boolean
 }
 
 

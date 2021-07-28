@@ -40,7 +40,7 @@ export class MaxFullFlowComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setMaxFullFlowLabel(compressor.compressorControls.controlType);
           this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.maxFullFlow.power, compressor);
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow');
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow', this.inModification);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.isFormChange = false;

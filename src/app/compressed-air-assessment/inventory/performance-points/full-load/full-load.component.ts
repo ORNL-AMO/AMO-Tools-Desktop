@@ -16,7 +16,7 @@ import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessa
 export class FullLoadComponent implements OnInit {
   @Input()
   inModification: boolean;
-  
+
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
@@ -42,7 +42,7 @@ export class FullLoadComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setFullLoadLabel(compressor.compressorControls.controlType);
           this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad')
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad', this.inModification)
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.isFormChange = false;

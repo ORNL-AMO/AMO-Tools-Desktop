@@ -38,7 +38,7 @@ export class UnloadPointComponent implements OnInit {
         this.checkShowCalc();
         if (this.isFormChange == false) {
           this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.unloadPoint.power, compressor);
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint, compressor, 'unloadPoint');
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint, compressor, 'unloadPoint', this.inModification);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.isFormChange = false;

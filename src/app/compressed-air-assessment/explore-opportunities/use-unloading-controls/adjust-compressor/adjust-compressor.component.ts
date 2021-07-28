@@ -27,8 +27,7 @@ export class AdjustCompressorComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   selectedCompressorSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointsFormService: PerformancePointsFormService,
-    private inventoryService: InventoryService, private performancePointCalculationsService: PerformancePointCalculationsService,
-    private cd: ChangeDetectorRef) { }
+    private inventoryService: InventoryService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -58,6 +57,7 @@ export class AdjustCompressorComponent implements OnInit {
     //update forms
     this.selectedCompressor.compressorControls.controlType = this.adjustedCompressor.controlType;
     this.selectedCompressor.compressorControls.unloadPointCapacity = this.adjustedCompressor.unloadPointCapacity;
+    this.selectedCompressor.compressorControls.automaticShutdown = this.adjustedCompressor.automaticShutdown;
     this.selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(this.selectedCompressor);
     this.inventoryService.selectedCompressor.next(this.selectedCompressor);
 
@@ -70,7 +70,6 @@ export class AdjustCompressorComponent implements OnInit {
   }
 
   setControlTypeOptions() {
-    console.log(this.adjustedCompressor.originalControlType);
     if (this.adjustedCompressor.originalControlType == 1) {
       //inlet modulation without unloading
       //potential selections = Inlet Mod with unloading, Start/Stop
@@ -107,7 +106,6 @@ export class AdjustCompressorComponent implements OnInit {
     this.setShowUnload();
     this.setShowNoLoad();
     this.setShowBlowoff();
-    this.cd.detectChanges();
   }
 
 

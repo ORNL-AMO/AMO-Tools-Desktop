@@ -59,6 +59,7 @@ export class UseUnloadingControlsComponent implements OnInit {
     selectedCompressorCopy.performancePoints = this.selectedAdjustedCompressor.performancePoints;
     selectedCompressorCopy.compressorControls.controlType = this.selectedAdjustedCompressor.controlType;
     selectedCompressorCopy.compressorControls.unloadPointCapacity = this.selectedAdjustedCompressor.unloadPointCapacity;
+    selectedCompressorCopy.compressorControls.automaticShutdown = this.selectedAdjustedCompressor.automaticShutdown;
     this.inventoryService.selectedCompressor.next(selectedCompressorCopy);
   }
 
