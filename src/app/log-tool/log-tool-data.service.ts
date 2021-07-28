@@ -125,7 +125,8 @@ export class LogToolDataService {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
         this.isTimeSeries = false;
-      } else {
+      } 
+      else {
         //update date field format
         csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
         //remove invalid dates
