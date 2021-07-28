@@ -50,11 +50,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   addExploreOpp() {
-    let newModification: Modification = this.exploerOpportunitiesService.getNewModification();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.modifications.push(newModification);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.compressedAirAssessmentService.selectedModificationId.next(newModification.modificationId);
+    this.compressedAirAssessmentService.showAddModificationModal.next(true);
   }
 
   save() {

@@ -18,6 +18,9 @@ export class CompressedAirAssessmentService {
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
   selectedModificationId: BehaviorSubject<string>;
+  showModificationListModal: BehaviorSubject<boolean>;
+  showAddModificationModal: BehaviorSubject<boolean>;
+
   constructor() {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -29,6 +32,9 @@ export class CompressedAirAssessmentService {
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
+    this.showModificationListModal = new BehaviorSubject<boolean>(false);
+    this.showAddModificationModal = new BehaviorSubject<boolean>(false);
+
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment) {
@@ -39,5 +45,7 @@ export class CompressedAirAssessmentService {
     // });
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
+
+  
 
 }

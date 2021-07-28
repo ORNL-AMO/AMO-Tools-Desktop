@@ -53,6 +53,7 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
@@ -74,11 +75,12 @@ import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs
 import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
 import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
 import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';
-import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
+import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
+import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { FlowReallocationComponent } from './explore-opportunities/flow-reallocation/flow-reallocation.component';
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
@@ -95,6 +97,8 @@ import { CompressedAirDiagramComponent } from './compressed-air-diagram/compress
 import { CompressorNamePipe } from './compressor-name.pipe';
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
+import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
+import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 
 @NgModule({
   declarations: [
@@ -133,6 +137,7 @@ import { AdjustCompressorComponent } from './explore-opportunities/use-unloading
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
     DayTypeFilterPipe,
+    SystemCapacityModalComponent,
     HelpPanelComponent,
     SystemBasicsHelpComponent,
     SystemInformationHelpComponent,
@@ -164,7 +169,9 @@ import { AdjustCompressorComponent } from './explore-opportunities/use-unloading
     CompressedAirDiagramComponent,
     CompressorNamePipe,
     ExploreOpportunitiesResultsComponent,
-    AdjustCompressorComponent
+    AdjustCompressorComponent,
+    ModificationListModalComponent,
+    AddModificationModalComponent
   ],
   imports: [
     CommonModule,
@@ -179,8 +186,9 @@ import { AdjustCompressorComponent } from './explore-opportunities/use-unloading
     CompressedAirPressureReductionModule,
     AirVelocityModule,
     FormsModule,
-    ConfirmDeleteModalModule,
-    ModalModule
+    ModalModule,
+    NgbModule,
+    ConfirmDeleteModalModule
   ],
   providers: [
     CompressedAirAssessmentService,

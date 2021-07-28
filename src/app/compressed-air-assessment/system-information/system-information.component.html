@@ -41,18 +41,19 @@
         <!--Total Air Storage-->
         <div class="form-group">
             <label for="totalAirStorage">Total Air Storage
-                <a class="form-text small click-link disabled-link" >Calculate Air Storage Capacity</a>
+                <a class="form-text small click-link" (click)="openSystemCapacityModal()">Calculate Air Storage Capacity</a>
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
                     formControlName="totalAirStorage" (change)="save()" (focus)="focusField('totalAirStorage')">
-                <span class="units input-group-addon">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.totalAirStorage.invalid && !form.controls.totalAirStorage.pristine">
                 <span *ngIf="form.controls.totalAirStorage.errors.required">Value Required</span>
                 <span *ngIf="form.controls.totalAirStorage.errors.min">Value can't be less than
-                    {{form.controls.totalAirStorage.errors.min.min}} gal.</span>
+                    {{form.controls.totalAirStorage.errors.min.min}} </span>
             </span>
         </div>
         <!--Is a target pressure sequencer used?-->
@@ -82,3 +83,5 @@
         </div>
     </form>
 </div>
+
+<app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings" (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>
