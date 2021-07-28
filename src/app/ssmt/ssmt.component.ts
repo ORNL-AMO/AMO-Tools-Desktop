@@ -250,6 +250,7 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
+    this.initSankeyList();
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);

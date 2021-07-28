@@ -10,7 +10,7 @@
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
-      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
+      <app-system-information *ngIf="setupTab == 'system-information'" [settings]="settings"></app-system-information>
       <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
       <app-end-uses *ngIf="setupTab == 'end-uses'"></app-end-uses>
       <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>
@@ -34,23 +34,23 @@
 
 
   <!--Assessment-->
-  <!-- <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" class="tab-content"
-      [ngStyle]="{'height.px': containerHeight}">
-      <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
-      </app-modify-conditions>
-      <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+    class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <!-- <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
+    </app-modify-conditions> -->
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
       (exploreOppsToast)="hideToast($event)">
-      </app-explore-opportunities>
-    </div> -->
+    </app-explore-opportunities>
+  </div>
 
   <!--Analysis-->
   <!-- <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
       <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
-    </div>
+    </div> -->
   
     <div class="tab-content" *ngIf="mainTab == 'diagram'">
-      <app-waste-water-diagram></app-waste-water-diagram>
-    </div> -->
+      <app-compressed-air-diagram></app-compressed-air-diagram>
+    </div>
 
   <!--Report-->
   <!-- <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
@@ -59,6 +59,8 @@
         </app-waste-water-report>
       </div>
     </div> -->
+  <app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+    [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
 
 
   <!--footer-->
@@ -73,10 +75,10 @@
   <!--end footer-->
 </div>
 
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
 
-<!-- <app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
-  <app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
-  
+<!-- 
   <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
     [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
     (emitDisable)="disableDisclaimer()"></app-toast>

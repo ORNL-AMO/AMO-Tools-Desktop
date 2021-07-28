@@ -16,14 +16,15 @@ export class CentrifugalSpecificsComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private inventoryService: InventoryService, 
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
   ngOnInit(): void {
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
+      if (compressor) {
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getCentrifugalFormFromObj(val.centrifugalSpecifics);
+          this.form = this.inventoryService.getCentrifugalFormFromObj(compressor);
         } else {
           this.isFormChange = false;
         }

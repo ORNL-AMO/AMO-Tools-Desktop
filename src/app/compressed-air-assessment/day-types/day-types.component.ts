@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
+import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
+import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { InventoryService } from '../inventory/inventory.service';
 
 @Component({
   selector: 'app-day-types',
@@ -15,7 +17,13 @@ export class DayTypesComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   totalAnnualDays: number;
   totalDownDays: number;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router) { }
+
+  showConfirmDeleteModal: boolean = false;
+  
+  deleteSelectedIndex: number;
+  confirmDeleteDayTypeData: ConfirmDeleteData;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router,
+    private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -33,16 +41,18 @@ export class DayTypesComponent implements OnInit {
   }
 
   addDayType() {
-    this.compressedAirAssessment.compressedAirDayTypes.push({
-      dayTypeId: Math.random().toString(36).substr(2, 9),
-      name: 'Day Type',
-      numberOfDays: 0,
-      profileDataType: "percentCapacity"
-    });
+    this.compressedAirAssessment = this.inventoryService.addNewDayType(this.compressedAirAssessment, 'Day Type');
     this.save();
   }
 
   save() {
+    //update modification day type names on changes
+    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+        let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
+        this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData[dayTypeIndex].dayTypeName = dayType.name;
+      }
+    })
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -57,8 +67,33 @@ export class DayTypesComponent implements OnInit {
     }
   }
 
-  removeDayType(index: number){
-    this.compressedAirAssessment.compressedAirDayTypes.splice(index, 1);
+  removeDayType() {
+    let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[this.deleteSelectedIndex];
+    this.compressedAirAssessment.systemProfile.profileSummary = this.compressedAirAssessment.systemProfile.profileSummary.filter(summary => { return summary.dayTypeId != dayTypeToRemove.dayTypeId });
+    for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
+      let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayTypeToRemove.dayTypeId });
+      this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.splice(dayTypeIndex, 1)
+    }
+    this.compressedAirAssessment.compressedAirDayTypes.splice(this.deleteSelectedIndex, 1);
+    this.deleteSelectedIndex = undefined;
     this.save();
+  }
+
+  openConfirmDeleteModal(index: number) {
+    this.confirmDeleteDayTypeData = {
+      modalTitle: 'Delete Day Type',
+      confirmMessage: `Are you sure you want to delete '${this.compressedAirAssessment.compressedAirDayTypes[index].name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteSelectedIndex = index;
+    this.compressedAirAssessmentService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(deleteDayType: boolean) {
+    if (deleteDayType) {
+     this.removeDayType();
+    }
+    this.showConfirmDeleteModal = false;
+    this.compressedAirAssessmentService.modalOpen.next(false);
   }
 }

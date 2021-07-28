@@ -22,6 +22,8 @@ export class AirHeatingFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inModal: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('gasMaterialModal', { static: false }) public gasMaterialModal: ModalDirective;
@@ -104,6 +106,13 @@ export class AirHeatingFormComponent implements OnInit {
     }
     this.airHeatingService.airHeatingInput.next(currentInput);
     this.initForm();
+  }
+
+  setTreasureHuntFuelCost() {
+    let energySourceType = this.form.controls.utilityType.value;
+    let treasureHuntFuelCost = this.airHeatingService.getTreasureHuntFuelCost(energySourceType, this.settings);
+    this.form.patchValue({fuelCost: treasureHuntFuelCost});
+    this.calculate();
   }
 
   setFuelOptions() {

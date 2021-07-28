@@ -122,9 +122,15 @@ export class LogToolDataService {
       if (csvData.hasDateField == false) {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
-      } else {
+      } 
+      else {
         //update date field format
-        csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        if (csvData.hasDateField == true && csvData.hasTimeField == true) {
+          csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        }
+        else {
+          csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        }
         //remove invalid dates
         _.remove(csvData.csvImportData.data, (dataItem) => {
           return dataItem[csvData.dateField.fieldName] == 'Invalid date';

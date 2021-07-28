@@ -1,0 +1,333 @@
+<div class="output-summary">
+    <h6>Psychrometric Data</h6>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
+                [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+              <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
+                *ngFor="let modification of fsat.modifications; let index = index;"
+                [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
+            </tr>
+          </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Dry Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.dryBulbTemp">
+                        {{fsat.outputs.psychrometricResults.dryBulbTemp | number:'1.0-4' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.dryBulbTemp">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.dryBulbTemp">
+                        {{modification.fsat.outputs.psychrometricResults.dryBulbTemp | number:'1.0-4' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.dryBulbTemp">
+                        &mdash;
+                    </span>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Relative Humidity (%)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.relativeHumidity">
+                        {{fsat.outputs.psychrometricResults.relativeHumidity | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.relativeHumidity">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.relativeHumidity">
+                        {{modification.fsat.outputs.psychrometricResults.relativeHumidity | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.relativeHumidity">
+                        &mdash;
+                    </span>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.wetBulbTemp">
+                        {{fsat.outputs.psychrometricResults.wetBulbTemp | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.wetBulbTemp">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.wetBulbTemp">
+                        {{modification.fsat.outputs.psychrometricResults.wetBulbTemp | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.wetBulbTemp">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.dewPoint">
+                        {{fsat.outputs.psychrometricResults.dewPoint | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.dewPoint">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.dewPoint">
+                        {{modification.fsat.outputs.psychrometricResults.dewPoint | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.dewPoint">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Enthalpy
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.enthalpy">
+                        {{fsat.outputs.psychrometricResults.enthalpy | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.enthalpy">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.enthalpy">
+                        {{modification.fsat.outputs.psychrometricResults.enthalpy | number:'1.0-1' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.enthalpy">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.gasDensity">
+                        {{fsat.outputs.psychrometricResults.gasDensity | sigFigs: '4'}}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.gasDensity">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.gasDensity">
+                        {{modification.fsat.outputs.psychrometricResults.gasDensity | sigFigs: '4'}}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.gasDensity">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Specific Volume
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m<sup>3</sup>/kg)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.specificVolume">
+                        {{fsat.outputs.psychrometricResults.specificVolume | number:'1.0-2' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.specificVolume">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.specificVolume">
+                        {{modification.fsat.outputs.psychrometricResults.specificVolume | number:'1.0-2' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.specificVolume">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Barometric Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.barometricPressure">
+                        {{fsat.outputs.psychrometricResults.barometricPressure | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.barometricPressure">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.barometricPressure">
+                        {{modification.fsat.outputs.psychrometricResults.barometricPressure | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.barometricPressure">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.saturationPressure">
+                        {{fsat.outputs.psychrometricResults.saturationPressure | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.saturationPressure">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.saturationPressure">
+                        {{modification.fsat.outputs.psychrometricResults.saturationPressure | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.saturationPressure">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Saturation Humidity Ratio
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.saturatedHumidity">
+                        {{fsat.outputs.psychrometricResults.saturatedHumidity | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.saturatedHumidity">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.saturatedHumidity">
+                        {{modification.fsat.outputs.psychrometricResults.saturatedHumidity | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.saturatedHumidity">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.absolutePressure">
+                        {{fsat.outputs.psychrometricResults.absolutePressure | number:'1.0-2' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.absolutePressure">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.absolutePressure">
+                        {{modification.fsat.outputs.psychrometricResults.absolutePressure | number:'1.0-2' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.absolutePressure">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Degree of Saturation
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.saturationDegree">
+                        {{fsat.outputs.psychrometricResults.saturationDegree | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.saturationDegree">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.saturationDegree">
+                        {{modification.fsat.outputs.psychrometricResults.saturationDegree | number:'1.0-3' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.saturationDegree">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Humidity Ratio
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="fsat.outputs.psychrometricResults.humidityRatio">
+                        {{fsat.outputs.psychrometricResults.humidityRatio | number:'1.0-4' }}
+                    </span>
+                    <span *ngIf="!fsat.outputs.psychrometricResults.humidityRatio">
+                        &mdash;
+                    </span>
+                </td>
+                <td *ngFor="let modification of fsat.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="modification.fsat.outputs.psychrometricResults.humidityRatio">
+                        {{modification.fsat.outputs.psychrometricResults.humidityRatio | number:'1.0-4' }}
+                    </span>
+                    <span *ngIf="!modification.fsat.outputs.psychrometricResults.humidityRatio">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-container *ngIf="showPlaneResults">
+    <h6>Traverse Data Results</h6>
+    <div>
+        <app-traverse-results [settings]="settings" [fsat]="fsat" [fsatName]="'Baseline'"></app-traverse-results>
+        <div *ngFor="let modification of fsat.modifications;">
+            <app-traverse-results [settings]="settings" [fsat]="modification.fsat" [fsatName]="modification.fsat.name">
+            </app-traverse-results>
+        </div>
+    </div>
+</ng-container>

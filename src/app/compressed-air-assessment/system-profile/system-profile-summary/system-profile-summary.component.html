@@ -20,7 +20,12 @@
                     Calc Power, kW
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    {{data.power | number:'1.0-2'}}
+                    <span *ngIf="data.order != 0">
+                        {{data.power | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -28,7 +33,12 @@
                     Calc Airflow, acfm
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    {{data.airflow | number:'1.0-2'}}
+                    <span *ngIf="data.order != 0">
+                        {{data.airflow | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -36,7 +46,12 @@
                     % Capacity
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    {{data.percentCapacity | number:'1.0-2'}}
+                    <span *ngIf="data.order != 0">
+                        {{data.percentCapacity | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -44,7 +59,12 @@
                     % Power
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    {{data.percentPower | number:'1.0-2'}}
+                    <span *ngIf="data.order != 0">
+                        {{data.percentPower | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
                 </td>
             </tr>
         </tbody>

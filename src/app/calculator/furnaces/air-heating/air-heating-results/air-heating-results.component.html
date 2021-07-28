@@ -1,81 +1,125 @@
+<label class="group-label my-1">Annual Savings</label>
 <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
   <tbody>
     <tr>
-        <td class="bold w-50">Heat Transfered to Cold Air</td>
-        <td *ngIf="output.hxColdAir" class="text-center w-50">
-          {{output.hxColdAir | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+      <td class="bold w-50">Baseline Energy</td>
+      <td *ngIf="output.baselineEnergy" class="text-center w-50">
+        {{output.baselineEnergy | number:'1.0-0'}}
+        <span class="input-group-addon">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
         </span>
-        </td>
-        <td *ngIf="!output.hxColdAir" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Exhaust Gas Temperature Leaving Heat Exchanger</td>
-        <td *ngIf="output.hxOutletExhaust" class="text-center w-50">
-          {{output.hxOutletExhaust | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-               <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+      </td>
+      <td *ngIf="!output.baselineEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Modification Energy</td>
+      <td *ngIf="output.modificationEnergy" class="text-center w-50">
+        {{output.modificationEnergy | number:'1.0-0'}}
+        <span class="input-group-addon">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
         </span>
-        </td>
-        <td *ngIf="!output.hxOutletExhaust" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Heat Capacity of Flue</td>
-        <td *ngIf="output.heatCapacityFlue" class="text-center w-50">
-          {{output.heatCapacityFlue | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
-          </span>
-        </td>
-        <td *ngIf="!output.heatCapacityFlue" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Heat Capacity of Air</td>
-        <td *ngIf="output.heatCapacityAir" class="text-center w-50">
-          {{output.heatCapacityAir | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
-          </span>
-        </td>
-        <td *ngIf="!output.heatCapacityAir" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Annual Energy Savings</td>
-        <td *ngIf="output.energySavings" class="text-center w-50">
-          {{output.energySavings | number:'1.0-0'}}
-          <span class="input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
-        </span>
-        </td>
-        <td *ngIf="!output.energySavings" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Cost Savings</td>
-        <td *ngIf="output.costSavings" class="text-center w-50">
-            {{output.costSavings | currency: 'USD': 'symbol' : '1.0-0'}}
-        </td>
-        <td *ngIf="!output.costSavings" class="text-center w-50">
-          &mdash; &mdash;
-        </td>
-      </tr>
+      </td>
+      <td *ngIf="!output.modificationEnergy" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Savings</td>
+      <td *ngIf="output.energySavings" class="text-center w-50">
+        {{output.energySavings | number:'1.0-0'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+      </td>
+      <td *ngIf="!output.energySavings" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Cost Savings</td>
+      <td *ngIf="output.costSavings" class="text-center w-50">
+          {{output.costSavings | currency: 'USD': 'symbol' : '1.0-0'}}
+      </td>
+      <td *ngIf="!output.costSavings" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr>
   </tbody>
 </table>
 <!-- export table component -->
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
+
+
+<div>
+  <label class="group-label p-1" (click)="toggleResults()">
+    <span class="fa fa-chevron-down" *ngIf="displayAdditionalResults"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayAdditionalResults"></span>
+    <span class="pl-1">
+      Additional Results
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displayAdditionalResults">
+    <table *ngIf="output" #copyTable1 class="table table-hover table-striped">
+      <tbody>
+        <tr>
+            <td class="bold w-50">Heat Transfered to Cold Air</td>
+            <td *ngIf="output.hxColdAir" class="text-center w-50">
+              {{output.hxColdAir | number:'1.0-0'}}
+              <span class="input-group-addon">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+            </span>
+            </td>
+            <td *ngIf="!output.hxColdAir" class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          </tr>
+          <tr>
+            <td class="bold w-50">Exhaust Gas Temperature Leaving Heat Exchanger</td>
+            <td *ngIf="output.hxOutletExhaust" class="text-center w-50">
+              {{output.hxOutletExhaust | number:'1.0-0'}}
+              <span class="input-group-addon">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+            </td>
+            <td *ngIf="!output.hxOutletExhaust" class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          </tr>
+          <tr>
+            <td class="bold w-50">Heat Capacity of Flue</td>
+            <td *ngIf="output.heatCapacityFlue" class="text-center w-50">
+              {{output.heatCapacityFlue | number:'1.0-0'}}
+              <span class="input-group-addon">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
+              </span>
+            </td>
+            <td *ngIf="!output.heatCapacityFlue" class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          </tr>
+          <tr>
+            <td class="bold w-50">Heat Capacity of Air</td>
+            <td *ngIf="output.heatCapacityAir" class="text-center w-50">
+              {{output.heatCapacityAir | number:'1.0-0'}}
+              <span class="input-group-addon">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
+              </span>
+            </td>
+            <td *ngIf="!output.heatCapacityAir" class="text-center w-50">
+              &mdash; &mdash;
+            </td>
+          </tr>
+      
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()">
+    </app-exportable-results-table>
+  </div>

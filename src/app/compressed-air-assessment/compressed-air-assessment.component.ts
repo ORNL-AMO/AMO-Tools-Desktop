@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -10,6 +10,7 @@ import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
+import { InventoryService } from './inventory/inventory.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -25,7 +26,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   onResize(event) {
     this.setContainerHeight();
   }
-
+  
   assessment: Assessment;
   settings: Settings;
   mainTab: string;
@@ -36,12 +37,18 @@ export class CompressedAirAssessmentComponent implements OnInit {
   profileTabSub: Subscription;
   compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
+  showModificationListSub: Subscription;
+  showModificationList: boolean = false;
+  showAddModificationSub: Subscription;
+  showAddModification: boolean = false;
   isModalOpen: boolean;
   modalOpenSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService,
+  assessmentTab: string;
+  assessmentTabSub: Subscription;
+  constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
-    private genericCompressorDbService: GenericCompressorDbService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.genericCompressorDbService.getAllCompressors();
@@ -78,6 +85,17 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.setContainerHeight();
     });
 
+    this.showAddModificationSub = this.compressedAirAssessmentService.showAddModificationModal.subscribe(val => {
+      this.showAddModification = val;
+      this.cd.detectChanges();
+    });
+
+
+    this.showModificationListSub = this.compressedAirAssessmentService.showModificationListModal.subscribe(val => {
+      this.showModificationList = val;
+      this.cd.detectChanges();
+    });
+
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
       this.profileTab = val;
     });
@@ -85,6 +103,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
+
+    this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
+    })
   }
 
   ngOnDestroy() {
@@ -93,9 +115,13 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.assessmentTabSub.unsubscribe();
+    this.showAddModificationSub.unsubscribe();
+    this.showModificationListSub.unsubscribe();
     this.compressedAirAssessmentService.mainTab.next('system-setup');
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
+    this.inventoryService.selectedCompressor.next(undefined);
   }
 
   ngAfterViewInit() {

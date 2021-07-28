@@ -12,15 +12,21 @@ export class SystemInformationFormService {
     if(obj.isSequencerUsed){
       sequencerValidators = [Validators.required]
     }
-    return this.formBuilder.group({
-      nominalPressure: [obj.nominalPressure, Validators.required],
-      systemElevation: [obj.systemElevation, Validators.required],
-      totalAirStorage: [obj.totalAirStorage, Validators.required],
+    let form: FormGroup = this.formBuilder.group({
+      nominalPressure: [obj.nominalPressure, [Validators.required, Validators.min(0)]],
+      systemElevation: [obj.systemElevation, [Validators.required, Validators.min(0), Validators.max(29000)]],
+      totalAirStorage: [obj.totalAirStorage, [Validators.required, Validators.min(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
       targetPressure: [obj.targetPressure, sequencerValidators],
       variance: [obj.variance, sequencerValidators]
 
-    })
+    });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
+    return form;
   }
 
   getObjFromForm(form: FormGroup): SystemInformation {

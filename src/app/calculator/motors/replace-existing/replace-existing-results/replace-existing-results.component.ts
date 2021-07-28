@@ -13,9 +13,9 @@ export class ReplaceExistingResultsComponent implements OnInit {
   inTreasureHunt: boolean;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  tableString: any;
+  tableString: string;
   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
-  tableString2: any;
+  table2String: string;
 
   numCols: number = 2;
   constructor() { }
@@ -30,7 +30,7 @@ export class ReplaceExistingResultsComponent implements OnInit {
     this.tableString = this.copyTable.nativeElement.innerText;
   }
   
-  updateTableString2() {
-    this.tableString2 = this.copyTable2.nativeElement.innerText;
+  updateTable2String() {
+    this.table2String = this.copyTable2.nativeElement.innerText;
   }
 }

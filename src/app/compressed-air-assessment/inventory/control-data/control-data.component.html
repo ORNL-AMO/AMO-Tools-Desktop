@@ -32,12 +32,14 @@
                 formControlName="unloadPointCapacity" (input)="save()" (focus)="focusField('unloadPointCapacity')">
             <span class="units input-group-addon">%</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.unloadPointCapacity.invalid && !form.controls.unloadPointCapacity.pristine">
+          <span *ngIf="form.controls.unloadPointCapacity.errors.required">Value Required</span>
+          <span *ngIf="form.controls.unloadPointCapacity.errors.min">Value can't be less than
+            {{form.controls.unloadPointCapacity.errors.min.min}} </span>
+          <span *ngIf="form.controls.unloadPointCapacity.errors.max">Value can't be greater than
+              {{form.controls.unloadPointCapacity.errors.max.max}}</span>
+        </span>
     </div>
     <!-- numberOfUnloadSteps -->
     <div class="form-group" *ngIf="displayUnload">
@@ -46,12 +48,14 @@
             <input name="numberOfUnloadSteps" type="number" step="any" class="form-control" id="numberOfUnloadSteps"
                 formControlName="numberOfUnloadSteps" (input)="save()" (focus)="focusField('numberOfUnloadSteps')">
         </div>
-        <!-- <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
-        </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.numberOfUnloadSteps.invalid && !form.controls.numberOfUnloadSteps.pristine">
+          <span *ngIf="form.controls.numberOfUnloadSteps.errors.required">Value Required</span>
+          <span *ngIf="form.controls.numberOfUnloadSteps.errors.min">Value can't be less than
+            {{form.controls.numberOfUnloadSteps.errors.min.min}}</span>
+          <span *ngIf="form.controls.numberOfUnloadSteps.errors.max">Value can't be less than
+              {{form.controls.numberOfUnloadSteps.errors.min.min}} </span>
+        </span>
     </div>
     <!-- automaticShutdown -->
     <div class="form-group" *ngIf="displayAutomaticShutdown">
