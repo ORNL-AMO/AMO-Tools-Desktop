@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
@@ -310,7 +311,7 @@ export class InventoryService {
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
       modulatingPressureRange: [designDetails.modulatingPressureRange, modulatingPressureValidators],
       inputPressure: [designDetails.inputPressure, [Validators.min(0), Validators.max(16)]],
-      designEfficiency: [designDetails.designEfficiency, [Validators.min(0), Validators.max(100)]],
+      designEfficiency: [designDetails.designEfficiency, [GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       serviceFactor: [designDetails.serviceFactor, [Validators.min(1)]],
       noLoadPowerFM: [designDetails.noLoadPowerFM],
       noLoadPowerUL: [designDetails.noLoadPowerUL],
