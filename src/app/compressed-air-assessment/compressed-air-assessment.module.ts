@@ -53,6 +53,7 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
@@ -180,8 +181,8 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     AirVelocityModule,
     FormsModule,
     ModalModule,
-    ConfirmDeleteModalModule,
-    ModalModule
+    NgbModule,
+    ConfirmDeleteModalModule
   ],
   providers: [
     CompressedAirAssessmentService,
