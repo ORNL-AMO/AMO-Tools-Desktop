@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
@@ -13,6 +13,9 @@ import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessa
   styleUrls: ['./max-full-flow.component.css']
 })
 export class MaxFullFlowComponent implements OnInit {
+  @Input()
+  inModification: boolean;
+
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
@@ -58,8 +61,15 @@ export class MaxFullFlowComponent implements OnInit {
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     this.updateForm(selectedCompressor.performancePoints.maxFullFlow);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    if (!this.inModification) {
+      let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
+      compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    } else {
+      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+      let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
+      let adjustedCompressorIndex: number = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => { return adjustedCompressor.compressorId == selectedCompressor.itemId });
+      compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors[adjustedCompressorIndex].performancePoints = selectedCompressor.performancePoints;
+    }
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);

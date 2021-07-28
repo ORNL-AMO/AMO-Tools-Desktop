@@ -34,7 +34,9 @@ export class ExploreOpportunitiesService {
         compressorId: compressorCopy.itemId,
         unloadPointCapacity: compressorCopy.compressorControls.unloadPointCapacity,
         controlType: compressorCopy.compressorControls.controlType,
-        performancePoints: compressorCopy.performancePoints
+        performancePoints: compressorCopy.performancePoints,
+        originalControlType: compressorCopy.compressorControls.controlType,
+        compressorType: compressorCopy.nameplateData.compressorType
       })
     })
 

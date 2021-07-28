@@ -68,6 +68,8 @@ export interface UseUnloadingControls {
 export interface AdjustedUnloadingCompressor {
     selected: boolean,
     compressorId: string,
+    originalControlType: number,
+    compressorType: number,
     unloadPointCapacity: number,
     controlType: number,
     performancePoints: PerformancePoints

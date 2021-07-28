@@ -6,38 +6,19 @@
     </label>
 </div>
 <div *ngIf="useUnloadingControls.selected">
-    <form class="mb-2 pt-1"
-        *ngFor="let adjustedCompressor of useUnloadingControls.adjustedCompressors; let adjustedIndex = index;">
-        <label class="group-label group-label-2" for="{{'adjustedCompressor_'+adjustedIndex}}">
-            <input type="checkbox" id="{{'adjustedCompressor_'+adjustedIndex}}"
-                (focus)="focusField('useUnloadingControls')" (change)="save()" [(ngModel)]="adjustedCompressor.selected"
-                name="{{'adjustedCompressor_'+adjustedIndex}}" />
-            {{adjustedCompressor.compressorId | compressorName:inventoryItems}}
-        </label>
-        <div class="form-group" *ngIf="adjustedCompressor.selected">
-            <label for="{{'unloadPointCapacity_'+adjustedIndex}}">Unload Point, %C</label>
-            <div class="input-group">
-                <input type="number" class="form-control" [(ngModel)]="adjustedCompressor.unloadPointCapacity"
-                    name="{{'unloadPointCapacity_'+adjustedIndex}}" id="{{'unloadPointCapacity_'+adjustedIndex}}"
-                    (input)="save()">
-                <span class="input-group-addon units">%</span>
-            </div>
-        </div>
-        <!-- controlType -->
-        <div class="form-group">
-            <label for="controlType">Control Type</label>
-            <select id="{{'controlType_'+adjustedIndex}}" name="{{'controlType_'+adjustedIndex}}"
-                [(ngModel)]="adjustedCompressor.controlType" (change)="save()" (focus)="focusField('controlType')"
-                class="form-control">
-                <option *ngFor="let controlTypeOption of controlTypeOptions" [ngValue]="controlTypeOption.value">
-                    {{controlTypeOption.label}}</option>
-            </select>
-        </div>
-
-
-        <!-- <div *ngIf="!canAddUnloadingControls" class="alert alert-warning p-2">
-            Select compressor that can add unloading controls.
-        </div> -->
-    </form>
-
+    <div class="form-group">
+        <label>Select Compressor</label>
+        <select class="form-control" id="selectedAdjustedCompressor" [(ngModel)]="selectedAdjustedCompressor"
+            name="selectedAdjustedCompressor" (change)="setSelectedCompressor()">
+            <option *ngFor="let adjustedCompressor of useUnloadingControls.adjustedCompressors"
+                [ngValue]="adjustedCompressor">
+                {{adjustedCompressor.compressorId | compressorName:inventoryItems}}
+                <span *ngIf="adjustedCompressor.originalControlType != adjustedCompressor.controlType">
+                    *
+                </span>
+            </option>
+        </select>
+    </div>
+    <app-adjust-compressor *ngIf="selectedAdjustedCompressor" [inventoryItems]="inventoryItems"
+        [adjustedCompressor]="selectedAdjustedCompressor"></app-adjust-compressor>
 </div>

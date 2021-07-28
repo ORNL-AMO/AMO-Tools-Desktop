@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" [ngClass]="{'p-0': inModification}">
     <!--BLOWOFF-->
     <label class="group-label secondary-group">Surge (blowoff) point</label>
     <!-- blowoffDischargePressure -->
@@ -14,10 +14,11 @@
             <span class="units input-group-addon">psig</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
-          <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
-          <span *ngIf="form.controls.dischargePressure.errors.equalTo !== undefined">Value must be equal to Full Load Discharge Pressure
-            ({{form.controls.dischargePressure.errors.equalTo}}) psig.</span>
+            *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
+            <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
+            <span *ngIf="form.controls.dischargePressure.errors.equalTo !== undefined">Value must be equal to Full Load
+                Discharge Pressure
+                ({{form.controls.dischargePressure.errors.equalTo}}) psig.</span>
         </span>
     </div>
     <!-- blowoffAirflow -->
@@ -44,14 +45,15 @@
             <span class="units input-group-addon">kW</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
-          <span *ngIf="form.controls.power.errors.required">Value Required</span>
-          <span *ngIf="form.controls.power.errors.min">Value can't be less than
-            {{form.controls.power.errors.min.min}} kW.</span>
-          <span *ngIf="form.controls.power.errors.max">Value can't be greater than Full Load Power
-              {{form.controls.power.errors.max.max}} kW.</span>
+            *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
+            <span *ngIf="form.controls.power.errors.required">Value Required</span>
+            <span *ngIf="form.controls.power.errors.min">Value can't be less than
+                {{form.controls.power.errors.min.min}} kW.</span>
+            <span *ngIf="form.controls.power.errors.max">Value can't be greater than Full Load Power
+                {{form.controls.power.errors.max.max}} kW.</span>
         </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
+        <span class="alert-warning pull-right small"
+            *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
     </div>
 
 </form>

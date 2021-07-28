@@ -94,6 +94,7 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 import { CompressorNamePipe } from './compressor-name.pipe';
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
+import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 
 @NgModule({
   declarations: [
@@ -162,7 +163,8 @@ import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/ex
     AddReceiverVolumeComponent,
     CompressedAirDiagramComponent,
     CompressorNamePipe,
-    ExploreOpportunitiesResultsComponent
+    ExploreOpportunitiesResultsComponent,
+    AdjustCompressorComponent
   ],
   imports: [
     CommonModule,

@@ -45,7 +45,7 @@
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
         </div> -->
-        <app-explore-opportunities-results></app-explore-opportunities-results>
+        <app-explore-opportunities-results *ngIf="modificationExists"></app-explore-opportunities-results>
         <!-- End .help-panel -->
     </div>
 </div>
