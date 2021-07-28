@@ -7,6 +7,23 @@
           <td class="text-center bold">Baseline</td>
           <td class="text-center bold" *ngIf="modificationName">{{modificationName}}</td>
         </tr>
+        <!--humidity ratio-->
+        <tr>
+          <td>Humidity Ratio</td>
+          <td>
+            <span *ngIf="psychrometricResults">{{ psychrometricResults.humidityRatio | number:'1.0-4' }}</span>
+            <span *ngIf="!psychrometricResults">&mdash;</span>
+          </td>
+        </tr>
+        <!--gas density-->
+        <tr>
+          <td>Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
+          <td>
+            <span
+            *ngIf="psychrometricResults">{{ psychrometricResults.gasDensity | sigFigs: '4'}}</span>
+            <span *ngIf="!psychrometricResults">&mdash;</span>
+          </td>
+        </tr>
         <!-- Dry Bulb-->
         <tr>
           <td>Dry Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
@@ -46,15 +63,6 @@
             <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
           <td>
             <span *ngIf="psychrometricResults">{{ psychrometricResults.enthalpy | number:'1.0-1' }}</span>
-            <span *ngIf="!psychrometricResults">&mdash;</span>
-          </td>
-        </tr>
-        <!--gas density-->
-        <tr>
-          <td>Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
-          <td>
-            <span
-            *ngIf="psychrometricResults">{{ psychrometricResults.gasDensity | sigFigs: '4'}}</span>
             <span *ngIf="!psychrometricResults">&mdash;</span>
           </td>
         </tr>
@@ -106,14 +114,6 @@
           <td>Degree of Saturation</td>
           <td>
             <span *ngIf="psychrometricResults">{{ psychrometricResults.saturationDegree | number:'1.0-3' }}</span>
-            <span *ngIf="!psychrometricResults">&mdash;</span>
-          </td>
-        </tr>
-        <!--humidity ratio-->
-        <tr>
-          <td>Humidity Ratio</td>
-          <td>
-            <span *ngIf="psychrometricResults">{{ psychrometricResults.humidityRatio | number:'1.0-4' }}</span>
             <span *ngIf="!psychrometricResults">&mdash;</span>
           </td>
         </tr>

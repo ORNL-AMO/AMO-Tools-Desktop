@@ -41,7 +41,6 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     { display: 'Relative Humidity %', value: 'relativeHumidity' },
     { display: 'Wet Bulb Temperature', value: 'wetBulb' },
     { display: 'Gas Dew Point', value: 'dewPoint' },
-    { display: 'Use Known Density', value: 'custom' },
   ];
 
   gasTypes: Array<{ display: string, value: string }> = [
