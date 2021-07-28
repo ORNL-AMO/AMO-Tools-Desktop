@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, FlowReallocation } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, FlowReallocation, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { SystemProfileService } from '../../system-profile/system-profile.service';
 
 @Component({
   selector: 'app-flow-reallocation',
@@ -13,7 +14,14 @@ export class FlowReallocationComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   flowReallocation: FlowReallocation
   isFormChange: boolean = false;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+
+  dayTypeResults: Array<{
+    dayTypeName: string,
+    baselineResults: { cost: number, power: number, peakDemand: number },
+    adjustedResults: { cost: number, power: number, peakDemand: number },
+    savings: { cost: number, power: number, peakDemand: number }
+  }>
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
@@ -21,6 +29,22 @@ export class FlowReallocationComponent implements OnInit {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.flowReallocation = compressedAirAssessment.modifications[modificationIndex].flowReallocation;
+
+        this.dayTypeResults = new Array();
+        compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+          let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType);
+          let calculatedSavings: {
+            baselineResults: { cost: number, power: number, peakDemand: number },
+            adjustedResults: { cost: number, power: number, peakDemand: number },
+            savings: { cost: number, power: number, peakDemand: number }
+          } = this.systemProfileService.calculateSavings(compressedAirAssessment.systemProfile.profileSummary, adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
+          this.dayTypeResults.push({
+            dayTypeName: dayType.name,
+            baselineResults: calculatedSavings.baselineResults,
+            adjustedResults: calculatedSavings.adjustedResults,
+            savings: calculatedSavings.savings
+          })
+        })
       } else {
         this.isFormChange = false;
       }
