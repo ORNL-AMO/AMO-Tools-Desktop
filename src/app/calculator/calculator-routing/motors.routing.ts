@@ -5,11 +5,16 @@ import { NemaEnergyEfficiencyComponent } from "../motors/nema-energy-efficiency/
 import { PercentLoadEstimationComponent } from "../motors/percent-load-estimation/percent-load-estimation.component";
 import { ReplaceExistingComponent } from "../motors/replace-existing/replace-existing.component";
 import { MotorsListComponent } from "../motors/motors-list/motors-list.component";
+import { FullLoadAmpsComponent } from "../motors/full-load-amps/full-load-amps.component";
 
 export const motorRoutes: Routes = [
     {
         path: '',
         component: MotorsListComponent
+    },
+    {
+        path: 'full-load-amps',
+        component: FullLoadAmpsComponent
     },
     {
         path: 'motor-drive',

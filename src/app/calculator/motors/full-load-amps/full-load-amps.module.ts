@@ -8,6 +8,7 @@ import { FullLoadAmpsComponent } from './full-load-amps.component';
   declarations: [FullLoadAmpsComponent],
   imports: [
     CommonModule
-  ]
+  ],
+  exports: [FullLoadAmpsComponent]
 })
 export class FullLoadAmpsModule { }
