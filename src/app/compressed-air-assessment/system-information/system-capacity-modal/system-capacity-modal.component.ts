@@ -1,5 +1,7 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-system-capacity-modal',
@@ -9,10 +11,12 @@ import { ModalDirective } from 'ngx-bootstrap';
 export class SystemCapacityModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<number>();
+  @Input()
+  settings: Settings;
   totalCapacityOfCompressedAirSystem: number;
 
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
   }
@@ -22,7 +26,12 @@ export class SystemCapacityModalComponent implements OnInit {
   }
   
   setSystemCapacity(totalCapacity: number) {
-    this.totalCapacityOfCompressedAirSystem = totalCapacity;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      totalCapacity = this.convertUnitsService.value(totalCapacity).from('ft3').to('gal');
+    } else {
+      totalCapacity = this.convertUnitsService.value(totalCapacity).from('m3').to('L')
+    }
+    this.totalCapacityOfCompressedAirSystem =  Number(totalCapacity.toFixed(1));
   }
 
   closeSystemCapacityModal() {
