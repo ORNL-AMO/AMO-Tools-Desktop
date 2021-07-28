@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, FlowReallocation, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, FlowReallocation, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile/system-profile.service';
 
@@ -27,12 +27,12 @@ export class FlowReallocationComponent implements OnInit {
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
-        this.flowReallocation = compressedAirAssessment.modifications[modificationIndex].flowReallocation;
+        let selectedModification: Modification = compressedAirAssessment.modifications.find(mod => { return mod.modificationId == val });
+        this.flowReallocation = selectedModification.flowReallocation;
 
         this.dayTypeResults = new Array();
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-          let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType);
+          let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType, selectedModification, false);
           let calculatedSavings: {
             baselineResults: { cost: number, power: number, peakDemand: number },
             adjustedResults: { cost: number, power: number, peakDemand: number },

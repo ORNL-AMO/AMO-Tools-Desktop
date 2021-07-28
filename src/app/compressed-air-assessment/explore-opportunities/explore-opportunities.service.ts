@@ -46,7 +46,8 @@ export class ExploreOpportunitiesService {
       },
       reduceAirLeaks: {
         selected: false,
-        leakReduction: undefined
+        leakReduction: undefined,
+        leakFlow: undefined
       },
       improveEndUseEfficiency: {
         selected: false,

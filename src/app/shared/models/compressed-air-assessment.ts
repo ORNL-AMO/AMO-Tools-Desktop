@@ -36,6 +36,7 @@ export interface FlowReallocation {
 
 export interface ReduceAirLeaks {
     selected: boolean,
+    leakFlow: number,
     leakReduction: number
 }
 
