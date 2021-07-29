@@ -21,7 +21,7 @@
                     Compressor
                 </th>
                 <th>
-                    Aiflow Capacity, acfm
+                    Aifrlow Capacity 
                 </th>
                 <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
                     {{data.timeInterval}}
@@ -35,7 +35,7 @@
                     {{rData.compressorId | compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
-                    {{rData.fullLoadCapacity}}
+                    {{rData.fullLoadCapacity}} acfm
                 </td>
                 <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                     <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
@@ -47,7 +47,7 @@
         <tfoot>
             <tr>
                 <td>
-                    Available Airflow, acfm
+                    Available Airflow
                 </td>
                 <td>
 
@@ -59,7 +59,7 @@
             </tr>
             <tr>
                 <td>
-                    Required Airflow, acfm
+                    Required Airflow
                 </td>
                 <td>
 

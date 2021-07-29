@@ -16,6 +16,7 @@ td, th{
     border-left: solid 1px darkgray;
     padding: 3px;
     white-space: nowrap;
+    width: 25%;
   }
   
   /* tr > td:first-child {
@@ -25,6 +26,8 @@ td, th{
   
   table {
     /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
   }
   
 

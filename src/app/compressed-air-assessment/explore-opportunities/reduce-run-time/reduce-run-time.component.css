@@ -7,6 +7,11 @@
 }
 
 
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
 td, th{
     font-size: small;
     border-right: solid 1px darkgray;
@@ -22,7 +27,9 @@ td, th{
    */
   
   table {
-    box-shadow: 0 4px 8px 0 grey
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
   }
   
 
@@ -35,6 +42,6 @@ td, th{
   }
 
   thead tr, tfoot tr{
-	  background-color: lightgray;
+	  /* background-color: lightgray; */
 	  font-weight: bold;
   }

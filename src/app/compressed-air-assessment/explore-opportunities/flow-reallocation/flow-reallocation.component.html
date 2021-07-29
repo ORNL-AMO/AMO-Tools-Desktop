@@ -8,15 +8,12 @@
 
 
 <div class="pl-2 pt-3 pr-2" *ngIf="flowReallocation.selected">
-    <div *ngFor="let dayTypeResult of dayTypeResults">
-        <!-- <label class="group-label group-label-2">
-           
-        </label> -->
-        <table class="table table-hover table-striped">
+    <div class="pb-2" *ngFor="let dayTypeResult of dayTypeResults">
+        <table class="table table-hover bg-white">
             <thead>
                 <tr>
                     <th>
-                        Day Type: {{dayTypeResult.dayTypeName}}
+                        {{dayTypeResult.dayTypeName}}
                     </th>
                     <th>
                         Baseline
