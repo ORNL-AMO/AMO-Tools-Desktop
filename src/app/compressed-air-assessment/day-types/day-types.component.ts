@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { createFalse } from 'typescript';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -22,6 +23,9 @@ export class DayTypesComponent implements OnInit {
   
   deleteSelectedIndex: number;
   confirmDeleteDayTypeData: ConfirmDeleteData;
+  // invalidDayTypeIndex: number;
+  hasValidDayTypes: boolean;
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router,
     private inventoryService: InventoryService) { }
 
@@ -29,6 +33,7 @@ export class DayTypesComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
       this.setTotalDays();
+      this.hasValidDayTypes = this.inventoryService.hasValidDayTypes();
     });
   }
 
@@ -44,6 +49,22 @@ export class DayTypesComponent implements OnInit {
     this.compressedAirAssessment = this.inventoryService.addNewDayType(this.compressedAirAssessment, 'Day Type');
     this.save();
   }
+
+  // checkValidDays(index?: number) {
+  //   let summedTotalDays = this.compressedAirAssessment.compressedAirDayTypes.map(dayType => dayType.numberOfDays).reduce((yearDays, currentDayCount) => {
+  //     return yearDays + currentDayCount;
+  //   });
+  //   if (summedTotalDays > 365) {
+  //     this.invalidDayTypeIndex = index;
+  //     this.invalidDayTypes = true;
+  //   } else {
+  //     this.invalidDayTypeIndex = undefined;
+  //     this.invalidDayTypes = false;
+  //   }
+  //   console.log('exceeds max days index', this.invalidDayTypeIndex);
+  //   debugger;
+  //   // this.save();
+  // }
 
   save() {
     //update modification day type names on changes
