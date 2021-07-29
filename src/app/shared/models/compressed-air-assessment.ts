@@ -88,7 +88,18 @@ export interface UseAutomaticSequencer {
 }
 
 export interface ReduceRuntime {
-    selected: boolean
+    selected: boolean,
+    runtimeData: Array<ReduceRuntimeData>
+}
+
+export interface ReduceRuntimeData {
+    compressorId: string,
+    fullLoadCapacity: number,
+    intervalData: Array<{
+        isCompressorOn: boolean,
+        timeInterval: number,
+    }>
+    dayTypeId: string
 }
 
 export interface AddPrimaryReceiverVolume {
@@ -224,9 +235,9 @@ export interface ProfileSummaryData {
 }
 
 export interface ProfileSummaryTotal {
-    airflow: number, 
-    power: number, 
-    percentCapacity: number, 
+    airflow: number,
+    power: number,
+    percentCapacity: number,
     percentPower: number,
     timeInterval: number
 }

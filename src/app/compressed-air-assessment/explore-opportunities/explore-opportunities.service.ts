@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
@@ -17,13 +17,37 @@ export class ExploreOpportunitiesService {
         reductionAmount: number
       }>
     }> = new Array();
+
+    let reduceRuntimeData: Array<ReduceRuntimeData> = new Array();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       reductionData.push({
         dayTypeId: dayType.dayTypeId,
         dayTypeName: dayType.name,
         data: this.getDefaultReductionData()
-      })
+      });
+      compressedAirAssessment.compressorInventoryItems.forEach(item => {
+        let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
+          return summary.dayTypeId == dayType.dayTypeId && item.itemId == summary.compressorId;
+        })
+        let intervalData: Array<{
+          isCompressorOn: boolean,
+          timeInterval: number,
+        }> = new Array();
+        itemProfile.profileSummaryData.forEach(dataItem => {
+          intervalData.push({
+            isCompressorOn: dataItem.order != 0,
+            timeInterval: dataItem.timeInterval
+          })
+        });
+        reduceRuntimeData.push({
+          compressorId: item.itemId,
+          fullLoadCapacity: item.performancePoints.fullLoad.airflow,
+          intervalData: intervalData,
+          dayTypeId: dayType.dayTypeId
+        })
+      });
+
     });
 
     let adjustedCompressors: Array<AdjustedUnloadingCompressor> = new Array();
@@ -75,7 +99,8 @@ export class ExploreOpportunitiesService {
         variance: undefined
       },
       reduceRuntime: {
-        selected: false
+        selected: false,
+        runtimeData: reduceRuntimeData
       },
       addPrimaryReceiverVolume: {
         selected: false,
