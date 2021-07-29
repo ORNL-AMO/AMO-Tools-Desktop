@@ -20,3 +20,7 @@ td, th{
   .compressor-name-row{
       background-color: lightgray !important;
   }
+
+  select.form-control{
+    width: auto;
+  }

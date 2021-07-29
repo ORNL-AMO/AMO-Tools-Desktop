@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntime, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import * as _ from 'lodash';
 
@@ -147,7 +147,7 @@ export class SystemProfileService {
   }
 
 
-  flowReallocation(compressedAirAssessment: CompressedAirAssessment, dayType: CompressedAirDayType,  modification: Modification, applyEEEMs: boolean): Array<ProfileSummary> {
+  flowReallocation(compressedAirAssessment: CompressedAirAssessment, dayType: CompressedAirDayType, modification: Modification, applyEEEMs: boolean): Array<ProfileSummary> {
     let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment, dayType);
     let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary));
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
@@ -182,7 +182,17 @@ export class SystemProfileService {
 
     intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
     intervalData.forEach(data => {
-      if (data.summaryData.order != 0 && Math.abs(neededAirFlow) > 0.01) {
+      let isTurnedOn: boolean = data.summaryData.order != 0;
+      if (applyEEEMs) {
+        if (modification.reduceRuntime.selected) {
+          let reduceRuntime: ReduceRuntimeData = modification.reduceRuntime.runtimeData.find(dataItem => {
+            return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+          });
+          let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntime.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
+          isTurnedOn = intervalData.isCompressorOn;
+        }
+      }
+      if ((data.summaryData.order != 0 && isTurnedOn) && Math.abs(neededAirFlow) > 0.01) {
         let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == data.compressorId });
         // console.log(compressor.name);
         let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
