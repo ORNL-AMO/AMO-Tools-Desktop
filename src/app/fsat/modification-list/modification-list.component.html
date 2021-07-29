@@ -61,7 +61,7 @@
 
                       <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
                         (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.fsat.whatIfScenario">
-                      <label for="{{'twoExisting_'+index}}">Two existing Fans</label><br>
+                      <label for="{{'twoExisting_'+index}}">Two Existing Fans</label><br>
 
                       <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
                         [(ngModel)]="modification.fsat.whatIfScenario" (input)="saveScenarioChange(true, index)">

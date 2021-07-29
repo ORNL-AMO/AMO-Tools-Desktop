@@ -32,11 +32,17 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   onResize(event) {
     this.hideResults();
   }
+
+  isWhatIfScenario: boolean;
+
   showResults: boolean = true;
   timeOut: any;
   constructor() { }
 
   ngOnInit() {
+    if(this.psat.modifications && this.psat.modifications.length > 0) {
+      this.isWhatIfScenario = this.psat.modifications[this.exploreModIndex].psat.inputs.whatIfScenario;
+    }    
   }
 
 

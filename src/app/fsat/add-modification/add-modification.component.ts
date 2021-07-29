@@ -21,6 +21,8 @@ export class AddModificationComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  isWhatIfScenario: boolean = true;
+
   newModificationName: string;
   assessmentTab: string;
   assessmentTabSub: Subscription;
@@ -35,7 +37,7 @@ export class AddModificationComponent implements OnInit {
     // this.tabSubscription = this.psatService.secondaryTab.subscribe(val => {
     //   this.currentTab = val;
     // })
-
+    
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
@@ -48,8 +50,13 @@ export class AddModificationComponent implements OnInit {
   addModification() {
     let tmpModification: Modification = this.fsatService.getNewMod(this.fsat, this.settings);
     tmpModification.fsat.name = this.newModificationName;
-    tmpModification.fsat.whatIfScenario = true;
+    tmpModification.fsat.whatIfScenario = this.isWhatIfScenario;
     tmpModification.exploreOpportunities = (this.assessmentTab == 'explore-opportunities');
     this.save.emit(tmpModification);
   }
+
+  saveScenarioChange(isNewModWhatIfScenario: boolean){
+    this.isWhatIfScenario = isNewModWhatIfScenario;
+  }
+
 }
