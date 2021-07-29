@@ -25,6 +25,7 @@ export class OperatingProfileTableComponent implements OnInit {
   fieldOptions: Array<LogToolField>
   logToolDayTypeSummaries: Array<DayTypeSummary>;
   showSelectField: boolean = false;
+  invalidProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
@@ -40,6 +41,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
+        this.checkProfileSummaryData();
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
@@ -52,6 +54,25 @@ export class OperatingProfileTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+  }
+
+  checkProfileSummaryData() {
+    this.invalidProfileSummaryData = false;
+    this.profileSummary.forEach(summary => {
+      if (summary.dayTypeId == this.selectedDayTypeId) {
+        summary.profileSummaryData.forEach(data => {
+          if (data.order != 0) {
+            if (this.profileDataType == 'percentCapacity' && data.percentCapacity < 0) {
+              this.invalidProfileSummaryData = true;
+            } else if (this.profileDataType == 'power' && data.power < 0) {
+              this.invalidProfileSummaryData = true;
+            } else if (this.profileDataType == 'airflow' && data.airflow < 0) {
+              this.invalidProfileSummaryData = true;
+            }
+          } 
+        });
+      }
+    });
   }
 
 
