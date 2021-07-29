@@ -65,6 +65,7 @@ export class SetupTabsComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
+    this.compressedAirAssessmentSub.unsubscribe();
   }
 
   changeSetupTab(str: string) {
