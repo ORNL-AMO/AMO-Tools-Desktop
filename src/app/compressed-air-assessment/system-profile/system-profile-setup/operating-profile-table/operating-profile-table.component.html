@@ -12,6 +12,9 @@
 </label>
 
 <div class="scroll-item">
+    <div class="p-2 alert alert-danger small" *ngIf="invalidProfileSummaryData">
+        Profile Data values must be at least 0 
+    </div>
     <table class="table table-striped bg-white" *ngIf="profileDataType && selectedDayTypeId">
         <thead>
             <tr>
