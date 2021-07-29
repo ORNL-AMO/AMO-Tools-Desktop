@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntime, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntime, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import * as _ from 'lodash';
 
@@ -166,8 +166,31 @@ export class SystemProfileService {
     // console.log('interval: ' + total.timeInterval);
     let neededAirFlow: number = total.airflow;
     if (applyEEEMs) {
+      //EEM: Reduce Air leaks
       if (modification.reduceAirLeaks.selected) {
         neededAirFlow = neededAirFlow - (modification.reduceAirLeaks.leakReduction / 100 * modification.reduceAirLeaks.leakFlow);
+      }
+      //EEM: Improve End use Efficiency
+      if (modification.improveEndUseEfficiency.selected) {
+        let reductionData: {
+          dayTypeId: string;
+          dayTypeName: string;
+          data: Array<{
+            hourInterval: number;
+            applyReduction: boolean;
+            reductionAmount: number;
+          }>
+        } = modification.improveEndUseEfficiency.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
+        let intervalReductionData = reductionData.data.find(rData => { return rData.hourInterval == total.timeInterval });
+        if (modification.improveEndUseEfficiency.reductionType == 'Fixed') {
+          if (intervalReductionData.applyReduction) {
+            neededAirFlow = neededAirFlow - modification.improveEndUseEfficiency.airflowReduction;
+          }
+        } else if (modification.improveEndUseEfficiency.reductionType == 'Variable') {
+          if (intervalReductionData.reductionAmount) {
+            neededAirFlow = neededAirFlow - intervalReductionData.reductionAmount;
+          }
+        }
       }
     }
     let intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }> = new Array();
@@ -183,7 +206,9 @@ export class SystemProfileService {
     intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
     intervalData.forEach(data => {
       let isTurnedOn: boolean = data.summaryData.order != 0;
+      let additionalRecieverVolume: number = 0
       if (applyEEEMs) {
+        //EEM: Reduce run time
         if (modification.reduceRuntime.selected) {
           let reduceRuntime: ReduceRuntimeData = modification.reduceRuntime.runtimeData.find(dataItem => {
             return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
@@ -191,19 +216,34 @@ export class SystemProfileService {
           let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntime.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
           isTurnedOn = intervalData.isCompressorOn;
         }
+        //EEM: Add primary receiver volume
+        if (modification.addPrimaryReceiverVolume.selected) {
+          additionalRecieverVolume = modification.addPrimaryReceiverVolume.increasedVolume;
+        }
       }
       if ((data.summaryData.order != 0 && isTurnedOn) && Math.abs(neededAirFlow) > 0.01) {
         let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == data.compressorId });
-        // console.log(compressor.name);
+        //EEM: Use unloading controls
+        if (applyEEEMs) {
+          if (modification.useUnloadingControls.selected) {
+            let adjustedCompressor: AdjustedUnloadingCompressor = modification.useUnloadingControls.adjustedCompressors.find(adjustedCompressor => {
+              return (adjustedCompressor.compressorId == compressor.itemId);
+            });
+            compressor.compressorControls.controlType = adjustedCompressor.controlType;
+            compressor.performancePoints = adjustedCompressor.performancePoints;
+            compressor.compressorControls.unloadPointCapacity = adjustedCompressor.unloadPointCapacity;
+            compressor.compressorControls.automaticShutdown = adjustedCompressor.automaticShutdown;
+          }
+        }
+
         let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
-        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow);
+        //calc with full load
+        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow, additionalRecieverVolume);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
-        // console.log(tmpNeededAirFlow);
+        //if excess air added then reduce amount and calc again
         if (tmpNeededAirFlow < 0) {
-          // console.log('re-calc')
-          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow);
+          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow, additionalRecieverVolume);
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
-          // console.log(tmpNeededAirFlow)
         }
         neededAirFlow = tmpNeededAirFlow;
         let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
