@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntime, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import * as _ from 'lodash';
+import { PerformancePointCalculationsService } from '../inventory/performance-points/calculations/performance-point-calculations.service';
 
 @Injectable()
 export class SystemProfileService {
 
 
-  constructor(private formBuilder: FormBuilder, private compressedAirCalculationService: CompressedAirCalculationService) {
+  constructor(private formBuilder: FormBuilder, private compressedAirCalculationService: CompressedAirCalculationService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) {
   }
 
   getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): FormGroup {
@@ -223,26 +225,38 @@ export class SystemProfileService {
       }
       if ((data.summaryData.order != 0 && isTurnedOn) && Math.abs(neededAirFlow) > 0.01) {
         let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == data.compressorId });
-        //EEM: Use unloading controls
+        let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
         if (applyEEEMs) {
+          //EEM: Use unloading controls
           if (modification.useUnloadingControls.selected) {
             let adjustedCompressor: AdjustedUnloadingCompressor = modification.useUnloadingControls.adjustedCompressors.find(adjustedCompressor => {
-              return (adjustedCompressor.compressorId == compressor.itemId);
+              return (adjustedCompressor.compressorId == compressorCopy.itemId);
             });
-            compressor.compressorControls.controlType = adjustedCompressor.controlType;
-            compressor.performancePoints = adjustedCompressor.performancePoints;
-            compressor.compressorControls.unloadPointCapacity = adjustedCompressor.unloadPointCapacity;
-            compressor.compressorControls.automaticShutdown = adjustedCompressor.automaticShutdown;
+            let adjustedCompressorCopy: AdjustedUnloadingCompressor = JSON.parse(JSON.stringify(adjustedCompressor))
+            compressorCopy.compressorControls.controlType = adjustedCompressorCopy.controlType;
+            compressorCopy.performancePoints = adjustedCompressorCopy.performancePoints;
+            compressorCopy.compressorControls.unloadPointCapacity = adjustedCompressorCopy.unloadPointCapacity;
+            compressorCopy.compressorControls.automaticShutdown = adjustedCompressorCopy.automaticShutdown;
+          }
+          //EEM: Reduce System Pressure
+          if (modification.reduceSystemAirPressure.selected) {
+            let originalPressure: number = compressorCopy.performancePoints.fullLoad.dischargePressure;
+            compressorCopy.performancePoints.fullLoad.dischargePressure = compressorCopy.performancePoints.fullLoad.dischargePressure - modification.reduceSystemAirPressure.averageSystemPressureReduction;
+            compressorCopy.performancePoints.fullLoad.isDefaultPressure = false;
+            compressorCopy.performancePoints.fullLoad.airflow = this.calculateReducedAirFlow(compressorCopy.performancePoints.fullLoad.airflow, compressorCopy.performancePoints.fullLoad.dischargePressure, compressorCopy.inletConditions.atmosphericPressure, originalPressure);
+            compressorCopy.performancePoints.fullLoad.isDefaultAirFlow = false;
+            compressorCopy.performancePoints.fullLoad.isDefaultPower = true;
+            compressorCopy.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressorCopy);
           }
         }
 
-        let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
+        let fullLoadAirFlow: number = compressorCopy.performancePoints.fullLoad.airflow;
         //calc with full load
-        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow, additionalRecieverVolume);
+        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow, additionalRecieverVolume);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
         //if excess air added then reduce amount and calc again
         if (tmpNeededAirFlow < 0) {
-          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow, additionalRecieverVolume);
+          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow + tmpNeededAirFlow, additionalRecieverVolume);
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
         }
         neededAirFlow = tmpNeededAirFlow;
@@ -253,7 +267,6 @@ export class SystemProfileService {
           percentCapacity: calculateFullLoad.percentageCapacity,
           timeInterval: data.summaryData.timeInterval,
           percentPower: calculateFullLoad.percentagePower,
-          //TODO
           percentSystemCapacity: 0,
           order: data.summaryData.order,
         });
@@ -265,14 +278,11 @@ export class SystemProfileService {
           percentCapacity: 0,
           timeInterval: data.summaryData.timeInterval,
           percentPower: 0,
-          //TODO
           percentSystemCapacity: 0,
           order: data.summaryData.order,
         });
       }
     });
-    // console.log('final air flow: ' + neededAirFlow);
-    // console.log('===');
     return adjustedProfileSummary;
   }
 
@@ -310,6 +320,11 @@ export class SystemProfileService {
       peakDemand: peakDemand.power,
       power: sumPower
     }
+  }
+
+  calculateReducedAirFlow(c_usage: number, p_fl_rpred: number, p_alt: number, p_fl: number): number {
+    let p: number = (p_fl_rpred + p_alt) / (p_fl + 14.7);
+    return (c_usage - (c_usage - (c_usage * p)) * .6)
   }
 
 }
