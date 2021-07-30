@@ -399,6 +399,23 @@ export class InventoryService {
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
+  canAdvanceSetupTabs() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let hasValidCompressor: boolean = false;
+    compressedAirAssessment.compressorInventoryItems.some(compressorInventoryItem => {
+      hasValidCompressor = this.isCompressorValid(compressorInventoryItem);
+    });
+    return hasValidCompressor;
+  }
+
+  hasValidDayTypes() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let summedTotalDays = compressedAirAssessment.compressedAirDayTypes.map(dayType => dayType.numberOfDays).reduce((annualDays, currentDayCount) => {
+      return annualDays + currentDayCount;
+    });
+    return summedTotalDays <= 365? true: false;
+  }
+
   checkCentrifugalSpecsValid(compressor: CompressorInventoryItem): boolean {
     if (compressor.nameplateData.compressorType == 6) {
       let form: FormGroup = this.getCentrifugalFormFromObj(compressor);

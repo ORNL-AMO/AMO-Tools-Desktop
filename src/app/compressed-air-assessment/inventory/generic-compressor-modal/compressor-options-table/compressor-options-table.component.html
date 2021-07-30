@@ -1,4 +1,4 @@
-<div class="p-2">
+<div class="p-2 scroll-item">
     <table class="table table-sm table-hover">
         <tr class="header-row">
             <th></th>
@@ -22,7 +22,8 @@
                 Max Full Flow Pressure
             </th>
         </tr>
-        <tr *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions">
+        <tr
+            *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions | slice: ((pageNumber-1) * itemsPerPage): pageNumber * itemsPerPage">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
             </td>
@@ -49,4 +50,14 @@
             </td>
         </tr>
     </table>
+</div>
+
+<div class="tableControls d-flex pull-right small pr-2">
+    <p class="pull-right">({{filteredCompressors.length}} compressors)</p>
+    <div class="pull-right">
+        <ngb-pagination [collectionSize]="filteredCompressors.length"
+            [(page)]="pageNumber" [pageSize]="itemsPerPage" [rotate]="true"
+            aria-label="Default pagination" [maxSize]="5">
+        </ngb-pagination>
+    </div>
 </div>
