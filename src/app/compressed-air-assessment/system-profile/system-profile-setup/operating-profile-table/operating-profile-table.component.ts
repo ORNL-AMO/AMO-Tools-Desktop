@@ -75,6 +75,12 @@ export class OperatingProfileTableComponent implements OnInit {
     });
   }
 
+  updateProfileSummary() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    this.isFormChange = true;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
