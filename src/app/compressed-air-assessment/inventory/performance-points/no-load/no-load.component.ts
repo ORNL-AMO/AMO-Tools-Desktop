@@ -3,14 +3,13 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { NoLoadCalculationsService } from '../calculations/no-load-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
-  selector: 'app-no-load',
+  selector: '[app-no-load]',
   templateUrl: './no-load.component.html',
   styleUrls: ['./no-load.component.css']
 })

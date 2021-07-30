@@ -9,7 +9,7 @@ import { PerformancePointCalculationsService } from '../calculations/performance
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: 'app-blowoff',
+  selector: '[app-blowoff]',
   templateUrl: './blowoff.component.html',
   styleUrls: ['./blowoff.component.css']
 })

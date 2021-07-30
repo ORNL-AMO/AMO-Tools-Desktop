@@ -9,7 +9,7 @@ import { PerformancePointCalculationsService } from '../calculations/performance
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: 'app-full-load',
+  selector: '[app-full-load]',
   templateUrl: './full-load.component.html',
   styleUrls: ['./full-load.component.css']
 })

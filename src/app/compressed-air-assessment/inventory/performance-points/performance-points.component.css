@@ -7,3 +7,8 @@
     cursor: pointer;
     background-color: lightgray;
 }
+
+table.table th {
+    border: none !important;
+    padding: .25rem;
+}

@@ -9,7 +9,7 @@ import { UnloadPointCalculationsService } from '../calculations/unload-point-cal
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: 'app-unload-point',
+  selector: '[app-unload-point]',
   templateUrl: './unload-point.component.html',
   styleUrls: ['./unload-point.component.css']
 })
