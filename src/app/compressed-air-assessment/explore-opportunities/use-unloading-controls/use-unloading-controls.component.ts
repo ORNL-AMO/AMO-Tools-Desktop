@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, UseUnloadingControls } from '../../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, UseUnloadingControls } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { InventoryService } from '../../inventory/inventory.service';
 
 @Component({
   selector: 'app-use-unloading-controls',
@@ -13,12 +14,16 @@ export class UseUnloadingControlsComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   useUnloadingControls: UseUnloadingControls
   isFormChange: boolean = false;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+
+  inventoryItems: Array<CompressorInventoryItem>;
+  selectedAdjustedCompressor: AdjustedUnloadingCompressor;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+        this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.useUnloadingControls = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls;
       } else {
@@ -47,4 +52,15 @@ export class UseUnloadingControlsComponent implements OnInit {
     compressedAirAssessment.modifications[modificationIndex].useUnloadingControls = this.useUnloadingControls;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
+
+  setSelectedCompressor(){
+    let selectedCompressor: CompressorInventoryItem = this.inventoryItems.find(item => {return item.itemId == this.selectedAdjustedCompressor.compressorId});
+    let selectedCompressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(selectedCompressor));
+    selectedCompressorCopy.performancePoints = this.selectedAdjustedCompressor.performancePoints;
+    selectedCompressorCopy.compressorControls.controlType = this.selectedAdjustedCompressor.controlType;
+    selectedCompressorCopy.compressorControls.unloadPointCapacity = this.selectedAdjustedCompressor.unloadPointCapacity;
+    selectedCompressorCopy.compressorControls.automaticShutdown = this.selectedAdjustedCompressor.automaticShutdown;
+    this.inventoryService.selectedCompressor.next(selectedCompressorCopy);
+  }
+
 }

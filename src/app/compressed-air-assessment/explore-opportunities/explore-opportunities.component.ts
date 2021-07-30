@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { SystemProfileService } from '../system-profile/system-profile.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService,
+    private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -37,7 +39,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
         if (!this.modification) {
           this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
-        } 
+        }
       }
     })
   }
@@ -51,7 +53,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compressedAirAssessmentService.showAddModificationModal.next(true);
   }
 
-  save(){
-    this.exploreOpportunitiesService.saveModification(this.modification);
+  save() {
+    this.exploerOpportunitiesService.saveModification(this.modification);
   }
 }

@@ -130,7 +130,8 @@ export class OperatingProfileTableComponent implements OnInit {
         compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
         profileSummaryData: profileSummaryData,
-        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: inventoryItem.performancePoints.fullLoad.airflow
       }
     }
     return profileSummary;

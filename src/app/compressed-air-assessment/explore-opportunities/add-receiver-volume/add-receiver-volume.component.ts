@@ -13,12 +13,14 @@ export class AddReceiverVolumeComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   addPrimaryReceiverVolume: AddPrimaryReceiverVolume;
   isFormChange: boolean = false;
+  existingCapacity: number;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+        this.existingCapacity = compressedAirAssessment.systemInformation.totalAirStorage;
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.addPrimaryReceiverVolume = compressedAirAssessment.modifications[modificationIndex].addPrimaryReceiverVolume;
       } else {
