@@ -42,6 +42,9 @@ export class AirHeatingComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

@@ -205,7 +205,7 @@ export class FsatService {
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (isBaseline) {
+      if (isBaseline || !fsat.whatIfScenario) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
@@ -355,6 +355,7 @@ export class FsatService {
     tmpModification.fsat.fanSetup.fanType = 12;
     tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    tmpModification.fsat.whatIfScenario = true;
     return tmpModification;
   }
 }
