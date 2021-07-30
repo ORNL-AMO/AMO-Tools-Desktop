@@ -69,7 +69,7 @@
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="disableNext" (click)="continue()">Next</button>
+      <button class="btn btn-primary" [disabled]="disableNext || setupTab == 'end-uses'" (click)="next()">Next</button>
     </div>
   </div>
   <!--end footer-->

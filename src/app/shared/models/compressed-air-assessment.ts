@@ -128,6 +128,7 @@ export interface CompressorInventoryItem {
     compressorLibId?: number,
     name: string,
     description: string,
+    isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     inletConditions: InletConditions,

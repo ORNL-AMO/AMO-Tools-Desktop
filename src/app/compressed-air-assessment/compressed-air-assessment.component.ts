@@ -64,14 +64,12 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.settings = settings;
         this.compressedAirAssessmentService.settings.next(settings);
       }
-      // if (this.assessmentService.tab) {
-      //   this.wasteWaterService.mainTab.next(this.assessmentService.tab);
-      // }
-    });
-
-    this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      if (val && this.assessment) {
+      });
+      
+      this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+        if (val && this.assessment) {
         this.save(val);
+        this.setDisableNext();
       }
     })
 
@@ -82,6 +80,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
+      this.setDisableNext();
       this.setContainerHeight();
     });
 
@@ -143,17 +142,48 @@ export class CompressedAirAssessmentComponent implements OnInit {
     });
   }
 
-
   initUpdateUnitsModal() {
 
   }
 
-  next() {
+  setDisableNext() {
+    let canAdvanceSetupTabs: boolean = this.inventoryService.hasValidCompressors();
+    let hasValidDayTypes: boolean = this.inventoryService.hasValidDayTypes();
+    if (canAdvanceSetupTabs == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
+      this.disableNext = true;
+    } else if (!hasValidDayTypes && this.setupTab == 'day-types') {
+      this.disableNext = true;
+    } else {
+      this.disableNext = false;
+    }
+  }
 
+  next() {
+    if (this.setupTab == 'system-basics') {
+      this.compressedAirAssessmentService.setupTab.next('system-information');
+    } else if (this.setupTab == 'system-information') {
+      this.compressedAirAssessmentService.setupTab.next('inventory');
+    } else if (this.setupTab == 'inventory') {
+      this.compressedAirAssessmentService.setupTab.next('day-types');
+    } else if (this.setupTab == 'day-types') {
+      this.compressedAirAssessmentService.setupTab.next('system-profile');
+    } else if (this.setupTab == 'system-profile') {
+      // this.compressedAirAssessmentService.mainTab.next('end-uses');
+    }
   }
 
   back() {
-
+    if (this.setupTab == 'system-information') {
+      this.compressedAirAssessmentService.setupTab.next('system-basics');
+    } else if (this.setupTab == 'inventory') {
+      this.compressedAirAssessmentService.setupTab.next('system-information');
+    } else if (this.setupTab == 'day-types') {
+      this.compressedAirAssessmentService.setupTab.next('inventory');
+    } else if (this.setupTab == 'system-profile') {
+      this.compressedAirAssessmentService.setupTab.next('day-types');
+    } else if (this.setupTab == 'end-uses') {
+      // this.compressedAirAssessmentService.mainTab.next('system-profile');
+    }
   }
 
   setContainerHeight() {

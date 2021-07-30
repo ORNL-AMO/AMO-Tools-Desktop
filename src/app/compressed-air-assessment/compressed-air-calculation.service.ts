@@ -117,7 +117,6 @@ export class CompressedAirCalculationService {
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        // console.log(results);
         return results;
       }
     } else {
