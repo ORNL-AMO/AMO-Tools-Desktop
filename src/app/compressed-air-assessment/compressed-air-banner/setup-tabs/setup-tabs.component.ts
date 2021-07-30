@@ -37,7 +37,7 @@ export class SetupTabsComponent implements OnInit {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
       this.disabledSetupTabs = [];
-      let canAdvanceSetupTabs = this.inventoryService.canAdvanceSetupTabs();
+      let canAdvanceSetupTabs = this.inventoryService.hasValidCompressors();
       this.setTabStatus(canAdvanceSetupTabs);
     });
 
@@ -47,7 +47,7 @@ export class SetupTabsComponent implements OnInit {
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.disabledSetupTabs = [];
-      let canAdvanceSetupTabs = this.inventoryService.canAdvanceSetupTabs();
+      let canAdvanceSetupTabs = this.inventoryService.hasValidCompressors();
       this.setTabStatus(canAdvanceSetupTabs);
     });
   }
@@ -94,7 +94,7 @@ export class SetupTabsComponent implements OnInit {
     if (this.setupTab == "inventory" && canAdvanceSetupTabs) {
       this.inventoryStatus = ["active"];
     } else if (!canAdvanceSetupTabs) {
-      this.inventoryStatus = ["input-error"];
+      this.inventoryStatus = ["missing-data"];
     } else {
       this.inventoryStatus = [];
     }

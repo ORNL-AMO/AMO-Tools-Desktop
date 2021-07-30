@@ -147,7 +147,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   }
 
   setDisableNext() {
-    let canAdvanceSetupTabs: boolean = this.inventoryService.canAdvanceSetupTabs();
+    let canAdvanceSetupTabs: boolean = this.inventoryService.hasValidCompressors();
     let hasValidDayTypes: boolean = this.inventoryService.hasValidDayTypes();
     if (canAdvanceSetupTabs == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
       this.disableNext = true;

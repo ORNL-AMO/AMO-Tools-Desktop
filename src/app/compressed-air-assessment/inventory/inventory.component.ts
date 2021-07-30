@@ -20,6 +20,7 @@ export class InventoryComponent implements OnInit {
   compressorType: number;
   controlType: number;
   showCompressorModal: boolean = false;
+  hasValidCompressors: boolean = true;
   selectedCompressor: CompressorInventoryItem;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef, private systemProfileService: SystemProfileService) { }
@@ -54,6 +55,7 @@ export class InventoryComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
     if (this.hasInventoryItems) {
+      this.hasValidCompressors = this.inventoryService.hasValidCompressors();
       let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
       if (selectedCompressor) {
         let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
