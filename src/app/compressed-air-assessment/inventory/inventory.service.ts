@@ -399,14 +399,13 @@ export class InventoryService {
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
-  canAdvanceSetupTabs() {
+  hasValidCompressors() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressor: boolean = false;
-    compressedAirAssessment.compressorInventoryItems.some(compressorInventoryItem => {
-      hasValidCompressor = this.isCompressorValid(compressorInventoryItem);
-    });
-    return hasValidCompressor;
+    let hasValidCompressors: boolean = true;
+    hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+    return hasValidCompressors;
   }
+
 
   hasValidDayTypes() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
