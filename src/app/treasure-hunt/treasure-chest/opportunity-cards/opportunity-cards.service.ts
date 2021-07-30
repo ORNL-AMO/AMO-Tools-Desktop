@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 import { BehaviorSubject } from 'rxjs';
 import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
@@ -29,6 +30,7 @@ export class OpportunityCardsService {
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   updateOpportunityCards: BehaviorSubject<boolean>;
+  currCurrency: string = "$"; 
   constructor(private opportunitySheetService: OpportunitySheetService, 
     private opportunitySummaryService: OpportunitySummaryService,
     private airLeakTreasureService: AirLeakTreasureHuntService,
@@ -47,7 +49,8 @@ export class OpportunityCardsService {
     private openingTreasureService: OpeningTreasureHuntService,
     private wallLossTreasureHuntService: WallTreasureHuntService,
     private leakageLossTreasureService: LeakageTreasureHuntService,
-    private flueGasTreasureHuntService: FlueGasTreasureHuntService
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private convertUnitsService: ConvertUnitsService,
     ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -99,6 +102,26 @@ export class OpportunityCardsService {
     opportunityCardsData.forEach(card => {
       card.index = index;
       index++;
+      console.log(this.currCurrency);
+      if (this.currCurrency == "$" && settings.currency != "$") {
+        console.log("doing");
+        card.annualCostSavings = this.convertUnitsService.convertValue(card.annualCostSavings, "$", settings.currency);
+        card.implementationCost = this.convertUnitsService.convertValue(card.implementationCost, "$", settings.currency);
+        card.percentSavings.forEach(saving => {
+          saving.baselineCost = this.convertUnitsService.convertValue(saving.baselineCost, "$", settings.currency);
+          saving.modificationCost = this.convertUnitsService.convertValue(saving.modificationCost, "$", settings.currency);
+        }); 
+      }
+      else if (this.currCurrency != "$" && settings.currency == "$") {
+        console.log("doing 2");
+        card.annualCostSavings = this.convertUnitsService.convertValue(card.annualCostSavings, this.currCurrency, settings.currency);
+        card.implementationCost = this.convertUnitsService.convertValue(card.implementationCost, this.currCurrency, settings.currency);
+        card.percentSavings.forEach(saving => {
+          saving.baselineCost = this.convertUnitsService.convertValue(saving.baselineCost, this.currCurrency, settings.currency);
+          saving.modificationCost = this.convertUnitsService.convertValue(saving.modificationCost, this.currCurrency, settings.currency);
+        }); 
+      }
+      this.currCurrency = settings.currency;
     })
     // this.opportunityCards.next(opportunityCardsData);
 
