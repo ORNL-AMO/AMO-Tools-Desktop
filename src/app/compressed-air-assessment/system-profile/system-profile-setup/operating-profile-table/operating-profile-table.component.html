@@ -57,17 +57,17 @@
                         <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}" 
-                            (input)="updateProfileSummary()"
+                            (input)="updateProfileSummary(summary, dataIndex)"
                             [(ngModel)]="summaryData.power">
                         <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                            (input)="updateProfileSummary()"
+                            (input)="updateProfileSummary(summary, dataIndex)"
                             [(ngModel)]="summaryData.airflow">
                         <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                            (input)="updateProfileSummary()"
+                            (input)="updateProfileSummary(summary, dataIndex)"
                             [(ngModel)]="summaryData.percentCapacity">
                     </span>
                     <div class="w-100 bold text-center"
@@ -85,4 +85,12 @@
 
 <div class="p-2 alert alert-warning" *ngIf="!selectedDayTypeId">
     Select a Day Type
+</div>
+<div class="w-100 d-flex justify-content-end">
+    <div class="pl-2 pr-2 border-left">
+        <label class="small" for="fillRight">
+            <input type="checkbox" [(ngModel)]="fillRight" name="fillRight" id="fillRight">
+            Fill right on change
+        </label>
+    </div>
 </div>
