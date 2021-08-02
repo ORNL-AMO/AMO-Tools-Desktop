@@ -27,7 +27,6 @@ export class OperatingProfileTableComponent implements OnInit {
   showSelectField: boolean = false;
   fillRight: boolean = false;
 
-  // invalidProfileSummaryData: boolean;
   validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
