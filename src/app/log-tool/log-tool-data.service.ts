@@ -7,6 +7,7 @@ import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-mode
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
+  isTimeSeries: boolean;
   constructor(private logToolService: LogToolService) { }
 
   resetData() {
@@ -118,10 +119,12 @@ export class LogToolDataService {
   };
 
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+    this.isTimeSeries = true;
     individualDataFromCsv.forEach(csvData => {
       if (csvData.hasDateField == false) {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
+        this.isTimeSeries = false;
       } 
       else {
         //update date field format
