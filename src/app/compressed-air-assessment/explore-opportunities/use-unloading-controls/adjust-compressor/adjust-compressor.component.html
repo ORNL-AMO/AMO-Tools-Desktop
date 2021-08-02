@@ -1,0 +1,40 @@
+<form class="mb-2 pt-1">
+    <div class="form-group"
+        *ngIf="adjustedCompressor.controlType != 1 && adjustedCompressor.controlType != 7 && adjustedCompressor.controlType != 9">
+        <label for="unloadPointCapacity">Unload Point, %C</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="adjustedCompressor.unloadPointCapacity"
+                name="unloadPointCapacity" id="unloadPointCapacity" (input)="save()"
+                [disabled]="adjustedCompressor.controlType != 2 && adjustedCompressor.controlType != 3">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="automaticShutdown">Automatic Shutdown Timer</label>
+        <select id="automaticShutdown" name="automaticShutdown" [(ngModel)]="adjustedCompressor.automaticShutdown"
+            (change)="save()" (focus)="focusField('automaticShutdown')" class="form-control" [disabled]="adjustedCompressor.controlType == 1 || adjustedCompressor.controlType == 5 ||
+            adjustedCompressor.controlType == 7 || adjustedCompressor.controlType == 9">
+            <option [value]="true">Yes</option>
+            <option [value]="false">No</option>
+        </select>
+    </div>
+    <!-- controlType -->
+    <div class="form-group">
+        <label for="controlType">Proposed Control Type</label>
+        <select id="controlType" name="controlType" [(ngModel)]="adjustedCompressor.controlType" (change)="save()"
+            (focus)="focusField('controlType')" class="form-control">
+            <option *ngFor="let controlTypeOption of controlTypeOptions" [ngValue]="controlTypeOption.value">
+                {{controlTypeOption.label}}
+                <span *ngIf="controlTypeOption.value == adjustedCompressor.originalControlType">*</span>
+            </option>
+        </select>
+    </div>
+    <div class="w-100 text-right">
+        <a class="click-link small" (click)="restoreCompressor()">Restore Baseline</a>
+    </div>
+    <app-full-load *ngIf="selectedCompressor" [inModification]="true"></app-full-load>
+    <app-max-full-flow *ngIf="showMaxFullFlow && selectedCompressor" [inModification]="true"></app-max-full-flow>
+    <app-unload-point *ngIf="showUnload && selectedCompressor" [inModification]="true"></app-unload-point>
+    <app-no-load *ngIf="showNoLoad && selectedCompressor" [inModification]="true"></app-no-load>
+    <app-blowoff *ngIf="showBlowoff && selectedCompressor" [inModification]="true"></app-blowoff>
+</form>

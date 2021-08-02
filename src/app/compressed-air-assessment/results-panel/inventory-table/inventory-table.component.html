@@ -1,5 +1,8 @@
 <div class="card p-2">
     <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
+            One or more compressor is invalid - Review inventory and make changes to continue
+        </span>
         <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedCompressor && compressorInventoryItems">
             <thead>
                 <tr>
@@ -13,10 +16,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
-                    [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId}">
+                    [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId,
+                                'invalid-compressor': !compressorInventoryItem.isValid}">
                     <td>
                         <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
-                            class="fa fa-chevron-right"></span>
+                            class="fa fa-chevron-right danger"></span>
                         <a class="click-link"
                             (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
                     </td>

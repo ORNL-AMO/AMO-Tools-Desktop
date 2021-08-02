@@ -94,6 +94,9 @@ import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
+import { CompressorNamePipe } from './compressor-name.pipe';
+import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
+import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 
@@ -164,6 +167,9 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     ReduceRunTimeComponent,
     AddReceiverVolumeComponent,
     CompressedAirDiagramComponent,
+    CompressorNamePipe,
+    ExploreOpportunitiesResultsComponent,
+    AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent
   ],

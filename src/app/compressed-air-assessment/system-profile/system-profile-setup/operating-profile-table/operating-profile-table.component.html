@@ -12,6 +12,9 @@
 </label>
 
 <div class="scroll-item">
+    <div class="p-2 alert alert-danger small" *ngIf="invalidProfileSummaryData">
+        Profile Data values must be at least 0 
+    </div>
     <table class="table table-striped bg-white" *ngIf="profileDataType && selectedDayTypeId">
         <thead>
             <tr>
@@ -42,7 +45,7 @@
                 </td>
                 <td *ngIf="showSelectField">
                     <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
-                        name="{compressorIndex+'logToolFieldId'}" id="{compressorIndex+'logToolFieldId'}"
+                        name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
                         (change)="setLogToolData(summary)">
                         <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
                             {{field.alias}}
@@ -53,13 +56,18 @@
                     <span *ngIf="summaryData.order != 0">
                         <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
-                            name="{{'summaryData_'+compressorIndex+dataIndex}}" [(ngModel)]="summaryData.power">
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}" 
+                            (input)="updateProfileSummary()"
+                            [(ngModel)]="summaryData.power">
                         <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
-                            name="{{'summaryData_'+compressorIndex+dataIndex}}" [(ngModel)]="summaryData.airflow">
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary()"
+                            [(ngModel)]="summaryData.airflow">
                         <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary()"
                             [(ngModel)]="summaryData.percentCapacity">
                     </span>
                     <div class="w-100 bold text-center"

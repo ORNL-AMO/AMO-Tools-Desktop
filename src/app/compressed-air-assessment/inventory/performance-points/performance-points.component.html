@@ -1,6 +1,9 @@
 <label class="group-label" (click)="toggleCollapse()">
     <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
     Performance Points
+    <span class="pull-right">
+        <span *ngIf="!hasValidPerformancePoints" class="fa fa-exclamation-circle"></span>
+    </span>
 </label>
 
 <div *ngIf="!contentCollapsed" class="p-2">

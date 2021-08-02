@@ -15,3 +15,9 @@
 a.danger{
     color: red;
 }
+
+.invalid-compressor {
+    color: #721c24 !important;
+    background-color: #f8d7da !important;
+    border-color: #f8d7da !important;
+}

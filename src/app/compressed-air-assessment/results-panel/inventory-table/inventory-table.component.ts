@@ -21,6 +21,7 @@ export class InventoryTableComponent implements OnInit {
   
   showConfirmDeleteModal: boolean = false;
   deleteSelectedId: string;
+  hasInvalidCompressors: boolean = false;
   confirmDeleteCompressorInventoryData: ConfirmDeleteData;
 
 
@@ -33,6 +34,10 @@ export class InventoryTableComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressorInventoryItems = val.compressorInventoryItems;
+        this.compressorInventoryItems.forEach(compressor => {
+          compressor.isValid = this.inventoryService.isCompressorValid(compressor);
+        });
+        this.hasInvalidCompressors = this.compressorInventoryItems.some(compressor => !compressor.isValid);
       }
     });
   }

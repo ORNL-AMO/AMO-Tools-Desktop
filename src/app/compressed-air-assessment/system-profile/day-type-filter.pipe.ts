@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 
 @Pipe({
   name: 'dayTypeFilter',
@@ -7,8 +7,8 @@ import { ProfileSummary } from '../../shared/models/compressed-air-assessment';
 })
 export class DayTypeFilterPipe implements PipeTransform {
 
-  transform(profileSummary: Array<ProfileSummary>, dayTypeId: string): Array<ProfileSummary> {
-    return profileSummary.filter(summary => { return summary.dayTypeId == dayTypeId });
+  transform(data: Array<ProfileSummary | ReduceRuntimeData>, dayTypeId: string): Array<ProfileSummary | ReduceRuntimeData> {
+    return data.filter(summary => { return summary.dayTypeId == dayTypeId });
   }
 
 }

@@ -5,3 +5,20 @@
         Use Unloading Controls
     </label>
 </div>
+<div *ngIf="useUnloadingControls.selected">
+    <div class="form-group">
+        <label>Select Compressor</label>
+        <select class="form-control" id="selectedAdjustedCompressor" [(ngModel)]="selectedAdjustedCompressor"
+            name="selectedAdjustedCompressor" (change)="setSelectedCompressor()">
+            <option *ngFor="let adjustedCompressor of useUnloadingControls.adjustedCompressors"
+                [ngValue]="adjustedCompressor">
+                {{adjustedCompressor.compressorId | compressorName:inventoryItems}}
+                <span *ngIf="adjustedCompressor.originalControlType != adjustedCompressor.controlType">
+                    *
+                </span>
+            </option>
+        </select>
+    </div>
+    <app-adjust-compressor *ngIf="selectedAdjustedCompressor" [inventoryItems]="inventoryItems"
+        [adjustedCompressor]="selectedAdjustedCompressor"></app-adjust-compressor>
+</div>
