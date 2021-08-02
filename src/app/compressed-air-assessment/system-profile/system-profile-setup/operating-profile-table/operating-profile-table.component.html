@@ -12,7 +12,7 @@
 </label>
 
 <div class="scroll-item">
-    <div class="p-2 alert alert-danger small" *ngIf="invalidProfileSummaryData">
+    <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
         Profile Data values must be at least 0 
     </div>
     <table class="table table-striped bg-white" *ngIf="profileDataType && selectedDayTypeId">
@@ -45,7 +45,7 @@
                 </td>
                 <td *ngIf="showSelectField">
                     <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
-                        name="{compressorIndex+'logToolFieldId'}" id="{compressorIndex+'logToolFieldId'}"
+                        name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
                         (change)="setLogToolData(summary)">
                         <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
                             {{field.alias}}

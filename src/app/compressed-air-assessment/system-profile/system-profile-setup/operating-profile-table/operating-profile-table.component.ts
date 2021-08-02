@@ -27,7 +27,8 @@ export class OperatingProfileTableComponent implements OnInit {
   showSelectField: boolean = false;
   fillRight: boolean = false;
 
-  invalidProfileSummaryData: boolean;
+  // invalidProfileSummaryData: boolean;
+  validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
@@ -43,7 +44,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
-        this.checkProfileSummaryData();
+        this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
@@ -58,31 +59,13 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  checkProfileSummaryData() {
-    this.invalidProfileSummaryData = false;
-    this.profileSummary.forEach(summary => {
-      if (summary.dayTypeId == this.selectedDayTypeId) {
-        summary.profileSummaryData.forEach(data => {
-          if (data.order != 0) {
-            if (this.profileDataType == 'percentCapacity' && data.percentCapacity < 0) {
-              this.invalidProfileSummaryData = true;
-            } else if (this.profileDataType == 'power' && data.power < 0) {
-              this.invalidProfileSummaryData = true;
-            } else if (this.profileDataType == 'airflow' && data.airflow < 0) {
-              this.invalidProfileSummaryData = true;
-            }
-          } 
-        });
-      }
-    });
-  }
-
   updateProfileSummary(changedSummary: ProfileSummary, dataInputIndex: number) {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.fillRight) {
       this.updateSummaryDataFields(changedSummary, dataInputIndex);
     }
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
@@ -155,7 +138,8 @@ export class OperatingProfileTableComponent implements OnInit {
         compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
         profileSummaryData: profileSummaryData,
-        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: inventoryItem.performancePoints.fullLoad.airflow
       }
     }
     return profileSummary;

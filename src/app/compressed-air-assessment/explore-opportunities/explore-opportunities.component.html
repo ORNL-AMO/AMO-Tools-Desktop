@@ -40,12 +40,12 @@
         <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
         <p>Data will be copied from your current baseline condition.</p>
     </div>
-    <!--<div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
-        <app-results-panel *ngIf="modificationExists"></app-results-panel>
+    <div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
+        <!-- <app-results-panel *ngIf="modificationExists"></app-results-panel>
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
-        </div>
-
-        <!-- End .help-panel --
-    </div>-->
+        </div> -->
+        <app-explore-opportunities-results *ngIf="modificationExists"></app-explore-opportunities-results>
+        <!-- End .help-panel -->
+    </div>
 </div>

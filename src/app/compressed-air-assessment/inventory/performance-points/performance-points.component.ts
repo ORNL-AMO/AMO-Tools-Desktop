@@ -17,12 +17,14 @@ export class PerformancePointsComponent implements OnInit {
   showNoLoad: boolean;
   showBlowoff: boolean;
   contentCollapsed: boolean;
+  hasValidPerformancePoints: boolean = true;
   constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapsePerformancePoints;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
+        this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(val);
         this.setShowMaxFlow(val);
         this.setShowUnload(val);
         this.setShowNoLoad(val);

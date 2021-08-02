@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
 import * as _ from 'lodash';
@@ -25,7 +25,8 @@ export class SystemProfileSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
-      this.totals = this.systemProfileService.calculateProfileSummaryTotals(val);
+      let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
+      this.totals = this.systemProfileService.calculateProfileSummaryTotals(val, selectedDayType);
     });
   }
 

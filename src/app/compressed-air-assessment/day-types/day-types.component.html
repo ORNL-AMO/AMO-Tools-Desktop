@@ -43,7 +43,7 @@
         <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
     </div>
     <div class="p-2">
-        <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days cannot be greater than 365.
+        <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be greater than 0 and less than or equal to 365.
         </div>
         <table class="table table-striped">
             <tbody>
