@@ -9,7 +9,7 @@ import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessa
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 
 @Component({
-  selector: 'app-no-load',
+  selector: '[app-no-load]',
   templateUrl: './no-load.component.html',
   styleUrls: ['./no-load.component.css']
 })
