@@ -67,12 +67,10 @@ export class SetupTabsComponent implements OnInit {
 
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (compressedAirAssessment) {
-      // hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
-      // hasValidCompressors = hasValidSystemInformation && this.inventoryService.hasValidCompressors();
-      // hasValidDayTypes = hasValidCompressors && this.inventoryService.hasValidDayTypes();
       hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
       hasValidCompressors = this.inventoryService.hasValidCompressors();
       hasValidDayTypes = this.inventoryService.hasValidDayTypes();
+      hasValidSystemProfile = this.compressedAirAssessmentService.hasValidProfileSummaryData();
 
       canViewInventory = hasValidSystemInformation;
       canViewDayTypes = hasValidSystemInformation && hasValidCompressors;
