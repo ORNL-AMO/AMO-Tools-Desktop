@@ -112,9 +112,12 @@ export class CompressedAirCalculationService {
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
       } else {
+        // console.log(computeFromVal);
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
+        // console.log(inputData.receiverVolume);
         // console.log(inputData);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        // console.log(results);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
@@ -253,7 +256,9 @@ export class CompressedAirCalculationService {
 
 
       receiverVolume: receiverVolume,
-      loadFactorUnloaded: 1
+      loadFactorUnloaded: 1,
+
+      unloadPointCapacity: compressor.compressorControls.unloadPointCapacity
 
     }
   }
@@ -373,7 +378,7 @@ export interface CompressorsCalcInput {
   //Start stop
   powerMaxPercentage: number
   powerAtFullLoadPercentage: number,
-
+  unloadPointCapacity: number
 }
 
 
