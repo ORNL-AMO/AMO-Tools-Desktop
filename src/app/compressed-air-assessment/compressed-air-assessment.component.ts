@@ -11,6 +11,7 @@ import { CompressedAirAssessmentService } from './compressed-air-assessment.serv
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
 
 @Component({
   selector: 'app-compressed-air-assessment',
@@ -45,7 +46,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   modalOpenSub: Subscription;
   assessmentTab: string;
   assessmentTabSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef,
+  constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService) { }
@@ -147,11 +148,16 @@ export class CompressedAirAssessmentComponent implements OnInit {
   }
 
   setDisableNext() {
-    let canAdvanceSetupTabs: boolean = this.inventoryService.hasValidCompressors();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
+    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
     let hasValidDayTypes: boolean = this.inventoryService.hasValidDayTypes();
-    if (canAdvanceSetupTabs == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
+    if (hasValidCompressors == false && this.setupTab != 'system-basics') {
       this.disableNext = true;
-    } else if (!hasValidDayTypes && this.setupTab == 'day-types') {
+    } else if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
+      this.disableNext = true;
+    } 
+    else if (!hasValidDayTypes && this.setupTab == 'day-types') {
       this.disableNext = true;
     } else {
       this.disableNext = false;

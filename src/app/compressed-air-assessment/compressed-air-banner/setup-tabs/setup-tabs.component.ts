@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
+import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 
 @Component({
   selector: 'app-setup-tabs',
@@ -31,14 +33,13 @@ export class SetupTabsComponent implements OnInit {
   profileTabSub: Subscription;
   compressedAirAssessmentSub: Subscription;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private inventoryService: InventoryService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
       this.disabledSetupTabs = [];
-      let canAdvanceSetupTabs = this.inventoryService.hasValidCompressors();
-      this.setTabStatus(canAdvanceSetupTabs);
+      this.setTabStatus();
     });
 
     this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
@@ -47,19 +48,44 @@ export class SetupTabsComponent implements OnInit {
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.disabledSetupTabs = [];
-      let canAdvanceSetupTabs = this.inventoryService.hasValidCompressors();
-      this.setTabStatus(canAdvanceSetupTabs);
+      this.setTabStatus();
     });
   }
 
-  setTabStatus(canAdvanceSetupTabs: boolean) {
-    let hasValidDayTypes = canAdvanceSetupTabs && this.inventoryService.hasValidDayTypes();
+  setTabStatus() {
+    let hasValidDayTypes: boolean = false;
+    let hasValidSystemInformation: boolean = false;
+    let hasValidCompressors: boolean = false;
+    // TODO when validation in
+    let hasValidSystemProfile: boolean = true;
+    let hasValidEndUses: boolean = true;
+    
+    let canViewInventory: boolean = false;
+    let canViewDayTypes: boolean = false;
+    let canViewSystemProfile: boolean = false;
+    let canViewEndUses: boolean = false;
+
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if (compressedAirAssessment) {
+      // hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+      // hasValidCompressors = hasValidSystemInformation && this.inventoryService.hasValidCompressors();
+      // hasValidDayTypes = hasValidCompressors && this.inventoryService.hasValidDayTypes();
+      hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+      hasValidCompressors = this.inventoryService.hasValidCompressors();
+      hasValidDayTypes = this.inventoryService.hasValidDayTypes();
+
+      canViewInventory = hasValidSystemInformation;
+      canViewDayTypes = hasValidSystemInformation && hasValidCompressors;
+      canViewSystemProfile = canViewDayTypes && hasValidDayTypes;
+      canViewEndUses = canViewSystemProfile && hasValidSystemProfile;
+
+    }
     this.setSystemBasicsStatus();
-    this.setSystemInformationStatus();
-    this.setInventoryStatus(canAdvanceSetupTabs);
-    this.setDayTypesStatus(canAdvanceSetupTabs);
-    this.setSystemProfileStatus(hasValidDayTypes);
-    this.setEndUsesStatus(hasValidDayTypes);
+    this.setSystemInformationStatus(hasValidSystemInformation);
+    this.setInventoryStatus(hasValidCompressors, canViewInventory);
+    this.setDayTypesStatus(hasValidDayTypes, canViewDayTypes);
+    this.setSystemProfileStatus(hasValidSystemProfile, canViewSystemProfile);
+    this.setEndUsesStatus(hasValidEndUses, canViewEndUses);
   }
 
   ngOnDestroy() {
@@ -82,54 +108,70 @@ export class SetupTabsComponent implements OnInit {
     }
   }
 
-  setSystemInformationStatus() {
+  setSystemInformationStatus(hasValidSystemInformation: boolean) {
+    this.systemInformationClassStatus = [];
+    if (!hasValidSystemInformation) {
+      this.systemInformationClassStatus.push("missing-data");
+    }
     if (this.setupTab == "system-information") {
-      this.systemInformationClassStatus = ["active"];
-    } else {
-      this.systemInformationClassStatus = [];
+      this.systemInformationClassStatus.push("active");
     }
   }
 
-  setInventoryStatus(canAdvanceSetupTabs: boolean) {
-    if (this.setupTab == "inventory" && canAdvanceSetupTabs) {
-      this.inventoryStatus = ["active"];
-    } else if (!canAdvanceSetupTabs) {
-      this.inventoryStatus = ["missing-data"];
-    } else {
-      this.inventoryStatus = [];
+  setInventoryStatus(hasValidCompressors: boolean, canViewInventory: boolean) {
+    this.inventoryStatus = [];
+    if (!canViewInventory) {
+      this.inventoryStatus.push('disabled');
+      this.disabledSetupTabs.push('inventory')
+    }
+    if (canViewInventory && !hasValidCompressors) {
+      this.inventoryStatus.push("missing-data");
+    } 
+    if (this.setupTab == "inventory") {
+      this.inventoryStatus.push("active");
     }
   }
 
-  setDayTypesStatus(canAdvanceSetupTabs: boolean) {
-    if (!canAdvanceSetupTabs) {
-      this.dayTypesClassStatus = ["disabled"];
+  setDayTypesStatus(hasValidDayTypes: boolean, canViewDayTypes: boolean) {
+    this.dayTypesClassStatus = [];
+    if (!canViewDayTypes) {
+      this.dayTypesClassStatus.push("disabled");
       this.disabledSetupTabs.push('day-types');
-    } else if (this.setupTab == "day-types") {
-      this.dayTypesClassStatus = ["active"];
-    } else {
-      this.dayTypesClassStatus = [];
+    } 
+    if (canViewDayTypes && !hasValidDayTypes) {
+      this.dayTypesClassStatus.push("missing-data");
+    }
+    if (this.setupTab == "day-types") {
+      this.dayTypesClassStatus.push("active");
     }
   }
-
-  setEndUsesStatus(canAdvanceSetupTabs: boolean) {
-    if (!canAdvanceSetupTabs) {
-      this.endUsesStatus = ["disabled"];
-      this.disabledSetupTabs.push('end-uses');
-    } else if (this.setupTab == "end-uses") {
-      this.endUsesStatus = ["active"];
-    } else {
-      this.endUsesStatus = [];
-    }
-  }
-
-  setSystemProfileStatus(canAdvanceSetupTabs: boolean){
-    if (!canAdvanceSetupTabs) {
-      this.systemProfileStatus = ["disabled"];
+  
+  setSystemProfileStatus(hasValidSystemProfile: boolean, canViewSystemProfile: boolean) {
+    this.systemProfileStatus = [];
+    if (!canViewSystemProfile) {
+      this.systemProfileStatus.push("disabled");
       this.disabledSetupTabs.push('system-profile');
-    } else if (this.setupTab == "system-profile") {
-      this.systemProfileStatus = ["active"];
-    } else {
-      this.systemProfileStatus = [];
+    }
+    if (canViewSystemProfile && !hasValidSystemProfile) {
+      this.systemProfileStatus.push('missing-data');
+    }
+    if (this.setupTab == "system-profile") {
+      this.systemProfileStatus.push("active");
+    }
+  }
+
+  setEndUsesStatus(hasValidEndUses: boolean, canViewEndUses: boolean) {
+    this.endUsesStatus = [];
+    if (!canViewEndUses) {
+      this.endUsesStatus.push("disabled");
+      this.disabledSetupTabs.push('end-uses');
+    }
+    if (canViewEndUses && !hasValidEndUses) {
+      this.endUsesStatus.push('missing-data');
+    }
+
+    if (this.setupTab == "end-uses") {
+      this.endUsesStatus.push("active");
     }
   }
 

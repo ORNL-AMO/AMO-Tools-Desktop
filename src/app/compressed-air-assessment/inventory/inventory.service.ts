@@ -401,18 +401,29 @@ export class InventoryService {
 
   hasValidCompressors() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressors: boolean = true;
-    hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+    let hasValidCompressors: boolean = false;
+    if (compressedAirAssessment.compressorInventoryItems.length > 0) {
+      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+    }
     return hasValidCompressors;
   }
 
 
   hasValidDayTypes() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let summedTotalDays = compressedAirAssessment.compressedAirDayTypes.map(dayType => dayType.numberOfDays).reduce((annualDays, currentDayCount) => {
-      return annualDays + currentDayCount;
-    });
-    return summedTotalDays <= 365? true: false;
+    let hasValidDayTypes: boolean = false;
+    if (compressedAirAssessment.compressedAirDayTypes.length > 0) {
+      let summedTotalDays: number = 0;
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        if (dayType.numberOfDays > 0) {
+          summedTotalDays += dayType.numberOfDays;
+        } else {
+          return false;
+        }
+      });
+      hasValidDayTypes = summedTotalDays > 0 && summedTotalDays <= 365;
+    }
+    return hasValidDayTypes;
   }
 
   checkCentrifugalSpecsValid(compressor: CompressorInventoryItem): boolean {
