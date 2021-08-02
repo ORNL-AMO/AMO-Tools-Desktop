@@ -8,6 +8,11 @@
     background-color: lightgray;
 }
 
+table.table th {
+    border: none !important;
+    padding: .25rem;
+}
+
 .fa-exclamation-circle {
     color: red !important;
     font-size: .75rem;

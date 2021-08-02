@@ -46,6 +46,35 @@ export class CompressedAirAssessmentService {
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
 
+
+  hasValidProfileSummaryData(compressedAirAssessment?: CompressedAirAssessment) {
+    if (!compressedAirAssessment) {
+      compressedAirAssessment = this.compressedAirAssessment.getValue();
+    }
+    let isInvalidProfileSummaryData = false;
+    let profileSummary = compressedAirAssessment.systemProfile.profileSummary;
+    let profileDataType = compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType;
+    let selectedDayTypeId = compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId;
+
+    isInvalidProfileSummaryData = profileSummary.some(summary => {
+      if (summary.dayTypeId == selectedDayTypeId) {
+        let hasInvalidData = summary.profileSummaryData.some(data => {
+          if (data.order != 0) {
+            if (profileDataType == 'percentCapacity' && data.percentCapacity < 0) {
+               return true
+            } else if (profileDataType == 'power' && data.power < 0) {
+              return true;
+            } else if (profileDataType == 'airflow' && data.airflow < 0) {
+              return true;
+            }
+          }
+        });
+        return hasInvalidData;
+      }
+    });
+    return !isInvalidProfileSummaryData;
+  }
+
   
 
 }

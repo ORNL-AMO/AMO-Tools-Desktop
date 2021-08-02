@@ -25,7 +25,7 @@
             <label for="systemElevation">System Elevation</label>
             <div class="input-group">
                 <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
-                    formControlName="systemElevation" (change)="save()" (focus)="focusField('systemElevation')">
+                    formControlName="systemElevation" (input)="save()" (focus)="focusField('systemElevation')">
                 <span class="units input-group-addon">ft</span>
             </div>
             <span class="alert-danger pull-right small"
