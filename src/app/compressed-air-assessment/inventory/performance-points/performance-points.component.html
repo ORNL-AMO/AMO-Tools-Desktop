@@ -1,9 +1,33 @@
 <label class="group-label" (click)="toggleCollapse()">
     <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
     Performance Points
+    <span class="pull-right">
+        <span *ngIf="!hasValidPerformancePoints" class="fa fa-exclamation-circle"></span>
+    </span>
 </label>
-<app-full-load *ngIf="!contentCollapsed"></app-full-load>
-<app-max-full-flow *ngIf="showMaxFullFlow && !contentCollapsed"></app-max-full-flow>
-<app-unload-point *ngIf="showUnload && !contentCollapsed"></app-unload-point>
-<app-no-load *ngIf="showNoLoad && !contentCollapsed"></app-no-load>
-<app-blowoff *ngIf="showBlowoff && !contentCollapsed"></app-blowoff>
+
+<div *ngIf="!contentCollapsed" class="p-2">
+    <table class="table">
+        <thead>
+            <tr class="small bold">
+                <th class="p-1"></th>
+                <th class="text-center p-1">
+                    Discharge Pressure
+                </th>
+                <th class="text-center p-1">
+                    Airflow
+                </th>
+                <th class="text-center p-1">
+                    Power
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr [app-full-load]></tr>
+            <tr [app-max-full-flow] *ngIf="showMaxFullFlow"></tr>
+            <tr [app-unload-point] *ngIf="showUnload"></tr>
+            <tr [app-no-load] *ngIf="showNoLoad"></tr>
+            <tr [app-blowoff] *ngIf="showBlowoff"></tr>
+        </tbody>
+    </table>
+</div>

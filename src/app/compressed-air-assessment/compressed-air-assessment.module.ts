@@ -53,6 +53,7 @@ import { NoLoadCalculationsService } from './inventory/performance-points/calcul
 import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
 import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
@@ -93,6 +94,9 @@ import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
+import { CompressorNamePipe } from './compressor-name.pipe';
+import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
+import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 
@@ -163,6 +167,9 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     ReduceRunTimeComponent,
     AddReceiverVolumeComponent,
     CompressedAirDiagramComponent,
+    CompressorNamePipe,
+    ExploreOpportunitiesResultsComponent,
+    AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent
   ],
@@ -180,8 +187,8 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     AirVelocityModule,
     FormsModule,
     ModalModule,
-    ConfirmDeleteModalModule,
-    ModalModule
+    NgbModule,
+    ConfirmDeleteModalModule
   ],
   providers: [
     CompressedAirAssessmentService,

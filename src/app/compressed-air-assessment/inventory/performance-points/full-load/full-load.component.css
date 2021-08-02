@@ -8,3 +8,7 @@
 .input-group-addon.calc-addon{
     border-left: solid 1px;
 }
+
+td {
+    border-top: none !important;
+}

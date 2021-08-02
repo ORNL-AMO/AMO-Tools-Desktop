@@ -1,9 +1,10 @@
-import { ViewChild } from '@angular/core';
+import { Input, ViewChild } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
+import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile/system-profile.service';
 import { SystemInformationFormService } from './system-information-form.service';
@@ -14,7 +15,8 @@ import { SystemInformationFormService } from './system-information-form.service'
   styleUrls: ['./system-information.component.css']
 })
 export class SystemInformationComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
 
   showSystemCapacityModal: boolean = false;

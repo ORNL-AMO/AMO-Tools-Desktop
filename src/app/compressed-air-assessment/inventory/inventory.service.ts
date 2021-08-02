@@ -400,6 +400,33 @@ export class InventoryService {
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
+  hasValidCompressors() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let hasValidCompressors: boolean = false;
+    if (compressedAirAssessment.compressorInventoryItems.length > 0) {
+      hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+    }
+    return hasValidCompressors;
+  }
+
+
+  hasValidDayTypes() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let hasValidDayTypes: boolean = false;
+    if (compressedAirAssessment.compressedAirDayTypes.length > 0) {
+      let summedTotalDays: number = 0;
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        if (dayType.numberOfDays > 0) {
+          summedTotalDays += dayType.numberOfDays;
+        } else {
+          return false;
+        }
+      });
+      hasValidDayTypes = summedTotalDays > 0 && summedTotalDays <= 365;
+    }
+    return hasValidDayTypes;
+  }
+
   checkCentrifugalSpecsValid(compressor: CompressorInventoryItem): boolean {
     if (compressor.nameplateData.compressorType == 6) {
       let form: FormGroup = this.getCentrifugalFormFromObj(compressor);
@@ -419,7 +446,8 @@ export class InventoryService {
         compressorName: newInventoryItem.name,
         dayTypeId: dayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
-        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
       });
     })
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
@@ -443,7 +471,8 @@ export class InventoryService {
         compressorName: item.name,
         dayTypeId: newDayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
-        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: item.performancePoints.fullLoad.airflow
       })
     });
     compressedAirAssessment.modifications.forEach(modification => {

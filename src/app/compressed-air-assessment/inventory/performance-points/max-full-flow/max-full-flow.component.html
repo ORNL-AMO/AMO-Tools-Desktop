@@ -1,67 +1,73 @@
-<form [formGroup]="form">
-    <label class="group-label secondary-group">Max Full Flow {{maxFullFlowLabel}}</label>
-    <!-- fullLoadDischargePressure -->
-    <div class="form-group">
-        <label for="maxFullFlowDischargePressure">Discharge Pressure</label>
-        <div class="input-group">
-            <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
-                <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+<td class="w-25 p-1">
+    <label >Max Full Flow {{maxFullFlowLabel}}</label>
+</td>
+<td class="w-25 p-1">
+    <form [formGroup]="form" class="p-0">
+        <div class="form-group">
+            <div class="input-group d-inline-flex px-2">
+                <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                    <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+                </span>
+                <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
+                    id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
+                    (focus)="focusField('maxFullFlowDischargePressure')">
+                <span class="units input-group-addon">psig</span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
+                <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
+                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.min.min}}) psig.</span>
+                <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
+                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig</span>
             </span>
-            <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
-                id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
-                (focus)="focusField('maxFullFlowDischargePressure')">
-            <span class="units input-group-addon">psig</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
-            <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
-            <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
-                Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.min.min}}) psig.</span>
-            <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
-                Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig</span>
-        </span>
-    </div>
-    <!-- maxFullFlowAirflow -->
-    <div class="form-group">
-        <label for="maxFullFlowAirflow">Airflow</label>
-        <div class="input-group">
-            <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
-                <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+    </form>
+</td>
+<td class="w-25 p-1">
+    <form [formGroup]="form" class="p-0">
+        <div class="form-group">
+            <div class="input-group d-inline-flex px-2">
+                <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
+                    <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+                </span>
+                <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
+                    formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('maxFullFlowAirflow')">
+                <span class="units input-group-addon">acfm</span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
+                <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
+                <span *ngIf="form.controls.airflow.errors.min">Value can't be less than
+                    Full Load Air Flow ({{form.controls.airflow.errors.min.min}}) acfm.</span>
+                <span *ngIf="form.controls.airflow.errors.equalTo !== undefined">Value must be equal to Full Load Air Flow
+                    ({{form.controls.airflow.errors.equalTo}} acfm).</span>
+                <span *ngIf="form.controls.airflow.errors.lessThan !== undefined">
+                    Value must be less than Full Load Air Flow ({{form.controls.airflow.errors.lessThan}}) acfm</span>
+            
             </span>
-            <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
-                formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('maxFullFlowAirflow')">
-            <span class="units input-group-addon">acfm</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
-            <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
-            <span *ngIf="form.controls.airflow.errors.min">Value can't be less than
-                Full Load Air Flow ({{form.controls.airflow.errors.min.min}}) acfm.</span>
-            <span *ngIf="form.controls.airflow.errors.equalTo !== undefined">Value must be equal to Full Load Air Flow
-                ({{form.controls.airflow.errors.equalTo}} acfm).</span>
-            <span *ngIf="form.controls.airflow.errors.lessThan !== undefined">
-                Value must be less than Full Load Air Flow ({{form.controls.airflow.errors.lessThan}}) acfm</span>
-        
-        </span>
-    </div>
-    <!-- maxFullFlowPower -->
-    <div class="form-group">
-        <label for="maxFullFlowPower">Power</label>
-        <div class="input-group">
-            <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
-                <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+        </form>
+</td>
+<td class="w-25 p-1">
+    <form [formGroup]="form" class="p-0">
+        <div class="form-group">
+            <div class="input-group d-inline-flex px-2">
+                <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
+                    <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+                </span>
+                <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
+                    formControlName="power" (input)="savePower()" (focus)="focusField('maxFullFlowPower')">
+                <span class="units input-group-addon">kW</span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
+                <span *ngIf="form.controls.power.errors.required">Value Required</span>
+                <span *ngIf="form.controls.power.errors.min">Value can't be less than
+                    {{form.controls.power.errors.min.min}} kW.</span>
+                <span *ngIf="form.controls.power.errors.equalTo !== undefined">Value must be equal to Full Load Power
+                    ({{form.controls.power.errors.equalTo}} kW).</span>
+                <span *ngIf="form.controls.power.errors.greaterThan !== undefined">{{validationMessages.maxFullFlow.greaterThan}}
+                    kW</span>
             </span>
-            <input name="power" type="number" step="any" class="form-control" id="maxFullFlowPower"
-                formControlName="power" (input)="savePower()" (focus)="focusField('maxFullFlowPower')">
-            <span class="units input-group-addon">kW</span>
+            <span class="alert-warning pull-right small" *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
-            <span *ngIf="form.controls.power.errors.required">Value Required</span>
-            <span *ngIf="form.controls.power.errors.min">Value can't be less than
-                {{form.controls.power.errors.min.min}} kW.</span>
-            <span *ngIf="form.controls.power.errors.equalTo !== undefined">Value must be equal to Full Load Power
-                ({{form.controls.power.errors.equalTo}} kW).</span>
-            <span *ngIf="form.controls.power.errors.greaterThan !== undefined">{{validationMessages.maxFullFlow.greaterThan}}
-                kW</span>
-        </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
-    </div>
-</form>
+    </form>
+</td>

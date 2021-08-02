@@ -5,7 +5,7 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { PerformancePointCalculationsService } from '../../performance-points/calculations/performance-point-calculations.service';
-import { FilterCompressorOptions } from '../filter-compressors.pipe';
+import { FilterCompressorOptions, FilterCompressorsPipe } from '../filter-compressors.pipe';
 
 @Component({
   selector: 'app-compressor-options-table',
@@ -19,6 +19,9 @@ export class CompressorOptionsTableComponent implements OnInit {
   genericCompressors: Array<GenericCompressor>;
   filterCompressorOptionsSub: Subscription;
   filterCompressorOptions: FilterCompressorOptions
+  itemsPerPage: number = 25;
+  pageNumber: number = 1;
+  filteredCompressors: Array<GenericCompressor>;
   constructor(private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
@@ -26,6 +29,8 @@ export class CompressorOptionsTableComponent implements OnInit {
     this.genericCompressors = this.genericCompressorDbService.genericCompressors;
     this.filterCompressorOptionsSub = this.inventoryService.filterCompressorOptions.subscribe(val => {
       this.filterCompressorOptions = val;
+      let genericCompressorsCopy: Array<GenericCompressor> = JSON.parse(JSON.stringify(this.genericCompressors));
+      this.filteredCompressors = new FilterCompressorsPipe().transform(genericCompressorsCopy, this.filterCompressorOptions);
     });
   }
 

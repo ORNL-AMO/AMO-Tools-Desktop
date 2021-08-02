@@ -36,6 +36,7 @@ export interface FlowReallocation {
 
 export interface ReduceAirLeaks {
     selected: boolean,
+    leakFlow: number,
     leakReduction: number
 }
 
@@ -60,8 +61,21 @@ export interface ReduceSystemAirPressure {
 }
 
 export interface UseUnloadingControls {
-    selected: boolean
+    selected: boolean,
+    adjustedCompressors: Array<AdjustedUnloadingCompressor>
 }
+
+export interface AdjustedUnloadingCompressor {
+    selected: boolean,
+    compressorId: string,
+    originalControlType: number,
+    compressorType: number,
+    unloadPointCapacity: number,
+    controlType: number,
+    performancePoints: PerformancePoints,
+    automaticShutdown: boolean
+}
+
 
 export interface AdjustCascadingSetPoints {
     selected: boolean
@@ -74,11 +88,23 @@ export interface UseAutomaticSequencer {
 }
 
 export interface ReduceRuntime {
-    selected: boolean
+    selected: boolean,
+    runtimeData: Array<ReduceRuntimeData>
+}
+
+export interface ReduceRuntimeData {
+    compressorId: string,
+    fullLoadCapacity: number,
+    intervalData: Array<{
+        isCompressorOn: boolean,
+        timeInterval: number,
+    }>
+    dayTypeId: string
 }
 
 export interface AddPrimaryReceiverVolume {
-    selected: boolean
+    selected: boolean,
+    increasedVolume: number
 }
 
 export interface CASystemBasics {
@@ -102,6 +128,7 @@ export interface CompressorInventoryItem {
     compressorLibId?: number,
     name: string,
     description: string,
+    isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     inletConditions: InletConditions,
@@ -191,6 +218,7 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     compressorName: string,
     fullLoadPressure: number,
+    fullLoadCapacity: number,
     compressorId: string,
     dayTypeId: string,
     profileSummaryData: Array<ProfileSummaryData>,
@@ -205,6 +233,14 @@ export interface ProfileSummaryData {
     percentPower: number,
     percentSystemCapacity: number,
     order: number,
+}
+
+export interface ProfileSummaryTotal {
+    airflow: number,
+    power: number,
+    percentCapacity: number,
+    percentPower: number,
+    timeInterval: number
 }
 
 

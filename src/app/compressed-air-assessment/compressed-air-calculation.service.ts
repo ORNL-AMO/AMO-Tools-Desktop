@@ -96,7 +96,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number): CompressorCalcResult {
     // let inputData: CentrifugalBlowOffInput = this.getCentrifugalBlowOffInput(compressor, computeFrom, computeFromVal)
     // let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
     // results.percentagePower = results.percentagePower * 100;
@@ -112,12 +112,11 @@ export class CompressedAirCalculationService {
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
       } else {
-        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal);
+        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
         // console.log(inputData);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        // console.log(results);
         return results;
       }
     } else {
@@ -182,7 +181,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CompressorsCalcInput {
+  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number): CompressorsCalcInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
@@ -193,7 +192,11 @@ export class CompressedAirCalculationService {
     }
 
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let receiverVolume: number = this.convertUnitsService.value(compressedAirAssessment.systemInformation.totalAirStorage).from('gal').to('ft3');
+    let receiverVolume: number = compressedAirAssessment.systemInformation.totalAirStorage;
+    if (additionalRecieverVolume) {
+      receiverVolume = receiverVolume + additionalRecieverVolume;
+    }
+    receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
     return {
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,

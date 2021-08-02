@@ -27,6 +27,8 @@
                     <td class="w-45">
                         <input type="number" [(ngModel)]="dayType.numberOfDays" name="{'numberOfDays_'+index}"
                             id="{'numberOfDays_'+index}" class="form-control w-100" (input)="save()" max="365" min="0">
+                            <!-- <span *ngIf="dayType.numberOfDays == 0" class="alert-danger pull-right">Value Required</span> -->
+                            <!-- <span *ngIf="invalidDayTypeIndex == index" class="alert-danger pull-right">Total year days cannot be greater than 365</span> -->
                     </td>
                     <td class="text-center">
                         <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
@@ -41,13 +43,15 @@
         <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
     </div>
     <div class="p-2">
+        <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be greater than 0 and less than or equal to 365.
+        </div>
         <table class="table table-striped">
             <tbody>
                 <tr>
                     <td class="w-50">
                         Total Annual Days
                     </td>
-                    <td class="w-50" [ngClass]="{'red': totalAnnualDays > 365}">
+                    <td class="w-50">
                         {{totalAnnualDays}}
                     </td>
                 </tr>

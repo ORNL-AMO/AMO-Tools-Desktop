@@ -25,6 +25,7 @@ export class OperatingProfileTableComponent implements OnInit {
   fieldOptions: Array<LogToolField>
   logToolDayTypeSummaries: Array<DayTypeSummary>;
   showSelectField: boolean = false;
+  validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
@@ -40,6 +41,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileDataType = val.systemProfile.systemProfileSetup.profileDataType;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.profileSummary = val.systemProfile.profileSummary;
+        this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
@@ -54,6 +56,13 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  updateProfileSummary() {
+    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
+    this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
+    this.isFormChange = true;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {
     this.hourIntervals = new Array();
@@ -103,7 +112,8 @@ export class OperatingProfileTableComponent implements OnInit {
         compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
         profileSummaryData: profileSummaryData,
-        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: inventoryItem.performancePoints.fullLoad.airflow
       }
     }
     return profileSummary;
