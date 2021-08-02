@@ -45,7 +45,7 @@
                 </td>
                 <td *ngIf="showSelectField">
                     <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
-                        name="{compressorIndex+'logToolFieldId'}" id="{compressorIndex+'logToolFieldId'}"
+                        name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
                         (change)="setLogToolData(summary)">
                         <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
                             {{field.alias}}

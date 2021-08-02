@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
@@ -17,15 +17,53 @@ export class ExploreOpportunitiesService {
         reductionAmount: number
       }>
     }> = new Array();
+
+    let reduceRuntimeData: Array<ReduceRuntimeData> = new Array();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       reductionData.push({
         dayTypeId: dayType.dayTypeId,
         dayTypeName: dayType.name,
         data: this.getDefaultReductionData()
-      })
+      });
+      compressedAirAssessment.compressorInventoryItems.forEach(item => {
+        let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
+          return summary.dayTypeId == dayType.dayTypeId && item.itemId == summary.compressorId;
+        })
+        let intervalData: Array<{
+          isCompressorOn: boolean,
+          timeInterval: number,
+        }> = new Array();
+        itemProfile.profileSummaryData.forEach(dataItem => {
+          intervalData.push({
+            isCompressorOn: dataItem.order != 0,
+            timeInterval: dataItem.timeInterval
+          })
+        });
+        reduceRuntimeData.push({
+          compressorId: item.itemId,
+          fullLoadCapacity: item.performancePoints.fullLoad.airflow,
+          intervalData: intervalData,
+          dayTypeId: dayType.dayTypeId
+        })
+      });
+
     });
 
+    let adjustedCompressors: Array<AdjustedUnloadingCompressor> = new Array();
+    compressedAirAssessment.compressorInventoryItems.forEach(item => {
+      let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(item));
+      adjustedCompressors.push({
+        selected: false,
+        compressorId: compressorCopy.itemId,
+        unloadPointCapacity: compressorCopy.compressorControls.unloadPointCapacity,
+        controlType: compressorCopy.compressorControls.controlType,
+        performancePoints: compressorCopy.performancePoints,
+        originalControlType: compressorCopy.compressorControls.controlType,
+        compressorType: compressorCopy.nameplateData.compressorType,
+        automaticShutdown: compressorCopy.compressorControls.automaticShutdown
+      })
+    })
 
     return {
       name: 'Modification',
@@ -35,7 +73,8 @@ export class ExploreOpportunitiesService {
       },
       reduceAirLeaks: {
         selected: false,
-        leakReduction: undefined
+        leakReduction: undefined,
+        leakFlow: undefined
       },
       improveEndUseEfficiency: {
         selected: false,
@@ -48,7 +87,8 @@ export class ExploreOpportunitiesService {
         averageSystemPressureReduction: undefined
       },
       useUnloadingControls: {
-        selected: false
+        selected: false,
+        adjustedCompressors: adjustedCompressors
       },
       adjustCascadingSetPoints: {
         selected: false
@@ -59,10 +99,12 @@ export class ExploreOpportunitiesService {
         variance: undefined
       },
       reduceRuntime: {
-        selected: false
+        selected: false,
+        runtimeData: reduceRuntimeData
       },
       addPrimaryReceiverVolume: {
-        selected: false
+        selected: false,
+        increasedVolume: 0
       }
     }
   }

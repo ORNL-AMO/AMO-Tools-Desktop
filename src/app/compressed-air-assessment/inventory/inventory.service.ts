@@ -399,14 +399,13 @@ export class InventoryService {
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
-  canAdvanceSetupTabs() {
+  hasValidCompressors() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressor: boolean = false;
-    compressedAirAssessment.compressorInventoryItems.some(compressorInventoryItem => {
-      hasValidCompressor = this.isCompressorValid(compressorInventoryItem);
-    });
-    return hasValidCompressor;
+    let hasValidCompressors: boolean = true;
+    hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
+    return hasValidCompressors;
   }
+
 
   hasValidDayTypes() {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -435,7 +434,8 @@ export class InventoryService {
         compressorName: newInventoryItem.name,
         dayTypeId: dayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
-        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
       });
     })
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
@@ -459,7 +459,8 @@ export class InventoryService {
         compressorName: item.name,
         dayTypeId: newDayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
-        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure
+        fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,
+        fullLoadCapacity: item.performancePoints.fullLoad.airflow
       })
     });
     compressedAirAssessment.modifications.forEach(modification => {
