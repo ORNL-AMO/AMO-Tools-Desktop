@@ -442,7 +442,6 @@ export class InventoryService {
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       compressedAirAssessment.systemProfile.profileSummary.push({
         compressorId: newInventoryItem.itemId,
-        compressorName: newInventoryItem.name,
         dayTypeId: dayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
         fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
@@ -467,7 +466,6 @@ export class InventoryService {
     compressedAirAssessment.compressorInventoryItems.forEach(item => {
       compressedAirAssessment.systemProfile.profileSummary.push({
         compressorId: item.itemId,
-        compressorName: item.name,
         dayTypeId: newDayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
         fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,

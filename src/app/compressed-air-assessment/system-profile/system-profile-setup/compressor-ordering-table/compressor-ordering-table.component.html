@@ -9,7 +9,7 @@
 </label>
 
 <div class="scroll-item">
-    <table class="table table-striped bg-white">
+    <table class="table bg-white">
         <thead>
             <tr>
                 <th>
@@ -26,7 +26,7 @@
         <tbody *ngIf="isSequencerUsed">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorName}}
+                    {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     {{summary.fullLoadPressure}}
@@ -52,7 +52,7 @@
         <tbody *ngIf="!isSequencerUsed">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorName}}
+                    {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     {{summary.fullLoadPressure}}

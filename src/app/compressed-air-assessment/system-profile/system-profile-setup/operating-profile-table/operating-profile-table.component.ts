@@ -27,6 +27,7 @@ export class OperatingProfileTableComponent implements OnInit {
   showSelectField: boolean = false;
   validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
+  inventoryItems: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -43,6 +44,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileSummary = val.systemProfile.profileSummary;
         this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
+        this.inventoryItems = val.compressorInventoryItems;
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
         }
@@ -109,7 +111,7 @@ export class OperatingProfileTableComponent implements OnInit {
       let profileSummaryData: Array<ProfileSummaryData> = this.getDummyData(systemProfileSetup.numberOfHours, systemProfileSetup.dataInterval);
       profileSummary = {
         compressorId: inventoryItem.itemId,
-        compressorName: inventoryItem.name,
+        // compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
         profileSummaryData: profileSummaryData,
         fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,

@@ -15,7 +15,7 @@
     <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
         Profile Data values must be at least 0 
     </div>
-    <table class="table table-striped bg-white" *ngIf="profileDataType && selectedDayTypeId">
+    <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId">
         <thead>
             <tr>
                 <th>
@@ -36,7 +36,7 @@
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorName}}
+                    {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     <span *ngIf="profileDataType == 'power'">Power</span>

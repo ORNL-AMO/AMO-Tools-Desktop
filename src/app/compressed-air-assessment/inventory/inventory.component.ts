@@ -84,11 +84,6 @@ export class InventoryComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
-      if (summary.compressorId == this.selectedCompressor.itemId) {
-        summary.compressorName = this.selectedCompressor.name;
-      }
-    });
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);
