@@ -9,7 +9,7 @@
             <label for="nominalPressure">Nominal Pressure</label>
             <div class="input-group">
                 <input name="nominalPressure" type="number" step="any" class="form-control" id="nominalPressure"
-                    formControlName="nominalPressure" (change)="save()"
+                    formControlName="nominalPressure" (input)="save()"
                     (focus)="focusField('nominalPressure')">
                 <span class="units input-group-addon">psig</span>
             </div>
@@ -45,7 +45,7 @@
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
-                    formControlName="totalAirStorage" (change)="save()" (focus)="focusField('totalAirStorage')">
+                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
             </div>

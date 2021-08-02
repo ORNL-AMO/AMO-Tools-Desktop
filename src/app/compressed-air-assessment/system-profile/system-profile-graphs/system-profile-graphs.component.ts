@@ -22,7 +22,7 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val, val.systemProfile.systemProfileSetup.dayTypeId);
       this.inventoryItems = val.compressorInventoryItems;
       this.drawCharts();
     });

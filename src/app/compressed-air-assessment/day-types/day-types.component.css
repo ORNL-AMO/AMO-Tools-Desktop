@@ -25,8 +25,3 @@ td, th{
   .w-45{
       width: 45%;
   }
-
-
-  tfoot tr {
-    background-color: lightgray;
-  }

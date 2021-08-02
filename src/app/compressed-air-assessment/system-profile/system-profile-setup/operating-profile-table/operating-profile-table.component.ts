@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { SystemProfileService } from '../../system-profile.service';
 
 @Component({
   selector: 'app-operating-profile-table',
@@ -28,7 +29,7 @@ export class OperatingProfileTableComponent implements OnInit {
   validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   inventoryItems: Array<CompressorInventoryItem>;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {

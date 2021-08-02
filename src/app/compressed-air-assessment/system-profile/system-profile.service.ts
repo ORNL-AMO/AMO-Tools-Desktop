@@ -38,37 +38,41 @@ export class SystemProfileService {
   }
 
 
-  calculateDayTypeProfileSummary(compressedAirAssessment: CompressedAirAssessment): Array<ProfileSummary> {
+  calculateDayTypeProfileSummary(compressedAirAssessment: CompressedAirAssessment, dayTypeId?: string): Array<ProfileSummary> {
     let inventoryItems: Array<CompressorInventoryItem> = compressedAirAssessment.compressorInventoryItems;
     let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
     let selectedDayTypeSummary: Array<ProfileSummary> = new Array();
     let totalFullLoadCapacity: number = _.sumBy(inventoryItems, (inventoryItem) => {
       return inventoryItem.nameplateData.fullLoadRatedCapacity;
     });
-    selectedProfileSummary.forEach(summary => {
-      let compressor: CompressorInventoryItem = inventoryItems.find(item => { return item.itemId == summary.compressorId });
-      if (summary.dayTypeId == compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId) {
-        summary.profileSummaryData.forEach(summaryData => {
-          let computeFrom: 1 | 2 | 3;
-          let computeFromVal: number;
-          if (compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType == 'power') {
-            computeFrom = 2;
-            computeFromVal = summaryData.power;
-          } else if (compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType == 'percentCapacity') {
-            computeFrom = 1;
-            computeFromVal = summaryData.percentCapacity;
-          } else if (compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType == 'airflow') {
-            computeFrom = 3;
-            computeFromVal = summaryData.airflow;
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      if (!dayTypeId || dayType.dayTypeId == dayTypeId) {
+        selectedProfileSummary.forEach(summary => {
+          let compressor: CompressorInventoryItem = inventoryItems.find(item => { return item.itemId == summary.compressorId });
+          if (summary.dayTypeId == dayType.dayTypeId) {
+            summary.profileSummaryData.forEach(summaryData => {
+              let computeFrom: 1 | 2 | 3;
+              let computeFromVal: number;
+              if (dayType.profileDataType == 'power') {
+                computeFrom = 2;
+                computeFromVal = summaryData.power;
+              } else if (dayType.profileDataType == 'percentCapacity') {
+                computeFrom = 1;
+                computeFromVal = summaryData.percentCapacity;
+              } else if (dayType.profileDataType == 'airflow') {
+                computeFrom = 3;
+                computeFromVal = summaryData.airflow;
+              }
+              let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal);
+              summaryData.airflow = calcResult.capacityCalculated;
+              summaryData.power = calcResult.powerCalculated;
+              summaryData.percentCapacity = calcResult.percentageCapacity;
+              summaryData.percentPower = calcResult.percentagePower;
+              summaryData.percentSystemCapacity = (calcResult.capacityCalculated / totalFullLoadCapacity) * 100;
+            });
+            selectedDayTypeSummary.push(summary);
           }
-          let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal);
-          summaryData.airflow = calcResult.capacityCalculated;
-          summaryData.power = calcResult.powerCalculated;
-          summaryData.percentCapacity = calcResult.percentageCapacity;
-          summaryData.percentPower = calcResult.percentagePower;
-          summaryData.percentSystemCapacity = (calcResult.capacityCalculated / totalFullLoadCapacity) * 100;
         });
-        selectedDayTypeSummary.push(summary);
       }
     });
     return selectedDayTypeSummary;
