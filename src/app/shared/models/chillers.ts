@@ -85,3 +85,26 @@ export interface CoolingTowerData {
     savingsEnergy: number,
   }
 
+  //====== Cooling Tower Fan Energy ======
+
+export interface CoolingTowerFanInput {
+  towerType: number,
+  numCells: number,
+  waterFlowRate: number,
+  ratedFanPower: number,
+  waterLeavingTemp: number,
+  waterEnteringTemp: number,
+  operatingTempWetBulb: number,
+  operatingHours: number,
+  baselineSpeedType: number,
+  modSpeedType: number,
+}
+
+
+export interface CoolingTowerFanOutput {
+  baselinePower: number,
+  baselineEnergy: number,
+  modPower: number,
+  modEnergy: number,
+  savingsEnergy: number,
+}

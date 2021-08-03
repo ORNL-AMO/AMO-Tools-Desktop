@@ -98,6 +98,7 @@ import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
+import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 
 export const coreRoutes: Routes = [
@@ -446,6 +447,10 @@ export const coreRoutes: Routes = [
           {
             path: 'tank-insulation-reduction',
             component: TankInsulationReductionComponent
+          },
+          {
+            path: 'cooling-tower-fan',
+            component: CoolingTowerFanComponent
           },
           {
             path: 'cooling-tower',
