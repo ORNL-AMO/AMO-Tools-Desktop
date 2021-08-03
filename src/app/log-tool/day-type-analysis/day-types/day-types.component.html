@@ -11,7 +11,7 @@
     <a class="click-link pull-right pr-2" (click)="showAddNewDayType()" *ngIf="addNewDayType == false">+Add New</a>
 </div>
 
-<!--add new day type-->
+<!--add new Day Type-->
 <div class="card-body p-0" *ngIf="addNewDayType == true">
     <div class="d-flex">
         <div class="p-2">
@@ -25,7 +25,7 @@
                     <input class="w-100 form-control color-picker" type="color" name="newDayTypeColor"
                         [(ngModel)]="newDayTypeColor" [ngStyle]="{'background-color': newDayTypeColor}">
                 </div>
-                <div class="alert alert-info p-2 small mb-0">Select dates to apply new day type.</div>
+                <div class="alert alert-info p-2 small mb-0">Select dates to apply new Day Type.</div>
             </form>
         </div>
         <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"

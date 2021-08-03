@@ -14,7 +14,7 @@
 
 <div class="d-flex w-100 h-100" *ngIf="!showContent">
     <div class="card card-body d-flex flex-column align-items-center pt-4">
-        <div *ngIf="!calculatingData" class="p-2">Click here to initialize day type analysis.</div>
+        <div *ngIf="!calculatingData" class="p-2">Click here to initialize Day Type analysis.</div>
         <button *ngIf="!calculatingData" class="btn btn-secondary" (click)="runAnalysis()">Run Analysis</button>
         <div class="spinner" *ngIf="calculatingData">
             <div class="bounce1"></div>
