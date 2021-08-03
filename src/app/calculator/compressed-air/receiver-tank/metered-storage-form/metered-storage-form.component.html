@@ -12,8 +12,8 @@
     <div class="input-group">
       <input name="airFlowRequirement" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlowRequirement" id="airFlowRequirement"
         (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('airFlowRequirement')">
-      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
     </div>
   </div>
   <div class="form-group">
@@ -21,8 +21,8 @@
     <div class="input-group">
       <input name="meteredControl" class="form-control" type="number" step="any" [(ngModel)]="inputs.meteredControl" id="meteredControl"
         (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('meteredControl')">
-      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
     </div>
   </div>
   <div class="form-group">
