@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { SystemProfileService } from '../system-profile/system-profile.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -21,8 +20,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService,
-    private systemProfileService: SystemProfileService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
