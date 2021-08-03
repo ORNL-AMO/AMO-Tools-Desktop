@@ -5,16 +5,20 @@
     <form [formGroup]="form" class="p-0">
         <div class="form-group">
             <div class="input-group d-inline-flex px-2">
-                <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
-                    <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+                <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
+                    <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
                 </span>
-                <input name="unloadPointAirflow" type="number" step="any" class="form-control" id="unloadPointAirflow"
-                    formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('unloadPointAirflow')">
-                <span class="units input-group-addon">acfm</span>
+                <input name="unloadPointDischargePressure" type="number" step="any" class="form-control"
+                    id="unloadPointDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
+                    (focus)="focusField('unloadPointDischargePressure')">
+                <span class="units input-group-addon">psig</span>
             </div>
-            <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
-                <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
-                <span *ngIf="form.controls.airflow.errors.min">Value can't be less than {{form.controls.airflow.errors.min.min}} acfm.</span>
+            <span class="alert-danger pull-right small" *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
+                <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
+                    Max Full Flow Discharge Pressure {{form.controls.dischargePressure.errors.min.min}} psig.</span>
+                <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
+                    Max Full Flow Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig.</span>
             </span>
         </div>
     </form>

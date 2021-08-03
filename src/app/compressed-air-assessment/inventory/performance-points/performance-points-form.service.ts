@@ -89,12 +89,12 @@ export class PerformancePointsFormService {
           powerValidators.push(GreaterThanValidator.greaterThan(0));
           break;
         case 'maxFullFlow':
-          if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
-            powerValidators.push(Validators.min(0), EqualToValidator.equalTo(compressor.performancePoints.fullLoad.power));
+          if (compressor.compressorControls.controlType == 3 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
+            powerValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.power));
           } else {
             if (compressor.performancePoints.fullLoad.power) {
-              powerValidators.push(Validators.min(0), GreaterThanValidator.greaterThan(compressor.performancePoints.fullLoad.power));
-              validationMessages.maxFullFlow.greaterThan = `Value must be greater than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
+              powerValidators.push(Validators.min(compressor.performancePoints.fullLoad.power));
+              validationMessages.maxFullFlow.min = `Value can't be less than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
             } else {
               powerValidators.push(GreaterThanValidator.greaterThan(0));
               validationMessages.maxFullFlow.greaterThan = 'Value must be greater than 0';
@@ -192,7 +192,7 @@ export class PerformancePointsFormService {
           } else if (compressor.compressorControls.controlType == 2 || compressor.compressorControls.controlType == 3) {
             airFlowValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.airflow));
           } else if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
-            airFlowValidators.push(Validators.min(compressor.performancePoints.fullLoad.airflow));
+            airFlowValidators.push(Validators.max(compressor.performancePoints.fullLoad.airflow));
           }
           break;
         case 'noLoad':

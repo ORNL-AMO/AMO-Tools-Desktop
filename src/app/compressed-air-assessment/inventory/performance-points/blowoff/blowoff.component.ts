@@ -58,6 +58,8 @@ export class BlowoffComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.blowoff = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+    this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.blowoff.power, selectedCompressor);
+   
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     this.updateForm(selectedCompressor.performancePoints.blowoff);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
