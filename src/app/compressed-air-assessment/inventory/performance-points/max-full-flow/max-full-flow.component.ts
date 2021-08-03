@@ -57,6 +57,7 @@ export class MaxFullFlowComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.maxFullFlow = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+    this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.maxFullFlow.power, selectedCompressor);
     //re-calculate performance points on changes to max full flow
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     this.updateForm(selectedCompressor.performancePoints.maxFullFlow);

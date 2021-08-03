@@ -58,6 +58,8 @@ export class NoLoadComponent implements OnInit {
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.noLoad = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+    this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.noLoad.power, selectedCompressor);
+    
     this.updateForm(selectedCompressor.performancePoints.noLoad);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (!this.inModification) {
