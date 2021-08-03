@@ -18,26 +18,39 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes; let index = index;">
-                    <td class="w-45">
-                        <input type="text" [(ngModel)]="dayType.name" name="{'name_'+index}" id="{'name_'+index}"
-                            class="form-control w-100" (input)="save()">
-                    </td>
-                    <td class="w-45">
-                        <input type="number" [(ngModel)]="dayType.numberOfDays" name="{'numberOfDays_'+index}"
-                            id="{'numberOfDays_'+index}" class="form-control w-100" (input)="save()" max="365" min="0">
-                            <!-- <span *ngIf="dayType.numberOfDays == 0" class="alert-danger pull-right">Value Required</span> -->
-                            <!-- <span *ngIf="invalidDayTypeIndex == index" class="alert-danger pull-right">Total year days cannot be greater than 365</span> -->
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
-                            <button class="btn btn-sm btn-danger" (click)="openConfirmDeleteModal(index)">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </span>
-                    </td>
-                </tr>
+            <tbody [formGroup]="form">
+                    <tr formArrayName="dayTypeList" class="form-group form-array"
+                        *ngFor="let dayType of form.controls.dayTypeList.controls; let i = index">
+                        <ng-container [formGroup]="dayType">
+                            <td class="w-45">
+                                <input class="form-control w-100" name="{{'name'+i}}" id="{{'name'+i}}" formControlName="name" type="text"
+                                    (input)="save()" (focus)="focusField('name')" onfocus="this.select();">
+                                <span class="alert-danger pull-right"
+                                    *ngIf="dayType.controls.name.invalid && !dayType.controls.name.pristine">
+                                    <span *ngIf="dayType.controls.name.errors.required">Value required.</span>
+                                </span>
+                            </td>
+                            <td class="w-45">
+                                <input class="form-control w-100" name="{{'numberOfDays'+i}}" id="{{'numberOfDays'+i}}" formControlName="numberOfDays"
+                                    type="number" (input)="save()" (focus)="focusField('numberOfDays')" onfocus="this.select();">
+                                    <span class="alert-danger pull-right"
+                                    *ngIf="dayType.controls.numberOfDays.invalid && !dayType.controls.numberOfDays.pristine">
+                                    <span *ngIf="dayType.controls.numberOfDays.errors.required">Value required.</span>
+                                    <span *ngIf="dayType.controls.numberOfDays.errors.min">Value can't be less than
+                                        {{dayType.controls.numberOfDays.errors.min.min}}.</span>
+                                    <span *ngIf="dayType.controls.numberOfDays.errors.max">Value can't be greater than
+                                        {{dayType.controls.numberOfDays.errors.max.max}}.</span>
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
+                                    <button class="btn btn-sm btn-danger" (click)="openConfirmDeleteModal(i)">
+                                        <span class="fa fa-trash"></span>
+                                    </button>
+                                </span>
+                            </td>
+                        </ng-container>
+                    </tr>
             </tbody>
         </table>
         <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { DayTypeService } from '../../day-types/day-type.service';
 import { InventoryService } from '../../inventory/inventory.service';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 
@@ -33,7 +34,8 @@ export class SetupTabsComponent implements OnInit {
   profileTabSub: Subscription;
   compressedAirAssessmentSub: Subscription;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+    private dayTypeService: DayTypeService, private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
@@ -69,7 +71,7 @@ export class SetupTabsComponent implements OnInit {
     if (compressedAirAssessment) {
       hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
       hasValidCompressors = this.inventoryService.hasValidCompressors();
-      hasValidDayTypes = this.inventoryService.hasValidDayTypes();
+      hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
       hasValidSystemProfile = this.compressedAirAssessmentService.hasValidProfileSummaryData();
 
       canViewInventory = hasValidSystemInformation;

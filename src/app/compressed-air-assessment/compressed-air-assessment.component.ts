@@ -9,6 +9,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
+import { DayTypeService } from './day-types/day-type.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
@@ -49,6 +50,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
+    private dayTypeService: DayTypeService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
@@ -151,7 +153,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
     let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
-    let hasValidDayTypes: boolean = this.inventoryService.hasValidDayTypes();
+    let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     if (hasValidCompressors == false && this.setupTab != 'system-basics') {
       this.disableNext = true;
     } else if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
