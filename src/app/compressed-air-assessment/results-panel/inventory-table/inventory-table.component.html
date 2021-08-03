@@ -1,0 +1,47 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
+            One or more compressor is invalid - Review inventory and make changes to continue
+        </span>
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedCompressor && compressorInventoryItems">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>Compressor Type</th>
+                    <th>Control Type</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
+                    [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId,
+                                'invalid-compressor': !compressorInventoryItem.isValid}">
+                    <td>
+                        <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
+                            class="fa fa-chevron-right danger"></span>
+                        <a class="click-link"
+                            (click)="selectItem(compressorInventoryItem)">{{compressorInventoryItem.name}}</a>
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                    </td>
+                    <td>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="addNewCompressor()">+Add New Compressor</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressorInventoryData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

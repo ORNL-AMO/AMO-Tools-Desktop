@@ -1,0 +1,96 @@
+<label class="group-label w-100">
+    Profile Data
+    <a class="click-link small pull-right" *ngIf="displayLogToolLink && !showSelectField"
+        (click)="showDataFromExplorer()">
+        Set Data From Data Explorer
+    </a>
+    <a class="click-link small pull-right" *ngIf="displayLogToolLink && showSelectField"
+        (click)="hideDataFromExplorer()">
+        Hide Data Explorer Options
+    </a>
+
+</label>
+
+<div class="scroll-item">
+    <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
+        Profile Data values must be at least 0 
+    </div>
+    <table class="table table-striped bg-white" *ngIf="profileDataType && selectedDayTypeId">
+        <thead>
+            <tr>
+                <th>
+                    <!-- Compressor Name -->
+
+                </th>
+                <td>
+
+                </td>
+                <td *ngIf="showSelectField">
+                    Explorer
+                </td>
+                <th class="text-center" *ngFor="let interval of hourIntervals">
+                    {{interval}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorName}}
+                </td>
+                <td class="text-center">
+                    <span *ngIf="profileDataType == 'power'">Power</span>
+                    <span *ngIf="profileDataType == 'percentCapacity'">% Capacity</span>
+                    <span *ngIf="profileDataType == 'airflow'">Airflow</span>
+                </td>
+                <td *ngIf="showSelectField">
+                    <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
+                        name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
+                        (change)="setLogToolData(summary)">
+                        <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
+                            {{field.alias}}
+                        </option>
+                    </select>
+                </td>
+                <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
+                    <span *ngIf="summaryData.order != 0">
+                        <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}" 
+                            (input)="updateProfileSummary(summary, dataIndex)"
+                            [(ngModel)]="summaryData.power">
+                        <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)"
+                            [(ngModel)]="summaryData.airflow">
+                        <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)"
+                            [(ngModel)]="summaryData.percentCapacity">
+                    </span>
+                    <div class="w-100 bold text-center"
+                        *ngIf="summaryData.order == 0">
+                        &mdash; &mdash;
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="p-2 alert alert-warning" *ngIf="!profileDataType">
+    Select Profiling Data Type
+</div>
+
+<div class="p-2 alert alert-warning" *ngIf="!selectedDayTypeId">
+    Select a Day Type
+</div>
+<div class="w-100 d-flex justify-content-end">
+    <div class="pl-2 pr-2 border-left">
+        <label class="small" for="fillRight">
+            <input type="checkbox" [(ngModel)]="fillRight" name="fillRight" id="fillRight">
+            Fill right on change
+        </label>
+    </div>
+</div>

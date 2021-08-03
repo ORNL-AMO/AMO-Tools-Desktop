@@ -1,0 +1,27 @@
+<div bsModal #confirmDeleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        {{confirmDeleteData.modalTitle}}
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close(false)">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                 <div class="card-block p-4">
+                    {{confirmDeleteData.confirmMessage}}
+                </div>
+                <div class="modal-footer p-2">
+                    <span>
+                      <button type="button" class="btn btn-secondary btn-sm modal-btn"
+                        (click)="close(false)">Cancel</button>
+                      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="close(true)">Delete</button>
+                    </span>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>

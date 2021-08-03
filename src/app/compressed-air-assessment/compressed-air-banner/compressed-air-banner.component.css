@@ -1,0 +1,98 @@
+.pill-row{
+    height: 100%;
+}
+
+.btn-dashboard{
+    height: 100%;
+}
+
+.title h1{
+    padding-top: 5px;
+}
+
+.img-icon{
+    width: 45px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.img-col{
+    padding-right: 0px;
+}
+
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+
+.nav-link.disabled {
+    color: rgba(255,255,255,0.3);
+}
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    background: rgba(0,0,0,0.3);
+}
+
+
+
+/* .home-nav-item{
+    color: black;
+    border-color: black !important;
+} */
+
+.nav-link{
+    padding: 6px;
+    font-size: medium;
+    color: #fff;
+}
+
+.nav-link:not(.disabled):hover{
+    cursor: pointer;
+    background-color: #808B96;
+}
+
+.nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
+
+
+.nav-item{
+    margin: .1rem;
+}
+
+
+.btn{
+    padding: 6px;
+}
+
+.mod-name a:hover{
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.btn-primary{
+   font-size: small;
+}
+
+.navbar.assessment-bar{
+    padding: 0px;
+    background-color: #e5e5e5;
+}
+
+.badge{
+    margin-left: .25rem;
+    margin-right: .25rem;
+}
+
+.click-link{
+    font-size: small;
+}
+
+.br-color-white{
+    background: #fff;
+}

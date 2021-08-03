@@ -1,0 +1,95 @@
+<label class="group-label">Nameplate Data</label>
+<form [formGroup]="form">
+    <!-- compressorType -->
+    <div class="form-group">
+        <label for="compressorType">Compressor Type</label>
+        <select id="compressorType" name="compressorType" formControlName="compressorType" (change)="save()"
+            (focus)="focusField('compressorType')" class="form-control">
+            <option *ngFor="let compressorTypeOption of compressorTypeOptions" [ngValue]="compressorTypeOption.value">
+                {{compressorTypeOption.label}}</option>
+        </select>
+    </div>
+    <!-- motorPower -->
+    <div class="form-group">
+        <label for="motorPower">Motor Power</label>
+        <div class="input-group">
+            <input name="motorPower" type="number" step="any" class="form-control" id="motorPower"
+                formControlName="motorPower" (input)="save()" (focus)="focusField('motorPower')">
+            <span class="units input-group-addon">hp</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span>
+    </div>
+
+    <!-- fullLoadOperatingPressure -->
+    <div class="form-group">
+        <label for="fullLoadOperatingPressure">Full Load Operating Pressure</label>
+        <div class="input-group">
+            <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control" id="fullLoadOperatingPressure"
+                formControlName="fullLoadOperatingPressure" (input)="save()" (focus)="focusField('fullLoadOperatingPressure')">
+            <span class="units input-group-addon">psig</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.fullLoadOperatingPressure.invalid && !form.controls.fullLoadOperatingPressure.pristine">
+          <span *ngIf="form.controls.fullLoadOperatingPressure.errors.required">Value Required</span>
+          <span *ngIf="form.controls.fullLoadOperatingPressure.errors.min">Value can't be less than
+            {{form.controls.fullLoadOperatingPressure.errors.min.min}} psig</span>
+        </span>
+    </div>
+
+    <!-- fullLoadRatedCapacity -->
+    <div class="form-group">
+        <label for="fullLoadRatedCapacity">Rated Capacity at Full Load Pressure</label>
+        <div class="input-group">
+            <input name="fullLoadRatedCapacity" type="number" step="any" class="form-control" id="fullLoadRatedCapacity"
+                formControlName="fullLoadRatedCapacity" (input)="save()" (focus)="focusField('fullLoadRatedCapacity')">
+            <span class="units input-group-addon">acfm</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.fullLoadRatedCapacity.invalid && !form.controls.fullLoadRatedCapacity.pristine">
+          <span *ngIf="form.controls.fullLoadRatedCapacity.errors.required">Value Required</span>
+          <span *ngIf="form.controls.fullLoadRatedCapacity.errors.min">Value can't be less than
+            {{form.controls.fullLoadRatedCapacity.errors.min.min}} acfm</span>
+        </span>
+    </div>
+
+    <!-- fullLoadAmps -->
+    <div class="form-group">
+        <label for="fullLoadAmps">Full Load Amps</label>
+        <div class="input-group">
+            <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
+                formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')">
+            <span class="units input-group-addon">amps</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.fullLoadAmps.invalid && !form.controls.fullLoadAmps.pristine">
+          <span *ngIf="form.controls.fullLoadAmps.errors.required">Value Required</span>
+          <span *ngIf="form.controls.fullLoadAmps.errors.min">Value can't be less than
+            {{form.controls.fullLoadAmps.errors.min.min}} amps</span>
+        </span>
+    </div>
+    <!-- totalPackageInputPower -->
+    <div class="form-group">
+        <label for="totalPackageInputPower">Total Package Input Power</label>
+        <div class="input-group">
+            <input name="totalPackageInputPower" type="number" step="any" class="form-control" id="totalPackageInputPower"
+                formControlName="totalPackageInputPower" (input)="save()" (focus)="focusField('totalPackageInputPower')">
+            <span class="units input-group-addon">kW</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+          <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+            {{form.controls.motorPower.errors.min.min}} hp.</span>
+        </span> -->
+    </div>
+
+
+
+    <!-- ratedLoadPower (hidden)-->
+    <!-- ploytropicCompressorExponent (hidden)-->
+</form>

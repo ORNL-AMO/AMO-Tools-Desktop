@@ -245,6 +245,11 @@ i{
     background-color: #003087;
   }
   
+  .compressed-air .dropdown-toggle,
+  .compressed-air .btn-primary{
+    background-color: #7030A0;
+  }
+
   .dropdown-menu.shown{
   left: -160px;
   background-color: #ececec;

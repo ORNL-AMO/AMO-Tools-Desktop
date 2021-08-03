@@ -1,0 +1,26 @@
+<div class="checkbox">
+    <label class="group-label" for="useAutomaticSequencer">
+        <input type="checkbox" id="useAutomaticSequencer" (focus)="focusField('useAutomaticSequencer')"
+            (change)="setUseAutomaticSequencer()" [(ngModel)]="useAutomaticSequencer.selected" />
+        Use Automatic Sequencer
+    </label>
+</div>
+
+<form *ngIf="useAutomaticSequencer.selected" class="mb-2 pt-1">
+    <div class="form-group">
+        <label for="targetPressure">Target Pressure</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.targetPressure"
+                name="targetPressure" id="targetPressure" (input)="save()">
+            <span class="input-group-addon units">psig</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="variance">Variance (+/-)</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="targetPressure"
+                id="variance" (input)="save()">
+            <span class="input-group-addon units">psia</span>
+        </div>
+    </div>
+</form>

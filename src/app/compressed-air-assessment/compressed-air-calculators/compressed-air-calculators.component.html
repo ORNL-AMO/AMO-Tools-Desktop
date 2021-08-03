@@ -1,0 +1,10 @@
+<app-air-flow-conversion *ngIf="calcTab == 'air-flow-conversion'" [settings]="settings"></app-air-flow-conversion>
+<app-receiver-tank *ngIf="calcTab == 'receiver-tank'" [settings]="settings"></app-receiver-tank>
+<!--  altitude correction -->
+<!-- <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
+      ></app-system-and-equipment-curve> -->
+<app-system-capacity *ngIf="calcTab == 'system-capacity'" [settings]="settings"></app-system-capacity>
+<app-pipe-sizing *ngIf="calcTab == 'pipe-sizing'" [settings]="settings"></app-pipe-sizing>
+<app-air-velocity *ngIf="calcTab == 'air-velocity'" [settings]="settings"></app-air-velocity>
+<app-air-leak *ngIf="calcTab == 'air-leak-survey'" [settings]="settings" class="w-100"></app-air-leak>
+<app-compressed-air-pressure-reduction *ngIf="calcTab == 'compressed-air-pressure-reduction'" [settings]="settings" class="w-100"></app-compressed-air-pressure-reduction>

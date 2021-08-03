@@ -1,0 +1,59 @@
+<div class="row no-gutters w-100 mh-100 scroll-item">
+    <div class="col-12">
+        <div class="row no-gutters">
+            <div class="col-12">
+                <!--end uses tabs-->
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayEndUses">
+                    <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'end-uses'}">
+                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                            (click)="setTab('end-uses')">
+                            <div>End Uses</div>
+                        </a>
+                    </div>
+                    <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!--inventory tabs-->
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayInventory">
+                    <!-- <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'performance-profile'}">
+                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                            (click)="setTab('performance-profile')">
+                            <div>Performance Profile</div>
+                        </a>
+                    </div> -->
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'current-inventory'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('current-inventory')">
+                            <div>Current Inventory</div>
+                        </a>
+                    </div>
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="header mr-2 ml-2" *ngIf="!displayInventory && !displayEndUses">
+                    <div class="h3">
+                        Help
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-12 pr-2 pl-2 pb-4 mt-1">
+                <app-inventory-table *ngIf="tabSelect == 'current-inventory'"></app-inventory-table>
+                <hr  *ngIf="tabSelect == 'current-inventory'">
+                <app-inventory-performance-profile *ngIf="tabSelect == 'current-inventory'"></app-inventory-performance-profile>
+                <app-help-panel *ngIf="(tabSelect == 'help' && displayInventory) || !displayInventory">
+                </app-help-panel>
+                <!-- <app-results-table *ngIf="tabSelect == 'results' && displayInventory">
+                </app-results-table> -->
+            </div>
+        </div>
+    </div>
+</div>

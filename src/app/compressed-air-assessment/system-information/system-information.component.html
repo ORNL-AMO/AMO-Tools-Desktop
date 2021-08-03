@@ -1,0 +1,87 @@
+<div class="d-flex flex-column panel-container">
+    <div class="header mr-2 ml-2">
+        <h3>System Information</h3>
+        <br>
+    </div>
+    <form class="pl-3 pr-3" [formGroup]="form">
+        <!--Nominal Pressure-->
+        <div class="form-group">
+            <label for="nominalPressure">Nominal Pressure</label>
+            <div class="input-group">
+                <input name="nominalPressure" type="number" step="any" class="form-control" id="nominalPressure"
+                    formControlName="nominalPressure" (change)="save()"
+                    (focus)="focusField('nominalPressure')">
+                <span class="units input-group-addon">psig</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.nominalPressure.invalid && !form.controls.nominalPressure.pristine">
+                <span *ngIf="form.controls.nominalPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.nominalPressure.errors.min">Value can't be less than
+                    {{form.controls.nominalPressure.errors.min.min}} psig.</span>
+            </span>
+        </div>
+        <!--System Elevation-->
+        <div class="form-group">
+            <label for="systemElevation">System Elevation</label>
+            <div class="input-group">
+                <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
+                    formControlName="systemElevation" (input)="save()" (focus)="focusField('systemElevation')">
+                <span class="units input-group-addon">ft</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.systemElevation.invalid && !form.controls.systemElevation.pristine">
+                <span *ngIf="form.controls.systemElevation.errors.required">Value Required</span>
+                <span *ngIf="form.controls.systemElevation.errors.min">Value can't be less than
+                    {{form.controls.systemElevation.errors.min.min}} ft.</span>
+                <span *ngIf="form.controls.systemElevation.errors.max">Value can't
+                    be greater than {{form.controls.systemElevation.errors.max.max}} ft.</span>
+            </span>
+            
+        </div>
+        <!--Total Air Storage-->
+        <div class="form-group">
+            <label for="totalAirStorage">Total Air Storage
+                <a class="form-text small click-link" (click)="openSystemCapacityModal()">Calculate Air Storage Capacity</a>
+            </label>
+            <div class="input-group">
+                <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
+                    formControlName="totalAirStorage" (change)="save()" (focus)="focusField('totalAirStorage')">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.totalAirStorage.invalid && !form.controls.totalAirStorage.pristine">
+                <span *ngIf="form.controls.totalAirStorage.errors.required">Value Required</span>
+                <span *ngIf="form.controls.totalAirStorage.errors.min">Value can't be less than
+                    {{form.controls.totalAirStorage.errors.min.min}} </span>
+            </span>
+        </div>
+        <!--Is a target pressure sequencer used?-->
+        <div class="form-group">
+            <label for="utilityType">Is a target pressure sequencer used?</label>
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="changeIsSequencerUsed()"
+                (focus)="focusField('isSequencerUsed')">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+        <!--Target Pressure-->
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
+            <label for="targetPressure">Target Pressure
+            </label>
+            <div class="input-group">
+                <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
+                    formControlName="targetPressure" (change)="save()" (focus)="focusField('targetPressure')">
+                <span class="units input-group-addon">psig</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
+                <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
+                    {{form.controls.targetPressure.errors.min.min}} psig.</span>
+            </span>
+        </div>
+    </form>
+</div>
+
+<app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings" (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>

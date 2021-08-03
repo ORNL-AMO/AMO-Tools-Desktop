@@ -1,0 +1,75 @@
+<div class="d-flex flex-column panel-container">
+    <div class="header mr-2 ml-2">
+        <h3>Day Types</h3>
+        <br>
+    </div>
+    <div class="p-2">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Day Type
+                    </th>
+                    <th>
+                        Operating Days
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes; let index = index;">
+                    <td class="w-45">
+                        <input type="text" [(ngModel)]="dayType.name" name="{'name_'+index}" id="{'name_'+index}"
+                            class="form-control w-100" (input)="save()">
+                    </td>
+                    <td class="w-45">
+                        <input type="number" [(ngModel)]="dayType.numberOfDays" name="{'numberOfDays_'+index}"
+                            id="{'numberOfDays_'+index}" class="form-control w-100" (input)="save()" max="365" min="0">
+                            <!-- <span *ngIf="dayType.numberOfDays == 0" class="alert-danger pull-right">Value Required</span> -->
+                            <!-- <span *ngIf="invalidDayTypeIndex == index" class="alert-danger pull-right">Total year days cannot be greater than 365</span> -->
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
+                            <button class="btn btn-sm btn-danger" (click)="openConfirmDeleteModal(index)">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
+    </div>
+    <div class="p-2">
+        <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be greater than 0 and less than or equal to 365.
+        </div>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td class="w-50">
+                        Total Annual Days
+                    </td>
+                    <td class="w-50">
+                        {{totalAnnualDays}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-50">
+                        Total Down Days
+                    </td>
+                    <td class="w-50">
+                        {{totalDownDays}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-2 w-100 text-center">
+        <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">Find Day Types With Data Explorer</button>
+    </div>
+</div>
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteDayTypeData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

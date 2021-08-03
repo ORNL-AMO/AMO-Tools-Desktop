@@ -1,0 +1,18 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+.group-label-2{
+	width: auto;
+    padding-bottom: 0px;
+}

@@ -1,0 +1,87 @@
+<label class="group-label w-100">
+    Compressor Ordering
+    <span *ngIf="isSequencerUsed" class="pull-right">
+        Has Sequencer
+    </span>
+    <span *ngIf="!isSequencerUsed" class="pull-right">
+        No Sequencer
+    </span>
+</label>
+
+<div class="scroll-item">
+    <table class="table table-striped bg-white">
+        <thead>
+            <tr>
+                <th>
+                    <!-- Compressor Name -->
+                </th>
+                <th class="text-center">
+                    FLP
+                </th>
+                <th class="text-center" *ngFor="let interval of hourIntervals">
+                    {{interval}}
+                </th>
+            </tr>
+        </thead>
+        <tbody *ngIf="isSequencerUsed">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorName}}
+                </td>
+                <td class="text-center">
+                    {{summary.fullLoadPressure}}
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
+                        name="{{'order_'+compressorIndex+orderIndex}}" [(ngModel)]="summaryData.order"
+                        (change)="changeOrderSequencer(compressorIndex, orderIndex)">
+                        <option *ngFor="let orderingOption of orderingOptions; let optionIndex = index;"
+                            [ngValue]="orderingOption" id="{{'order_'+compressorIndex+orderIndex+optionIndex}}">
+                            <span *ngIf="orderingOption != 0">
+                                {{orderingOption}}
+                            </span>
+                            <span *ngIf="orderingOption == 0">
+                                Off
+                            </span>
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="!isSequencerUsed">
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorName}}
+                </td>
+                <td class="text-center">
+                    {{summary.fullLoadPressure}}
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm" *ngIf="summaryData.order == 0"
+                        (click)="toggleOn(summary, orderIndex)">Off</button>
+                    <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
+                        class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
+                        (click)="toggleOn(summary, orderIndex)">{{summaryData.order}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="w-100 d-flex justify-content-end">
+    <div class="pl-2 pr-2 border-left">
+        <label class="small" for="fillRight">
+            <input type="checkbox" [(ngModel)]="fillRight" name="fillRight" id="fillRight">
+            Fill right on change
+        </label>
+    </div>
+    <div class="pl-2 pr-2 border-right border-left">
+        <a class="click-link small" (click)="resetOrdering()">Turn All Off</a>
+    </div>
+    <div class="pl-2 pr-2 border-right">
+        <a class="click-link small" (click)="turnAllOn()">Turn All On</a>
+    </div>
+</div>

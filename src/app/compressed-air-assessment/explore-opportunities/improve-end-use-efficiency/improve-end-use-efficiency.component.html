@@ -1,0 +1,69 @@
+<div class="checkbox">
+    <label class="group-label" for="improveEndUseEfficiency">
+        <input type="checkbox" id="improveEndUseEfficiency" (focus)="focusField('improveEndUseEfficiency')"
+            (change)="setImproveEndUseEfficiency()" [(ngModel)]="improveEndUseEfficiency.selected" />
+        Improve End Use Efficiency
+    </label>
+</div>
+
+<form *ngIf="improveEndUseEfficiency.selected" class="mb-2 pt-1">
+    <div class="form-group">
+        <label for="reductionType">Airflow Reduction Type</label>
+        <div class="input-group">
+            <div class="d-flex flex-column">
+                <div class="d-flex">
+                    <label class="w-100" for="Fixed">
+                        <input type="radio" name="reductionType" id="Fixed"
+                            [(ngModel)]="improveEndUseEfficiency.reductionType" value="Fixed" (change)="save()"
+                            class="mr-2">Fixed</label>
+                </div>
+                <div class="d-flex">
+                    <label class="w-100" for="Variable">
+                        <input type="radio" name="reductionType" id="Variable"
+                            [(ngModel)]="improveEndUseEfficiency.reductionType" value="Variable" (change)="save()"
+                            class="mr-2">Variable</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'">
+        <label for="airflowReduction">Aiflow Reduction</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="improveEndUseEfficiency.airflowReduction"
+                name="airflowReduction" id="airflowReduction" (input)="save()">
+            <span class="input-group-addon units">acfm</span>
+        </div>
+    </div>
+    <div class="scroll-item pt-2">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th>
+                        Day Type
+                    </th>
+                    <th *ngFor="let hourInterval of hourIntervals">
+                        {{hourInterval}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dataItem of improveEndUseEfficiency.reductionData; let reductionIndex = index;">
+                    <td>
+                        {{dataItem.dayTypeName}}
+                    </td>
+                    <td *ngFor="let d of dataItem.data; let dataIndex = index; trackBy:trackByIdx">
+                        <input *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'" type="checkbox"
+                            [(ngModel)]="d.applyReduction" name="{{'applyReduction_'+reductionIndex+dataIndex}}"
+                            id="{{'applyReduction_'+reductionIndex+dataIndex}}" (change)="save()">
+                        <input *ngIf="improveEndUseEfficiency.reductionType == 'Variable'"
+                            class="form-control w-100 min-width" type="number" [(ngModel)]="d.reductionAmount"
+                            name="{{'reductionAmount_'+reductionIndex+dataIndex}}"
+                            id="{{'reductionAmount_'+reductionIndex+dataIndex}}" (input)="save()">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <a *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'" class="click-link small pull-right"
+        (click)="toggleAll()">Toggle All</a>
+</form>

@@ -8,7 +8,7 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { HelpPanelComponent } from './system-setup/help-panel/help-panel.component';
 import { VisualizeComponent } from './visualize/visualize.component';
 import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
 import { DayTypeAnalysisComponent } from './day-type-analysis/day-type-analysis.component';
 import { DayTypesComponent } from './day-type-analysis/day-types/day-types.component';
@@ -41,6 +41,7 @@ import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type
 import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/selected-data-table/selected-data-table.component';
 import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
 import { LogToolDbService } from './log-tool-db.service';
+import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
 
 @NgModule({
   declarations: [
@@ -71,12 +72,14 @@ import { LogToolDbService } from './log-tool-db.service';
     IndividualDaySummaryTableComponent,
     DayTypeSummaryTableComponent,
     SelectedDataTableComponent,
-    BinDataComponent
+    BinDataComponent,
+    SelectAssessmentModalComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbDatepickerModule,
     ModalModule,
     ExportableResultsTableModule,

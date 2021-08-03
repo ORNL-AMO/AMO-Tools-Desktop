@@ -1,0 +1,58 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        System Information Help
+        <br>
+        <small class="text-muted">Set system information for modeling
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+
+    <div class="my-2" *ngIf="focusedField == 'nominalPressure'">
+        <h6>
+            Nominal Pressure
+            <br>
+            <small class="text-muted">
+                The user-assumed average compressed air system operating pressure
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'systemElevation'">
+        <h6>
+            System Elevation
+            <br>
+            <small class="text-muted">
+                The height above mean sea level at which the compressed air system is located
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'totalAirStorage'">
+        <h6>
+            Total Air Storage
+            <br>
+            <small class="text-muted">
+                The volume of air that the entire compressed air system can store, including receivers and distribution
+                pipes.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'isSequencerUsed'">
+        <h6>
+            Is a target pressure sequencer used?
+            <br>
+            <small class="text-muted">
+                Mark this box if the system air compressors are controlled by an automatic sequencer. A sequencer is a
+                device used to bring air compressors on line according to a programmed schedule
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+</div>

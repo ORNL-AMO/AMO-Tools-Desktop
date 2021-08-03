@@ -1,0 +1,29 @@
+<div class="checkbox">
+    <label class="group-label" for="addPrimaryReceiverVolume">
+        <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
+            (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" />
+        Add Primary Receiver Volume
+    </label>
+</div>
+<form *ngIf="addPrimaryReceiverVolume.selected" class="mb-2 pt-1">
+    <div class="form-group">
+        <label>Existing air storage capacity</label>
+        <div class="text-center small">
+            {{existingCapacity | number}} gal
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="increasedVolume">Increased Volume</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="addPrimaryReceiverVolume.increasedVolume"
+                name="increasedVolume" id="increasedVolume" (input)="save()">
+            <span class="input-group-addon units">gal</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Proposed air storage capacity</label>
+        <div class="text-center small">
+            {{existingCapacity + addPrimaryReceiverVolume.increasedVolume | number}} gal
+        </div>
+    </div>
+</form>

@@ -1,0 +1,26 @@
+<div class="checkbox">
+    <label class="group-label" for="reduceAirLeaks">
+        <input type="checkbox" id="reduceAirLeaks" (focus)="focusField('reduceAirLeaks')" (change)="setReduceAirLeaks()"
+            [(ngModel)]="reduceAirLeaks.selected" />
+        Reduce Air Leaks
+    </label>
+</div>
+
+<form *ngIf="reduceAirLeaks.selected" class="mb-2 pt-1">
+    <div class="form-group">
+        <label for="leakFlow">Leak Flow</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"
+                id="leakFlow" (input)="save()">
+            <span class="input-group-addon units">acfm</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="leakReduction">Leak Reduction</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakReduction" name="leakReduction"
+                id="leakReduction" (input)="save()">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+</form>

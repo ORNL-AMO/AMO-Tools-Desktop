@@ -1,0 +1,15 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <div class="group-label">
+            System Profile <span *ngIf="!showAllCompressors && selectedCompressor">({{selectedCompressor.name}})</span>
+            <span class="checkbox pull-right">
+                <label>
+                    <input type="checkbox" id="showAllCompressors" (change)="drawChart()"
+                        [(ngModel)]="showAllCompressors" />
+                    Graph All Compressors
+                </label>
+            </span>
+        </div>
+        <div #performanceProfileChart id="performanceProfileChart"></div>
+    </div>
+</div>
