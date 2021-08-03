@@ -1,6 +1,9 @@
 <label class="group-label" (click)="toggleCollapse()">
     <span class="fa fa-chevron-right" [ngClass]="{'fa-chevron-right': contentCollapsed, 'fa-chevron-down': !contentCollapsed}"></span>
     Design Details
+    <span *ngIf="!form.valid" class="pull-right">
+        <span class="fa fa-exclamation-circle"></span>
+    </span>
 </label>
 <form [formGroup]="form" *ngIf="!contentCollapsed">
     <!-- blowdownTime -->
@@ -66,8 +69,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.designEfficiency.invalid && !form.controls.designEfficiency.pristine">
           <span *ngIf="form.controls.designEfficiency.errors.required">Value Required</span>
-          <span *ngIf="form.controls.designEfficiency.errors.min">Value can't be less than
-            {{form.controls.designEfficiency.errors.min.min}}</span>
+          <span *ngIf="form.controls.designEfficiency.errors.greaterThan !== undefined">Value must be greater than
+            {{form.controls.designEfficiency.errors.greaterThan}}</span>
           <span *ngIf="form.controls.designEfficiency.errors.max">Value can't be greater than
               {{form.controls.designEfficiency.errors.max.max}}</span>
         </span>

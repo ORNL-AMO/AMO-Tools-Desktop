@@ -26,6 +26,8 @@ export class OperatingProfileTableComponent implements OnInit {
   fieldOptions: Array<LogToolField>
   logToolDayTypeSummaries: Array<DayTypeSummary>;
   showSelectField: boolean = false;
+  fillRight: boolean = false;
+
   validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
   inventoryItems: Array<CompressorInventoryItem>;
@@ -59,12 +61,35 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  updateProfileSummary() {
+  updateProfileSummary(changedSummary: ProfileSummary, dataInputIndex: number) {
     let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if (this.fillRight) {
+      this.updateSummaryDataFields(changedSummary, dataInputIndex);
+    }
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
     this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
+
+  
+  updateSummaryDataFields(changedSummary: ProfileSummary, dataInputIndex: number) {
+    changedSummary.profileSummaryData.forEach((summaryData, index) => {
+      if (summaryData.order != 0 && index > dataInputIndex) {
+        if (this.profileDataType == 'power') {
+          summaryData.power = changedSummary.profileSummaryData[dataInputIndex].power;
+        } else if (this.profileDataType == 'percentCapacity') {
+          summaryData.percentCapacity = changedSummary.profileSummaryData[dataInputIndex].percentCapacity;
+        } else if (this.profileDataType == 'airflow') {
+          summaryData.airflow = changedSummary.profileSummaryData[dataInputIndex].airflow;
+        }
+      }
+    });
+    this.profileSummary.forEach(summary => { 
+      if (summary.dayTypeId == this.selectedDayTypeId && summary.compressorId == changedSummary.compressorId) {
+        summary = changedSummary;
+      }
+    });
   }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {

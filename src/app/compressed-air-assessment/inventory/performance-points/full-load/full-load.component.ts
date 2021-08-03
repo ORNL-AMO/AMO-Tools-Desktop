@@ -59,6 +59,7 @@ export class FullLoadComponent implements OnInit {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.fullLoad = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+    this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.fullLoad.power, selectedCompressor);
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     this.updateForm(selectedCompressor.performancePoints.fullLoad);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
