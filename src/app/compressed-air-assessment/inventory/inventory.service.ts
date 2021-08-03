@@ -408,24 +408,6 @@ export class InventoryService {
     return hasValidCompressors;
   }
 
-
-  hasValidDayTypes() {
-    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidDayTypes: boolean = false;
-    if (compressedAirAssessment.compressedAirDayTypes.length > 0) {
-      let summedTotalDays: number = 0;
-      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        if (dayType.numberOfDays > 0) {
-          summedTotalDays += dayType.numberOfDays;
-        } else {
-          return false;
-        }
-      });
-      hasValidDayTypes = summedTotalDays > 0 && summedTotalDays <= 365;
-    }
-    return hasValidDayTypes;
-  }
-
   checkCentrifugalSpecsValid(compressor: CompressorInventoryItem): boolean {
     if (compressor.nameplateData.compressorType == 6) {
       let form: FormGroup = this.getCentrifugalFormFromObj(compressor);
