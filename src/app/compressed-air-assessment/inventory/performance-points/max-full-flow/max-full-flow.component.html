@@ -64,7 +64,8 @@
                     {{form.controls.power.errors.min.min}} kW.</span>
                 <span *ngIf="form.controls.power.errors.equalTo !== undefined">Value must be equal to Full Load Power
                     ({{form.controls.power.errors.equalTo}} kW).</span>
-                <span *ngIf="form.controls.power.errors.greaterThan !== undefined">{{validationMessages.maxFullFlow.greaterThan}}
+                <span *ngIf="form.controls.power.errors.greaterThan !== undefined">
+                    Value must be greater than {{form.controls.power.errors.greaterThan}}
                     kW</span>
             </span>
             <span class="alert-warning pull-right small" *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>

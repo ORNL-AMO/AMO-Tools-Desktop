@@ -90,11 +90,11 @@ export class PerformancePointsFormService {
           break;
         case 'maxFullFlow':
           if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
-            powerValidators.push(Validators.min(0), EqualToValidator.equalTo(compressor.performancePoints.fullLoad.power));
+            powerValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.power));
           } else {
             if (compressor.performancePoints.fullLoad.power) {
-              powerValidators.push(Validators.min(0), GreaterThanValidator.greaterThan(compressor.performancePoints.fullLoad.power));
-              validationMessages.maxFullFlow.greaterThan = `Value must be greater than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
+              powerValidators.push(Validators.min(compressor.performancePoints.fullLoad.power));
+              validationMessages.maxFullFlow.min = `Value can't be less than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
             } else {
               powerValidators.push(GreaterThanValidator.greaterThan(0));
               validationMessages.maxFullFlow.greaterThan = 'Value must be greater than 0';
