@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { FullLoadAmpsService } from '../full-load-amps.service';
 
 @Component({
@@ -7,14 +8,19 @@ import { FullLoadAmpsService } from '../full-load-amps.service';
   styleUrls: ['./full-load-amps-help.component.css']
 })
 export class FullLoadAmpsHelpComponent implements OnInit {
-  // don't need to pass as input (doesn't exist on full-load-amps.component.ts to pass anyway)
-  // @Input()
   currentField: string;
+  currentFieldSub: Subscription;
 
   constructor(private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit() {
-    // TODO rhernandez Subscribe to currentfield and set this.currentfield based on value
+    this.currentFieldSub = this.fullLoadAmpsService.currentField.subscribe(value => {
+      this.currentField = value;
+    })
+  }
+
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
   }
 
 }

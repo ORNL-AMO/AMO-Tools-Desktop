@@ -12,7 +12,8 @@ import { FullLoadAmpsService } from './full-load-amps.service';
 export class FullLoadAmpsComponent implements OnInit {
   @Input()
   settings: Settings;
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -83,7 +84,8 @@ export class FullLoadAmpsComponent implements OnInit {
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 }

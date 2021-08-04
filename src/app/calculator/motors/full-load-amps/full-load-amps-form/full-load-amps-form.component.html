@@ -9,7 +9,7 @@
     <label for="{{'lineFrequency_'+idString}}">Line Frequency</label>
     <select name="lineFrequency" class="form-control number-input-field" id="{{'lineFrequency_'+idString}}"
       formControlName="lineFrequency" (change)="changeLineFreq()" (focus)="focusField('lineFrequency')">
-      <option *ngFor="let lineFrequency of frequencies" value="lineFrequency">{{lineFrequency}} Hz</option>
+      <option *ngFor="let lineFrequency of frequencies" [ngValue]="lineFrequency">{{lineFrequency}} Hz</option>
     </select>
   </div>
 
@@ -38,7 +38,7 @@
     <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
     <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
       formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
-      <option *ngFor="let efficiencyClass of efficiencyClasses" value="efficiencyClass.value">
+      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
         {{efficiencyClass.display}}</option>
     </select>
   </div>
@@ -63,21 +63,14 @@
     </div>
   </div>
 
-  <!-- <div class="form-group">
-    <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
-      Full-Load Amps
-      <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate
-        Full-Load Amps</a>
+  <div class="form-group">
+    <label class="bold">
+      Full-Load Amps     
     </label>
-    <div class="input-group">
-      <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field"
-        id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')"
-        onfocus="this.select();">
-      <span class="input-group-addon units">A</span>
-    </div>
-  </div> -->
-<!-- TODO rhernandez will probably need centering/align/style over some sort. see other calcs -->
-  {{fullLoadAmps}}
+    <span class="input-group text-center">
+      {{fullLoadAmps}} A
+    </span>
+  </div>
 
 
 </form>
