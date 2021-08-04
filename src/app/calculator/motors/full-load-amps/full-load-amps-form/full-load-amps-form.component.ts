@@ -1,16 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { FullLoadAmpsService } from '../full-load-amps.service';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
-import { MotorService } from '../../../../psat/motor/motor.service';
 import { PSAT } from '../../../../shared/models/psat';
-import { PsatCsvDataFields } from '../../../../shared/helper-services/json-to-csv.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { Assessment } from '../../../../shared/models/assessment';
-import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { FanMotor } from '../../../../shared/models/fans';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import { Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-full-load-amps-form',
@@ -22,8 +21,10 @@ export class FullLoadAmpsFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @Input()
-  motor: FanMotor;
+  @Output('emitSave')
+  emitSave = new EventEmitter<FanMotor>();
+
+  @Input() motor: FanMotor;
 
 
 
@@ -37,64 +38,75 @@ export class FullLoadAmpsFormComponent implements OnInit {
   ];
   options: Array<any>;
   motorForm: FormGroup;
+  resetDataSub: Subscription;
+  generateExampleSub: Subscription;
+
   idString: string;
   selected: boolean = true;
-  constructor(private motorService: MotorService, private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
+  flaOutput: number;
+  frequency: number;
+  constructor( private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
     this.efficiencyClasses = motorEfficiencyConstants;
     this.idString = 'fla_calc';
+    
 
-
-    // this.motorForm = new FormGroup({
-    //   lineFrequency: new FormControl(null),
-    //   motorRatedPower: new FormControl(null),
-    //   motorRpm: new FormControl(null),
-    //   efficiencyClass: new FormControl(null),
-    //   specifiedEfficiency: new FormControl(null),
-    //   motorRatedVoltage: new FormControl(null),
-    //   fullLoadAmps: new FormControl(null)
-    // });
-    // this.motorForm.setValue({
-    //   lineFrequency: 60,
-    //   motorRatedPower: 350.01,
-    //   motorRpm: 2000,
-    //   efficiencyClass: 0,
-    //   specifiedEfficiency: 95,
-    //   motorRatedVoltage: 460,
-    //   fullLoadAmps: 389.08
-    // });
 
     this.motor = {
       lineFrequency: 60,
-      motorRatedPower: 350.01,
-      motorRpm: 2000,
-      efficiencyClass: 0,
-      specifiedEfficiency: 95,
-      motorRatedVoltage: 460,
-      fullLoadAmps: 400
+      motorRatedPower: 600,
+      motorRpm: 1180,
+      efficiencyClass: 1,
+      specifiedEfficiency: 100,
+      motorRatedVoltage: 470,
+      fullLoadAmps: 683.25
     };
 
-    // this.motorForm.patchValue({
-    //   lineFrequency: 60,
-    //   motorRatedPower: 350.01,
-    //   motorRpm: 2000,
-    //   efficiencyClass: 0,
-    //   specifiedEfficiency: 95,
-    //   motorRatedVoltage :460,
-    //   fullLoadAmps: 389.08
-    // });
 
-    this.init();
+
+    //this.init();
+    this.initSubscription();
 
 
   }
 
+  ngOnDestroy() {
+    this.resetDataSub.unsubscribe();
+    this.generateExampleSub.unsubscribe();
+  }
+
+
   init() {
     //this.motor = this.fullLoadAmpsService.getObjFromForm(this.motorForm)
     this.motorForm = this.fullLoadAmpsService.getFormFromObj(this.motor);
+    //this.motor = this.fullLoadAmpsService.getObjFromForm(this.motorForm);
 
+  }
+
+  initSubscription(){
+    this.generateExampleSub = this.fullLoadAmpsService.generateExample.subscribe(value => {
+      this.updateForm();
+    })
+  }
+
+  updateForm(){
+    let flaInputs: FanMotor = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
+    this.motorForm = this.fullLoadAmpsService.getFormFromObj(flaInputs);
+    this.save();
+  }
+
+  calculate() {
+    let data: FanMotor = this.fullLoadAmpsService.getObjFromForm(this.motorForm);
+    this.emitSave.emit(data);
+
+
+  }
+
+  save() {
+    this.motor = this.fullLoadAmpsService.getObjFromForm(this.motorForm);
+    this.emitSave.emit(this.motor);
   }
 
   changeEfficiencyClass() {
@@ -115,14 +127,15 @@ export class FullLoadAmpsFormComponent implements OnInit {
         })
       }
     }
+    this.save();
   }
 
 
   getFullLoadAmps() {
-    //this.motorForm = this.psatService.setFormFullLoadAmps(this.motorForm, this.settings);
     this.motorForm.patchValue({
       fullLoadAmps: this.calcFla()
     });
+    this.save();
   }
 
   calcFla(): number {
@@ -145,7 +158,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
       this.motorForm.controls.motorRatedVoltage.value,
       this.settings
     );
-    console.log(estEfficiency);
+    this.flaOutput = estEfficiency;
     return estEfficiency;
 
   }
@@ -158,14 +171,3 @@ export class FullLoadAmpsFormComponent implements OnInit {
 
 
 }
-
-// export interface MotorObj {
-//   lineFrequency: number;
-//   motorRatedPower: number;
-//   motorRpm: number;
-//   efficiencyClass: number;
-//   specifiedEfficiency?: number;
-//   motorRatedVoltage: number;
-//   fullLoadAmps: number;
-
-// }

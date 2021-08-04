@@ -1,81 +1,82 @@
-<form #formRef [formGroup]="motorForm">
+<form [formGroup]="motorForm">
   <div class="d-flex flex-column">
     <div class="header mr-2 ml-2">
       <h3>Motor</h3>
     </div>
   </div>
 
-  <div>
-    <div class="form-group">
-      <label for="{{'lineFrequency_'+idString}}">Line Frequency</label>
-      <select name="lineFrequency" class="form-control number-input-field" id="{{'lineFrequency_'+idString}}"
-        formControlName="lineFrequency" (change)="changeLineFreq()" (focus)="focusField('lineFrequency')">
-        <option *ngFor="let lineFrequency of frequencies" value="lineFrequency">{{lineFrequency}} Hz</option>
-      </select>
-    </div>
 
-    <div class="form-group">
-      <label for="{{'motorRatedPower_'+idString}}">Rated Motor Power</label>
-      <div name="motorRatedPower" class="input-group">
-        <input type="number" step="any" min="0" class="form-control number-input-field"
-          id="{{'motorRatedPower_'+idString}}" formControlName="motorRatedPower"
-          (focus)="focusField('motorRatedPower')" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.powerMeasurement}}</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
-      <div name="motorRpm" class="input-group">
-        <input type="number" step="10" min="0" class="form-control number-input-field"
-          id="{{'motorRpm_'+idString}}" formControlName="motorRpm" (focus)="focusField('motorRpm')"
-          onfocus="this.select();">
-        <span class="input-group-addon units">rpm</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
-      <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
-        formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" value="efficiencyClass.value">
-          {{efficiencyClass.display}}</option>
-      </select>
-    </div>
-
-    <div class="form-group" *ngIf="motorForm.controls.efficiencyClass.value == 3">
-      <label for="{{'specifiedEfficiency_'+idString}}">Efficiency</label>
-      <div class="input-group">
-        <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control"
-          id="{{'specifiedEfficiency_'+idString}}" formControlName="specifiedEfficiency"
-          (focus)="focusField('specifiedEfficiency')" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
-      <div class="input-group">
-        <input name="motorRatedVoltage" type="number" min="0" step="any"
-          class="form-control number-input-field" id="{{'motorRatedVoltage_'+idString}}" formControlName="motorRatedVoltage"
-           (focus)="focusField('motorRatedVoltage')" onfocus="this.select();">
-        <span class="input-group-addon units">V</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
-        Full-Load Amps
-        <a class="form-text small click-link"
-          id="flaHelp" (click)="getFullLoadAmps()">Estimate
-          Full-Load Amps</a>
-      </label>
-      <div class="input-group">
-        <input name="fullLoadAmps" type="number" min="0" step="any"
-          class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps"
-          (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
-        <span class="input-group-addon units">A</span>
-      </div>
-      </div>
+  <div class="form-group">
+    <label for="{{'lineFrequency_'+idString}}">Line Frequency</label>
+    <select name="lineFrequency" class="form-control number-input-field" id="{{'lineFrequency_'+idString}}"
+      formControlName="lineFrequency" (change)="changeLineFreq()" (focus)="focusField('lineFrequency')">
+      <option *ngFor="let lineFrequency of frequencies" value="lineFrequency">{{lineFrequency}} Hz</option>
+    </select>
   </div>
+
+  <div class="form-group">
+    <label for="{{'motorRatedPower_'+idString}}">Rated Motor Power</label>
+    <div name="motorRatedPower" class="input-group">
+      <input type="number" step="any" min="0" class="form-control number-input-field"
+        id="{{'motorRatedPower_'+idString}}" formControlName="motorRatedPower" (input)="calculate()" (focus)="focusField('motorRatedPower')"
+        onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.powerMeasurement}}</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
+    <div name="motorRpm" class="input-group">
+      <input type="number" step="10" min="0" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
+        formControlName="motorRpm" (focus)="focusField('motorRpm')" (input)="calculate()" onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
+    <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
+      formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
+      <option *ngFor="let efficiencyClass of efficiencyClasses" value="efficiencyClass.value">
+        {{efficiencyClass.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group" *ngIf="motorForm.controls.efficiencyClass.value == 3">
+    <label for="{{'specifiedEfficiency_'+idString}}">Efficiency</label>
+    <div class="input-group">
+      <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control"
+        id="{{'specifiedEfficiency_'+idString}}" formControlName="specifiedEfficiency"
+        (focus)="focusField('specifiedEfficiency')" (input)="calculate()" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
+    <div class="input-group">
+      <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field"
+        id="{{'motorRatedVoltage_'+idString}}" formControlName="motorRatedVoltage"
+        (focus)="focusField('motorRatedVoltage')" (input)="calculate()" onfocus="this.select();">
+      <span class="input-group-addon units">V</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
+      Full-Load Amps
+      <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate
+        Full-Load Amps</a>
+    </label>
+    <div class="input-group">
+      <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field"
+        id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')"
+        onfocus="this.select();">
+      <span class="input-group-addon units">A</span>
+    </div>
+  </div>
+
+  {{flaOutput}}
+
+
 </form>

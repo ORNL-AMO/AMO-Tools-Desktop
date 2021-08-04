@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FanMotor } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
@@ -7,18 +8,24 @@ declare var psatAddon: any;
 
 @Injectable()
 export class FullLoadAmpsService {
+
+  fullLoadAmpsInputs: BehaviorSubject<FanMotor>;
+  fullLoadAmpsOutputs: BehaviorSubject<FanMotor>;
+  resetData: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;
+
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   getFormFromObj(obj: FanMotor): FormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
     let form: FormGroup = this.formBuilder.group({
-      lineFrequency: [obj.lineFrequency, Validators.required],
-      motorRatedPower: [obj.motorRatedPower, Validators.required],
-      motorRpm: [obj.motorRpm, Validators.required],
-      efficiencyClass: [obj.efficiencyClass, Validators.required],
+      lineFrequency: [obj.lineFrequency],
+      motorRatedPower: [obj.motorRatedPower],
+      motorRpm: [obj.motorRpm],
+      efficiencyClass: [obj.efficiencyClass],
       specifiedEfficiency: [obj.specifiedEfficiency, specifiedEfficiencyValidators],
-      motorRatedVoltage: [obj.motorRatedVoltage, Validators.required],
-      fullLoadAmps: [obj.fullLoadAmps, Validators.required]
+      motorRatedVoltage: [obj.motorRatedVoltage],
+      fullLoadAmps: [obj.fullLoadAmps]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -87,5 +94,39 @@ export class FullLoadAmpsService {
     return Number(val.toFixed(digits))
   }
 
+  generateExampleData(settings: Settings){
+    let defaultData: FanMotor = {
+      lineFrequency: 60,
+      motorRatedPower: 600,
+      motorRpm: 1180,
+      efficiencyClass: 1,
+      specifiedEfficiency: 100,
+      motorRatedVoltage: 470,
+      fullLoadAmps: 683.25
+    };
+    this.fullLoadAmpsInputs.next(defaultData);
+  }
+
+  initDefualtEmptyInputs(settings: Settings){
+    let emptyInput = this.getFLAEmptyInputs(settings);
+    this.fullLoadAmpsInputs.next(emptyInput);
+  }
+
+  initDefualtEmptyOutputs(){
+
+  }
+
+  getFLAEmptyInputs(settings: Settings){
+    let emptyInput: FanMotor = {
+      lineFrequency: 50,
+      motorRatedPower: 0,
+      motorRpm: 0,
+      efficiencyClass: 0,
+      specifiedEfficiency: 0,
+      motorRatedVoltage: 0,
+      fullLoadAmps: 0
+    };
+    return emptyInput;
+  }
   
 }
