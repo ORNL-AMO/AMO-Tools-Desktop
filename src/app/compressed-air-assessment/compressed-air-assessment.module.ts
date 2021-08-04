@@ -99,6 +99,7 @@ import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/ex
 import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
+import { DayTypeService } from './day-types/day-type.service';
 
 @NgModule({
   declarations: [
@@ -206,7 +207,8 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     UnloadPointCalculationsService,
     SharedPointCalculationsService,
     PerformancePointsFormService,
-    ExploreOpportunitiesService
+    ExploreOpportunitiesService,
+    DayTypeService
   ]
 })
 export class CompressedAirAssessmentModule { }

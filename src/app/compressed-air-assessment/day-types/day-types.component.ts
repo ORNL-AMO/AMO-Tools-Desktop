@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { createFalse } from 'typescript';
@@ -6,6 +7,7 @@ import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDele
 import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
+import { DayTypeService } from './day-type.service';
 
 @Component({
   selector: 'app-day-types',
@@ -23,17 +25,24 @@ export class DayTypesComponent implements OnInit {
   
   deleteSelectedIndex: number;
   confirmDeleteDayTypeData: ConfirmDeleteData;
-  // invalidDayTypeIndex: number;
+  form: FormGroup;
+  isFormChange: boolean = false;
   hasValidDayTypes: boolean;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private router: Router,
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+    private dayTypeService: DayTypeService, private router: Router,
     private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
       this.setTotalDays();
-      this.hasValidDayTypes = this.inventoryService.hasValidDayTypes();
+      this.hasValidDayTypes = this.dayTypeService.hasValidDayTypes(val.compressedAirDayTypes);
+      if (this.isFormChange == false) {
+        this.form = this.dayTypeService.getDayTypeForm(this.compressedAirAssessment.compressedAirDayTypes);
+       } else {
+         this.isFormChange = false;
+       }
     });
   }
 
@@ -47,33 +56,24 @@ export class DayTypesComponent implements OnInit {
 
   addDayType() {
     this.compressedAirAssessment = this.inventoryService.addNewDayType(this.compressedAirAssessment, 'Day Type');
+    this.form = this.dayTypeService.getDayTypeForm(this.compressedAirAssessment.compressedAirDayTypes);
     this.save();
   }
 
-  // checkValidDays(index?: number) {
-  //   let summedTotalDays = this.compressedAirAssessment.compressedAirDayTypes.map(dayType => dayType.numberOfDays).reduce((yearDays, currentDayCount) => {
-  //     return yearDays + currentDayCount;
-  //   });
-  //   if (summedTotalDays > 365) {
-  //     this.invalidDayTypeIndex = index;
-  //     this.invalidDayTypes = true;
-  //   } else {
-  //     this.invalidDayTypeIndex = undefined;
-  //     this.invalidDayTypes = false;
-  //   }
-  //   console.log('exceeds max days index', this.invalidDayTypeIndex);
-  //   debugger;
-  //   // this.save();
-  // }
+  focusField(currentField: string) {}
 
   save() {
     //update modification day type names on changes
+    let compressedAirDaytypes: Array<CompressedAirDayType> = this.dayTypeService.getDayTypesFromForm(this.form);
+    this.compressedAirAssessment.compressedAirDayTypes = compressedAirDaytypes;
+    this.setTotalDays();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
         let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
         this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData[dayTypeIndex].dayTypeName = dayType.name;
       }
     })
+    this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -96,14 +96,18 @@ export class DayTypesComponent implements OnInit {
       this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.splice(dayTypeIndex, 1)
     }
     this.compressedAirAssessment.compressedAirDayTypes.splice(this.deleteSelectedIndex, 1);
+    if (this.deleteSelectedIndex > 0) {
+      this.form = this.dayTypeService.removeDayTypeInput(this.form, this.deleteSelectedIndex);
+    }
     this.deleteSelectedIndex = undefined;
     this.save();
   }
 
   openConfirmDeleteModal(index: number) {
+    let deleteDayType: CompressedAirDayType = this.dayTypeService.getDayTypesFromForm(this.form)[index]
     this.confirmDeleteDayTypeData = {
       modalTitle: 'Delete Day Type',
-      confirmMessage: `Are you sure you want to delete '${this.compressedAirAssessment.compressedAirDayTypes[index].name}'?`
+      confirmMessage: `Are you sure you want to delete '${deleteDayType.name}'?`
     }
     this.showConfirmDeleteModal = true;
     this.deleteSelectedIndex = index;
