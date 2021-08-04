@@ -57,6 +57,17 @@ export class CsvToJsonService {
     });
     return results;
   }
+
+  // Weather calc old method
+  parseCSV(csvData: any): CsvImportData {
+    let results: CsvImportData = Papa.parse(csvData, {
+      header: true,
+      dynamicTyping: true
+    });
+    //last item ends up as null
+    results.data.pop();
+    return results;
+  }
 }
 
 
