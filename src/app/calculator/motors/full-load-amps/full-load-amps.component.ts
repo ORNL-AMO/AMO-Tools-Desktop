@@ -13,7 +13,6 @@ export class FullLoadAmpsComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -44,6 +43,13 @@ export class FullLoadAmpsComponent implements OnInit {
     this.initSubscriptions();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+
   ngOnDestroy(){
     this.flaInputSub.unsubscribe();
   }
@@ -71,19 +77,13 @@ export class FullLoadAmpsComponent implements OnInit {
     this.fullLoadAmpsService.generateExample.next(true);
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.resizeTabs();
-    }, 100);
-  }
-
   setTab(str: string) {
     this.tabSelect = str;
   }
 
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 }

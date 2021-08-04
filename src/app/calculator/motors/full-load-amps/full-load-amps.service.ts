@@ -23,6 +23,8 @@ export class FullLoadAmpsService {
     this.currentField = new BehaviorSubject<string>('default');
   }
 
+  // TODO rhernandez Do we need further validation here?
+  
   getFormFromObj(obj: FanMotor): FormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
     let form: FormGroup = this.formBuilder.group({
@@ -78,7 +80,6 @@ export class FullLoadAmpsService {
       tmpEfficiency = flaInput.specifiedEfficiency;
     }
 
-    // TODO 
     let fullLoadAmpsResult = this.psatService.estFLA(
       flaInput.motorRatedPower,
       flaInput.motorRpm,
@@ -87,9 +88,18 @@ export class FullLoadAmpsService {
       tmpEfficiency,
       flaInput.motorRatedVoltage,
       settings
-    );
+      );
+      // TODO rhernandez find out if this should be converted
 
     this.fullLoadAmpsResult.next(fullLoadAmpsResult);
+  }
+
+  changeEfficiencyClass(form: FormGroup) {
+    let tmpEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(form.controls.efficiencyClass.value);
+    form.controls.efficiencyClass.setValidators(tmpEfficiencyValidators);
+    form.controls.efficiencyClass.reset(form.controls.efficiencyClass.value);
+    form.controls.efficiencyClass.markAsDirty();
+    return form;
   }
 
 
@@ -108,10 +118,11 @@ export class FullLoadAmpsService {
       fullLoadAmps: 683.25
     };
 
-    // TODO Do we need to convert the example?
+    // TODO rhernandez  Do we need to convert the example?
     this.fullLoadAmpsInputs.next(defaultData);
   }
 
+  // TODO Need defaults for efficiencyClass and line frequency
   initDefualtEmptyInputs(settings: Settings){
     let emptyInput: FanMotor = {
       lineFrequency: 50,

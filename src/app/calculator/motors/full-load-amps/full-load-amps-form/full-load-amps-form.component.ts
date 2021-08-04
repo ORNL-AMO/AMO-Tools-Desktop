@@ -32,11 +32,12 @@ export class FullLoadAmpsFormComponent implements OnInit {
   ];
   efficiencyClasses: Array<{ display: string, value: number }>;
   
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
+  constructor(private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
     this.efficiencyClasses = motorEfficiencyConstants;
+    
     this.idString = 'fla_calc';
   
     this.initSubscriptions();
@@ -65,6 +66,23 @@ export class FullLoadAmpsFormComponent implements OnInit {
     this.calculate();
   }
 
+  changeLineFreq() {
+    if (this.form.controls.lineFrequency.value === 60) {
+      if (this.form.controls.motorRpm.value === 1485) {
+        this.form.controls.motorRpm.patchValue(1780);
+      }
+    } else if (this.form.controls.lineFrequency.value === 50) {
+      if (this.form.controls.motorRpm.value === 1780) {
+        this.form.controls.motorRpm.patchValue(1485);
+      }
+    }
+    this.calculate();
+  }
+
+  changeEfficiencyClass() {
+    this.form = this.fullLoadAmpsService.changeEfficiencyClass(this.form);
+    this.calculate();
+  }
 
   focusField(str: string) {
     this.fullLoadAmpsService.currentField.next(str);

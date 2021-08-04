@@ -10,18 +10,18 @@
         </div>
 
         <div class="d-flex flex-column m-4">
-            <app-full-load-amps-form [form]="motorForm" (changeField)="changeField($event)"></app-full-load-amps-form>
+            <!-- <app-full-load-amps-form [form]="motorForm" (changeField)="changeField($event)"></app-full-load-amps-form> -->
+            <app-full-load-amps-form></app-full-load-amps-form>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
-                <!-- <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-                    Reset Data
-                </button> -->
-                <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                    (click)="btnGenerateExample()">
+                <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
                     Generate Example
+                </button>
+                <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+                    Reset Data
                 </button>
             </div>
         </div>
-    </div>
+        </div>
 
     <div class="d-flex flex-column w-50 mh-100 scroll-item">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
