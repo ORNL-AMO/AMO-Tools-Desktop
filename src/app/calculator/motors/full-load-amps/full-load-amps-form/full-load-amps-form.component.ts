@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { FullLoadAmpsService } from '../full-load-amps.service';
@@ -8,8 +8,8 @@ import { PsatService } from '../../../../psat/psat.service';
 import { Assessment } from '../../../../shared/models/assessment';
 import { FanMotor } from '../../../../shared/models/fans';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
-import { Output } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { FullLoadAmpsHelpComponent } from '../full-load-amps-help/full-load-amps-help.component';
 
 @Component({
   selector: 'app-full-load-amps-form',
@@ -24,7 +24,13 @@ export class FullLoadAmpsFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<FanMotor>();
 
-  @Input() motor: FanMotor;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
+
+  motor: FanMotor;
+
+  @Input()
+  motorForm: FormGroup;
 
 
 
@@ -37,7 +43,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
     60
   ];
   options: Array<any>;
-  motorForm: FormGroup;
+  //motorForm: FormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
 
@@ -45,7 +51,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
   selected: boolean = true;
   flaOutput: number;
   frequency: number;
-  constructor( private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
+  constructor( private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService, private fullLoadAmpsHelp: FullLoadAmpsHelpComponent) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
@@ -165,6 +171,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
 
 
   focusField(str: string) {
+    this.changeField.emit(str);
   }
 
 

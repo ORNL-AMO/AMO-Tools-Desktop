@@ -13,8 +13,15 @@ export class FullLoadAmpsService {
   fullLoadAmpsOutputs: BehaviorSubject<FanMotor>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  currentField: BehaviorSubject<string>;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.resetData = new BehaviorSubject<boolean>(undefined);
+    this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
+    this.fullLoadAmpsOutputs = new BehaviorSubject<FanMotor>(undefined);
+    this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.currentField = new BehaviorSubject<string>('default');
+   }
 
   getFormFromObj(obj: FanMotor): FormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
