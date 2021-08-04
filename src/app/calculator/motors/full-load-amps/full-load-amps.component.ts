@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -10,17 +10,42 @@ import { FullLoadAmpsService } from './full-load-amps.service';
   styleUrls: ['./full-load-amps.component.css']
 })
 export class FullLoadAmpsComponent implements OnInit {
-
-
-  flaInputSub: Subscription;
+  @Input()
   settings: Settings;
+  flaInputSub: Subscription;
+
+  // @Input()
+  // inTreasureHunt: boolean;
+  // @Input()
+  // operatingHours: OperatingHours;
+  
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+  
+  
+  containerHeight: number;
+  tabSelect: string = 'help';
+
   constructor(private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit() {
-    this.settings = this.settingsDbService.globalSettings;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     this.fullLoadAmpsService.initDefualtEmptyInputs(this.settings);
 
-    
+    let existingInputs = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
+    if(!existingInputs) {
+      this.fullLoadAmpsService.initDefualtEmptyInputs(this.settings);
+      this.fullLoadAmpsService.initDefualtEmptyOutputs();
+    }
+    this.initSubscriptions();
   }
 
   ngOnDestroy(){
@@ -28,18 +53,42 @@ export class FullLoadAmpsComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.flaInputSub = this.fullLoadAmpsService.fullLoadAmpsInputs.subscribe(value => {
-      this.fullLoadAmpsService.getFormFromObj(value);
+    this.flaInputSub = this.fullLoadAmpsService.fullLoadAmpsInputs.subscribe(updatedInputs => {
+      if (updatedInputs) {
+        this.calculate();
+      }
     })
   }
 
-  // calculate() {
-  //   this.fullLoadAmpsService.calculate(this.settings);
-  // }
+  calculate() {
+    this.fullLoadAmpsService.estimateFullLoadAmps(this.settings);
+  }
+
+  
+  btnResetData() {
+    this.fullLoadAmpsService.initDefualtEmptyInputs(this.settings);
+    this.fullLoadAmpsService.resetData.next(true);
+  }
 
   btnGenerateExample() {
     this.fullLoadAmpsService.generateExampleData(this.settings);
     this.fullLoadAmpsService.generateExample.next(true);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+    }
   }
 
 }

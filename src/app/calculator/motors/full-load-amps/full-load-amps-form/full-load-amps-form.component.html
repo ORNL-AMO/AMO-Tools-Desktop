@@ -1,10 +1,9 @@
-<form [formGroup]="motorForm">
+<form [formGroup]="form">
   <div class="d-flex flex-column">
     <div class="header mr-2 ml-2">
       <h3>Motor</h3>
     </div>
   </div>
-
 
   <div class="form-group">
     <label for="{{'lineFrequency_'+idString}}">Line Frequency</label>
@@ -20,7 +19,9 @@
       <input type="number" step="any" min="0" class="form-control number-input-field"
         id="{{'motorRatedPower_'+idString}}" formControlName="motorRatedPower" (input)="calculate()" (focus)="focusField('motorRatedPower')"
         onfocus="this.select();">
-      <span class="input-group-addon units">{{settings.powerMeasurement}}</span>
+      <!-- <span class="input-group-addon units">{{settings.powerMeasurement}}</span> -->
+      <!-- TODO Rachel find out units for imp/metric power -->
+      <span class="input-group-addon units">hp</span>
     </div>
   </div>
 
@@ -42,7 +43,7 @@
     </select>
   </div>
 
-  <div class="form-group" *ngIf="motorForm.controls.efficiencyClass.value == 3">
+  <div class="form-group" *ngIf="form.controls.efficiencyClass.value == 3">
     <label for="{{'specifiedEfficiency_'+idString}}">Efficiency</label>
     <div class="input-group">
       <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control"
@@ -62,7 +63,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
       Full-Load Amps
       <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate
@@ -74,9 +75,9 @@
         onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
-  </div>
+  </div> -->
 
-  {{flaOutput}}
+  {{fullLoadAmps}}
 
 
 </form>

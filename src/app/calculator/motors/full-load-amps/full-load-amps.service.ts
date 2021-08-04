@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PsatService } from '../../../psat/psat.service';
 import { FanMotor } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-declare var psatAddon: any;
 
 @Injectable()
 export class FullLoadAmpsService {
 
   fullLoadAmpsInputs: BehaviorSubject<FanMotor>;
-  fullLoadAmpsOutputs: BehaviorSubject<FanMotor>;
+  fullLoadAmpsResult: BehaviorSubject<number>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  currentField: BehaviorSubject<string>;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService) { 
+    // Behavior subjects must be instantiated with some value
+    this.resetData = new BehaviorSubject<boolean>(undefined);
+    this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
+    this.fullLoadAmpsResult = new BehaviorSubject<number>(undefined);
+    this.generateExample = new BehaviorSubject<boolean>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);
+  }
 
   getFormFromObj(obj: FanMotor): FormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
@@ -25,7 +32,6 @@ export class FullLoadAmpsService {
       efficiencyClass: [obj.efficiencyClass],
       specifiedEfficiency: [obj.specifiedEfficiency, specifiedEfficiencyValidators],
       motorRatedVoltage: [obj.motorRatedVoltage],
-      fullLoadAmps: [obj.fullLoadAmps]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -52,7 +58,7 @@ export class FullLoadAmpsService {
       efficiencyClass: form.controls.efficiencyClass.value,
       specifiedEfficiency: form.controls.specifiedEfficiency.value,
       motorRatedVoltage: form.controls.motorRatedVoltage.value,
-      fullLoadAmps: form.controls.fullLoadAmps.value
+      fullLoadAmps: undefined,
     };
     return obj;
   }
@@ -62,34 +68,31 @@ export class FullLoadAmpsService {
     return form.valid;
   }
 
-  estFLA(
-    horsePower: number,
-    motorRPM: number,
-    frequency: number,
-    efficiencyClass: number,
-    efficiency: number,
-    motorVoltage: number,
-    settings: Settings
-  ) {
-    if (settings.powerMeasurement != 'hp') {
-      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
-      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
-    }
-    if (motorRPM > 0) {
-      let inputs: any = {
-        motor_rated_power: horsePower,
-        motor_rated_speed: motorRPM,
-        line_frequency: frequency,
-        efficiency_class: efficiencyClass,
-        efficiency: efficiency,
-        motor_rated_voltage: motorVoltage
-      }
-      return this.roundVal(psatAddon.estFLA(inputs), 2);
+  estimateFullLoadAmps(settings: Settings) {
+    let flaInput = this.fullLoadAmpsInputs.getValue();
+    let tmpEfficiency: number;
+    
+    if (flaInput.efficiencyClass !== 3) {
+      tmpEfficiency = flaInput.efficiencyClass;
     } else {
-      return 0;
+      tmpEfficiency = flaInput.specifiedEfficiency;
     }
 
+    // TODO 
+    let fullLoadAmpsResult = this.psatService.estFLA(
+      flaInput.motorRatedPower,
+      flaInput.motorRpm,
+      flaInput.lineFrequency,
+      flaInput.efficiencyClass,
+      tmpEfficiency,
+      flaInput.motorRatedVoltage,
+      settings
+    );
+
+    this.fullLoadAmpsResult.next(fullLoadAmpsResult);
   }
+
+
   roundVal(val: number, digits: number) {
     return Number(val.toFixed(digits))
   }
@@ -104,19 +107,12 @@ export class FullLoadAmpsService {
       motorRatedVoltage: 470,
       fullLoadAmps: 683.25
     };
+
+    // TODO Do we need to convert the example?
     this.fullLoadAmpsInputs.next(defaultData);
   }
 
   initDefualtEmptyInputs(settings: Settings){
-    let emptyInput = this.getFLAEmptyInputs(settings);
-    this.fullLoadAmpsInputs.next(emptyInput);
-  }
-
-  initDefualtEmptyOutputs(){
-
-  }
-
-  getFLAEmptyInputs(settings: Settings){
     let emptyInput: FanMotor = {
       lineFrequency: 50,
       motorRatedPower: 0,
@@ -126,7 +122,11 @@ export class FullLoadAmpsService {
       motorRatedVoltage: 0,
       fullLoadAmps: 0
     };
-    return emptyInput;
+    this.fullLoadAmpsInputs.next(emptyInput);
+  }
+
+  initDefualtEmptyOutputs(){
+    this.fullLoadAmpsResult.next(undefined);
   }
   
 }
