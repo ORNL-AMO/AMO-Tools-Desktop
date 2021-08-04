@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Subscription } from 'rxjs';
 import { StackLossService } from '../../stack-loss.service';
+import { FlueGasMaterial } from '../../../../../shared/models/materials';
+import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';
 
 @Component({
   selector: 'app-stack-loss-by-volume',
@@ -27,7 +28,7 @@ export class StackLossByVolumeComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  options: any;
+  options: Array<FlueGasMaterial>;
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -105,7 +106,7 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       CH4: this.stackLossForm.controls.CH4.value,
       C2H6: this.stackLossForm.controls.C2H6.value,
       N2: this.stackLossForm.controls.N2.value,
@@ -152,20 +153,22 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
-    this.stackLossForm.patchValue({
-      CH4: this.roundVal(tmpFlueGas.CH4, 4),
-      C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
-      N2: this.roundVal(tmpFlueGas.N2, 4),
-      H2: this.roundVal(tmpFlueGas.H2, 4),
-      C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
-      C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
-      H2O: this.roundVal(tmpFlueGas.H2O, 4),
-      CO: this.roundVal(tmpFlueGas.CO, 4),
-      CO2: this.roundVal(tmpFlueGas.CO2, 4),
-      SO2: this.roundVal(tmpFlueGas.SO2, 4),
-      O2: this.roundVal(tmpFlueGas.O2, 4)
-    });
+    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.stackLossForm.patchValue({
+        CH4: this.roundVal(tmpFlueGas.CH4, 4),
+        C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
+        N2: this.roundVal(tmpFlueGas.N2, 4),
+        H2: this.roundVal(tmpFlueGas.H2, 4),
+        C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
+        C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
+        H2O: this.roundVal(tmpFlueGas.H2O, 4),
+        CO: this.roundVal(tmpFlueGas.CO, 4),
+        CO2: this.roundVal(tmpFlueGas.CO2, 4),
+        SO2: this.roundVal(tmpFlueGas.SO2, 4),
+        O2: this.roundVal(tmpFlueGas.O2, 4)
+      });
+    }
     this.calculate();
   }
   roundVal(val: number, digits: number) {

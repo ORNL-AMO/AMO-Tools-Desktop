@@ -1,0 +1,215 @@
+
+<div class="p-3 pt-3 d-flex flex-column help-info">
+    <h5>
+      Vent Steam to Heat Water Help
+      <br>
+      <small class="text-muted">
+        This tool is used to calculate energy and related cost saving when vent steam is used to heat domestic hot water. 
+        This is achieved using a steam to water heat exchanger.  The calculator requires data on steam flow and steam
+         conditions as well as water flow and inlet conditions.  The steam source can be deaerator water tanks, flash 
+         steam from condensate return tank or any other equipment / process that vents steam into the atmosphere.
+          Savings calculations are based on heat exchanger efficiency and reduction or elimination of energy cost 
+          used to heat domestic water that will be heated by using vent steam. 
+        <br>
+        <div class="alert-info p-3 small text-left">
+          Additional energy savings are available on the steam/boiler side as vent steam is condensed back and recovered. 
+          Makeup water is also saved in addition to the chemical treatment costs. To quantify the additional savings, 
+          additional inputs of boiler efficiency, water and treatment costs, makeup water temperature are needed.
+        </div>
+      </small>
+      <hr>
+    </h5>
+  
+    <div class="my-2" *ngIf="currentField == 'pressureSteamIn'">
+      <h6>
+        Vent Steam Pressure
+        <br>
+        <small class="text-muted">
+          This is available vent steam for heat recovery. The steam pressure can be obtained from production or process data in gauge pressure.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flowSteamRate'">
+      <h6>
+        Vent Steam Mass Flow Rate
+        <br>
+        <small class="text-muted">
+          This is the mass flow rate of the vented steam. This is measured or available from production/process data. 
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'temperatureWaterIn'">
+      <h6>
+        Water HX Inlet Temperature
+        <br>
+        <small class="text-muted">
+          This is the temperature of inlet (cold) water supplied to the heat exchanger.
+          This is usually measured or obtained from production - process data
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'pressureWaterOut'">
+      <h6>
+        Water HX Outlet Pressure
+        <br>
+        <small class="text-muted">
+          This is the pressure of outlet (hot) water coming out from the heat exchanger. This pressure is measured or obtained from production - process data
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'flowWaterRate'">
+      <h6>
+        Water HX Flow Rate
+        <br>
+        <small class="text-muted">
+          This is the flow rate of heated water. This is measured or obtained from production - process data.
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'effWaterHeater'">
+      <h6>
+        Current Water Heater Efficiency
+        <br>
+        <small class="text-muted">
+          This is efficiency of the existing water heater that is partially or completely offset. 
+          This can vary from 65% to 85% depending on the design and cost of equipment. 
+          A nominal value of 75% can be used as a default number.
+        </small>
+      </h6>
+    </div>
+
+      
+    <div class="my-2" *ngIf="currentField == 'operationHours'">
+        <h6>
+          Operating Hours
+          <br>
+          <small class="text-muted">
+            Number of hours for which the heat exchanger would be operated during the full year. 
+            This can be obtained from the data collection system if available or can be estimated from 
+            interview with knowledgeable operators. Generally, vent steam schedule and hot water demand 
+            schedule should be compared and overlapping hours should be used.
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0 hrs/yr</td>
+                <td class="text-center">8760 hrs/yr</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'fuelCost'">
+        <h6>
+          Cost of Fuel (Water Heater)
+          <br>
+          <small class="text-muted">
+            This is unit cost of gas.  It can be obtained from a gas bill or from a gas company representative.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'fuelHV'">
+        <h6>
+          Heating Value of Natural Gas
+          <br>
+          <small class="text-muted">
+            This is the calorific value of the fuel used for the water heater which will be 
+            saved. This can be obtained from the fuel composition analysis report or fuel invoice. 
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'tempMakeupWater'">
+        <h6>
+          Makeup Water Temperature
+          <br>
+          <small class="text-muted">
+            Temperature of makeup water used for steam generating boiler. If the source is city water / river / lake the temperature will be within range of 50 to 100°F. 60°F can be used as default number.
+          </small>
+        </h6>
+      </div>
+
+      
+      <div class="my-2" *ngIf="currentField == 'presMakeupWater'">
+        <h6>
+            Makeup Water Pressure
+          <br>
+          <small class="text-muted">
+            Pressure of makeup water used for steam generating boiler. This is a usually measured process variable. If unmeasured same value as boiler feed water tank could be used.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'fuelCostBoiler'">
+        <h6>
+            Cost of Fuel (Steam Boiler)
+          <br>
+          <small class="text-muted">
+            This is the cost of fuel used for steam generation boiler. It can be same fuel as the hot water heater gas. If steam is generated using a boiler that does not use the same fuel as the hot water heater this input will yield more accurate results for savings.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'heatingValueGas'">
+        <h6>
+            Cost of Fuel (Steam Boiler)
+          <br>
+          <small class="text-muted">
+            This is the calorific value of the fuel used for the water heater which will be saved. This can be obtained from the fuel composition analysis report or fuel invoice. 
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'effBoiler'">
+        <h6>
+            Boiler Efficiency
+          <br>
+          <small class="text-muted">
+            The efficiency of steam boiler can vary from 65% to 95% depending on the design, fuel and application of the equipment.  A nominal value of 80% can be used as a default number.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'waterCost'">
+        <h6>
+            Cost of Makeup Water
+          <br>
+          <small class="text-muted">
+            This is cost of supplied water and can vary from $1 to $8 per 1000 gallons of water. A default number of $0.002/gal can be used.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'treatCost'">
+        <h6>
+            Cost of Makeup Water Treatment
+          <br>
+          <small class="text-muted">
+            This is cost of chemical treatment for makeup water. This can also vary from $1 to $7 per 1000 gallons of water. A default number of $0.002/gal can be used.
+          </small>
+        </h6>
+      </div>
+      <hr *ngIf="currentField != undefined">
+      <div class="justify-content-center mx-auto">
+      <img src="assets/images/water-heating-diagram.png" class="help-img">
+    </div>
+

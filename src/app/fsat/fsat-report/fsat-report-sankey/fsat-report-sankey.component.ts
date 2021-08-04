@@ -18,22 +18,34 @@ export class FsatReportSankeyComponent implements OnInit {
   fsat2CostSavings: number;
   fsat1: FSAT;
   fsat2: FSAT;
+  fsat1Baseline: boolean = true;
+  fsat2Baseline: boolean = false;
   constructor() { }
 
   ngOnInit() {
     this.fsat1 = this.assessment.fsat;
-    this.setPsat1Savings();
+    this.setFsat1Savings();
     if (this.assessment.fsat.modifications.length != 0) {
       this.fsat2 = this.assessment.fsat.modifications[0].fsat;
-      this.setPsat2Savings();
+      this.setFsat2Savings();
     }
   }
 
-  setPsat1Savings() {
+  setFsat1Savings() {
     this.fsat1CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat1.outputs.annualCost;
   }
 
-  setPsat2Savings() {
+  setFsat2Savings() {
+    this.fsat2CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat2.outputs.annualCost;
+  }
+
+  setFsat1() {
+    this.fsat1Baseline = this.assessment.fsat.name == this.fsat1.name? true : false
+    this.fsat1CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat1.outputs.annualCost;
+  }
+
+  setFsat2() {
+    this.fsat2Baseline = this.assessment.fsat.name == this.fsat2.name? true : false
     this.fsat2CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat2.outputs.annualCost;
   }
 

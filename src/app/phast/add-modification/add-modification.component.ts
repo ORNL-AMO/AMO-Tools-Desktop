@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
+import { SavingsOpportunity } from '../../shared/models/explore-opps';
 
 @Component({
   selector: 'app-add-modification',
@@ -41,6 +42,7 @@ export class AddModificationComponent implements OnInit {
   }
 
   addModification() {
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -62,7 +64,22 @@ export class AddModificationComponent implements OnInit {
         exhaustGasNotes: '',
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
-      }
+      },
+      exploreOppsShowFlueGas: exploreOppsDefault,
+      exploreOppsShowAirTemp: exploreOppsDefault,
+      exploreOppsShowMaterial: exploreOppsDefault,
+      exploreOppsShowAllTimeOpen: exploreOppsDefault,
+      exploreOppsShowOpening: exploreOppsDefault,
+      exploreOppsShowAllEmissivity: exploreOppsDefault,
+      exploreOppsShowCooling: exploreOppsDefault,
+      exploreOppsShowAtmosphere: exploreOppsDefault,
+      exploreOppsShowOperations: exploreOppsDefault,
+      exploreOppsShowLeakage: exploreOppsDefault,
+      exploreOppsShowSlag: exploreOppsDefault,
+      exploreOppsShowEfficiencyData: exploreOppsDefault,
+      exploreOppsShowWall: exploreOppsDefault,
+      exploreOppsShowAllTemp: exploreOppsDefault,
+      exploreOppsShowFixtures: exploreOppsDefault,
     };
     if (this.currentTab === 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;

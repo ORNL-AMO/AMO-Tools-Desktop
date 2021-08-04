@@ -46,7 +46,7 @@ import { PipeInsulationReductionComponent } from '../calculator/steam/pipe-insul
 import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
-import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
+import { WaterReductionComponent } from '../calculator/waste-water/water-reduction/water-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
@@ -81,9 +81,25 @@ import { SteamReductionComponent } from '../calculator/steam/steam-reduction/ste
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
-import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { FanPsychrometricComponent } from '../calculator/process-cooling/fan-psychrometric/fan-psychrometric.component';
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
+import { WallComponent } from '../calculator/furnaces/wall/wall.component';
+import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.component';
+import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
+import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
+import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
+import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
+import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
+import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
+import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
+import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
+import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
+import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
+import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
 
 export const coreRoutes: Routes = [
   {
@@ -221,6 +237,10 @@ export const coreRoutes: Routes = [
             component: FanAnalysisComponent
           },
           {
+            path: 'fan-system-checklist',
+            component: FanSystemChecklistComponent
+          },
+          {
             path: 'fan-efficiency',
             component: FanEfficiencyComponent
           },
@@ -277,6 +297,10 @@ export const coreRoutes: Routes = [
             component: WaterReductionComponent
           },
           {
+            path: 'water-heating',
+            component: WaterHeatingComponent
+          },
+          {
             path: 'steam-reduction',
             component: SteamReductionComponent
           },
@@ -319,6 +343,50 @@ export const coreRoutes: Routes = [
           {
             path: 'o2-enrichment',
             component: O2EnrichmentComponent
+          },
+          {
+            path: 'atmosphere',
+            component: AtmosphereComponent
+          },
+          {
+            path: 'cooling',
+            component: CoolingComponent
+          },
+          {
+            path: 'wall-loss',
+            component: WallComponent
+          },
+          {
+            path: 'opening',
+            component: OpeningComponent
+          },
+          {
+            path: 'heat-cascading',
+            component: HeatCascadingComponent
+          },
+          {
+            path: 'flue-gas',
+            component: FlueGasComponent
+          },
+          {
+            path: 'air-heating',
+            component: AirHeatingComponent
+          },
+          {
+            path: 'waste-heat',
+            component: WasteHeatComponent
+          },
+          {
+            path: 'charge-material',
+            component: ChargeMaterialComponent
+          },
+          {
+            path: 'leakage',
+            component: LeakageComponent
+          },
+          {
+            path: 'fixture',
+            component: FixtureComponent
           },
           {
             path: 'achievable-efficiency',
@@ -391,6 +459,14 @@ export const coreRoutes: Routes = [
           {
             path: 'cooling-tower',
             component: CoolingTowerComponent
+          },
+          {
+            path: 'waste-water-list',
+            component: WasteWaterListComponent
+          },
+          {
+            path: 'o2-utilization-rate',
+            component: O2UtilizationRateComponent
           }
         ]
       }
@@ -441,4 +517,8 @@ export const coreRoutes: Routes = [
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
   },
+  {
+    component: WasteWaterComponent,
+    path: 'waste-water/:id',
+  }
 ];

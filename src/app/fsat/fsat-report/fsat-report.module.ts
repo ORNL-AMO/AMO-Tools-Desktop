@@ -9,7 +9,7 @@ import { FieldDataSummaryComponent } from './input-summary/field-data-summary/fi
 import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-motor-summary.component';
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
-import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
+import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
 import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
 import { ModalModule } from '../../../../node_modules/ngx-bootstrap';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
@@ -17,6 +17,9 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { DetailedResultsComponent } from './detailed-results/detailed-results.component';
+import { TraverseResultsComponent } from './detailed-results/traverse-results/traverse-results.component';
 
 
 @NgModule({
@@ -29,9 +32,10 @@ import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
     PercentGraphModule,
-    PieChartModule
+    PieChartModule,
+    SharedPipesModule,
   ],
-  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent],
+  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent, TraverseResultsComponent],
   exports: [FsatReportComponent]
 })
 export class FsatReportModule { }

@@ -13,6 +13,15 @@
     z-index: 5;
 }
 
+.show-bottom {
+    top: 100%;
+}
+
+.show-top {
+    top: -100%;
+}
+
+
 .revealed-tooltip-box {
     display: initial;
     /* top: initial; */

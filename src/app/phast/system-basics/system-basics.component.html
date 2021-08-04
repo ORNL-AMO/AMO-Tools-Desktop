@@ -2,25 +2,34 @@
   <div class="header mr-2 ml-2">
     <h3>{{assessment.name}} Settings</h3>
     <br>
-    <a class="no-data-link" *ngIf="showUpdateData" (click)="updateData()">Your units have changed! Click here to update
-      your data to reflect these changes!</a>
-    <span class="data-updated" *ngIf="dataUpdated">Data Updated!</span>
+  </div>
+  <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
+    <div>Units of measure were changed after assessment data was entered. 
+      <br>Please update your assessment data for accurate results.
+    </div>
+    <a class="click-link" (click)="updateData(true)">Update Data</a>
+  </div>
+  <div class="alert-success mt-3 py-3 small mx-auto w-75 text-center" *ngIf="showSuccessMessage">
+    <div>
+      Data updated successfully!
+    </div>
+    <a class="click-link" (click)="dismissSuccessMessage()">Dismiss</a>
   </div>
   <div class="p-4">
-    <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges(true)">
+    <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()">
     </app-application-settings>
-    <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges(true)" [disable]="lossesExist">
+    <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [disable]="lossesExist">
     </app-phast-settings>
     <form>
       <div class="form-group">
         <label class="group-label w-100">Equipment Notes</label>
-        <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges(true)"
+        <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveSettings()"
           [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
       </div>
       <div class="form-group">
         <label class="group-label w-100">
           Operating Conditions at time of Assessment</label>
-        <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges(true)"
+        <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveSettings()"
           [(ngModel)]="phast.operatingHours.operatingConditions"
           placeholder="Add note for operating conditions"></textarea>
       </div>

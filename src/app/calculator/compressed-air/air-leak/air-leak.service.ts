@@ -138,7 +138,6 @@ export class AirLeakService {
       let converted = this.convertAirleakService.convertResult(leakResult, settings);
       leakResults.push(converted)
     });
-
     // Get cumulative leak results
     let baselineResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(baselineLeaks);
     let modificationResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(modificationLeaks);
@@ -151,6 +150,17 @@ export class AirLeakService {
       annualTotalElectricityCost: baselineResults.annualTotalElectricityCost - modificationResults.annualTotalElectricityCost,
       annualTotalFlowRate: baselineResults.annualTotalFlowRate - modificationResults.annualTotalFlowRate,
     }
+
+    if (inputCopy.facilityCompressorData.utilityType == 1) {
+      let compressorControlAdjustment: number = airLeakSurveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment || 1;
+      savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
+      savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
+    }
+
+      // overwrite estimated annualTotalElectricity value originally set in suite results
+    modificationResults.annualTotalElectricity = baselineResults.annualTotalElectricity - savings.annualTotalElectricity;
+    modificationResults.annualTotalElectricityCost = baselineResults.annualTotalElectricityCost - savings.annualTotalElectricityCost;
+
     let outputs: AirLeakSurveyOutput = {
       leakResults: leakResults,
       baselineData: baselineResults,

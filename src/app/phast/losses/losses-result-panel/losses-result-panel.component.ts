@@ -26,6 +26,8 @@ export class LossesResultPanelComponent implements OnInit {
   @Input()
   inSetup: boolean;
   @Input()
+  inModifyConditions: boolean;
+  @Input()
   containerHeight: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
@@ -37,12 +39,16 @@ export class LossesResultPanelComponent implements OnInit {
 
   tabSelect: string = 'results';
   helpHeight: number;
+  sankeyView: string = 'Baseline';
+  baselineSankey: PHAST;
+  modificationSankey: PHAST;
   constructor(private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.getSankeyData();
   }
 
   ngAfterViewInit() {
@@ -63,6 +69,13 @@ export class LossesResultPanelComponent implements OnInit {
     if (this.containerHeight && this.resultTabs) {
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
+    }
+  }
+
+  getSankeyData() {
+    this.baselineSankey = this.phast;
+    if (this.modification) {
+      this.modificationSankey = this.modification.phast;
     }
   }
 

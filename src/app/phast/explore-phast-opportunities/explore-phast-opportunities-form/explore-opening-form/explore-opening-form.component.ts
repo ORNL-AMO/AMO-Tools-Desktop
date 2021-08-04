@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import { OpeningLossesService, OpeningLossWarnings } from '../../../losses/opening-losses/opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { LossTab } from '../../../tabs';
+import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 
 @Component({
   selector: 'app-explore-opening-form',
@@ -34,7 +35,10 @@ export class ExploreOpeningFormComponent implements OnInit {
   showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>;
   showSize: Array<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+  constructor(private convertUnitsService: ConvertUnitsService,
+    private openingLossesService: OpeningService,
+    private openingFormService: OpeningFormService,
+    private phastService: PhastService) { }
 
   ngOnInit() {
     this.initData();
@@ -47,23 +51,22 @@ export class ExploreOpeningFormComponent implements OnInit {
       }
     }
   }
-  
+
   initData() {
+    this.initWarnings();
     this.showViewFactor = new Array();
     this.showSize = new Array();
     this.showEmissivity = new Array<boolean>();
     this.showTimeOpen = new Array<boolean>();
-    this.baselineWarnings = new Array<OpeningLossWarnings>();
-    this.modificationWarnings = new Array<OpeningLossWarnings>();
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' }; 
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install curtains or radiation shields to reduce opening losses' }; 
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
-    
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' };
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install Curtains or Radiation Shields to Reduce Opening Losses' };
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' };
+
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: check, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: check, display: 'Minimize Opening Size or Install Tunnel-like Extensions' };
       }
       this.showSize.push(check);
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index);
@@ -73,18 +76,18 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.showViewFactor.push(!check);
       check = (loss.emissivity !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: check, display: 'Install curtains or radiation shields to reduce opening losses' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: check, display: 'Install Curtains or Radiation Shields to Reduce Opening Losses' };
       }
       this.showEmissivity.push(check);
       check = (loss.percentTimeOpen !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
       this.showTimeOpen.push(check);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' };
       }
 
-      let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
+      let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.openingLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
+      tmpWarnings = this.openingFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
     });
@@ -201,15 +204,46 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(this.phast.losses.openingLosses[index]);
+    let calculatedViewFactor = this.calculateViewFactor(this.phast.losses.openingLosses[index]);
+    let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(this.phast.losses.openingLosses[index], calculatedViewFactor);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
+    let calculatedViewFactor = this.calculateViewFactor(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
+    let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], calculatedViewFactor);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
+  }
+
+  initWarnings() {
+    this.baselineWarnings = new Array<OpeningLossWarnings>(
+      {
+        temperatureWarning: null,
+        emissivityWarning: null,
+        timeOpenWarning: null,
+        numOpeningsWarning: null,
+        thicknessWarning: null,
+        lengthWarning: null,
+        heightWarning: null,
+        viewFactorWarning: null,
+        calculateVFWarning: null,
+      }
+    );
+    this.modificationWarnings = new Array<OpeningLossWarnings>(
+      {
+        temperatureWarning: null,
+        emissivityWarning: null,
+        timeOpenWarning: null,
+        numOpeningsWarning: null,
+        thicknessWarning: null,
+        lengthWarning: null,
+        heightWarning: null,
+        viewFactorWarning: null,
+        calculateVFWarning: null
+      }
+    );
   }
 
   toggleAllTimeOpen() {
@@ -255,10 +289,16 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   calculateViewFactor(loss: OpeningLoss) {
-    let openingLossform: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+    let openingLossform: FormGroup = this.openingFormService.getFormFromLoss(loss);
     let vfInputs = this.openingLossesService.getViewFactorInput(openingLossform);
     let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
-    loss.viewFactor = Number(viewFactor.toFixed(3));
-    this.calculate();
+    viewFactor = Number(viewFactor.toFixed(3));
+    return viewFactor;
+  }
+
+  setViewFactor(loss: OpeningLoss, index: number) {
+    loss.viewFactor = this.calculateViewFactor(loss);
+    this.checkBaselineWarnings(index);
+    this.checkModificationWarnings(index);
   }
 }

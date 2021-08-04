@@ -6,17 +6,18 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
-import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
-import { StepTab, LossTab } from './tabs';
+import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { Directory } from '../shared/models/directory';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsService } from '../settings/settings.service';
+import { PhastValidService } from './phast-valid.service';
+import { SavingsOpportunity } from '../shared/models/explore-opps';
+import { ConvertPhastService } from './convert-phast.service';
 
 @Component({
   selector: 'app-phast',
@@ -24,6 +25,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   //elementRefs used for getting container height for scrolling
@@ -31,6 +33,12 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+  sankeyLabelStyle: string = 'both';
+  phastOptions: Array<{ name: string, phast: PHAST }>;
+  showSankeyLabelOptions: boolean;
+
+  showUpdateUnitsModal: boolean;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -40,7 +48,6 @@ export class PhastComponent implements OnInit {
   assessment: Assessment;
   saveClicked: boolean = false;
   settings: Settings;
-  isAssessmentSettings: boolean;
   stepTab: StepTab;
   _phast: PHAST;
 
@@ -70,15 +77,16 @@ export class PhastComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
+    private convertPhastService: ConvertPhastService,
+    private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private settingsService: SettingsService,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService,
-    private assessmentDbService: AssessmentDbService) {
+    private assessmentDbService: AssessmentDbService,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -89,57 +97,56 @@ export class PhastComponent implements OnInit {
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      let tmpAssessmentId = params['id'];
-      //get assessment from iDb using assessmentId
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
-        //use copy of phast object of as modal provided to forms
-        this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
-        if (this._phast.modifications) {
-          if (this._phast.modifications.length !== 0) {
-            if (!this._phast.modifications[0].exploreOpportunities) {
-              this.phastService.assessmentTab.next('modify-conditions');
-            }
-            if (this._phast.setupDone) {
-              this.phastCompareService.setCompareVals(this._phast, 0, false);
-            }
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      //use copy of phast object of as modal provided to forms
+      this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      if (this._phast.modifications) {
+        if (this._phast.modifications.length !== 0) {
+          this._phast.modifications.forEach(modification => {
+            this.setExploreOppsDefaults(modification);
+          })
+          if (!this._phast.modifications[0].exploreOpportunities) {
+            this.phastService.assessmentTab.next('modify-conditions');
+          }
+          if (this._phast.setupDone) {
+            this.phastCompareService.setCompareVals(this._phast, 0, false);
           }
         }
-        //get settings
-        this.getSettings();
-      });
-      //check to see if we need to start on a specified tab
-      let tmpTab = this.assessmentService.getTab();
-      if (tmpTab) {
-        //set that tab
-        this.phastService.mainTab.next(tmpTab);
       }
-      //subscription for mainTab
-      this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
-        this.mainTab = val;
-        //on tab change get container height
-        this.getContainerHeight();
-        this.checkTutorials();
-      });
-      //subscription for stepTab
-      this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
-        this.stepTab = val;
-        //on tab change get container height
-        this.getContainerHeight();
-      });
-      //specTab used for: system basics, operating hours and operating costs
-      this.specTabSubscription = this.phastService.specTab.subscribe(val => {
-        this.specTab = val;
-      });
-      //tabs used for heat balance
-      this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
-        this.selectedLossTab = this.lossesService.getTab(tab);
-      });
-      //modify conditions or explore opps tab
-      this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
-        this.assessmentTab = tab;
-        this.getContainerHeight();
-      });
+      this.getSettings();
+      this.initSankeyList();
+    });
+    //check to see if we need to start on a specified tab
+    let tmpTab = this.assessmentService.getTab();
+    if (tmpTab) {
+      //set that tab
+      this.phastService.mainTab.next(tmpTab);
+    }
+    //subscription for mainTab
+    this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
+      this.mainTab = val;
+      //on tab change get container height
+      this.getContainerHeight();
+      this.checkTutorials();
+    });
+    //subscription for stepTab
+    this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
+      this.stepTab = val;
+      //on tab change get container height
+      this.getContainerHeight();
+    });
+    //specTab used for: system basics, operating hours and operating costs
+    this.specTabSubscription = this.phastService.specTab.subscribe(val => {
+      this.specTab = val;
+    });
+    //tabs used for heat balance
+    this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
+      this.selectedLossTab = this.lossesService.getTab(tab);
+    });
+    //modify conditions or explore opps tab
+    this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
+      this.assessmentTab = tab;
+      this.getContainerHeight();
     });
     //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
@@ -169,8 +176,58 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
   }
 
+  setExploreOppsDefaults(modification: Modification) {  
+    // old assessments with scenario added - prevent break on missing properties
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+      if (modification.exploreOppsShowAirTemp == undefined) {
+        modification.exploreOppsShowAirTemp = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowFlueGas == undefined) {
+        modification.exploreOppsShowFlueGas = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowMaterial == undefined) {
+        modification.exploreOppsShowMaterial = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllTimeOpen == undefined) {
+        modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowOpening == undefined) {
+        modification.exploreOppsShowOpening = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllEmissivity == undefined) {
+        modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowCooling == undefined) {
+        modification.exploreOppsShowCooling = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAtmosphere == undefined) {
+        modification.exploreOppsShowAtmosphere = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowOperations == undefined) {
+        modification.exploreOppsShowOperations = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowLeakage == undefined) {
+        modification.exploreOppsShowLeakage = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowSlag == undefined) {
+        modification.exploreOppsShowSlag = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowEfficiencyData == undefined) {
+        modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowWall == undefined) {
+        modification.exploreOppsShowWall = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllTemp == undefined) {
+        modification.exploreOppsShowAllTemp = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowFixtures == undefined) {
+        modification.exploreOppsShowFixtures = exploreOppsDefault;
+      }
+  }
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
@@ -193,6 +250,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSubscription.unsubscribe();
+
     //reset services
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
@@ -217,6 +275,7 @@ export class PhastComponent implements OnInit {
   checkSetupDone() {
     //use copy so we don't modify existing
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this._phast.valid = this.phastValidService.checkValid(JSON.parse(JSON.stringify(this._phast)), this.settings);
     this.lossesService.updateTabs.next(true);
     //set current phast as selected sankey in sankey tab
     this.sankeyPhast = this._phast;
@@ -226,6 +285,19 @@ export class PhastComponent implements OnInit {
     }
     else {
       this.tab2Status = 'missing-data';
+    }
+    this.cd.detectChanges();
+  }
+
+  initSankeyList() {
+    this.phastOptions = new Array<{ name: string, phast: PHAST }>();
+    this.phastOptions.push({ name: 'Baseline', phast: this._phast });
+    this.sankeyPhast = this.phastOptions[0].phast;
+    this.showSankeyLabelOptions = ((this.sankeyPhast.name == 'Baseline' || this.sankeyPhast.name == null) && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);
+    if (this._phast.modifications) {
+      this._phast.modifications.forEach(mod => {
+        this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
+      });
     }
   }
 
@@ -264,46 +336,12 @@ export class PhastComponent implements OnInit {
   }
 
   getSettings() {
-    //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      if (tmpSettings.unitsOfMeasure == 'Custom') {
-        tmpSettings.unitsOfMeasure = 'Imperial';
-      }
-      this.settings = tmpSettings;
-      //sets which tabs will be used based on settings
-      this.lossesService.setTabs(this.settings);
-      this.isAssessmentSettings = true;
-      this.checkSetupDone();
-      this.tab1Status = this.validateSettings();
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(tmpSettings);
     } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-      this.tab1Status = this.validateSettings();
-    }
-  }
-  //assessment doesn't have it's own settings, get directory settings to start
-  getParentDirectorySettings(parentId: number) {
-    let tmpParentSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (tmpParentSettings) {
-      //create new settings for this assessment
-      let settingsForm = this.settingsService.getFormFromSettings(tmpParentSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.getSettings();
-          });
-        });
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      //get parent directory and recursively call this function until you have settings
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+      this.lossesService.setTabs(this.settings);
     }
   }
 
@@ -387,6 +425,10 @@ export class PhastComponent implements OnInit {
     //TODO: Logic for exporting data (csv?)
   }
 
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
+  }
+
   selectModificationModal() {
     this.isModalOpen = true;
     this.changeModificationModal.show();
@@ -409,6 +451,7 @@ export class PhastComponent implements OnInit {
 
   saveNewMod(mod: Modification) {
     this._phast.modifications.push(mod);
+    this.initSankeyList();
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
     this.saveDb();
@@ -416,6 +459,7 @@ export class PhastComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -437,7 +481,22 @@ export class PhastComponent implements OnInit {
         exhaustGasNotes: '',
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
-      }
+      },
+      exploreOppsShowFlueGas: exploreOppsDefault,
+      exploreOppsShowAirTemp: exploreOppsDefault,
+      exploreOppsShowMaterial: exploreOppsDefault,
+      exploreOppsShowAllTimeOpen: exploreOppsDefault,
+      exploreOppsShowOpening: exploreOppsDefault,
+      exploreOppsShowAllEmissivity: exploreOppsDefault,
+      exploreOppsShowCooling: exploreOppsDefault,
+      exploreOppsShowAtmosphere: exploreOppsDefault,
+      exploreOppsShowOperations: exploreOppsDefault,
+      exploreOppsShowLeakage: exploreOppsDefault,
+      exploreOppsShowSlag: exploreOppsDefault,
+      exploreOppsShowEfficiencyData: exploreOppsDefault,
+      exploreOppsShowWall: exploreOppsDefault,
+      exploreOppsShowAllTemp: exploreOppsDefault,
+      exploreOppsShowFixtures: exploreOppsDefault,
     };
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
@@ -473,4 +532,51 @@ export class PhastComponent implements OnInit {
     });
     this.hideToast();
   }
+
+  addSettings(settings: Settings) {
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.lossesService.setTabs(this.settings);
+      });
+    });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.phastService.mainTab.next('system-setup');
+      this.phastService.stepTab.next(stepTabs[0]);
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if (shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.saveDb();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    if (this._phast.losses) {
+      this._phast = this.convertPhastService.convertExistingData(this._phast, this.oldSettings, this.settings);
+      this.saveDb();
+      // Get updated settings passed down to system-basics
+      this.getSettings();
+      this._phast.lossDataUnits = this.settings.unitsOfMeasure;
+    }
+
+  }
+
 }

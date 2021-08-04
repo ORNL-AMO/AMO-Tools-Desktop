@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { FlueGasMaterial } from '../../../../shared/models/materials';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 @Component({
   selector: 'app-flue-gas-summary',
   templateUrl: './flue-gas-summary.component.html',
@@ -18,8 +18,8 @@ export class FlueGasSummaryComponent implements OnInit {
   printView: boolean;
   
   lossData: Array<any>;
-  volumeOptions: Array<any>;
-  massOptions: Array<any>;
+  volumeOptions: Array<FlueGasMaterial>;
+  massOptions: Array<SolidLiquidFlueGasMaterial>;
   numLosses: number = 0;
   collapse: boolean = true;
 
@@ -153,7 +153,7 @@ export class FlueGasSummaryComponent implements OnInit {
   getData(loss: FlueGas): FlueGasSummaryData {
     let tmpName, tmpGasTemp, tmpMethod, tmpOxygen, tmpExcessAir, tmpCombustionTemp, tmpFuelTemp,
       tmpMoisture, tmpDischargeTemp, tmpUnburnedCarbon;
-    let tmpGas: FlueGasMaterial;
+    let tmpGas: FlueGasMaterial | SolidLiquidFlueGasMaterial;
 
     if (loss.flueGasType === 'By Volume') {
       tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId === val.id; });
@@ -210,5 +210,5 @@ export interface FlueGasSummaryData {
   moistureInAir: number;
   dischargeTemp: number;
   unburnedCarbon: number;
-  material: FlueGasMaterial;
+  material: FlueGasMaterial | SolidLiquidFlueGasMaterial;
 }

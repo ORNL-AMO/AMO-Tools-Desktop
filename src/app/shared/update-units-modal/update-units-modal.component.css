@@ -1,0 +1,21 @@
+.btn{
+    padding: 6px;
+}
+
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+.modal-header{
+    background: #fff;
+}
+
+.modal-dialog{
+    top: 20%;
+}
+
+.phast .btn-primary{
+    background-color: #BF3D00;
+}

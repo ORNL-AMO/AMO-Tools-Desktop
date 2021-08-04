@@ -6,8 +6,9 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
-import { FlueGasWarnings, FlueGasLossesService } from '../flue-gas-losses.service';
+import { FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { FlueGasMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -39,7 +40,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
 
   firstChange: boolean = true;
-  options: any;
+  options: Array<FlueGasMaterial>;
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -50,7 +51,10 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationFlueGasO2 = 0.0;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private flueGasLossesService: FlueGasLossesService, private lossesService: LossesService, private phastService: PhastService) { }
+  constructor(private suiteDbService: SuiteDbService,
+    private flueGasCompareService: FlueGasCompareService,
+    private flueGasFormService: FlueGasFormService,
+    private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -80,6 +84,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.options = this.suiteDbService.selectGasFlueGasMaterials();
           this.enableForm();
         }
       }
@@ -114,7 +119,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       CH4: this.flueGasLossForm.controls.CH4.value,
       C2H6: this.flueGasLossForm.controls.C2H6.value,
       N2: this.flueGasLossForm.controls.N2.value,
@@ -154,27 +159,29 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
-    this.warnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(tmpLoss);
-    let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss, this.settings);
+    let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
-    this.flueGasLossForm.patchValue({
-      CH4: this.roundVal(tmpFlueGas.CH4, 4),
-      C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
-      N2: this.roundVal(tmpFlueGas.N2, 4),
-      H2: this.roundVal(tmpFlueGas.H2, 4),
-      C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
-      C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
-      H2O: this.roundVal(tmpFlueGas.H2O, 4),
-      CO: this.roundVal(tmpFlueGas.CO, 4),
-      CO2: this.roundVal(tmpFlueGas.CO2, 4),
-      SO2: this.roundVal(tmpFlueGas.SO2, 4),
-      O2: this.roundVal(tmpFlueGas.O2, 4)
-    });
+    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.flueGasLossForm.patchValue({
+        CH4: this.roundVal(tmpFlueGas.CH4, 4),
+        C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
+        N2: this.roundVal(tmpFlueGas.N2, 4),
+        H2: this.roundVal(tmpFlueGas.H2, 4),
+        C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
+        C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
+        H2O: this.roundVal(tmpFlueGas.H2O, 4),
+        CO: this.roundVal(tmpFlueGas.CO, 4),
+        CO2: this.roundVal(tmpFlueGas.CO2, 4),
+        SO2: this.roundVal(tmpFlueGas.SO2, 4),
+        O2: this.roundVal(tmpFlueGas.O2, 4)
+      });
+    }
     this.save();
   }
   roundVal(val: number, digits: number) {
@@ -183,6 +190,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   save() {
+    this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

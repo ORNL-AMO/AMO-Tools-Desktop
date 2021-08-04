@@ -2,6 +2,19 @@
   <div class="col-10  mx-auto">
     <div class="tab-content content-container" *ngIf="settingsForm">
       <div class="card-form">
+        <div class="d-flex ml-auto justify-content-end p-1">
+          <div class="pl-1">
+            <button [routerLink]="['/directory-dashboard', 1]" class="btn btn-secondary action-btn">
+              <span class="fa fa-folder"></span>
+            </button>
+          </div>
+          <div class="pl-1">
+            <button [routerLink]="['/landing-screen']" class="btn btn-secondary action-btn">
+              <span class="fa fa-home"></span>
+            </button>
+          </div>
+        </div>
+        <hr class="my-1 hr-spacer">
         <div class="form-section">
           <!--add click event to call function that toggles section boolean-->
           <label class="group-label general" (click)="toggleGeneralSettings()">General Settings
@@ -76,9 +89,8 @@
 
         <div class="reset-data">
           <h3>Restore System Settings</h3>
-          <p class="help-text">Restoring system settings will provide options for resetting all application settings to
-            their default values, returning all example assessments to their original state, deleting all user-created
-            assessments/pre-assessments, and deleting all user-created materials.
+          <p class="help-text">Restoring system settings will provide options for resetting all application settings to their default values, returning all example assessments to their original state, deleting all user-created assessments/pre-assessments, and deleting all user-created materials.
+          Selecting this button opens the menu where you can choose to reset one or all of these before-mentioned settings. If you reset only one option (e.g. resetting example assessments), it will not impact any other areas or options.
             <span class="red">This cannot be undone!</span>
           </p>
           <button class="btn btn-danger pull-right" (click)="showResetSystemSettingsModal()">Restore System Settings</button>

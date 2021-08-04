@@ -2,7 +2,7 @@
   <label class="group-label">Solve For</label>
   <div class="form-group">
     <select name="solveFor" class="form-control w-100" formControlName="solveFor" id="solveFor"
-      (change)="setValidators()" (focus)="focusField('solveFor')" (blur)="focusOut()">
+      (change)="setValidators()" (focus)="focusField('solveFor')" >
       <option *ngFor="let option of methodOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -12,7 +12,7 @@
     <label class="small" for="inletPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="inletPressure" id="inletPressure" formControlName="inletPressure" type="number"
-        (input)="calculate()" (focus)="focusField('inletPressure')" (blur)="focusOut()" onfocus="this.select();">
+        (input)="calculate()" (focus)="focusField('inletPressure')"  onfocus="this.select();">
       <span class="input-group-addon units">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
@@ -31,7 +31,7 @@
   <div class="form-group">
     <label class="small" for="inletQuantity">Known Variable</label>
     <select name="inletQuantity" class="form-control" formControlName="inletQuantity" id="inletQuantity"
-      (change)="setValidators()" (focus)="focusField('inletQuantity')" (blur)="focusOut()">
+      (change)="setValidators()" (focus)="focusField('inletQuantity')" >
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -41,7 +41,7 @@
       Value</label>
     <div class="input-group">
       <input class="form-control" name="inletQuantityValue" id="inletQuantityValue" formControlName="inletQuantityValue"
-        type="number" (input)="calculate()" (focus)="focusField('inletQuantityValue')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('inletQuantityValue')" 
         onfocus="this.select();">
       <span *ngIf="turbineForm.controls.inletQuantity.value != 3" class="input-group-addon units"
         [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value) | settingsLabel"></span>
@@ -66,7 +66,7 @@
   <div class="form-group">
     <label class="small" for="turbineProperty">Selected Turbine Property</label>
     <select name="turbineProperty" class="form-control" formControlName="turbineProperty" id="turbineProperty"
-      (change)="calculate()" (focus)="focusField('turbineProperty')" (blur)="focusOut()">
+      (change)="calculate()" (focus)="focusField('turbineProperty')" >
       <option *ngFor="let option of turbineOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -78,7 +78,7 @@
       Out</label>
     <div class="input-group">
       <input class="form-control" name="massFlowOrPowerOut" id="massFlowOrPowerOut" formControlName="massFlowOrPowerOut"
-        type="number" (input)="calculate()" (focus)="focusField('massFlowOrPowerOut')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('massFlowOrPowerOut')" 
         onfocus="this.select();">
       <span class="input-group-addon units"
         *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
@@ -105,7 +105,7 @@
     <div class="input-group">
       <input class="form-control" name="isentropicEfficiency" id="isentropicEfficiency"
         formControlName="isentropicEfficiency" type="number" (input)="calculate()"
-        (focus)="focusField('isentropicEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+        (focus)="focusField('isentropicEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -123,7 +123,7 @@
     <div class="input-group">
       <input class="form-control" name="generatorEfficiency" id="generatorEfficiency"
         formControlName="generatorEfficiency" type="number" (input)="calculate()"
-        (focus)="focusField('generatorEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+        (focus)="focusField('generatorEfficiency')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -142,7 +142,7 @@
     <div class="input-group">
       <input class="form-control" name="outletSteamPressure" id="outletSteamPressure"
         formControlName="outletSteamPressure" type="number" (input)="calculate()"
-        (focus)="focusField('outletSteamPressure')" (blur)="focusOut()" onfocus="this.select();">
+        (focus)="focusField('outletSteamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
     <span class="alert-danger pull-right small"
@@ -158,7 +158,7 @@
   <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 1">
     <label class="small" for="outletQuantity">Known Variable</label>
     <select name="outletQuantity" class="form-control" formControlName="outletQuantity" id="outletQuantity"
-      (change)="setValidators()" (focus)="focusField('outletQuantity')" (blur)="focusOut()">
+      (change)="setValidators()" (focus)="focusField('outletQuantity')" >
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -169,7 +169,7 @@
     <div class="input-group">
       <input class="form-control" name="outletQuantityValue" id="outletQuantityValue"
         formControlName="outletQuantityValue" type="number" (input)="calculate()"
-        (focus)="focusField('outletQuantityValue')" (blur)="focusOut()" onfocus="this.select();">
+        (focus)="focusField('outletQuantityValue')"  onfocus="this.select();">
       <span *ngIf="turbineForm.controls.outletQuantity.value != 3" class="input-group-addon units"
         [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value) | settingsLabel"></span>
     </div>

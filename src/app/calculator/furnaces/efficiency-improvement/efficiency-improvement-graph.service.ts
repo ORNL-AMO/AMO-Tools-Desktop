@@ -29,8 +29,12 @@ export class EfficiencyImprovementGraphService {
     let line = this.getEnrichmentLine(inputData, isBaseline);
     let point = this.getEnrichmentPoint(inputData, isBaseline);
     let xAxis: Axis = this.getAxis(point, selectedAxis, settings);
-
     line.fuelSavings = 0.0;
+
+    if (selectedAxis == 0) {
+      xAxis.termination = Math.max(inputData.currentFlueGasTemp, inputData.newFlueGasTemp);
+    }
+
     for (let i = xAxis.axisStartValue; i <= xAxis.termination; i += xAxis.increment) {
       point[xAxis.propertyName] = i;
       let output = this.phastService.o2Enrichment(point, settings);
@@ -223,7 +227,6 @@ export class EfficiencyImprovementGraphService {
           showgrid: showGrid,
           showspikes: true,
           spikemode: 'across',
-          range: [20, 40, 60, 80, 100],
           showticksuffix: 'all',
           tickangle: -60
         },

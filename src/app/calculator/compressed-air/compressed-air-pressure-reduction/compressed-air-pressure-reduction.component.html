@@ -72,10 +72,13 @@
             <div *ngFor="let data of modificationData; let i = index;">
               <!-- app form -->
               <app-compressed-air-pressure-reduction-form [index]="i" [settings]="settings" [data]="data"
-                [compressorPower]="modificationData[i].compressorPower" [pressure]="modificationData[i].pressure"
+                [compressorPower]="baselineData[i].compressorPower" 
+                [pressure]="baselineData[i].pressure"
+                [powerType]="baselineData[i].powerType"
                 [isBaseline]="false" (emitCalculate)="updateModificationData($event, i)"
                 (emitChangeField)="changeField($event)" (emitRemoveEquipment)="removeModificationEquipment($event)"
-                [selected]="!baselineSelected">
+                [selected]="!baselineSelected" [pressureRated]="baselineData[i].pressureRated"
+                [atmosphericPressure]="baselineData[i].atmosphericPressure">
               </app-compressed-air-pressure-reduction-form>
 
             </div>

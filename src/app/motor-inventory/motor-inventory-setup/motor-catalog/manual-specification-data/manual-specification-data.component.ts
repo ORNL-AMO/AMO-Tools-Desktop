@@ -65,11 +65,11 @@ export class ManualSpecificationDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
-    this.focusOut();
+    // this.focusOut();
   }
 
-  focusOut() {
-    this.motorInventoryService.focusedDataGroup.next('manual-specifications')
-    this.motorInventoryService.focusedField.next('default');
-  }
+  // focusOut() {
+  //   this.motorInventoryService.focusedDataGroup.next('manual-specifications')
+  //   this.motorInventoryService.focusedField.next('default');
+  // }
 }

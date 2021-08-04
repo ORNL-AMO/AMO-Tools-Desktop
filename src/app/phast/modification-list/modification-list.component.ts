@@ -5,6 +5,7 @@ import { LossesService } from '../losses/losses.service';
 import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
+import { SavingsOpportunity } from '../../shared/models/explore-opps';
 
 @Component({
   selector: 'app-modification-list',
@@ -138,6 +139,7 @@ export class ModificationListComponent implements OnInit {
     if (!phast) {
       phast = this.phast;
     }
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -160,6 +162,21 @@ export class ModificationListComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
+      exploreOppsShowFlueGas: exploreOppsDefault,
+      exploreOppsShowAirTemp: exploreOppsDefault,
+      exploreOppsShowMaterial: exploreOppsDefault,
+      exploreOppsShowAllTimeOpen: exploreOppsDefault,
+      exploreOppsShowOpening: exploreOppsDefault,
+      exploreOppsShowAllEmissivity: exploreOppsDefault,
+      exploreOppsShowCooling: exploreOppsDefault,
+      exploreOppsShowAtmosphere: exploreOppsDefault,
+      exploreOppsShowOperations: exploreOppsDefault,
+      exploreOppsShowLeakage: exploreOppsDefault,
+      exploreOppsShowSlag: exploreOppsDefault,
+      exploreOppsShowEfficiencyData: exploreOppsDefault,
+      exploreOppsShowWall: exploreOppsDefault,
+      exploreOppsShowAllTemp: exploreOppsDefault,
+      exploreOppsShowFixtures: exploreOppsDefault,
     };
     if (this.asssessmentTab === 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;

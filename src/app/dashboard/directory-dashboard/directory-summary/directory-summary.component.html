@@ -38,6 +38,13 @@
                             <td>{{ssmtSummary.totalCost | currency}}</td>
                         </tr>
                         <tr>
+                            <td>Waste Water</td>
+                            <td>{{wasteWaterSummary.totalAssessments}}</td>
+                            <td>{{wasteWaterSummary.totalEnergyUsed | sigFigs:'6'}} MWh
+                            </td>
+                            <td>{{wasteWaterSummary.totalCost | currency}}</td>
+                        </tr>
+                        <tr>
                             <td class="bold">Total</td>
                             <td class="bold">{{totalSummary.totalAssessments}}</td>
                             <td class="bold">{{totalSummary.totalEnergyUsed | sigFigs:'6'}}
@@ -69,7 +76,7 @@
                         </tr>
                         <tr>
                             <td class="bold">Electricity Cost</td>
-                            <td>{{directorySettings.electricityCost | currency}}
+                            <td>{{directorySettings.electricityCost | currency:'USD':'symbol':'1.0-3' }}
                                 <span>/kWh</span>
                             </td>
                         </tr>

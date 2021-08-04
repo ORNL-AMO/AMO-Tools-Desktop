@@ -8,8 +8,12 @@ declare const packageJson;
 export class SettingsService {
 
   setDontShow: BehaviorSubject<boolean>;
+  updateUnitsModalOpen: BehaviorSubject<boolean>;
+
   constructor(private formBuilder: FormBuilder) {
     this.setDontShow = new BehaviorSubject<boolean>(false);
+    this.updateUnitsModalOpen = new BehaviorSubject<boolean>(false);
+
   }
 
   // getSettingsForm(): FormGroup {
@@ -183,6 +187,7 @@ export class SettingsService {
   }
 
   getNewSettingFromSetting(settings: Settings): Settings {
+    let defaultSettings: Settings = this.getNewSettingsDefaults(settings)
     let newSettings: Settings = {
       language: settings.language,
       currency: settings.currency,
@@ -197,10 +202,10 @@ export class SettingsService {
       steamSpecificEntropyMeasurement: settings.steamSpecificEntropyMeasurement,
       steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
       steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
-      steamPowerMeasurement: settings.steamPowerMeasurement || 'kW',
-      steamVolumeMeasurement: settings.steamVolumeMeasurement || 'gal',
-      steamVolumeFlowMeasurement: settings.steamVolumeFlowMeasurement || 'gpm',
-      steamVacuumPressure: settings.steamVacuumPressure || 'psia',
+      steamPowerMeasurement: settings.steamPowerMeasurement || defaultSettings.steamPowerMeasurement,
+      steamVolumeMeasurement: settings.steamVolumeMeasurement || defaultSettings.steamVolumeMeasurement,
+      steamVolumeFlowMeasurement: settings.steamVolumeFlowMeasurement || defaultSettings.steamVolumeFlowMeasurement,
+      steamVacuumPressure: settings.steamVacuumPressure || defaultSettings.steamVacuumPressure,
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -218,14 +223,14 @@ export class SettingsService {
       fuelCost: settings.fuelCost,
       steamCost: settings.steamCost,
       electricityCost: settings.electricityCost,
-      densityMeasurement: settings.densityMeasurement || 'lbscf',
-      fanFlowRate: settings.fanFlowRate || 'ft3/h',
-      fanPressureMeasurement: settings.fanPressureMeasurement || 'inH2o',
-      fanBarometricPressure: settings.fanBarometricPressure || 'inHg',
-      fanSpecificHeatGas: settings.fanSpecificHeatGas || 'btulbF',
-      fanPowerMeasurement: settings.fanPowerMeasurement || 'hp',
-      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F',
-      steamEnergyMeasurement: settings.steamEnergyMeasurement || 'kWh',
+      densityMeasurement: settings.densityMeasurement || defaultSettings.densityMeasurement,
+      fanFlowRate: settings.fanFlowRate || defaultSettings.fanFlowRate,
+      fanPressureMeasurement: settings.fanPressureMeasurement || defaultSettings.fanPressureMeasurement,
+      fanBarometricPressure: settings.fanBarometricPressure || defaultSettings.fanBarometricPressure,
+      fanSpecificHeatGas: settings.fanSpecificHeatGas || defaultSettings.fanSpecificHeatGas,
+      fanPowerMeasurement: settings.fanPowerMeasurement || defaultSettings.fanPowerMeasurement,
+      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || defaultSettings.fanTemperatureMeasurement,
+      steamEnergyMeasurement: settings.steamEnergyMeasurement || defaultSettings.steamEnergyMeasurement,
       disableTutorial: settings.disableTutorial,
       disableDashboardTutorial: settings.disableDashboardTutorial,
       disablePsatSetupTutorial: settings.disablePsatSetupTutorial,
@@ -244,6 +249,15 @@ export class SettingsService {
     }
     return newSettings;
   }
+
+  getNewSettingsDefaults(currentSettings: Settings): Settings {
+    let currentSettingsForm: FormGroup = this.getFormFromSettings(currentSettings);
+    currentSettingsForm = this.setUnits(currentSettingsForm);
+    let defaultSettings: Settings = this.getSettingsFromForm(currentSettingsForm);
+    return defaultSettings;
+  }
+
+
 
   setUnits(settingsForm: FormGroup): FormGroup {
     if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {

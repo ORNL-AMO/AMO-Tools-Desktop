@@ -201,18 +201,18 @@ export class MotorInventoryService {
         ratedSpeed: false,
       },
       nameplateDataOptions: {
-        displayNameplateData: false,
+        displayNameplateData: true,
         manufacturer: false,
         model: false,
         motorType: false,
         enclosureType: false,
-        ratedVoltage: false,
+        ratedVoltage: true,
         serviceFactor: false,
         insulationClass: false,
         weight: false,
         numberOfPhases: false,
-        fullLoadSpeed: false,
-        fullLoadAmps: false
+        fullLoadSpeed: true,
+        fullLoadAmps: true
       },
       operationDataOptions: {
         displayOperationData: true,

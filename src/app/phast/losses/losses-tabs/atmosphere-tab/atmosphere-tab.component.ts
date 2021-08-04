@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { AtmosphereLossesCompareService } from '../../atmosphere-losses/atmosphere-losses-compare.service';
-import { AtmosphereLossesService, AtmosphereLossWarnings } from '../../atmosphere-losses/atmosphere-losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Subscription } from 'rxjs';
+import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
   selector: 'app-atmosphere-tab',
@@ -27,7 +27,7 @@ export class AtmosphereTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereLossesService: AtmosphereLossesService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereFormService: AtmosphereFormService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -78,8 +78,8 @@ export class AtmosphereTabComponent implements OnInit {
           missingData = true;
         }
         //warnings
-        let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+        let warnings: AtmosphereLossWarnings = this.atmosphereFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = warnings.temperatureWarning != undefined;
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -93,8 +93,8 @@ export class AtmosphereTabComponent implements OnInit {
           missingData = true;
         }
         //warnings
-        let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+        let warnings: AtmosphereLossWarnings = this.atmosphereFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = warnings.temperatureWarning != undefined;
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -104,7 +104,7 @@ export class AtmosphereTabComponent implements OnInit {
   }
 
   checkLossValid(loss: AtmosphereLoss) {
-    let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
+    let tmpForm: FormGroup = this.atmosphereFormService.getAtmosphereForm(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

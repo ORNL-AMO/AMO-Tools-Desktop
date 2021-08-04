@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { SortCardsService } from '../opportunity-cards/sort-cards.service';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-summary-card',
@@ -16,21 +18,22 @@ export class SummaryCardComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  electricityData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  naturalGasData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  compressedAirData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  waterData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  wasteWaterData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  steamData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
-  otherFuelData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number }
+  electricityData: UtilityTotal;
+  naturalGasData: UtilityTotal;
+  compressedAirData: UtilityTotal;
+  waterData: UtilityTotal;
+  wasteWaterData: UtilityTotal;
+  steamData: UtilityTotal;
+  otherFuelData: UtilityTotal;
+  additionalAnnualSavings: UtilityTotal;
 
-  totals: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number };
+  totals: UtilityTotal;
   opportunityCardsSub: Subscription;
   sortBySub: Subscription;
   sortCardsData: SortCardsData;
   opportunityCards: Array<OpportunityCardData>;
   constructor(private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
-    private sortCardsService: SortCardsService) { }
+    private sortCardsService: SortCardsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(val => {
@@ -53,68 +56,52 @@ export class SummaryCardComponent implements OnInit {
 
   setSavingsData() {
     if (this.sortCardsData != undefined && this.opportunityCards != undefined) {
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       let opportunityCards: Array<OpportunityCardData> = this.opportunityCards;
       opportunityCards = this.sortCardsService.sortCards(opportunityCards, this.sortCardsData);
-      let electricityData = this.getSavingsByUtilityType(opportunityCards, 'Electricity');
-      this.electricityData = {
-        baselineCost: electricityData.baselineCost,
-        modificationCost: electricityData.modificationCost,
-        totalCostSavings: electricityData.totalCostSavings,
-        totalPercentSavings: electricityData.totalPercentSavings
-      }
-      let naturalGas = this.getSavingsByUtilityType(opportunityCards, 'Natural Gas');
-      this.naturalGasData = {
-        baselineCost: naturalGas.baselineCost,
-        modificationCost: naturalGas.modificationCost,
-        totalCostSavings: naturalGas.totalCostSavings,
-        totalPercentSavings: naturalGas.totalPercentSavings
-      }
-      let water = this.getSavingsByUtilityType(opportunityCards, 'Water');
-      this.waterData = {
-        baselineCost: water.baselineCost,
-        modificationCost: water.modificationCost,
-        totalCostSavings: water.totalCostSavings,
-        totalPercentSavings: water.totalPercentSavings
-      }
-      let compressedAir = this.getSavingsByUtilityType(opportunityCards, 'Compressed Air');
-      this.compressedAirData = {
-        baselineCost: compressedAir.baselineCost,
-        modificationCost: compressedAir.modificationCost,
-        totalCostSavings: compressedAir.totalCostSavings,
-        totalPercentSavings: compressedAir.totalPercentSavings
-      }
-      let steam = this.getSavingsByUtilityType(opportunityCards, 'Steam');
-      this.steamData = {
-        baselineCost: steam.baselineCost,
-        modificationCost: steam.modificationCost,
-        totalCostSavings: steam.totalCostSavings,
-        totalPercentSavings: steam.totalPercentSavings
-      }
-      let wasteWater = this.getSavingsByUtilityType(opportunityCards, 'Waste Water');
-      this.wasteWaterData = {
-        baselineCost: wasteWater.baselineCost,
-        modificationCost: wasteWater.modificationCost,
-        totalCostSavings: wasteWater.totalCostSavings,
-        totalPercentSavings: wasteWater.totalPercentSavings
-      }
-      let otherFuel = this.getSavingsByUtilityType(opportunityCards, 'Other Fuel');
-      this.otherFuelData = {
-        baselineCost: otherFuel.baselineCost,
-        modificationCost: otherFuel.modificationCost,
-        totalCostSavings: otherFuel.totalCostSavings,
-        totalPercentSavings: otherFuel.totalPercentSavings
-      }
+      this.electricityData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.electricityUsed, treasureHunt.currentEnergyUsage.electricityCosts, 'Electricity');
+      this.naturalGasData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.naturalGasUsed, treasureHunt.currentEnergyUsage.naturalGasCosts, 'Natural Gas');
+      this.waterData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.waterUsed, treasureHunt.currentEnergyUsage.waterCosts, 'Water');
+      this.compressedAirData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.compressedAirUsed, treasureHunt.currentEnergyUsage.compressedAirCosts, 'Compressed Air');
+      this.steamData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.steamUsed, treasureHunt.currentEnergyUsage.steamCosts, 'Steam');
+      this.wasteWaterData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.wasteWaterUsed, treasureHunt.currentEnergyUsage.wasteWaterCosts, 'Waste Water');
+      this.otherFuelData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.otherFuelUsed, treasureHunt.currentEnergyUsage.otherFuelCosts, 'Other Fuel');
+      let baselineCost: number = this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost;
+      this.additionalAnnualSavings = this.calculateAdditionalSavings(baselineCost, opportunityCards);
+      let totalCostSavings: number = this.electricityData.totalCostSavings + this.naturalGasData.totalCostSavings + this.waterData.totalCostSavings + this.compressedAirData.totalCostSavings + this.steamData.totalCostSavings + this.wasteWaterData.totalCostSavings + this.otherFuelData.totalCostSavings + this.additionalAnnualSavings.totalCostSavings;
       this.totals = {
-        baselineCost: this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost,
-        modificationCost: this.electricityData.modificationCost + this.naturalGasData.modificationCost + this.waterData.modificationCost + this.compressedAirData.modificationCost + this.steamData.modificationCost + this.wasteWaterData.modificationCost + this.otherFuelData.modificationCost,
-        totalCostSavings: this.electricityData.totalCostSavings + this.naturalGasData.totalCostSavings + this.waterData.totalCostSavings + this.compressedAirData.totalCostSavings + this.steamData.totalCostSavings + this.wasteWaterData.totalCostSavings + this.otherFuelData.totalCostSavings,
-        totalPercentSavings: this.electricityData.totalPercentSavings + this.naturalGasData.totalPercentSavings + this.waterData.totalPercentSavings + this.compressedAirData.totalPercentSavings + this.steamData.totalPercentSavings + this.wasteWaterData.totalPercentSavings + this.otherFuelData.totalPercentSavings
+        totalPercentSavings: (totalCostSavings / baselineCost * 100),
+        totalCostSavings: totalCostSavings,
+        baselineCost: baselineCost,
+        modificationCost: baselineCost - totalCostSavings
+      };
+    }
+  }
+
+
+  setUtilityTotal(utilityUsed: boolean, baselineCost: number, utilityType: string): UtilityTotal {
+    let opportunityCards: Array<OpportunityCardData> = this.opportunityCards;
+    opportunityCards = this.sortCardsService.sortCards(opportunityCards, this.sortCardsData);
+    if (utilityUsed) {
+      let utilityData: UtilityTotal = this.getSavingsByUtilityType(opportunityCards, utilityType);
+      return {
+        baselineCost: baselineCost,
+        modificationCost: baselineCost - utilityData.totalCostSavings,
+        totalCostSavings: utilityData.totalCostSavings,
+        totalPercentSavings: utilityData.totalPercentSavings
+      }
+    } else {
+      return {
+        baselineCost: 0,
+        modificationCost: 0,
+        totalPercentSavings: 0,
+        totalCostSavings: 0
       }
     }
   }
 
 
-  getSavingsByUtilityType(opportunityCards: Array<OpportunityCardData>, utilityType: string): { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number } {
+  getSavingsByUtilityType(opportunityCards: Array<OpportunityCardData>, utilityType: string): UtilityTotal {
     let filteredCards: Array<OpportunityCardData> = _.filter(opportunityCards, (data) => { return _.includes(data.utilityType, utilityType) });
     let totalPercentSavings: number = 0;
     let totalCostSavings: number = 0;
@@ -134,4 +121,20 @@ export class SummaryCardComponent implements OnInit {
     return { totalPercentSavings: totalPercentSavings, totalCostSavings: totalCostSavings, baselineCost: baselineCost, modificationCost: modificationCost }
   }
 
+  calculateAdditionalSavings(baselineCost: number, opportunityCards: Array<OpportunityCardData>): UtilityTotal {
+    let additionalAnnualSavings: number = 0;
+    opportunityCards.forEach(card => {
+      if (card.selected && card.opportunitySheet.opportunityCost.additionalAnnualSavings) {
+
+        additionalAnnualSavings += card.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    });
+    let totalPercentSavings: number = (additionalAnnualSavings / baselineCost * 100);
+    return { totalPercentSavings: totalPercentSavings, totalCostSavings: additionalAnnualSavings, baselineCost: 0, modificationCost: 0 }
+  }
+}
+
+
+export interface UtilityTotal {
+  totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number
 }

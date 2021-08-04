@@ -6,6 +6,8 @@ import { SigFigsPipe } from './sig-figs.pipe';
 import { OptionDisplayValuePipe } from './option-display-value.pipe';
 import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
 import { MotorDriveTypePipe } from './motor-drive-type.pipe';
+import { WasteWaterOptionsDisplayPipe } from './waste-water-options-display.pipe';
+import { RemoveCommasPipe } from './remove-commas.pipe';
 
 
 
@@ -16,7 +18,9 @@ import { MotorDriveTypePipe } from './motor-drive-type.pipe';
     SigFigsPipe,
     OptionDisplayValuePipe,
     MotorEfficiencyClassPipe,
-    MotorDriveTypePipe
+    MotorDriveTypePipe,
+    WasteWaterOptionsDisplayPipe,
+    RemoveCommasPipe,
   ],
   imports: [
     CommonModule
@@ -27,7 +31,9 @@ import { MotorDriveTypePipe } from './motor-drive-type.pipe';
     SigFigsPipe,
     OptionDisplayValuePipe,
     MotorEfficiencyClassPipe,
-    MotorDriveTypePipe
+    MotorDriveTypePipe,
+    WasteWaterOptionsDisplayPipe,
+    RemoveCommasPipe,
   ]
 })
 export class SharedPipesModule { }

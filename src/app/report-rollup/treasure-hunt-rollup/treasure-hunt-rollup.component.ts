@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { OpportunityCardData, OpportunityCardsService } from '../../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { TreasureHuntReportService } from '../../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
 import { OpportunityPaybackService } from '../../treasure-hunt/treasure-hunt-report/opportunity-payback.service';
+import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 
 @Component({
   selector: 'app-treasure-hunt-rollup',
@@ -14,23 +15,24 @@ import { OpportunityPaybackService } from '../../treasure-hunt/treasure-hunt-rep
   styleUrls: ['./treasure-hunt-rollup.component.css']
 })
 export class TreasureHuntRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   @Input()
   printView: boolean;
 
   combinedTreasureHuntResults: TreasureHuntResults;
   allOpportunityCardsData: Array<OpportunityCardData>
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
+  settings: Settings;
   allTeamsData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
-  constructor(private reportRollupService: ReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService) { }
+  constructor(private treasureHuntReportRollupService: TreasureHuntReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
+    private opportunityPaybackService: OpportunityPaybackService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
-    let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.reportRollupService.allTreasureHuntResults.getValue();
+    this.settings = this.reportRollupService.settings.getValue();
+    let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.treasureHuntReportRollupService.allTreasureHuntResults.getValue();
     this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
     this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries);
-    let treasureHuntAssessments: Array<ReportItem> = this.reportRollupService.treasureHuntAssessments.getValue();
+    let treasureHuntAssessments: Array<ReportItem> = this.treasureHuntReportRollupService.treasureHuntAssessments.getValue();
     this.setAllOpporutnityCardsData(treasureHuntAssessments);
   }
 
@@ -94,11 +96,13 @@ export class TreasureHuntRollupComponent implements OnInit {
     }
 
     let utilityArr: Array<UtilityUsageData> = [electricity, compressedAir, naturalGas, water, steam, wasteWater, otherFuel];
+    let totalAdditionalSavings: number = _.sumBy(resultsData, data => { return data.treasureHuntResults.totalAdditionalSavings });
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + other.implementationCost;
-    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings });
+    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings }) + totalAdditionalSavings;
     let totalBaselineCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.baselineEnergyCost });
     let hasMixed: boolean = electricity.hasMixed || naturalGas.hasMixed || water.hasMixed || wasteWater.hasMixed || otherFuel.hasMixed || compressedAir.hasMixed || steam.hasMixed;
-
+    
+    
     return {
       totalSavings: totalCostSavings,
       percentSavings: (totalCostSavings / totalBaselineCost) * 100,
@@ -115,7 +119,8 @@ export class TreasureHuntRollupComponent implements OnInit {
       other: other,
       opportunitySummaries: opportunitySummaries,
       totalImplementationCost: totalImplementationCost,
-      hasMixed: hasMixed
+      hasMixed: hasMixed,
+      totalAdditionalSavings: totalAdditionalSavings
     }
   }
 

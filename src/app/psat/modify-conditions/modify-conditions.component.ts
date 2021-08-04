@@ -28,11 +28,8 @@ export class ModifyConditionsComponent implements OnInit {
   modificationExists: boolean;
   @Input()
   containerHeight: number;
-  // @Input()
-  // emitPrint: boolean;
 
   modifyTab: string;
-  //_modifications: Array<Modification>;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
   isFirstChange: boolean = true;
@@ -57,13 +54,15 @@ export class ModifyConditionsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.modifyConditionsSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
   }
 
   save() {
-    // this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    if (this.modificationExists) {
+      this.psat.modifications[this.modificationIndex].exploreOpportunities = false;
+    }
     this.saved.emit(true);
   }
 

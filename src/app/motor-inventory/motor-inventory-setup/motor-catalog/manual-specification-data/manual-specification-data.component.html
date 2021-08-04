@@ -7,7 +7,7 @@
     <!--sychronous speed: synchronousSpeed-->
     <div class="form-group">
         <label for="synchronousSpeed">Synchronous Speed</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('synchronousSpeed')" (change)="save()"
+        <select class="form-control" (focus)="focusField('synchronousSpeed')" (change)="save()"
             formControlName="synchronousSpeed" id="synchronousSpeed">
             <option *ngFor="let option of synchronousSpeedOptions" [ngValue]="option">{{option}} rpm</option>
         </select>
@@ -16,7 +16,7 @@
     <div class="form-group" *ngIf="displayOptions.ratedSpeed">
         <label for="ratedSpeed">Rated Speed</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('ratedSpeed')" (input)="save()"
+            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
                 formControlName="ratedSpeed" id="ratedSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>
@@ -31,14 +31,14 @@
     <!-- frame -->
     <div class="form-group" *ngIf="displayOptions.frame">
         <label for="frame">Frame</label>
-        <input type="text" class="form-control" (blur)="focusOut()" (focus)="focusField('frame')" (input)="save()" formControlName="frame"
+        <input type="text" class="form-control" (focus)="focusField('frame')" (input)="save()" formControlName="frame"
             id="frame">
     </div>
 
     <!-- shaftPosiion -->
     <div class="form-group" *ngIf="displayOptions.shaftPosiion">
         <label for="shaftPosiion">Shaft Orientation</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('shaftPosiion')" (change)="save()"
+        <select class="form-control" (focus)="focusField('shaftPosiion')" (change)="save()"
             formControlName="shaftPosiion" id="shaftPosiion">
             <option [ngValue]="'Vertical'">Vertical</option>
             <option [ngValue]="'Horizontal'">Horizontal</option>
@@ -48,7 +48,7 @@
     <div class="form-group" *ngIf="displayOptions.windingResistance">
         <label for="windingResistance">Winding Resistance</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('windingResistance')" (input)="save()"
+            <input type="number" class="form-control" (focus)="focusField('windingResistance')" (input)="save()"
                 formControlName="windingResistance" id="windingResistance">
             <span class="input-group-addon units">&#x3A9;</span>
         </div>
@@ -60,7 +60,7 @@
     <!-- rotorBars -->
     <div class="form-group" *ngIf="displayOptions.rotorBars">
         <label for="rotorBars">Number of Rotor Bars</label>
-        <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('rotorBars')" (input)="save()"
+        <input type="number" class="form-control" (focus)="focusField('rotorBars')" (input)="save()"
             formControlName="rotorBars" id="rotorBars">
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.rotorBars.invalid">
             <span *ngIf="motorForm.controls.rotorBars.errors.min">Value can't be less than
@@ -70,7 +70,7 @@
     <!-- statorSlots -->
     <div class="form-group" *ngIf="displayOptions.statorSlots">
         <label for="statorSlots">Number of Stator Slots</label>
-        <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('statorSlots')" (input)="save()"
+        <input type="number" class="form-control" (focus)="focusField('statorSlots')" (input)="save()"
             formControlName="statorSlots" id="statorSlots">
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.statorSlots.invalid">
             <span *ngIf="motorForm.controls.statorSlots.errors.min">Value can't be less than
@@ -81,7 +81,7 @@
     <div class="form-group" *ngIf="displayOptions.ampsLockedRotor">
         <label for="ampsLockedRotor">Locked Rotor Amps</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('ampsLockedRotor')" (input)="save()"
+            <input type="number" class="form-control" (focus)="focusField('ampsLockedRotor')" (input)="save()"
                 formControlName="ampsLockedRotor" id="ampsLockedRotor">
             <span class="input-group-addon units">A</span>
         </div>
@@ -94,7 +94,7 @@
     <!-- currentType -->
     <div class="form-group" *ngIf="displayOptions.currentType">
         <label for="currentType">Current Type</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('currentType')" (change)="save()" formControlName="currentType"
+        <select class="form-control" (focus)="focusField('currentType')" (change)="save()" formControlName="currentType"
             id="currentType">
             <option [ngValue]="'AC'">AC</option>
             <option [ngValue]="'DC'">DC</option>
@@ -104,7 +104,7 @@
     <!-- poles -->
     <div class="form-group" *ngIf="displayOptions.poles">
         <label for="poles">Poles</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('poles')" (change)="save()" formControlName="poles" id="poles">
+        <select class="form-control" (focus)="focusField('poles')" (change)="save()" formControlName="poles" id="poles">
             <option *ngFor="let option of polesOptions" [ngValue]="option">{{option}}</option>
         </select>
     </div>

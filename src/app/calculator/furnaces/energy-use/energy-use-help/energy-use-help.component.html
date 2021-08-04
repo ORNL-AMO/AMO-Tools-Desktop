@@ -1,6 +1,6 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    Flow and Energy Used
+    Flow and Energy Used Help
     <br>
     <small class="text-muted"> Calculation of flow rates (at standard temperature and pressure) for commonly used gases
       using data for an orifice type flow meter and heat input calculations
@@ -68,7 +68,7 @@
   </div>
   <div class="my-2" *ngIf="currentField == 'sectionType'">
     <h6>
-      Type of Orifice
+      Orifice Type
       <br>
       <small class="text-muted">
         Type of orifice. Changing this automatically changes the field "Coefficient of Discharge".
@@ -127,7 +127,7 @@
 
   <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
     <h6>
-      Coefficient of Discharge
+      Discharge Coefficient
       <br>
       <small class="text-muted">
         Coefficient to take viscosity and turbulence into account when calculating flow rate. Here, this is based on the
@@ -140,7 +140,7 @@
       <table class="table table-hover table-striped">
         <tbody>
           <tr>
-            <th class="w-50 text-center">Type of Orifice</th>
+            <th class="w-50 text-center">Orifice Type</th>
             <th class="w-50 text-center">Coefficient</th>
           </tr>
           <tr>

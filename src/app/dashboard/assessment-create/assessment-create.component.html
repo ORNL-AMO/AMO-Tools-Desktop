@@ -1,7 +1,3 @@
-<!-- <a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a> -->
-<!--<button (click)="showCreateModal()" type="button" class="btn btn-secondary create-btn">Create Assessment</button>-->
-
-
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">
@@ -9,9 +5,8 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <!-- <h3 *ngIf="directory.id != 1">Add Assessment in {{directory.name}}</h3> -->
         <h3>Create New Assessment</h3>
-        <button class="close" (click)="hideCreateModal(false)">
+        <button class="close" (click)="hideCreateModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -30,6 +25,7 @@
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Fan'">Example: "Fan123" or "ORNL Fan 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Steam'">Example: "Steam123" or "ORNL Steam 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'TreasureHunt'">Example: "Treasure Hunt 1" or "ORNL T-Hunt 3"</p>
+              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'WasteWater'">Example: "Waste Water 1" or "ORNL Waste Water 3"</p>
 
             </div>
           </div>
@@ -43,6 +39,7 @@
               <option [ngValue]="'Fan'">Fan</option>
               <option [ngValue]="'Steam'">Steam</option>
               <option [ngValue]="'TreasureHunt'">Treasure Hunt</option>
+              <option [ngValue]="'WasteWater'">Waste Water</option>
             </select>
           </div>
 
@@ -83,27 +80,18 @@
             <div class="input-group">
               <input class="form-control input-group" formControlName="folderName" id="folderName" />
             </div>
-            <!-- <div class="help-text">
-            <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
-          </div> -->
           </div>
           <div class="form-group">
             <label class="form-control-label" for="companyName">Company Name</label>
             <div class="input-group">
               <input class="form-control input-group" formControlName="companyName" id="companyName" />
             </div>
-            <!-- <div class="help-text">
-              <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
-            </div> -->
           </div>
           <div class="form-group">
             <label class="form-control-label" for="facilityName">Facility Name</label>
             <div class="input-group">
               <input class="form-control input-group" formControlName="facilityName" id="facilityName" />
             </div>
-            <!-- <div class="help-text">
-                <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
-              </div> -->
           </div>
           <div class="form-group" *ngIf="directories">
             <label>New Folder Location</label>

@@ -6,10 +6,10 @@
     <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast" [inSetup]="inSetup"></app-auxiliary-power-tab>
     <app-cooling-tab *ngIf="tab.componentStr == 'cooling-losses'" [phast]="phast" [inSetup]="inSetup"></app-cooling-tab>
     <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-energy-input-exhaust-gas-tab>
-    <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast" [inSetup]="inSetup"></app-energy-input-tab>
+    <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-energy-input-tab>
     <app-extended-surface-tab *ngIf="tab.componentStr == 'extended-surface-losses'" [phast]="phast" [inSetup]="inSetup"></app-extended-surface-tab>
     <app-fixture-tab *ngIf="tab.componentStr == 'fixture-losses'" [phast]="phast" [inSetup]="inSetup"></app-fixture-tab>
-    <app-flue-gas-tab *ngIf="tab.componentStr == 'flue-gas-losses'" [phast]="phast" [inSetup]="inSetup"></app-flue-gas-tab>
+    <app-flue-gas-tab *ngIf="tab.componentStr == 'flue-gas-losses'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-flue-gas-tab>
     <app-gas-leakage-tab *ngIf="tab.componentStr == 'gas-leakage-losses'" [phast]="phast" [inSetup]="inSetup"></app-gas-leakage-tab>
     <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast" [inSetup]="inSetup"></app-opening-tab>
     <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast" [inSetup]="inSetup"></app-other-tab>

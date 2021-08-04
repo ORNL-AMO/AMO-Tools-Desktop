@@ -37,7 +37,7 @@ export class PlotlyBarChartComponent implements OnInit {
   ngOnChanges() {
     if (this.barChart) {
       if (!this.isPrint) {
-        this.drawPrintChart();
+        this.createChart();
       } else {
         this.drawPrintChart();
       }
@@ -60,7 +60,7 @@ export class PlotlyBarChartComponent implements OnInit {
         title: {
           text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 16
           }
         },
@@ -96,7 +96,7 @@ export class PlotlyBarChartComponent implements OnInit {
         title: {
           text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 16
           }
         },

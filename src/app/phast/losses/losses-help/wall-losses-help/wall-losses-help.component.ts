@@ -11,10 +11,15 @@ export class WallLossesHelpComponent implements OnInit {
   settings: Settings;
   @Input()
   currentField: string;
+  displaySuggestions: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  toggleSuggestions() {
+    this.displaySuggestions = !this.displaySuggestions;
   }
 
 }

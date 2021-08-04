@@ -47,3 +47,36 @@
 .fa-globe{
     display: initial;
 }
+
+
+
+.nav-item .dropdown-toggle{
+    /* color: white; */
+    /* background: #84b641; */
+}
+
+.nav-link{
+    padding: 4px;
+}
+
+.list-group-item{
+    padding: 8px;
+    font-size: small;
+}
+
+.list-group-item.active{
+    /* color: white;
+    background: #84b641; */
+}
+
+a.list-group-item:hover, .nav-link{
+    cursor: pointer;
+}
+
+a.list-group-item.active:hover{
+    color: white;
+}
+
+/* .nav-link.dropdown-toggle:hover, .nav-btn:hover{
+    background-color: #808B96;
+} */

@@ -50,9 +50,10 @@
       <label for="globalBarometricPressure">Barometric Pressure (P<sub>b</sub>)</label>
       <div class="input-group">
         <input name="globalBarometricPressure" type="number" step="any" class="form-control"
-          formControlName="globalBarometricPressure" id="globalBarometricPressure" (input)="updatePressure()"
+          formControlName="globalBarometricPressure" id="globalBarometricPressure" (input)="updateBarometricPressure()"
           (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.globalBarometricPressure.invalid && !ratedInfoForm.controls.globalBarometricPressure.pristine">
@@ -63,6 +64,8 @@
           {{ratedInfoForm.controls.globalBarometricPressure.errors.min.min}}.</span>
       </span>
     </div>
+
+    <div *ngIf="!inModal">
     <div class="form-group">
       <label for="fanSpeedCorrected">Corrected Fan Speed (N<sub>c</sub>)</label>
       <div class="input-group">
@@ -86,7 +89,7 @@
       <div class="input-group">
         <input name="densityCorrected" type="number" step="any" class="form-control" formControlName="densityCorrected"
           id="densityCorrected" (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.densityCorrected.invalid && !ratedInfoForm.controls.densityCorrected.pristine">
@@ -99,7 +102,7 @@
         <input name="pressureBarometricCorrected" type="number" step="any" class="form-control"
           formControlName="pressureBarometricCorrected" id="pressureBarometricCorrected" (input)="save()"
           (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.invalid && !ratedInfoForm.controls.pressureBarometricCorrected.pristine">
@@ -110,6 +113,8 @@
           {{ratedInfoForm.controls.pressureBarometricCorrected.errors.min.min}}.</span>
       </span>
     </div>
+  </div>
+  
     <div class="form-group">
       <label for="includesEvase">Rated Fan Performance Includes Evase</label>
       <div class="input-group">

@@ -6,6 +6,15 @@
       Enter measured data to calculate your system's annual savings potential.
     </small>
   </h5>
+  <div class="my-2">
+      <h6>
+      Savings Suggestions
+      <br>
+        <small class="text-muted">
+          Enter data about Operations Settings (operating hours and costs) and the cost of implementing a modification.
+        </small>
+      </h6>
+    </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -18,6 +27,20 @@
         last row.
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 
@@ -40,17 +63,6 @@
       <br>
       <small class="text-muted">
         Cost associated with executing the modifications to the baseline system.
-      </small>
-    </h6>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Enter data about Operations Settings (operating hours and costs) and the cost of implementing a modification.
       </small>
     </h6>
   </div>

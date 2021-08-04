@@ -7,16 +7,15 @@
     <!-- driveType -->
     <div class="form-group" *ngIf="displayOptions.driveType">
         <label for="driveType">Drive Type</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('driveType')" (change)="save()"
-            formControlName="driveType" id="driveType">
+        <select class="form-control" (focus)="focusField('driveType')" (change)="save()" formControlName="driveType"
+            id="driveType">
             <option *ngFor="let driveType of driveTypes" [ngValue]="driveType.value">{{driveType.display}}</option>
         </select>
     </div>
     <!-- isVFD -->
     <div class="form-group" *ngIf="displayOptions.isVFD">
         <label for="isVFD">Is VFD?</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('isVFD')" (change)="save()"
-            formControlName="isVFD" id="isVFD">
+        <select class="form-control" (focus)="focusField('isVFD')" (change)="save()" formControlName="isVFD" id="isVFD">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
         </select>
@@ -24,7 +23,7 @@
     <!-- hasLoggerData -->
     <div class="form-group" *ngIf="displayOptions.hasLoggerData">
         <label for="hasLoggerData">Has Logger Data?</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('hasLoggerData')" (change)="save()"
+        <select class="form-control" (focus)="focusField('hasLoggerData')" (change)="save()"
             formControlName="hasLoggerData" id="hasLoggerData">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
@@ -33,7 +32,7 @@
     <!-- voltageConnectionType -->
     <div class="form-group" *ngIf="displayOptions.voltageConnectionType">
         <label for="voltageConnectionType">Voltage Connection Type</label>
-        <select class="form-control" (blur)="focusOut()" (focus)="focusField('voltageConnectionType')" (change)="save()"
+        <select class="form-control" (focus)="focusField('voltageConnectionType')" (change)="save()"
             formControlName="voltageConnectionType" id="voltageConnectionType">
             <option [ngValue]="'Delta'">Delta</option>
             <option [ngValue]="'Wye'">Wye</option>

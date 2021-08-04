@@ -5,6 +5,7 @@ import { CompressedAirReductionService } from '../compressed-air-reduction.servi
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { ConvertCompressedAirReductionService } from '../convert-compressed-air-reduction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-compressed-air-reduction-form',
@@ -30,6 +31,14 @@ export class CompressedAirReductionFormComponent implements OnInit {
   selected: boolean;
   @Input()
   utilityType: number;
+  @Input()
+  compressorControl: number;
+  @Input()
+  compressorControlAdjustment: number;
+  @Input()
+  compressorSpecificPowerControl: number;
+  @Input()
+  compressorSpecificPower: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -62,18 +71,20 @@ export class CompressedAirReductionFormComponent implements OnInit {
     { value: 8, name: '3/8" pipe, open' },
     { value: 9, name: '3/8" tubing' },
     { value: 10, name: '5/16" tubing' },
-    { value: 11, name: 'Blue Air Knife' },
-    { value: 12, name: 'Yellow Air Knife' }
+    { value: 11, name: 'Air Knife' }
   ];
   compressorControls: Array<{ value: number, name: string, adjustment: number }> = [
-    { value: 0, name: 'Modulation (Poor)', adjustment: 25 },
-    { value: 1, name: 'Load-Unload (Short-Cycle)', adjustment: 40 },
-    { value: 2, name: 'Load-Unload (2+ Minute Cycle)', adjustment: 75 },
-    { value: 3, name: 'Centrifugal (Venting)', adjustment: 0 },
-    { value: 4, name: 'Centrifugal (Non-Venting)', adjustment: 75 },
-    { value: 5, name: 'Reciprocrating Unloaders', adjustment: 80 },
-    { value: 6, name: 'Variable Speed', adjustment: 60 },
-    { value: 7, name: 'Variable Displacement', adjustment: 60 },
+    { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
+    { value: 101, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
+    { value: 102, name: 'Screw Compressor – Variable Speed Drives', adjustment: 97 },
+    { value: 103, name: 'Oil Injected Screw - Load/Unload (short cycle)', adjustment: 48 },
+    { value: 104, name: 'Oil Injected Screw - Load/Unload (2+ minutes cycle)', adjustment: 68 },
+    { value: 105, name: 'Oil Free Screw - Load/Unload', adjustment: 73 },
+    { value: 106, name: 'Reciprocating Compressor - Load/Unload', adjustment: 74 },
+    { value: 107, name: 'Reciprocating Compressor - On/Off', adjustment: 100 },
+    { value: 108, name: 'Centrifugal Compressor – In blowoff (Venting)', adjustment: 0 },
+    { value: 109, name: 'Centrifugal – Modulating (IBV) in throttle range (Non-Venting)', adjustment: 67 },
+    { value: 110, name: 'Centrifugal– Modulating (IGV) in throttle range (Non-Venting)', adjustment: 86 },
     { value: 8, name: 'Custom', adjustment: 0 }
   ];
   compressorSpecificPowerControls: Array<{ value: number, name: string, specificPower: number }> = [
@@ -89,7 +100,9 @@ export class CompressedAirReductionFormComponent implements OnInit {
   form: FormGroup;
   idString: string;
   individualResults: CompressedAirReductionResult;
+  compressedAirResultsSub: Subscription;
   isEditingName: boolean = false;
+  
   constructor(private compressedAirReductionService: CompressedAirReductionService, private convertCompressedAirReductionService: ConvertCompressedAirReductionService) { }
 
   ngOnInit() {
@@ -99,24 +112,69 @@ export class CompressedAirReductionFormComponent implements OnInit {
     else {
       this.idString = 'modification_' + this.index;
     }
+    //previous 0.8.1 versions had nozzle type 12 with different color knife
+    if (this.data.pressureMethodData.nozzleType == 12) {
+      this.data.pressureMethodData.nozzleType = 11;
+    }
+
+    if (this.data.compressorElectricityData.compressorControl == 8) {
+      this.compressorCustomControl = true;
+    }
     this.form = this.compressedAirReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (this.selected == false) {
       this.form.disable();
     }
-    this.calculateIndividualResult();
+
+    this.compressedAirResultsSub = this.compressedAirReductionService.compressedAirResults.subscribe(results => {
+      if (results) {
+        if (this.isBaseline) {
+          this.individualResults = results.baselineResults[this.index];
+        } else {
+          this.individualResults = results.modificationResults[this.index];
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.compressedAirResultsSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.utilityType && !changes.utilityType.firstChange) {
       this.form.patchValue({ utilityType: this.utilityType });
     }
+
+    if (changes.compressorControlAdjustment && !changes.compressorControlAdjustment.firstChange) {
+      this.form.controls.compressorControlAdjustment.patchValue(this.compressorControlAdjustment);
+    }
+
+    if (changes.compressorControl && !changes.compressorControl.firstChange) {
+      this.form.controls.compressorControl.patchValue(this.compressorControl);
+      this.compressorCustomControl = (this.compressorControl == 8);
+    }
+
+    if (changes.compressorSpecificPowerControl && !changes.compressorSpecificPowerControl.firstChange) {
+      this.form.controls.compressorSpecificPowerControl.patchValue(this.compressorSpecificPowerControl);
+    }
+
+    if (changes.compressorSpecificPower && !changes.compressorSpecificPower.firstChange) {
+      this.form.controls.compressorSpecificPower.patchValue(this.compressorSpecificPower);
+    }
+
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
       } else {
         this.form.enable();
-        if (this.index != 0 || !this.isBaseline) {
+        if (this.index != 0) {
           this.form.controls.utilityType.disable();
+        }
+        if (!this.isBaseline) {
+          this.form.controls.compressorControl.disable();
+          this.form.controls.compressorControlAdjustment.disable();
+          // Compressor type
+          this.form.controls.compressorSpecificPowerControl.disable();
         }
       }
     }
@@ -133,23 +191,12 @@ export class CompressedAirReductionFormComponent implements OnInit {
       if (this.form.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
-
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
-        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
-      }
+      let specificPower: number = this.getSpecificPower();
       this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (this.form.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
-
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
-        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
-      }
-
+      let specificPower: number = this.getSpecificPower();
       this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
@@ -161,23 +208,39 @@ export class CompressedAirReductionFormComponent implements OnInit {
     this.calculate();
   }
 
+  getSpecificPower(): number {
+    let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
+
+    if (this.settings.unitsOfMeasure != 'Imperial') {
+      specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
+      specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
+    } else {
+      specificPower = specificPower * 100;
+    }
+    return specificPower;
+  }
+
   changeCompressorControl() {
     if (!this.compressorCustomControl) {
       if (this.form.controls.compressorControl.value == 8) {
         this.compressorCustomControl = true;
-        this.form.patchValue({ compressorControlAdjustment: this.compressorControls[this.form.controls.compressorControl.value].adjustment });
+        let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
+        this.form.patchValue({ compressorControlAdjustment: control.adjustment });
       }
       else {
-        this.form.patchValue({ compressorControlAdjustment: this.compressorControls[this.form.controls.compressorControl.value].adjustment });
+        let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
+        this.form.patchValue({ compressorControlAdjustment: control.adjustment });
       }
     }
     else if (this.form.controls.compressorControl.value !== 8) {
       this.compressorCustomControl = false;
-      this.form.patchValue({ compressorControlAdjustment: this.compressorControls[this.form.controls.compressorControl.value].adjustment });
+      let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
+      this.form.patchValue({ compressorControlAdjustment: control.adjustment });
     }
     else {
       if (this.form.controls.compressorControlAdjustment.valid) {
-        this.compressorControls[8].adjustment = this.form.controls.compressorControlAdjustment.value;
+        //custom
+        this.compressorControls[11].adjustment = this.form.controls.compressorControlAdjustment.value;
       }
     }
     this.compressedAirReductionService.setValidators(this.form);
@@ -196,17 +259,11 @@ export class CompressedAirReductionFormComponent implements OnInit {
 
   calculate() {
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
-    this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
 
   removeEquipment() {
     this.emitRemoveEquipment.emit(this.index);
-  }
-
-  calculateIndividualResult() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
-    this.individualResults = this.compressedAirReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
   editEquipmentName() {

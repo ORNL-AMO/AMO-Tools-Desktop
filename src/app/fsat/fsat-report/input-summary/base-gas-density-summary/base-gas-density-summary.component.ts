@@ -29,12 +29,13 @@ export class BaseGasDensitySummaryComponent implements OnInit {
   gasDensityDiff: Array<boolean>;
   gasTypeDiff: Array<boolean>;
   conditionLocationDiff: Array<boolean>;
-  specificGravityDiff: Array<boolean>;
+  // specificGravityDiff: Array<boolean>;
   inputTypeDiff: Array<boolean>;
   dewPointDiff: Array<boolean>;
   relativeHumidityDiff: Array<boolean>;
   wetBulbTempDiff: Array<boolean>;
   specificHeatGasDiff: Array<boolean>;
+  specificHeatRatioDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -45,13 +46,13 @@ export class BaseGasDensitySummaryComponent implements OnInit {
     this.gasDensityDiff = new Array<boolean>();
     this.gasTypeDiff = new Array<boolean>();
     this.conditionLocationDiff = new Array<boolean>();
-    this.specificGravityDiff = new Array<boolean>();
+    // this.specificGravityDiff = new Array<boolean>();
     this.inputTypeDiff = new Array<boolean>();
     this.dewPointDiff = new Array<boolean>();
     this.relativeHumidityDiff = new Array<boolean>();
     this.wetBulbTempDiff = new Array<boolean>();
     this.specificHeatGasDiff = new Array<boolean>();
-
+    this.specificHeatRatioDiff = new Array<boolean>();
 
     if (this.fsat.baseGasDensity) {
 
@@ -76,12 +77,13 @@ export class BaseGasDensitySummaryComponent implements OnInit {
         this.gasDensityDiff.push(false);
         this.gasTypeDiff.push(false);
         this.conditionLocationDiff.push(false);
-        this.specificGravityDiff.push(false);
+        // this.specificGravityDiff.push(false);
         this.inputTypeDiff.push(false);
         this.dewPointDiff.push(false);
         this.relativeHumidityDiff.push(false);
         this.wetBulbTempDiff.push(false);
         this.specificHeatGasDiff.push(false);
+        this.specificHeatRatioDiff.push(false);
       }
 
       this.baseGasDensity = {

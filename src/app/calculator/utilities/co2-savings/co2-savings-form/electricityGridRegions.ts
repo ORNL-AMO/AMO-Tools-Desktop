@@ -12,7 +12,7 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'U.S. Average',
-                outputRate: 512.6374
+                outputRate: 432.2286834
             }
         ]
     },
@@ -21,11 +21,11 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'AKGD: ASCC Alaska Grid',
-                outputRate: 421.7208
+                outputRate: 474.0045904
             },
             {
                 subregion: 'AKMS: ASCC Miscellaneous',
-                outputRate: 309.8554991
+                outputRate: 239.0434633
             }
         ]
     },
@@ -34,7 +34,7 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'ERCT: ERCOT All',
-                outputRate: 520.745842
+                outputRate: 424.6083225
             }
         ]
     },
@@ -43,7 +43,7 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'FRCC: FRCC All',
-                outputRate: 490.2277187
+                outputRate: 424.6083225
             }
         ]
     },
@@ -52,11 +52,11 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'HIMS: HICC Miscellaneous',
-                outputRate: 429.790667
+                outputRate: 507.6158249
             },
             {
                 subregion: 'HIOA: HICC Oahu',
-                outputRate: 676.0180947
+                outputRate: 763.2154294
             }
         ]
     },
@@ -65,11 +65,11 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'MROE: MRO East',
-                outputRate: 760.4610494
+                outputRate: 766.4359391
             },
             {
                 subregion: 'MROW: MRO West',
-                outputRate: 623.9638768
+                outputRate: 566.6282625
             }
         ]
     },
@@ -78,7 +78,7 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'NEWE: NPCC New England',
-                outputRate: 261.6137219
+                outputRate: 239.315619
             },
             {
                 subregion: 'NYCW: NPCC NYC/Westchester',
@@ -86,11 +86,11 @@ export const electricityGridRegions: Array<eGridRegion> = [
             },
             {
                 subregion: 'NYLI: NPCC Long Island',
-                outputRate: 546.2712782
+                outputRate: 541.1817002
             },
             {
                 subregion: 'NYUP: NPCC Upstate NY',
-                outputRate: 166.7585629
+                outputRate: 115.1672397
             },
         ]
     },
@@ -99,15 +99,15 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'RFCE: RFC East',
-                outputRate: 378.5116378
+                outputRate: 326.5868948
             },
             {
                 subregion: 'RFCM: RFC Michigan',
-                outputRate: 699.7191839
+                outputRate: 599.2869519
             },
             {
                 subregion: 'RFCW: RFC West',
-                outputRate: 630.8865979
+                outputRate: 532.5180757
             }
         ]
     },
@@ -116,23 +116,23 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'SRMV: SERC Mississippi Valley',
-                outputRate: 465.8916007
+                outputRate: 389.3641535
             },
             {
                 subregion: 'SRMW: SERC Midwest',
-                outputRate: 810.0273152
+                outputRate: 760.5845905
             },
             {
                 subregion: 'SRSO: SERC South',
-                outputRate: 521.9632829
+                outputRate: 468.7882719
             },
             {
                 subregion: 'SRTV: SERC Tennessee Valley',
-                outputRate: 610.2703879
+                outputRate: 470.8747993
             },
             {
                 subregion: 'SRVC: SERC Virginia/Carolina',
-                outputRate: 391.3528273
+                outputRate: 339.0606998
             }
         ]
     },
@@ -141,11 +141,11 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'SPNO: SPP North',
-                outputRate: 719.6051107
+                outputRate: 531.4294527
             },
             {
                 subregion: 'SPSO: SPP South',
-                outputRate: 673.4938552
+                outputRate: 531.9737642
             }
         ]
     },
@@ -154,20 +154,20 @@ export const electricityGridRegions: Array<eGridRegion> = [
         subregions: [
             {
                 subregion: 'AZNM: WECC Southwest',
-                outputRate: 399.1029002
+                outputRate: 466.0667144
             },
             {
                 subregion: 'CAMX: WECC California',
-                outputRate: 258.7692465
+                outputRate: 226.2067839
             },
             {
 
                 subregion: 'NWPP: WECC Northwest',
-                outputRate: 414.3213654
+                outputRate: 291.8416779
             },
             {
                 subregion: 'RMPA: WECC Rockies',
-                outputRate: 793.5229166
+                outputRate: 581.4607506
             }
         ]
     }

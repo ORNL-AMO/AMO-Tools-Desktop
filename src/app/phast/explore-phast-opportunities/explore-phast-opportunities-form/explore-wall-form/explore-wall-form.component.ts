@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
-import { WallLossWarnings, WallLossesService } from '../../../losses/wall-losses/wall-losses.service';
+import { WallFormService, WallLossWarnings } from '../../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
   selector: 'app-explore-wall-form',
@@ -26,7 +26,7 @@ export class ExploreWallFormComponent implements OnInit {
   showSurfaceTemp: Array<boolean>;
   baselineWarnings: Array<WallLossWarnings>;
   modificationWarnings: Array<WallLossWarnings>;
-  constructor(private wallLossesService: WallLossesService) { }
+  constructor(private wallFormService: WallFormService) { }
 
   ngOnInit() {
     this.initData();
@@ -52,9 +52,9 @@ export class ExploreWallFormComponent implements OnInit {
         this.phast.modifications[this.exploreModIndex].exploreOppsShowWall = { hasOpportunity: check, display: 'Add / Improve Wall Insulation' };
       }
       this.showSurfaceTemp.push(check);
-      let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
+      let tmpWarnings: WallLossWarnings = this.wallFormService.checkWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
+      tmpWarnings = this.wallFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
     });
@@ -101,13 +101,13 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
+    let tmpWarnings: WallLossWarnings = this.wallFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.losses.wallLosses[index]);
+    let tmpWarnings: WallLossWarnings = this.wallFormService.checkWarnings(this.phast.losses.wallLosses[index]);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }

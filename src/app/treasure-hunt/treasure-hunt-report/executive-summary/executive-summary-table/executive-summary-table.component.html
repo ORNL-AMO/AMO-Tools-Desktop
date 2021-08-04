@@ -340,6 +340,45 @@
                 <span class="fa fa-asterisk"></span>
             </td>
         </tr>
+        <tr *ngIf="treasureHuntResults.totalAdditionalSavings != 0">
+            <!--cant use colspan with copy table button (need 7)-->
+            <td class="bold" *ngIf="showFullSummary">
+                Other
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td class="bold" *ngIf="!showFullSummary">
+                Other
+            </td>
+            <td>
+                ${{treasureHuntResults.totalAdditionalSavings | number:'.0-0'}}
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <!-- <span class="fa fa-asterisk"></span> -->
+            </td>
+        </tr>
         <!--Total-->
         <tr>
             <!--cant use colspan with copy table button (need 5)-->

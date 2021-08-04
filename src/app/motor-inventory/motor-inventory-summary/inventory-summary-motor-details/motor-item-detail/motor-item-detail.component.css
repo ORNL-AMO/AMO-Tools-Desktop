@@ -11,3 +11,9 @@ hr.hr-spacer{
 hr.hr-spacer.last-spacer{
     border: dashed 2px gray;
 }
+
+@media print{
+     .page-break-after {
+        page-break-after: always !important;
+    }
+}

@@ -119,6 +119,7 @@
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.combustionAirTempWarning !== null">{{modificationWarnings.combustionAirTempWarning}}</span>
         </div>
       </form>
     </li>

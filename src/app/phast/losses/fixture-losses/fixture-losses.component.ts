@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { FixtureLossesService } from './fixture-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { FixtureFormService } from '../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -40,7 +40,7 @@ export class FixtureLossesComponent implements OnInit {
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   total: number;
-  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private phastService: PhastService, private fixtureFormService: FixtureFormService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
@@ -75,7 +75,7 @@ export class FixtureLossesComponent implements OnInit {
       let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
-          form: this.fixtureLossesService.getFormFromLoss(loss),
+          form: this.fixtureFormService.getFormFromLoss(loss),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -94,7 +94,7 @@ export class FixtureLossesComponent implements OnInit {
 
   addLoss() {
     this._fixtureLosses.push({
-      form: this.fixtureLossesService.initForm(this._fixtureLosses.length + 1),
+      form: this.fixtureFormService.initForm(this._fixtureLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -109,7 +109,7 @@ export class FixtureLossesComponent implements OnInit {
 
   calculate(loss: FixtureLossObj) {
     if (loss.form.status === 'VALID') {
-      let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
+      let tmpLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
     } else {
       loss.heatLoss = null;
@@ -131,7 +131,7 @@ export class FixtureLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
+      let tmpFixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
     });

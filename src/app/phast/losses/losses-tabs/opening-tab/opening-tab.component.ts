@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { OpeningLossesService, OpeningLossWarnings } from '../../opening-losses/opening-losses.service';
 import { OpeningLossesCompareService } from '../../opening-losses/opening-losses-compare.service';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { Subscription } from 'rxjs';
+import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
 
 @Component({
   selector: 'app-opening-tab',
@@ -27,7 +27,9 @@ export class OpeningTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, 
+              private openingFormService: OpeningFormService, 
+              private openingLossesCompareService: OpeningLossesCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -74,8 +76,8 @@ export class OpeningTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        let warnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -86,8 +88,8 @@ export class OpeningTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        let warnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -98,7 +100,7 @@ export class OpeningTabComponent implements OnInit {
 
 
   checkLossValid(loss: OpeningLoss) {
-      let tmpForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+      let tmpForm: FormGroup = this.openingFormService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

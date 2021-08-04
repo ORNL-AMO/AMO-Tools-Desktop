@@ -15,6 +15,7 @@ export class BlowdownRateHelpComponent implements OnInit {
   currentField: string;
   currentFieldSub: Subscription;
   ranges: BoilerBlowdownRateRanges;
+  displaySuggestions: boolean = false;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService) { }
 
   ngOnInit() {
@@ -26,6 +27,10 @@ export class BlowdownRateHelpComponent implements OnInit {
 
   ngOnDestroy() {
     this.currentFieldSub.unsubscribe();
+  }
+
+  toggleSuggestions() {
+    this.displaySuggestions = !this.displaySuggestions;
   }
 
 }

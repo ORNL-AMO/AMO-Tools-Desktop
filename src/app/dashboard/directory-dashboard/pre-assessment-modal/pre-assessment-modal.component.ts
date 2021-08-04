@@ -52,7 +52,7 @@ export class PreAssessmentModalComponent implements OnInit {
   showPreAssessmentModal() {
     this.preAssessmentModal.show();
     this.preAssessmentModal.onShown.subscribe(val => {
-      this.modalShown = val;
+      this.modalShown = true;
     })
   }
 

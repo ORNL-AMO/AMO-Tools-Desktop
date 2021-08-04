@@ -26,6 +26,8 @@ import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-gra
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { SsmtPieChartComponent } from './report-graphs/ssmt-pie-chart/ssmt-pie-chart.component';
 import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-waterfall.component';
+import { SsmtReportSankeyComponent } from './ssmt-report-sankey/ssmt-report-sankey.component';
+import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-wate
     PercentGraphModule,
     PieChartModule,
     WaterfallGraphModule,
-    SharedPipesModule
+    SharedPipesModule,
+    SsmtSankeyModule
   ],
   declarations: [
     SsmtReportComponent,
@@ -55,7 +58,8 @@ import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-wate
     TurbineInputTableComponent,
     ReportGraphsPrintComponent,
     SsmtPieChartComponent,
-    SsmtWaterfallComponent
+    SsmtWaterfallComponent,
+    SsmtReportSankeyComponent
   ],
   exports: [
     SsmtReportComponent

@@ -38,6 +38,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   baselineSankey: SSMT;
   modificationSankey: SSMT;
+  sankeyView: string = 'Baseline';
+
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(private ssmtService: SsmtService) {
@@ -61,6 +63,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.getSankeyData();
       //this.checkToasty();
     }
+    if (changes.ssmt) {
+      this.getSankeyData();
+    }
   }
 
   ngAfterViewInit() {
@@ -80,10 +85,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   addExploreOpp() {
     this.ssmtService.openNewModificationModal.next(true);
-  }
-
-  getResults() {
-
   }
 
   save(newSSMT: SSMT) {

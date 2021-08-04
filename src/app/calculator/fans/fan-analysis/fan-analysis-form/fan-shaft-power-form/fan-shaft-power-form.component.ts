@@ -2,10 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FanShaftPowerFormService } from './fan-shaft-power-form.service';
 import { PsatService } from '../../../../../psat/psat.service';
 import { FormGroup } from '@angular/forms';
-import { FanShaftPower } from '../../../../../shared/models/fans';
+import { FanShaftPower, FanShaftPowerResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
+import { FanInfoFormService } from '../fan-info-form/fan-info-form.service';
+import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
+import { PlaneDataFormService } from '../plane-data-form/plane-data-form.service';
+import { GasDensityFormService } from '../gas-density-form/gas-density-form.service';
 
 @Component({
   selector: 'app-fan-shaft-power-form',
@@ -48,53 +52,68 @@ export class FanShaftPowerFormComponent implements OnInit {
   fanShaftPower: FanShaftPower;
   resetFormSubscription: Subscription;
   flaDisabled: boolean = true;
-  constructor(private fanShaftPowerFormService: FanShaftPowerFormService, private psatService: PsatService, private fanAnalysisService: FanAnalysisService) { }
+  results: FanShaftPowerResults;
+  fanShaftPowerResultSub: Subscription;
+  constructor(
+    private fanShaftPowerFormService: FanShaftPowerFormService, 
+    private psatService: PsatService, 
+    private fanAnalysisService: FanAnalysisService,
+    private convertFanAnalysisService: ConvertFanAnalysisService, 
+    private gasDensityFormService: GasDensityFormService,
+    private planeDataFormService: PlaneDataFormService, 
+    private fanInfoFormService: FanInfoFormService
+    ) { }
 
   ngOnInit() {
-    this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower);
+    this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
     this.checkFlaDisabled();
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
-    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
-      if (val == true) {
-        this.resetData();
-      }
-    })
+    this.initSubscriptions();
+    this.save();
   }
 
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
   }
 
+  initSubscriptions() {
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    });
+  }
+
   resetData() {
-    this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower);
+    this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
   }
 
   calcAverageAmps() {
-    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
+    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
     let total = this.fanAnalysisService.inputData.FanShaftPower.phase1.amps + this.fanAnalysisService.inputData.FanShaftPower.phase2.amps + this.fanAnalysisService.inputData.FanShaftPower.phase3.amps;
     this.fanAnalysisService.inputData.FanShaftPower.amps = total / 3;
     this.calcMotorShaftPower();
   }
 
   calcAverageVoltage() {
-    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
+    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
     let total = this.fanAnalysisService.inputData.FanShaftPower.phase1.voltage + this.fanAnalysisService.inputData.FanShaftPower.phase2.voltage + this.fanAnalysisService.inputData.FanShaftPower.phase3.voltage;
     this.fanAnalysisService.inputData.FanShaftPower.voltage = total / 3;
     this.calcMotorShaftPower();
   }
 
   calcMotorShaftPower() {
-    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
-    let tmpVal = this.fanAnalysisService.inputData.FanShaftPower.voltage * this.fanAnalysisService.inputData.FanShaftPower.amps * Math.sqrt(3) * (this.fanAnalysisService.inputData.FanShaftPower.powerFactorAtLoad / 745);
+    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
+    let calculatedMotorShaftPower = this.fanAnalysisService.inputData.FanShaftPower.voltage * this.fanAnalysisService.inputData.FanShaftPower.amps * Math.sqrt(3) * (this.fanAnalysisService.inputData.FanShaftPower.powerFactorAtLoad / 745);
     this.shaftPowerForm.patchValue({
-      motorShaftPower: tmpVal
+      motorShaftPower: calculatedMotorShaftPower
     });
     this.save();
   }
 
 
   setBeltEfficiency() {
-    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
+    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
     let tmpEff: { name: string, efficiency: number } = this.driveTypes.find((type) => { return type.name === this.fanAnalysisService.inputData.FanShaftPower.driveType; });
     this.shaftPowerForm.patchValue({
       efficiencyBelt: tmpEff.efficiency
@@ -103,10 +122,27 @@ export class FanShaftPowerFormComponent implements OnInit {
   }
 
   save() {
-    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
+    this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower, true, this.settings);
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
     this.checkFlaDisabled();
     this.fanAnalysisService.getResults.next(true);
+    this.calculatePowerResults();
+  }
+
+  calculatePowerResults() {
+      let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+      let basicsDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
+      let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
+      let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower, true, this.settings).valid;
+  
+      if (planeDataDone && basicsDone && gasDone && shaftPowerDone) {
+        let fanResults = this.convertFanAnalysisService.fan203(this.fanAnalysisService.inputData, this.settings);
+        this.results = 
+          {
+            power: fanResults.power,
+            powerCorrected: fanResults.powerCorrected
+          };
+      }
   }
 
   focusField(str: string) {
@@ -122,6 +158,7 @@ export class FanShaftPowerFormComponent implements OnInit {
       let efficiency: number = 100;
       let motorVoltage: number = this.fanShaftPower.npv;
       let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+      fla = Math.round(fla);
       this.shaftPowerForm.patchValue({
         fullLoadAmps: fla
       });

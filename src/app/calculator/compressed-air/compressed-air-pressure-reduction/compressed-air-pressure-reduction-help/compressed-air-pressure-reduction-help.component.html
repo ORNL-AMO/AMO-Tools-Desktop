@@ -1,6 +1,6 @@
 <div class="px-2 pt-3 d-flex flex-column help-info">
   <h5>
-    Compressed Air Pressure Reduction
+    Compressed Air Pressure Reduction Help
     <br>
   </h5>
   <div class="my-2">
@@ -8,13 +8,19 @@
       <small class="text-muted">
         This calculator can be used to quantify the electricity saved from reducing compressed air system pressure. The
         benefits of lowering system pressure are twofold:
-        <hr class="my-1">Reducing the pressure lowers the work done by the compressor and hence lesser electricity is
-        drawn.
-        <hr class="my-1">Reducing the pressure also lowers the amount of air delivered to plant and thus cuts down on
-        the air lost in the form of artificial demand and air leaks.
+        <ul>
+          <li class="help-list-item">Reducing the pressure lowers the work done by the compressor and hence lesser electricity is
+            drawn.
+          </li>
+          <li class="help-list-item">Reducing the pressure also lowers the amount of air delivered to plant and thus cuts down on
+            the air lost in the form of artificial demand and air leaks.
+          </li>
+        </ul>
         <hr class="my-1">
         This calculator only calculates the electricity saved at the compressors and hence its savings are not relevant
         when compressed air is brought from outside.
+        <hr class="my-1">
+        <b>Note:</b> This calculator is not valid for centrifugal compressors
       </small>
     </h6>
   </div>
@@ -74,4 +80,25 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'ratedPressure'">
+    <h6>
+      Rated Pressure
+      <small class="text-muted">
+        <br>
+        Pressure at rated flow per CAGI data sheet or manufacturer specified design inlet pressure
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+    <h6>
+      Atmospheric Pressure
+      <small class="text-muted">
+        <br>
+        Standard atmospheric pressure is 14.7 psia.
+        <hr>
+      </small>
+    </h6>
+  </div>
 </div>

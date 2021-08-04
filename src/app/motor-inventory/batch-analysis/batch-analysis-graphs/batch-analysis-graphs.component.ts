@@ -13,4 +13,11 @@ export class BatchAnalysisGraphsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  ngAfterViewInit(){
+    //fires after child components are rendered
+    //call resize: reactive plotly plots as child components will resize to correct dimensions
+    window.dispatchEvent(new Event('resize'));
+  }
+
 }

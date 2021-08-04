@@ -1,0 +1,54 @@
+<form [formGroup]="energyForm">
+   <div class="form-group">
+     <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+     <div class="input-group">
+       <span class="input-group-addon op-hour-addon units">
+         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+       </span>
+       <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+         formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+        onfocus="this.select();">
+       <span class="units input-group-addon">hrs/yr</span>
+     </div>
+     <span class="alert-danger pull-right small"
+       *ngIf="energyForm.controls.hoursPerYear.invalid && !energyForm.controls.hoursPerYear.pristine">
+       <span *ngIf="energyForm.controls.hoursPerYear.errors.required">Value required.</span>
+       <span *ngIf="energyForm.controls.hoursPerYear.errors.max">Value can't be greater than
+         {{energyForm.controls.hoursPerYear.errors.max.max}}.</span>
+       <span *ngIf="energyForm.controls.hoursPerYear.errors.min">Value can't be less than
+         {{energyForm.controls.hoursPerYear.errors.min.min}}.</span>
+     </span>
+   </div>
+
+   <div *ngIf="inTreasureHunt && isBaseline && method === 'By Volume'" class="form-group">
+    <label class="small" for="utilityType">Utility type
+    </label>
+    <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+      (change)="calculate()" (focus)="focusField('utilityType')" >
+      <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+      <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+    </select>
+  </div>
+
+   <div class="form-group">
+     <label class="small" for="fuelCost">
+        Fuel Cost
+      </label>
+     <div class="input-group">
+       <input name="fuelCost" type="number" class="form-control"
+       formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
+       (input)="calculate()" (focus)="focusField('fuelCost')" >
+       <span class="input-group-addon units">$/<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
+       </span>
+     </div>
+     <span class="alert-danger pull-right small"
+       *ngIf="energyForm.controls.fuelCost.invalid && !energyForm.controls.fuelCost.pristine">
+       <span *ngIf="energyForm.controls.fuelCost.errors.required">Value Required</span>
+     </span>
+   </div>
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+(emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+[operatingHours]="flueGasService.operatingHours">
+</app-operating-hours-modal>

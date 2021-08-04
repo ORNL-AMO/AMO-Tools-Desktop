@@ -38,7 +38,8 @@
               "lodash",
               "plotly.js",
               "c3",
-              "regression"
+              "regression",
+              "xlsx"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
@@ -65,6 +66,7 @@
               "src/assets/styles/c3-charts.css",
               "src/assets/styles/directory-dashboard.css",
               "src/assets/styles/sidebar.css",
+              "src/assets/styles/plotly-overrides.css",
               "src/assets/styles/explore-opps.css"
             ],
             "scripts": []
@@ -74,7 +76,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

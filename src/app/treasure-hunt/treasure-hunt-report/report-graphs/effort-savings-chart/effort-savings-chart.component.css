@@ -1,0 +1,61 @@
+
+.point-key-circle {
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border-radius: 50%;
+  }
+  
+  .grid-toggle-button {
+    padding: 0;
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    z-index: 1;
+  }
+  
+  .tab-panel-background {
+    background: white;
+  }
+
+  .labels-toggled {
+    opacity: 1;
+    border: 1px solid #000 !important;
+  }
+  
+  
+  td{
+    font-size: small;
+  }
+  
+  th {
+    border-top: none;
+    padding: .5rem;
+  }
+  
+  td{
+    font-size: small;
+    padding: .5rem;
+  }
+  
+  table {
+    margin-bottom: .5rem;
+  }
+  
+  .data-summary{
+    background-color: white;
+  }
+  
+  .hidden-copy-table {
+    z-index: -10;
+    position: fixed;
+    opacity: 0;
+    top: -1000px;
+    height: 0;
+    width: 0;
+  }
+
+
+  .max-width-50{
+    max-width: 50px;
+  }

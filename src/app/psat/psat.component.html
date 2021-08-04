@@ -13,11 +13,11 @@
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true}">
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
-        [(psat)]="_psat" (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()"
-        (closeModal)="modalClose()"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
+        (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+        <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
       <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
@@ -74,15 +74,27 @@
   <!--TODO: Move sankey selecting logic to sankey component-->
   <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
-    <div class="p-1 mx-auto">
-      <div class="form-group" *ngIf="psatOptionsLength > 1">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" [(ngModel)]="psat1">
-          <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
-        </select>
+    <nav class="navbar phast">
+      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+        <div class="tab-content pl-2 pr-2">
+          <div class="form-group" *ngIf="psatOptionsLength > 1">
+            <select name="psatSelect" class="form-control mx-auto mt-0 w-100" id="psatSelect" [(ngModel)]="psat1">
+              <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
+            </select>
+          </div>
+        </div>
+          <div class="btn-group btn-group-sm align-self-center">
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          </div>
       </div>
-    </div>
+  </nav>
     <div class="sankey-padding w-100">
-      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"
+      <app-psat-sankey [psat]="psat1.psat" [labelStyle]="sankeyLabelStyle" [appBackground]="true" [settings]="settings"
         [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
     </div>
   </div>
@@ -158,3 +170,6 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

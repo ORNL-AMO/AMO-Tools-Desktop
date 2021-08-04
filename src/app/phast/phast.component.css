@@ -27,4 +27,11 @@
 
 .sankey-padding{
     padding-bottom:4rem;
+    padding-top:2rem;
+}
+
+
+.btn-sm.active{
+    color: white;
+    background-color: #BF3D00;
 }

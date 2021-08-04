@@ -3,9 +3,11 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { ChargeMaterialCompareService } from '../../charge-material/charge-material-compare.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { ChargeMaterialService, SolidMaterialWarnings, LiquidMaterialWarnings, GasMaterialWarnings } from '../../charge-material/charge-material.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { GasMaterialFormService } from '../../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
+import { SolidMaterialFormService, SolidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 
 @Component({
   selector: 'app-charge-material-tab',
@@ -28,7 +30,15 @@ export class ChargeMaterialTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, 
+              private chargeMaterialCompareService: ChargeMaterialCompareService, 
+              private cd: ChangeDetectorRef,
+              private liquidMaterialFormService: LiquidMaterialFormService,
+              private gasMaterialFormService: GasMaterialFormService,
+              private solidMaterialFormService: SolidMaterialFormService
+    ) {
+      
+     }
 
   ngOnInit() {
     this.setNumLosses();
@@ -98,38 +108,35 @@ export class ChargeMaterialTabComponent implements OnInit {
   }
 
   checkWarningExists(material: ChargeMaterial): boolean {
-    if (material.chargeMaterialType === 'Gas') {
-      let warnings: GasMaterialWarnings = this.chargeMaterialService.checkGasWarnings(material.gasChargeMaterial);
-      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
-      return tmpHasWarning;
-    } else if (material.chargeMaterialType === 'Liquid') {
-      let warnings: LiquidMaterialWarnings = this.chargeMaterialService.checkLiquidWarnings(material.liquidChargeMaterial);
-      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
+    // Gas warnings have been moved to validation
+    if (material.chargeMaterialType === 'Liquid') {
+      let warnings: LiquidMaterialWarnings = this.liquidMaterialFormService.checkLiquidWarnings(material.liquidChargeMaterial);
+      let tmpHasWarning: boolean = warnings.dischargeTempWarning != undefined || warnings.inletOverVaporizingWarning != undefined || warnings.outletOverVaporizingWarning != undefined;
       return tmpHasWarning;
     } else if (material.chargeMaterialType === 'Solid') {
-      let warnings: SolidMaterialWarnings = this.chargeMaterialService.checkSolidWarnings(material.solidChargeMaterial);
-      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
+      let warnings: SolidMaterialWarnings = this.solidMaterialFormService.checkSolidWarnings(material.solidChargeMaterial);
+      let tmpHasWarning: boolean = warnings.dischargeTempWarning != undefined;
       return tmpHasWarning;
     }
   }
 
   checkMaterialValid(material: ChargeMaterial) {
     if (material.chargeMaterialType === 'Gas') {
-      let tmpForm: FormGroup = this.chargeMaterialService.getGasChargeMaterialForm(material);
+      let tmpForm: FormGroup = this.gasMaterialFormService.getGasChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (material.chargeMaterialType === 'Solid') {
-      let tmpForm: FormGroup = this.chargeMaterialService.getSolidChargeMaterialForm(material);
+      let tmpForm: FormGroup = this.solidMaterialFormService.getSolidChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (material.chargeMaterialType === 'Liquid') {
-      let tmpForm: FormGroup = this.chargeMaterialService.getLiquidChargeMaterialForm(material);
+      let tmpForm: FormGroup = this.liquidMaterialFormService.getLiquidChargeMaterialForm(material);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

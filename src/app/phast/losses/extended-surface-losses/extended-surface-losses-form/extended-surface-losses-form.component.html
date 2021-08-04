@@ -4,7 +4,7 @@
       <label class="small" for="{{'surfaceArea'+idString}}">Total Outside Surface Area</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea(), 'error': warnings.surfaceAreaWarning !== null, 'invalid': lossesForm.controls.surfaceArea.invalid}">
         <input [readonly]="!baselineSelected" name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea"
-          id="{{'surfaceArea'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
+          id="{{'surfaceArea'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('surfaceArea')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
           <span>ft
             <sup>2</sup>
@@ -23,7 +23,7 @@
       <label class="small" for="{{'avgSurfaceTemp'+idString}}">Average Surface Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.avgSurfaceTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
-          id="{{'avgSurfaceTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('avgSurfaceTemp')" (blur)="focusOut()">
+          id="{{'avgSurfaceTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('avgSurfaceTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -34,7 +34,7 @@
       <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.ambientTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="{{'ambientTemp'+idString}}"
-          onfocus="this.select();" (input)="save()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="save()" (focus)="focusField('ambientTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -45,7 +45,7 @@
       <label class="small" for="{{'surfaceEmissivity'+idString}}" aria-describedby="emissivityHelp">Surface Emissivity</label>
       <input [readonly]="!baselineSelected" name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="surfaceEmissivity"
         id="{{'surfaceEmissivity'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('surfaceEmissivity')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareSurfaceEmissivity(), 'error': warnings.emissivityWarning !== null, 'invalid': lossesForm.controls.surfaceEmissivity.invalid}">
+         [ngClass]="{'indicate-different': compareSurfaceEmissivity(), 'error': warnings.emissivityWarning !== null, 'invalid': lossesForm.controls.surfaceEmissivity.invalid}">
       <span class="alert-warning pull-right small" *ngIf="warnings.emissivityWarning !== null">{{warnings.emissivityWarning}}</span>
     </div>
   </div>

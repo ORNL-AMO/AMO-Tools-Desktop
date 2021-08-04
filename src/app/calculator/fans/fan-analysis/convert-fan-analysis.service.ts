@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, PsychrometricResults } from '../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, PsychrometricResults, FanShaftPower } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 declare var fanAddon: any;
@@ -23,8 +23,13 @@ export class ConvertFanAnalysisService {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertPlaneResults(results, settings);
+    let results: PlaneResults = {};
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertPlaneResults(results, settings);
+    } catch(err) {
+      results.error = true;
+    }
     return results;
   }
 
@@ -97,42 +102,47 @@ export class ConvertFanAnalysisService {
     inputCpy.FanInletFlange = this.convertPlaneForCalculations(inputCpy.FanInletFlange, settings);
     inputCpy.FanEvaseOrOutletFlange = this.convertPlaneForCalculations(inputCpy.FanEvaseOrOutletFlange, settings);
     inputCpy.FlowTraverse = this.convertPlaneForCalculations(inputCpy.FlowTraverse, settings);
-    inputCpy.FlowTraverse.traverseData = this.convertTraverseData(inputCpy.FlowTraverse.traverseData, settings.fanPressureMeasurement, 'inH2o');
+    inputCpy.FlowTraverse = this.convertTraverseData(inputCpy.FlowTraverse, settings.fanPressureMeasurement, 'inH2o');
+
     inputCpy.InletMstPlane = this.convertPlaneForCalculations(inputCpy.InletMstPlane, settings);
     inputCpy.OutletMstPlane = this.convertPlaneForCalculations(inputCpy.OutletMstPlane, settings);
+
     if (inputCpy.AddlTraversePlanes) {
-      if (inputCpy.AddlTraversePlanes[0]) {
-        inputCpy.AddlTraversePlanes[0] = this.convertPlaneForCalculations(inputCpy.AddlTraversePlanes[0], settings);
-        if (inputCpy.AddlTraversePlanes[0].traverseData) {
-          inputCpy.AddlTraversePlanes[0].traverseData = this.convertTraverseData(inputCpy.AddlTraversePlanes[0].traverseData, settings.fanPressureMeasurement, 'inH2o');
-        }
-      }
-      if (inputCpy.AddlTraversePlanes[1]) {
-        inputCpy.AddlTraversePlanes[1] = this.convertPlaneForCalculations(inputCpy.AddlTraversePlanes[1], settings);
-        if (inputCpy.AddlTraversePlanes[1].traverseData) {
-          inputCpy.AddlTraversePlanes[1].traverseData = this.convertTraverseData(inputCpy.AddlTraversePlanes[1].traverseData, settings.fanPressureMeasurement, 'inH2o');
-        }
-      }
-      if (inputCpy.AddlTraversePlanes[2]) {
-        inputCpy.AddlTraversePlanes[2] = this.convertPlaneForCalculations(inputCpy.AddlTraversePlanes[2], settings);
-        if (inputCpy.AddlTraversePlanes[2].traverseData) {
-          inputCpy.AddlTraversePlanes[2].traverseData = this.convertTraverseData(inputCpy.AddlTraversePlanes[2].traverseData, settings.fanPressureMeasurement, 'inH2o');
-        }
-      }
+      inputCpy.AddlTraversePlanes = inputCpy.AddlTraversePlanes.map(plane => {
+        plane = this.convertPlaneForCalculations(plane, settings);
+        plane = this.convertTraverseData(plane, settings.fanPressureMeasurement, 'inH2o');
+        return plane;
+      });
     }
     return inputCpy;
   }
 
-  convertTraverseData(data: Array<Array<number>>, from: string, to: string): Array<Array<number>> {
+  convertTraverseData(plane: Plane, from: string, to: string): Plane {
+    if (plane.traverseData) {
     let convertedData: Array<Array<number>> = new Array();
-    data.forEach(dataRow => {
-      let dataRowConv = new Array();
-      dataRow.forEach(d => {
-        dataRowConv.push(this.convertNum(d, from, to));
+      plane.traverseData.forEach(dataRow => {
+        let dataRowConv = new Array();
+        dataRow.forEach(d => {
+          dataRowConv.push(this.convertNum(d, from, to));
+        });
+        convertedData.push(dataRowConv);
       });
-      convertedData.push(dataRowConv);
-    });
-    return convertedData;
+      plane.traverseData = convertedData;
+    } 
+
+    if (plane.staticPressureData) {
+      let convertedData: Array<Array<number>> = new Array();
+        plane.staticPressureData.forEach(dataRow => {
+          let dataRowConv = new Array();
+          dataRow.forEach(d => {
+            dataRowConv.push(this.convertNum(d, from, to));
+          });
+          convertedData.push(dataRowConv);
+        });
+        plane.staticPressureData = convertedData;
+      } 
+
+    return plane;
   }
 
   convertFan203Results(results: Fan203Results, settings: Settings): Fan203Results {
@@ -173,29 +183,16 @@ export class ConvertFanAnalysisService {
     inputs.BaseGasDensity = this.convertBaseGasDensityInput(inputs.BaseGasDensity, settings);
     inputs.FanRatedInfo = this.convertFanRatedInfoInput(inputs.FanRatedInfo, settings);
     if (inputs.PlaneData.AddlTraversePlanes) {
-      if (inputs.PlaneData.AddlTraversePlanes[0]) {
-        inputs.PlaneData.AddlTraversePlanes[0] = this.convertPlaneInput(inputs.PlaneData.AddlTraversePlanes[0], settings);
-        if (inputs.PlaneData.AddlTraversePlanes[0].traverseData) {
-          inputs.PlaneData.AddlTraversePlanes[0].traverseData = this.convertTraverseData(inputs.PlaneData.AddlTraversePlanes[0].traverseData, 'inH2o', settings.fanPressureMeasurement);
-        }
-      }
-      if (inputs.PlaneData.AddlTraversePlanes[1]) {
-        inputs.PlaneData.AddlTraversePlanes[1] = this.convertPlaneInput(inputs.PlaneData.AddlTraversePlanes[1], settings);
-        if (inputs.PlaneData.AddlTraversePlanes[1].traverseData) {
-          inputs.PlaneData.AddlTraversePlanes[1].traverseData = this.convertTraverseData(inputs.PlaneData.AddlTraversePlanes[1].traverseData, 'inH2o', settings.fanPressureMeasurement);
-        }
-      }
-      if (inputs.PlaneData.AddlTraversePlanes[2]) {
-        inputs.PlaneData.AddlTraversePlanes[2] = this.convertPlaneInput(inputs.PlaneData.AddlTraversePlanes[2], settings);
-        if (inputs.PlaneData.AddlTraversePlanes[2].traverseData) {
-          inputs.PlaneData.AddlTraversePlanes[2].traverseData = this.convertTraverseData(inputs.PlaneData.AddlTraversePlanes[2].traverseData, 'inH2o', settings.fanPressureMeasurement);
-        }
-      }
+      inputs.PlaneData.AddlTraversePlanes = inputs.PlaneData.AddlTraversePlanes.map(plane => {
+        plane = this.convertPlaneInput(plane, settings);
+        plane = this.convertTraverseData(plane, 'inH2o', settings.fanPressureMeasurement);
+        return plane;
+      });
     }
     inputs.PlaneData.FanEvaseOrOutletFlange = this.convertPlaneInput(inputs.PlaneData.FanEvaseOrOutletFlange, settings);
     inputs.PlaneData.FanInletFlange = this.convertPlaneInput(inputs.PlaneData.FanInletFlange, settings);
     inputs.PlaneData.FlowTraverse = this.convertPlaneInput(inputs.PlaneData.FlowTraverse, settings);
-    inputs.PlaneData.FlowTraverse.traverseData = this.convertTraverseData(inputs.PlaneData.FlowTraverse.traverseData, 'inH2o', settings.fanPressureMeasurement);
+    inputs.PlaneData.FlowTraverse = this.convertTraverseData(inputs.PlaneData.FlowTraverse, 'inH2o', settings.fanPressureMeasurement);
     inputs.PlaneData.InletMstPlane = this.convertPlaneInput(inputs.PlaneData.InletMstPlane, settings);
     inputs.PlaneData.OutletMstPlane = this.convertPlaneInput(inputs.PlaneData.OutletMstPlane, settings);
 
@@ -233,6 +230,9 @@ export class ConvertFanAnalysisService {
     }
     input.dryBulbTemp = this.convertNum(input.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
     input.staticPressure = this.convertNum(input.staticPressure, 'inH2o', settings.fanPressureMeasurement);
+    if (input.userDefinedStaticPressure) {
+      input.userDefinedStaticPressure = this.convertNum(input.userDefinedStaticPressure, 'inH2o', settings.fanPressureMeasurement);
+    }
     return input;
   }
 

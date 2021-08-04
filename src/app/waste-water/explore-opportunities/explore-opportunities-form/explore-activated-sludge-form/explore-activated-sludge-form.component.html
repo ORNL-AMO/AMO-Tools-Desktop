@@ -1,0 +1,106 @@
+<!-- Plant control point -->
+<div class="checkbox">
+    <label class="group-label" for="exploreMLSS">
+        <input type="checkbox" id="exploreMLSS" (focus)="focusField('exploreMLSS')" (change)="setExploreMLSS()"
+            [(ngModel)]="modificationData.exploreMLSS.hasOpportunity" />
+        <span [innerHTML]="modificationData.exploreMLSS.display"></span>
+    </label>
+</div>
+<!-- Plant Control Point-->
+<li *ngIf="modificationData.exploreMLSS.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="baselineMLSSpar" class="baseline-value-label">Plant Control Point</label>
+            <div class="text-muted baseline-value-input" *ngIf="baselineForm.controls.CalculateGivenSRT.value == false">
+                MLSS</div>
+            <div class="text-muted baseline-value-input" *ngIf="baselineForm.controls.CalculateGivenSRT.value == true">
+                SRT Days</div>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+            <label for="modificationMLSSpar" class="mod-value-label">Plant Control Point</label>
+            <div class="input-group mod-max-width">
+                <select class="form-control" formControlName="CalculateGivenSRT" (change)="changePlantControlPoint()"
+                    (focus)="focusField('CalculateGivenSRT')">
+                    <option [ngValue]="false">MLSS </option>
+                    <option [ngValue]="true">SRT Days</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</li>
+
+<li *ngIf="modificationData.exploreMLSS.hasOpportunity" class="explore-opps-item">
+    <!--MLSSpar-->
+    <form [formGroup]="baselineForm" class="explore-opps-form"
+        *ngIf="baselineForm.controls.CalculateGivenSRT.value == false">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.MLSSpar.invalid}">
+            <!-- <label for="baselineMLSSpar" class="baseline-value-label">MLSS</label> -->
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.MLSSpar.value }}
+                <span>mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.MLSSpar.invalid && !baselineForm.controls.MLSSpar.pristine">
+                <span *ngIf="baselineForm.controls.MLSSpar.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.MLSSpar.errors.min">Value can't be less than
+                    {{baselineForm.controls.MLSSpar.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form"
+        *ngIf="modificationForm.controls.CalculateGivenSRT.value == false">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.MLSSpar.invalid }">
+            <!-- <label for="modificationMLSSpar" class="mod-value-label">MLSS</label> -->
+            <div class="input-group mod-max-width">
+                <input name="modificationMLSSpar" type="number" step="1" min="0" id="modificationMLSSpar"
+                    class="form-control mod-value-input" (focus)="focusField('MLSSpar')" formControlName="MLSSpar"
+                    (input)="save()" />
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.MLSSpar.invalid && !modificationForm.controls.MLSSpar.pristine">
+                <span *ngIf="modificationForm.controls.MLSSpar.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.MLSSpar.errors.min">Value can't be less than
+                    {{modificationForm.controls.MLSSpar.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+
+    <!--SRT-->
+    <form [formGroup]="baselineForm" class="explore-opps-form"
+        *ngIf="baselineForm.controls.CalculateGivenSRT.value == true">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.DefinedSRT.invalid}">
+            <!-- <label for="baselineDefinedSRT" class="baseline-value-label">SRT Days</label> -->
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.DefinedSRT.value }}
+                <span>days</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.DefinedSRT.invalid && !baselineForm.controls.DefinedSRT.pristine">
+                <span *ngIf="baselineForm.controls.DefinedSRT.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.DefinedSRT.errors.min">Value can't be less than
+                    {{baselineForm.controls.DefinedSRT.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form"
+        *ngIf="modificationForm.controls.CalculateGivenSRT.value == true">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.DefinedSRT.invalid }">
+            <!-- <label for="modificationDefinedSRT" class="mod-value-label">SRT Days</label> -->
+            <div class="input-group mod-max-width">
+                <input name="modificationDefinedSRT" type="number" step="1" min="0" id="modificationDefinedSRT"
+                    class="form-control mod-value-input" (focus)="focusField('DefinedSRT')" formControlName="DefinedSRT"
+                    (input)="save()" />
+                <span class="input-group-addon units">days</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.DefinedSRT.invalid && !modificationForm.controls.DefinedSRT.pristine">
+                <span *ngIf="modificationForm.controls.DefinedSRT.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.DefinedSRT.errors.min">Value can't be less than
+                    {{modificationForm.controls.DefinedSRT.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+</li>

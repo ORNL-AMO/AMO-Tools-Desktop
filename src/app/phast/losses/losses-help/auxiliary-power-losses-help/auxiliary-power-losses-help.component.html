@@ -6,6 +6,30 @@
       Enter measured data to calculate your system's annual savings potential.
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+      <h6>
+        <small class="text-muted">
+          Use variable speed drive where possible
+          <ul>
+            <li> Improve power factor</li>
+          <li> Reduce motor load through assessment of use of utilities (water, compressed air, hydraulics etc.) to eliminate waste
+          and reduce usage where possible</li>
+          <li> Consider alternate drive system where possible</li>
+          <li> Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turndown</li>
+          <li> Replace excess air burners by ratio type burners. Consider process requirements (i.e. make up air) to evaluate benefits
+          of ratio type burners </li>
+          <li> Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down</li>
+          </ul>
+        </small>
+      </h6>
+    </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -55,20 +79,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0 A</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -123,24 +133,6 @@
     </div>
   </div>
 
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Use variable speed drive where possible
-        <br> Improve power factor
-        <br> Reduce motor load through assessment of use of utilities (water, compressed air, hydraulics etc.) to eliminate waste
-        and reduce usage where possible
-        <br> Consider alternate drive system where possible
-        <br> Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turndown
-        <br> Replace excess air burners by ratio type burners. Consider process requirements (i.e. make up air) to evaluate benefits
-        of ratio type burners
-        <br> Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down
-      </small>
-    </h6>
-  </div>
 
 
 </div>

@@ -1,0 +1,241 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="leakageForm">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
+      <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{leakageForm.controls.name.value}}</span>
+      <a *ngIf="isBaseline && index > 0" class="click-link pull-right add-loss text-danger small pl-2"
+        (click)="removeLoss(index)">+Remove Loss</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="leakageForm.controls.name.invalid && !leakageForm.controls.name.pristine">
+        <span *ngIf="leakageForm.controls.name.errors.required">Please enter a loss name.</span>
+      </span>
+    </label>
+
+    <div *ngIf="index == 0" class="form-section">
+
+      <div *ngIf="!inTreasureHunt" class="d-flex flex-column w-100 justify-content-center pb-3">
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Fuel')" [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Electricity')" [ngClass]="{'active': leakageForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && leakageForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySourceFromToggle('Steam')" [ngClass]="{'active':  leakageForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+        </div>
+      </div>
+
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="{{'energySourceType'+idString}}"> Energy Source Type
+        </label>
+        <select name="{{'energySourceType'+idString}}" class="form-control" id="{{'energySourceType'+idString}}"
+          formControlName="energySourceType" (change)="setEnergyData()" (focus)="focusField('energySourceType')">
+          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option">{{option}}</option>
+        </select>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+           onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="leakageForm.controls.hoursPerYear.invalid && !leakageForm.controls.hoursPerYear.pristine">
+          <span *ngIf="leakageForm.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="leakageForm.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{leakageForm.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="leakageForm.controls.hoursPerYear.errors.min">Value can't be less than
+            {{leakageForm.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'fuelCost'+idString}}">
+          <span *ngIf="leakageForm.controls.energySourceType.value == 'Electricity'">
+           Energy Cost
+          </span>
+         <span *ngIf="leakageForm.controls.energySourceType.value != 'Electricity'">
+           Fuel Cost
+         </span> 
+         </label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" class="form-control"
+          formControlName="fuelCost" id="{{'fuelCost'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelCost')" >
+          <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="leakageForm.controls.fuelCost.invalid && !leakageForm.controls.fuelCost.pristine">
+          <span *ngIf="leakageForm.controls.fuelCost.errors.required">Value Required</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="leakageForm.controls.energySourceType.value !== 'Steam' && leakageForm.controls.energySourceType.value !== 'Electricity'">
+            Available Heat
+          </span>
+          <span *ngIf="leakageForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <span *ngIf="leakageForm.controls.energySourceType.value == 'Electricity'">
+            System Efficiency
+          </span>
+          <a *ngIf="leakageForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="leakageForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.availableHeat.invalid && !leakageForm.controls.availableHeat.pristine">
+        <span *ngIf="leakageForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="leakageForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="leakageForm.controls.availableHeat.errors.max">Value can't be greater than
+            {{leakageForm.controls.availableHeat.errors.max.max}}%</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{'draftPressure'+idString}}">Furnace Draft Pressure</label>
+        <div class="input-group">
+          <input  name="{{'draftPressure_'+idString}}" type="number" min="0" class="form-control" formControlName="draftPressure" id="{{'draftPressure'+idString}}"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('draftPressure')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
+            <sub>2</sub>O</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Pa</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.draftPressure.invalid && !leakageForm.controls.draftPressure.pristine">
+        <span *ngIf="leakageForm.controls.draftPressure.errors.required">Value required.</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'openingArea'+idString}}">Opening Area</label>
+        <div class="input-group" >
+          <input  name="{{'openingArea_'+idString}}" type="number" step="any" min="0" class="form-control" formControlName="openingArea"
+            id="{{'openingArea'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('openingArea')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+            <span>ft
+              <sup>2</sup>
+            </span>
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+            <span>m
+              <sup>2</sup>
+            </span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.openingArea.invalid && !leakageForm.controls.openingArea.pristine">
+        <span *ngIf="leakageForm.controls.openingArea.errors.required">Value required.</span>
+        <span *ngIf="leakageForm.controls.openingArea.errors.min">Value can't be less than
+          {{leakageForm.controls.openingArea.errors.min.min}}.</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'leakageGasTemperature'+idString}}">Temperature of Leaking Gases</label>
+        <div class="input-group" >
+          <input  name="{{'leakageGasTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
+            id="{{'leakageGasTemperature'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('leakageGasTemperature')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.leakageGasTemperature.invalid && !leakageForm.controls.leakageGasTemperature.pristine">
+        <span *ngIf="leakageForm.controls.leakageGasTemperature.errors.required">Value required.</span>
+      </span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'specificGravity'+idString}}" aria-describedby="specificGravityHelp">Specific Gravity of Flue Gas</label>
+        <input  name="{{'specificGravity_'+idString}}" type="number" step="any" min="0" class="form-control" formControlName="specificGravity"
+          id="{{'specificGravity'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('specificGravity')" >
+          <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.specificGravity.invalid && !leakageForm.controls.specificGravity.pristine">
+        <span *ngIf="leakageForm.controls.specificGravity.errors.required">Value required.</span>
+        <span *ngIf="leakageForm.controls.specificGravity.errors.min">Value can't be less than
+          {{leakageForm.controls.specificGravity.errors.min.min}}.</span>
+      </span>
+        </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'ambientTemperature'+idString}}">Ambient Temperature</label>
+        <div class="input-group" >
+          <input  name="{{'ambientTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
+            id="{{'ambientTemperature'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('ambientTemperature')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakageForm.controls.ambientTemperature.invalid && !leakageForm.controls.ambientTemperature.pristine">
+        <span *ngIf="leakageForm.controls.ambientTemperature.errors.required">Value required.</span>
+      </span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
+      </div>
+    </div>
+  </form>
+    
+               <!-- Results -->
+       <div *ngIf="lossResult" class="d-flex flex-column mt-3 mb-2">
+           <div class="form-group m-0">
+             <label class="bold">Leakage Loss</label>
+             <div *ngIf="lossResult.leakageLoss" class="text-center bold small">
+               {{lossResult.leakageLoss | sigFigs:'6'}} 
+              <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+             </div>
+             <div *ngIf="!lossResult.leakageLoss" class="text-center bold small">
+               &mdash; &mdash;
+             </div>
+           </div>
+        </div>
+        <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+       <div class="form-group m-0">
+         <label class="bold">Gross Loss</label>
+         <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+           {{lossResult.grossLoss | sigFigs:'6'}} 
+            <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+         </div>
+         <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+           &mdash; &mdash;
+         </div>
+       </div>
+      </div>
+      
+    </div>
+      
+    
+   <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+   aria-hidden="true" [config]="{backdrop: 'static'}">
+   <div class="modal-dialog modal-lg">
+     <div class="modal-content">
+       <div>
+         <app-flue-gas-modal *ngIf="showFlueGasModal" [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" [inTreasureHunt]="inTreasureHunt" 
+         (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+           [settings]="settings"></app-flue-gas-modal>
+       </div>
+     </div>
+   </div>
+ </div>
+    
+  <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+  [operatingHours]="leakageService.operatingHours">
+</app-operating-hours-modal>

@@ -44,6 +44,13 @@ export class PlaneInfoFormComponent implements OnInit {
     this.fanAnalysisService.currentField.next(str);
   }
 
+  updateBarometricPressure() {
+    if (this.planeInfoForm.controls.variationInBarometricPressure.value == false) {
+      this.fanAnalysisService.updateBarometricPressure();
+    }
+    this.save();
+  }
+
   getSum(planeData: PlaneData) {
     this.sumSEF = planeData.inletSEF + planeData.outletSEF;
   }
@@ -51,14 +58,5 @@ export class PlaneInfoFormComponent implements OnInit {
     this.fanAnalysisService.inputData.PlaneData = this.planeDataFormService.getPlaneInfoObjFromForm(this.planeInfoForm, this.fanAnalysisService.inputData.PlaneData);
     this.getSum(this.fanAnalysisService.inputData.PlaneData);
     this.fanAnalysisService.getResults.next(true);
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 }

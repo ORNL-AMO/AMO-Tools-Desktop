@@ -32,7 +32,7 @@
       </span>
       <input name="operatingHours" type="number" class="form-control" id="operatingHours" (input)="calculate()"
         (focus)="changeField('operatingHours')" formControlName="operatingHours" onfocus="this.select();"
-        (blur)="changeField('default')">
+        >
       <span class="input-group-addon units">hrs/yr</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -46,7 +46,7 @@
     <label class="small" for="fuelCost">Fuel Cost</label>
     <div class="input-group">
       <input name="fuelCost" type="number" min="0" step="any" class="form-control" id="fuelCost" (input)="calculate()"
-        (focus)="changeField('fuelCost')" formControlName="fuelCost" onfocus="this.select();" (blur)="changeField('default')">
+        (focus)="changeField('fuelCost')" formControlName="fuelCost" onfocus="this.select();" >
       <span class="input-group-addon units">$/<span
           [innerHTML]="settings.energyResultUnit | settingsLabel"></span></span>
     </div>
@@ -62,7 +62,7 @@
     <div class="input-group">
       <input name="o2CombAir" autofocus type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir"
         (input)="calculate()" (focus)="changeField('o2CombAir')" formControlName="o2CombAir" onfocus="this.select();"
-        (blur)="changeField('default')">
+        >
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -79,7 +79,7 @@
     <label class="small" for="combAirTemp">Combustion Air Preheat Temperature</label>
     <div class="input-group">
       <input name="combAirTemp" type="number" min="0" step="10" class="form-control" id="combAirTemp" (input)="calculate()"
-        (focus)="changeField('combAirTemp')" formControlName="combAirTemp" onfocus="this.select();" (blur)="changeField('default')">
+        (focus)="changeField('combAirTemp')" formControlName="combAirTemp" onfocus="this.select();" >
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
     </div>
@@ -103,7 +103,7 @@
     <div class="input-group">
       <input name="o2FlueGas" type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGas"
         (input)="calculate()" (focus)="changeField('o2FlueGas')" formControlName="o2FlueGas" onfocus="this.select();"
-        (blur)="changeField('default')">
+        >
       <span class="input-group-addon units">% Dry</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -120,7 +120,7 @@
     <label class="small" for="flueGasTemp">Flue Gas Temperature</label>
     <div class="input-group">
       <input name="flueGasTemp" type="number" min="0" step="10" class="form-control" id="flueGasTemp" (input)="calculate()"
-        (focus)="changeField('flueGasTemp')" formControlName="flueGasTemp" onfocus="this.select();" (blur)="changeField('default')">
+        (focus)="changeField('flueGasTemp')" formControlName="flueGasTemp" onfocus="this.select();" >
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
 
@@ -145,7 +145,7 @@
     <div class="input-group">
       <input name="fuelConsumption" type="number" min="0" step="any" class="form-control" id="fuelConsumption"
         (input)="calculate()" (focus)="changeField('fuelConsumption')" formControlName="fuelConsumption"
-        onfocus="this.select();" (blur)="changeField('default')">
+        onfocus="this.select();" >
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
     </div>
@@ -157,9 +157,16 @@
 
   <div class="d-flex w-100 justify-content-end">
     <button type="button" class="btn btn-primary pull-right m-2 btn-form" id="plotBtn" 
-    (click)="addModification()">Add New Line</button>
-    <button *ngIf="!o2Form.controls.isBaseline.value" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
-    (click)="removeModification()">Remove Line</button>
+    (click)="addModification()">
+    <span *ngIf="o2Form.controls.isBaseline.value === true">
+      Add Modification
+    </span>
+    <span *ngIf="o2Form.controls.isBaseline.value === false">
+      Add New Line
+    </span>
+  </button>
+    <button *ngIf="o2Form.controls.isBaseline.value === false" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
+    (click)="removeModification()">Remove line</button>
   </div>
 </form>
 

@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import { AssessmentService } from '../assessment.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-assessment-create',
@@ -73,7 +74,7 @@ export class AssessmentCreateComponent implements OnInit {
     this.createModal.show();
   }
 
-  hideCreateModal(bool?: boolean) {
+  hideCreateModal() {
     this.createModal.hide();
     this.dashboardService.newAssessmentType = undefined;
     this.dashboardService.createAssessment.next(false);
@@ -82,132 +83,68 @@ export class AssessmentCreateComponent implements OnInit {
   createAssessment() {
     if (this.newAssessmentForm.valid && this.canCreate) {
       this.canCreate = false;
-      this.hideCreateModal(true);
-      this.createModal.onHidden.subscribe(() => {
-        this.assessmentService.tab = 'system-setup';
-        //psat
-        if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
-          let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
-          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-          let tmpPsat = this.assessmentService.getNewPsat();
-          tmpAssessment.psat = tmpPsat;
-          if (this.settings.powerMeasurement !== 'hp') {
-            tmpAssessment.psat.inputs.motor_rated_power = 150;
-          }
-          tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.assessmentDbService.setAll().then(() => {
-              tmpAssessment.id = assessmentId;
-              this.router.navigateByUrl('/psat/' + tmpAssessment.id);
-            });
-          });
-        }
-        //phast
-        else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
-          let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
-          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-          let tmpPhast = this.assessmentService.getNewPhast();
-          tmpAssessment.phast = tmpPhast;
-          tmpAssessment.phast.setupDone = false;
-          tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-          tmpAssessment.phast.operatingCosts = {
-            electricityCost: this.settings.electricityCost || .066,
-            steamCost: this.settings.steamCost || 4.69,
-            fuelCost: this.settings.fuelCost || 3.99
-          };
-          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.assessmentDbService.setAll().then(() => {
-              tmpAssessment.id = assessmentId;
-              this.router.navigateByUrl('/phast/' + tmpAssessment.id);
-            });
-          });
-        }
-        //fsat
-        else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
-          let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
-          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-          tmpAssessment.directoryId = this.directory.id;
-          tmpAssessment.fsat = this.assessmentService.getNewFsat();
-          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
-              tmpAssessment = assessment;
-              if (this.directory.assessments) {
-                this.directory.assessments.push(tmpAssessment);
-              } else {
-                this.directory.assessments = new Array();
-                this.directory.assessments.push(tmpAssessment);
-              }
-
-              let tmpDirRef: DirectoryDbRef = {
-                name: this.directory.name,
-                id: this.directory.id,
-                parentDirectoryId: this.directory.parentDirectoryId,
-                createdDate: this.directory.createdDate,
-                modifiedDate: this.directory.modifiedDate
-              };
-              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.router.navigateByUrl('/fsat/' + tmpAssessment.id);
-              });
-            });
-          });
-        }
-        //ssmt
-        else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
-          let tmpAssessment = this.assessmentService.getNewAssessment('SSMT');
-          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-          tmpAssessment.directoryId = this.directory.id;
-          tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
-          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
-              tmpAssessment = assessment;
-              if (this.directory.assessments) {
-                this.directory.assessments.push(tmpAssessment);
-              } else {
-                this.directory.assessments = new Array();
-                this.directory.assessments.push(tmpAssessment);
-              }
-              let tmpDirRef: DirectoryDbRef = {
-                name: this.directory.name,
-                id: this.directory.id,
-                parentDirectoryId: this.directory.parentDirectoryId,
-                createdDate: this.directory.createdDate,
-                modifiedDate: this.directory.modifiedDate
-              };
-              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.router.navigateByUrl('/ssmt/' + tmpAssessment.id);
-              });
-            });
-          });
-        } if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
-          let tmpAssessment = this.assessmentService.getNewAssessment('TreasureHunt');
-          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
-          tmpAssessment.directoryId = this.directory.id;
-          //tmpAssessment.treasureHunt = this.assessmentService.getNewTreasureHunt();
-          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
-              tmpAssessment = assessment;
-              if (this.directory.assessments) {
-                this.directory.assessments.push(tmpAssessment);
-              } else {
-                this.directory.assessments = new Array();
-                this.directory.assessments.push(tmpAssessment);
-              }
-
-              let tmpDirRef: DirectoryDbRef = {
-                name: this.directory.name,
-                id: this.directory.id,
-                parentDirectoryId: this.directory.parentDirectoryId,
-                createdDate: this.directory.createdDate,
-                modifiedDate: this.directory.modifiedDate
-              }
-              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.router.navigateByUrl('/treasure-hunt/' + tmpAssessment.id)
-              });
-            })
-          });
-        }
-      });
+      this.assessmentService.tab = 'system-setup';
+      //psat
+      if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
+        let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        let tmpPsat = this.assessmentService.getNewPsat(this.settings);
+        tmpAssessment.psat = tmpPsat;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        this.addAssessment(tmpAssessment, '/psat/');
+      }
+      //phast
+      else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
+        let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('PHAST');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        let tmpPhast = this.assessmentService.getNewPhast(this.settings);
+        tmpAssessment.phast = tmpPhast;
+        tmpAssessment.phast.setupDone = false;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        this.addAssessment(tmpAssessment, '/phast/');
+      }
+      //fsat
+      else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
+        let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.fsat = this.assessmentService.getNewFsat();
+        this.addAssessment(tmpAssessment, '/fsat/');
+      }
+      //ssmt
+      else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
+        let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
+        this.addAssessment(tmpAssessment, '/ssmt/');
+      }
+      //treasure hunt
+      else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
+        let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        this.addAssessment(tmpAssessment, '/treasure-hunt/');
+      } 
+      // Waste Water
+      else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
+        let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.directory.id;
+        tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
+        this.addAssessment(tmpAssessment, '/waste-water/');
+      }
     }
+  }
+
+  addAssessment(assessment: Assessment, navigationUrl: string) {
+    this.indexedDbService.addAssessment(assessment).then(assessmentId => {
+      this.assessmentDbService.setAll();
+      this.hideCreateModal();
+      this.createModal.onHidden.subscribe(() => {
+        this.router.navigateByUrl(navigationUrl + assessmentId);
+      });
+    });
   }
 
   getParentDirStr(id: number) {

@@ -18,6 +18,8 @@ import { DashboardService } from '../../../dashboard/dashboard.service';
 import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { MockMotorInventory } from '../../../examples/mockMotorInventoryData';
+import { MockWasteWater, MockWasteWaterSettings } from '../../../examples/mockWasteWater';
+
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
@@ -193,6 +195,18 @@ export class ResetDataModalComponent implements OnInit {
     } else {
       this.createFsatExample(id);
     }
+    // Waste Water
+    let wasteWaterExample: Assessment = this.assessmentDbService.getWasteWaterExample();
+    if (wasteWaterExample) {
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(wasteWaterExample.id).then(() => {
+        //create
+        this.createWasteWaterExample(id);
+      });
+    } else {
+      this.createWasteWaterExample(id);
+    }
     //phast
     let phastExample: Assessment = this.assessmentDbService.getPhastExample();
     if (phastExample) {
@@ -297,6 +311,21 @@ export class ResetDataModalComponent implements OnInit {
     });
   }
 
+  createWasteWaterExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockWasteWater.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockWasteWater).then(assessmentId => {
+        MockWasteWaterSettings.assessmentId = assessmentId;
+        MockWasteWaterSettings.facilityInfo.date = new Date().toDateString();
+        //add settings
+        this.indexedDbService.addSettings(MockWasteWaterSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
+  
   createSsmtExample(dirId: number): Promise<any> {
     return new Promise((resolve, reject) => {
       MockSsmt.directoryId = dirId;

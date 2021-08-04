@@ -1,0 +1,101 @@
+<form [formGroup]="energyForm" >
+  <div class="form-section">
+       <div class="d-flex flex-column w-100 justify-content-center pb-3">
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': energyForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && energyForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  energyForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+           onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="energyForm.controls.hoursPerYear.invalid && !energyForm.controls.hoursPerYear.pristine">
+          <span *ngIf="energyForm.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="energyForm.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{energyForm.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="energyForm.controls.hoursPerYear.errors.min">Value can't be less than
+            {{energyForm.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="fuelCost">
+          <span *ngIf="energyForm.controls.energySourceType.value == 'Electricity'">
+           Energy Cost
+          </span>
+         <span *ngIf="energyForm.controls.energySourceType.value != 'Electricity'">
+           Fuel Cost
+         </span> 
+         </label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" class="form-control"
+          formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelCost')" >
+          <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="energyForm.controls.fuelCost.invalid && !energyForm.controls.fuelCost.pristine">
+          <span *ngIf="energyForm.controls.fuelCost.errors.required">Value Required</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="energyForm.controls.energySourceType.value == 'Fuel'">
+            Available Heat
+          </span>
+          <span *ngIf="energyForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <span *ngIf="energyForm.controls.energySourceType.value == 'Electricity'">
+            System Efficiency
+          </span>
+          <a *ngIf="energyForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="energyForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="energyForm.controls.availableHeat.invalid && !energyForm.controls.availableHeat.pristine">
+        <span *ngIf="energyForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="energyForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="energyForm.controls.availableHeat.errors.max">Value can't be greater than 100%.</span>
+      </span>
+      </div>
+    </div>
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+(emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+[operatingHours]="chargeMaterialService.operatingHours">
+</app-operating-hours-modal>
+
+    <!--CREATE flueGas MODAL-->
+    <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div>
+          <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+            [settings]="settings"></app-flue-gas-modal>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -10,6 +10,33 @@
       This is used to model replacement or make-up atmosphere gas, not total flow of make-up gas.
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>
+            Optimize (minimize) use of process atmosphere flow rate
+          </li>
+          <li>
+            Preheat atmosphere to a higher temperature entering the furnace
+          </li>
+        </ul>
+        <hr>
+        Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating
+        conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and
+        apply
+        the appropriate measures
+      </small>
+    </h6>
+  </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -18,8 +45,10 @@
       Atmosphere Gas
       <br>
       <small class="text-muted">
-        Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas, click "Add New
-        Gas". You can "start with existing gas" and edit the condition factor or add a completely new gas. You cannot use
+        Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas,
+        click "Add New
+        Gas". You can "start with existing gas" and edit the condition factor or add a completely new gas. You cannot
+        use
         the name of a gas already in the database.
       </small>
     </h6>
@@ -28,39 +57,28 @@
 
   <div class="my-2" *ngIf="currentField == 'specificHeat'">
     <h6>
-      Specific Heat of Gas
+      Average Specific Heat of Gas
       <br>
       <small class="text-muted">
-        Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(SCF-&#8457;)</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(Nm
-                <sup>3</sup>-&#8451;)</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <h6>
       <small class="text-muted">
         <hr>
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -74,7 +92,8 @@
       Inlet Temperature
       <br>
       <small class="text-muted">
-        Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber. Use temperature
+        Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber.
+        Use temperature
         recorder/indicator reading or actual measurement.
       </small>
     </h6>
@@ -86,7 +105,8 @@
       Outlet Temperature
       <br>
       <small class="text-muted">
-        Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber. Use temperature
+        Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber.
+        Use temperature
         recorder/indicator reading or actual measurement.
       </small>
     </h6>
@@ -98,33 +118,17 @@
       Flow Rate
       <br>
       <small class="text-muted">
-        Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard conditions and
-        actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement
+        Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard
+        conditions and
+        actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the
+        measurement
         point.
-        <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour
+        <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain
+        weight per hour
         value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm
-                <sup>3</sup>
-              </span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -135,35 +139,6 @@
       <small class="text-muted">
         Engineering correction factor multiplied to the result to account for a known systematic error.
         <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Optimize (minimize) use of process atmosphere flow rate
-        <br> Preheat atmosphere to a higher temperature entering the furnace
-        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-        There may additional measures when considering specific situations and the user is encouraged to review and apply
-        the appropriate measures
       </small>
     </h6>
   </div>

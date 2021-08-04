@@ -7,8 +7,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { GasMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
-import { GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -29,8 +28,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Output('inputError')
-  inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
   @Input()
@@ -38,12 +35,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  materialTypes: any;
-  selectedMaterial: any;
+  materialTypes: Array<GasLoadChargeMaterial>;
   showModal: boolean = false;
-  warnings: GasMaterialWarnings;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isBaseline) {
@@ -57,6 +52,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
           this.enableForm();
         }
       }
@@ -74,7 +70,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.checkWarnings();
   }
 
   ngOnDestroy() {
@@ -115,13 +110,15 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+      }
+      this.chargeMaterialForm.patchValue({
+        materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
+      });
     }
-    this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
-    });
     this.save();
   }
 
@@ -130,15 +127,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     return test;
   }
 
-  checkWarnings() {
-    let tmpMaterial: GasChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(this.chargeMaterialForm).gasChargeMaterial;
-    this.warnings = this.chargeMaterialService.checkGasWarnings(tmpMaterial);
-    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
-  }
-
   save() {
-    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

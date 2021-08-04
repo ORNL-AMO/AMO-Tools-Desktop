@@ -1,7 +1,7 @@
 <div class="panel-container d-flex w-100">
   <div class="panel-column w-50 p-2 scroll-item" [ngStyle]="{'height.px': bodyHeight}">
     <div class="header">
-      <h3>Calculate Outlet Pressure</h3>
+      <h3>Estimate Outlet Pressure</h3>
     </div>
     <form *ngIf="outletPressureData">
       <div class="form-section">
@@ -61,6 +61,50 @@
               id="processRequirements" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirements')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
+        </div>
+
+        <div class="mt-2" *ngIf="usingStaticPressure == false">
+          <div *ngIf="!outletPressureData.userDefinedVelocityPressure" class="form-group">
+          <label for="{{'duct'+idString}}">
+            Fan Outlet Area
+          </label>
+          <div class="input-group">
+            <input name="fanOutletArea" type="number" max="0" step="any" class="form-control"
+            [(ngModel)]="outletPressureData.fanOutletArea" id="{{'fanOutletArea'+idString}}" (input)="calculate()"
+              (focus)="changeField('fanOutletArea')" onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+            </span>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="{{'inletVelocityPressure_'+idString}}">Outlet Velocity Pressure
+            <a class="form-text small click-link" *ngIf="outletPressureData.userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()" >
+              Estimate Outlet Velocity Pressure</a>
+            <a class="form-text small click-link" *ngIf="!outletPressureData.userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()">
+              Define Outlet Velocity Pressure</a>
+          </label>
+          <div *ngIf="outletPressureData.userDefinedVelocityPressure" class="input-group">
+            <input name="inletVelocityPressure" type="number" max="0" step="any" class="form-control"
+            [(ngModel)]="outletPressureData.inletVelocityPressure" id="{{'inletVelocityPressure'+idString}}" (input)="calculate()"
+            (focus)="changeField('inletVelocityPressure')" onfocus="this.select();">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+          </div>
+          <div *ngIf="!outletPressureData.userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
+            <span class="mr-2" *ngIf="outletPressureData.inletVelocityPressure !== undefined">
+              {{outletPressureData.inletVelocityPressure | number:'1.0-5'}}
+            <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            </span>
+            <span class="mr-2" *ngIf="outletPressureData.inletVelocityPressure === undefined">&mdash; &mdash;</span>
+          </div>
+          <span class="alert-warning pull-right small"
+            *ngIf="calcInletVelocityPressureError !== null && !outletPressureData.userDefinedVelocityPressure">
+            {{ calcInletVelocityPressureError }}
+          </span>
+        </div>
+    
         </div>
       </div>
       <div class="form-group pt-1">

@@ -1,7 +1,7 @@
 <form class="p-0">
     <div class="d-flex flex-column">
         <div class="header mr-2 ml-2">
-            <h3>Import Logger Data from .csv file</h3>
+            <h3>Import Logger Data from .csv or .xlsx file</h3>
             <a class="click-link pull-right" (click)="resetData()" *ngIf="individualDataFromCsv.length != 0">Start
                 Over</a>
         </div>
@@ -13,9 +13,35 @@
                 <label>
                     Log File
                 </label>
-                <input type="file" class="form-control" (change)="setImportFile($event)">
-                <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
-                    have a .csv file extension</span>
+                <input type="file" class="form-control" id="importFile" (change)="setImport($event)" accept=".xlsx,.csv">
+            </div>
+            <div class="form-group">
+                <label *ngIf = "workSheetsAvailable" for = "workSheetInput">Choose Worksheet</label>
+                <select *ngIf = "workSheetsAvailable" class="form-control" (change)="finishImportExcel()" name = "workSheetInput" [(ngModel)]="selectedSheet">
+                  <option *ngFor="let workSheet of workSheets">{{workSheet}}</option>
+                </select>
+            </div>
+            <div class="p-2" *ngIf="previewDataFromCsv">
+                <table class="table table-condensed table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <td class="bold" colspan="100%">
+                                Select Header Row
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let itemIndex of itemIndexes">
+                            <td>
+                                <input type="radio" name="selectedIndex" id="{{'item'+itemIndex}}"
+                                    [(ngModel)]="selectedHeaderRow" value={{itemIndex}}>
+                            </td>
+                            <td *ngFor="let dataItem of previewDataFromCsv.data[itemIndex]">
+                                {{dataItem}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="d-flex w-100 justify-content-end" *ngIf="dataExists == false">
                 <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"

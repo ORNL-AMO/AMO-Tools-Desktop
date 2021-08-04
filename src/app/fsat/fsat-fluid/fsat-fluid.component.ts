@@ -159,6 +159,11 @@ export class FsatFluidComponent implements OnInit {
           gasDensity: undefined
         });
       }
+    } 
+    
+    if (psychrometricResults) {
+      psychrometricResults.dryBulbTemp = this.gasDensityForm.controls.dryBulbTemp.value;
+      psychrometricResults.barometricPressure = this.gasDensityForm.controls.barometricPressure.value;
     }
 
     if (!this.baseline) {
@@ -291,6 +296,13 @@ export class FsatFluidComponent implements OnInit {
   isInputTypeDifferent() {
     if (this.canCompare()) {
       return this.compareService.isInputTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecificHeatRatioDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificHeatRatioDifferent();
     } else {
       return false;
     }

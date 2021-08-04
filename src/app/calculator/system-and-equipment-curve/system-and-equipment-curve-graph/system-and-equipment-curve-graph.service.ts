@@ -22,6 +22,7 @@ export class SystemAndEquipmentCurveGraphService {
   curveEquipmentChart: BehaviorSubject<SimpleChart>;
   powerChart: BehaviorSubject<SimpleChart>;
   selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
+  modifiedIntersectionIndex: number;
 
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
@@ -80,13 +81,14 @@ export class SystemAndEquipmentCurveGraphService {
     let closestModifiedDataPoint;
     let smallestDistanceBetweenPoints = Infinity;
     this.systemAndEquipmentCurveService.systemCurveRegressionData.forEach(systemCurveDataPoint => {
-      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach(modifiedDataPoint => {
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach((modifiedDataPoint, index) => {
         //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
         let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - modifiedDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - modifiedDataPoint.y), 2)
         if (smallestDistanceBetweenPoints > distanceBetweenCurrentPoint) {
           smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
           closestSystemCurvePoint = systemCurveDataPoint;
           closestModifiedDataPoint = modifiedDataPoint;
+          this.modifiedIntersectionIndex = index;
         }
       })
     });
@@ -102,6 +104,17 @@ export class SystemAndEquipmentCurveGraphService {
       }
     } 
     return intersection;
+  }
+
+  getSelectedDataPointEfficiency(userDataPoint: SystemCurveDataPoint, equipmentType: string, settings: Settings, isModification: boolean): SystemCurveDataPoint {
+    let baselinePowerPairs = this.systemAndEquipmentCurveService.baselinePowerDataPairs;
+    let systemCurveDataPoint: SystemCurveDataPoint;
+    if (equipmentType == 'fan') {
+      systemCurveDataPoint = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, userDataPoint, settings, isModification);
+    } else {
+      systemCurveDataPoint = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, userDataPoint, settings, isModification);
+    }
+    return systemCurveDataPoint;
   }
 
   getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
@@ -327,5 +340,6 @@ export interface HoverGroupData {
 export interface SystemCurveDataPoint extends DataPoint {
   power?: number,
   efficiency?: number,
-  fluidPower?: number
+  fluidPower?: number,
+  isUserPoint?: boolean
 }

@@ -6,19 +6,24 @@
       <div class="input-group">
         <input [readonly]="!baselineSelected" name="{{'coolingMedium_'+lossIndex}}" type="text" class="form-control"
           formControlName="coolingMedium" id="{{'coolingMedium'+idString}}" onfocus="this.select();" (input)="save()"
-          (focus)="focusField('coolingMedium')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareCoolingMedium(), 'invalid': lossesForm.controls.coolingMedium.invalid}">
+          (focus)="focusField('coolingMedium')"  [ngClass]="{'indicate-different': compareCoolingMedium(), 'invalid': lossesForm.controls.coolingMedium.invalid}">
       </div>
     </div>
     <div class="form-group">
-      <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat</label>
+      <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat of Gas</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasSpecificHeat(), 'error': warnings.specificHeatWarning !== null, 'invalid': lossesForm.controls.avgSpecificHeat.invalid}">
         <input [readonly]="!baselineSelected" name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="avgSpecificHeat" id="{{'avgSpecificHeat'+idString}}" onfocus="this.select();" (input)="save()"
-          (focus)="focusField('avgSpecificHeatGas')" (blur)="focusOut()">
+          (focus)="focusField('avgSpecificHeatGas')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatWarning !== null">{{warnings.specificHeatWarning}}</span>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.avgSpecificHeat.invalid && !lossesForm.controls.avgSpecificHeat.pristine">
+      <span *ngIf="lossesForm.controls.avgSpecificHeat.errors.required">Value required.</span>
+      <span *ngIf="lossesForm.controls.avgSpecificHeat.errors.min">Value can't be less than
+        {{lossesForm.controls.avgSpecificHeat.errors.min.min}}.</span>
+    </span>
     </div>
 
     <div class="form-group">
@@ -26,13 +31,18 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareGasDensity(), 'error': warnings.gasDensityWarning !== null, 'invalid': lossesForm.controls.gasDensity.invalid}">
         <input [readonly]="!baselineSelected" name="{{'gasDensity_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="gasDensity" id="{{'gasDensity'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('gasDensity')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/SCF</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm
           <sup>3</sup>
         </span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.gasDensityWarning !== null">{{warnings.gasDensityWarning}}</span>
+      <span class="alert-danger pull-right small"
+            *ngIf="lossesForm.controls.gasDensity.invalid && !lossesForm.controls.gasDensity.pristine">
+            <span *ngIf="lossesForm.controls.gasDensity.errors.required">Value required.</span>
+            <span *ngIf="lossesForm.controls.gasDensity.errors.min">Value can't be less than
+              {{lossesForm.controls.gasDensity.errors.min.min}}.</span>
+          </span>
     </div>
 
     <div class="form-group">
@@ -40,12 +50,17 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareGasFlowRate(), 'error': warnings.gasFlowWarning !== null, 'invalid': lossesForm.controls.gasFlow.invalid}">
         <input [readonly]="!baselineSelected" name="{{'gasFlow_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
           formControlName="gasFlow" id="{{'gasFlow'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('gasFlow')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
           <sup>3</sup>/min</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.gasFlowWarning !== null">{{warnings.gasFlowWarning}}</span>
+      <span class="alert-danger pull-right small"
+              *ngIf="lossesForm.controls.gasFlow.invalid && !lossesForm.controls.gasFlow.pristine">
+              <span *ngIf="lossesForm.controls.gasFlow.errors.required">Value required.</span>
+              <span *ngIf="lossesForm.controls.gasFlow.errors.min">Value can't be less than
+                {{lossesForm.controls.gasFlow.errors.min.min}}.</span>
+            </span>
     </div>
 
     <div class="form-group">
@@ -53,10 +68,14 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareGasInitialTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.inletTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="inletTemp" id="{{'inletTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('inletTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+            *ngIf="lossesForm.controls.inletTemp.invalid && !lossesForm.controls.inletTemp.pristine">
+            <span *ngIf="lossesForm.controls.inletTemp.errors.required">Value required.</span>
+          </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
@@ -65,10 +84,14 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareGasFinalTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': lossesForm.controls.outletTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="outletTemp" id="{{'outletTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('outletTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+            *ngIf="lossesForm.controls.outletTemp.invalid && !lossesForm.controls.outletTemp.pristine">
+            <span *ngIf="lossesForm.controls.outletTemp.errors.required">Value required.</span>
+          </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
@@ -76,7 +99,11 @@
       <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
       <input [readonly]="!baselineSelected" name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control"
         formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('correctionFactor')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareGasCorrectionFactor(), 'invalid': lossesForm.controls.correctionFactor.invalid}">
-    </div>
+         [ngClass]="{'indicate-different': compareGasCorrectionFactor(), 'invalid': lossesForm.controls.correctionFactor.invalid}">
+         <span class="alert-danger pull-right small"
+         *ngIf="lossesForm.controls.correctionFactor.invalid && !lossesForm.controls.correctionFactor.pristine">
+         <span *ngIf="lossesForm.controls.correctionFactor.errors.required">Value required.</span>
+       </span>
+        </div>
   </div>
 </form>

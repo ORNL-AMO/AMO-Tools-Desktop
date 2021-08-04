@@ -110,6 +110,12 @@ img.fan-image{
 	height:81px;
 }
 
+.waste-water-image {
+	width:90px;
+	height:81px;
+	padding: 8px;
+}
+
 
 .skyline{
 	position: relative;
@@ -174,6 +180,19 @@ img.treasure-hunt-image {
 
 .motor-inventory-background{
     background-image: linear-gradient(white, rgb(132, 182, 64));
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+}
+
+.data-explorer-icon{
+    width: 78px;
+    height: 60px;
+}
+
+
+.data-explorer-background{
+    background-image: linear-gradient(white, rgb(17, 122, 101));
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);

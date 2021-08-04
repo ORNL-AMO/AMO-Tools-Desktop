@@ -53,6 +53,7 @@ export class ConvertFsatService {
     if (oldSettings.densityMeasurement !== newSettings.densityMeasurement) {
       inputCpy.baseGasDensity.gasDensity = this.convertNum(inputCpy.baseGasDensity.gasDensity, oldSettings.densityMeasurement, newSettings.densityMeasurement);
     }
+
     if (oldSettings.fanBarometricPressure !== newSettings.fanBarometricPressure) {
       inputCpy.baseGasDensity.barometricPressure = this.convertNum(inputCpy.baseGasDensity.barometricPressure, oldSettings.fanBarometricPressure, newSettings.fanBarometricPressure);
     }
@@ -92,5 +93,15 @@ export class ConvertFsatService {
     num = this.convertUnitsService.value(num).from(from).to(to);
     num = Number(num.toFixed(3));
     return num;
+  }
+
+  convertExistingData(fsat: FSAT, oldSettings: Settings, settings: Settings): FSAT {
+    fsat = this.convertAllInputData(fsat, oldSettings, settings);
+    if(fsat.modifications){
+      fsat.modifications.forEach(mod => {
+        mod.fsat = this.convertAllInputData(mod.fsat, oldSettings, settings);
+      })
+    }
+    return fsat;
   }
 }

@@ -20,6 +20,15 @@ export class TreasureHuntReportService {
 
   calculateTreasureHuntResultsFromSummaries(opportunitySummaries: Array<OpportunitySummary>, currentEnergyUsage: EnergyUsage): TreasureHuntResults {
     let totalBaselineCost: number = this.getTotalBaselineCost(currentEnergyUsage);
+
+    let totalAdditionalSavings: number = _.sumBy(opportunitySummaries, (summary) => {
+      if (summary.opportunityCost && summary.opportunityCost.additionalAnnualSavings && summary.opportunityCost.additionalAnnualSavings.cost) {
+        return summary.opportunityCost.additionalAnnualSavings.cost;
+      } else {
+        return 0;
+      }
+    })
+
     //Mixed
     let mixedSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Mixed' && summary.selected == true });
     let otherUtilityUsage: UtilityUsageData = this.getUtilityUsageData(mixedSummaries, 'Mixed', 0, 0);
@@ -46,9 +55,12 @@ export class TreasureHuntReportService {
     let otherFuelSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Other Fuel' && summary.selected == true });
     let otherFuelUtilityUsage: UtilityUsageData = this.getUtilityUsageData(otherFuelSummaries, 'Other Fuel', currentEnergyUsage.otherFuelUsage, currentEnergyUsage.otherFuelCosts, mixedSummaries)
 
+
+
+
     let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, wasteWaterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + otherUtilityUsage.implementationCost;
-    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings });
+    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings }) + totalAdditionalSavings;
 
     let hasMixed: boolean = electricityUtilityUsage.hasMixed || naturalGasUtilityUsage.hasMixed || waterUtilityUsage.hasMixed || wasteWaterUtilityUsage.hasMixed || otherFuelUtilityUsage.hasMixed || compressedAirUtilityUsage.hasMixed || steamUtilityUsage.hasMixed;
     let thuntResults: TreasureHuntResults = {
@@ -67,7 +79,8 @@ export class TreasureHuntReportService {
       other: otherUtilityUsage,
       opportunitySummaries: opportunitySummaries,
       totalImplementationCost: totalImplementationCost,
-      hasMixed: hasMixed
+      hasMixed: hasMixed,
+      totalAdditionalSavings: totalAdditionalSavings
     };
 
     return thuntResults;
@@ -111,13 +124,14 @@ export class TreasureHuntReportService {
     return currentEnergyUsage.electricityCosts + currentEnergyUsage.naturalGasCosts + currentEnergyUsage.otherFuelCosts + currentEnergyUsage.waterCosts + currentEnergyUsage.wasteWaterCosts + currentEnergyUsage.compressedAirCosts + currentEnergyUsage.steamCosts;
   }
 
-  getTeamData(opportunityCardsData: Array<OpportunityCardData>): Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>{
+  getTeamData(opportunityCardsData: Array<OpportunityCardData>): Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }> {
     let teams: Array<string> = this.treasureChestMenuService.getAllTeams(opportunityCardsData);
     let teamData = new Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>();
     teams.forEach(team => {
       let teamOpps: Array<OpportunityCardData> = opportunityCardsData.filter(cardData => { return cardData.teamName == team && cardData.selected == true });
       let teamName: string = team;
-      let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings');
+      let totalAdditionalSavings: number = this.getAdditionalCostSavings(teamOpps);
+      let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings') + totalAdditionalSavings;
       let implementationCost: number = _.sumBy(teamOpps, 'implementationCost');
       let paybackPeriod: number = implementationCost / costSavings;
       teamData.push({
@@ -129,5 +143,16 @@ export class TreasureHuntReportService {
     });
     teamData = _.orderBy(teamData, 'costSavings', 'desc');
     return teamData;
+  }
+
+  getAdditionalCostSavings(teamOpps: Array<OpportunityCardData>): number {
+    let additionalCostSavings: number = _.sumBy(teamOpps, (teamOpp) => {
+      if (teamOpp.opportunitySheet && teamOpp.opportunitySheet.opportunityCost && teamOpp.opportunitySheet.opportunityCost.additionalAnnualSavings && teamOpp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost) {
+        return teamOpp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost
+      } else {
+        return 0;
+      }
+    });
+    return additionalCostSavings;
   }
 }

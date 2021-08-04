@@ -7,6 +7,7 @@ import { ExploreOpportunitiesService } from '../../explore-opportunities.service
 import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-boiler-form',
@@ -32,8 +33,8 @@ export class BoilerFormComponent implements OnInit {
   showBlowdownRateModal: boolean = false;
 
 
-  baselineFuelOptions: any;
-  modificationFuelOptions: any;
+  baselineFuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
+  modificationFuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
 
   showCombustionEfficiency: boolean = false;
   showFuelType: boolean = false;

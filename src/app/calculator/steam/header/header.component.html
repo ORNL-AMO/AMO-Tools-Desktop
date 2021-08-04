@@ -12,7 +12,7 @@
           <label class="small" for="headerPressure">Header Pressure</label>
           <div class="input-group">
             <input class="form-control" name="headerPressure" id="headerPressure" formControlName="headerPressure" type="number"
-              (input)="calculate()" (focus)="changeField('headerPressure')" (blur)="changeField('default')" onfocus="this.select();">
+              (input)="calculate()" (focus)="changeField('headerPressure')"  onfocus="this.select();">
             <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
           </div>
           <span class="alert-danger pull-right small" *ngIf="headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine">
@@ -27,7 +27,7 @@
         <div class="form-group">
           <label for="numInlets" class="small">Number of Inlets</label>
           <select class="form-control" name="numInlets" id="numInlets" formControlName="numInlets" type="number"
-            (change)="getInletForms()" (focus)="changeField('numInlets')" (blur)="changeField('default')">
+            (change)="getInletForms()" (focus)="changeField('numInlets')" >
             <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
           </select>
         </div>

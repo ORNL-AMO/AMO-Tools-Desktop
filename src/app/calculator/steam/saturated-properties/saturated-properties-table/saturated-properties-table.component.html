@@ -1,4 +1,4 @@
-<table #copyTable class="steam-table calculator-table">
+<table class="steam-table calculator-table">
   <thead>
     <tr>
       <th class="table-col-0">Pressure(<span [innerHTML]="settings.steamPressureMeasurement|settingsLabel"></span>)
@@ -33,11 +33,11 @@
   <tbody>
     <tr *ngFor="let row of rowData; let i = index">
       <td>{{row.pressure | number:'1.0-4'}}</td>
-      <td class="parent-col">{{row.temperature | number:'1.0-4'}}</td>
+      <td class="parent-col">{{row.temperature | number:'1.0-2'}}</td>
 
-      <td class="parent-col">{{row.satLiquidEnthalpy | number:'1.0-4'}}</td>
-      <td class="child-col">{{row.evapEnthalpy | number:'1.0-4'}}</td>
-      <td class="child-col">{{row.satGasEnthalpy | number:'1.0-4'}}</td>
+      <td class="parent-col">{{row.satLiquidEnthalpy | number:'1.0-2'}}</td>
+      <td class="child-col">{{row.evapEnthalpy | number:'1.0-2'}}</td>
+      <td class="child-col">{{row.satGasEnthalpy | number:'1.0-2'}}</td>
 
       <td class="parent-col">{{row.satLiquidEntropy | number:'1.0-4'}}</td>
       <td class="child-col">{{row.evapEntropy | number:'1.0-4'}}</td>
@@ -51,6 +51,4 @@
     </tr>
   </tbody>
 </table>
-
-<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
-</app-exportable-results-table>
+<app-saturated-properties-hidden-copy-table [rowData]="rowData" [settings]="settings"></app-saturated-properties-hidden-copy-table>

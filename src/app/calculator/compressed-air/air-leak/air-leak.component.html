@@ -1,6 +1,6 @@
 <div #contentContainer class="d-flex h-100 modify-conditions general standalone-calculator">
     <div class="d-flex flex-column mh-100 w-100">
-        <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center w-100"
+        <div #panelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center w-100"
             [ngClass]="{'justify-content-between': inTreasureHunt}">
             <div class="d-flex pl-2 align-items-center">
                 <div class="text-center">
@@ -28,7 +28,8 @@
         </div>
         <!--add this ngIf so form wont render untils airLeakInput is initialized-->
         <div class="d-flex w-100 h-100">
-            <div class="d-flex flex-column leak-form-width modification scroll-item h-100" *ngIf="airLeakInput">
+            <div class="d-flex flex-column leak-form-width modification scroll-item h-100" *ngIf="airLeakInput"
+                [ngStyle]="{'height.px': containerHeight}">
                 <div class="tab-content">
                     <div class="d-flex flex-row flex-wrap">
                         <div class="compressor-form-item pb-3">
@@ -44,8 +45,8 @@
                     <app-air-leak-results-table [settings]="settings"></app-air-leak-results-table>
                 </div>
                 <app-air-leak-copy-table [settings]="settings"></app-air-leak-copy-table>
-                <div class="w-100 justify-content-end btn-group btn-group-sm mh-25">
-                    <div class="btn-group btn-group-sm h-25">
+                <div class="w-100 justify-content-end btn-group btn-group-sm">
+                    <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
                             (click)="btnGenerateExample()">
                             Generate Example
@@ -62,8 +63,9 @@
                     [operatingHours]="operatingCostService.operatingCostOperatingHours">
                 </app-operating-hours-modal>
             </div>
-            <div class="d-flex flex-column leak-results-width mh-100 scroll-item">
-                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+            <div class="d-flex flex-column leak-results-width mh-100 scroll-item"
+                [ngStyle]="{'height.px': containerHeight}">
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
                     <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                             (click)="setTab('results')">

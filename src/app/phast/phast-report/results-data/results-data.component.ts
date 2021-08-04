@@ -6,6 +6,7 @@ import { PhastResultsService } from '../../phast-results.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Subscription } from 'rxjs';
 import { PhastValidService } from '../../phast-valid.service';
+import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
 
 @Component({
   selector: 'app-results-data',
@@ -44,7 +45,7 @@ export class ResultsDataComponent implements OnInit {
   numMods: number = 0;
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
-              private reportRollupService: ReportRollupService,
+              private phastReportRollupService: PhastReportRollupService,
               private phastValidService: PhastValidService) { }
 
   ngOnInit() {
@@ -56,7 +57,7 @@ export class ResultsDataComponent implements OnInit {
     }
 
     if (this.inReport) {
-      this.selectedPhastsSub = this.reportRollupService.selectedPhasts.subscribe(val => {
+      this.selectedPhastsSub = this.phastReportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -89,7 +90,7 @@ export class ResultsDataComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.phastReportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   getResults() {
@@ -101,13 +102,13 @@ export class ResultsDataComponent implements OnInit {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length !== 0) {
           this.phast.modifications.forEach(mod => {
-            mod.phast.valid = this.phastValidService.checkValid(mod.phast);
+            mod.phast.valid = this.phastValidService.checkValid(mod.phast, this.settings);
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
             this.modificationResults.push(tmpResults);
           });
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
-        this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast);
+        this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast, this.settings);
         let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
         this.modificationResults.push(tmpResults);
       }

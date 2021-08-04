@@ -3,6 +3,163 @@
         <h2 class="mb-1">Process Heating Calculators</h2>
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div p-2 d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/air-heating']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/air-heating']">Air Heating using Flue Gas</a>
+                <p>
+                    This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace, oven, or boiler
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/waste-heat']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/waste-heat']">Waste Heat for Absorption Chillers</a>
+                <p>
+                    Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div p-2 d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img"
+                        [routerLink]="['/calculators/flue-gas']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/flue-gas']">Flue Gas</a>
+                <p>
+                    Determine the amount of heat lost in the furnace flue gas
+
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div p-2 d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/heat-cascading.png" class="calc-img"
+                        [routerLink]="['/calculators/heat-cascading']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/heat-cascading']">Heat Cascading</a>
+                <p>
+                    This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher temperature (primary) process heating equipment is used to supply heat to lower temperature (secondary) process heating equipment.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/atmosphere.png" class="calc-img"
+                        [routerLink]="['/calculators/atmosphere']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/atmosphere']">Atmosphere</a>
+                <p>
+                    Estimates losses from heating makeup atmospheric gases
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div p-2 d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/cooling.png" class="calc-img"
+                        [routerLink]="['/calculators/cooling']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/cooling']">Cooling</a>
+                <p>
+                    Estimate losses from a cooling a heating system.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div p-2 d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img"
+                    [routerLink]="['/calculators/wall-loss']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/wall-loss']">Wall Loss</a>
+                <p>
+                    This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img"
+                        [routerLink]="['/calculators/opening']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/opening']">Opening</a>
+                <p>
+                    Estimates losses due to openings in the heating system.
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/charge-materials.png" class="calc-img"
+                        [routerLink]="['/calculators/charge-material']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill p-2 flex-column justify-content-center">
+                <a [routerLink]="['/calculators/charge-material']">Charge Material</a>
+                <p>
+                    Estimates savings from preheating or changing how the load is heated.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/leakage.png" class="calc-img"
+                        [routerLink]="['/calculators/leakage']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/leakage']">Leakage</a>
+                <p>
+                    Estimates losses due to gases leaking out of or into the furnace.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/fixture.png" class="calc-img"
+                        [routerLink]="['/calculators/fixture']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/fixture']">Fixture</a>
+                <p>
+                    Estimates the heat loss from heating the fixtures
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/o2.png" class="calc-img"
                         [routerLink]="['/calculators/o2-enrichment']">

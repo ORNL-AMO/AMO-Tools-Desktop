@@ -25,12 +25,19 @@ export class MeteredEnergyComponent implements OnInit {
 
 
   results: MeteredEnergyResults = {
-    meteredEnergyUsed: 0,
-    meteredEnergyIntensity: 0,
-    meteredElectricityUsed: 0,
-    calculatedFuelEnergyUsed: 0,
-    calculatedEnergyIntensity: 0,
-    calculatedElectricityUsed: 0
+    metered: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      hourlyElectricity: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    },
+      byPhast: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    }
   };
 
   tabSelect: string = 'results';
@@ -105,7 +112,7 @@ export class MeteredEnergyComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, false);
+    this.results = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
   }
 
   setTab(str: string) {

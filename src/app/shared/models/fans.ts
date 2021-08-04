@@ -8,6 +8,7 @@ export interface FSAT {
   fieldData?: FieldData;
   fanMotor?: FanMotor;
   fanSetup?: FanSetup;
+  fan203InputsForPlaneResults?: Fan203Inputs;
   baseGasDensity?: BaseGasDensity;
   notes: Notes;
   implementationCosts?: number;
@@ -16,7 +17,9 @@ export interface FSAT {
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
   valid?: FsatValid;
-  tempFsatCopy?: FSAT;
+  modalFieldData?: FieldData;
+  existingDataUnits?: string;
+  whatIfScenario?: boolean;
 }
 
 export interface FsatValid {
@@ -60,9 +63,12 @@ export interface FieldData {
   outletPressure: number;
   loadEstimatedMethod: number;
   motorPower: number;
-  specificHeatRatio: number;
+  // specificHeatRatio: number;
   compressibilityFactor: number;
   measuredVoltage: number;
+  usingStaticPressure?: boolean;
+  ductArea?: number,
+  inletVelocityPressure?: number;
   inletPressureData?: InletPressureData;
   outletPressureData?: OutletPressureData;
   fanRatedInfo?: FanRatedInfo;
@@ -116,8 +122,10 @@ export interface Plane {
   numInletBoxes?: number; // should have a default of 1 and the
   //psx => staticPressure
   staticPressure?: number;
+  userDefinedStaticPressure?: number;
   pitotTubeCoefficient?: number;
   traverseData?: Array<Array<number>>;
+  staticPressureData?: Array<Array<number>>;
   pitotTubeType?: string;
   numTraverseHoles?: number;
   numInsertionPoints?: number;
@@ -129,7 +137,7 @@ export interface PlaneData {
   totalPressureLossBtwnPlanes2and5: number;
   inletSEF: number;
   outletSEF: number;
-  //variationInBarometricPressure: boolean;
+  variationInBarometricPressure: boolean;
   // globalBarometricPressure: number;
   estimate2and5TempFrom1: boolean;
   FanInletFlange: Plane;
@@ -154,6 +162,7 @@ export interface BaseGasDensity {
   relativeHumidity?: number;
   wetBulbTemp?: number;
   specificHeatGas?: number; //used with wetBulb
+  specificHeatRatio?: number;
 }
 
 
@@ -207,7 +216,7 @@ export interface Fan203Inputs {
   FanRatedInfo: FanRatedInfo;
   BaseGasDensity: BaseGasDensity;
   FanShaftPower: FanShaftPower;
-  PlaneData?: PlaneData | PlaneData;
+  PlaneData?: PlaneData;
 }
 
 export interface Fan203Results {
@@ -230,12 +239,24 @@ export interface Fan203Results {
 
 
 export interface PlaneResults {
-  AddlTraversePlanes: Array<PlaneResult>;
-  FanInletFlange: PlaneResult;
-  FanOrEvaseOutletFlange: PlaneResult;
-  FlowTraverse: PlaneResult;
-  InletMstPlane: PlaneResult;
-  OutletMstPlane: PlaneResult;
+  AddlTraversePlanes?: Array<PlaneResult>;
+  FanInletFlange?: PlaneResult;
+  FanOrEvaseOutletFlange?: PlaneResult;
+  FlowTraverse?: PlaneResult;
+  InletMstPlane?: PlaneResult;
+  OutletMstPlane?: PlaneResult;
+  error?: boolean;
+}
+
+export interface VelocityResults { 
+  pv3: number,
+  percent75Rule: number,
+  traverseVelocity?: number 
+}
+
+export interface FanShaftPowerResults {
+  power: number;
+  powerCorrected: number;
 }
 
 export interface PlaneResult {
@@ -310,6 +331,7 @@ export interface FsatInput {
   flowRate: number;
   inletPressure: number;
   outletPressure: number;
+  velocityPressure: number;
   compressibilityFactor: number;
   // operatingFraction: number,
   operatingHours: number;
@@ -344,8 +366,9 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  planeResults?: PlaneResults;
+  psychrometricResults?: PsychrometricResults;
 }
-
 
 export interface InletPressureData {
   inletLoss: number;
@@ -358,6 +381,9 @@ export interface InletPressureData {
   processRequirements: number;
   inletSystemEffectLoss: number;
   calculatedInletPressure: number;
+  fanInletArea?: number;
+  inletVelocityPressure?: number;
+  userDefinedVelocityPressure?: boolean;
 }
 
 export interface OutletPressureData {
@@ -369,6 +395,9 @@ export interface OutletPressureData {
   processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
+  inletVelocityPressure?: number,
+  userDefinedVelocityPressure?: boolean,
+  fanOutletArea?: number
 }
 
 
@@ -380,3 +409,84 @@ export interface CompressibilityFactor {
   flowRate: number;
   specificHeatRatio: number;
 };
+
+
+export interface FanSystemChecklistInput {
+  operatingHours: number,
+  motorPower: number,
+  fanType: number,
+  notes: string,
+  name: string,
+  // Control
+  control: {
+    motorOverloads: number,
+    spillOrBypass: number,
+    dischargeDamper: number,
+    inletDamper: number,
+    variableInletVane: number,
+    systemDamper: number,
+    damperClosed: number,
+  }
+  // System
+  system: {
+    turnRight: number,
+    turnNear: number,
+    dirtLeg: number,
+    noOutletDuct: number,
+    restrictedInlet: number,
+  }
+  // Production
+  production: {
+    excessFlowOrPressure: number,
+    unstableSystem: number,
+    unreliableSystem: number,
+    lowFlowOrPressure: number,
+    systemNoisy: number,
+    fanBladeBuildup: number,
+    weldingDuctwork: number,
+    radialFanCleanAir: number,
+  }
+}
+
+
+export interface FanSystemChecklistOutput {
+  equipmentResults: Array<FanSystemChecklistResult>;
+}
+
+export interface FanSystemChecklistResult {
+  totalScore: number;
+  priority: string,
+  motorPowerScore: number;
+  operatingHoursScore: number;
+  controlsScore: number;
+  productionScore: number;
+  systemScore: number;
+  name: string;
+  hasMotorPowerPriority: boolean;
+  notes: string;
+  checklistAnswers?: {[key: string]: string} 
+}
+
+export const fanChecklistQuestions =  {
+  motorOverloads: 'Motor overloads unless damper restricts flow.',
+  spillOrBypass: 'Spill or bypass',
+  dischargeDamper: 'Discharge damper',
+  inletDamper: 'Inlet damper',
+  variableInletVane: 'Variable Inlet Vane',
+  systemDamper: 'System Damper',
+  damperClosed: 'Damper is mostly closed',
+  turnRight: '90% turn right at fan outlet or inlet',
+  turnNear: '90% turn near fan outlet or inlet',
+  dirtLeg: 'Dirt leg at bottom of inlet duct',
+  noOutletDuct: 'No outlet duct',
+  restrictedInlet: 'Restricted or sharp inlet',
+  excessFlowOrPressure: 'Too much flow or pressure for production',
+  unstableSystem: 'Unstable or hard to control system',
+  unreliableSystem: 'Unreliable system breaks down regularly',
+  lowFlowOrPressure: 'Not enough flow or pressure for production',
+  systemNoisy: 'System is excessively noisy',
+  fanBladeBuildup: 'Buildup on fan blades',
+  weldingDuctwork: 'Need to weld ductwork cracks regularly',
+  radialFanCleanAir: 'Radial fan handling clean air',
+};
+

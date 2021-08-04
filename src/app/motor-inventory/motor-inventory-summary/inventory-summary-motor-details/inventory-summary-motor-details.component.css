@@ -2,3 +2,25 @@
     background-color: white;
     border-bottom: 5px solid #84b641;
 }
+
+.btn-sm{
+    padding: 6px;
+    font-size: small;
+}
+
+
+@media print{
+    .print-col-10{
+        flex: inherit;
+        max-width: inherit;
+    }
+
+    .card, .card-header{
+        background-color: none !important;
+        border: none !important;
+    }
+
+    .pt-4{
+        padding-top: 0px !important;
+    }
+}

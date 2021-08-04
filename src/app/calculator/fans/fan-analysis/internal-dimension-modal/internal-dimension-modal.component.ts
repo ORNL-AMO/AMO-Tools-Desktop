@@ -20,9 +20,9 @@ export class InternalDimensionModalComponent implements OnInit {
   emitSave = new EventEmitter<number>();
 
   @ViewChild('internalDimensionModal', { static: false }) public boilerEfficiencyModal: ModalDirective;
-  
-  internalClearDimension = 0;
-  inputs = {externalDimension: 0, thickness: 0};
+
+  internalClearDimension: number = 0;
+  inputs: { externalDimension: number, thickness: number } = { externalDimension: 0, thickness: 0 };
   constructor() { }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class InternalDimensionModalComponent implements OnInit {
   }
 
   calculate() {
-    this.internalClearDimension = this.inputs.externalDimension - this.inputs.thickness;
+    this.internalClearDimension = this.inputs.externalDimension - (2 * this.inputs.thickness);
   }
 
   save() {

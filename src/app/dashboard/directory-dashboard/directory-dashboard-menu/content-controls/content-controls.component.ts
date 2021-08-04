@@ -94,6 +94,7 @@ export class ContentControlsComponent implements OnInit {
       this.filterDashboardBy.showFans == false &&
       this.filterDashboardBy.showSteam == false &&
       this.filterDashboardBy.showTreasureHunt == false &&
+      this.filterDashboardBy.showWasteWater == false &&
       // this.filterDashboardBy.showSubFolders == false &&
       this.filterDashboardBy.showPreAssessments == false &&
       this.filterDashboardBy.showPhast == false &&
@@ -235,6 +236,26 @@ export class ContentControlsComponent implements OnInit {
       this.filterDashboardBy.showMotorInventory = true;
     } else {
       this.filterDashboardBy.showMotorInventory = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterWasteWater() {
+    if (this.filterDashboardBy.showWasteWater == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showFans = false;
+        this.filterDashboardBy.showMotorInventory = false;
+      }
+      this.filterDashboardBy.showWasteWater = true;
+    } else {
+      this.filterDashboardBy.showWasteWater = false;
       this.checkShowAll();
     }
     this.updateFilterBy();

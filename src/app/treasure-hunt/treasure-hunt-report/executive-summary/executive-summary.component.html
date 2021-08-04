@@ -8,6 +8,11 @@
     <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults" [showPrintView]="showPrintView">
     </app-utility-bar-chart>
   </div>
+  <div class="col-12">
+    <div class="alert-warning small mb-2">
+      Implementation Cost is the net cost of implementing a project, including any specified rebates
+    </div>
+  </div>
   <div class="col-12" *ngIf="treasureHuntResults.hasMixed == true">
     <div class="alert-warning small mb-2">
       <span class="fa fa-asterisk"></span>

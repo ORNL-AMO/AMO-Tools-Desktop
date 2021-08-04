@@ -62,13 +62,13 @@ export class NameplateDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
-    this.focusOut();
+    // this.focusOut();
   }
 
-  focusOut() {
-    this.motorInventoryService.focusedDataGroup.next('nameplate-data')
-    this.motorInventoryService.focusedField.next('default');
-  }
+  // focusOut() {
+  //   this.motorInventoryService.focusedDataGroup.next('nameplate-data')
+  //   this.motorInventoryService.focusedField.next('default');
+  // }
 
   estimateEfficiency() {
     if (this.displayOptions.fullLoadSpeed) {

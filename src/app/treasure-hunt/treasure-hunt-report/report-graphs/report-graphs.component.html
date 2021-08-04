@@ -15,8 +15,15 @@
     [ngClass]="{'col-lg-3 col-md-4': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of savingsItems">
     <div class="p-0">
       <label class="group-label w-100">{{savingsItem.label}}</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [savings]="savingsItem.savings" [newCost]="savingsItem.newCost">
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem">
       </app-utility-donut-chart>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="print-break-before col-12">
+    <label class="group-label w-100">Payback Period vs. Effort to Implement</label>
+    <app-effort-savings-chart class="m-3" [treasureHuntResults]="treasureHuntResults" [showPrint]="showPrint">
+    </app-effort-savings-chart>
   </div>
 </div>

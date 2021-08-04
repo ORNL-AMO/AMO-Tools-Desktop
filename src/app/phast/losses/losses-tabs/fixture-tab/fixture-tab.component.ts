@@ -3,9 +3,9 @@ import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { FixtureLossesCompareService } from '../../fixture-losses/fixture-losses-compare.service';
-import { FixtureLossesService } from '../../fixture-losses/fixture-losses.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { Subscription } from 'rxjs';
+import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
   selector: 'app-fixture-tab',
@@ -27,7 +27,7 @@ export class FixtureTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private fixtureFormService: FixtureFormService, private fixtureLossesCompareService: FixtureLossesCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -75,7 +75,7 @@ export class FixtureTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(loss);
         if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
           hasWarning = true;
         }
@@ -86,7 +86,7 @@ export class FixtureTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(loss);
         if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
           hasWarning = true;
         }
@@ -96,7 +96,7 @@ export class FixtureTabComponent implements OnInit {
   }
 
   checkLossValid(loss: FixtureLoss) {
-    let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
+    let tmpForm: FormGroup = this.fixtureFormService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

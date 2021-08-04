@@ -38,6 +38,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   baselineSankey: FSAT;
   modificationSankey: FSAT;
+  sankeyView: string = 'Baseline';
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -57,6 +58,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (changes.modificationIndex) {
       this.getSankeyData();
       this.checkToasty();
+    }
+    if (changes.fsat) {
+      this.getSankeyData();
     }
   }
 

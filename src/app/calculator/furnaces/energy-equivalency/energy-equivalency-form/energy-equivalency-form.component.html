@@ -5,7 +5,7 @@
     <div class="input-group">
       <input autofocus name="fuelFiredEfficiency1" formControlName="fuelFiredEfficiency" type="number" step="any" class="form-control"
         id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiency')"
-        (blur)="focusOut()">
+        >
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="formElectric.controls.fuelFiredEfficiency.invalid && !formElectric.controls.fuelFiredEfficiency.pristine">
@@ -21,7 +21,7 @@
     <div class="input-group">
       <input name="electricallyHeatedEfficiency1" formControlName="electricallyHeatedEfficiency" type="number" step="any"
         class="form-control" id="electricallyHeatedEfficiency1" (input)="calcElectric()" onfocus="this.select();"
-        (focus)="focusField('electricallyHeatedEfficiency')" (blur)="focusOut()">
+        (focus)="focusField('electricallyHeatedEfficiency')" >
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="formElectric.controls.electricallyHeatedEfficiency.invalid && !formElectric.controls.electricallyHeatedEfficiency.pristine">
@@ -37,7 +37,7 @@
     <div class="input-group">
       <input name="fuelFiredHeatInput" formControlName="fuelFiredHeatInput" type="number" step="any" class="form-control"
         id="fuelFiredHeatInput1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredHeatInput')"
-        (blur)="focusOut()">
+        >
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
     </div>
@@ -49,8 +49,11 @@
   </div>
   <div class="form-group">
     <label>Equivalent Electrical Heat Input</label>
-    <div class="small text-center">
+    <div *ngIf="energyEquivalencyElectricOutput.electricalHeatInput" class="small text-center">
       <strong>{{energyEquivalencyElectricOutput.electricalHeatInput | number:'2.2-2'}} kW</strong>
+    </div>
+    <div *ngIf="!energyEquivalencyElectricOutput.electricalHeatInput" class="small text-center">
+      <strong>&mdash; &mdash;</strong>
     </div>
   </div>
 </form>
@@ -62,7 +65,7 @@
     <div class="input-group">
       <input name="electricallyHeatedEfficiency2" formControlName="electricallyHeatedEfficiency" type="number" step="any"
         class="form-control" id="electricallyHeatedEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricallyHeatedEfficiencyFuel')"
-        (blur)="focusOut()">
+        >
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="formFuel.controls.electricallyHeatedEfficiency.invalid && !formFuel.controls.electricallyHeatedEfficiency.pristine">
@@ -78,7 +81,7 @@
     <div class="input-group">
       <input name="fuelFiredEfficiency2" formControlName="fuelFiredEfficiency" type="number" step="any" class="form-control"
         id="fuelFiredEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiencyFuel')"
-        (blur)="focusOut()">
+        >
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="formFuel.controls.fuelFiredEfficiency.invalid && !formFuel.controls.fuelFiredEfficiency.pristine">
@@ -94,7 +97,7 @@
     <div class="input-group">
       <input name="electricalHeatInput3" formControlName="electricalHeatInput" type="number" step="any" class="form-control"
         id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
-        (blur)="focusOut()">
+        >
       <span class="input-group-addon units">kW</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="formFuel.controls.electricalHeatInput.invalid && !formFuel.controls.electricalHeatInput.pristine">
@@ -105,7 +108,7 @@
   </div>
   <div class="form-group">
     <label class="strong">Equivalent Fuel-Fired Heat Input</label>
-    <div class="small text-center">
+    <div *ngIf="energyEquivalencyFuelOutput.fuelFiredHeatInput" class="small text-center">
       <strong>{{energyEquivalencyFuelOutput.fuelFiredHeatInput | number:'2.2-2'}}</strong>
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
         <strong> MMBtu/hr</strong>
@@ -113,6 +116,9 @@
       <span *ngIf="settings.unitsOfMeasure == 'Metric'">
         <strong> GJ/hr</strong>
       </span>
+    </div>
+    <div *ngIf="!energyEquivalencyFuelOutput.fuelFiredHeatInput" class="small text-center">
+      <strong>&mdash; &mdash;</strong>
     </div>
   </div>
 </form>

@@ -86,6 +86,14 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printReportOpportunitySummary = !currentPrintOptions.printReportOpportunitySummary;
         break;
       }
+      case "printWasteWaterRollup": {
+        currentPrintOptions.printWasteWaterRollup = !currentPrintOptions.printWasteWaterRollup;
+        break;
+      }
+      case "detailedResults": {
+        currentPrintOptions.printDetailedResults = !currentPrintOptions.printDetailedResults;
+        break;
+      }
       default: {
         break;
       }
@@ -110,6 +118,8 @@ export class PrintOptionsMenuService {
       printReportOpportunityPayback: bool,
       printReportOpportunitySummary: bool,
       printSsmtRollup: bool,
+      printWasteWaterRollup: bool,
+      printDetailedResults: bool,
       selectAll: bool
     }
   }

@@ -1,0 +1,8 @@
+.group-label {
+    width: 100%;
+    margin-bottom: .5rem;
+}
+
+.group-sub-label {
+    border-bottom: 1px solid #000;
+}

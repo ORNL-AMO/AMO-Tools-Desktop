@@ -60,7 +60,7 @@
       <strong>Pressure</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedPressure | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedPressure | number:'1.0-4'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -73,7 +73,7 @@
       <strong>Temperature</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedTemperature | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedTemperature | number:'1.0-2'}}
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -86,7 +86,7 @@
       <strong>Liquid Specific Enthalpy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEnthalpy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEnthalpy | number:'1.0-2'}}
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span></strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
         &mdash;
@@ -98,7 +98,7 @@
       <strong>Liquid Specific Entropy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEntropy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEntropy | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -111,7 +111,7 @@
       <strong>Liquid Specific Volume</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidVolume | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidVolume | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -125,7 +125,7 @@
       <strong>Gas Specific Enthalpy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEnthalpy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEnthalpy | number:'1.0-2'}}
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
 
       </strong>
@@ -139,7 +139,7 @@
       <strong>Gas Specific Entropy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEntropy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEntropy | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -152,7 +152,7 @@
       <strong>Gas Specific Volume</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasVolume | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasVolume | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -166,7 +166,7 @@
       <strong>Evaporation Specific Enthalpy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEnthalpy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEnthalpy | number:'1.0-2'}}
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -179,7 +179,7 @@
       <strong>Evaporation Specific Entropy</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEntropy | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEntropy | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
@@ -192,7 +192,7 @@
       <strong>Evaporation Specific Volume</strong>
     </label>
     <div class="small text-center">
-      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationVolume | number:'1.1-4'}}
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationVolume | number:'1.0-4'}}
         <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
       </strong>
       <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">

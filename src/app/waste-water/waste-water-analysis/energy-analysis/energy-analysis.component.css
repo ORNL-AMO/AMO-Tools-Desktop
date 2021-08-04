@@ -1,0 +1,14 @@
+.min-row-height{
+    min-height: 500px;
+}
+@media print {
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+}
+
+
+.page-height{
+    height: 1500px;
+}

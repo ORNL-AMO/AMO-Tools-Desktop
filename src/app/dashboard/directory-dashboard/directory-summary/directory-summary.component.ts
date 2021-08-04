@@ -22,6 +22,8 @@ import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { WasteWaterService } from '../../../waste-water/waste-water.service';
+import { WasteWaterResults } from '../../../shared/models/waste-water';
 
 @Component({
   selector: 'app-directory-summary',
@@ -40,6 +42,7 @@ export class DirectorySummaryComponent implements OnInit {
   psatSummary: AssessmentTypeSummary;
   fsatSummary: AssessmentTypeSummary;
   ssmtSummary: AssessmentTypeSummary;
+  wasteWaterSummary: AssessmentTypeSummary;
 
   settingsForm: FormGroup;
   updateDashboardDataSub: Subscription;
@@ -48,7 +51,8 @@ export class DirectorySummaryComponent implements OnInit {
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private ssmtService: SsmtService, private settingsService: SettingsService, private indexedDbService: IndexedDbService
+    private ssmtService: SsmtService, private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+    private wasteWaterService: WasteWaterService
   ) { }
 
   ngOnInit() {
@@ -78,12 +82,14 @@ export class DirectorySummaryComponent implements OnInit {
       this.calculatePhastSummary();
       this.calculateFsatSummary();
       this.calculateSsmtSummary();
+      this.calculateWasteWaterSummary();
       let convertedFsatEnergy: number = this.convertUnitsService.value(this.fsatSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
       let convertedPsatEnergy: number = this.convertUnitsService.value(this.psatSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
+      let convertedWasteWaterEnergy: number = this.convertUnitsService.value(this.wasteWaterSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
       this.totalSummary = {
-        totalAssessments: this.psatSummary.totalAssessments + this.phastSummary.totalAssessments + this.fsatSummary.totalAssessments + this.ssmtSummary.totalAssessments,
-        totalCost: this.psatSummary.totalCost + this.phastSummary.totalCost + this.fsatSummary.totalCost + this.ssmtSummary.totalCost,
-        totalEnergyUsed: convertedPsatEnergy + this.phastSummary.totalEnergyUsed + convertedFsatEnergy + this.ssmtSummary.totalEnergyUsed
+        totalAssessments: this.psatSummary.totalAssessments + this.phastSummary.totalAssessments + this.fsatSummary.totalAssessments + this.ssmtSummary.totalAssessments + this.wasteWaterSummary.totalAssessments,
+        totalCost: this.psatSummary.totalCost + this.phastSummary.totalCost + this.fsatSummary.totalCost + this.ssmtSummary.totalCost + this.wasteWaterSummary.totalCost,
+        totalEnergyUsed: convertedPsatEnergy + this.phastSummary.totalEnergyUsed + convertedFsatEnergy + this.ssmtSummary.totalEnergyUsed + convertedWasteWaterEnergy
       }
     }, 150);
   }
@@ -166,6 +172,28 @@ export class DirectorySummaryComponent implements OnInit {
       totalCost: totalCost,
       totalEnergyUsed: totalEnergyUsed
     }
+  }
+
+  calculateWasteWaterSummary() {
+    let wasteWaterAssessments: Array<Assessment> = _.filter(this.directory.assessments, (assessment) => { return assessment.type == 'WasteWater' });
+    let totalEnergyUsed: number = 0;
+    let totalCost: number = 0;
+    wasteWaterAssessments.forEach(assessment => {
+      if (assessment.wasteWater.setupDone) {
+        let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.systemBasics, settings, false);
+        if (results.AeEnergyAnnual != undefined) {
+          totalEnergyUsed = results.AeEnergyAnnual + totalEnergyUsed;
+          totalCost = results.AeCost + totalCost;
+        }
+      }
+    });
+    this.wasteWaterSummary = {
+      totalAssessments: wasteWaterAssessments.length,
+      totalCost: totalCost,
+      totalEnergyUsed: totalEnergyUsed
+    }
+
   }
 
 

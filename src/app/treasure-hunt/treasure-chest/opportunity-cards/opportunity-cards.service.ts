@@ -1,10 +1,30 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 import { BehaviorSubject } from 'rxjs';
 import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
+import { AirLeakTreasureHuntService } from '../../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
+import { CaPressureReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/ca-pressure-reduction-treasure-hunt.service';
+import { CaReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/ca-reduction-treasure-hunt.service';
+import { ElectricityReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/electricity-reduction-treasure-hunt.service';
+import { FlueGasTreasureHuntService } from '../../treasure-hunt-calculator-services/flue-gas-treasure-hunt.service';
+import { LightingReplacementTreasureHuntService } from '../../treasure-hunt-calculator-services/lighting-replacement-treasure-hunt.service';
+import { MotorDriveTreasureHuntService } from '../../treasure-hunt-calculator-services/motor-drive-treasure-hunt.service';
+import { NaturalGasReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/natural-gas-reduction-treasure-hunt.service';
+import { PipeInsulationTreasureHuntService } from '../../treasure-hunt-calculator-services/pipe-insulation-treasure-hunt.service';
+import { ReplaceExistingTreasureHuntService } from '../../treasure-hunt-calculator-services/replace-existing-treasure-hunt.service';
+import { SteamReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
+import { TankInsulationTreasureHuntService } from '../../treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
+import { WallTreasureHuntService } from '../../treasure-hunt-calculator-services/wall-treasure-hunt.service';
+import { WaterReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from '../../treasure-hunt-calculator-services/leakage-treasure-hunt.service';
+import { WasteHeatTreasureHuntService } from '../../treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
+import { OpeningTreasureHuntService } from '../../treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { AirHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from '../../treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -12,7 +32,29 @@ export class OpportunityCardsService {
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   updateOpportunityCards: BehaviorSubject<boolean>;
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) {
+  constructor(private opportunitySheetService: OpportunitySheetService, 
+    private opportunitySummaryService: OpportunitySummaryService,
+    private airLeakTreasureService: AirLeakTreasureHuntService,
+    private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
+    private lightingTreasureHuntService: LightingReplacementTreasureHuntService,
+    private replaceExistingTreasureService: ReplaceExistingTreasureHuntService,
+    private motorDriveTreasureHuntService: MotorDriveTreasureHuntService,
+    private naturalGasTreasureHuntService: NaturalGasReductionTreasureHuntService,
+    private electricityReductionTreasureHuntService: ElectricityReductionTreasureHuntService,
+    private compressedAirTreasureHuntService: CaReductionTreasureHuntService,
+    private compressedAirPressureTreasureHuntService: CaPressureReductionTreasureHuntService,
+    private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
+    private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
+    private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
+    private wasteHeatTreasureHuntService: WasteHeatTreasureHuntService,
+    private airHeatingTreasureHuntService: AirHeatingTreasureHuntService,
+    private openingTreasureService: OpeningTreasureHuntService,
+    private wallLossTreasureHuntService: WallTreasureHuntService,
+    private leakageLossTreasureService: LeakageTreasureHuntService,
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
+    ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
     this.updateOpportunityCards = new BehaviorSubject<boolean>(true);
@@ -20,20 +62,51 @@ export class OpportunityCardsService {
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    let lightingReplacementsCardData: Array<OpportunityCardData> = this.getLightingReplacements(treasureHunt.lightingReplacements, treasureHunt.currentEnergyUsage);
-    let motorDrivesCardData: Array<OpportunityCardData> = this.getMotorDrives(treasureHunt.motorDrives, treasureHunt.currentEnergyUsage);
+    let lightingReplacementsCardData: Array<OpportunityCardData> = this.getLightingReplacements(treasureHunt.lightingReplacements, treasureHunt.currentEnergyUsage, settings);
+    let motorDrivesCardData: Array<OpportunityCardData> = this.getMotorDrives(treasureHunt.motorDrives, treasureHunt.currentEnergyUsage, settings);
     let replaceExistingData: Array<OpportunityCardData> = this.getReplaceExistingMotors(treasureHunt.replaceExistingMotors, treasureHunt.currentEnergyUsage, settings);
     let naturalGasReductionData: Array<OpportunityCardData> = this.getNaturalGasReductions(treasureHunt.naturalGasReductions, treasureHunt.currentEnergyUsage, settings);
     let electricityReductionData: Array<OpportunityCardData> = this.getElectricityReductions(treasureHunt.electricityReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirReductionData: Array<OpportunityCardData> = this.getCompressedAirReductions(treasureHunt.compressedAirReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirPressureReductionData: Array<OpportunityCardData> = this.getCompressedAirPressureReductions(treasureHunt.compressedAirPressureReductions, treasureHunt.currentEnergyUsage, settings);
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
-    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
+    let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, treasureHunt.currentEnergyUsage, settings)
     let steamReductionData: Array<OpportunityCardData> = this.getSteamReductions(treasureHunt.steamReductions, treasureHunt.currentEnergyUsage, settings);
     let pipeInsulationReductionData: Array<OpportunityCardData> = this.getPipeInsulationReductions(treasureHunt.pipeInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let tankInsulationReductionData: Array<OpportunityCardData> = this.getTankInsulationReductions(treasureHunt.tankInsulationReductions, treasureHunt.currentEnergyUsage, settings);
     let airLeakSurveyData: Array<OpportunityCardData> = this.getAirLeakSurveys(treasureHunt.airLeakSurveys, treasureHunt.currentEnergyUsage, settings);
-    opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData, steamReductionData, motorDrivesCardData, pipeInsulationReductionData, tankInsulationReductionData, airLeakSurveyData);
+    let openingLossData: Array<OpportunityCardData> = this.getOpeningLosses(treasureHunt.openingLosses, treasureHunt.currentEnergyUsage, settings);
+    let wallLossData: Array<OpportunityCardData> = this.getWallLosses(treasureHunt.wallLosses, treasureHunt.currentEnergyUsage, settings);
+    let wasteHeatData: Array<OpportunityCardData> = this.getWasteHeatReductions(treasureHunt.wasteHeatReductions, treasureHunt.currentEnergyUsage, settings);
+    let airHeatingData: Array<OpportunityCardData> = this.getAirHeatingOpportunities(treasureHunt.airHeatingOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let heatCascadingData: Array<OpportunityCardData> = this.getHeatCascadingOpportunities(treasureHunt.heatCascadingOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let waterHeatingData: Array<OpportunityCardData> = this.getWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let leakageLossData: Array<OpportunityCardData> = this.getLeakageLosses(treasureHunt.leakageLosses, treasureHunt.currentEnergyUsage, settings);
+    let flueGasData: Array<OpportunityCardData> = this.getFlueGasLosses(treasureHunt.flueGasLosses, treasureHunt.currentEnergyUsage, settings);
+    
+    opportunityCardsData = _.union(
+      lightingReplacementsCardData, 
+      replaceExistingData, 
+      naturalGasReductionData, 
+      electricityReductionData, 
+      compressedAirReductionData, 
+      compressedAirPressureReductionData, 
+      waterReductionData, 
+      standaloneOpportunitySheetData, 
+      steamReductionData, 
+      motorDrivesCardData, 
+      pipeInsulationReductionData, 
+      tankInsulationReductionData, 
+      airLeakSurveyData,
+      openingLossData,
+      wallLossData,
+      airHeatingData,
+      leakageLossData,
+      wasteHeatData,
+      heatCascadingData,
+      waterHeatingData,
+      flueGasData
+      );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
       card.index = index;
@@ -45,12 +118,13 @@ export class OpportunityCardsService {
   }
 
   //lightingReplacement;
-  getLightingReplacements(lightingReplacements: Array<LightingReplacementTreasureHunt>, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getLightingReplacements(lightingReplacements: Array<LightingReplacementTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (lightingReplacements) {
       let index: number = 0;
       lightingReplacements.forEach(lightingReplacement => {
-        let cardData: OpportunityCardData = this.getLightingReplacementCardData(lightingReplacement, index, currentEnergyUsage);
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(lightingReplacement, settings);
+        let cardData: OpportunityCardData = this.lightingTreasureHuntService.getLightingReplacementCardData(lightingReplacement, opportunitySummary, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -58,43 +132,13 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getLightingReplacementCardData(lightingReplacement: LightingReplacementTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getLightingSummary(lightingReplacement, index);
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: lightingReplacement.selected,
-      opportunityType: 'lighting-replacement',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
-      }],
-      utilityType: ['Electricity'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost
-      }],
-      lightingReplacement: lightingReplacement,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: lightingReplacement.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png',
-      teamName: this.getTeamName(lightingReplacement.opportunitySheet)
-    }
-    return cardData;
-  }
-
   //opportunitySheets
-  getStandaloneOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, settings: Settings, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getStandaloneOpportunitySheets(opportunitySheets: Array<OpportunitySheet>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (opportunitySheets) {
       let index: number = 0;
       opportunitySheets.forEach(oppSheet => {
-        let cardData: OpportunityCardData = this.getOpportunitySheetCardData(oppSheet, currentEnergyUsage, index, settings);
+        let cardData: OpportunityCardData = this.getOpportunitySheetCardData(oppSheet, settings, index, currentEnergyUsage);
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -102,7 +146,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getOpportunitySheetCardData(oppSheet: OpportunitySheet, currentEnergyUsage: EnergyUsage, index: number, settings: Settings): OpportunityCardData {
+  getOpportunitySheetCardData(oppSheet: OpportunitySheet, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let results: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(oppSheet, settings);
     let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
@@ -278,581 +322,7 @@ export class OpportunityCardsService {
     return { annualEnergySavings: annualEnergySavings, percentSavings: percentSavings, utilityTypes: utilityTypes }
   }
 
-  //replaceExistingMotors
-  getReplaceExistingMotors(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (replaceExistingMotors) {
-      let index: number = 0;
-      replaceExistingMotors.forEach(replaceExistingMotor => {
-        let cardData: OpportunityCardData = this.getReplaceExistingCardData(replaceExistingMotor, index, currentEnergyUsage, settings);
-        opportunityCardsData.push(cardData);
-        index++;
-      })
-    }
-    return opportunityCardsData;
-  }
-
-  getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
-    // let results: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingMotor.replaceExistingData);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getReplaceExistingSummary(replaceExistingMotor, index, settings);
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: replaceExistingMotor.selected,
-      opportunityType: 'replace-existing',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
-      }],
-      utilityType: ['Electricity'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-
-      replaceExistingMotor: replaceExistingMotor,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: replaceExistingMotor.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/motor-icons/replace.png',
-      teamName: this.getTeamName(replaceExistingMotor.opportunitySheet)
-    };
-    return cardData;
-  }
-
-  //motorDrives
-  getMotorDrives(motorDrives: Array<MotorDriveInputsTreasureHunt>, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (motorDrives) {
-      let index: number = 0;
-      motorDrives.forEach(drive => {
-        let cardData: OpportunityCardData = this.getMotorDriveCard(drive, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-      return opportunityCardsData;
-    }
-  }
-
-  getMotorDriveCard(drive: MotorDriveInputsTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: MotorDriveOutputs = this.motorDriveService.getResults(drive.motorDriveInputs);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getMotorDriveSummary(drive, index);
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: drive.selected,
-      opportunityType: 'motor-drive',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
-      }],
-      utilityType: ['Electricity'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      motorDrive: drive,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: drive.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png',
-      teamName: this.getTeamName(drive.opportunitySheet)
-    }
-    return cardData;
-  }
-  //naturalGasReductions
-  getNaturalGasReductions(naturalGasReductions: Array<NaturalGasReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (naturalGasReductions) {
-      let index: number = 0;
-      naturalGasReductions.forEach(naturalGasReduction => {
-        let cardData: OpportunityCardData = this.getNaturalGasReductionCard(naturalGasReduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-
-  getNaturalGasReductionCard(naturalGasReduction: NaturalGasReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: NaturalGasReductionResults = this.naturalGasReductionService.getResults(settings, naturalGasReduction.baseline, naturalGasReduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getNaturalGasReductionSummary(naturalGasReduction, index, settings);
-    let unitStr: string = 'MMBtu/yr';
-    if (settings.unitsOfMeasure == 'Metric') {
-      unitStr = 'MJ/yr';
-    }
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: naturalGasReduction.selected,
-      opportunityType: 'natural-gas-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: 'Natural Gas'
-      }],
-      utilityType: ['Natural Gas'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.naturalGasCosts),
-        label: 'Natural Gas',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      naturalGasReduction: naturalGasReduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: naturalGasReduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png',
-      teamName: this.getTeamName(naturalGasReduction.opportunitySheet)
-    }
-    return cardData;
-  }
-
-  //electricityReductions
-  getElectricityReductions(electricityReductions: Array<ElectricityReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (electricityReductions) {
-      let index: number = 0;
-      electricityReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getElectricityReductionCard(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      })
-    }
-    return opportunityCardsData;
-  }
-  getElectricityReductionCard(reduction: ElectricityReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: ElectricityReductionResults = this.electricityReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getElectricityReductionSummary(reduction, index, settings);
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'electricity-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
-      }],
-      utilityType: ['Electricity'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      electricityReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    };
-    return cardData;
-  }
-
-  //compressedAirReductions
-  getCompressedAirReductions(compressedAirReductions: Array<CompressedAirReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (compressedAirReductions) {
-      let index: number = 0;
-      compressedAirReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getCompressedAirReductionCardData(reduction, settings, currentEnergyUsage, index);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-
-  getCompressedAirReductionCardData(reduction: CompressedAirReductionTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, index: number): OpportunityCardData {
-    // let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirReductionSummary(reduction, index, settings);
-    let utilityCost: number = currentEnergyUsage.compressedAirCosts;
-    let unitStr: string = 'kSCF'
-    //electricity utility
-    if (reduction.baseline[0].utilityType == 1) {
-      utilityCost = currentEnergyUsage.electricityCosts;
-      unitStr = 'kWh'
-    } else if (settings.unitsOfMeasure == 'Metric') {
-      unitStr = 'Nm3'
-    }
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'compressed-air-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, utilityCost),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      compressedAirReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    };
-    return cardData;
-  }
-
-  //compressedAirPressureReductions
-  getCompressedAirPressureReductions(compressedAirPressureReductions: Array<CompressedAirPressureReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (compressedAirPressureReductions) {
-      let index: number = 0;
-      compressedAirPressureReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getCompressedAirPressureReductionCardData(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-
-  getCompressedAirPressureReductionCardData(reduction: CompressedAirPressureReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirPressureReductionSummary(reduction, index, settings);
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'compressed-air-pressure-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
-      }],
-      utilityType: ['Electricity'],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity',
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      compressedAirPressureReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    };
-    return cardData;
-  }
-
-  //waterReductions
-  getWaterReductions(waterReductions: Array<WaterReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (waterReductions) {
-      let index: number = 0;
-      waterReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getWaterReductionCardData(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-
-  getWaterReductionCardData(reduction: WaterReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getWaterReductionSummary(reduction, index, settings);
-    let utilityCost: number = currentEnergyUsage.waterCosts;
-    let unitStr: string = 'm3';
-    if (settings.unitsOfMeasure == 'Imperial') {
-      unitStr = 'kgal';
-    }
-    //electricity utility
-    if (reduction.baseline[0].isWastewater == true) {
-      utilityCost = currentEnergyUsage.wasteWaterCosts;
-    }
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'water-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, utilityCost),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      waterReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    }
-    return cardData;
-  }
-  //steamReductions
-  getSteamReductions(steamReductions: Array<SteamReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (steamReductions) {
-      let index: number = 0;
-      steamReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getSteamReductionCardData(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-
-  getSteamReductionCardData(reduction: SteamReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getSteamReductionSummary(reduction, index, settings);
-    let unitStr: string = 'klb';
-    if (settings.unitsOfMeasure == 'Imperial') {
-      unitStr = 'tonnes';
-    }
-    let currentCosts: number = currentEnergyUsage.steamCosts;
-    if (reduction.baseline[0].utilityType == 1) {
-      currentCosts = currentEnergyUsage.naturalGasCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    } else if (reduction.baseline[0].utilityType == 2) {
-      currentCosts = currentEnergyUsage.otherFuelCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    }
-
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'steam-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      steamReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    }
-    return cardData;
-  }
-
-  //pipeInsulationReductions
-  getPipeInsulationReductions(pipeInsulationReductions: Array<PipeInsulationReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (pipeInsulationReductions) {
-      let index: number = 0;
-      pipeInsulationReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getPipeInsulationReductionCardData(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-  getPipeInsulationReductionCardData(reduction: PipeInsulationReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getPipeInsulationReductionSummary(reduction, index, settings);
-    let unitStr: string;
-    let currentCosts: number;
-    if (reduction.baseline.utilityType == 0) {
-      currentCosts = currentEnergyUsage.naturalGasCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    } else if (reduction.baseline.utilityType == 1) {
-      currentCosts = currentEnergyUsage.otherFuelCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    }
-
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'pipe-insulation-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      pipeInsulationReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/pipe-insulation-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    }
-    return cardData;
-  }
-
-  //tankInsulationReductions
-  getTankInsulationReductions(tankInsulationReductions: Array<TankInsulationReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (tankInsulationReductions) {
-      let index: number = 0;
-      tankInsulationReductions.forEach(reduction => {
-        let cardData: OpportunityCardData = this.getTankInsulationReductionCardData(reduction, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-  getTankInsulationReductionCardData(reduction: TankInsulationReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getTankInsulationReductionSummary(reduction, index, settings);
-    let unitStr: string;
-    let currentCosts: number;
-    if (reduction.baseline.utilityType == 0) {
-      currentCosts = currentEnergyUsage.naturalGasCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    } else if (reduction.baseline.utilityType == 1) {
-      currentCosts = currentEnergyUsage.otherFuelCosts;
-      unitStr = 'MMBtu';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'GJ';
-      }
-    }
-
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: reduction.selected,
-      opportunityType: 'tank-insulation-reduction',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      tankInsulationReduction: reduction,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/tank-insulation-reduction-icon.png',
-      teamName: this.getTeamName(reduction.opportunitySheet)
-    }
-    return cardData;
-  }
-
-  //airLeakSurvey
-  getAirLeakSurveys(airLeakSurveys: Array<AirLeakSurveyTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
-    let opportunityCardsData: Array<OpportunityCardData> = new Array();
-    if (airLeakSurveys) {
-      let index: number = 0;
-      airLeakSurveys.forEach(airLeakSurvey => {
-        let cardData: OpportunityCardData = this.getAirLeakSurveyCardData(airLeakSurvey, settings, index, currentEnergyUsage);
-        opportunityCardsData.push(cardData);
-        index++;
-      });
-    }
-    return opportunityCardsData;
-  }
-  getAirLeakSurveyCardData(airLeakSurvey: AirLeakSurveyTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getAirLeakSurveySummary(airLeakSurvey, index, settings);
-    let unitStr: string;
-    let currentCosts: number;
-    //utilityType: 0 = Compressed Air, 1 = Electricity
-    if (airLeakSurvey.airLeakSurveyInput.facilityCompressorData.utilityType == 0) {
-      currentCosts = currentEnergyUsage.compressedAirCosts;
-      unitStr = 'm3';
-      if (settings.unitsOfMeasure == 'Imperial') {
-        unitStr = 'kSCF';
-      }
-    } else if (airLeakSurvey.airLeakSurveyInput.facilityCompressorData.utilityType == 1) {
-      currentCosts = currentEnergyUsage.electricityCosts;
-      unitStr = 'kWh';
-    }
-
-    let cardData: OpportunityCardData = {
-      implementationCost: opportunitySummary.totalCost,
-      paybackPeriod: opportunitySummary.payback,
-      selected: airLeakSurvey.selected,
-      opportunityType: 'air-leak-survey',
-      opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
-      airLeakSurvey: airLeakSurvey,
-      name: opportunitySummary.opportunityName,
-      opportunitySheet: airLeakSurvey.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/compressed-air-icons/air-leak-icon.png',
-      teamName: this.getTeamName(airLeakSurvey.opportunitySheet)
-    }
-    return cardData;
-  }
-
-
+  
   getPercentSavings(totalCostSavings: number, totalUtiltyCost: number): number {
     return (totalCostSavings / totalUtiltyCost) * 100;
   }
@@ -864,9 +334,289 @@ export class OpportunityCardsService {
       return undefined;
     }
   }
+
+  //replaceExistingMotors
+  getReplaceExistingMotors(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (replaceExistingMotors) {
+      let index: number = 0;
+      replaceExistingMotors.forEach(replaceExistingMotor => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(replaceExistingMotor, settings);
+        let cardData: OpportunityCardData = this.replaceExistingTreasureService.getReplaceExistingCardData(replaceExistingMotor, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      })
+    }
+    return opportunityCardsData;
+  }
+
+  //motorDrives
+  getMotorDrives(motorDrives: Array<MotorDriveInputsTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (motorDrives) {
+      let index: number = 0;
+      motorDrives.forEach(drive => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(drive, settings);
+        let cardData: OpportunityCardData = this.motorDriveTreasureHuntService.getMotorDriveCard(drive, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+      return opportunityCardsData;
+    }
+  }
+
+  //naturalGasReductions
+  getNaturalGasReductions(naturalGasReductions: Array<NaturalGasReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (naturalGasReductions) {
+      let index: number = 0;
+      naturalGasReductions.forEach(naturalGasReduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(naturalGasReduction, settings);
+        let cardData: OpportunityCardData = this.naturalGasTreasureHuntService.getNaturalGasReductionCard(naturalGasReduction, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+
+  //electricityReductions
+  getElectricityReductions(electricityReductions: Array<ElectricityReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (electricityReductions) {
+      let index: number = 0;
+      electricityReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.electricityReductionTreasureHuntService.getElectricityReductionCard(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      })
+    }
+    return opportunityCardsData;
+  }
+
+  //compressedAirReductions
+  getCompressedAirReductions(compressedAirReductions: Array<CompressedAirReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (compressedAirReductions) {
+      let index: number = 0;
+      compressedAirReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.compressedAirTreasureHuntService.getCompressedAirReductionCardData(reduction, opportunitySummary, settings, currentEnergyUsage, index);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+
+  //compressedAirPressureReductions
+  getCompressedAirPressureReductions(compressedAirPressureReductions: Array<CompressedAirPressureReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (compressedAirPressureReductions) {
+      let index: number = 0;
+      compressedAirPressureReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.compressedAirPressureTreasureHuntService.getCompressedAirPressureReductionCardData(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+
+  //waterReductions
+  getWaterReductions(waterReductions: Array<WaterReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (waterReductions) {
+      let index: number = 0;
+      waterReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.waterReductionTreasureHuntService.getWaterReductionCardData(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  //steamReductions
+  getSteamReductions(steamReductions: Array<SteamReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (steamReductions) {
+      let index: number = 0;
+      steamReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.steamReductionTreasureHuntService.getSteamReductionCardData(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+
+  //pipeInsulationReductions
+  getPipeInsulationReductions(pipeInsulationReductions: Array<PipeInsulationReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (pipeInsulationReductions) {
+      let index: number = 0;
+      pipeInsulationReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.pipeInsulationTreasureHuntService.getPipeInsulationReductionCardData(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  //tankInsulationReductions
+  getTankInsulationReductions(tankInsulationReductions: Array<TankInsulationReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (tankInsulationReductions) {
+      let index: number = 0;
+      tankInsulationReductions.forEach(reduction => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(reduction, settings);
+        let cardData: OpportunityCardData = this.tankInsulationTreasureHuntService.getTankInsulationReductionCardData(reduction, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+
+  // //airLeakSurvey
+  getAirLeakSurveys(airLeakSurveys: Array<AirLeakSurveyTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (airLeakSurveys) {
+      let index: number = 0;
+      airLeakSurveys.forEach(airLeakSurvey => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(airLeakSurvey, settings);
+        let cardData: OpportunityCardData = this.airLeakTreasureService.getAirLeakSurveyCardData(airLeakSurvey, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getOpeningLosses(openingLosses: Array<OpeningLossTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (openingLosses) {
+      let index: number = 0;
+      openingLosses.forEach(openingLoss => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(openingLoss, settings);
+        let cardData: OpportunityCardData = this.openingTreasureService.getOpeningLossCardData(openingLoss, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+  getWallLosses(wallLosses: Array<WallLossTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (wallLosses) {
+      let index: number = 0;
+      wallLosses.forEach(wallLoss => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(wallLoss, settings);
+        let cardData: OpportunityCardData = this.wallLossTreasureHuntService.getWallLossCardData(wallLoss, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getLeakageLosses(leakageLosses: Array<LeakageLossTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (leakageLosses) {
+      let index: number = 0;
+      leakageLosses.forEach(leakageLoss => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(leakageLoss, settings);
+        let cardData: OpportunityCardData = this.leakageLossTreasureService.getLeakageLossCardData(leakageLoss, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+ 
+  getFlueGasLosses(flueGasLosses: Array<FlueGasTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (flueGasLosses) {
+      let index: number = 0;
+      flueGasLosses.forEach(flueGas => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(flueGas, settings);
+        let cardData: OpportunityCardData = this.flueGasTreasureHuntService.getFlueGasCardData(flueGas, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getAirHeatingOpportunities(airHeatingOpportunities: Array<AirHeatingTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (airHeatingOpportunities) {
+      let index: number = 0;
+      airHeatingOpportunities.forEach(airHeating => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(airHeating, settings);
+        let cardData: OpportunityCardData = this.airHeatingTreasureHuntService.getAirHeatingOpportunityCardData(airHeating, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getWasteHeatReductions(wasteHeatReductions: Array<WasteHeatTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (wasteHeatReductions) {
+      let index: number = 0;
+      wasteHeatReductions.forEach(wasteHeat => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(wasteHeat, settings);
+        let cardData: OpportunityCardData = this.wasteHeatTreasureHuntService.getWasteHeatCardData(wasteHeat, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getHeatCascadingOpportunities(heatCascadingOpportunities: Array<HeatCascadingTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (heatCascadingOpportunities) {
+      let index: number = 0;
+      heatCascadingOpportunities.forEach(heatCascading => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(heatCascading, settings);
+        let cardData: OpportunityCardData = this.heatCascadingTreasureHuntService.getHeatCascadingOpportunityCardData(heatCascading, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getWaterHeatingOpportunities(waterHeatingOpportunities: Array<WaterHeatingTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (waterHeatingOpportunities) {
+      let index: number = 0;
+      waterHeatingOpportunities.forEach(waterHeating => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(waterHeating, settings);
+        let cardData: OpportunityCardData = this.waterHeatingTreasureHuntService.getWaterHeatingOpportunityCardData(waterHeating, opportunitySummary, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
 }
-
-
 
 
 export interface OpportunityCardData {
@@ -906,4 +656,12 @@ export interface OpportunityCardData {
   pipeInsulationReduction?: PipeInsulationReductionTreasureHunt;
   tankInsulationReduction?: TankInsulationReductionTreasureHunt;
   airLeakSurvey?: AirLeakSurveyTreasureHunt;
+  wasteHeat?: WasteHeatTreasureHunt;
+  airHeating?: AirHeatingTreasureHunt;
+  openingLoss?: OpeningLossTreasureHunt;
+  wallLoss?: WallLossTreasureHunt;
+  leakageLoss?: LeakageLossTreasureHunt;
+  flueGas?: FlueGasTreasureHunt;
+  heatCascading?: HeatCascadingTreasureHunt;
+  waterHeating?: WaterHeatingTreasureHunt;
 }

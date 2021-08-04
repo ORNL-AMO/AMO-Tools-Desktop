@@ -3,7 +3,8 @@
     Energy Input Help
     <br>
     <small class="text-muted">
-      The data entered on this page does not directly impact the calculations by the PHA for the total gross heat of the system.
+      The data entered on this page does not directly impact the calculations by the PHA for the total gross heat of the
+      system.
       This page is intended as a comparison to the PHA calculation.
     </small>
   </h5>
@@ -15,29 +16,14 @@
       Natural Gas Heat Input
       <br>
       <small class="text-muted">
-        Total heat input to the heating system (furnace/oven) from all sources of heat supplied. They may include natural gas, carbon,
-        fuel oil etc. as applicable. Can be calculated using "Calculate using flow rate" button. Note that for batch furnaces
+        Total heat input to the heating system (furnace/oven) from all sources of heat supplied. They may include
+        natural gas, carbon,
+        fuel oil etc. as applicable. Can be calculated using "Calculate using flow rate" button. Note that for batch
+        furnaces
         the total heat input should be corrected for cycle time to obtain per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -46,28 +32,12 @@
       Coal Carbon Injection
       <br>
       <small class="text-muted">
-        Mass (weight) of coal or carbon injection on a per hour basis. Note that for batch furnaces the total carbon injection should
+        Mass (weight) of coal or carbon injection on a per hour basis. Note that for batch furnaces the total carbon
+        injection should
         be corrected for cycle time to obtain per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lbs/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -76,8 +46,8 @@
       Coal Heating Value
       <br>
       <small class="text-muted">
-        Higher heating value for the coal or carbon injected. 
-        The HHV of coal is dependent on the type and source. The default value represents 
+        Higher heating value for the coal or carbon injected.
+        The HHV of coal is dependent on the type and source. The default value represents
         the average coal HHV. Below is a table of HHV for the various grades of coal.
         <hr>
       </small>
@@ -156,28 +126,12 @@
       Electrode Use
       <br>
       <small class="text-muted">
-        Mass (weight) of electrode use on a per hour basis. Note that for batch furnaces the electrode use should be corrected for
+        Mass (weight) of electrode use on a per hour basis. Note that for batch furnaces the electrode use should be
+        corrected for
         cycle time to obtain per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lbs/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -190,23 +144,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -215,28 +152,12 @@
       Other Fuels
       <br>
       <small class="text-muted">
-        Heat supplied from other sources, if any. Note that for batch furnaces the total weight should be corrected for cycle time
+        Heat supplied from other sources, if any. Note that for batch furnaces the total weight should be corrected for
+        cycle time
         to obtain per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -245,34 +166,22 @@
       Electricity Input
       <br>
       <small class="text-muted">
-        Electricity Input into system. Note that for batch furnaces the electricity input should be corrected for cycle time to obtain
+        Electricity Input into system. Note that for batch furnaces the electricity input should be corrected for cycle
+        time to obtain
         per hour value.
         <hr>
+        This field is used to calculate the Exhaust Gas Losses as an alternative to utilizing the Exhaust Gas Loss page.
+        If there is no data on the Exhaust Gas Loss page, then Exhaust Gas Loss is calculated as the difference between
+        the Gross Heat Input (the sum of the chemical, electrical, and exothermic reaction heat inputs) and Total Net
+        Heat Required.
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
 </div>
 
 
-  <!-- <p class="text-muted">
+<!-- <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
   </p> -->

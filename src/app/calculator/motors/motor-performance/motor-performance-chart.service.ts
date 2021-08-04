@@ -133,7 +133,7 @@ export class MotorPerformanceChartService {
           type: 'linear',
           showgrid: true,
           title: {
-            text: "Current, Power, Efficiency"
+            text: "Current, Power Factor, Efficiency"
           },
           range: [0, 140],
           tickvals: [0, 20, 40, 60, 80, 100, 120],

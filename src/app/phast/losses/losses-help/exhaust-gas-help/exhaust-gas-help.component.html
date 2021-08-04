@@ -3,9 +3,28 @@
     Exhaust Gas Help
     <br>
     <small class="text-muted">
-      Enter measured data to calculate your system's annual savings potential.
+      Enter measured data to calculate your system's annual savings potential. This loss is optional. If no data,
+      exhaust gas losses will be calculated from the difference between Gross Heat Input and Total Net Heat Required
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>Minimize volume by controlling make up air and air leaks in the oven</li>
+          <li>Use preheated combustion air</li>
+          <li>Reduce exhaust gas temperature by using one or more heat recovery methods</li>
+        </ul>
+      </small>
+    </h6>
+  </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -14,7 +33,8 @@
       Off (Exhaust) Gas Temperature
       <br>
       <small class="text-muted">
-        Temperature of exhaust gases from the EAF (sometimes referred to as fourth hole). This is measured or estimated before the
+        Temperature of exhaust gases from the EAF (sometimes referred to as fourth hole). This is measured or estimated
+        before the
         gases are mixed with outside air.
       </small>
     </h6>
@@ -26,7 +46,8 @@
       CO
       <br>
       <small class="text-muted">
-        Average value of CO percentage in exhaust gases. Note that the values vary with time during the cycle and this is average
+        Average value of CO percentage in exhaust gases. Note that the values vary with time during the cycle and this
+        is average
         over the cycle time.
         <hr>
       </small>
@@ -55,7 +76,8 @@
       <br>
       <small class="text-muted">
         Average value of H
-        <sub>2</sub> percentage in exhaust gases. Note that the values vary with time during the cycle and this is average over
+        <sub>2</sub> percentage in exhaust gases. Note that the values vary with time during the cycle and this is
+        average over
         the cycle time.
         <hr>
       </small>
@@ -83,7 +105,8 @@
       <sub>4</sub>
       <br>
       <small class="text-muted">
-        Average value of combustible gases percentage in exhaust gases. Note that the values vary with time during the cycle and
+        Average value of combustible gases percentage in exhaust gases. Note that the values vary with time during the
+        cycle and
         this is average over the cycle time.
         <hr>
       </small>
@@ -114,25 +137,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">cfm</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
-                <sup>3</sup>/min
-              </span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -145,45 +149,13 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/scf</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/Nm
-                <sup>3</sup>
-              </span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Minimize volume by controlling make up air and air leaks in the oven
-        <br> Use preheated combustion air
-        <br> Reduce exhaust gas temperature by using one or more heat recovery methods
-      </small>
-    </h6>
-  </div>
 
 
 </div>
 
-  <!-- <p>Enter data</p>
+<!-- <p>Enter data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
   </p> -->
-

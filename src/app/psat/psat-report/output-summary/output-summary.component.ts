@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { CompareService } from '../../compare.service';
+import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
 
 @Component({
   selector: 'app-output-summary',
@@ -20,12 +20,17 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
+  
+
+  notes: Array<SummaryNote>;
+
+  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
+    this.notes = new Array();
     if (this.inRollup) {
-      this.reportRollupService.selectedPsats.forEach(val => {
+      this.psatReportRollupService.selectedPsats.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId == this.assessment.id) {
@@ -35,6 +40,11 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+
+    if(this.psat.modifications){
+      this.notes = this.buildSummaryNotes(this.psat);
+    }
+
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
@@ -56,7 +66,7 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.psatReportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   getDiff(num1: number, num2: number) {
@@ -78,4 +88,42 @@ export class OutputSummaryComponent implements OnInit {
     }
     return result;
   }
+
+  buildSummaryNotes(psat: PSAT): Array<SummaryNote>{
+    let tmpNotesArr: Array<SummaryNote> = new Array<SummaryNote>();
+    psat.modifications.forEach(mod =>{
+      if(mod.notes){
+        if(mod.notes.pumpFluidNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Pump and Fluid', mod.notes.pumpFluidNotes);
+          tmpNotesArr.push(note);
+        }
+        if(mod.notes.motorNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Motor', mod.notes.motorNotes);
+          tmpNotesArr.push(note);
+        }
+        if(mod.notes.fieldDataNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Field Data', mod.notes.fieldDataNotes);
+          tmpNotesArr.push(note);
+        }
+      }
+    });
+    return tmpNotesArr;
+  }
+
+  buildNoteObject(modName: string, modMade: string, modNote: string): SummaryNote {
+    let summaryNote: SummaryNote = {
+      modName: modName,
+      modMade: modMade,
+      modNote: modNote
+    };
+    return summaryNote;
+  }
+
 }
+
+export interface SummaryNote {
+  modName: string;
+  modMade: string;
+  modNote: string;
+}
+

@@ -18,6 +18,7 @@ export interface SSMT {
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
     valid?: SsmtValid;
+    existingDataUnits?: string;
 }
 
 export interface SSMTInputs {

@@ -6,6 +6,30 @@
       Enter measured data to calculate your system's annual savings potential.
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+      <h6>
+        <small class="text-muted">
+          <ul>
+            <li>Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation</li>
+            <li>Use proper insulation and thickness to reduce furnace casing or surface temperature while rebuilding the furnace</li>
+            <li>Consider use of low weight, fiber insulation when appropriate</li>
+            <li>Account for process atmosphere composition (i.e. presence of hydrogen) in the furnace. Select the insulation to
+              provide barrier to gas penetration in the insulation voids</li>
+            <li>Reduce or eliminate external wall cooling if used</li>
+          </ul>
+          <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+          There may additional measures when considering specific situations and the user is encouraged to review and apply
+          the appropriate measures
+        </small>
+      </h6>
+    </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -46,23 +70,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">mph</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">km/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -175,27 +182,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
-                <sup>2</sup>
-              </span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
-                <sup>2</sup>
-              </span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -205,39 +191,6 @@
       <br>
       <small class="text-muted">
         Engineering correction factor multiplied to the result to account for a known systematic error.
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation
-        <br> Use proper insulation and thickness to reduce furnace casing or surface temperature while rebuilding the furnace
-        <br> Consider use of low weight, fiber insulation when appropriate
-        <br> Account for process atmosphere composition (i.e. presence of hydrogen) in the furnace. Select the insulation to
-        provide barrier to gas penetration in the insulation voids
-        <br> Reduce or eliminate external wall cooling if used
-        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-        There may additional measures when considering specific situations and the user is encouraged to review and apply
-        the appropriate measures
       </small>
     </h6>
   </div>

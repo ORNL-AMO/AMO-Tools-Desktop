@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { FixtureLossesComponent } from "./fixture-losses.component";
-import { FixtureLossesService } from "./fixture-losses.service";
 import { FixtureLossesFormComponent } from "./fixture-losses-form/fixture-losses-form.component";
 
 import { ModalModule } from 'ngx-bootstrap';
@@ -23,7 +22,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
   ],
   providers: [
     FixtureLossesCompareService,
-    FixtureLossesService
   ],
   exports: [
     FixtureLossesComponent

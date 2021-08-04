@@ -4,18 +4,17 @@ import { Calculator } from '../../shared/models/calculators';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
-import { ReportRollupService } from '../report-rollup.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { FsatResultsData } from '../report-rollup-models';
 import * as _ from 'lodash';
+import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 @Component({
   selector: 'app-fsat-rollup',
   templateUrl: './fsat-rollup.component.html',
   styleUrls: ['./fsat-rollup.component.css']
 })
 export class FsatRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   @Input()
   calculators: Array<Calculator>;
   @Input()
@@ -30,9 +29,14 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private reportRollupService: ReportRollupService) { }
+  settings: Settings;
+
+  rollupEnergyUnit: string = 'MWh';
+  
+  constructor(private fsatReportRollupService: FsatReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');
@@ -46,7 +50,7 @@ export class FsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
+      this.yAxisLabel = 'Annual Energy Usage (MWh)';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
@@ -65,7 +69,7 @@ export class FsatRollupComponent implements OnInit {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -96,18 +100,17 @@ export class FsatRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
-      fsatResults.forEach(result => {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
+      this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
         projectedCosts.push(result.modificationResults.annualCost);
       })
-    } else if (dataOption == 'energy') {
-      fsatResults.forEach(result => {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
+      this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualEnergy - result.modificationResults.annualEnergy);
         projectedCosts.push(result.modificationResults.annualEnergy);
@@ -121,17 +124,18 @@ export class FsatRollupComponent implements OnInit {
   }
 
   setPieChartData() {
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
     this.pieChartData = new Array();
-    let totalEnergyUse: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualEnergy; });
-    let totalCost: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualCost; });
+    let totalEnergyUse: number = _.sumBy(this.fsatReportRollupService.selectedFsatResults, (result) => { return result.baselineResults.annualEnergy; });
+    let totalCost: number = _.sumBy(this.fsatReportRollupService.selectedFsatResults, (result) => { return result.baselineResults.annualCost; });
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
-    fsatResults.forEach(result => {
+    this.fsatReportRollupService.selectedFsatResults.forEach(result => {
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergy,
         annualCost: result.baselineResults.annualCost,
+        energySavings: result.baselineResults.annualEnergy - result.modificationResults.annualEnergy,
+        costSavings: result.baselineResults.annualCost - result.modificationResults.annualCost,
         percentCost: result.baselineResults.annualCost / totalCost * 100,
         percentEnergy: result.baselineResults.annualEnergy / totalEnergyUse * 100,
         color: graphColors[colorIndex]
@@ -142,14 +146,13 @@ export class FsatRollupComponent implements OnInit {
 
   setTableData() {
     this.rollupSummaryTableData = new Array();
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
-    fsatResults.forEach(dataItem => {
+    this.fsatReportRollupService.selectedFsatResults.forEach(dataItem => {
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annualEnergy,
         modificationCost: dataItem.modificationResults.annualCost,
-        modificationEnergyUse: dataItem.baselineResults.annualEnergy,
+        modificationEnergyUse: dataItem.modificationResults.annualEnergy,
         baselineCost: dataItem.baselineResults.annualCost,
         costSavings: dataItem.baselineResults.annualCost - dataItem.modificationResults.annualCost,
         implementationCosts: dataItem.modification.implementationCosts,

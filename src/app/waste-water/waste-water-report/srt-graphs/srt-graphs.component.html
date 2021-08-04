@@ -1,0 +1,14 @@
+<div class="row no-gutter" *ngIf="!printView">
+    <div class="p-2 min-height" *ngFor="let analysisGraphItem of analysisGraphItems"
+        [ngClass]="{'col-12': analysisGraphItems.length == 1, 'col-6': (analysisGraphItems.length == 2 || printView), 'col-lg-4 col-md-6 col-sm-12': analysisGraphItems.length > 2}">
+        <app-srt-graph class="h-100" [analysisGraphItem]="analysisGraphItem" [hideActionsMenu]="true" [settings]="settings"></app-srt-graph>
+    </div>
+</div>
+
+
+<div class="row no-gutter print-break-before" *ngIf="printView">
+    <div class="p-2 min-height col-6" *ngFor="let analysisGraphItem of analysisGraphItems">
+        <app-srt-graph class="h-100" [analysisGraphItem]="analysisGraphItem" [hideActionsMenu]="true"
+            [printView]="true" [settings]="settings"></app-srt-graph>
+    </div>
+</div>

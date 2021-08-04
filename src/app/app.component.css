@@ -358,6 +358,10 @@ select.form-control:not([size]):not([multiple]) {
   color: #F39C12  !important;
 }
 
+.waste-water .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
 
 .input-error{
   color: red;
@@ -567,8 +571,6 @@ Reports
 .output-summary .table th {
     border: none;
     padding: 0px;
-    text-align: left;
-    font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px;
@@ -646,6 +648,16 @@ Reports
     background-size: 60px;
     padding: 0px 0 0px 55px;
 }
+
+.assessment-report.report-in-waste-water .assessment-name,
+.assessment-report.report-in-rollup.report-in-waste-water .assessment-name {
+  background-image: url('../assets/images/waste-water-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
 
 
 .assessment-report .report-header:after {
@@ -1026,6 +1038,15 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
 
+.ico-size4.waste-water {
+  height: 55px;
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
+}
+
 .ico-size5 {
   height: 55px;
   background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
@@ -1060,6 +1081,14 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
+
+.waste-water-icon-landing {
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
 .ico-size4.general {
   height: 55px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;
@@ -1242,7 +1271,11 @@ Banner
     background: #84b641;
   }
 
-
+  .banner.waste-water{
+    background: #003087;
+    color: white;
+  }
+  
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;
@@ -1716,7 +1749,7 @@ No Data Messaging
   padding: 5px;
 }
 
-.fa-bar-chart {
+.fa-bar-chart, .fa-comment-o {
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
@@ -1754,7 +1787,7 @@ No Data Messaging
   transition: ease-in-out 0.2s all;
 }
 
-.fa-bar-chart:hover {
+.fa-bar-chart:hover, .fa-comment-o:hover {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;

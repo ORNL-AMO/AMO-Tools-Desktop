@@ -75,7 +75,7 @@ export class SankeyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
     if (this.location !== "sankey-diagram") {
       // this.location = this.location + this.modIndex.toString();
       if (this.location === 'baseline') {
@@ -106,7 +106,7 @@ export class SankeyComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.phast) {
-      this.phast.valid = this.phastValidService.checkValid(this.phast);
+      this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
       if (!changes.phast.firstChange) {
         if (this.location !== "sankey-diagram") {
           if (this.isBaseline) {

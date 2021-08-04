@@ -1,0 +1,40 @@
+<div class="output-summary">
+    <div class="d-flex flex-column">
+      <div class="d-flex">
+        <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+          <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect" (change)="setSsmt1()"
+            [(ngModel)]="ssmt1">
+            <option [ngValue]="assessment.ssmt">Baseline</option>
+            <option *ngFor="let modification of assessment.ssmt.modifications" [ngValue]="modification.ssmt">
+              {{modification.ssmt.name}}</option>
+          </select>
+          <div class="p-2" [ngClass]="{
+            'negative-savings': ssmt1CostSavings < 0,
+            'positive-savings': ssmt1CostSavings > 0
+          }">Cost Savings: {{ ssmt1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
+        </div>
+        <div class="w-75 m-3">
+          <app-ssmt-sankey [ssmt]="ssmt1" [assessment]="assessment" [settings]="settings"
+            [isBaseline]="ssmt1Baseline"></app-ssmt-sankey>
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex" *ngIf="ssmt2">
+        <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+          <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect2" (change)="setSsmt2()"
+            [(ngModel)]="ssmt2">
+            <option [ngValue]="assessment.ssmt">Baseline</option>
+            <option *ngFor="let modification of assessment.ssmt.modifications" [ngValue]="modification.ssmt">
+              {{modification.ssmt.name}}</option>
+          </select>
+          <div class="p-2" [ngClass]="{
+            'negative-savings': ssmt2CostSavings < 0,
+            'positive-savings': ssmt2CostSavings > 0
+          }">Cost Savings: {{ ssmt2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
+        </div>
+        <div class="w-75 m-3">
+          <app-ssmt-sankey [ssmt]="ssmt2" [assessment]="assessment" [settings]="settings" [isBaseline]="ssmt2Baseline"></app-ssmt-sankey>
+        </div>
+      </div>
+    </div>
+  </div>

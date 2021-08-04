@@ -63,6 +63,20 @@ export class AssessmentDbService {
     }
     return tmpExample;
   }
+
+  getWasteWaterExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample === true; });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type === 'WasteWater') {
+          tmpExample = example;
+        }
+      });
+    }
+    return tmpExample;
+  }
+
   getPsatExample(): Assessment {
     let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
       return (assessment.isExample === true);

@@ -7,8 +7,8 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import { AtmosphereLossWarnings, AtmosphereLossesService } from '../atmosphere-losses.service';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -44,7 +44,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
   idString: string;
-  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereLossesService: AtmosphereLossesService) { }
+  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -52,6 +52,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
           this.enableForm();
         }
       }
@@ -74,13 +75,15 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
-    }
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
+      }
 
-    this.atmosphereLossForm.patchValue({
-      specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
-    });
+      this.atmosphereLossForm.patchValue({
+        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
+      });
+    }
     this.save();
   }
 
@@ -118,9 +121,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: AtmosphereLoss = this.atmosphereLossesService.getLossFromForm(this.atmosphereLossForm);
-    this.warnings = this.atmosphereLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: AtmosphereLoss = this.atmosphereFormService.getLossFromForm(this.atmosphereLossForm);
+    this.warnings = this.atmosphereFormService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.warnings.temperatureWarning != undefined
     this.inputError.emit(hasWarning);
   }
 
@@ -198,10 +201,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.atmosphereLossForm.patchValue({
-          atmosphereGas: newMaterial[0].id
+          atmosphereGas: newMaterial.id
         });
         this.setProperties();
       }

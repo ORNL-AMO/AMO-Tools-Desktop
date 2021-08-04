@@ -4,17 +4,17 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
-import { SettingsService } from '../settings/settings.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
+import { SettingsService } from '../settings/settings.service';
+import { ConvertInputDataService } from './convert-input-data.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -26,6 +26,8 @@ export class TreasureHuntComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+  oldSettings: Settings;
+  showUpdateUnitsModal: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -51,22 +53,20 @@ export class TreasureHuntComponent implements OnInit {
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
+    private convertInputDataService: ConvertInputDataService,
     private calculatorsService: CalculatorsService,
-    private treasureChestMenuService: TreasureChestMenuService
+    private treasureChestMenuService: TreasureChestMenuService,
+    private settingsService: SettingsService,
+    private convertUnitsService: ConvertUnitsService
   ) { }
 
   ngOnInit() {
-    let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
-      tmpAssessmentId = params['id'];
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -91,16 +91,13 @@ export class TreasureHuntComponent implements OnInit {
             hoursPerYear: 8760
           }
         }
-
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
-
         this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
-      })
-    })
+    });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -150,36 +147,10 @@ export class TreasureHuntComponent implements OnInit {
 
 
   getSettings() {
-    //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      this.settings = tmpSettings;
-    } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-  getParentDirectorySettings(parentId: number) {
-    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (dirSettings) {
-      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      //create settings for assessment
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.getSettings();
-          })
-        })
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -290,5 +261,48 @@ export class TreasureHuntComponent implements OnInit {
         this.assessmentService.showTutorial.next('treasure-hunt-report-tutorial');
       }
     }
+  }
+
+  addSettings(settings: Settings) {
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
+    });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.treasureHuntService.mainTab.next('system-setup');
+      this.treasureHuntService.subTab.next('settings');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.saveTreasureHunt(this.assessment.treasureHunt);
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
+    let settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.addSettings(settings);
+    this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
+    this.saveTreasureHunt(this.assessment.treasureHunt);
+    this.getSettings();
   }
 }

@@ -4,9 +4,6 @@ import { ImportExportOpportunities, TreasureHunt } from '../../shared/models/tre
 @Injectable()
 export class ImportOpportunitiesService {
 
-
-  
-
   constructor() { }
 
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
@@ -76,11 +73,61 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.tankInsulationReductions = treasureHunt.tankInsulationReductions.concat(data.tankInsulationReductions);
     }
+
+    if(data.flueGasLosses){
+      if (treasureHunt.flueGasLosses == undefined) {
+        treasureHunt.flueGasLosses = new Array();
+      }
+      treasureHunt.flueGasLosses = treasureHunt.flueGasLosses.concat(data.flueGasLosses);
+    }
+
     if(data.airLeakSurveys){
       if (treasureHunt.airLeakSurveys == undefined) {
         treasureHunt.airLeakSurveys = new Array();
       }
       treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
+    }
+    if(data.openingLosses){
+      if (treasureHunt.openingLosses == undefined) {
+        treasureHunt.openingLosses = new Array();
+      }
+      treasureHunt.openingLosses = treasureHunt.openingLosses.concat(data.openingLosses);
+    }
+    if(data.wallLosses){
+      if (treasureHunt.wallLosses == undefined) {
+        treasureHunt.wallLosses = new Array();
+      }
+      treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
+    }
+    if(data.wasteHeatReductions){
+      if (treasureHunt.wasteHeatReductions == undefined) {
+        treasureHunt.wasteHeatReductions = new Array();
+      }
+      treasureHunt.wasteHeatReductions = treasureHunt.wasteHeatReductions.concat(data.wasteHeatReductions);
+    }
+    if(data.airHeatingOpportunities){
+      if (treasureHunt.airHeatingOpportunities == undefined) {
+        treasureHunt.airHeatingOpportunities = new Array();
+      }
+      treasureHunt.airHeatingOpportunities = treasureHunt.airHeatingOpportunities.concat(data.airHeatingOpportunities);
+    }
+    if(data.leakageLosses){
+      if (treasureHunt.leakageLosses == undefined) {
+        treasureHunt.leakageLosses = new Array();
+      }
+      treasureHunt.leakageLosses = treasureHunt.leakageLosses.concat(data.leakageLosses);
+    }
+    if(data.heatCascadingOpportunities){
+      if (treasureHunt.heatCascadingOpportunities == undefined) {
+        treasureHunt.heatCascadingOpportunities = new Array();
+      }
+      treasureHunt.heatCascadingOpportunities = treasureHunt.heatCascadingOpportunities.concat(data.heatCascadingOpportunities);
+    }
+    if(data.waterHeatingOpportunities){
+      if (treasureHunt.waterHeatingOpportunities == undefined) {
+        treasureHunt.waterHeatingOpportunities = new Array();
+      }
+      treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
     }
     return treasureHunt;
   }

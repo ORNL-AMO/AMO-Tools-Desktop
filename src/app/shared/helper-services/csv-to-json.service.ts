@@ -6,14 +6,41 @@ export class CsvToJsonService {
 
   constructor() { }
 
-  parseCSV(csvData: any): CsvImportData {
-    let results: CsvImportData = Papa.parse(csvData, {
-      header: true,
+  parseCsvWithHeaders(csvData: any, headerRow: number): CsvImportData {
+    let results: CsvImportData;
+    if (headerRow == 0) {
+      results = Papa.parse(csvData, {
+        header: true,
+        dynamicTyping: true
+      });
+    } else {
+      results = Papa.parse(csvData, {
+        dynamicTyping: true
+      });
+      results.meta.fields = results.data[headerRow];
+      results.data = results.data.splice(headerRow + 1);
+      results.data = results.data.map(dataItem => {
+        let element = {};
+        results.meta.fields.forEach((field, index) => {
+          element[field] = dataItem[index];
+        });
+        return element;
+      })
+    }
+    //last item ends up as null
+    results.data.pop();
+    return results;
+  }
+
+  parseCsvWithoutHeaders(csvData: any): CsvImportData {
+    let results: CsvImportData;
+    results = Papa.parse(csvData, {
       dynamicTyping: true
     });
     //last item ends up as null
     results.data.pop();
     return results;
+
   }
 
   parseWeatherCSV(csvData: any): CsvImportData {

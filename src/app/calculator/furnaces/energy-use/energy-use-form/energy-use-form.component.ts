@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
@@ -81,19 +80,13 @@ export class EnergyUseFormComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private energyUseService: EnergyUseService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private energyUseService: EnergyUseService) {
   }
 
   ngOnInit() {
-    //this.gasTypeOptions = this.suiteDbService.selectGasFlueGasMaterials();
     this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.flowCalculations) {
-      this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
-    }
-  }
 
   calculate() {
     //TODO: update validation with extra error check rules

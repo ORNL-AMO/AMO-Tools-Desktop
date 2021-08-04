@@ -9,6 +9,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 
 @Component({
   selector: 'app-boiler',
@@ -44,7 +45,7 @@ export class BoilerComponent implements OnInit {
   showBlowdownRateModal: boolean = false;
   showBoilerEfficiencyModal: boolean = false;
   boilerForm: FormGroup;
-  options: any;
+  options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
   highPressureHeaderForm: FormGroup;

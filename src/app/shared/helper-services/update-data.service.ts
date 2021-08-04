@@ -3,8 +3,11 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
+import { FSAT } from '../models/fans';
+import { CompressedAirPressureReductionData } from '../models/standalone';
+import { PSAT } from '../models/psat';
 declare const packageJson;
 
 @Injectable()
@@ -18,6 +21,9 @@ export class UpdateDataService {
         } else {
             if (assessment.type === 'PSAT') {
                 return this.updatePsat(assessment);
+            }
+            if (assessment.type === 'FSAT') {
+                return this.updateFsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
             } else if (assessment.type == 'SSMT') {
@@ -43,7 +49,53 @@ export class UpdateDataService {
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
+
+        if(assessment.psat.modifications){
+            assessment.psat.modifications.forEach(mod => {
+                mod.psat = this.addWhatIfScenarioPsat(mod.psat);
+            })
+        }
+
         return assessment;
+    }
+
+    addWhatIfScenarioPsat(psat: PSAT): PSAT {
+        if(!psat.inputs.whatIfScenario) {
+            psat.inputs.whatIfScenario = true;
+        }
+        return psat;
+    }
+
+    updateFsat(assessment: Assessment): Assessment {
+        //logic for updating fsat data
+        assessment.appVersion = packageJson.version;
+        if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
+            assessment.fsat.fieldData.inletVelocityPressure = 0;
+            assessment.fsat.fieldData.usingStaticPressure = true;
+        }
+
+        assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
+        if(assessment.fsat.modifications){
+            assessment.fsat.modifications.forEach(mod => {
+                mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+                mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
+            });
+        }
+        return assessment;
+    }
+
+    addWhatIfScenarioFsat(fsat: FSAT): FSAT {
+        if(!fsat.whatIfScenario) {
+            fsat.whatIfScenario = true;
+        }
+        return fsat;
+    }
+
+    updateSpecificHeatRatio(fsat: FSAT): FSAT {
+        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        }
+        return fsat;
     }
 
     updatePhast(assessment: Assessment): Assessment {
@@ -128,8 +180,71 @@ export class UpdateDataService {
             if (assessment.treasureHunt.lightingReplacements) {
                 assessment.treasureHunt.lightingReplacements.forEach(replacement => {
                     replacement = this.updateLightingReplacementTreasureHunt(replacement);
-                })
+                    replacement.opportunityType = Treasure.lightingReplacement;
+                });
             }
+            if (assessment.treasureHunt.opportunitySheets) {
+                assessment.treasureHunt.opportunitySheets.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.opportunitySheet;
+                });
+            }
+            if (assessment.treasureHunt.replaceExistingMotors) {
+                assessment.treasureHunt.replaceExistingMotors.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.replaceExisting;
+                });
+            }
+            if (assessment.treasureHunt.motorDrives) {
+                assessment.treasureHunt.motorDrives.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.motorDrive;
+                });
+            }
+            if (assessment.treasureHunt.naturalGasReductions) {
+                assessment.treasureHunt.naturalGasReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.naturalGasReduction;
+                });
+            }
+            if (assessment.treasureHunt.electricityReductions) {
+                assessment.treasureHunt.electricityReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.electricityReduction;
+                });
+            }
+            if (assessment.treasureHunt.compressedAirReductions) {
+                assessment.treasureHunt.compressedAirReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.compressedAir;
+                });
+            }
+            if (assessment.treasureHunt.compressedAirPressureReductions) {
+                assessment.treasureHunt.compressedAirPressureReductions.forEach(opportunity => {
+                    opportunity = this.updateCompressedAirPressureReductionTreasureHunt(opportunity);
+                    opportunity.opportunityType = Treasure.compressedAirPressure;
+                });
+            }
+            if (assessment.treasureHunt.waterReductions) {
+                assessment.treasureHunt.waterReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.waterReduction;
+                });
+            }
+            if (assessment.treasureHunt.steamReductions) {
+                assessment.treasureHunt.steamReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.steamReduction;
+                });
+            }
+            if (assessment.treasureHunt.pipeInsulationReductions) {
+                assessment.treasureHunt.pipeInsulationReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.pipeInsulation;
+                });
+            }
+            if (assessment.treasureHunt.tankInsulationReductions) {
+                assessment.treasureHunt.tankInsulationReductions.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.tankInsulation;
+                });
+            }
+            if (assessment.treasureHunt.airLeakSurveys) {
+                assessment.treasureHunt.airLeakSurveys.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.airLeak;
+                });
+            }
+            
         }
         return assessment;
     }
@@ -148,6 +263,7 @@ export class UpdateDataService {
         return lightingReplacementTreasureHunt;
     }
 
+
     updateLightingReplacement(lightingReplacement: LightingReplacementData): LightingReplacementData {
         if (lightingReplacement.ballastFactor == undefined) {
             lightingReplacement.ballastFactor = 1;
@@ -162,5 +278,27 @@ export class UpdateDataService {
             lightingReplacement.category = 0;
         }
         return lightingReplacement;
+    }
+
+    updateCompressedAirPressureReductionTreasureHunt(compressedAirPressureReductionTreasureHunt: CompressedAirPressureReductionTreasureHunt): CompressedAirPressureReductionTreasureHunt {
+        if (compressedAirPressureReductionTreasureHunt.baseline) {
+            compressedAirPressureReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        if (compressedAirPressureReductionTreasureHunt.modification) {
+            compressedAirPressureReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        return compressedAirPressureReductionTreasureHunt;
+    }
+
+
+    updateCompressedAirPressureReduction(compressedAirPressureReduction: CompressedAirPressureReductionData): CompressedAirPressureReductionData {
+        if (compressedAirPressureReduction.powerType === undefined) {
+            compressedAirPressureReduction.powerType = 'Measured';
+        }
+        return compressedAirPressureReduction;
     }
 }

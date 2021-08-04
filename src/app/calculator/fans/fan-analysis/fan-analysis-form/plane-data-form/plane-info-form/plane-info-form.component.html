@@ -6,7 +6,7 @@
       <input name="totalPressureLossBtwnPlanes1and4" type="number" step="any" class="form-control"
         formControlName="totalPressureLossBtwnPlanes1and4" id="totalPressureLossBtwnPlanes1and4" (input)="save()"
         (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.pristine">
@@ -22,7 +22,7 @@
       <input name="totalPressureLossBtwnPlanes2and5" type="number" step="any" class="form-control"
         formControlName="totalPressureLossBtwnPlanes2and5" id="totalPressureLossBtwnPlanes2and5" (input)="save()"
         (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.pristine">
@@ -31,13 +31,24 @@
         {{planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min.min}}.</span>
     </span>
   </div>
+  <div class="form-group">
+    <label for="variationInBarometricPressure">Variation in Planar Barometric Pressure</label>
+    <div class="input-group">
+      <select formControlName="variationInBarometricPressure" name="variationInBarometricPressure"
+        id="variationInBarometricPressure" (change)="updateBarometricPressure()" (focus)="focusField('variationInBarometricPressure')"
+        class="form-control">
+        <option [ngValue]="true">Yes</option>
+        <option [ngValue]="false">No</option>
+      </select>
+    </div>
+  </div>
   <label class="group-label group-label-2">System Effect Data</label>
   <div class="form-group">
     <label for="inletSEF">Inlet System Effect Factor</label>
     <div class="input-group">
       <input name="inletSEF" type="number" step="any" class="form-control" formControlName="inletSEF" id="inletSEF"
         (input)="save()" (focus)="focusField('inletSEF')" onfocus="this.select();">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.inletSEF.invalid && !planeInfoForm.controls.inletSEF.pristine">
@@ -49,7 +60,7 @@
     <div class="input-group">
       <input name="outletSEF" type="number" step="any" class="form-control" formControlName="outletSEF" id="outletSEF"
         (input)="save()" (focus)="focusField('outletSEF')" onfocus="this.select();">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.outletSEF.invalid && !planeInfoForm.controls.outletSEF.pristine">
@@ -60,7 +71,7 @@
     <label for="sumSEF">&Sigma; System Effect Factor</label>
     <div class="sef-results">
       {{sumSEF}}
-      <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
   </div>
 </form>

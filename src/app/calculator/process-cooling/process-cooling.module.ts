@@ -4,6 +4,7 @@ import { ProcessCoolingListComponent } from './process-cooling-list/process-cool
 import { CoolingTowerModule } from './cooling-tower/cooling-tower.module';
 import { RouterModule } from '@angular/router';
 import { ChillerService } from './chiller.service';
+import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ChillerService } from './chiller.service';
   imports: [
     RouterModule,
     CommonModule,
-    CoolingTowerModule
+    CoolingTowerModule,
+    FanPsychrometricModule
   ],
   exports: [
     ProcessCoolingListComponent
@@ -22,4 +24,5 @@ import { ChillerService } from './chiller.service';
     ChillerService
   ]
 })
+
 export class ProcessCoolingModule { }

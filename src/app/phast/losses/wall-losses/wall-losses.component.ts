@@ -3,9 +3,9 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Losses } from '../../../shared/models/phast/phast';
-import { WallLossesService } from './wall-losses.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { WallFormService } from '../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
   selector: 'app-wall-losses',
@@ -38,9 +38,8 @@ export class WallLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  showError: boolean = false;
   total: number = 0;
-  constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
+  constructor(private phastService: PhastService, private wallFormService: WallFormService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -83,7 +82,7 @@ export class WallLossesComponent implements OnInit {
       this.losses.wallLosses.forEach(loss => {
         //create a temp loss object
         let tmpLoss = {
-          form: this.wallLossesService.getWallLossForm(loss),
+          form: this.wallFormService.getWallLossForm(loss, true),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -105,16 +104,12 @@ export class WallLossesComponent implements OnInit {
   addLoss() {
     //add new empty loss to component data
     this._wallLosses.push({
-      form: this.wallLossesService.initForm(this._wallLosses.length + 1),
+      form: this.wallFormService.initForm(this._wallLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
 
     this.saveLosses();
-  }
-
-  setError(bool: boolean) {
-    this.showError = bool;
   }
 
   collapseLoss(loss: WallLossObj) {
@@ -130,7 +125,7 @@ export class WallLossesComponent implements OnInit {
   //calculate wall loss results
   calculate(loss: WallLossObj) {
     if (loss.form.status === 'VALID') {
-      let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      let tmpWallLoss: WallLoss = this.wallFormService.getWallLossFromForm(loss.form);
       loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
     } else {
       loss.heatLoss = null;
@@ -150,7 +145,7 @@ export class WallLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      let tmpWallLoss = this.wallFormService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     });

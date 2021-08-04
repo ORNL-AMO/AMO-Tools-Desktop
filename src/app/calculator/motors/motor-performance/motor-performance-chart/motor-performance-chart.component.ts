@@ -51,7 +51,7 @@ export class MotorPerformanceChartComponent implements OnInit {
   performanceChart: SimpleChart;
   traceNames = {
     0: 'Current (FLA)',
-    1: 'Power',
+    1: 'Power Factor',
     2: 'Efficiency'
   };
   graphColors: Array<string>;

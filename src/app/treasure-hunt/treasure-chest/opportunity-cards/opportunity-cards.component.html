@@ -23,7 +23,7 @@
           <div class="d-flex h-100 align-items-center w-100">
             <table class="mb-0">
               <tbody>
-                <tr class="no-border-top" [ngClass]="{ active: sortByVal.sortBy == 'teamName' }">
+                <tr class="no-border-top" [ngClass]="{ active: sortByVal.sortBy == 'teamName'}">
                   <td class="w-75">
                     Owner/Lead/Team
                   </td>
@@ -32,7 +32,7 @@
                     <span *ngIf="!cardData.teamName">&mdash;</span>
                   </td>
                 </tr>
-                <tr [ngClass]="{ active: sortByVal.sortBy == 'annualCostSavings'    }">
+                <tr [ngClass]="{ active: sortByVal.sortBy == 'annualCostSavings'}">
                   <td class="w-75">Annual Savings</td>
                   <td class="w-25">
                     {{ cardData.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
@@ -80,7 +80,7 @@
 
             <a class="click-link text-center" (click)="editOpportunity(cardData)">Edit Calculations</a>
             <a class="click-link text-center" (click)="createCopy(cardData)">Create Copy</a>
-            <a class="click-link danger" (click)="setDeleteItem(cardData)">Delete</a>
+            <a class="click-link danger" (click)="setDeleteOpportunity(cardData)">Delete</a>
           </div>
         </div>
       </div>
@@ -88,19 +88,19 @@
   </div>
 </div>
 
-<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{ backdrop: 'static' }">
+<div bsModal #deletedOpportunityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deletedOpportunityModalLabel" aria-hidden="true" [config]="{ backdrop: 'static' }">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
-        Are you sure you want to delete "{{ deleteOpportunity.name }}"?<br />
+      <div class="modal-body p-2 text-center" *ngIf="deletedOpportunityModal.isShown">
+        Are you sure you want to delete "{{ deleteOpportunityCard.name }}"?<br />
         <span class="small danger">This cannot be undone.</span>
       </div>
       <div class="modal-footer p-2 justify-content-end delete-modal">
-        <button class="btn btn-danger btn-sm" (click)="deleteItem()">
+        <button class="btn btn-danger btn-sm" (click)="deleteOpportunity()">
           Delete
         </button>
-        <button class="btn btn-primary btn-sm" (click)="hideDeleteItemModal()">
+        <button class="btn btn-primary btn-sm" (click)="hideDeleteOpportunityModal()">
           Cancel
         </button>
       </div>
@@ -113,7 +113,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
-        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveItemOpportunitySheet($event)"
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
           [(opportunitySheet)]="editOpportunitySheetCardData.opportunitySheet">
         </app-opportunity-sheet>
       </div>

@@ -27,7 +27,7 @@
           </tr>
           <tr>
             <td class="text-center">0 hrs/yr</td>
-            <td class="text-center">8670 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
           </tr>
         </tbody>
       </table>
@@ -51,22 +51,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Units</th>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">Currency</td>
-            <td class="text-center">0 $/kWh</td>
-            <td class="text-center">1 $/kWh</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -129,20 +113,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0.1 {{settings.distanceMeasurement}}</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -176,21 +146,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td *ngIf="psat.inputs.load_estimation_method == 0" class="text-center">0 kW</td>
-            <td *ngIf="psat.inputs.load_estimation_method == 1" class="text-center">0 A</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -198,6 +153,37 @@
     <h6>
       Measured Voltage
       <br>
+      <small class="text-muted">
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the
+        specified
+        Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Suggested Minimum</th>
+            <th class="text-center">Suggested Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">1 V</td>
+            <td class="text-center">13800 V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'modMeasuredVoltage'">
+    <h6>
+      Measured Voltage
+      <br>
+      <div class="text-muted small alert-warning text-left p-1">
+        For what-if modifications that change the motor, this value can not be measured. If the rated voltage of the motor stays the 
+        same, the baseline's measured voltage is a valid estimate, if the rated voltage changes, use the rated voltage as a first estimate
+      </div>
       <small class="text-muted">
         The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the
         specified
@@ -253,20 +239,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 

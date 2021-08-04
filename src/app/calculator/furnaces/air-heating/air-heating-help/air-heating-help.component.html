@@ -1,0 +1,213 @@
+<div class="p-3 pt-3 d-flex flex-column help-info">
+    <h5>
+      Air Heating Using Flue Gas Help
+      <br>
+      <small class="text-muted">
+        This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace, oven, or boiler. 
+        The hot air can be used as a makeup air for buildings during cold weather months or 
+        it can be used as heated makeup air for ovens or other processes.  It is necessary to know cold air entering 
+        the heat recovery unit and the desired hot air temperature; leaving the heat recovery unit or a heat exchanger.  
+        It is also necessary to know the details of operation of the oven or furnace from where the hot exhaust gases are used.
+      </small>
+      <hr>
+    </h5>
+  
+    <div class="my-2" *ngIf="currentField == 'materialTypeId'">
+      <h6>
+        Fuel
+        <br>
+        <small class="text-muted">
+          
+          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+          are intended
+          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+          fuel
+          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+          edit
+          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'materialTypeIdModal'">
+      <h6>
+        Fuel
+        <br>
+        <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new assessment</small>
+        <br>
+        <small class="text-muted">
+          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+          are intended
+          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+          fuel
+          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+          edit
+          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'moistureInAirComposition'">
+      <h6>
+        Moisture in Air
+        <br>
+        <small class="text-muted">
+          The moisture of the air (mass water / mass dry air). Can be determined with a psychrometric chart.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0%</td>
+              <td class="text-center">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'flueTemperature'">
+      <h6>
+        Furnace Flue Gas Temperature
+        <br>
+        <small class="text-muted">
+          Measure flue gas temperature by using "proper" temperature probe. Type of temperature probe depends on flue gas
+          temperature
+          and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
+        </small>
+      </h6>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'excessAir'">
+      <h6>
+        Excess Air
+        <br>
+        <small class="text-muted">
+          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
+          gases form
+          the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'flueGasO2'">
+      <h6>
+        O
+        <sub>2</sub> in Flue Gas
+        <br>
+        <small class="text-muted">
+          The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the
+          same location
+          where flue gas temperature is measured to maintain accuracy of the calculations.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0%</td>
+              <td class="text-center">21%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'combustionAirTemp'">
+      <h6>
+        Combustion Air Temperature
+        <br>
+        <small class="text-muted">
+          Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
+          asurement
+          using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
+        </small>
+      </h6>
+    </div>
+
+      
+    <div class="my-2" *ngIf="currentField == 'fireRate'">
+        <h6>
+          Average Firing Rate
+          <br>
+          <small class="text-muted">
+            The average firing rate of the furnace, oven, boiler, etc. This can be obtained from measurement, 
+            the gas bills (or other meters), or the equipment supplier (design specifications). 
+            It can also be estimated using the Process Heating Assessment.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'airflow'">
+        <h6>
+          Air Flow
+          <br>
+          <small class="text-muted">
+            The amount of air currently heated by another heat source (air to be heated by exhaust gas)
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'inletTemperature'">
+        <h6>
+          Inlet Air Temperature
+          <br>
+          <small class="text-muted">
+            Average temperature of the air heated by heat source or exhaust gas. Likely to be ambient or external air temperature. This can be a measured value or from the equipment supplier.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'outletTemperature'">
+        <h6>
+          Outlet Air Temperature
+          <br>
+          <small class="text-muted">
+            Average temperature of air after being heated. For HVAC systems, in most cases this will be less than 250 deg. F. 
+            There may be exceptions to this when air is used for other than HVAC. This can be a measured value or from the equipment supplier.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'heaterEfficiency'">
+        <h6>
+          Current Heater Efficiency
+          <br>
+          <small class="text-muted">
+            The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and size.  In most cases it can be assumed to be in a range of 75% to 95%.
+          </small>
+        </h6>
+      </div>
+
+      
+      <div class="my-2" *ngIf="currentField == 'hxEfficiency'">
+        <h6>
+            Proposed Heat Exchanger Effectiveness
+          <br>
+          <small class="text-muted">
+            The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and size.  In most cases it can be assumed to be in a range of 50% to 70%.
+          </small>
+        </h6>
+      </div>
+
+      <hr *ngIf="currentField != undefined">
+      <div class="justify-content-center mx-auto">
+      <img src="assets/images/airheating.png" class="help-img">
+    </div>
+

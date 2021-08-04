@@ -1,21 +1,20 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    Boiler Calculator
+    Boiler Calculator Help
     <br>
     <small class="text-muted">Determines the amount of fuel energy required to produce steam with specified properties at a given flow rate using general
       boiler operational characteristics.
     </small>
   </h5>
-  <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'default'">
+  <div class="my-2">
     <h6>
       <small class="text-muted">
         Input steam properties, flow rate, and general boiler operational characteristics to determine the amount of fuel energy
         required to produce steam at the specified properties.
-        <hr>
       </small>
     </h6>
   </div>
+  <hr class="my-1 hr-spacer">
   <div class="my-2" *ngIf="currentField == 'deaeratorPressure'">
     <h6>
       Deaerator Pressure

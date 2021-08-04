@@ -6,6 +6,31 @@
       Enter measured data to calculate your system's annual savings potential.
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>Review design of fixtures or baskets or other material handling to reduce weight</li>
+          <li>Investigate alternate high strength material to reduce weight of the fixtures etc.</li>
+          <li>Where possible reduce cooling of conveyors, belts, fixtures baskets etc. during their return from
+            unloading to loading
+            station</li>
+        </ul>
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+        operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and
+        apply
+        the appropriate measures
+      </small>
+    </h6>
+  </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -14,9 +39,12 @@
       Material Name
       <br>
       <small class="text-muted">
-        Type of material used as a fixture within the heating equipment or reaction chamber The word fixture is used to represent
-        fixtures, trays, baskets, conveyor belt, etc. used for material handling during the heating process. To add a new
-        material, click "Add New Material". You can "start with existing material" and edit the material properties or add
+        Type of material used as a fixture within the heating equipment or reaction chamber The word fixture is used to
+        represent
+        fixtures, trays, baskets, conveyor belt, etc. used for material handling during the heating process. To add a
+        new
+        material, click "Add New Material". You can "start with existing material" and edit the material properties or
+        add
         a completely new material. You cannot use the name of a material already in the database.
       </small>
     </h6>
@@ -25,39 +53,28 @@
 
   <div class="my-2" *ngIf="currentField == 'specificHeat'">
     <h6>
-      Specific Heat
+      Average Specific Heat of Material
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <h6>
       <small class="text-muted">
         <hr>
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -68,37 +85,21 @@
 
   <div class="my-2" *ngIf="currentField == 'feedRate'">
     <h6>
-      Fixture Weight Feed Rate
+      Fixture Feed Rate
       <br>
       <small class="text-muted">
-        Weight of fixture material fed into the unit per hour. Note that for batch furnaces the total weight should be corrected
+        Weight of fixture material fed into the unit per hour. Note that for batch furnaces the total weight should be
+        corrected
         for cycle time to obtain weight per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
   <div class="my-2" *ngIf="currentField == 'initialTemp'">
     <h6>
-      Initial Temperature
+      Inlet Temperature
       <br>
       <small class="text-muted">
         The temperature of the fixture as it enters the unit. Use production data or actual measurement.
@@ -109,7 +110,7 @@
 
   <div class="my-2" *ngIf="currentField == 'finalTemp'">
     <h6>
-      Final Temperature
+      Outlet Temperature
       <br>
       <small class="text-muted">
         The temperature of the fixture as it enters the unit. Use production data or actual measurement.
@@ -127,38 +128,8 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Review design of fixtures or baskets or other material handling to reduce weight
-        <br> Investigate alternate high strength material to reduce weight of the fixtures etc.
-        <br> Where possible reduce cooling of conveyors, belts, fixtures baskets etc. during their return from unloading to loading
-        station
-        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-        There may additional measures when considering specific situations and the user is encouraged to review and apply
-        the appropriate measures
-      </small>
-    </h6>
-  </div>
 
 
 </div>

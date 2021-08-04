@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, PsatOutputs } from '../../shared/models/psat';
+import { PSAT, PsatOutputs, PsatValid } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
@@ -40,6 +40,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   // titlePlacement: string;
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
+  sankeyView: string = 'Baseline';
+  opportunityPsatValid: PsatValid;
 
   tabSelect: string = 'results';
   currentField: string;
@@ -92,11 +94,21 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
   getResults() {
     let psatResults: { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number };
-    this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, false);
     if (this.modificationExists) {
-      this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
-      psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs)
+      if (this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario === true) {
+        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
+        this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;
+        psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs);
+      } else if (this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario === false) {
+        // Pass scenario as baseline
+        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, true);
+        this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;
+        psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
+        psatResults.modificationResults = psatResults.baselineResults;
+      }
     } else {
+      this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, true);
+      this.opportunityPsatValid = this.psat.valid;
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
     }
     this.baselineResults = psatResults.baselineResults;

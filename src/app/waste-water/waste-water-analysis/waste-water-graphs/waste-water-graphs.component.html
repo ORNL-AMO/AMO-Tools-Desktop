@@ -1,0 +1,9 @@
+<div class="row no-gutters scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="col-12">
+        <app-energy-analysis-table></app-energy-analysis-table>
+    </div>
+    <div class="p-2 min-height" *ngFor="let analysisGraphItem of analysisGraphItems"
+        [ngClass]="{'col-12': analysisGraphItems.length == 1, 'col-6': analysisGraphItems.length == 2, 'col-lg-4 col-md-6 col-sm-12': analysisGraphItems.length > 2}">
+        <app-srt-graph class="h-100" [analysisGraphItem]="analysisGraphItem"></app-srt-graph>
+    </div>
+</div>

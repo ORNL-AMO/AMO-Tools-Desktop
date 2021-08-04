@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FilterOption, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { FilterOption, Treasure, TreasureHunt } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 import { TreasureChestMenuService } from '../treasure-chest-menu.service';
 import { SortCardsData } from '../../opportunity-cards/sort-cards-by.pipe';
@@ -76,32 +76,48 @@ export class CalculatorTypeDropdownComponent implements OnInit {
 
   getCalculatorDisplay(calculator: string): string {
     switch (calculator) {
-      case 'lighting-replacement':
+      case Treasure.lightingReplacement:
         return 'Lighting Replacement';
-      case 'opportunity-sheet':
+      case Treasure.opportunitySheet:
         return 'Opportunity Sheet';
-      case 'replace-existing':
+      case Treasure.replaceExisting:
         return 'Replace Existing Motor';
-      case 'motor-drive':
+      case Treasure.motorDrive:
         return 'Motor Drive';
-      case 'natural-gas-reduction':
+      case Treasure.naturalGasReduction:
         return 'Natural Gas Reduction';
-      case 'electricity-reduction':
+      case Treasure.electricityReduction:
         return 'Electricity Reduction';
-      case 'compressed-air-reduction':
+      case Treasure.compressedAir:
         return 'Compressed Air Reduction';
-      case 'compressed-air-pressure-reduction':
+      case Treasure.compressedAirPressure:
         return 'Compressed Air Pressure Reduction';
-      case 'water-reduction':
+      case Treasure.waterReduction:
         return 'Water Reduction';
-      case 'steam-reduction':
+      case Treasure.steamReduction:
         return 'Steam Reduction';
-      case 'pipe-insulation-reduction':
+      case Treasure.pipeInsulation:
         return 'Pipe Insulation';
-      case 'tank-insulation-reduction':
+      case Treasure.tankInsulation:
         return 'Tank Insulation';
-      case 'air-leak-survey':
+      case Treasure.airLeak:
         return 'Air Leak Survey';
+      case Treasure.flueGas:
+        return 'Flue Gas';
+      case Treasure.wallLoss:
+        return 'Wall Loss';
+      case Treasure.airHeating:
+        return 'Air Heating'
+      case Treasure.leakageLoss:
+        return 'Leakage Loss';
+      case Treasure.wasteHeat:
+        return 'Waste Heat';
+      case Treasure.openingLoss:
+        return 'Opening Loss'
+      case Treasure.heatCascading:
+        return 'Heat Cascading'
+      case Treasure.waterHeating:
+        return 'Water Heating'
     }
   }
 }

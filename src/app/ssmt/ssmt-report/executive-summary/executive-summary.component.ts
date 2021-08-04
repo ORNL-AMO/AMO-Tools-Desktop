@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
+import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -30,12 +30,12 @@ export class ExecutiveSummaryComponent implements OnInit {
   ssmt: SSMT;
 
   selectedModificationIndex: number;
-  constructor(private reportRollupService: ReportRollupService,
+  constructor(private ssmtReportRollupService: SsmtReportRollupService,
     private compareService: CompareService) { }
 
   ngOnInit() {
     if (this.inRollup) {
-      this.reportRollupService.selectedSsmt.forEach(val => {
+      this.ssmtReportRollupService.selectedSsmt.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -53,7 +53,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.ssmtReportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   getModificationsMadeList(modifiedSsmt: SSMT): Array<string> {

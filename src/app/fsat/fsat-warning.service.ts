@@ -4,11 +4,12 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
 import { FsatService } from './fsat.service';
+import { CompareService } from './compare.service';
 
 @Injectable()
 export class FsatWarningService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private psatService: PsatService, private fsatService: FsatService) {
    }
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
@@ -20,17 +21,36 @@ export class FsatWarningService {
     let warnings: FanFieldDataWarnings = {
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
+      suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
-      outletPressureError: this.checkOutletPressure(fsat)
+      inletPressureError: this.checkInletPressure(fsat),
+      outletPressureError: this.checkOutletPressure(fsat),
+      calcInletVelocityPressureError: this.checkCalcInletVelocityPressureError(fsat.fieldData.flowRate)
     };
 
     return warnings;
   }
 
+  checkCalcInletVelocityPressureError(flowRate: number) {
+    if (flowRate <= 0) {
+      return 'Flow rate is required to calculate Inlet Velocity Pressure';
+    } else {
+      return null;
+    }
+  }
+
   //REQUIRED?
   checkOutletPressure(fsat: FSAT) {
     if (fsat.fieldData.outletPressure < 0) {
-      return 'Outlet pressure should be greater than or equal to 0';
+      return 'Outlet pressure is usually not less than zero';
+    } else {
+      return null;
+    }
+  }
+
+  checkInletPressure(fsat: FSAT) {
+    if(fsat.fieldData.inletPressure > 0) {
+      return 'Inlet Pressure is usually not greater than zero';
     } else {
       return null;
     }
@@ -43,6 +63,7 @@ export class FsatWarningService {
       return null;
     }
   }
+
 
   checkCost(fsat: FSAT) {
     if (fsat.fieldData.cost > 1) {
@@ -121,6 +142,20 @@ export class FsatWarningService {
     } else if (fsat.fieldData.measuredVoltage < 1) {
       return "Voltage should be greater then 1 V.";
     } else {
+      return null;
+    }
+  }
+
+  checkSuggestedVoltage(fsat: FSAT, isModification: boolean) {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && isModification) {
+      let ratedVoltage = this.compareService.modifiedFSAT.fanMotor.motorRatedVoltage;
+      if (this.compareService.isMotorRatedVoltageDifferent() && fsat.fieldData.measuredVoltage != ratedVoltage) {
+        return `Motor modification Rated Voltage differs from baseline. Consider using ${ratedVoltage} (modification Rated Voltage) for Measured Voltage`;
+      } else {
+        return null;
+      }
+    }
+    else {
       return null;
     }
   }
@@ -221,18 +256,23 @@ export class FsatWarningService {
         fsat.fanMotor.motorRatedVoltage,
         settings
       );
-      let flaMax = estEfficiency * 1.05;
-      let flaMin = estEfficiency * .95;
-      if (fsat.fanMotor.fullLoadAmps < flaMin) {
-        return 'Value should be greater than ' + Math.round(flaMin) + ' A';
-      } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
-        return 'Value should be less than ' + Math.round(flaMax) + ' A';
-      } else {
-        if (fsat.fanMotor.fullLoadAmps != estEfficiency) {
-          return "Inputs to this calculated value have changed. Consider re-estimating";
-        }
-        return null;
+
+      // Keep - may use min/max in the future
+      // let flaMax = estEfficiency * 1.05;
+      // let flaMin = estEfficiency * .95;
+      // if (fsat.fanMotor.fullLoadAmps < flaMin) {
+      //   return 'Value should be greater than ' + Math.round(flaMin) + ' A';
+      // } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
+      //   return 'Value should be less than ' + Math.round(flaMax) + ' A';
+      // } else {
+      // return null;
+
+      let limit = .05;
+      let percentDifference = Math.abs(fsat.fanMotor.fullLoadAmps - estEfficiency) / estEfficiency;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from estimated FLA (${Math.round(estEfficiency)} A). Consider using the 'Estimate Full-Load Amps' button.`;
       }
+      return null;
     } else {
       return null;
     }
@@ -307,7 +347,10 @@ export interface FanFieldDataWarnings {
   voltageError: string;
   costError: string;
   ratedPowerError: string;
+  suggestedVoltage: string,
+  inletPressureError: string;
   outletPressureError: string;
+  calcInletVelocityPressureError: string;
 }
 
 export interface FanMotorWarnings {

@@ -25,3 +25,8 @@
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+.btn-sm.active{
+    color: white;
+    background-color: #F39C12;
+}

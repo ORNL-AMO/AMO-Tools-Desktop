@@ -99,8 +99,8 @@
       </tr>
       <tr class="bold">
         <td>Selected Energy Projects</td>
-        <td class="text-muted">&mdash;</td>
-        <td *ngFor="let modification of phast.modifications; let index = index;">
+        <td class="text-muted" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span class="d-block"
             *ngIf="modification.exploreOppsShowFlueGas && modification.exploreOppsShowFlueGas.hasOpportunity"
             [innerHTML]="modification.exploreOppsShowFlueGas.display"></span>
@@ -135,8 +135,8 @@
       </tr>
       <tr class="bold">
         <td>Modifications</td>
-        <td class="text-muted">&mdash;</td>
-        <td *ngFor="let modification of phast.modifications; let index = index;">
+        <td class="text-muted" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div *ngFor="let modificationMade of getModificationsMadeList(modification.phast)">
             {{modificationMade}}<br>
           </div>

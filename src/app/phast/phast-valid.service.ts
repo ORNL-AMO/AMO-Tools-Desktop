@@ -1,53 +1,58 @@
 import { Injectable } from '@angular/core';
 
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
 import { ExtendedSurfaceLossesService } from './losses/extended-surface-losses/extended-surface-losses.service';
 import { OperationsService } from './losses/operations/operations.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
-import { HeatSystemEfficiencyCompareService } from './losses/heat-system-efficiency/heat-system-efficiency-compare.service';
 import { ExhaustGasService } from './losses/exhaust-gas/exhaust-gas.service';
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
-import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
-import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
-import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
-import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
-import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { SlagService } from './losses/slag/slag.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { Settings } from '../shared/models/settings';
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { PhastResultsService } from './phast-results.service';
+import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
+import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
+import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
+import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 
 
 @Injectable()
 export class PhastValidService {
 
   constructor(
-    private openingLossesService: OpeningLossesService,
-    private atmosphereLossesService: AtmosphereLossesService,
+    private openingFormService: OpeningFormService,
+    private atmosphereFormService: AtmosphereFormService,
     private slagService: SlagService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
-    private chargeMaterialService: ChargeMaterialService,
-    private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
-    private flueGasLossesService: FlueGasLossesService,
+    private coolingFormService: CoolingFormService,
+    private wallFormService: WallFormService,
+    private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,
     private energyInputService: EnergyInputService,
     private exhaustGasService: ExhaustGasService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
-    private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService,
-    private fixtureLossesService: FixtureLossesService,
-    private gasLeakageLossesService: GasLeakageLossesService,
+    private fixtureFormService: FixtureFormService,
     private otherLossessService: OtherLossesService,
+    private liquidMaterialFormService: LiquidMaterialFormService,
+    private gasMaterialFormService: GasMaterialFormService,
+    private solidMaterialFormService: SolidMaterialFormService,
+    private phastResultsService: PhastResultsService,
+    private leakageFormService: LeakageFormService
   ) { }
 
-  
-  
-  checkValid(phast: PHAST): PhastValid {
+
+
+  checkValid(phast: PHAST, settings: Settings): PhastValid {
     let isChargeMaterialValid: boolean = this.checkChargeMaterialValid(phast);
     let isFlueGasValid: boolean = this.checkFlueGasValid(phast);
     let isFixtureValid: boolean = this.checkFixtureValid(phast);
@@ -60,30 +65,30 @@ export class PhastValidService {
     let isOtherValid: boolean = this.checkOtherValid(phast);
     let isOperationsValid: boolean = this.checkOperationsValid(phast);
     let isSystemEfficiencyValid: boolean = this.checkSysEfficiencyValid(phast);
-    let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast);
+    let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast, settings);
     let isSlagValid: boolean = this.checkSlagValid(phast);
     let isExhaustGasValid: boolean = this.checkExhaustGasValid(phast);
     let isInputExhaustValid: boolean = this.checkInputExhaustValid(phast);
     let isAuxPowerValid: boolean = this.checkAuxPowerValidValid(phast);
 
     return {
-      isValid: isChargeMaterialValid 
-                && isFlueGasValid 
-                && isFixtureValid 
-                && isWallValid 
-                && isCoolingValid 
-                && isAtmosphereValid 
-                && isOpeningValid
-                && isLeakageValid 
-                && isOtherValid
-                && isExtendedValid
-                && isOperationsValid
-                && isEnergyInputValid
-                && isSystemEfficiencyValid
-                && isSlagValid
-                && isExhaustGasValid
-                && isInputExhaustValid
-                && isAuxPowerValid,
+      isValid: isChargeMaterialValid
+        && isFlueGasValid
+        && isFixtureValid
+        && isWallValid
+        && isCoolingValid
+        && isAtmosphereValid
+        && isOpeningValid
+        && isLeakageValid
+        && isOtherValid
+        && isExtendedValid
+        && isOperationsValid
+        && isEnergyInputValid
+        && isSystemEfficiencyValid
+        && isSlagValid
+        && isExhaustGasValid
+        && isInputExhaustValid
+        && isAuxPowerValid,
       operationsValid: isOperationsValid,
       chargeMaterialValid: isChargeMaterialValid,
       flueGasValid: isFlueGasValid,
@@ -114,13 +119,13 @@ export class PhastValidService {
         }
       });
     }
-    return valid
+    return valid;
   }
 
   checkInputExhaustValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.exhaustGasEAF) {
-      phast.losses.exhaustGasEAF.forEach(loss => {
+    if (phast.losses.energyInputExhaustGasLoss) {
+      phast.losses.energyInputExhaustGasLoss.forEach(loss => {
         let exhaustGasForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
         if (exhaustGasForm.status === 'INVALID') {
           valid = false;
@@ -141,7 +146,7 @@ export class PhastValidService {
       });
     }
     return valid
-    
+
   }
 
   checkOperationsValid(phast: PHAST): boolean {
@@ -151,15 +156,15 @@ export class PhastValidService {
 
   checkChargeMaterialValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.chargeMaterials) {
+    if (phast.losses && phast.losses.chargeMaterials) {
       let chargeMaterialForm: FormGroup;
       phast.losses.chargeMaterials.forEach(loss => {
         if (loss.chargeMaterialType === 'Gas') {
-          chargeMaterialForm = this.chargeMaterialService.getGasChargeMaterialForm(loss);
+          chargeMaterialForm = this.gasMaterialFormService.getGasChargeMaterialForm(loss);
         } else if (loss.chargeMaterialType === 'Solid') {
-          chargeMaterialForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
+          chargeMaterialForm = this.solidMaterialFormService.getSolidChargeMaterialForm(loss);
         } else if (loss.chargeMaterialType === 'Liquid') {
-          chargeMaterialForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
+          chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss);
         }
 
         if (chargeMaterialForm.status === 'INVALID') {
@@ -176,9 +181,9 @@ export class PhastValidService {
       let flueGasForm: FormGroup;
       phast.losses.flueGasLosses.forEach(loss => {
         if (loss.flueGasByVolume) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByVolumeFormFromLoss(loss, true);
         } else if (loss.flueGasByMass) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByMassFormFromLoss(loss, true);
         }
 
         if (flueGasForm.status === 'INVALID') {
@@ -193,12 +198,12 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.fixtureLosses) {
       phast.losses.fixtureLosses.forEach(loss => {
-        let fixtureForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
+        let fixtureForm: FormGroup = this.fixtureFormService.getFormFromLoss(loss);
         if (fixtureForm.status === 'INVALID') {
           valid = false;
         }
       });
-    } 
+    }
     return valid;
   }
 
@@ -206,7 +211,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.wallLosses) {
       phast.losses.wallLosses.forEach(loss => {
-        let wallForm: FormGroup = this.wallLossesService.getWallLossForm(loss);
+        let wallForm: FormGroup = this.wallFormService.getWallLossForm(loss);
         if (wallForm.status === 'INVALID') {
           valid = false;
         }
@@ -221,9 +226,9 @@ export class PhastValidService {
       let coolingForm: FormGroup;
       phast.losses.coolingLosses.forEach(loss => {
         if (loss.gasCoolingLoss) {
-          coolingForm = this.coolingLossesService.initGasFormFromLoss(loss);
+          coolingForm = this.coolingFormService.initGasFormFromLoss(loss);
         } else if (loss.liquidCoolingLoss) {
-          coolingForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
+          coolingForm = this.coolingFormService.initLiquidFormFromLoss(loss);
         }
 
         if (coolingForm.status === 'INVALID') {
@@ -238,7 +243,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.atmosphereLosses) {
       phast.losses.atmosphereLosses.forEach(loss => {
-        let atmosphereForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss)
+        let atmosphereForm: FormGroup = this.atmosphereFormService.getAtmosphereForm(loss)
         if (atmosphereForm.status === 'INVALID') {
           valid = false;
         }
@@ -251,11 +256,11 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.openingLosses) {
       phast.losses.openingLosses.forEach(loss => {
-          let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
-          if (openingForm.status === 'INVALID') {
-            valid = false;
-          }
-        });
+        let openingForm: FormGroup = this.openingFormService.getFormFromLoss(loss);
+        if (openingForm.status === 'INVALID') {
+          valid = false;
+        }
+      });
     }
     return valid;
   }
@@ -264,7 +269,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.leakageLosses) {
       phast.losses.leakageLosses.forEach(loss => {
-        let leakageForm: FormGroup = this.gasLeakageLossesService.initFormFromLoss(loss)
+        let leakageForm: FormGroup = this.leakageFormService.initFormFromLoss(loss)
         if (leakageForm.status === 'INVALID') {
           valid = false;
         }
@@ -317,11 +322,15 @@ export class PhastValidService {
     return valid;
   }
 
-  checkEnergyInputValid(phast: PHAST): boolean {
+  checkEnergyInputValid(phast: PHAST, settings: Settings): boolean {
     let valid = true;
     if (phast.losses.energyInputEAF) {
+      let minElectricityInput: number;
+      if (phast.losses) {
+        minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, settings);
+      }
       phast.losses.energyInputEAF.forEach(loss => {
-        let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss)
+        let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)
         if (energyInputForm.status === 'INVALID') {
           valid = false;
         }

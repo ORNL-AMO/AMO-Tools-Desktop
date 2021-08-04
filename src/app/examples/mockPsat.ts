@@ -23,23 +23,24 @@ export const MockPsat: Assessment = {
             "efficiency": 95,
             "motor_rated_voltage": 460,
             "load_estimation_method": 1,
-            "motor_rated_fla": 172.63,
+            "motor_rated_fla": 389.08,
             "margin": 0,
             "operating_hours": 8760,
             "flow_rate": 2500,
             "head": 410,
             "motor_field_power": 88.2,
-            "motor_field_current": 187,
+            "motor_field_current": 370,
             "motor_field_voltage": 460,
             "cost_kw_hour": 0.066,
             "fluidType": "Water",
             "fluidTemperature": 68,
             "specifiedDriveEfficiency": null,
-            "implementationCosts": null
+            "implementationCosts": null,
+            "whatIfScenario": true,
         },
         "modifications": [{
             "psat": {
-                "name": "New Pump and Motor",
+                "name": "New Pump and Motor",                
                 "inputs": {
                     "pump_style": 6,
                     "pump_specified": 87.52,
@@ -56,7 +57,7 @@ export const MockPsat: Assessment = {
                     "efficiency": 95,
                     "motor_rated_voltage": 460,
                     "load_estimation_method": 1,
-                    "motor_rated_fla": 389.1,
+                    "motor_rated_fla": 376.86,
                     "margin": 0,
                     "operating_hours": 8760,
                     "flow_rate": 2499.99,
@@ -76,7 +77,7 @@ export const MockPsat: Assessment = {
                 "motorNotes": "",
                 "pumpFluidNotes": "",
                 "systemBasicsNotes": ""
-            }
+            }            
         }, {
             "psat": {
                 "name": "VFD reduce speed to 90%",
@@ -96,7 +97,7 @@ export const MockPsat: Assessment = {
                     "efficiency": 95,
                     "motor_rated_voltage": 460,
                     "load_estimation_method": 1,
-                    "motor_rated_fla": 172.63,
+                    "motor_rated_fla": 389.08,
                     "margin": 0,
                     "operating_hours": 8760,
                     "flow_rate": 2236.5,
@@ -109,7 +110,8 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": 95,
                     "implementationCosts": null,
-                    "isVFD": true
+                    "isVFD": true,
+                    "whatIfScenario": true,
                 }
             },
             "notes": {

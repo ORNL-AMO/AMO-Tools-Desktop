@@ -1,6 +1,6 @@
 <div class="px-2 pt-3 d-flex flex-column help-info">
   <h5>
-    Compressed Air Reduction
+    Compressed Air Reduction Help
     <br>
     <small class="text-muted">
       This calculator is used to quantify the energy savings associated with reducing compressed air usage.
@@ -28,6 +28,20 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'compressedAirCost'">
@@ -211,6 +225,15 @@
         react differently to reduced air demand and it is important to take this into consideration when
         estimating the energy reduction by reducing the demand.
         <hr>
+        Values for associated fraction of average power are based off the
+        <a href="https://www.nrel.gov/docs/fy17osti/68577.pdf" target="_blank">NREL Compressed Air Evaluation
+          Protocol</a>
+        <hr>
+        IBV - Inlet Butterfly Value<br>
+        IGV - Inlet Guide Vanes
+        <hr>
+        Each CCAF value represents the slope of the performance curve when operating within the 40% to 80% capacity range as this is a common operating range for a trim compressor.
+        <hr>
       </small>
     </h6>
     <div class="w-100 d-flex justify-content-center">
@@ -221,36 +244,48 @@
             <th class="w-50 text-center">Control Adjustment(% of Average Power)</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">Modulation (Poor)</td>
-            <td class="w-50 text-center">25%</td>
+            <td class="w-50 text-center">Screw Compressor - Inlet Modulation</td>
+            <td class="w-50 text-center">30%</td>
           </tr>
           <tr>
-            <td class="w-50 text-center">Load-Unload (Short-Cycle)</td>
-            <td class="w-50 text-center">40%</td>
+            <td class="w-50 text-center">Screw Compressor - Variable Displacement</td>
+            <td class="w-50 text-center">60%</td>
           </tr>
           <tr>
-            <td class="w-50 text-center">Load-Unload (2+ Minute Cycle)</td>
-            <td class="w-50 text-center">75%</td>
+            <td class="w-50 text-center">Screw Compressor – Variable Speed Drives</td>
+            <td class="w-50 text-center">97%</td>
           </tr>
           <tr>
-            <td class="w-50 text-center">Centrifugal (Venting)</td>
+            <td class="w-50 text-center">Oil Injected Screw - Load/Unload (short cycle)</td>
+            <td class="w-50 text-center">48%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Oil Injected Screw - Load/Unload (2+ minutes cycle)</td>
+            <td class="w-50 text-center">68%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Oil Free Screw - Load/Unload</td>
+            <td class="w-50 text-center">73%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Reciprocating Compressor - Load/Unload</td>
+            <td class="w-50 text-center">74%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Reciprocating Compressor - On/Off</td>
+            <td class="w-50 text-center">100%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Centrifugal Compressor – In blowoff (Venting)</td>
             <td class="w-50 text-center">0%</td>
           </tr>
           <tr>
-            <td class="w-50 text-center">Centrifugal (Non-Venting)</td>
-            <td class="w-50 text-center">75%</td>
+            <td class="w-50 text-center">Centrifugal – Modulating (IBV) in throttle range (Non-Venting)</td>
+            <td class="w-50 text-center">67%</td>
           </tr>
           <tr>
-            <td class="w-50 text-center">Reciprocating Unloaders</td>
-            <td class="w-50 text-center">80%</td>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">Variable Speed</td>
-            <td class="w-50 text-center">60%</td>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">Variable Displacement</td>
-            <td class="w-50 text-center">60%</td>
+            <td class="w-50 text-center">Centrifugal– Modulating (IGV) in throttle range (Non-Venting)</td>
+            <td class="w-50 text-center">86%</td>
           </tr>
         </tbody>
       </table>
@@ -264,12 +299,17 @@
         Select a compressor type from the dropdown list. To find the savings in terms of energy (kWh) we need
         to know the electricity consumed by the compressor to produce unit compressed air (specific power of
         the compressor).
-        Note: It is recommended that the Specific Power of the compressor is defined by the user for most
-        accurate results. These values be found from previous compressed air studies or from the CAGI
+        These values can be found from previous compressed air studies or from the CAGI
         data sheets for the specific compressor found online.
         In a multi-compressor system the energy savings associated with reduced air demand are usually only
         seen at the trim compressor, hence the “Specific Power” and the “Control-Type Adjustment Factor” are
         to be specified by the trim compressor.
+        <hr class="my-1">
+        <b>Note:</b> It is recommended that the Specific Power of the compressor is defined by the user for most
+        accurate results.
+        <hr class="my-1">
+        <b>Note:</b> These values are only valid for compressors operating at full load. Please check data sheets for more
+        appropriate numbers if not at full load
         <hr>
       </small>
     </h6>

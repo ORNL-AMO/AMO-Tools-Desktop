@@ -1,0 +1,71 @@
+<div class="d-flex h-100 modify-conditions phast standalone-calculator" #contentContainer>
+	<div class="d-flex flex-column w-100 mh-100 scroll-item">
+		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+		[ngClass]="{'justify-content-between': inTreasureHunt}">
+		<div class="d-flex pl-2 align-items-center">
+			<div class="col-md-auto">
+				<img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="ico-size2 px-1 py-2">
+			</div>
+			<div class="pl-2">
+				<h3>Waste Heat for Absorption Chillers</h3>
+			</div>
+		</div>
+		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
+			<div class="d-flex help-holder">
+				<p class="help-text treasure-hunt-help">Click the save icon to add the
+					treasure to your chest! Click cancel to discard the opportunity and return
+					to method selection.
+				</p>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+				<span class="fa fa-save"></span>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+				<span class="fa fa-times"></span>
+			</div>
+		</div>
+		</div>
+	  <div class="d-flex">
+		<div class="scroll-item p-0 col-6 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
+				<div class="d-flex flex-column mx-2 mb-4 p-2 w-100">
+					<app-waste-heat-form [settings]="settings" [inModal]="isModalOpen"></app-waste-heat-form>	
+					<div class="w-100 justify content-center btn-group btn-group-sm">
+						<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+							(click)="btnResetData()">
+							Reset Data
+						</button>
+						<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+							(click)="btnGenerateExample()">
+							Generate Example
+						</button>
+					</div>
+				</div>
+		</div>
+  
+		<!-- help panel -->
+		<div class="col-6 p-0 help-panel">
+		  <div class="d-flex flex-column mh-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
+			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+				  (click)="setTab('results')">
+				  <div>Results</div>
+				</a>
+			  </div>
+			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+				  <div>Help</div>
+				</a>
+			  </div>
+			</div>
+  
+			<div class="p-2">
+				<app-waste-heat-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-waste-heat-help>
+				<app-waste-heat-results *ngIf="tabSelect == 'results'" class="mt-3 w-100" [settings]="settings"></app-waste-heat-results>	
+			</div>
+		  </div>
+		</div>
+  
+	  </div>
+	</div>
+</div>

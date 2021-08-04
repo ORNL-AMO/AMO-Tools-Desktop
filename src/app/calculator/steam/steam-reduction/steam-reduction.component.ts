@@ -4,7 +4,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SteamReductionResults, SteamReductionData } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamReductionService } from './steam-reduction.service';
-import { SteamReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { SteamReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-steam-reduction',
@@ -78,8 +78,8 @@ export class SteamReductionComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.leftPanelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 
@@ -185,7 +185,7 @@ export class SteamReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.steamReduction });
   }
 
   cancel() {

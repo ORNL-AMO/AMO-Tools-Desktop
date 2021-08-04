@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
+import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furnaces/leakage/leakage-form.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
-import { GasLeakageLossesService, LeakageWarnings } from '../../../losses/gas-leakage-losses/gas-leakage-losses.service';
 
 @Component({
   selector: 'app-explore-leakage-form',
@@ -29,7 +29,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   showLeakage: boolean = false;
   baselineWarnings: Array<LeakageWarnings>;
   modificationWarnings: Array<LeakageWarnings>;
-  constructor(private gasLeakageLossesService: GasLeakageLossesService) { }
+  constructor(private leakageFormService: LeakageFormService) { }
 
   ngOnInit() {
     this.initData();
@@ -61,9 +61,9 @@ export class ExploreLeakageFormComponent implements OnInit {
         this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: check, display: 'Control and Optimize Furnace Pressure' }; 
       }
       this.showPressure.push(check);
-      let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
+      let tmpWarnings: LeakageWarnings = this.leakageFormService.checkLeakageWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
+      tmpWarnings = this.leakageFormService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
     });
@@ -122,13 +122,13 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.losses.leakageLosses[index]);
+    let tmpWarnings: LeakageWarnings = this.leakageFormService.checkLeakageWarnings(this.phast.losses.leakageLosses[index]);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
+    let tmpWarnings: LeakageWarnings = this.leakageFormService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
   }

@@ -17,10 +17,10 @@
   <!--Furnace Setup -->
   <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="tab-content d-flex">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen}">
+      [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal}">
       <!--Step: 1 System Basics (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
-        [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings()" (save)="saveDb()">
+        (updateSettings)="getSettings()" (save)="saveDb()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)">
       </app-system-basics>
     </div>
     <div class="w-50">
@@ -62,18 +62,28 @@
     </div>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item"
-    [ngStyle]="{'height.px': containerHeight}">
-    <div class="p-1 mx-auto">
-      <div class="form-group">
-        <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
-          <option [ngValue]="_phast">Baseline</option>
-          <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
-        </select>
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <nav class="navbar phast">
+      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+        <div class="tab-content pl-2 pr-2">
+            <div class="form-group" *ngIf="phastOptions.length > 1">
+              <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
+                <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
+              </select>
+            </div>
+        </div>
+          <div class="btn-group btn-group-sm align-self-center">
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          </div>
       </div>
-    </div>
+  </nav>
     <div *ngIf="sankeyPhast" class="sankey-padding">
-      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+      <app-phast-sankey [phast]="sankeyPhast" [labelStyle]="sankeyLabelStyle" [settings]="settings" [appBackground]="true"></app-phast-sankey>
     </div>
   </div>
 
@@ -152,3 +162,6 @@
     </div>
   </div>
 </div>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'phast'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

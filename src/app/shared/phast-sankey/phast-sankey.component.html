@@ -1,0 +1,18 @@
+<div [ngClass]="{'chart-hide': !phast.valid.isValid, 'chart-show': phast.valid.isValid}">
+  <div #ngChart></div>
+  <div *ngIf="minLosses.length > 0" class="ml-5">
+  <div class="ml-5 mt-2">
+    <label class="group-label mb-2">Negligible Losses (not shown)</label>
+    <table class="small w-25 ml-3">
+      <tr *ngFor="let loss of minLosses">
+        <td>{{ loss.name}}</td>
+        <td>{{ loss.text}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<div class="w-75 ml-auto mr-auto mt-3" *ngIf="!phast.valid.isValid">
+  <app-invalid-phast [phastValid]="phast.valid"></app-invalid-phast>
+</div>

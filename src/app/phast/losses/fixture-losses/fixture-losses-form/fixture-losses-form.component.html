@@ -6,63 +6,85 @@
           New Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="{{'materialName'+idString}}"
-        (change)="setSpecificHeat()" (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMaterialName(), 'invalid': lossesForm.controls.materialName.invalid}">
+        (change)="setSpecificHeat()" (focus)="focusField('materialName')"  [ngClass]="{'indicate-different': compareMaterialName(), 'invalid': lossesForm.controls.materialName.invalid}">
         <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'specificHeat'+idString}}">Specific Heat</label>
-      <div class="input-group" [ngClass]="{'indicate-different-db':checkSpecificHeat(), 'error': specificHeatWarning !== null, 'invalid': lossesForm.controls.specificHeat.invalid}">
+      <label class="small" for="{{'specificHeat'+idString}}">Average Specific Heat of Material</label>
+      <div class="input-group" [ngClass]="{'indicate-different-db':checkSpecificHeat(), 'invalid': lossesForm.controls.specificHeat.invalid}">
         <input [readonly]="!baselineSelected" name="{{'specificHeat_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="specificHeat" id="{{'specificHeat'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('specificHeat')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('specificHeat')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="specificHeatWarning !== null">{{specificHeatWarning}}</span>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.specificHeat.invalid && !lossesForm.controls.specificHeat.pristine">
+      <span *ngIf="lossesForm.controls.specificHeat.errors.required">Value Required</span>
+      <span *ngIf="lossesForm.controls.specificHeat.errors.min">Value can't be less than
+        {{lossesForm.controls.specificHeat.errors.min.min}}.</span>
+    </span>
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'feedRate'+idString}}">Fixture Weight feed rate</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareFeedRate(), 'error': feedRateWarning !== null, 'invalid': lossesForm.controls.feedRate.invalid}">
+      <label class="small" for="{{'feedRate'+idString}}">Fixture Feed Rate</label>
+      <div class="input-group" [ngClass]="{'indicate-different': compareFeedRate(), 'invalid': lossesForm.controls.feedRate.invalid}">
         <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
           formControlName="feedRate" id="{{'feedRate'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('feedRate')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="feedRateWarning !== null">{{feedRateWarning}}</span>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.feedRate.invalid && !lossesForm.controls.feedRate.pristine">
+      <span *ngIf="lossesForm.controls.feedRate.errors.required">Value Required</span>
+      <span *ngIf="lossesForm.controls.feedRate.errors.greaterThan == 0">Value must be greater than than
+        0.</span>
+    </span>
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'initialTemp'+idString}}">Initial Temperature</label>
+      <label class="small" for="{{'initialTemp'+idString}}">Inlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareInitialTemperature(), 'invalid': lossesForm.controls.initialTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="initialTemp" id="{{'initialTemp'+idString}}" onfocus="this.select();" (input)="save()"
-          (focus)="focusField('initialTemp')" (blur)="focusOut()">
+          (focus)="focusField('initialTemp')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.initialTemp.invalid && !lossesForm.controls.initialTemp.pristine">
+      <span *ngIf="lossesForm.controls.initialTemp.errors.required">Value Required</span>
+    </span>
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'finalTemp'+idString}}">Final Temperature</label>
+      <label class="small" for="{{'finalTemp'+idString}}">Outlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareFinalTemperature(), 'invalid': lossesForm.controls.finalTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control"
           formControlName="finalTemp" id="{{'finalTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('finalTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small"
+      *ngIf="lossesForm.controls.finalTemp.invalid && !lossesForm.controls.finalTemp.pristine">
+      <span *ngIf="lossesForm.controls.finalTemp.errors.required">Value Required</span>
+    </span>
     </div>
 
     <div class="form-group">
       <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
       <input [readonly]="!baselineSelected" name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control"
         formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="save()"
-        (focus)="focusField('correctionFactor')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': lossesForm.controls.correctionFactor.invalid}">
-    </div>
+        (focus)="focusField('correctionFactor')"  [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': lossesForm.controls.correctionFactor.invalid}">
+        <span class="alert-danger pull-right small"
+          *ngIf="lossesForm.controls.correctionFactor.invalid && !lossesForm.controls.correctionFactor.pristine">
+          <span *ngIf="lossesForm.controls.correctionFactor.errors.required">Value Required</span>
+        </span>
+      </div>
   </div>
 </form>
 

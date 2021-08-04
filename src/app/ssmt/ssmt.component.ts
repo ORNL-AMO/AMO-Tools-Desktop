@@ -6,16 +6,14 @@ import { Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { SettingsService } from '../settings/settings.service';
-import { Directory } from '../shared/models/directory';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SsmtValid } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
-
+import { SettingsService } from '../settings/settings.service';
+import { ConvertSsmtService } from './convert-ssmt.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -32,6 +30,10 @@ export class SsmtComponent implements OnInit {
   }
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   stepTabs: Array<string> = [
     'system-basics',
@@ -52,7 +54,6 @@ export class SsmtComponent implements OnInit {
   modelTab: string;
   assessmentTabSubscription: Subscription;
   assessmentTab: string;
-  isAssessmentSettings: boolean;
   settings: Settings;
   modificationExists: boolean;
   modificationIndex: number;
@@ -62,8 +63,8 @@ export class SsmtComponent implements OnInit {
   showAddModal: boolean;
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
-  stepTabIndex: number;
   modalOpenSubscription: Subscription;
+  stepTabIndex: number;
 
   calcTab: string;
   calcTabSubscription: Subscription;
@@ -72,47 +73,50 @@ export class SsmtComponent implements OnInit {
   modListOpen: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+
+  ssmtOptions: Array<any>;
+  selectedSSMT: {ssmt: SSMT, name};
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
-    private settingsService: SettingsService,
-    private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
     private assessmentService: AssessmentService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService,
+    private convertSsmtService: ConvertSsmtService
   ) { }
 
   ngOnInit() {
-    let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
-      tmpAssessmentId = params['id'];
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
-        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-        if (this._ssmt.modifications) {
-          if (this._ssmt.modifications.length !== 0) {
-            this.modificationExists = true;
-            this.modificationIndex = 0;
-            this.compareService.setCompareVals(this._ssmt, 0);
-          } else {
-            this.modificationExists = false;
-            this.compareService.setCompareVals(this._ssmt);
-          }
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+      if (this._ssmt.modifications) {
+        if (this._ssmt.modifications.length !== 0) {
+          this.modificationExists = true;
+          this.modificationIndex = 0;
+          this.compareService.setCompareVals(this._ssmt, 0);
         } else {
-          this._ssmt.modifications = new Array<Modification>();
           this.modificationExists = false;
           this.compareService.setCompareVals(this._ssmt);
         }
-
-        this.getSettings();
-        let tmpTab = this.assessmentService.getTab();
-        if (tmpTab) {
-          this.ssmtService.mainTab.next(tmpTab);
-        }
-      });
+      } else {
+        this._ssmt.modifications = new Array<Modification>();
+        this.modificationExists = false;
+        this.compareService.setCompareVals(this._ssmt);
+      }
+      this.getSettings();
+      this.initSankeyList();
+      let tmpTab = this.assessmentService.getTab();
+      if (tmpTab) {
+        this.ssmtService.mainTab.next(tmpTab);
+      }
     });
     this.subscribeTabs();
 
@@ -139,7 +143,7 @@ export class SsmtComponent implements OnInit {
       }
     });
 
-    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+      this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
@@ -203,45 +207,33 @@ export class SsmtComponent implements OnInit {
 
   saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    if (this.isAssessmentSettings) {
-      this.indexedDbService.putSettings(this.settings).then(() => {
-        this.settingsDbService.setAll().then(() => {
-        });
+    this.indexedDbService.putSettings(this.settings).then(() => {
+      this.settingsDbService.setAll().then(() => {
+      });
+    });
+  }
+
+  initSankeyList() {
+    this.ssmtOptions = new Array<any>();
+    this.ssmtOptions.push({ name: 'Baseline', ssmt: this.assessment.ssmt });
+    this.selectedSSMT = this.ssmtOptions[0];
+    this.showSankeyLabelOptions = ((this.selectedSSMT.ssmt.name == 'Baseline' || this.selectedSSMT.ssmt.name == null) && this.selectedSSMT.ssmt != undefined) || (this.selectedSSMT.ssmt.valid && this.selectedSSMT.ssmt.valid.isValid);
+    if (this._ssmt.modifications) {
+      this._ssmt.modifications.forEach(mod => {
+        this.ssmtOptions.push({ name: mod.ssmt.name, ssmt: mod.ssmt });
       });
     }
   }
 
-  getSettings() {
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      this.settings = tmpSettings;
-      this.isAssessmentSettings = true;
-    } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
-  getParentDirectorySettings(parentId: number) {
-    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (dirSettings) {
-      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      //create settings for assessment
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.getSettings();
-          });
-        });
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+  getSettings() {
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -258,13 +250,14 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
+    this.initSankeyList();
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);
       });
     });
   }
-  
+
   checkSetupDone() {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
     this._ssmt.setupDone = ssmtValid.isValid;
@@ -322,7 +315,7 @@ export class SsmtComponent implements OnInit {
 
   getCanContinue() {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
-    
+
     if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
       return true;
     } else if (this.stepTab === 'boiler') {
@@ -417,7 +410,7 @@ export class SsmtComponent implements OnInit {
     });
     this.hideToast();
   }
-  
+
   checkTutorials() {
     if (this.mainTab == 'system-setup') {
       if (!this.settingsDbService.globalSettings.disableSsmtSystemSetupTutorial) {
@@ -440,5 +433,47 @@ export class SsmtComponent implements OnInit {
         this.assessmentService.showTutorial.next('ssmt-report-tutorial');
       }
     }
+  }
+
+  addSettings(settings: Settings) {
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
+    });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.stepTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    }
+    else {
+      this.save();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    this._ssmt = this.convertSsmtService.convertExistingData(this._ssmt, this.oldSettings, this.settings);
+    this._ssmt.existingDataUnits = this.settings.unitsOfMeasure;
+    this.save();
+    this.getSettings();
   }
 }

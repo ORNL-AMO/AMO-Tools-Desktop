@@ -1,0 +1,44 @@
+.explore-ops-form li{
+	list-style: none;
+}
+
+.explore-ops-form ul {
+	padding-left: 15px;
+}
+
+form{
+    padding-top: 0px;
+}
+
+.btn-primary{
+	padding: 6px;
+	font-size: small;
+}
+
+
+.group-name, .group-label{
+	border-bottom: #003087 groove 2px;
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+
+.btn{
+    padding: 6px;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+
+.modal-content{
+    height: 85vh;
+}

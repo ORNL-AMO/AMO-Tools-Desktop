@@ -1,8 +1,9 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
   <h5>
-    Input Plane Data Help
+    Pitot Tube Traverse Readings Help
     <br>
-    <small class="text-muted">This section is where the user enters more specific data about the fan system (e.g., ductwork arrangement and dimensions, the
+    <small class="text-muted">This section is where the user enters more specific data about the fan system (e.g.,
+      ductwork arrangement and dimensions, the
       fan).
     </small>
     <br>
@@ -10,10 +11,14 @@
       <hr> Plane Information
       <br>
       <small class="text-muted">
-        This section is where the user more specific data about the fan system (e.g., ductwork arrangement and dimensions, the fan).
-        <hr> This requires the user to enter data about the overall system (any system effects to take into consideration) and
-        any pressure drops between the fan inlet/outlet and the points of measurement. If the user can measure the static
-        pressure of the fan inlet or outlet directly, this pressure loss is zero and values for static pressure should be
+        This section is where the user more specific data about the fan system (e.g., ductwork arrangement and
+        dimensions, the fan).
+        <hr> This requires the user to enter data about the overall system (any system effects to take into
+        consideration) and
+        any pressure drops between the fan inlet/outlet and the points of measurement. If the user can measure the
+        static
+        pressure of the fan inlet or outlet directly, this pressure loss is zero and values for static pressure should
+        be
         entered on planes 4 or 5.
       </small>
     </span>
@@ -29,7 +34,7 @@
       <hr> Plane 2
       <br>
       <small class="text-muted">
-        Plane 2 is the fan outlet flange. If there is an evase, Plane 2 can be located either upstream or downstream of Plane 5.
+        Plane 2 is the fan outlet flange. If the evase was included in the Rated Fan Performance, Plane 2 can be located either upstream or downstream of Plane 5, however downstream is uncommon.
       </small>
     </span>
 
@@ -37,18 +42,15 @@
       <hr> Plane 3
       <br>
       <small class="text-muted">
-        Plane 3 is the plane used for the Pitot-static traverse for purpose of determining flow rate.
+        Plane 3 is the plane used for the Pitot-static traverse for purpose of determining flow rate. This plane is "Plane 5" in the ISO 5802 standard.
       </small>
-      <div class="my-2 d-flex w-100 justify-content-center align-items-center">
-        <img class="w-75" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
-      </div>
     </span>
 
     <span *ngIf="planeStep == '4'">
       <hr> Plane 4
       <br>
       <small class="text-muted">
-        Plane 4 is a plane upstream of fan used to establish fan inlet Plane Static Pressure.
+        Plane 4 is a plane upstream of fan used to establish fan inlet Plane Static Pressure. This plane is "Plane 3" in the ISO 5802 standard.
       </small>
     </span>
 
@@ -56,7 +58,7 @@
       <hr> Plane 5
       <br>
       <small class="text-muted">
-        Plane 5 is a plane downstream of fan used to establish fan outlet Plane 2 Static Pressure.
+        Plane 5 is a plane near the outlet used to establish fan outlet Plane 2 Static Pressure. If the evase was included in the Rated Fan Performance, this might be upstream or downstream of Plane 2. This plane is "Plane 4" in the ISO 5802 standard.
       </small>
     </span>
   </h5>
@@ -66,7 +68,8 @@
       Total Pressure Loss Between Planes 1 and 4
       <br>
       <small class="text-muted">
-        Input a positive value for the pressure loss between planes 1 and 4. This loss may be established from the frictional/dynamic
+        Input a positive value for the pressure loss between planes 1 and 4. This loss may be established from the
+        frictional/dynamic
         losses as per ASHRAE Fundamentals ‘Duct Design’, or by some other means.
         <hr>
       </small>
@@ -77,7 +80,8 @@
       Total Pressure Loss Between Planes 2 and 5
       <br>
       <small class="text-muted">
-        Input a positive value for the pressure loss between planes 2 and 5. This loss may be established from the frictional/dynamic
+        Input a positive value for the pressure loss between planes 2 and 5. This loss may be established from the
+        frictional/dynamic
         losses as per ASHRAE Fundamentals ‘Duct Design’, or by some other means.
         <hr>
       </small>
@@ -88,10 +92,13 @@
       Inlet System Effect Factor
       <br>
       <small class="text-muted">
-        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which has different
+        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which
+        has different
         operating conditions from when it was tested in the laboratory. The system effect at the inlet can be determined
-        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control Association
-        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National Association
+        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control
+        Association
+        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National
+        Association
         (SMACNA).
         <hr>
       </small>
@@ -102,10 +109,14 @@
       Outlet System Effect Factor
       <br>
       <small class="text-muted">
-        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which has different
-        operating conditions from when it was tested in the laboratory. The system effect at the outlet can be determined
-        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control Association
-        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National Association
+        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which
+        has different
+        operating conditions from when it was tested in the laboratory. The system effect at the outlet can be
+        determined
+        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control
+        Association
+        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National
+        Association
         (SMACNA).
         <hr>
       </small>
@@ -118,7 +129,7 @@
       <br>
       <small class="text-muted">
         The inner clear
-        <span *ngIf="planeType == 'Rectangular'">Height</span>
+        <span *ngIf="planeType == 'Rectangular'">height</span>
         <span *ngIf="planeType == 'Circular'">diameter</span> of the plane.
         <hr>
       </small>
@@ -139,12 +150,13 @@
       Number of Inlet Boxes
       <br>
       <small class="text-muted">
-        Choose either 1 or 2 depending on the number of inlet boxes. This will affect the calculation for Plane 1 planar area.
+        Choose either 1 or 2 depending on the number of inlet boxes. This will affect the calculation for Plane 1 planar
+        area.
         <hr>
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp' && planeStep == '3b'">
     <h6>
       Dry Bulb Temp
       <br>
@@ -154,13 +166,28 @@
       </small>
     </h6>
   </div>
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp' && planeStep == '3a'">
+    <h6>
+      Dry Bulb Temp
+      <br>
+      <small class="text-muted">
+        Dry bulb temperature measured near the plane. The density at this plane is based on the density defined on the Fluid page. The density for the 
+        other planes are adjusted using the dry bulb temperatures of the respective plane. If a temperature 
+        was specified on the Fluid page (because density was calculated), be sure the temperature entered for this field matches.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'barometricPressure'">
     <h6>
       Barometric Pressure
       <br>
       <small class="text-muted">
-        The pressure exerted by the weight of air in the atmosphere. This defaults to the barometric pressure entered earlier in
-        the calculator, but if there are major height changes, this can be estimated with information on the planar area elevation
+        The pressure exerted by the weight of air in the atmosphere. This defaults to the barometric pressure entered
+        earlier in
+        the calculator, but if there are major height changes, this can be estimated with information on the planar area
+        elevation
         above sea level.
         <hr>
       </small>
@@ -181,11 +208,15 @@
       Pitot Tube Coefficient
       <br>
       <small class="text-muted">
-        If “Standard” was selected in the Pitot Tube Type Combo Box, this box will default to 1.00 as a Standard Pitot tube does
+        If “Standard” was selected in the Pitot Tube Type Combo Box, this box will default to 1.00 as a Standard Pitot
+        tube does
         not require calibration and is considered a primary instrument. If “S-Type’” was selected in the Pitot Tube Type
-        Combo Box, the Pitot Tube Coefficient (Cp) box will default to 0.86. Typical Cp values for S-Type pitot tubes are
-        typically in the range of 0.84 to 0.88, but the actual value depends on the specific Pitot tube being used as well
-        as the general range of measurement the S-Type Pitot tube is being used for. Cp calibration charts for the specific
+        Combo Box, the Pitot Tube Coefficient (Cp) box will default to 0.86. Typical Cp values for S-Type pitot tubes
+        are
+        typically in the range of 0.84 to 0.88, but the actual value depends on the specific Pitot tube being used as
+        well
+        as the general range of measurement the S-Type Pitot tube is being used for. Cp calibration charts for the
+        specific
         Pitot tube being used should always be consulted first before inputting a value into this cell.
         <hr>
       </small>
@@ -196,8 +227,10 @@
       Number of Traverse Holes
       <br>
       <small class="text-muted">
-        The number of traverse points for the traverse or the number of readings per hole. This is determined from the AMCA 203 Standard,
-        based on the size of the ductwork. The readings should be taken in the center of rectangles or concentric circles
+        The number of traverse points for the traverse or the number of readings per hole. This is determined from the
+        AMCA 203 Standard,
+        based on the size of the ductwork. The readings should be taken in the center of rectangles or concentric
+        circles
         of constant area. </small>
       <hr>
     </h6>
@@ -207,13 +240,15 @@
       Number of Insertion Points
       <br>
       <small class="text-muted">
-        The number of insertion points used for the analysis. This is determined from the AMCA 203 Standard, based on the size of
+        The number of insertion points used for the analysis. This is determined from the AMCA 203 Standard, based on
+        the size of
         the ductwork. The readings should be taken in the center of rectangles or concentric circles of constant area.
       </small>
       <hr>
     </h6>
   </div>
-  <div class="my-2 d-flex w-100 justify-content-center align-items-center" *ngIf="currentField == 'numInsertionPoints' || currentField == 'numTraverseHoles'">
+  <div class="my-2 d-flex w-100 justify-content-center align-items-center"
+    *ngIf="currentField == 'numInsertionPoints' || currentField == 'numTraverseHoles'">
     <img *ngIf="planeType == 'Circular'" src="assets/images/circular-insertion-duct.png">
     <img class="w-100" *ngIf="planeType == 'Rectangular'" src="assets/images/rectangular-insertion-duct.png">
   </div>
@@ -222,12 +257,27 @@
       Add Differential Readings
       <br>
       <small class="text-muted">
-        This is where the user enters the data from the pitot tube readings. More information on how to conduct this test can be
+        This is where the user enters the data from the pitot tube readings. More information on how to conduct this
+        test can be
         found in the AMCA 203 standard. The rows of the table each represent all of the insertion points and the columns
         represent each reading along the traverse.
       </small>
     </h6>
   </div>
-
-
+  <div class="my-2" *ngIf="currentField == 'variationInBarometricPressure'">
+    <h6>
+      Variation In Barometric Pressure
+      <br>
+      <small class="text-muted">
+        In most cases, there is no major variation in barometric pressure along the fan, however, large elevation
+        changes may impact barometric pressure. If this is true, then set to "yes" and edit barometric pressure on each
+        plane. Otherwise, the calculator will use the barometric pressure determined on "Fan Basics".
+      </small>
+    </h6>
+  </div>
+  <span *ngIf="planeStep == '3a'||planeStep == '3b'||planeStep == '3c'">
+    <div class="my-2 d-flex w-100 justify-content-center align-items-center">
+      <img class="w-75" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
+    </div>
+  </span>
 </div>

@@ -37,19 +37,29 @@
 		</div>
 
 		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
-			[ngStyle]="{'height.px': helpHeight}">
-			<app-explore-opportunities-sankey *ngIf="psat.modifications[modificationIndex].psat.valid.isValid"
-				[baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings">
-			</app-explore-opportunities-sankey>
-			<div class="alert-danger small" *ngIf="!psat.modifications[modificationIndex].psat.valid.isValid">
-				Invalid System Setup:<br>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.pumpFluidValid">Errors found in Pump Fluid
-					Data<br></span>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.motorValid">Errors found in Motor
-					Data<br></span>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.fieldDataValid">Errors found in Field
-					Data<br></span>
-			</div>
+				[ngStyle]="{'height.px': helpHeight}">
+			<div class="d-flex flex-column w-100">
+				<div class="btn-group mt-2 justify-content-center">
+				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
+				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
+				</div>
+				<app-psat-sankey *ngIf="sankeyView == 'Baseline'"
+					[psat]="psat"
+					[settings]="settings"
+					[appBackground]="true"
+					[baselineResults]="baselineResults"
+					[validPsat]="opportunityPsatValid"
+					[isBaseline]="true">
+				</app-psat-sankey>
+				<app-psat-sankey *ngIf="sankeyView == 'Modified'"
+				  [settings]="settings"
+				  [psat]="psat"
+				  [appBackground]="true"
+				  [modResults]="modificationResults"
+			      [validPsat]="opportunityPsatValid"
+				  [isBaseline]="false">
+				</app-psat-sankey>
+			  </div>
 		</div>
 		<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}"
 			*ngIf="modificationExists && tabSelect == 'results'">

@@ -13,11 +13,16 @@ import { TurbineComponent } from "../steam/turbine/turbine.component";
 import { SteamListComponent } from "../steam/steam-list/steam-list.component";
 import { PipeInsulationReductionComponent } from "../steam/pipe-insulation-reduction/pipe-insulation-reduction.component";
 import { TankInsulationReductionComponent } from "../steam/tank-insulation-reduction/tank-insulation-reduction.component";
+import { WaterHeatingComponent } from "../steam/water-heating/water-heating.component";
 
 export const steamRoutes: Routes = [
     {
         path: '',
         component: SteamListComponent
+    },
+    {
+        path: 'water-heating',
+        component: WaterHeatingComponent   
     },
     {
         path: 'boiler',

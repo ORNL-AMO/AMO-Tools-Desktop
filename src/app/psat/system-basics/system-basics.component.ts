@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
@@ -8,39 +8,51 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { PsatService } from '../psat.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit {
+export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Input()
   assessment: Assessment;
   @Input()
   settings: Settings;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
-  @Input()
-  psat: PSAT;
   @Output('updateAssessment')
-  updateAssessment = new EventEmitter<boolean>();
+  updateAssessment = new EventEmitter<PSAT>();
   @Output('openModal')
   openModal = new EventEmitter<boolean>();
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
+  @Output('openUpdateUnitsModal') 
+  openUpdateUnitsModal = new EventEmitter<Settings>();
 
   settingsForm: FormGroup;
   oldSettings: Settings;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showSuccessMessage: boolean = false;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    if (this.assessment.psat.existingDataUnits && this.assessment.psat.existingDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings = this.getExistingDataSettings();
+      this.showUpdateDataReminder = true;
+    }
+  }
+
+  ngOnDestroy() {
+    if(this.showUpdateDataReminder && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
   }
 
   saveChanges() {
@@ -48,22 +60,26 @@ export class SystemBasicsComponent implements OnInit {
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
-    if (
-      this.settings.currency != this.oldSettings.currency ||
+
+    let settingsChanged: boolean = this.settings.currency != this.oldSettings.currency ||
       this.settings.distanceMeasurement != this.oldSettings.distanceMeasurement ||
       this.settings.flowMeasurement != this.oldSettings.flowMeasurement ||
       this.settings.language != this.oldSettings.language ||
       this.settings.powerMeasurement != this.oldSettings.powerMeasurement ||
       this.settings.pressureMeasurement != this.oldSettings.pressureMeasurement ||
       this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure ||
-      this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement
-    ) {
-      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power || this.psat.inputs.fluidTemperature) {
-        this.showUpdateData = true;
-      }
+      this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
+      this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure;
+    let hasData: boolean = Boolean(this.assessment.psat.inputs.flow_rate || this.assessment.psat.inputs.head || this.assessment.psat.inputs.motor_rated_power || this.assessment.psat.inputs.fluidTemperature);
+    
+    if (hasData && settingsChanged) {
+      this.assessment.psat.existingDataUnits = this.oldSettings.unitsOfMeasure;
+
+      this.showUpdateDataReminder = true;
+      this.updateAssessment.emit(this.assessment.psat);
     }
-    if (this.showUpdateData == false) {
-      this.dataUpdated = true;
+    if (this.showSuccessMessage == true) {
+      this.showSuccessMessage = false;
     }
     //save
     this.indexedDbService.putSettings(this.settings).then(
@@ -76,39 +92,29 @@ export class SystemBasicsComponent implements OnInit {
     )
   }
 
-  updateData() {
-    this.psat = this.convertPsatData(this.psat);
-    if (this.psat.modifications) {
-      this.psat.modifications.forEach(mod => {
-        mod.psat = this.convertPsatData(mod.psat);
-      })
-    }
-    this.updateAssessment.emit(true);
-    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    this.showUpdateData = false;
-    this.dataUpdated = true;
+  getExistingDataSettings(): Settings {
+    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    existingSettingsForm.patchValue({unitsOfMeasure: this.assessment.psat.existingDataUnits});
+    let existingSettings = this.settingsService.setUnits(existingSettingsForm);
+    return this.settingsService.getSettingsFromForm(existingSettings);
   }
 
-  convertPsatData(psat: PSAT) {
-    if (psat.inputs.flow_rate) {
-      psat.inputs.flow_rate = this.convertUnitsService.value(psat.inputs.flow_rate).from(this.oldSettings.flowMeasurement).to(this.settings.flowMeasurement);
-      psat.inputs.flow_rate = this.convertUnitsService.roundVal(psat.inputs.flow_rate, 2);
+  updateData(showSuccess?: boolean) {
+    this.assessment.psat = this.psatService.convertExistingData(this.assessment.psat, this.oldSettings, this.settings);
+    if (this.assessment.psat.modifications) {
+      this.assessment.psat.modifications.forEach(mod => {
+        this.psatService.convertExistingData(mod.psat, this.oldSettings, this.settings, mod.psat);
+      })
     }
-    if (psat.inputs.head) {
-      psat.inputs.head = this.convertUnitsService.value(psat.inputs.head).from(this.oldSettings.distanceMeasurement).to(this.settings.distanceMeasurement);
-      psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
+
+    if(showSuccess) {
+      this.initSuccessMessage();
     }
-    if (psat.inputs.motor_rated_power) {
-      psat.inputs.motor_rated_power = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(this.oldSettings.powerMeasurement).to(this.settings.powerMeasurement);
-      psat.inputs.motor_rated_power = this.convertUnitsService.roundVal(psat.inputs.motor_rated_power, 2)
-    }
-    if (psat.inputs.fluidTemperature) {
-      if (this.settings.temperatureMeasurement && this.oldSettings.temperatureMeasurement) {
-        psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(this.oldSettings.temperatureMeasurement).to(this.settings.temperatureMeasurement);
-        psat.inputs.fluidTemperature = this.convertUnitsService.roundVal(psat.inputs.fluidTemperature, 2);
-      }
-    }
-    return psat;
+
+    this.showUpdateDataReminder = false;
+    this.assessment.psat.existingDataUnits = this.settings.unitsOfMeasure;
+    this.updateAssessment.emit(this.assessment.psat);
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
   }
 
   showSettingsModal() {
@@ -124,4 +130,16 @@ export class SystemBasicsComponent implements OnInit {
   startSavePolling() {
     this.saveChanges()
   }
+
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
+  }
+
 }

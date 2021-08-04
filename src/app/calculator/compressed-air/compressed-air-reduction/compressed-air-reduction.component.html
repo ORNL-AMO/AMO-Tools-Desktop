@@ -1,5 +1,5 @@
 <div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
-  <div class="d-flex flex-column w-100 h-100 scroll-item">
+  <div class="d-flex flex-column w-100 h-100">
     <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
@@ -72,7 +72,11 @@
               <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
                 (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
-                [utilityType]="baselineData[0].utilityType">
+                [utilityType]="baselineData[0].utilityType"
+                [compressorControl]="baselineData[i].compressorElectricityData.compressorControl"
+                [compressorControlAdjustment]="baselineData[i].compressorElectricityData.compressorControlAdjustment"
+                [compressorSpecificPowerControl]="baselineData[i].compressorElectricityData.compressorSpecificPowerControl"
+                [compressorSpecificPower]="baselineData[i].compressorElectricityData.compressorSpecificPower">
               </app-compressed-air-reduction-form>
             </div>
           </div>
@@ -96,7 +100,7 @@
 
       <!-- help panel -->
       <div class="col-4 p-0 help-panel">
-        <div class="d-flex flex-column mh-100 scroll-item">
+        <div class="d-flex flex-column mh-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
           <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
               <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
@@ -114,7 +118,7 @@
           <div class="p-2">
             <!-- app results if results tab -->
             <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
-              [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists"
+              [modificationExists]="modificationExists"
               [utilityType]="baselineData[0].utilityType">
             </app-compressed-air-reduction-results>
 

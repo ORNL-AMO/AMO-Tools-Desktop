@@ -25,7 +25,7 @@ export class AtmosphereSummaryComponent implements OnInit {
   //used to collapse table
   collapse: boolean = true;
   //use array to get gas names
-  gasOptions: Array<any>;
+  gasOptions: Array<AtmosphereSpecificHeat>;
   
   atmosphereGasDiff: Array<boolean>;
   specificHeatDiff: Array<boolean>;

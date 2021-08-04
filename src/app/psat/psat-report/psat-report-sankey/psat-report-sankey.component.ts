@@ -18,22 +18,26 @@ export class PsatReportSankeyComponent implements OnInit {
   psat2CostSavings: number;
   psat1: PSAT;
   psat2: PSAT;
+  psat2Baseline = false;
+  psat1Baseline = true;
   constructor() { }
 
   ngOnInit() {
     this.psat1 = this.assessment.psat;
-    this.setPsat1Savings();
+    this.setPsat1();
     if (this.assessment.psat.modifications.length != 0) {
       this.psat2 = this.assessment.psat.modifications.find(modification => {return modification.psat.valid.isValid == true}).psat;
-      this.setPsat2Savings();
+      this.setPsat2();
     }
   }
 
-  setPsat1Savings() {
+  setPsat1() {
+    this.psat1Baseline = this.assessment.psat.name == this.psat1.name? true : false
     this.psat1CostSavings = this.assessment.psat.outputs.annual_cost - this.psat1.outputs.annual_cost;
   }
 
-  setPsat2Savings() {
+  setPsat2() {
+    this.psat2Baseline = this.assessment.psat.name == this.psat2.name? true : false
     this.psat2CostSavings = this.assessment.psat.outputs.annual_cost - this.psat2.outputs.annual_cost;
   }
 }

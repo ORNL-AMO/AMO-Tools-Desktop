@@ -1,0 +1,135 @@
+<form [formGroup]="coolingForm">
+      <div class="form-section">
+          <div class="form-group">
+            <label class="small" for="{{'coolingMedium'+idString}}">Name of Cooling Medium</label>
+            <div class="input-group">
+              <input  name="{{'coolingMedium_'+idString}}" type="text" class="form-control"
+                formControlName="coolingMedium" id="{{'coolingMedium'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('coolingMedium')" >
+            </div>
+          </div>
+
+            <div class="form-group">
+              <label class="small" for="{{'avgSpecificHeat'+idString}}">Average Specific Heat of Liquid</label>
+              <div class="input-group" >
+                <input  name="{{'avgSpecificHeat_'+idString}}" type="number" step="any" class="form-control"
+                  formControlName="avgSpecificHeat" id="{{'avgSpecificHeat'+idString}}" onfocus="this.select();" (input)="calculate()"
+                  (focus)="focusField('avgSpecificHeatLiquid')" >
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+              </div>
+              <span class="alert-danger pull-right small"
+                *ngIf="coolingForm.controls.avgSpecificHeat.invalid && !coolingForm.controls.avgSpecificHeat.pristine">
+                <span *ngIf="coolingForm.controls.avgSpecificHeat.errors.required">Value required.</span>
+                <span *ngIf="coolingForm.controls.avgSpecificHeat.errors.min">Value can't be less than
+                  {{coolingForm.controls.avgSpecificHeat.errors.min.min}}.</span>
+              </span>
+            </div>
+    
+              <div class="form-group">
+              <label class="small" for="{{'density'+idString}}">Density</label>
+              <div class="input-group" >
+                <input  name="{{'density_'+idString}}" type="number" step="any" class="form-control"
+                formControlName="density" id="{{'density'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('density')"
+                >
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/L</span>
+              </div>
+              <span class="alert-danger pull-right small"
+              *ngIf="coolingForm.controls.density.invalid && !coolingForm.controls.density.pristine">
+              <span *ngIf="coolingForm.controls.density.errors.required">Value required.</span>
+              <span *ngIf="coolingForm.controls.density.errors.min">Value can't be less than
+                {{coolingForm.controls.density.errors.min.min}}.</span>
+            </span>
+            </div>
+            
+            <div class="form-group">
+              <label class="small" for="{{'liquidFlow'+idString}}">Liquid Flow</label>
+              <div class="input-group">
+                <input  name="{{'liquidFlow_'+idString}}" type="number" step="any" class="form-control"
+                formControlName="liquidFlow" id="{{'liquidFlow'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('liquidFlow')" >
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
+              </div>
+              <span class="alert-danger pull-right small"
+              *ngIf="coolingForm.controls.liquidFlow.invalid && !coolingForm.controls.liquidFlow.pristine">
+              <span *ngIf="coolingForm.controls.liquidFlow.errors.required">Value required.</span>
+              <span *ngIf="coolingForm.controls.liquidFlow.errors.min">Value can't be less than
+                {{coolingForm.controls.liquidFlow.errors.min.min}}.</span>
+            </span>
+            </div>
+      
+          <div class="form-group">
+            <label class="small" for="{{'inletTemp'+idString}}">Inlet Temperature</label>
+            <div class="input-group">
+              <input  name="{{'inletTemp_'+idString}}" type="number" step="any" class="form-control"
+                formControlName="inletTemp" id="{{'inletTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('inletTemp')"
+                >
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            </div>
+            <span class="alert-danger pull-right small"
+            *ngIf="coolingForm.controls.inletTemp.invalid && !coolingForm.controls.inletTemp.pristine">
+            <span *ngIf="coolingForm.controls.inletTemp.errors.required">Value required.</span>
+          </span>
+          <span class="alert-warning pull-right small" *ngIf="temperatureWarning !== null">{{temperatureWarning}}</span>
+          </div>
+      
+          <div class="form-group">
+            <label class="small" for="{{'outletTemp'+idString}}">Outlet Temperature</label>
+            <div class="input-group">
+              <input  name="{{'outletTemp_'+idString}}" type="number" step="any" class="form-control"
+                formControlName="outletTemp" id="{{'outletTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('outletTemp')"
+                >
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            </div>
+            <span class="alert-danger pull-right small"
+            *ngIf="coolingForm.controls.outletTemp.invalid && !coolingForm.controls.outletTemp.pristine">
+            <span *ngIf="coolingForm.controls.outletTemp.errors.required">Value required.</span>
+          </span>
+          <span class="alert-warning pull-right small" *ngIf="temperatureWarning !== null">{{temperatureWarning}}</span>
+          </div>
+      
+          <div class="row form-group">
+            <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
+            <input  name="{{'correctionFactor_'+idString}}" type="number" step="any" class="form-control"
+              formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('correctionFactor')"
+              >
+              <span class="alert-danger pull-right small"
+              *ngIf="coolingForm.controls.correctionFactor.invalid && !coolingForm.controls.correctionFactor.pristine">
+              <span *ngIf="coolingForm.controls.correctionFactor.errors.required">Value required.</span>
+            </span>
+          </div>
+  
+      </div>
+    </form>
+    
+           <!-- Results -->
+      <div *ngIf="lossResult" class="d-flex flex-column mt-3 mb-2">
+          <div class="form-group m-0">
+            <label class="bold">Cooling Loss</label>
+            <div *ngIf="lossResult.coolingLoss" class="text-center bold small">
+              {{lossResult.coolingLoss | sigFigs:'6'}} 
+          <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+            </div>
+            <div *ngIf="!lossResult.coolingLoss" class="text-center bold small">
+              &mdash; &mdash;
+            </div>
+          </div>
+       </div>
+    <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+      <div class="form-group m-0">
+        <label class="bold">Gross Loss</label>
+        <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+          {{lossResult.grossLoss | sigFigs:'6'}} 
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+        </div>
+        <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+      </div>
+        
+      

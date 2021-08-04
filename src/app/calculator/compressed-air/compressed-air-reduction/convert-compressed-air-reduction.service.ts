@@ -30,6 +30,9 @@ export class ConvertCompressedAirReductionService {
     } else {
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].otherMethodData.consumption = inputArray[i].otherMethodData.consumption * 1000;
+        //per issue-4091 /100
+        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / 100;
+
       }
     }
     return inputArray;
@@ -63,7 +66,8 @@ export class ConvertCompressedAirReductionService {
     inputData.otherMethodData.consumption = this.roundVal(inputData.otherMethodData.consumption);
 
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
-    inputData.compressorElectricityData.compressorSpecificPower = inputData.compressorElectricityData.compressorSpecificPower / conversionHelper;
+    //per issue-4091 /100
+    inputData.compressorElectricityData.compressorSpecificPower = (inputData.compressorElectricityData.compressorSpecificPower / 100) / conversionHelper;
     inputData.compressorElectricityData.compressorSpecificPower = this.roundVal(inputData.compressorElectricityData.compressorSpecificPower);
 
     if (inputData.utilityType == 0) {

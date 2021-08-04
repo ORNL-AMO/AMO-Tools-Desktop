@@ -7,8 +7,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
-import { FixtureLossesService } from '../fixture-losses.service';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -39,12 +37,10 @@ export class FixtureLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  specificHeatWarning: string = null;
-  feedRateWarning: string = null;
-  materials: Array<any>;
+  materials: Array<SolidLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -52,6 +48,7 @@ export class FixtureLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
           this.enableForm();
         }
       }
@@ -69,7 +66,6 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.checkWarnings();
   }
 
   disableForm() {
@@ -89,13 +85,15 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   setSpecificHeat() {
-    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    let tmpMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (tmpMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+      }
+      this.lossesForm.patchValue({
+        specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
+      });
     }
-    this.lossesForm.patchValue({
-      specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
-    });
     this.save();
   }
   checkSpecificHeat() {
@@ -118,28 +116,22 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  checkWarnings() {
-    let fixtureLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(this.lossesForm);
-    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(fixtureLoss);
-    this.specificHeatWarning = tmpWarnings.specificHeatWarning;
-    this.feedRateWarning = tmpWarnings.feedRateWarning;
-    let hasWarning: boolean = ((this.feedRateWarning !== null) || (this.specificHeatWarning !== null));
-    this.inputError.emit(hasWarning);
-  }
   save() {
-    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+  
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
-    }
+    let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+      }
 
-    this.lossesForm.patchValue({
-      specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
-    });
+      this.lossesForm.patchValue({
+        specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
+      });
+    }
     this.calculate.emit(true);
   }
   roundVal(val: number, digits: number) {
@@ -154,10 +146,10 @@ export class FixtureLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
-      let newMaterial = this.materials.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.lossesForm.patchValue({
-          materialName: newMaterial[0].id
+          materialName: newMaterial.id
         });
         this.setProperties();
       }

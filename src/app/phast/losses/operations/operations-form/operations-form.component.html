@@ -8,7 +8,7 @@
       </span>
       <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control"
         id="{{'hoursPerYear_'+idString}}" (input)="save()" formControlName="hoursPerYear"
-        (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        (focus)="focusField('operatingHours')" >
       <span class="units input-group-addon">hrs/yr</span>
     </div>
     <span class="alert-warning pull-right small"
@@ -20,7 +20,7 @@
       [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.invalid}">
       <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control"
         id="{{'fuelCost_'+idString}}" (input)="save()" formControlName="fuelCost" (focus)="focusField('operatingCosts')"
-        (blur)="focusOut()">
+        >
       <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
     </div>
   </div>
@@ -30,7 +30,7 @@
       [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.invalid}">
       <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control"
         id="{{'steamCost_'+idString}}" (input)="save()" formControlName="steamCost"
-        (focus)="focusField('operatingCosts')" (blur)="focusOut()">
+        (focus)="focusField('operatingCosts')" >
       <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
     </div>
   </div>
@@ -40,7 +40,7 @@
       [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.invalid}">
       <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control"
         id="{{'electricityCost_'+idString}}" (input)="save()" formControlName="electricityCost"
-        (focus)="focusField('operatingCosts')" (blur)="focusOut()">
+        (focus)="focusField('operatingCosts')" >
       <span class="units input-group-addon">$/kWh</span>
     </div>
   </div>
@@ -49,7 +49,7 @@
     <div class="input-group">
       <input [readonly]="!baselineSelected" name="implementationCost" type="number" step="any" class="form-control"
         id="{{'implementationCost_'+idString}}" (input)="save()" formControlName="implementationCost"
-        (focus)="focusField('implementationCost')" (blur)="focusOut()">
+        (focus)="focusField('implementationCost')" >
       <span class="units input-group-addon">$</span>
     </div>
   </div>

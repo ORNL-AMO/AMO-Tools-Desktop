@@ -35,8 +35,10 @@
         id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
       <span class="input-group-addon units">
         <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 1">$/kWH</span>
-        <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
-        <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
+        <span
+          *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
+        <span
+          *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
       </span>
       <span class="alert-danger pull-right small"
         *ngIf="facilityCompressorDataForm.controls.utilityCost.invalid && !facilityCompressorDataForm.controls.utilityCost.pristine">
@@ -56,12 +58,35 @@
         <select class="form-control" name="compressorControlType" id="compressorControlType"
           formControlName="compressorControl" (change)="changeCompressorControl()"
           (focus)="changeField('compressorControl')">
-          <option *ngFor="let control of compressorControlTypes" [ngValue]="control.value">{{control.display}}
-          </option>
+          <optgroup label="Screw Compressor">
+            <option [ngValue]="100">Inlet Modulation</option>
+            <option [ngValue]="101">Variable Displacement</option>
+            <option [ngValue]="102">Variable Speed Drives</option>
+          </optgroup>
+          <optgroup label="Oil Injected Screw">
+            <option [ngValue]="103">Load/Unload (short cycle)</option>
+            <option [ngValue]="104">Load/Unload (2+ minutes cycle)</option>
+          </optgroup>
+          <optgroup label="Oil Free Screw">
+            <option [ngValue]="105">Load/Unload</option>
+          </optgroup>
+          <optgroup label="Reciprocating Compressor">
+            <option [ngValue]="106">Load/Unload</option>
+            <option [ngValue]="107">On/Off</option>
+          </optgroup>
+          <optgroup label="Centrifugal Compressor">
+            <option [ngValue]="108">In blowoff (Venting)</option>
+            <option [ngValue]="109">Modulating (IBV) in throttle range (Non-Venting)</option>
+            <option [ngValue]="110">Modulating (IGV) in throttle range (Non-Venting)</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option [ngValue]="8">Custom</option>
+          </optgroup>
         </select>
       </div>
     </div>
-    <div class="row" *ngIf="!compressorCustomControl">
+    <div class="row"
+      *ngIf="facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorControl.value != 8">
       <div class="col-6">
         <label class="small bold" for="compressorControlAdjustment">Compressor Control
           Adjustment</label>
@@ -73,7 +98,8 @@
       </div>
     </div>
 
-    <div class="form-group" *ngIf="compressorCustomControl">
+    <div class="form-group"
+      *ngIf="facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorControl.value == 8">
       <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
       <div class="input-group">
         <input class="form-control" name="compressorControlAdjustment" id="compressorControlAdjustment" type="number"
@@ -94,26 +120,28 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="!compressorCustomSpecificPower">
+    <div class="row"
+      *ngIf="facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPowerControl.value != 4">
       <div class="col-6">
         <label class="small bold" for="compressorSpecificPower">Compressor Specific Power</label>
       </div>
       <div class="col-6 text-center">
         <span
           class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPower.value | number:'1.0-2'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
         </span>
       </div>
     </div>
 
-    <div class="form-group" *ngIf="compressorCustomSpecificPower">
+    <div class="form-group"
+      *ngIf="facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPowerControl.value == 4">
       <label class="small" for="compressorCustomSpecificPower">Compressor Specific Power</label>
       <div class="input-group">
         <input class="form-control" name="compressorSpecificPower" id="compressorCustomSpecificPower"
           (input)="changeCompressorType()" formControlName="compressorSpecificPower" type="number"
           (focus)="changeField('compressorSpecificPower')" onfocus="this.select();">
-        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
         <span class="units input-group-addon"
           *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
       </div>
@@ -132,3 +160,7 @@
     </div>
   </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>

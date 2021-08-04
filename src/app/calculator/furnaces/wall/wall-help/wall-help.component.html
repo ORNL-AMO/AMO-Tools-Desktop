@@ -1,0 +1,275 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+      Wall Loss Help
+      <br>
+      <small class="text-muted">
+        Enter measured data to calculate your system's annual savings potential.
+      </small>
+    </h5>
+    <label class="p-1" (click)="toggleSuggestions()">
+      <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+      <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+      <span class="h6 pl-1">
+        Savings Suggestions
+      </span>
+    </label>
+    <div class="my-2" *ngIf="displaySuggestions">
+        <h6>
+          <small class="text-muted">
+            <ul>
+              <li>Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation</li>
+              <li>Use proper insulation and thickness to reduce furnace casing or surface temperature while rebuilding the furnace</li>
+              <li>Consider use of low weight, fiber insulation when appropriate</li>
+              <li>Account for process atmosphere composition (i.e. presence of hydrogen) in the furnace. Select the insulation to
+                provide barrier to gas penetration in the insulation voids</li>
+              <li>Reduce or eliminate external wall cooling if used</li>
+            </ul>
+            <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+            There may additional measures when considering specific situations and the user is encouraged to review and apply
+            the appropriate measures
+          </small>
+        </h6>
+      </div>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="currentField == 'operationHours'">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>
+          Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+          Be sure to include normally scheduled overtime.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0 hrs/yr</td>
+              <td class="text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'fuelCost'">
+      <h6>
+        Fuel Cost
+        <br>
+        <small class="text-muted">
+            Cost of fuel per energy unit
+            <hr>
+        </small>
+    </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'energySourceType'">
+      <h6>
+        Energy Source
+        <small class="text-muted">
+          <br>
+          Select the appropriate energy source to determine energy costs and, if steam or fuel, help estimate system efficiency.  Choose steam if you purchase steam directly, choose fuel if you make your own steam for process heating.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'availableHeat'">
+      <h6>
+        Available Heat
+        <small class="text-muted">
+          <br>
+          The gross quantity of heat released within a combustion chamber minus both the dry flue gas loss and the moisture loss. 
+          It represents the quantity of heat remaining for useful purposes (and to balance losses to walls, openings, and conveyors).
+          <br><br>
+          More simply, available heat is the fraction of the heat available to be used over the fuel heat input into the system. 
+          <br><br>
+          <span class="text-center">
+            Available heat =  
+            <div class="fraction">
+              <span class="top">Heat input - Heat in flue gases</span>
+              <span class="bottom"> Heat input</span>
+          </div>
+          </span>
+          <br><br>
+          Available heat can be estimated via charts (https://www.energy.gov/sites/prod/files/2014/05/f16/check_burner_air2.pdf) or calculated.
+          MEASUR can help estimate the available heat if several parameters are known (such as, excess air or oxygen in flue and flue, fuel, and combustion air temperatures).
+          <br> <br>      
+          This is used to estimate the true amount of fuel wasted for a given heat loss.  If only wanting to estimate the heat lost directly, set available heat to 100%.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'avgSurfaceTemp'">
+      <h6>
+        Average Surface Temperature
+        <br>
+        <small class="text-muted">
+          Average temperature for the exposed wall surfaces. The average value should be calculated based on actual measurement at
+          several locations for the furnace outside areas. The actual temperatures can vary over a wide range and care should
+          be taken to use weighted average. use infra-red radiation temperature measurement (with proper emissivity correction)
+          whenever possible.
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'ambientTemp'">
+      <h6>
+        Ambient Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the area where the equipment is located. In some cases it may be necessary to take temperature reading at
+          the bottom or top of the equipment to make sure that the temperature is not much higher than the room-ambient temperature.
+          Use weighted average if the temperature readings vary too much.
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'windVelocity'">
+      <h6>
+        Wind Velocity
+        <br>
+        <small class="text-muted">
+          This is average wind velocity over the entire surface. For most indoor installation this can be assumed to be zero. For outdoor
+          installations it is necessary to measure wind velocity or use available data from other sources such as weather report.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'surfaceShape'">
+      <h6>
+        Surface Shape / Orientation
+        <br>
+        <small class="text-muted">
+          Type of wall surface. To add a new surface, click "Add New Surface". You can "start with existing surface" and edit the Surface
+          Shape / Orientation Factor or add a completely new surface. You cannot use the name of a surface already in the database.
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'surfaceEmissivity'">
+      <h6>
+        Emissivity of the Source
+        <br>
+        <small class="text-muted">
+          The emissivity of a material is a measure of its effectiveness in emitting thermal radiation (heat). It is a
+          non-dimensional ratio of the radiant exitance of the surface to the radiant exitance of a black body.
+          <hr>
+          Many unpainted furnaces are made of materials with an emissivity of 0.9, this is a good first estimate. A
+          good rule of thumb: the darker the material - the higher the emissivity.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Material</th>
+              <th class="text-center">Finish</th>
+              <th class="text-center">Value</th>
+            </tr>
+            <tr>
+              <td class="text-center">Aluminum</td>
+              <td class="text-center">Polished</td>
+              <td class="text-center">0.04 - 0.06</td>
+            </tr>
+            <tr>
+              <td class="text-center">Aluminum</td>
+              <td class="text-center">Oxidized</td>
+              <td class="text-center">0.5</td>
+            </tr>
+            <tr>
+              <td class="text-center">Iron</td>
+              <td class="text-center">Polished</td>
+              <td class="text-center">0.14 - 0.38</td>
+            </tr>
+            <tr>
+              <td class="text-center">Iron</td>
+              <td class="text-center">Oxidized</td>
+              <td class="text-center">0.7</td>
+            </tr>
+            <tr>
+              <td class="text-center">Steel</td>
+              <td class="text-center">Polished</td>
+              <td class="text-center">0.07</td>
+            </tr>
+            <tr>
+              <td class="text-center">Steel</td>
+              <td class="text-center">Oxidized</td>
+              <td class="text-center">0.8</td>
+            </tr>
+            <tr>
+              <td class="text-center">Nickel</td>
+              <td class="text-center">Electroplated</td>
+              <td class="text-center">0.03</td>
+            </tr>
+            <tr>
+              <td class="text-center">Nickel</td>
+              <td class="text-center">Polished</td>
+              <td class="text-center">0.07</td>
+            </tr>
+            <tr>
+              <td class="text-center">Nickel</td>
+              <td class="text-center">Electroplated</td>
+              <td class="text-center">0.6 - 0.85</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="w-100 justify-content-center pt-2">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0</td>
+              <td class="text-center">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  
+  
+    <div class="my-2" *ngIf="currentField == 'surfaceArea'">
+      <h6>
+        Total Outside Surface Area
+        <br>
+        <small class="text-muted">
+          Total surface area for the wall being considered and exposed to the ambient. Use actual measurement or calculate/estimate
+          based on the equipment drawings.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  
+  
+    <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+      <h6>
+        Correction Factor
+        <br>
+        <small class="text-muted">
+          Engineering correction factor multiplied to the result to account for a known systematic error.
+        </small>
+      </h6>
+    </div>
+  
+  
+  </div>
+  

@@ -136,6 +136,21 @@
 										</div>
 									</div>
 								</div>
+								<div class="d-flex pt-3">
+									<div class="p-2 align-items-center waste-water">
+										<div
+											class="d-flex flex-column waste-water-icon-landing align-items-center justify-content-center">
+											<img class="waste-water-image" src="assets/images/waste-water-icon-landing.png">
+										</div>
+									</div>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('WasteWater')" class="click-link p-0 waste-water">Create
+												Waste Water Assessment</a>
+											<span class="former-name">Based on the Bio-Tiger Model for Wastewater Treatment Plants</span>
+										</div>
+									</div>
+								</div>
 								<hr>
 								<div class="d-flex flex-column">
 									<a [routerLink]="['/directory-dashboard', 1]" class="click-link align-self-center">
@@ -160,38 +175,8 @@
 											<div class="col-6">
 												<div class="p-1">
 													<a class="icon click-link"
-														[routerLink]="['/calculators/motors-list']">
-														<i class="fa fa-calculator"></i> Motors
-													</a>
-												</div>
-												<div class="p-1">
-													<a class="icon click-link"
-														[routerLink]="['/calculators/process-cooling-list']">
-														<i class="fa fa-calculator"></i> Process Cooling
-													</a>
-												</div>
-												<div class="p-1">
-													<a class="icon click-link"
-														[routerLink]="['/calculators/pumps-list']">
-														<i class="fa fa-calculator"></i> Pumps</a>
-												</div>
-												<div class="p-1">
-													<a class="icon click-link"
-														[routerLink]="['/calculators/fans-list']">
-														<i class="fa fa-calculator"></i> Fans</a>
-												</div>
-												<div class="p-1">
-													<a class="icon click-link furnace"
-														[routerLink]="['/calculators/process-heating-list']">
-														<i class="fa fa-calculator"></i> Process Heating
-													</a>
-												</div>
-											</div>
-											<div class="col-6">
-												<div class="p-1">
-													<a class="icon click-link furnace"
-														[routerLink]="['/calculators/steam-list']">
-														<i class="fa fa-calculator"></i> Steam
+														[routerLink]="['/calculators/general-list']">
+														<i class="fa fa-calculator"></i> General
 													</a>
 												</div>
 												<div class="p-1">
@@ -202,14 +187,50 @@
 												</div>
 												<div class="p-1">
 													<a class="icon click-link"
+														[routerLink]="['/calculators/fans-list']">
+														<i class="fa fa-calculator"></i> Fans</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
 														[routerLink]="['/calculators/lighting-list']">
 														<i class="fa fa-calculator"></i> Lighting
 													</a>
 												</div>
 												<div class="p-1">
 													<a class="icon click-link"
-														[routerLink]="['/calculators/general-list']">
-														<i class="fa fa-calculator"></i> General
+														[routerLink]="['/calculators/motors-list']">
+														<i class="fa fa-calculator"></i> Motors
+													</a>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/process-cooling-list']">
+														<i class="fa fa-calculator"></i> Process Cooling
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link furnace"
+														[routerLink]="['/calculators/process-heating-list']">
+														<i class="fa fa-calculator"></i> Process Heating
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/pumps-list']">
+														<i class="fa fa-calculator"></i> Pumps</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link furnace"
+														[routerLink]="['/calculators/steam-list']">
+														<i class="fa fa-calculator"></i> Steam
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/waste-water-list']">
+														<i class="fa fa-calculator"></i> Waste Water
 													</a>
 												</div>
 											</div>
@@ -239,6 +260,24 @@
 													<a (click)="createInventory()" class="p-0 click-link">Create
 														Motor Inventory</a>
 													<span class="former-name">based on DOE's MotorMaster+ tool</span>
+												</div>
+											</div>
+										</div>
+
+                    <div class="d-flex pt-2">
+											<div class="p-2">
+												<div class="d-flex flex-column">
+													<div class="data-explorer-background align-self-center">
+														<img class="data-explorer-icon"
+															src="assets/images/data-explorer-icon.png">
+													</div>
+												</div>
+											</div>
+											<div class="p-2 d-flex">
+												<div class="d-flex flex-column">
+													<a routerLink="/log-tool" class="p-0 click-link">Create
+														Data Exploration</a>
+													<span class="former-name">based on DOE's LogTool</span>
 												</div>
 											</div>
 										</div>

@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LiquidCoolingLoss, GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { LossTab } from '../../../tabs';
-import { GasCoolingWarnings, LiquidCoolingWarnings, CoolingLossesService } from '../../../losses/cooling-losses/cooling-losses.service';
+import { CoolingFormService, GasCoolingWarnings, LiquidCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 @Component({
   selector: 'app-explore-cooling-form',
   templateUrl: './explore-cooling-form.component.html',
@@ -29,7 +29,7 @@ export class ExploreCoolingFormComponent implements OnInit {
   showTemp: Array<boolean>;
   baselineWarnings: Array<{ flowWarning: string, tempWarning: string }>;
   modificationWarnings: Array<{ flowWarning: string, tempWarning: string }>;
-  constructor(private coolingLossesService: CoolingLossesService) { }
+  constructor(private coolingFormService: CoolingFormService) { }
 
   ngOnInit() {
     this.initData();
@@ -95,12 +95,12 @@ export class ExploreCoolingFormComponent implements OnInit {
   }
 
   getLiquidWarnings(liquidCoolingLoss: LiquidCoolingLoss): { flowWarning: string, tempWarning: string } {
-    let tmpLiquidCoolingWarnings: LiquidCoolingWarnings = this.coolingLossesService.checkLiquidWarnings(liquidCoolingLoss);
+    let tmpLiquidCoolingWarnings: LiquidCoolingWarnings = this.coolingFormService.checkLiquidWarnings(liquidCoolingLoss);
     return { flowWarning: tmpLiquidCoolingWarnings.liquidFlowWarning, tempWarning: tmpLiquidCoolingWarnings.temperatureWarning };
   }
 
   getGasWarnings(gasCoolingLoss: GasCoolingLoss): { flowWarning: string, tempWarning: string } {
-    let tmpGasCoolingWarnings: GasCoolingWarnings = this.coolingLossesService.checkGasWarnings(gasCoolingLoss);
+    let tmpGasCoolingWarnings: GasCoolingWarnings = this.coolingFormService.checkGasWarnings(gasCoolingLoss);
     return { flowWarning: tmpGasCoolingWarnings.gasFlowWarning, tempWarning: tmpGasCoolingWarnings.temperatureWarning };
   }
 

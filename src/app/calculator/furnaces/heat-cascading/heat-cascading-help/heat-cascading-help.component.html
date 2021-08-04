@@ -1,0 +1,240 @@
+<div class="p-3 pt-3 d-flex flex-column help-info">
+  <h5>
+    Heat Cascading from High Temperature Process to Lower Temperature Process Help
+    <br>
+    <small class="text-muted">
+      This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher
+      temperature (primary) process heating equipment is used to supply heat to lower temperature (secondary) process
+      heating equipment. The energy savings result from reduction of heat supply for the secondary process. This is a
+      very attractive method of energy saving, however several issues must be considered before application of this
+      method. They include matching of heat supply and heat use timing or schedule, distance between primary and
+      secondary process equipment, quality of gases from primary process - they must be free of any contamination such
+      as particulates, chemicals, organic or inorganic material vapors etc. In general, this method should be considered
+      for a continuous process line in which primary and secondary processes are running at the same time and the
+      loading (production) rate is constant.
+    </small>
+    <hr>
+  </h5>
+
+  <div class="my-2" *ngIf="currentField == 'materialTypeId'">
+    <h6>
+      Fuel
+      <br>
+      <small class="text-muted">
+
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+        are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit
+        the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'utilityType'">
+    <h6>
+      Utility Type
+      <small class="text-muted">
+        <br>
+        Choose the utility type to set the appropriate utility for calculating energy and cost savings
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'materialTypeIdModal'">
+    <h6>
+      Fuel
+      <br>
+      <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new
+        assessment</small>
+      <br>
+      <small class="text-muted">
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+        are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit
+        the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'operationHours'">
+    <h6>
+      Annual Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'availableHeat'">
+    <h6>
+      Available Heat
+      <small class="text-muted">
+        <br>
+        The gross quantity of heat released within a combustion chamber minus both the dry flue gas loss and the
+        moisture loss.
+        It represents the quantity of heat remaining for useful purposes (and to balance losses to walls, openings, and
+        conveyors).
+        <br><br>
+        More simply, available heat is the fraction of the heat available to be used over the fuel heat input into the
+        system.
+        <br><br>
+        <span class="text-center">
+          Available heat =
+          <div class="fraction">
+            <span class="top">Heat input - Heat in flue gases</span>
+            <span class="bottom"> Heat input</span>
+          </div>
+        </span>
+        <br><br>
+        Available heat can be estimated via charts
+        (https://www.energy.gov/sites/prod/files/2014/05/f16/check_burner_air2.pdf) or calculated.
+        MEASUR can help estimate the available heat if several parameters are known (such as, excess air or oxygen in
+        flue and flue, fuel, and combustion air temperatures).
+        <br> <br>
+        This is used to estimate the true amount of fuel wasted for a given heat loss. If only wanting to estimate the
+        heat lost directly, set available heat to 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'firingRate'">
+    <h6>
+      Heat Input (Firing) Rate - Average
+      <small class="text-muted">
+        <br>
+        The average firing rate of the furnace, oven, boiler, etc. This can be obtained from measurement, the gas bills
+        (or other meters), or the equipment supplier (design specifications). It can also be estimated using the Process
+        Heating Assessment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'exhaustTemperature'">
+    <h6>
+      (Hot) Process Exhaust Gas Temperature
+      <small class="text-muted">
+        <br>
+        The average exhaust air temperature from the primary/secondary process furnace. This can be obtained from flue
+        gas analysis.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'exhaustO2'">
+    <h6>
+      % Oxygen in Process Exhaust
+      <br>
+      <small class="text-muted">
+        % Oxygen is a percentage value of oxygen in exhaust flue gas. This is based on flue gas analysis or from design
+        - operating data. Use average value when available. For most high temperature processes this is in the range of
+        1% to 5%. However measured value should be used.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'excessAir'">
+    <h6>
+      % Excess Air for Primary Process
+      <br>
+      <small class="text-muted">
+        The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
+        gases form
+        the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+       </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'combAirTemperature'">
+    <h6>
+      Combustion Air Temperature to Burners
+      <br>
+      <small class="text-muted">
+        Measured temperature of the combustion air supplied to the furnace.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'secFuelCost'">
+    <h6>
+      Fuel Cost
+      <br>
+      <small class="text-muted">
+        Cost of fuel per energy unit
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'fuelHV'">
+    <h6>
+      Fuel Heating Value
+      <br>
+      <small class="text-muted">
+        This is the calorific value of the fuel used for the secondary process which will be saved. This can be obtained
+        from the fuel composition analysis report or fuel invoice.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flueGasO2'">
+    <h6>
+      O
+      <sub>2</sub> in Flue Gas
+      <br>
+      <small class="text-muted">
+        The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the
+        same location
+        where flue gas temperature is measured to maintain accuracy of the calculations.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%</td>
+            <td class="text-center">21%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr *ngIf="currentField != undefined">
+  <div class="justify-content-center mx-auto">
+      <img src="assets/images/heat-cascading-diagram.png" class="help-img">
+    </div>

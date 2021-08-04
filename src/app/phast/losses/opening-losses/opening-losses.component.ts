@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { OpeningFormService } from '../../../calculator/furnaces/opening/opening-form.service';
+import { OpeningService } from '../../../calculator/furnaces/opening/opening.service';
 
 @Component({
   selector: 'app-opening-losses',
@@ -40,7 +41,7 @@ export class OpeningLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   total: number;
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) {}
+  constructor(private phastService: PhastService, private openingLossesService: OpeningService, private openingFormService: OpeningFormService) {}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,7 +79,7 @@ export class OpeningLossesComponent implements OnInit {
       let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
-          form: this.openingLossesService.getFormFromLoss(loss),
+          form: this.openingFormService.getFormFromLoss(loss),
           totalOpeningLosses: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -97,7 +98,7 @@ export class OpeningLossesComponent implements OnInit {
 
   addLoss() {
     this._openingLosses.push({
-      form: this.openingLossesService.initForm(this._openingLosses.length + 1),
+      form: this.openingFormService.initForm(this._openingLosses.length + 1),
       totalOpeningLosses: 0.0,
       collapse: false
     });
@@ -117,11 +118,11 @@ export class OpeningLossesComponent implements OnInit {
   calculate(loss: OpeningLossObj) {
     if (loss.form.status === 'VALID') {
       if (loss.form.controls.openingType.value === 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value !== '') {
-        let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
+        let tmpLoss: QuadOpeningLoss = this.openingFormService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
       } else if (loss.form.controls.openingType.value === 'Round') {
-        let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
+        let tmpLoss: CircularOpeningLoss = this.openingFormService.getCircularLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
       } else {
@@ -143,7 +144,7 @@ export class OpeningLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
+      let tmpOpeningLoss = this.openingFormService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
     });

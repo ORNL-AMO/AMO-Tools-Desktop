@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryId: number;
   selectedDirectoryIdSub: Subscription;
   googleTranslateAvailable: boolean;
+  showNewDropdown: boolean = false;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private coreService: CoreService) { }
@@ -60,7 +61,24 @@ export class SidebarComponent implements OnInit {
   }
 
   showCreateAssessment() {
+    this.directoryDashboardService.createFolder.next(false);
+    this.dashboardService.createInventory.next(false);
+    this.showNewDropdown = false;
     this.dashboardService.createAssessment.next(true);
+  }
+
+  showCreateInventory(){
+    this.dashboardService.createAssessment.next(false);
+    this.directoryDashboardService.createFolder.next(false);
+    this.showNewDropdown = false;
+    this.dashboardService.createInventory.next(true);
+  }
+
+  showCreateFolder(){
+    this.dashboardService.createAssessment.next(false);
+    this.dashboardService.createInventory.next(false);
+    this.showNewDropdown = false;
+    this.directoryDashboardService.createFolder.next(true);
   }
 
   openUpdateModal() {
@@ -79,5 +97,9 @@ export class SidebarComponent implements OnInit {
 
   emitTranslate(){
     this.coreService.showTranslateModal.next(true);
+  }
+
+  toggleNewDropdown(){
+    this.showNewDropdown = !this.showNewDropdown;
   }
 }

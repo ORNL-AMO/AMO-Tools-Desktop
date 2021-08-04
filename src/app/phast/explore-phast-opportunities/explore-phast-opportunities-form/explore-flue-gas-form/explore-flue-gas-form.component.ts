@@ -1,11 +1,12 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
-import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { FlueGasLossesService } from '../../../losses/flue-gas-losses/flue-gas-losses.service';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { FlueGasMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-explore-flue-gas-form',
@@ -38,9 +39,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
   showExcessAir: boolean = false;
   showO2: boolean = false;
 
-  baselineWarnings: { excessAirWarning: string, o2Warning: string };
-  modificationWarnings: { excessAirWarning: string, o2Warning: string };
-  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService, private flueGasLossesService: FlueGasLossesService) { }
+  baselineWarnings: FlueGasWarnings;
+  modificationWarnings: FlueGasWarnings;
+  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService,
+    private flueGasFormService: FlueGasFormService,
+  ) { }
 
   ngOnInit() {
     this.initData();
@@ -50,13 +53,15 @@ export class ExploreFlueGasFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' };
         this.initData();
       }
     }
   }
 
   initData() {
+    this.baselineWarnings = { excessAirWarning: null, o2Warning: null };
+    this.modificationWarnings = { excessAirWarning: null, o2Warning: null };
     if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByMass;
     } else {
@@ -93,23 +98,23 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   initAirTemp() {
     if (this.baselineFlueGas.combustionAirTemperature !== this.modifiedFlueGas.combustionAirTemperature) {
-      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: true, display: 'Preheat Combustion Air' }; 
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: true, display: 'Preheat Combustion Air' };
     } else {
-      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' }; 
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' };
     }
   }
 
   initFlueGas() {
     if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp.hasOpportunity || this.showO2 || this.showExcessAir) {
-      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: true, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: true, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' };
     } else {
-      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' };
     }
   }
 
   toggleFlueGas() {
     if (this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas.hasOpportunity === false) {
-      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' }; 
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' };
       this.showExcessAir = false;
       this.showO2 = false;
       this.toggleAirTemp();
@@ -156,7 +161,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
     if (loss.o2InFlueGas < 0 || loss.o2InFlueGas > 20.99999) {
       loss.excessAirPercentage = 0.0;
     } else {
-      let input = this.buildInput(loss);
+      let input: MaterialInputProperties = this.buildInput(loss);
       loss.excessAirPercentage = this.phastService.flueGasCalculateExcessAir(input);
     }
     if (num === 1) {
@@ -170,7 +175,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
     if (loss.excessAirPercentage < 0) {
       loss.o2InFlueGas = 0.0;
     } else {
-      let input = this.buildInput(loss);
+      let input: MaterialInputProperties = this.buildInput(loss);
       loss.o2InFlueGas = this.phastService.flueGasCalculateO2(input);
     }
     if (num === 1) {
@@ -180,10 +185,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     }
   }
 
-  checkWarnings(loss: FlueGasByMass | FlueGasByVolume): { excessAirWarning: string, o2Warning: string } {
-    let tmpO2Warning: string = this.flueGasLossesService.checkO2Warning(loss);
-    let tmpExcessAirWarning: string = this.flueGasLossesService.checkExcessAirWarning(loss);
-    return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning };
+  checkWarnings(loss: FlueGasByMass | FlueGasByVolume): FlueGasWarnings {
+    let tmpO2Warning: string = this.flueGasFormService.checkO2Warning(loss);
+    let tmpExcessAirWarning: string = this.flueGasFormService.checkExcessAirWarning(loss);
+    let combustionAirTempWarning: string = this.flueGasFormService.checkCombustionAirTemp(loss);
+    return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning, combustionAirTempWarning: combustionAirTempWarning };
   }
 
   checkBaselineWarnings(loss: FlueGasByMass | FlueGasByVolume) {
@@ -196,24 +202,45 @@ export class ExploreFlueGasFormComponent implements OnInit {
     this.calculate();
   }
 
-  buildInput(loss: FlueGasByMass | FlueGasByVolume) {
-    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(loss.gasTypeId);
-    let input = {
-      CH4: tmpFlueGas.CH4,
-      C2H6: tmpFlueGas.C2H6,
-      N2: tmpFlueGas.N2,
-      H2: tmpFlueGas.H2,
-      C3H8: tmpFlueGas.C3H8,
-      C4H10_CnH2n: tmpFlueGas.C4H10_CnH2n,
-      H2O: tmpFlueGas.H2O,
-      CO: tmpFlueGas.CO,
-      CO2: tmpFlueGas.CO2,
-      SO2: tmpFlueGas.SO2,
-      O2: tmpFlueGas.O2,
-      o2InFlueGas: loss.o2InFlueGas,
-      excessAir: loss.excessAirPercentage
-    };
-    return input;
+  buildInput(loss: FlueGasByMass | FlueGasByVolume): MaterialInputProperties {
+    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(loss.gasTypeId);
+    let input: MaterialInputProperties;
+    if (tmpFlueGas) {
+      input = {
+        CH4: tmpFlueGas.CH4,
+        C2H6: tmpFlueGas.C2H6,
+        N2: tmpFlueGas.N2,
+        H2: tmpFlueGas.H2,
+        C3H8: tmpFlueGas.C3H8,
+        C4H10_CnH2n: tmpFlueGas.C4H10_CnH2n,
+        H2O: tmpFlueGas.H2O,
+        CO: tmpFlueGas.CO,
+        CO2: tmpFlueGas.CO2,
+        SO2: tmpFlueGas.SO2,
+        O2: tmpFlueGas.O2,
+        o2InFlueGas: loss.o2InFlueGas,
+        excessAir: loss.excessAirPercentage
+      };
+      return input;
+    } else {
+      input = {
+        CH4: 0,
+        C2H6: 0,
+        N2: 0,
+        H2: 0,
+        C3H8: 0,
+        C4H10_CnH2n: 0,
+        H2O: 0,
+        CO: 0,
+        CO2: 0,
+        SO2: 0,
+        O2: 0,
+        o2InFlueGas: 0,
+        excessAir: 0
+      };
+      return input;
+
+    }
   }
 
   focusOut() {

@@ -1,0 +1,182 @@
+/* SSMT sankey overrides */
+/* =========================== */
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #268ade !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+  }
+
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #268ade !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-last-child(-n+2) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: rgba(214, 185, 0, 1) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-last-child(-n+2) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+  }
+
+
+app-phast-sankey >
+div >
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+}
+
+app-phast-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #a71600 !important;
+    fill-opacity: 1 !important;
+}

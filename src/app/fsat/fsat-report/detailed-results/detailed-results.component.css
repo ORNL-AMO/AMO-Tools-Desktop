@@ -1,0 +1,48 @@
+.output-summary .table {
+    font-size: small;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+}
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+.output-summary .table tr.callout td {
+    font-weight: bold;
+}
+
+
+.btn{
+    padding: 6px;
+    font-size: small;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+.modal-content{
+    height: 85vh;
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
+
+.calculated-error {
+    color: red;
+    font-weight: bold;
+}

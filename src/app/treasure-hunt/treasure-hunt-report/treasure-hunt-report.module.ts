@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { TreasureHuntReportComponent } from './treasure-hunt-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-summary.component';
@@ -24,6 +24,8 @@ import { TeamSummaryTableComponent } from './executive-summary/team-summary-tabl
 import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-pie-chart/team-summary-pie-chart.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/opportunity-summary-copy-table/opportunity-summary-copy-table.component';
+import { EffortSavingsChartComponent } from './report-graphs/effort-savings-chart/effort-savings-chart.component';
+import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -33,7 +35,8 @@ import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/oppo
     PrintOptionsMenuModule,
     PieChartModule,
     TreasureChestMenuModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule,
   ],
   declarations: [
     TreasureHuntReportComponent,
@@ -51,9 +54,10 @@ import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/oppo
     ExecutiveSummaryTableComponent,
     TeamSummaryTableComponent,
     TeamSummaryPieChartComponent,
-    OpportunitySummaryCopyTableComponent
+    OpportunitySummaryCopyTableComponent,
+    EffortSavingsChartComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
-  providers: [OpportunityPaybackService, OpportunitySummaryService]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe]
 })
 export class TreasureHuntReportModule { }

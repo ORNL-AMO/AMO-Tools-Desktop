@@ -346,9 +346,12 @@ export interface CompressorElectricityData {
   compressorSpecificPower: number
 };
 
+
 export interface CompressedAirReductionResults {
-  baselineResults: CompressedAirReductionResult,
-  modificationResults: CompressedAirReductionResult,
+  baselineResults: Array<CompressedAirReductionResult>,
+  modificationResults: Array<CompressedAirReductionResult>,
+  baselineAggregateResults: CompressedAirReductionResult,
+  modificationAggregateResults: CompressedAirReductionResult,
   annualEnergySavings: number,
   annualCostSavings: number,
   annualFlowRateReduction: number,
@@ -442,14 +445,25 @@ export interface CompressedAirPressureReductionInput {
   compressedAirPressureReductionInputVec: Array<CompressedAirPressureReductionData>;
 };
 
+export interface CompEEM_kWAdjustedInput {
+  kW_fl_rated: number,
+  P_fl_rated: number,
+  P_discharge: number,
+  P_alt: number,
+  P_atm: number
+}
+
 export interface CompressedAirPressureReductionData {
   name: string,
+  powerType?: string,
   isBaseline: boolean,
   hoursPerYear: number,
   electricityCost: number,
   compressorPower: number,
   pressure: number,
-  proposedPressure: number
+  proposedPressure: number,
+  pressureRated: number,
+  atmosphericPressure: number
 };
 
 export interface CompressedAirPressureReductionResults {

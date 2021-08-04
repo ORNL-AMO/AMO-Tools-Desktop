@@ -1,137 +1,152 @@
 <form [formGroup]="dataForm">
-    <label class="group-label group-label-2">{{planeNum}}: {{planeDescription}}</label>
-    <div class="form-section">
-      <div class="form-group">
-        <label for="planeType">Planar Shape</label>
-        <div class="input-group">
-          <select class="form-control" name="planeType" formControlName="planeType" id="planeType" (change)="calcArea()" (focus)="focusField('planeType')">
-            <option [ngValue]="'Rectangular'">Rectangular</option>
-            <option [ngValue]="'Circular'">Circular</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <!-- Length/Height dimensions are interchangable -->
-        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">Height
-          <a class="form-text click-link" (click)="openInternalDimensionModal('Height')">
-            Calculate Internal Clear Height
-          </a>
-        </label>
-        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Circular'">Diameter
-          <a class="form-text click-link" (click)="openInternalDimensionModal('Diameter')">
-           Calculate Internal Clear Diameter
-         </a>
-        </label>
-        <div class="input-group">
-          <input name="length" type="number" step="any" class="form-control" formControlName="length" id="length" (input)="calcArea()"
-            (focus)="focusField('length')" onfocus="this.select();">
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.length.invalid && !dataForm.controls.length.pristine">
-          <span *ngIf="dataForm.controls.length.errors.required">Value Required</span>
-          <span *ngIf="dataForm.controls.length.errors.min">Value can't be less than {{dataForm.controls.length.errors.min.min}}.</span>
-        </span>
-      </div>
-      <div class="form-group" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">
-        <label for="width">Width
-          <a class="form-text click-link" (click)="openInternalDimensionModal('Width')">
-            Calculate Internal Clear Width
-          </a>
-        </label>
-        <div class="input-group">
-          <input name="width" type="number" step="any" class="form-control" formControlName="width" id="width" (input)="calcArea()"
-            (focus)="focusField('width')" onfocus="this.select();">
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.width.invalid && !dataForm.controls.width.pristine">
-          <span *ngIf="dataForm.controls.width.errors.required">Value Required</span>
-          <span *ngIf="dataForm.controls.width.errors.min">Value can't be less than {{dataForm.controls.width.errors.min.min}}.</span>
-        </span>
-      </div>
-      <div class="form-group" *ngIf="planeNum == '1' || planeNum == '4'">
-        <label for="numInletBoxes">Number of Inlet Boxes</label>
-        <div class="input-group">
-          <input name="numInletBoxes" type="number" step="any" class="form-control" formControlName="numInletBoxes" id="numInletBoxes"
-            (input)="calcArea()" (focus)="focusField('numInletBoxes')" onfocus="this.select();">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="area">Area</label>
-        <div class="text-center">
-          {{planeData.area | sigFigs: '6'}}
-          <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup>
-          </span>
-          <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup>
-          </span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.area.invalid">
-          <span *ngIf="dataForm.controls.area.errors.min">Value can't be less than {{dataForm.controls.area.errors.min.min}}.</span>
-        </span>
+  <label class="group-label group-label-2">{{planeNum}}: {{planeDescription}}</label>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="planeType">Planar Shape</label>
+      <div class="input-group">
+        <select class="form-control" name="planeType" formControlName="planeType" id="planeType" (change)="calcArea()"
+          (focus)="focusField('planeType')">
+          <option [ngValue]="'Rectangular'">Rectangular</option>
+          <option [ngValue]="'Circular'">Circular</option>
+        </select>
       </div>
     </div>
-    <div class="form-section">
-      <div class="form-group" *ngIf="planeNum != '1' && planeNum != '2'">
-        <label for="staticPressure">Static Pressure (P<sub>sx</sub>)</label>
-        <div class="input-group">
-          <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
-            (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
-          <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.staticPressure.invalid && !dataForm.controls.staticPressure.pristine">
-            <span *ngIf="dataForm.controls.staticPressure.errors.required">Value Required</span>
-          <span *ngIf="dataForm.controls.staticPressure.errors.max">Value can't be greater than {{dataForm.controls.staticPressure.errors.max.max}}.</span>
-          <span *ngIf="dataForm.controls.staticPressure.errors.min">Value can't be less than {{dataForm.controls.staticPressure.errors.min.min}}.</span>
-        </span>
+    <div class="form-group">
+      <!-- Length/Height dimensions are interchangable -->
+      <label for="length" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">Height
+        <a class="form-text click-link" (click)="openInternalDimensionModal('Height')">
+          Calculate Internal Clear Height
+        </a>
+      </label>
+      <label for="length" *ngIf="dataForm.controls.planeType.value == 'Circular'">Diameter
+        <a class="form-text click-link" (click)="openInternalDimensionModal('Diameter')">
+          Calculate Internal Clear Diameter
+        </a>
+      </label>
+      <div class="input-group">
+        <input name="length" type="number" step="any" class="form-control" formControlName="length" id="length"
+          (input)="calcArea()" (focus)="focusField('length')" onfocus="this.select();">
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
       </div>
-      <div class="form-group">
-        <label for="dryBulbTemp">Dry Bulb Temp (T<sub>dx</sub>)</label>
-        <div class="input-group">
-          <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="save()"
-            (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
-          <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'R'" class="input-group-addon units">&#176;R</span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.dryBulbTemp.invalid && !dataForm.controls.dryBulbTemp.pristine">
-            <span *ngIf="dataForm.controls.dryBulbTemp.errors.required">Value Required</span>
-          <span *ngIf="dataForm.controls.dryBulbTemp.errors.max">Value can't be greater than {{dataForm.controls.dryBulbTemp.errors.max.max}}.</span>
-          <span *ngIf="dataForm.controls.dryBulbTemp.errors.min">Value can't be less than {{dataForm.controls.dryBulbTemp.errors.min.min}}.</span>
-        </span>
+      <span class="alert-danger pull-right"
+        *ngIf="dataForm.controls.length.invalid && !dataForm.controls.length.pristine">
+        <span *ngIf="dataForm.controls.length.errors.required">Value Required</span>
+        <span *ngIf="dataForm.controls.length.errors.min">Value can't be less than
+          {{dataForm.controls.length.errors.min.min}}.</span>
+      </span>
+    </div>
+    <div class="form-group" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">
+      <label for="width">Width
+        <a class="form-text click-link" (click)="openInternalDimensionModal('Width')">
+          Calculate Internal Clear Width
+        </a>
+      </label>
+      <div class="input-group">
+        <input name="width" type="number" step="any" class="form-control" formControlName="width" id="width"
+          (input)="calcArea()" (focus)="focusField('width')" onfocus="this.select();">
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
       </div>
-      <div class="form-group">
-        <label for="barometricPressure">Barometric Pressure (P<sub>bx</sub>)</label>
-        <div class="input-group">
-          <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
-            (input)="save()" (focus)="focusField('barometricPressure')" onfocus="this.select();">
-          <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
-        </div>
-        <span class="alert-danger pull-right" *ngIf="dataForm.controls.barometricPressure.invalid && !dataForm.controls.barometricPressure.pristine">
-          <span *ngIf="dataForm.controls.barometricPressure.errors.required">Value Required</span>
-          <span *ngIf="dataForm.controls.barometricPressure.errors.max">Value can't be greater than {{dataForm.controls.barometricPressure.errors.max.max}}.</span>
-          <span *ngIf="dataForm.controls.barometricPressure.errors.min">Value can't be less than {{dataForm.controls.barometricPressure.errors.min.min}}.</span>
-        </span>
+      <span class="alert-danger pull-right"
+        *ngIf="dataForm.controls.width.invalid && !dataForm.controls.width.pristine">
+        <span *ngIf="dataForm.controls.width.errors.required">Value Required</span>
+        <span *ngIf="dataForm.controls.width.errors.min">Value can't be less than
+          {{dataForm.controls.width.errors.min.min}}.</span>
+      </span>
+    </div>
+    <div class="form-group" *ngIf="planeNum == '1' || planeNum == '4'">
+      <label for="numInletBoxes">Number of Inlet Boxes</label>
+      <div class="input-group">
+        <input name="numInletBoxes" type="number" step="any" class="form-control" formControlName="numInletBoxes"
+          id="numInletBoxes" (input)="calcArea()" (focus)="focusField('numInletBoxes')" onfocus="this.select();">
+          <span class="alert-danger pull-right"
+            *ngIf="dataForm.controls.numInletBoxes.invalid && !dataForm.controls.numInletBoxes.pristine">
+            <span *ngIf="dataForm.controls.numInletBoxes.errors.required">Value Required</span>
+            <span *ngIf="dataForm.controls.numInletBoxes.errors.min">Value can't be less than
+              {{dataForm.controls.numInletBoxes.errors.min.min}}.</span>
+          </span>
       </div>
     </div>
-    <!--3 velocity data-->
-    <div class="form-group bold" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
-      <label for="pv3">Traverse Velocity Pressure</label>
+    <div class="form-group">
+      <label for="area">Area</label>
       <div class="text-center">
-        {{velocityData.pv3 | sigFigs: '6'}}
-        <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        {{planeData.area | sigFigs: '6'}}
+        <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup>
+        </span>
+        <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup>
+        </span>
       </div>
+      <span class="alert-danger pull-right" *ngIf="dataForm.controls.area.invalid">
+        <span *ngIf="dataForm.controls.area.errors.min">Value can't be less than
+          {{dataForm.controls.area.errors.min.min}}.</span>
+      </span>
     </div>
-    <div class="form-group bold" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
-      <label for="percent75Rule">Points Satisfying 75% Rule</label>
-      <div class="text-center"
-       [ngClass]="{'text-danger': velocityData.percent75Rule < 75}">
-        {{velocityData.percent75Rule | number: '1.1-1'}} %
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="dryBulbTemp">Dry Bulb Temp (T<sub>dx</sub>)</label>
+      <div class="input-group">
+        <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp"
+          id="dryBulbTemp" (input)="save()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
+        <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'R'" class="input-group-addon units">&#176;R</span>
       </div>
+      <span class="alert-danger pull-right"
+        *ngIf="dataForm.controls.dryBulbTemp.invalid && !dataForm.controls.dryBulbTemp.pristine">
+        <span *ngIf="dataForm.controls.dryBulbTemp.errors.required">Value Required</span>
+        <span *ngIf="dataForm.controls.dryBulbTemp.errors.max">Value can't be greater than
+          {{dataForm.controls.dryBulbTemp.errors.max.max}}.</span>
+        <span *ngIf="dataForm.controls.dryBulbTemp.errors.min">Value can't be less than
+          {{dataForm.controls.dryBulbTemp.errors.min.min}}.</span>
+      </span>
     </div>
-  </form>
 
-  <app-internal-dimension-modal *ngIf="showInternalDimensionModal" [dimension]="currentDimension" [settings]="settings"
+    <div *ngIf="planeNum == '4' || planeNum == '5'" class="form-group mt-4">
+      <label for="{{'staticPressure_'+idString}}">Static Pressure
+      </label>
+        <div class="input-group">
+          <input name="staticPressure" type="number" step="any" class="form-control" 
+          formControlName="staticPressure"
+          id="staticPressure" (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger small pull-right"
+          *ngIf="dataForm.controls.staticPressure.invalid && !dataForm.controls.staticPressure.pristine">
+          <span *ngIf="dataForm.controls.staticPressure.errors.required">Value Required</span>
+          <span *ngIf="dataForm.controls.staticPressure.errors.max">Value can't be greater than
+            {{dataForm.controls.staticPressure.errors.max.max}}.</span>
+          <span *ngIf="dataForm.controls.staticPressure.errors.min">Value can't be less than
+            {{dataForm.controls.staticPressure.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    <div class="form-group">
+      <label for="barometricPressure">Barometric Pressure (P<sub>bx</sub>)</label>
+      <div class="input-group" *ngIf="variationInBarometricPressure">
+        <input name="barometricPressure" type="number" step="any" class="form-control"
+          formControlName="barometricPressure" id="barometricPressure" (input)="save()"
+          (focus)="focusField('barometricPressure')" onfocus="this.select();">
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+      </div>
+      <div class="text-center" *ngIf="!variationInBarometricPressure">
+        {{dataForm.controls.barometricPressure.value}} <span
+          [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+      </div>
+      <span class="alert-danger pull-right"
+        *ngIf="dataForm.controls.barometricPressure.invalid && !dataForm.controls.barometricPressure.pristine">
+        <span *ngIf="dataForm.controls.barometricPressure.errors.required">Value Required</span>
+        <span *ngIf="dataForm.controls.barometricPressure.errors.max">Value can't be greater than
+          {{dataForm.controls.barometricPressure.errors.max.max}}.</span>
+        <span *ngIf="dataForm.controls.barometricPressure.errors.min">Value can't be less than
+          {{dataForm.controls.barometricPressure.errors.min.min}}.</span>
+      </span>
+    </div>
+  </div>
+</form>
+
+<app-internal-dimension-modal *ngIf="showInternalDimensionModal" [dimension]="currentDimension" [settings]="settings"
   (emitClose)="closeInternalDimensionModal()" (emitSave)="setInternalDimensionAndClose($event)">
 </app-internal-dimension-modal>

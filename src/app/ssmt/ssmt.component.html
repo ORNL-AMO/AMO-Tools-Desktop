@@ -5,10 +5,10 @@
   </div>
   <!--Setup-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" [ssmt]="_ssmt" (emitSaveSsmt)="saveSetup($event)"></app-system-basics>
+        (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
@@ -68,8 +68,28 @@
   <!--sankey-->
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
+    <nav class="navbar ssmt">
+      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+        <div class="tab-content pl-2 pr-2">
+          <div class="form-group" *ngIf="ssmtOptions.length > 1">
+            <select name="ssmtSelect" class="form-control mx-auto w-100" id="ssmtSelect" [(ngModel)]="selectedSSMT">
+              <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
+            </select>
+          </div>
+        </div>
+          <div class="btn-group btn-group-sm align-self-center">
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('energy')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'energy'}">Loss Energy</button>
+              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          </div>
+      </div>
+  </nav>
     <div class="sankey-padding w-100">
-      <app-ssmt-sankey></app-ssmt-sankey>
+      <app-ssmt-sankey [ssmt]="selectedSSMT.ssmt" [settings]="settings" [assessment]="assessment"
+      [isBaseline]="selectedSSMT.ssmt.name == 'Baseline'" [labelStyle]="sankeyLabelStyle" [appBackground]="true"></app-ssmt-sankey>
     </div>
   </div>
 
@@ -132,3 +152,6 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'ssmt'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

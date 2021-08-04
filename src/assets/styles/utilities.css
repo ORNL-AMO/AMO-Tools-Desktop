@@ -64,6 +64,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-color: #2E4053;
 }
 
+.waste-water .btn-primary{
+    background-color: #003087;
+    border-color: #003087;
+}
+
 .fan-block i{
     color:#FFE400
   }
@@ -285,6 +290,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     background: linear-gradient(rgba(228, 219, 219, 0.34),#2E4053);
 }
 
+
+.waste-water .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
+}
 
 .calc-img{
     width: 90%;

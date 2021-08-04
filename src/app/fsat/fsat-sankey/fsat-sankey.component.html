@@ -1,8 +1,0 @@
-<div *ngIf="fsat.valid.isValid" #ngChart [attr.id]="location"></div>
-<div class="alert-danger small" *ngIf="!fsat.valid.isValid">
-    Invalid modification<br>
-    <span *ngIf="!fsat.valid.fluidValid">Errors found in Fluid<br></span>
-    <span *ngIf="!fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
-    <span *ngIf="!fsat.valid.fanValid">Errors found in Fan Setup<br></span>
-    <span *ngIf="!fsat.valid.motorValid">Errors found in Motor<br></span>
-</div>

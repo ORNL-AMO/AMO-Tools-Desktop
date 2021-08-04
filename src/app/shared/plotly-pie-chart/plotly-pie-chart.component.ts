@@ -45,7 +45,7 @@ export class PlotlyPieChartComponent implements OnInit {
   }
 
   createChart() {
-    var data = [{
+    let data = {
       values: this.valuesAndLabels.map(val => { return val.value }),
       labels: this.valuesAndLabels.map(val => { return val.label }),
       marker: {
@@ -60,8 +60,8 @@ export class PlotlyPieChartComponent implements OnInit {
       direction: "clockwise",
       rotation: 90,
       hovertemplate: '%{value:,.2f} ' + this.valuesUnit + ' <extra></extra>'
-    }];
-    var layout = {
+    };
+    let layout = {
       font: {
         size: 14,
       },
@@ -69,17 +69,17 @@ export class PlotlyPieChartComponent implements OnInit {
       // margin: {t: 10, b: 10, l: 30, r: 30}
     };
 
-    var modebarBtns = {
+    let modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    Plotly.react(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
   }
 
   drawPrintPlot() {
-    var data = [{
+    let data = {
       values: this.valuesAndLabels.map(val => { return val.value }),
       labels: this.valuesAndLabels.map(val => { return val.label }),
       marker: {
@@ -88,26 +88,27 @@ export class PlotlyPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      automargin: true,
+      automargin: false,
       textinfo: 'label+percent',
       texttemplate: this.textTemplate,
       hoverinfo: 'label+value',
       direction: "clockwise",
       rotation: 90,
       hovertemplate: '%{value:,.2f} ' + this.valuesUnit + ' <extra></extra>'
-    }];
+    };
 
-    var layout = {
+    let layout = {
       font: {
         size: 12,
       },
       showlegend: false,
       margin: { t: 0, b: 0}
     };
-    var modebarBtns = {
+    let modebarBtns = {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+
+    Plotly.react(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
   }
 }

@@ -44,7 +44,8 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
+  getFormFromLoss(loss: EnergyInputEAF, minElectricityInput: number): FormGroup {
+    let electricityInputValidators = this.getElectricityInputValidators(minElectricityInput);
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],
@@ -53,9 +54,18 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required],
+      electricityInput: [loss.electricityInput, electricityInputValidators],
       name: [loss.name]
     })
+  }
+
+  getElectricityInputValidators(minElectricityInput: number) {
+    let electricityInputValidators = [];
+    if (minElectricityInput != undefined) {
+      minElectricityInput = this.convertUnitsService.roundVal(minElectricityInput, 2)
+      electricityInputValidators = [Validators.required, Validators.min(minElectricityInput)];
+    }
+    return electricityInputValidators;
   }
 
   calculateHeatInputFromFlowRate(flowRate: number, settings: Settings) {

@@ -2,8 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { GasCoolingWarnings, CoolingLossesService } from '../cooling-losses.service';
 import { GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
+import { CoolingFormService, GasCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 
 @Component({
   selector: 'app-gas-cooling-losses-form',
@@ -34,7 +34,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
 
   warnings: GasCoolingWarnings;
   idString: string;
-  constructor(private coolingLossesCompareService: CoolingLossesCompareService, private coolingLossesService: CoolingLossesService) { }
+  constructor(private coolingLossesCompareService: CoolingLossesCompareService, private coolingFormService: CoolingFormService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -47,9 +47,9 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: GasCoolingLoss = this.coolingLossesService.initGasLossFromForm(this.lossesForm).gasCoolingLoss;
-    this.warnings = this.coolingLossesService.checkGasWarnings(tmpLoss);
-    let hasWarning: boolean = this.coolingLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: GasCoolingLoss = this.coolingFormService.initGasLossFromForm(this.lossesForm).gasCoolingLoss;
+    this.warnings = this.coolingFormService.checkGasWarnings(tmpLoss);
+    let hasWarning: boolean = this.coolingFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 

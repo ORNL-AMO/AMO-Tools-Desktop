@@ -35,6 +35,15 @@ export class OpportunitySummaryComponent implements OnInit {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
   }
 
+  getAdditionalSavings(oppCost: OpportunityCost): number {
+    if (oppCost && oppCost.additionalAnnualSavings) {
+      return oppCost.additionalAnnualSavings.cost;
+    } else {
+      return 0;
+    }
+  }
+
+
   getMaterialCost(oppCost: OpportunityCost): number {
     if (oppCost) {
       return oppCost.material;
@@ -52,15 +61,16 @@ export class OpportunitySummaryComponent implements OnInit {
   }
 
   getOtherCost(oppCost: OpportunityCost): number {
+    let total: number = 0;
     if (oppCost && oppCost.otherCosts && oppCost.otherCosts.length != 0) {
-      let total: number = 0;
       oppCost.otherCosts.forEach(oCost => {
         total = total + oCost.cost;
-      })
-      return total;
-    } else {
-      return 0;
+      });
     }
+    if (oppCost && oppCost.additionalSavings) {
+      total = total - oppCost.additionalSavings.cost
+    }
+    return total;
   }
 
   getEngineeringCost(oppCost: OpportunityCost): number {

@@ -4,7 +4,6 @@ export interface PrintOptions {
     printPhastRollup: boolean;
     printFsatRollup: boolean;
     printTreasureHuntRollup: boolean;
-    // this.printSsmtRollup: boolean;
     printReportGraphs: boolean;
     printReportSankey: boolean;
     printResults: boolean;
@@ -16,5 +15,7 @@ export interface PrintOptions {
     printReportOpportunityPayback: boolean;
     printReportOpportunitySummary: boolean;
     printSsmtRollup: boolean;
+    printWasteWaterRollup: boolean;
+    printDetailedResults: boolean;
     selectAll: boolean;
   }

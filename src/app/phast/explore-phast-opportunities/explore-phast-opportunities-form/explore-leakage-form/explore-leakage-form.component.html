@@ -37,8 +37,6 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
           </div>
        </div>
-        <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].draftPressureWarning !== null">{{baselineWarnings[index].draftPressureWarning}}</span>
-
         </form>
 
         <form class="explore-opps-form">
@@ -52,7 +50,6 @@
               <sub>2</sub>O</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Pa</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].draftPressureWarning !== null">{{modificationWarnings[index].draftPressureWarning}}</span>
         </div>
       </form>
     </li>

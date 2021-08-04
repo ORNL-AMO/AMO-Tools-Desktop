@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
@@ -6,8 +6,11 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService, FlueGasWarnings } from '../flue-gas-losses.service';
-import { FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { BaseGasDensity } from '../../../../shared/models/fans';
+import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { RemoveCommasPipe } from '../../../../shared/shared-pipes/remove-commas.pipe';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
@@ -35,12 +38,29 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   inSetup: boolean;
   @Input()
   isBaseline: boolean;
-  
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   warnings: FlueGasWarnings;
-  options: any;
+  options: Array<SolidLiquidFlueGasMaterial>;
   showModal: boolean = false;
+  showMoisture: boolean = false;
+  humidityRatio: number;
+  baseGasDensity: BaseGasDensity = {
+    barometricPressure: 29.92,
+    dewPoint: 0,
+    dryBulbTemp: 68,
+    gasDensity: 0.07516579558441701,
+    gasType: "AIR",
+    inputType: "relativeHumidity",
+    relativeHumidity: 0,
+    specificGravity: 1,
+    specificHeatGas: 0.24,
+    specificHeatRatio: 1.4,
+    staticPressure: 0,
+    wetBulbTemp: 118.999
+  }
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -50,8 +70,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService,
-    private lossesService: LossesService, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
+  constructor(private suiteDbService: SuiteDbService,
+    private flueGasFormService: FlueGasFormService,
+    private flueGasCompareService: FlueGasCompareService,
+    private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -81,6 +103,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
           this.enableForm();
         }
       }
@@ -93,7 +116,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   disableForm() {
     this.flueGasLossForm.controls.gasTypeId.disable();
     this.flueGasLossForm.controls.oxygenCalculationMethod.disable();
-    }
+  }
 
   enableForm() {
     this.flueGasLossForm.controls.gasTypeId.enable();
@@ -114,7 +137,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       carbon: this.flueGasLossForm.controls.carbon.value,
       hydrogen: this.flueGasLossForm.controls.hydrogen.value,
       sulphur: this.flueGasLossForm.controls.sulphur.value,
@@ -150,16 +173,18 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
-    this.flueGasLossForm.patchValue({
-      carbon: this.roundVal(tmpFlueGas.carbon, 4),
-      hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
-      sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
-      inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
-      o2: this.roundVal(tmpFlueGas.o2, 4),
-      moisture: this.roundVal(tmpFlueGas.moisture, 4),
-      nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
-    });
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.flueGasLossForm.patchValue({
+        carbon: this.roundVal(tmpFlueGas.carbon, 4),
+        hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
+        sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
+        inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
+        o2: this.roundVal(tmpFlueGas.o2, 4),
+        moisture: this.roundVal(tmpFlueGas.moisture, 4),
+        nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+      });
+    }
     this.save();
   }
 
@@ -169,15 +194,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   save() {
+    this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
-    this.warnings = this.flueGasLossesService.checkFlueGasByMassWarnings(tmpLoss);
-    let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss, this.settings);
+    let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 
@@ -185,6 +211,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
+  }
+
+  showMoistureModal() {
+    this.showMoisture = true;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.moistureModal.show();
   }
 
   hideMaterialModal(event?: any) {
@@ -201,6 +233,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
+  }
+
+  hideMoistureModal(event?: any) {
+    if (event !== -150) {
+      this.humidityRatio = event;
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.save();
   }
 
   canCompare() {
@@ -277,5 +319,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return this.flueGasCompareService.compareMassOxygenCalculationMethod(this.lossIndex);
     } else {
       return false;
-    }  }
+    }
+  }
 }

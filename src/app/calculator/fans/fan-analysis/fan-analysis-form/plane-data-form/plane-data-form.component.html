@@ -62,24 +62,9 @@
       <app-fan-data-form *ngIf="planeStep == '2'" [planeNum]="'2'" [planeDescription]="'Fan or Evase Outlet Flange'"
         [settings]="settings">
       </app-fan-data-form>
-      <!--3a-->
-      <app-fan-data-form *ngIf="planeStep == '3a'" [planeNum]="'3a'" [planeDescription]="'Additional Traverse Plane 1'"
-        [settings]="settings"></app-fan-data-form>
-      <app-plane-three-form *ngIf="planeStep == '3a'" [planeNum]="'3a'"></app-plane-three-form>
-      <app-pressure-readings-form *ngIf="planeStep == '3a'" [planeNum]="'3a'">
-      </app-pressure-readings-form>
-      <!--3b-->
-      <app-fan-data-form *ngIf="planeStep == '3b'" [planeNum]="'3b'" [planeDescription]="'Additional Traverse Plane 2'"
-        [settings]="settings"></app-fan-data-form>
-      <app-plane-three-form *ngIf="planeStep == '3b'" [planeNum]="'3b'"></app-plane-three-form>
-      <app-pressure-readings-form *ngIf="planeStep == '3b'" [planeNum]="'3b'">
-      </app-pressure-readings-form>
-      <!--3c-->
-      <app-fan-data-form *ngIf="planeStep == '3c'" [planeNum]="'3c'" [planeDescription]="'Additional Traverse Plane 3'"
-        [settings]="settings"></app-fan-data-form>
-      <app-plane-three-form *ngIf="planeStep == '3c'" [planeNum]="'3c'"></app-plane-three-form>
-      <app-pressure-readings-form *ngIf="planeStep == '3c'" [planeNum]="'3c'">
-      </app-pressure-readings-form>
+      <!--3a 3b 3c-->
+      <app-traverse-planes *ngIf="planeStep == '3a' || planeStep == '3b' || planeStep == '3c'"
+        [planeStep]="planeStep" [settings]="settings"></app-traverse-planes>
       <!--4-->
       <app-fan-data-form *ngIf="planeStep == '4'" [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'"
         [settings]="settings">

@@ -1,6 +1,6 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    PRV <span *ngIf="isSuperHeating == true">with</span><span *ngIf="isSuperHeating == false">without</span>
+    PRV <span *ngIf="isSuperHeating == true">with</span><span *ngIf="isSuperHeating == false">Without</span>
     Desuperheating Help
     <br>
     <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to
@@ -8,17 +8,16 @@
       after a pressure drop.
     </small>
   </h5>
-  <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'default'">
+  <div class="my-2">
     <h6>
       <small class="text-muted">
         Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties
         of steam
         after a pressure drop.
-        <hr>
       </small>
     </h6>
   </div>
+  <hr class="my-1 hr-spacer">
   <div class="my-2" *ngIf="currentField == 'inletPressure'">
     <h6>
       Inlet Pressure

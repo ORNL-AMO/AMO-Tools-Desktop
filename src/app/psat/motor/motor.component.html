@@ -100,7 +100,7 @@
     </div>
 
     <div class="form-group"
-      [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null || motorWarnings.recalculateFla !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
+      [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
       <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
         Full-Load Amps
         <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()"
@@ -118,9 +118,7 @@
         <span *ngIf="psatForm.controls.fullLoadAmps.errors.required">Value Required</span>
       </span>
       <span class="alert-warning small pull-right"
-        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid && !psatForm.controls.fullLoadAmps.pristine">{{motorWarnings.flaError}}</span>
-      <span class="alert-warning small pull-right"
-      *ngIf="motorWarnings.recalculateFla !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.recalculateFla }}</span>
+        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.flaError}}</span>
       </div>
   </div>
 </form>

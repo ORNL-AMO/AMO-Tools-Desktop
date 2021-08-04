@@ -6,7 +6,7 @@ import { ReplaceExistingModule } from '../../calculator/motors/replace-existing/
 import { MotorDriveModule } from '../../calculator/motors/motor-drive/motor-drive.module';
 import { NaturalGasReductionModule } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
 import { ElectricityReductionModule } from '../../calculator/utilities/electricity-reduction/electricity-reduction.module';
-import { WaterReductionModule } from '../../calculator/utilities/water-reduction/water-reduction.module';
+import { WaterReductionModule } from '../../calculator/waste-water/water-reduction/water-reduction.module';
 import { LightingReplacementModule } from '../../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { ModalModule } from 'ngx-bootstrap';
 
@@ -25,6 +25,14 @@ import { CompressedAirPressureReductionModule } from '../../calculator/compresse
 import { SteamReductionModule } from '../../calculator/steam/steam-reduction/steam-reduction.module';
 import { TankInsulationReductionModule } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.module';
 import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak.module';
+import { WallModule } from '../../calculator/furnaces/wall/wall.module';
+import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.module';
+import { LeakageModule } from '../../calculator/furnaces/leakage/leakage.module';
+import { WasteHeatModule } from '../../calculator/furnaces/waste-heat/waste-heat.module';
+import { OpeningModule } from '../../calculator/furnaces/opening/opening.module';
+import { AirHeatingModule } from '../../calculator/furnaces/air-heating/air-heating.module';
+import { HeatCascadingModule } from '../../calculator/furnaces/heat-cascading/heat-cascading.module';
+import { WaterHeatingModule } from '../../calculator/steam/water-heating/water-heating.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +60,15 @@ import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak
     PipeInsulationReductionModule,
     CompressedAirReductionModule,
     TankInsulationReductionModule,
-    AirLeakModule
+    WasteHeatModule,
+    AirHeatingModule,
+    LeakageModule,
+    AirLeakModule,
+    OpeningModule,
+    WallModule,
+    FlueGasModule,
+    HeatCascadingModule,
+    WaterHeatingModule
   ],
   providers: [
     CalculatorsService,

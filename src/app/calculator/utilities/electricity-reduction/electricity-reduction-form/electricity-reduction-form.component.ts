@@ -74,7 +74,7 @@ export class ElectricityReductionFormComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
@@ -120,24 +120,31 @@ export class ElectricityReductionFormComponent implements OnInit {
   focusOut() {
   }
 
-  closeOperatingHoursModal(){
+  closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(){
+  openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: OperatingHours){
+  updateOperatingHours(oppHours: OperatingHours) {
     this.electricityReductionService.operatingHours = oppHours;
     this.form.controls.operatingHours.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
 
-  setOpHoursModalWidth(){
+  setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  changeLineFrequency() {
+    if (this.form.controls.variableSpeedMotor.value == false) {
+      this.form.controls.operationalFrequency.patchValue(this.form.controls.lineFrequency.value);
+    }
+    this.calculate();
   }
 }

@@ -343,6 +343,10 @@ export interface SSMTLosses {
   highToMediumTurbineEfficiencyLoss: number;
   highToLowTurbineEfficiencyLoss: number;
   mediumToLowTurbineEfficiencyLoss: number;
+  showCondensingTurbine: boolean;
+  showHighToMediumTurbine: boolean;
+  showHighToLowTurbine: boolean;
+  showMediumToLowTurbine: boolean;
   condensingLosses: number;
   condensateLosses: number;
   lowPressureVentLoss: number;
@@ -362,7 +366,8 @@ export interface SSMTLosses {
   totalProcessLosses: number;
   totalVentLosses: number;
   totalTurbineLosses: number;
-  totalOtherLosses: number
+  totalOtherLosses: number;
+  returnedSteamAndCondensate: number;
 }
 
 export interface HeatExchangerOutput {

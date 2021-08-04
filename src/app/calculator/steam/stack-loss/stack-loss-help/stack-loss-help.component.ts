@@ -8,10 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 export class StackLossHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  displaySuggestions: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  toggleSuggestions() {
+    this.displaySuggestions = !this.displaySuggestions;
+  }
 }

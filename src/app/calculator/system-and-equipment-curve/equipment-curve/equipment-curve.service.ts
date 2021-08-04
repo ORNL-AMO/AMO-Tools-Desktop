@@ -8,7 +8,7 @@ import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../../shared
 export class EquipmentCurveService {
 
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {}
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   //equipment curve
   getEquipmentCurveFormFromObj(obj: EquipmentInputs): FormGroup {
@@ -39,7 +39,7 @@ export class EquipmentCurveService {
   }
 
   getResetEquipmentInputs(equipment: string): EquipmentInputs {
-    let option = equipment == 'fan'? 1 : 0;
+    let option = equipment == 'fan' ? 1 : 0;
     let exampleEquipment: EquipmentInputs = {
       measurementOption: option,
       baselineMeasurement: 0,
@@ -278,7 +278,7 @@ export class EquipmentCurveService {
         row.yValue = Math.round(this.convertUnitsService.value(row.yValue).from('ft').to(settings.distanceMeasurement) * 100) / 100;
       }
       if (settings.powerMeasurement !== 'hp') {
-        row.power = Math.round(this.convertUnitsService.value(row.power).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+        row.power = Math.round(this.convertUnitsService.value(row.power).from('hp').to(settings.powerMeasurement) * 100) / 100;
       }
     });
 

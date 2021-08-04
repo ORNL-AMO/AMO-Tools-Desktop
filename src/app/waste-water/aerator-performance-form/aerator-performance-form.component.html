@@ -1,0 +1,243 @@
+<form #formRef [formGroup]="form">
+    <div *ngIf="inSetup" class="d-flex flex-column">
+        <div class="header mr-2 ml-2">
+            <h3>Aerator Performance Data</h3>
+        </div>
+    </div>
+
+    <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+        <!--OperatingDO-->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingDO, 'invalid': form.controls.OperatingDO.invalid}">
+            <label for="{{'OperatingDO_'+idString}}">Operating Dissolved O<sub>2</sub> (DO)
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateDO()"
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize DO</a>
+
+            </label>
+            <div class="input-group">
+                <input type="number" name="OperatingDO" class="form-control number-input-field"
+                    id="{{'OperatingDO_'+idString}}" (focus)="focusField('OperatingDO')" (input)="save()"
+                    formControlName="OperatingDO" [readonly]="!selected" step=".1">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.OperatingDO.invalid && !form.controls.OperatingDO.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingDO.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingDO.errors.min">Value can't be
+                    less than {{form.controls.OperatingDO.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showDOAlert">
+            Value cannot be optimized further.
+        </div>
+        <!-- Alpha -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Alpha, 'invalid': form.controls.Alpha.invalid}">
+            <label for="{{'Alpha_'+idString}}">O<sub>2</sub> Transfer Coefficient Ratio (&alpha;)</label>
+            <div class="input-group">
+                <input type="number" name="Alpha" class="form-control number-input-field" id="{{'Alpha_'+idString}}"
+                    (focus)="focusField('Alpha')" (input)="save()" formControlName="Alpha" [readonly]="!selected">
+            </div>
+            <span *ngIf="form.controls.Alpha.invalid && !form.controls.Alpha.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Alpha.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Alpha.errors.min">Value can't be
+                    less than {{form.controls.Alpha.errors.min.min}}</span>
+            </span>
+        </div>
+        <!-- Beta -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Beta, 'invalid': form.controls.Beta.invalid}">
+            <label for="{{'Beta_'+idString}}">Saturation DO Concentration Ratio (&beta;)</label>
+            <div class="input-group">
+                <input type="number" name="Beta" class="form-control number-input-field" id="{{'Beta_'+idString}}"
+                    (focus)="focusField('Beta')" (input)="save()" formControlName="Beta" [readonly]="!selected">
+            </div>
+            <span *ngIf="form.controls.Beta.invalid && !form.controls.Beta.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Beta.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Beta.errors.min">Value can't be
+                    less than {{form.controls.Beta.errors.min.min}}</span>
+            </span>
+        </div>
+
+        <!-- Aerator -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aerator, 'invalid': form.controls.Aerator.invalid}">
+            <label for="{{'Aerator_'+idString}}">Aerator</label>
+            <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
+                (focus)="focusField('aerator')">
+                <optgroup label="Diffused Air Systems">
+                    <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">{{aerator.label}}
+                    </option>
+                </optgroup>
+                <optgroup label="Mechanical Aerators">
+                    <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">
+                        {{aerator.label}}</option>
+                </optgroup>
+                <optgroup label="Hybrid Aerators">
+                    <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">{{aerator.label}}
+                    </option>
+                </optgroup>
+                <option [ngValue]="'Other'">Other</option>
+            </select>
+        </div>
+
+        <!-- SOTR -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
+            <label for="{{'SOTR_'+idString}}">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
+            <div class="input-group">
+                <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
+                    (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kg
+                    O<sub>2</sub>/(kWh)</span>
+            </div>
+            <span *ngIf="form.controls.SOTR.invalid && !form.controls.SOTR.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.SOTR.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.SOTR.errors.min">Value can't be
+                    less than {{form.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
+            </span>
+        </div>
+        <!-- Aeration -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aeration, 'invalid': form.controls.Aeration.invalid}">
+            <label for="{{'Aeration_'+idString}}">Aeration Operating Power</label>
+            <div class="input-group">
+                <input type="number" name="Aeration" class="form-control number-input-field"
+                    id="{{'Aeration_'+idString}}" (focus)="focusField('Aeration')" (input)="save()"
+                    formControlName="Aeration" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kW</span>
+            </div>
+            <span *ngIf="form.controls.Aeration.invalid && !form.controls.Aeration.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Aeration.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Aeration.errors.min">Value can't be
+                    less than {{form.controls.Aeration.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span></span>
+            </span>
+        </div>
+        <!-- Elevation -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Elevation, 'invalid': form.controls.Elevation.invalid}">
+            <label for="{{'Elevation_'+idString}}">Site Elevation</label>
+            <div class="input-group">
+                <input type="number" name="Elevation" class="form-control number-input-field"
+                    id="{{'Elevation_'+idString}}" (focus)="focusField('Elevation')" (input)="save()"
+                    formControlName="Elevation" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m</span>
+            </div>
+            <span *ngIf="form.controls.Elevation.invalid && !form.controls.Elevation.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Elevation.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Elevation.errors.min">Value can't be
+                    less than {{form.controls.Elevation.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span></span>
+            </span>
+        </div>
+        <!-- OperatingTime -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingTime, 'invalid': form.controls.OperatingTime.invalid}">
+            <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateOperatingTime()"
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Operating Time</a>
+            </label>
+            <div class="input-group">
+                <input type="number" name="OperatingTime" class="form-control number-input-field"
+                    id="{{'OperatingTime_'+idString}}" (focus)="focusField('OperatingTime')" (input)="save()"
+                    formControlName="OperatingTime" [readonly]="!selected">
+                <span class="input-group-addon units">hr/day</span>
+            </div>
+            <span *ngIf="form.controls.OperatingTime.invalid && !form.controls.OperatingTime.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.min">Value can't
+                    be less than {{form.controls.OperatingTime.errors.min.min}} hr/day</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.max">Value can't
+                    be greater than {{form.controls.OperatingTime.errors.max.max}} hr/day</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.pristine">
+                {{aeratorPerformanceWarnings.OperatingTime}}</span>
+        </div>
+
+        <div class="alert alert-info small text-center" *ngIf="showOperatingTimeAlert">
+            Value cannot be optimized further.
+        </div>
+        <!-- TypeAerators -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.TypeAerators, 'invalid': form.controls.TypeAerators.invalid}">
+            <label for="{{'TypeAerators_'+idString}}">Type of Aerator</label>
+            <select class="form-control" formControlName="TypeAerators" (change)="save()"
+                (focus)="focusField('TypeAerators')">
+                <option *ngFor="let aeratorType of aeratorTypes" [ngValue]="aeratorType.value">{{aeratorType.display}}
+                </option>
+            </select>
+        </div>
+        <!-- Speed -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Speed,'error': aeratorPerformanceWarnings.Speed !== null, 'invalid': form.controls.Speed.invalid}">
+            <label for="{{'Speed_'+idString}}">Aerator Speed
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateSpeed()"
+                    [ngClass]="{'disabled-link':!selected || disableOptimize}">Optimize Speed</a></label>
+            <div class="input-group">
+                <input type="number" name="Speed" class="form-control number-input-field" id="{{'Speed_'+idString}}"
+                    (focus)="focusField('Speed')" (input)="save()" formControlName="Speed" [readonly]="!selected">
+                <span class="input-group-addon units">%</span>
+            </div>
+            <span *ngIf="form.controls.Speed.invalid && !form.controls.Speed.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Speed.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Speed.errors.min">Value can't
+                    be less than {{form.controls.Speed.errors.min.min}} %</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Speed.errors.max">Value can't
+                    be greater than {{form.controls.Speed.errors.max.max}} %</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="aeratorPerformanceWarnings.Speed !== null && !form.controls.Speed.pristine">{{aeratorPerformanceWarnings.Speed}}</span>
+        </div>
+        <div class="alert alert-info small text-center" *ngIf="showSpeedAlert">
+            Value cannot be optimized further.
+        </div>
+        <!-- EnergyCostUnit -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.EnergyCostUnit, 'invalid': form.controls.EnergyCostUnit.invalid}">
+            <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
+            <div class="input-group">
+                <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
+                    id="{{'EnergyCostUnit_'+idString}}" (focus)="focusField('EnergyCostUnit')" (input)="save()"
+                    formControlName="EnergyCostUnit" [readonly]="!selected">
+                <span class="input-group-addon units">$/kWh</span>
+            </div>
+            <span *ngIf="form.controls.EnergyCostUnit.invalid && !form.controls.EnergyCostUnit.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.EnergyCostUnit.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.EnergyCostUnit.errors.min">Value can't
+                    be less than {{form.controls.EnergyCostUnit.errors.min.min | currency}}</span>
+            </span>
+        </div>
+        <!-- AnoxicZoneCondition -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.AnoxicZoneCondition, 'invalid': form.controls.AnoxicZoneCondition.invalid}">
+            <label for="{{'AnoxicZoneCondition_'+idString}}">
+                Do you have an anoxic zone with returned mixed liquor from the aerobic zone?
+            </label>
+            <select class="form-control" formControlName="AnoxicZoneCondition" (change)="save()"
+                (focus)="focusField('AnoxicZoneCondition')">
+                <option [ngValue]="false">No</option>
+                <option [ngValue]="true">Yes</option>
+            </select>
+        </div>
+
+    </div>
+</form>

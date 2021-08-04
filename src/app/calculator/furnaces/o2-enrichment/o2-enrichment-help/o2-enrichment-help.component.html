@@ -1,6 +1,6 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    O<sub>2</sub> Enrichment
+    O<sub>2</sub> Enrichment Help
     <br>
     <small class="text-muted"> Calculation of available heat (an indication of thermal efficiency) for fuel fired
       furnaces and expected energy savings
@@ -10,6 +10,15 @@
 
     </small>
   </h5>
+  <div class="d-flex justify-content-center w-100">
+    <div class="alert alert-info">
+      <p>
+        Note: This calculator is designed for use with hydrocarbon fuels in North America.
+        It can be used for other naturally occurring fuels with reasonable accuracy or as first approximation.
+        It CANNOT be used for manufactured fuels such as blast furnace gas, refinery gas etc. with high inert content.
+      </p>
+    </div>
+  </div>
   <hr class="my-1 hr-spacer">
 
   <div class="my-2" *ngIf="currentField == 'o2CombAir'">
@@ -86,15 +95,5 @@
         <hr>
       </small>
     </h6>
-  </div>
-
-  <div class="d-flex justify-content-center w-100" *ngIf="currentField == 'default'">
-    <div class="alert alert-info">
-      <p>
-        Note: This calculator is designed for use with hydrocarbon fuels in North America.
-        It can be used for other naturally occurring fuels with reasonable accuracy or as first approximation.
-        It CANNOT be used for manufactured fuels such as blast furnace gas, refinery gas etc. with high inert content.
-      </p>
-    </div>
   </div>
 </div>

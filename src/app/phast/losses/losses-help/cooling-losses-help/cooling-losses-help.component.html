@@ -6,6 +6,31 @@
       Enter measured data to calculate your system's annual savings potential.
     </small>
   </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>Insulate water or air cooled parts where possible</li>
+          <li>Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation</li>
+          <li>Reduce or eliminate use of water cooled components by using high temperature materials for the components
+            where
+            possible</li>
+        </ul>
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+        operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and
+        apply
+        the appropriate measures.
+      </small>
+    </h6>
+  </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -15,7 +40,8 @@
       Cooling Medium
       <br>
       <small class="text-muted">
-        Select the appropriate cooling medium: gas or liquid. The default values for gas represent air, the default values for liquid
+        Select the appropriate cooling medium: gas or liquid. The default values for gas represent air, the default
+        values for liquid
         represent water.
       </small>
     </h6>
@@ -53,20 +79,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -76,29 +88,12 @@
       Gas Flow
       <br>
       <small class="text-muted">
-        Volumetric flow rate of gas per hour. Note that for batch furnaces the total weight should be corrected for cycle time to
+        Volumetric flow rate of gas per hour. Note that for batch furnaces the total weight should be corrected for
+        cycle time to
         obtain weight per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
-                <sup>3</sup>/min</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -107,61 +102,30 @@
       Gas Density
       <br>
       <small class="text-muted">
-        Density of the cooling gas. Default value is for air; may be more accurate to compute as the average of density based on
+        Density of the cooling gas. Default value is for air; may be more accurate to compute as the average of density
+        based on
         inlet and outlet temperature.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/SCF</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/Nm
-                <sup>3</sup>
-              </span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
   <div class="my-2" *ngIf="currentField == 'avgSpecificHeatGas'">
     <h6>
-      Average Specific Heat
+      Average Specific Heat of Gas
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
-        <br>Default value is for
-        <strong>air</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. Default value is for air, if at high temperatures, consider using another
+        value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -171,28 +135,12 @@
       Liquid Flow
       <br>
       <small class="text-muted">
-        Volumetric flow rate of liquid per hour. Note that for batch furnaces the total weight should be corrected for cycle time
+        Volumetric flow rate of liquid per hour. Note that for batch furnaces the total weight should be corrected for
+        cycle time
         to obtain weight per hour value.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal/min</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
@@ -202,74 +150,28 @@
       Density
       <br>
       <small class="text-muted">
-        Density of the cooling liquid. Default value is for water; may be more accurate to compute as the average of density based
+        Density of the cooling liquid. Default value is for water; may be more accurate to compute as the average of
+        density based
         on inlet and outlet temperature.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/gal</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/L</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
 
   <div class="my-2" *ngIf="currentField == 'avgSpecificHeatLiquid'">
     <h6>
-      Average Specific Heat
+      Average Specific Heat of Liquid
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
-        <br>Default value is for
-        <strong>water</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. Default value is for water, if at high temperatures, consider using another
+        value.
         <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
-            </td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'default'">
-    <h6>
-      Savings Suggestions
-      <br>
-      <small class="text-muted">
-        Insulate water or air cooled parts where possible
-        <br> Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation
-        <br> Reduce or eliminate use of water cooled components by using high temperature materials for the components where
-        possible
-        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-        There may additional measures when considering specific situations and the user is encouraged to review and apply
-        the appropriate measures.
       </small>
     </h6>
   </div>

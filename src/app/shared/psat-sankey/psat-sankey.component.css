@@ -1,0 +1,9 @@
+.chart-hide {
+    visibility: hidden;
+    height: 0;
+}
+
+.chart-show {
+    visibility: visible;
+    height: unset;
+}

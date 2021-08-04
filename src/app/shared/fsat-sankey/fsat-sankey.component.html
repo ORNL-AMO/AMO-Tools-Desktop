@@ -1,0 +1,20 @@
+<div class="alert-danger small m-3" *ngIf="!validLosses && fsat.valid.isValid">
+    <span>
+        Cannot generate
+        <span *ngIf="isBaseline">System</span>
+        <span *ngIf="!isBaseline">Modification</span>
+        Sankey: 
+        <br>
+        Fan or Motor efficiency is greater than 100%
+    </span>
+</div>
+<div class="alert-danger small m-3" *ngIf="!fsat.valid.isValid">
+    <span *ngIf="isBaseline">Invalid System Setup</span>
+    <span *ngIf="!isBaseline">Invalid Modification</span>
+    <br>
+    <span *ngIf="!fsat.valid.fluidValid">Errors found in Fluid<br></span>
+    <span *ngIf="!fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
+    <span *ngIf="!fsat.valid.fanValid">Errors found in Fan Setup<br></span>
+    <span *ngIf="!fsat.valid.motorValid">Errors found in Motor<br></span>
+</div>
+<div [ngClass]="{'chart-hide': !fsat.valid.isValid || !validLosses,'chart-show': fsat.valid.isValid && validLosses}" #ngChart></div>

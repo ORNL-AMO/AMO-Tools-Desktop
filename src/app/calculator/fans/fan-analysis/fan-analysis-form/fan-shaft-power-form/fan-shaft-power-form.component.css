@@ -3,6 +3,10 @@
     font-size: small;
 }
 
+label.result-label {
+    font-size: 15px;
+}
+
 .form-control{
     font-size: small;
 } 

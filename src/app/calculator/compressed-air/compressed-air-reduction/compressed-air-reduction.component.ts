@@ -3,8 +3,8 @@ import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
-import { CompressedAirReductionData, CompressedAirReductionResults } from '../../../shared/models/standalone';
-import { CompressedAirReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { CompressedAirReductionData } from '../../../shared/models/standalone';
+import { CompressedAirReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-reduction',
@@ -41,7 +41,6 @@ export class CompressedAirReductionComponent implements OnInit {
 
   modificationExists = false;
 
-  compressedAirReductionResults: CompressedAirReductionResults;
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
 
@@ -76,8 +75,8 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.leftPanelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 
@@ -105,7 +104,12 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    let utilityType: number;
+    if (this.baselineData.length != 0) {
+      utilityType = this.baselineData[0].utilityType;
+    }
+
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours, utilityType);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -123,7 +127,14 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType);
+    let utilityType: number;
+    if (this.baselineData.length != 0) {
+      utilityType = this.baselineData[0].utilityType;
+    }
+
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, utilityType);
+    let currentIndex = this.baselineData.length > 0 ? this.baselineData.length - 1 : 0;
+    tmpObj.compressorElectricityData = this.baselineData[currentIndex].compressorElectricityData;
     this.modificationData.push(tmpObj);
     this.getResults();
   }
@@ -163,7 +174,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   getResults() {
-    this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.baselineData, this.modificationData);
+    this.compressedAirReductionService.calculateResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
@@ -192,7 +203,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAir });
   }
 
   cancel() {

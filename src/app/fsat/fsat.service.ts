@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -10,6 +10,7 @@ import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
+import { FormGroup } from '@angular/forms';
 
 
 declare var fanAddon: any;
@@ -35,7 +36,7 @@ export class FsatService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calculatorTab = new BehaviorSubject<string>('fan-analysis');
+    this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -76,9 +77,44 @@ export class FsatService {
     return psychrometricResults;
   }
 
-  getVelocityPressureData(inputs: Plane, settings: Settings): { pv3: number, percent75Rule: number } {
+  getPsychrometricResults(fsat: FSAT, settings: Settings): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults = {
+      gasDensity: undefined,
+      absolutePressure: undefined,
+      saturatedHumidity: undefined,
+      saturationDegree: undefined,
+      humidityRatio: undefined,
+      specificVolume: undefined,
+      enthalpy: undefined,
+      dewPoint: undefined,
+      relativeHumidity: undefined,
+      saturationPressure: undefined,
+      wetBulbTemp: undefined,
+      barometricPressure:undefined,
+      dryBulbTemp:undefined,
+    };
+    let results: PsychrometricResults;
+    if (fsat.baseGasDensity.inputType === 'relativeHumidity') {
+      results = this.getPsychrometricRelativeHumidity(fsat.baseGasDensity, settings);
+    } else if (fsat.baseGasDensity.inputType === 'wetBulb') {
+      results = this.getPsychrometricWetBulb(fsat.baseGasDensity, settings);
+    } else if (fsat.baseGasDensity.inputType === 'dewPoint') {
+      results = this.getPsychrometricDewPoint(fsat.baseGasDensity, settings);
+    }
+
+    if (results) {
+      psychrometricResults = results;
+      psychrometricResults.dryBulbTemp = fsat.baseGasDensity.dryBulbTemp;
+      psychrometricResults.barometricPressure = fsat.baseGasDensity.barometricPressure;
+    }
+
+
+    return psychrometricResults;
+  }
+
+  getVelocityPressureData(inputs: Plane, settings: Settings): VelocityResults {
     inputs = this.convertFanAnalysisService.convertPlaneForCalculations(inputs, settings);
-    let results: { pv3: number, percent75Rule: number } = fanAddon.getVelocityPressureData(inputs);
+    let results: VelocityResults = fanAddon.getVelocityPressureData(inputs);
     if (settings.fanPressureMeasurement !== 'inH2o') {
       results.pv3 = this.convertUnitsService.value(results.pv3).from('inH2o').to(settings.fanPressureMeasurement);
     }
@@ -88,8 +124,13 @@ export class FsatService {
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFanAnalysisService.convertFan203DataForCalculations(inputCpy, settings);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
+    let results: PlaneResults;
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertFanAnalysisService.convertPlaneResults(results, settings);
+    } catch (err) {
+      console.log(err);
+    }
     return results;
   }
 
@@ -117,6 +158,7 @@ export class FsatService {
       measuredAmps: fsat.fieldData.motorPower,
       flowRate: fsat.fieldData.flowRate,
       inletPressure: fsat.fieldData.inletPressure,
+      velocityPressure: fsat.fieldData.inletVelocityPressure,
       outletPressure: fsat.fieldData.outletPressure,
       compressibilityFactor: fsat.fieldData.compressibilityFactor,
       operatingHours: fsat.fieldData.operatingHours,
@@ -153,6 +195,7 @@ export class FsatService {
         measuredAmps: fsat.fieldData.motorPower,
         flowRate: fsat.fieldData.flowRate,
         inletPressure: fsat.fieldData.inletPressure,
+        velocityPressure: fsat.fieldData.inletVelocityPressure,
         outletPressure: fsat.fieldData.outletPressure,
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
         operatingHours: fsat.fieldData.operatingHours,
@@ -162,7 +205,7 @@ export class FsatService {
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (isBaseline) {
+      if (isBaseline || !fsat.whatIfScenario) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
@@ -172,10 +215,34 @@ export class FsatService {
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
       results.annualCost = results.annualCost * 1000;
+
+      results.psychrometricResults = this.getPsychrometricResults(fsat, settings);
+
+      let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
+      if (fan203InputsForPlaneResults) {
+        fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;
+        results.planeResults = this.getPlaneResults(fan203InputsForPlaneResults, settings);
+      }
       return results;
     } else {
       return this.getEmptyResults();
     }
+  }
+
+  getFan203InputForPlaneResults(fsat: FSAT): Fan203Inputs {
+    let hasFanRatedInfo: boolean = fsat.fieldData.fanRatedInfo !== undefined;
+    let hasBaseGasDensity: boolean = fsat.baseGasDensity !== undefined;
+    let hasPlaneData: boolean = fsat.fieldData.planeData !== undefined;
+    let fan203Inputs: Fan203Inputs;
+    if (hasFanRatedInfo && hasBaseGasDensity && hasPlaneData) {
+      fan203Inputs = {
+        FanRatedInfo: fsat.fieldData.fanRatedInfo,
+        BaseGasDensity: fsat.baseGasDensity,
+        FanShaftPower: undefined,
+        PlaneData: fsat.fieldData.planeData,
+      }
+    }
+    return fan203Inputs;
   }
 
   fanResultsExisting(input: FsatInput): FsatOutput {
@@ -248,6 +315,18 @@ export class FsatService {
     return fanAddon.compressibilityFactor(inputCpy);
   }
 
+  calculateInletVelocityPressure(calculationInputs: InletVelocityPressureInputs): number {
+    let inletVelocityPressure: number;
+    let flowRateCalc: number = (1 / 1096) * (calculationInputs.flowRate / calculationInputs.ductArea);
+    inletVelocityPressure = calculationInputs.gasDensity * Math.pow(flowRateCalc, 2);
+    if (isNaN(inletVelocityPressure) || !isFinite(inletVelocityPressure)) {
+      inletVelocityPressure = undefined;
+    } else {
+      inletVelocityPressure = Number(inletVelocityPressure.toFixed(5));
+    }
+    return inletVelocityPressure;
+  }
+
 
   getNewMod(fsat: FSAT, settings: Settings): Modification {
     let modNum: number = 1;
@@ -276,7 +355,13 @@ export class FsatService {
     tmpModification.fsat.fanSetup.fanType = 12;
     tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    tmpModification.fsat.whatIfScenario = true;
     return tmpModification;
   }
 }
 
+export interface InletVelocityPressureInputs {
+  gasDensity: number,
+  flowRate: number,
+  ductArea: number
+}

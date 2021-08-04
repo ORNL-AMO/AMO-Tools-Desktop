@@ -34,15 +34,13 @@
   <div class="row print-avoid-break" *ngIf="printSankey">
     <div class="col-12">
       <div class="h3 mb-0">Baseline</div>
-      <app-psat-sankey [psat]="psat" [location]="'baseline'" [assessmentName]="'Baseline'" [settings]="settings"
-        [isBaseline]="true" [modIndex]="index" [printView]="true"></app-psat-sankey>
+      <app-psat-sankey [psat]="psat" [settings]="settings"
+        [isBaseline]="true" [printView]="true"></app-psat-sankey>
     </div>
     <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-psat-sankey [psat]="scenarioSummary.modificationGraphData.modification.psat"
-        [location]="scenarioSummary.modificationGraphData.name"
-        [assessmentName]="scenarioSummary.modificationGraphData.name" [settings]="settings" [isBaseline]="false"
-        [modIndex]="index" [printView]="true">
+      <app-psat-sankey [psat]="scenarioSummary.modificationGraphData.modification.psat" [settings]="settings" [isBaseline]="false"
+        [printView]="true">
       </app-psat-sankey>
     </div>
   </div>

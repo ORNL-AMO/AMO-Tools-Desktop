@@ -44,6 +44,7 @@ export class PlaneDataFormComponent implements OnInit {
   ngOnDestroy() {
     this.planeStepSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();
+    this.planeDataFormService.planeStep.next('plane-info');
   }
 
   changePlaneStepTab(str: string) {

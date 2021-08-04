@@ -6,8 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { WallLossWarnings, WallLossesService } from '../wall-losses.service';
-import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
+import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -29,8 +28,6 @@ export class WallLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Output('inputError')
-  inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
   @Input()
@@ -41,9 +38,8 @@ export class WallLossesFormComponent implements OnInit {
 
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
-  warnings: WallLossWarnings;
   idString: string;
-  constructor(private wallLossCompareService: WallLossCompareService, private wallLossesService: WallLossesService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private wallLossCompareService: WallLossCompareService, private wallFormService: WallFormService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -54,7 +50,6 @@ export class WallLossesFormComponent implements OnInit {
     }
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
-    this.checkWarnings();
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -68,6 +63,7 @@ export class WallLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
           this.enableForm();
         }
       }
@@ -91,27 +87,21 @@ export class WallLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  //check inputs for errors
-  checkWarnings() {
-    let tmpLoss: WallLoss = this.wallLossesService.getWallLossFromForm(this.wallLossesForm);
-    this.warnings = this.wallLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.wallLossesService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
-  }
 
-  //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   save() {
-    this.checkWarnings();
+    this.wallLossesForm = this.wallFormService.setValidators(this.wallLossesForm);
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
-    this.wallLossesForm.patchValue({
-      conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
-    });
-    this.calculate.emit(true);
+    let tmpFactor: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    if (tmpFactor) {
+      this.wallLossesForm.patchValue({
+        conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
+      });
+      this.calculate.emit(true);
+    }
     this.save();
   }
   roundVal(val: number, digits: number) {
@@ -128,10 +118,10 @@ export class WallLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-      let newMaterial = this.surfaceOptions.filter(material => { return material.surface === event.surface; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
+      if (newMaterial) {
         this.wallLossesForm.patchValue({
-          surfaceShape: newMaterial[0].id
+          surfaceShape: newMaterial.id
         });
         this.setProperties();
       }

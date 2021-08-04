@@ -5,7 +5,7 @@
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New Fuel</a>
       </label>
       <select name="gasTypeId" class="form-control" formControlName="gasTypeId" id="gasTypeId"
-        (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()">
+        (change)="setProperties()" (focus)="focusField('gasTypeId')" >
         <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
       </select>
     </div>
@@ -15,7 +15,7 @@
       <div class="input-group">
         <input name="flueGasTemperature" type="number" step="10" class="form-control"
           formControlName="flueGasTemperature" id="flueGasTemperature" onfocus="this.select();"
-          (input)="setCombustionValidation()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
+          (input)="setCombustionValidation()" (focus)="focusField('flueGasTemperature')" >
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
@@ -38,7 +38,7 @@
       <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
       <select name="oxygenCalculationMethod" class="form-control" (change)="changeMethod()"
         formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
-        (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
+        (focus)="focusField('oxygenCalculationMethod')" >
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
     </div>
@@ -48,7 +48,7 @@
       <div class="input-group">
         <input name="o2InFlueGas" type="number" step="0.5" min="0" max="20.5" class="form-control"
           formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+          (focus)="focusField('o2InFlueGas')" >
         <span class="input-group-addon units">%</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span> -->
@@ -79,7 +79,7 @@
       <div class="input-group">
         <input name="excessAirPercentage" type="number" step="any" min="0" class="form-control"
           formControlName="excessAirPercentage" id="excessAirPercentage" onfocus="this.select();"
-          (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
+          (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" >
         <span class="input-group-addon units">%</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span> -->
@@ -98,7 +98,7 @@
       <div class="input-group">
         <input name="combustionAirTemperature" type="number" step="10" class="form-control"
           formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();"
-          (input)="setFuelTempValidation()" (focus)="focusField('combustionAirTemperature')" (blur)="focusOut()">
+          (input)="setFuelTempValidation()" (focus)="focusField('combustionAirTemperature')" >
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
@@ -117,7 +117,7 @@
         <div class="input-group">
           <input name="fuelTemperature" type="number" step="10" class="form-control" formControlName="fuelTemperature"
             id="fuelTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelTemperature')"
-            (blur)="focusOut()">
+            >
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -128,7 +128,7 @@
       <div class="input-group">
         <input name="moistureInAirComposition" type="number" step="any" min="0" max="100" class="form-control"
           formControlName="moistureInAirComposition" id="moistureInAirComposition" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('moistureInAirComposition')" (blur)="focusOut()">
+          (input)="calculate()" (focus)="focusField('moistureInAirComposition')" >
         <span class="input-group-addon units">%</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="moistureInAirCompositionError !== null">{{moistureInAirCompositionError}}</span> -->
@@ -147,7 +147,7 @@
       <div class="input-group">
         <input name="ashDischargeTemperature" type="number" step="any" class="form-control"
           formControlName="ashDischargeTemperature" id="ashDischargeTemperature" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('ashDischargeTemperature')" (blur)="focusOut()">
+          (input)="calculate()" (focus)="focusField('ashDischargeTemperature')" >
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
@@ -162,7 +162,7 @@
       <div class="input-group">
         <input name="unburnedCarbonInAsh" type="number" step="any" min="0" max="100" class="form-control"
           formControlName="unburnedCarbonInAsh" id="unburnedCarbonInAsh" onfocus="this.select();" (input)="calculate()"
-          (focus)="focusField('unburnedCarbonInAsh')" (blur)="focusOut()">
+          (focus)="focusField('unburnedCarbonInAsh')" >
         <span class="input-group-addon units">%</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="unburnedCarbonInAshError !== null">{{unburnedCarbonInAshError}}</span> -->

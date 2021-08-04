@@ -9,6 +9,7 @@ import { PhastResultsService } from '../../phast-results.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -21,20 +22,35 @@ export class EnergyUsedComponent implements OnInit {
   settings: Settings;
 
   designedResults: DesignedEnergyResults = {
-    designedEnergyUsed: 0,
-    designedEnergyIntensity: 0,
-    designedElectricityUsed: 0,
-    calculatedFuelEnergyUsed: 0,
-    calculatedEnergyIntensity: 0,
-    calculatedElectricityUsed: 0
+    designed: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      hourlyElectricity: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    },
+      byPhast: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    }
   };
+  
   meteredResults: MeteredEnergyResults = {
-    meteredEnergyUsed: 0,
-    meteredEnergyIntensity: 0,
-    meteredElectricityUsed: 0,
-    calculatedFuelEnergyUsed: 0,
-    calculatedEnergyIntensity: 0,
-    calculatedElectricityUsed: 0
+    metered: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      hourlyElectricity: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    },
+      byPhast: {
+      hourlyEnergy: 0,
+      annualEnergy: 0,
+      annualElectricity: 0,
+      energyIntensity: 0,
+    }
   };
 
   calculatedResults: CalculatedByPhast = {
@@ -73,7 +89,7 @@ export class EnergyUsedComponent implements OnInit {
 
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy) {
-        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings, true);
+        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
       }
     }
   }
@@ -110,7 +126,7 @@ export class EnergyUsedComponent implements OnInit {
     this.electricEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyElectricity) {
-        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, true);
+        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
       }
     }
   }
@@ -119,7 +135,7 @@ export class EnergyUsedComponent implements OnInit {
     this.steamEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergySteam) {
-        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, true);
+        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
         this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
       }
     }
@@ -129,18 +145,22 @@ export class EnergyUsedComponent implements OnInit {
     this.fuelEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyFuel) {
-        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, true);
+        this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
       }
     }
-    
+
     if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-      let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-      this.fuelHeatingValue = gas.heatingValue;
-      this.fuelName = gas.substance;
+      let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+      if (gas) {
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
+      }
     } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-      this.fuelHeatingValue = gas.heatingValue;
-      this.fuelName = gas.substance;
+      let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+      if (gas) {
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
+      }
     }
     this.fuelHeatingValue = this.convertResult(this.fuelHeatingValue, this.settings);
   }

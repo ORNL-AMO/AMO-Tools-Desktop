@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
-import { WallLossesService } from './wall-losses.service';
 import { WallLossesComponent } from './wall-losses.component';
 import { WallLossesFormComponent } from './wall-losses-form/wall-losses-form.component';
 import { WallLossCompareService } from './wall-loss-compare.service';
@@ -22,7 +21,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     WallLossesFormComponent
   ],
   providers: [
-    WallLossesService,
     WallLossCompareService
   ],
   exports: [

@@ -7,6 +7,14 @@ export const volumetricEnergy = {
                 display: '(kJ/Nm&#x00B3;)'
             }
             , to_anchor: 1
+        },
+        MJNm3: {
+            name: {
+                singular: 'Megajoule per Normal meter cubed'
+                , plural: 'Megajoules per Normal meter cubed',
+                display: '(MJ/Nm&#x00B3;)'
+            }
+            , to_anchor: 1 / 1000
         }
     },
     imperial: {

@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { LossTab } from '../../../tabs';
-import { AtmosphereLossWarnings, AtmosphereLossesService } from '../../../losses/atmosphere-losses/atmosphere-losses.service';
+import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 @Component({
   selector: 'app-explore-atmosphere-form',
   templateUrl: './explore-atmosphere-form.component.html',
@@ -28,9 +28,10 @@ export class ExploreAtmosphereFormComponent implements OnInit {
 
   baselineWarnings: Array<AtmosphereLossWarnings>;
   modificationWarnings: Array<AtmosphereLossWarnings>;
-  constructor(private atmosphereLossesService: AtmosphereLossesService) { }
+  constructor(private atmosphereFormService: AtmosphereFormService) { }
 
   ngOnInit() {
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: false, display: 'Optimize Furnace Atmosphere Makeup System' }; 
     this.initData();
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -62,9 +63,9 @@ export class ExploreAtmosphereFormComponent implements OnInit {
         this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: check, display: 'Optimize Furnace Atmosphere Makeup System' }; 
       }
       this.showInletTemp.push(check);
-      let baselineWarningsCheck: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+      let baselineWarningsCheck: AtmosphereLossWarnings = this.atmosphereFormService.checkWarnings(loss);
       this.baselineWarnings.push(baselineWarningsCheck);
-      let modificationWarningsCheck: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
+      let modificationWarningsCheck: AtmosphereLossWarnings = this.atmosphereFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
       this.modificationWarnings.push(modificationWarningsCheck);
       index++;
     });
@@ -116,12 +117,12 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   }
 
   checkBaselineWarnings(index: number) {
-    this.baselineWarnings[index] = this.atmosphereLossesService.checkWarnings(this.phast.losses.atmosphereLosses[index]);
+    this.baselineWarnings[index] = this.atmosphereFormService.checkWarnings(this.phast.losses.atmosphereLosses[index]);
     this.calculate();
   }
 
   checkModificationWarnings(index: number) {
-    this.modificationWarnings[index] = this.atmosphereLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
+    this.modificationWarnings[index] = this.atmosphereFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
     this.calculate();
   }
 

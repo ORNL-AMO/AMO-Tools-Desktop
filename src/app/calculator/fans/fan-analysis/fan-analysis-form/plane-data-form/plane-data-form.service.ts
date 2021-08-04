@@ -11,9 +11,11 @@ export class PlaneDataFormService {
 
   planeStep: BehaviorSubject<string>;
   planeShape: BehaviorSubject<string>;
+  staticPressureValue: BehaviorSubject<number>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.planeStep = new BehaviorSubject<string>('plane-info');
     this.planeShape = new BehaviorSubject<string>(undefined);
+    this.staticPressureValue = new BehaviorSubject<number>(undefined);
   }
 
   getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
@@ -24,7 +26,8 @@ export class PlaneDataFormService {
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, [Validators.required, Validators.min(0)]],
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, [Validators.required, Validators.min(0)]],
       inletSEF: [obj.inletSEF, Validators.required],
-      outletSEF: [obj.outletSEF, Validators.required]
+      outletSEF: [obj.outletSEF, Validators.required],
+      variationInBarometricPressure: [obj.variationInBarometricPressure]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -40,6 +43,7 @@ export class PlaneDataFormService {
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
     obj.inletSEF = form.controls.inletSEF.value;
     obj.outletSEF = form.controls.outletSEF.value;
+    obj.variationInBarometricPressure = form.controls.variationInBarometricPressure.value;
     return obj;
 
   }
@@ -74,6 +78,7 @@ export class PlaneDataFormService {
       length: [obj.length, [Validators.required, Validators.min(0)]],
       width: [obj.width, [Validators.required, Validators.min(0)]],
       area: [obj.area, [Validators.required, Validators.min(0)]],
+      userDefinedStaticPressure: [obj.userDefinedStaticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
       staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
@@ -91,7 +96,7 @@ export class PlaneDataFormService {
   setPlaneValidators(form: FormGroup, planeNum: string, planeType: string, ranges: PlaneRanges) {
     //1, 4
     if (planeNum === '1' || planeNum === '4') {
-      form.controls.numInletBoxes.setValidators([Validators.required]);
+      form.controls.numInletBoxes.setValidators([Validators.required, Validators.min(1)]);
       form.controls.numInletBoxes.reset(form.controls.numInletBoxes.value);
       if (form.controls.numInletBoxes.value) {
         form.controls.numInletBoxes.markAsDirty();
@@ -104,21 +109,28 @@ export class PlaneDataFormService {
       }
     }
 
-    //!1 !2
-    if (planeNum !== '1' && planeNum !== '2') {
+    // 3a, 3b, 3c etc
+    if (planeNum.includes('3')) {
       form.controls.staticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
         form.controls.staticPressure.markAsDirty();
       }
-    } else {
-      form.controls.staticPressure.setValidators([Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
+      form.controls.userDefinedStaticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
+      form.controls.userDefinedStaticPressure.reset(form.controls.userDefinedStaticPressure.value);
+      if (form.controls.userDefinedStaticPressure.value) {
+        form.controls.userDefinedStaticPressure.markAsDirty();
+      }
+    } 
+  
+    if (planeNum === '4' || planeNum === '5') {
+      form.controls.staticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
         form.controls.staticPressure.markAsDirty();
       }
     }
-
+    
     //Rectangular
     if (planeType === 'Rectangular') {
       form.controls.width.setValidators([Validators.required, Validators.min(0)]);
@@ -171,6 +183,7 @@ export class PlaneDataFormService {
     obj.width = form.controls.width.value;
     obj.area = form.controls.area.value;
     obj.staticPressure = form.controls.staticPressure.value;
+    obj.userDefinedStaticPressure = form.controls.userDefinedStaticPressure.value;
     obj.dryBulbTemp = form.controls.dryBulbTemp.value;
     obj.barometricPressure = form.controls.barometricPressure.value;
     obj.numInletBoxes = form.controls.numInletBoxes.value;

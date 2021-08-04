@@ -65,7 +65,7 @@
         <label class="small" for="{{'type_'+lossIndex+idString}}">Select Type</label>
         <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="material.chargeMaterialType"
           [disabled]="(!baselineSelected || lossesLocked) && !inSetup" (focus)="changeField('chargeMaterialType')"
-          (blur)="focusOut()">
+          >
           <option>Solid</option>
           <option>Liquid</option>
           <option>Gas</option>
@@ -83,7 +83,7 @@
     <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)"
       [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
       [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"
-      (inputError)="setError($event)" [inSetup]="inSetup"></app-gas-charge-material-form>
+      [inSetup]="inSetup"></app-gas-charge-material-form>
   </div>
   <div class="d-flex flex-column loss-results" [ngClass]="{'input-error': showError == true}">
     <div class="form-group m-0">

@@ -36,19 +36,21 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-                Cost
+                Cost 
+                ($/kWh)
               </td>
               <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-                {{fieldData.baseline.cost}}
+                {{fieldData.baseline.cost | currency: 'USD': 'symbol' : '1.0-0'}}
               </td>
               <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.cost, 'costDiff', 0)}">
-                {{mod.cost}}
+                {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
               </td>
             </tr>
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
                 Flow Rate
+                (<span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
                 {{fieldData.baseline.flowRate}}
@@ -61,6 +63,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
                 Inlet Pressure
+                (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
                 {{fieldData.baseline.inletPressure}}
@@ -73,6 +76,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
                 Outlet Pressure
+                (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
                 {{fieldData.baseline.outletPressure}}
@@ -95,36 +99,24 @@
                 </span>
               </td>
               <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
-                <span *ngIf="mod.loadEstimatedMethod == 0">
-                  Power
-                </span>
-                <span *ngIf="mod.loadEstimatedMethod == 1">
-                  Current
-                </span>
+                &mdash; &mdash;
               </td>
             </tr>
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
-                Motor Power
+                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 0">
+                  Motor Power (kW)
+                </span>
+                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 1">
+                  Motor Current (A)
+                </span>
               </td>
               <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
                 {{fieldData.baseline.motorPower}}
               </td>
               <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
-                {{mod.motorPower}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                Specific Heat Ratio
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                {{fieldData.baseline.specificHeatRatio}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
-                {{mod.specificHeatRatio}}
+               &mdash; &mdash;
               </td>
             </tr>
 
@@ -142,7 +134,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
-                Measured Voltage
+                Measured Voltage (V)
               </td>
               <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
                 {{fieldData.baseline.measuredVoltage}}

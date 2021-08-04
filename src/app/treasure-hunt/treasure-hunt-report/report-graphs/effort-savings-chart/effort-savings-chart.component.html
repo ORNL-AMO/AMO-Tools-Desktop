@@ -1,0 +1,63 @@
+<div class="w-100" id="effortChartDiv"></div>
+<div class="col-md-12 pb-3" *ngIf="!showPrint">
+  <div class="graph-btn-container">
+    <span class="fa fa-comment-o" (click)="toggleLabels()" [ngClass]="{'labels-toggled': showingHoverLabels}"
+      (mouseenter)="initTooltip('btnLabels')" (mouseleave)="hideTooltip('btnLabels')"></span>
+    <app-simple-tooltip [direction]="'top'" [message]="'Toggle bubble labels'" [hover]="hoverBtnLabels"
+      [display]="displayLabelsTooltip" [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+  </div>
+  <div class="graph-btn-container">
+    <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')"
+      (mouseleave)="hideTooltip('btnGridLines')"></span>
+    <app-simple-tooltip [direction]="'top'" [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines"
+      [display]="displayGridLinesTooltip" [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+  </div>
+</div>
+
+<div class="d-flex flex-column w-100 data-summary align-items-center" [ngClass]="{'mt-2': showPrint}">
+  <div class="w-75">
+    <table class="table pt-2">
+      <tbody>
+        <tr class="bold small text-center no-border">
+          <th *ngIf="!showPrint" class="bold w-25 max-width-50"></th>
+          <th class="bold w-25">Opportunity</th>
+          <th class="bold w-25">Effort (1-10)</th>
+          <th class="bold w-25">Payback (years)</th>
+          <th class="bold w-25">Savings </th>
+        </tr>
+        <tr *ngFor="let opp of chartOpportunities; let index = index">
+          <td *ngIf="!showPrint" class="text-center max-width-50">
+            <div class="point-key-circle" [ngStyle]="{'background': opp.color}">
+            </div>
+          </td>
+          <td class="text-center">{{opp.name}}</td>
+          <td class="text-center">{{opp.effort}}</td>
+          <td class="text-center">{{opp.payback | number: '1.0-1'}}</td>
+          <td class="text-center">{{opp.savings | currency:'USD':'symbol':'1.0-0'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-exportable-results-table *ngIf="!showPrint" [tableString]="dataSummaryTableString"
+  (updateTableString)="updateTableString()"></app-exportable-results-table>
+<!-- Hidden copy table -->
+<div class="hidden-copy-table" *ngIf="!showPrint">
+  <table #dataSummaryTable>
+    <tbody>
+      <tr>
+        <th>Opportunity</th>
+        <th>Effort (1-10)</th>
+        <th>Payback ($)</th>
+        <th>Savings ($)</th>
+      </tr>
+      <tr *ngFor="let opp of chartOpportunities; let index = index">
+        <td>{{opp.name}}</td>
+        <td>{{opp.effort}}</td>
+        <td>{{opp.payback | number: '1.0-1'}}</td>
+        <td>{{opp.savings | number: '1.0-0'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

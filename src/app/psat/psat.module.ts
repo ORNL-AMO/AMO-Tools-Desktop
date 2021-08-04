@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
@@ -31,7 +31,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
-import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat-report-sankey.component';
@@ -54,6 +53,8 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
+import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,6 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
     PsatDiagramComponent,
-    PsatSankeyComponent,
     ModificationListComponent,
     AddModificationComponent,
     PsatReportSankeyComponent,
@@ -105,7 +105,9 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
     ToastModule,
     SharedPipesModule,
     UnitConverterModule,
-    SystemAndEquipmentCurveModule
+    SystemAndEquipmentCurveModule,
+    PsatSankeyModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     PsatService,
@@ -114,7 +116,8 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
     PsatTabService,
     PumpFluidService,
     MotorService,
-    FieldDataService
+    FieldDataService,
+    DecimalPipe
   ]
 })
 

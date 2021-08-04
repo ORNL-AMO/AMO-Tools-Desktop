@@ -5,7 +5,7 @@ import { CompressedAirPressureReductionService } from './compressed-air-pressure
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FormBuilder } from '@angular/forms';
 import { CompressedAirPressureReductionResults, CompressedAirPressureReductionData } from '../../../shared/models/standalone';
-import { CompressedAirPressureReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-pressure-reduction',
@@ -76,8 +76,8 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.leftPanelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 
@@ -127,6 +127,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   createModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.modificationData.forEach(modification => {
+      modification.isBaseline = false;
+    });
     this.getResults();
     this.modificationExists = true;
     this.setModificationSelected();
@@ -149,10 +152,16 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     dataArray[index].electricityCost = data.electricityCost;
     dataArray[index].compressorPower = data.compressorPower;
     dataArray[index].pressure = data.pressure;
+    dataArray[index].powerType = data.powerType;
     dataArray[index].proposedPressure = data.proposedPressure;
+    dataArray[index].atmosphericPressure = data.atmosphericPressure;
+    dataArray[index].pressureRated = data.pressureRated;
     if (data.isBaseline && this.modificationExists) {
       this.modificationData[index].compressorPower = data.compressorPower;
       this.modificationData[index].pressure = data.pressure;
+      this.modificationData[index].powerType = data.powerType;
+      this.modificationData[index].pressureRated = data.pressureRated;
+      this.modificationData[index].atmosphericPressure = data.atmosphericPressure;
     }
   }
 
@@ -187,7 +196,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
   
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAirPressure });
   }
 
   cancel() {

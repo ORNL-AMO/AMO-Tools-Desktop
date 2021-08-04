@@ -23,3 +23,9 @@
 .list-modal .modal-body {
     max-height: 80vh;
 }
+
+
+.btn-sm.active{
+    color: white;
+    background-color: #2980b9;
+}

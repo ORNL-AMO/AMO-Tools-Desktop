@@ -4,6 +4,12 @@ import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ReportRollupService } from '../report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { PsatReportRollupService } from '../psat-report-rollup.service';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
+import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -30,13 +36,17 @@ export class SidebarComponent implements OnInit {
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
   _reportAssessments: Array<ReportItem>;
+  _wasteWaterAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   reportAssessmentsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService) { }
+  wasteWaterAssessmentsSub: Subscription;
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private psatReportRollupService: PsatReportRollupService,
+    private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService,
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit(): void {
     this._phastAssessments = new Array<ReportItem>();
@@ -44,42 +54,48 @@ export class SidebarComponent implements OnInit {
     this._fsatAssessments = new Array<ReportItem>();
     this._ssmtAssessments = new Array<ReportItem>();
     this._treasureHuntAssessments = new Array<ReportItem>();
-    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
+    this._reportAssessments = new Array<ReportItem>();
+    this._wasteWaterAssessments = new Array<ReportItem>();
+    this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
       }
     });
-    this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
+    this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(items => {
       if (items) {
         this._phastAssessments = items;
       }
     });
 
-    this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
+    this.fsatAssessmentsSub = this.fsatReportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
         this._fsatAssessments = items;
       }
     });
 
-    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+    this.ssmtAssessmentsSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
         this._ssmtAssessments = items;
       }
     });
 
-    this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
+    this.treasureHuntAssesmentsSub = this.treasureHuntReportRollupService.treasureHuntAssessments.subscribe(items => {
       if (items) {
         this._treasureHuntAssessments = items;
       }
     });
     this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
-        // if (items.length !== 0) {
         this._reportAssessments = items;
-        // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
-        // }
       }
     });
+
+    this.wasteWaterAssessmentsSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(items => {
+      if(items){
+        this._wasteWaterAssessments = items;
+      }
+    })
+
     this.initFocusedAssessment();
   }
 
@@ -89,6 +105,8 @@ export class SidebarComponent implements OnInit {
     this.psatAssessmentSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
     this.treasureHuntAssesmentsSub.unsubscribe();
+    this.wasteWaterAssessmentsSub.unsubscribe();
+    this.reportAssessmentsSub.unsubscribe();
   }
 
   collapseSidebar() {
@@ -107,6 +125,8 @@ export class SidebarComponent implements OnInit {
         this.focusedAssessment = this._ssmtAssessments[0].assessment;
       } else if (this._treasureHuntAssessments.length != 0) {
         this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
+      } else if(this._wasteWaterAssessments.length != 0){
+        this.focusedAssessment = this._wasteWaterAssessments[0].assessment;
       }
     }
   }

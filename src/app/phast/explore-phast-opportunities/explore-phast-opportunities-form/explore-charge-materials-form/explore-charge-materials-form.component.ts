@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidChargeMaterial, LiquidChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LossTab } from '../../../tabs';
-import { ChargeMaterialService } from '../../../losses/charge-material/charge-material.service';
+import { ChargeMaterialService } from '../../../../calculator/furnaces/charge-material/charge-material.service';
 
 @Component({
   selector: 'app-explore-charge-materials-form',

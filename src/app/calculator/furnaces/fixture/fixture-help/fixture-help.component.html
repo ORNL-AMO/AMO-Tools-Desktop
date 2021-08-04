@@ -1,0 +1,197 @@
+
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Fixture Loss Help
+    <br>
+    <small class="text-muted">
+      A number of methods are used for material handling in a heating equipment such as a furnace, oven, dryer, kiln etc. Examples of fixtures, 
+      material handling equipment, include conveyors, belts, trays etc. The fixtures enter at the front (charge) end and exit at the back (discharge) end 
+      of the heating equipment, and must be heated along with the load. In some cases heating of fixtures can take a large percentage of the total heat used 
+      in the heating equipment. It may be possible to reduce weight of the fixture, change material of the fixture or even change the temperature of the 
+      fixture at the entry by returning hot fixture or preheat the fixture.Actual energy savings or fuel input reduction depends on combustion efficiency or available heat of the heating system.
+    </small>
+  </h5>
+  <label class="p-1" (click)="toggleSuggestions()">
+    <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+    <span class="h6 pl-1">
+      Savings Suggestions
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displaySuggestions">
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>Review design of fixtures or baskets or other material handling to reduce weight</li>
+          <li>Investigate alternate high strength material to reduce weight of the fixtures etc.</li>
+          <li>Where possible reduce cooling of conveyors, belts, fixtures baskets etc. during their return from
+            unloading to loading
+            station</li>
+        </ul>
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+        operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and
+        apply
+        the appropriate measures
+      </small>
+    </h6>
+  </div>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'operationHours'">
+    <h6>
+      Annual Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
+    <h6>
+      Fuel Cost
+      <br>
+      <small class="text-muted">
+        Cost of fuel per energy unit
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'energySourceType'">
+    <h6>
+      Energy Source
+      <small class="text-muted">
+        <br>
+        Select the appropriate energy source to determine energy costs and, if steam or fuel, help estimate system
+        efficiency.
+        Choose steam if you purchase steam directly, choose fuel if you make your own steam for process heating.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'materialName'">
+    <h6>
+      Material Name
+      <br>
+      <small class="text-muted">
+        Type of material used as a fixture within the heating equipment or reaction chamber The word fixture is used to
+        represent
+        fixtures, trays, baskets, conveyor belt, etc. used for material handling during the heating process. To add a
+        new
+        material, click "Add New Material". You can "start with existing material" and edit the material properties or
+        add
+        a completely new material. You cannot use the name of a material already in the database.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'specificHeat'">
+    <h6>
+      Average Specific Heat of Material
+      <br>
+      <small class="text-muted">
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
+        <hr>
+      </small>
+    </h6>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'feedRate'">
+    <h6>
+      Fixture Feed Rate
+      <br>
+      <small class="text-muted">
+        Weight of fixture material fed into the unit per hour. Note that for batch furnaces the total weight should be
+        corrected
+        for cycle time to obtain weight per hour value.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'initialTemp'">
+    <h6>
+      Inlet Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the fixture as it enters the unit. Use production data or actual measurement.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'finalTemp'">
+    <h6>
+      Outlet Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the fixture as it enters the unit. Use production data or actual measurement.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+    <h6>
+      Correction Factor
+      <br>
+      <small class="text-muted">
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+
+</div>
+
+
+
+<!-- <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering fixture loss data.
+  </p> -->

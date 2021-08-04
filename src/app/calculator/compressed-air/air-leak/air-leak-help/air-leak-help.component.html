@@ -1,326 +1,374 @@
 <div class="px-2 pt-3 d-flex flex-column help-info">
-    <h5>
-      Compressed Air - Leak Survey
-      <br>
+  <h5>
+    Compressed Air - Leak Survey Help
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing compressed air leaks.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
       <small class="text-muted">
-        This calculator is used to quantify the energy savings associated with reducing compressed air leaks.
+        This calculator can be used to quantify the electricity saved from reducing compressed air leaks.
+        Compressed air leaks are a major source of wasted energy sometimes accounting for 20-30% of the
+        compressor’s output. Compressed air leaks can contribute to the following problems:
+        <hr class="my-1">Fluctuations in system pressure
+        <hr class="my-1">Excess compressor capacity
+        <hr class="my-1">Decreased service life and increased maintenance due to unnecessary cycling and increased run
+        time.
+        <hr class="my-1">
       </small>
-    </h5>
-    <div class="my-2">
-      <h6>
-        <small class="text-muted">
-            This calculator can be used to quantify the electricity saved from reducing compressed air leaks. 
-            Compressed air leaks are a major source of wasted energy sometimes accounting for 20-30% of the 
-            compressor’s output. Compressed air leaks can contribute to the following problems:
-          <hr class="my-1">Fluctuations in system pressure
-          <hr class="my-1">Excess compressor capacity
-          <hr class="my-1">Decreased service life and increased maintenance due to unnecessary cycling and increased run time.
-          <hr class="my-1">
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
-      <h6>
-        Annual Operating Hours
-        <small class="text-muted">
-          <br>
-          Number of annual operating hours for the equipment.
-          <hr>
-        </small>
-      </h6>
-    </div>
+    </h6>
+  </div>
 
-    <div class="my-2" *ngIf="currentField == 'utilityType'">
-      <h6>
-        Utility Type
-        <small class="text-muted">
-          <br>
-          Select the appropriate utility type to determine energy use and cost.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'utilityCost'">
-      <h6>
-        Utility Cost
-        <small class="text-muted">
-          <br>
-          Per unit cost of electricity or compressed air.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'measurementMethod'">
-      <h6>
-        Method of Measurement
-        <small class="text-muted">
-          <br>
-          Choose the method to be used to determine compressed air consumption.
-          <hr class="my-1">Estimate - The most high-level way to determine the leak rate is to estimate it based on the visual and audible clues.
-          <hr class="my-1">Decibel Method - The decibels method is used when an Ultrasonic probe is used to scan for leaks. Use the dB vs CFM chart that comes along with the specific leak detector to estimate loss.
-          <hr class="my-1">Bag Method – The bag method estimates air loss by counting the time it takes to fill a trash bag.
-          <hr class="my-1">Orifice Method - Estimation of air loss using the pressure at the point of use and the diameter of the orifice. The user must know the air pressure at the point of use for this to be accurate.
-          <hr class="my-1">
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'fillTime'">
-      <h6>
-        Bag Fill Time (seconds)
-        <small class="text-muted">
-          <br>
-          The number of seconds it takes to fill the bag.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'height'">
-      <h6>
-        Height of Bag
-        <small class="text-muted">
-          <br>
-          The height of the bag after inflation in inches.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'diameter'">
-      <h6>
-        Diameter of Bag
-        <small class="text-muted">
-          <br>
-          The diameter of the bag after inflation in inches.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'leakDescription'">
-      <h6>
-        Leak Description
-        <small class="text-muted">
-          <br>
-          Provide information that can be used to characterize and find the leak. 
-          For example, what is leaking, where is it located, can you hear it, what’s 
-          the tag number you used to identify it.
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'leakRateEstimate'">
-        <h6>
-          Leak Rate Estimate
-          <small class="text-muted">
-            <br>
-            The standard criteria and associated leak rate for this method are given below. The user should use discretion in their estimate.
-            <hr>
-          </small>
-        </h6>
-        <div class="w-100 d-flex justify-content-center">
-            <table class="table table-hover table-striped">
-              <tbody>
-                <tr>
-                  <td class="w-25 text-center">Minimal</td>
-                  <td class="w-25 text-center">Feel but can not hear in quiet environment</td>
-                  <td class="w-25 text-center">0.2 CFM</td>
-                </tr>
-                <tr>
-                  <td class="w-25 text-center">Small</td>
-                  <td class="w-25 text-center">Feel and hear in quiet environment</td>
-                  <td class="w-25 text-center">0.8 CFM</td>
-                </tr>
-                <tr>
-                  <td class="w-25 text-center">Medium</td>
-                  <td class="w-25 text-center">Feel and hear in moderate noise</td>
-                  <td class="w-25 text-center">3.0 CFM</td>
-                </tr>
-                <tr>
-                  <td class="w-25 text-center">Large</td>
-                  <td class="w-25 text-center">Feel and hear in moderate noise</td>
-                  <td class="w-25 text-center">5.0 CFM</td>
-                </tr>
-                <tr>
-                  <td class="w-25 text-center">Severe</td>
-                  <td class="w-25 text-center">Feel and hear at a great distance</td>
-                  <td class="w-25 text-center">10.0</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-      </div>
-  
-    <div class="my-2" *ngIf="currentField == 'compressorAirTemp'">
-      <h6>
-        Compressor Air Temperature
-        <small class="text-muted">
-          <br>
-          Compressed air temperature is usually between 200 and 300 ℉. Use an estimated value if the exact temperature is not known.
-          <hr>
-        </small>
-      </h6>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
-        <h6>
-          Atmospheric Pressure
-          <small class="text-muted">
-            <br>
-            Standard atmospheric pressure is 14.7 psia.
-            <hr>
-          </small>
-        </h6>
-      </div>
-    
-      <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
-        <h6>
-          Discharge Coefficient
-          <small class="text-muted">
-            <br>
-            This is used to capture the effect of the shape of the outlet on air loss. 
-            Typical values:
-            <hr class="my-1">Sharp Edged – 0.6
-            <hr class="my-1">Gradual Transition – 1
-          </small>
-        </h6>
-      </div>
-
-      <div class="my-2" *ngIf="currentField == 'orificeDiameter'">
-        <h6>
-          Orifice Diameter
-          <small class="text-muted">
-            <br>
-            Enter the diameter of orifice in inches.
-            <hr>
-          </small>
-        </h6>
-      </div>
-
-      <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
-        <h6>
-          Supply Pressure
-          <small class="text-muted">
-            <br>
-            Enter the supply pressure to the orifice in psi. 
-            <hr>
-          </small>
-        </h6>
-      </div>
-
-      <div class="my-2" *ngIf="currentField == 'numberOfOrifices'">
-        <h6>
-          Number of Orifices
-          <small class="text-muted">
-            <br>
-            Enter the number of orifices.
-            <hr>
-          </small>
-        </h6>
-      </div>
-  
-  
-    <div class="my-2" *ngIf="currentField == 'compressorControl'">
-      <h6>
-        Compressor Control Type Adjustment Factor
-        <small class="text-muted">
-          <br>
-          Select your compressor control type from the dropdown list. Different compressor control strategies
-          react differently to reduced air demand and it is important to take this into consideration when
-          estimating the energy reduction by reducing the demand.
-          <hr>
-        </small>
-      </h6>
-      <div class="w-100 d-flex justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="w-50 text-center">Compressor Control</th>
-              <th class="w-50 text-center">Control Adjustment(% of Average Power)</th>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Modulation (Poor)</td>
-              <td class="w-50 text-center">25%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Load-Unload (Short-Cycle)</td>
-              <td class="w-50 text-center">40%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Load-Unload (2+ Minute Cycle)</td>
-              <td class="w-50 text-center">75%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Centrifugal (Venting)</td>
-              <td class="w-50 text-center">0%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Centrifugal (Non-Venting)</td>
-              <td class="w-50 text-center">75%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Reciprocating Unloaders</td>
-              <td class="w-50 text-center">80%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Variable Speed</td>
-              <td class="w-50 text-center">60%</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Variable Displacement</td>
-              <td class="w-50 text-center">60%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'compressorType'">
-      <h6>
-        Compressor Type
-        <small class="text-muted">
-          <br>
-          Select a compressor type from the dropdown list. To find the savings in terms of energy (kWh) we need
-          to know the electricity consumed by the compressor to produce unit compressed air (specific power of
-          the compressor).
-          Note: It is recommended that the Specific Power of the compressor is defined by the user for most
-          accurate results. These values be found from previous compressed air studies or from the CAGI
-          data sheets for the specific compressor found online.
-          In a multi-compressor system the energy savings associated with reduced air demand are usually only
-          seen at the trim compressor, hence the “Specific Power” and the “Control-Type Adjustment Factor” are
-          to be specified by the trim compressor.
-          <hr>
-        </small>
-      </h6>
-      <div class="w-100 d-flex justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="w-50 text-center">Compressor</th>
-              <th class="w-50 text-center">Typical Specific Power (kW/100 scfm)</th>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Reciprocating</td>
-              <td class="w-50 text-center">16</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Rotary Screw (Lubricant-Injected)</td>
-              <td class="w-50 text-center">20</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Rotary Screw (Lubricant-Free)</td>
-              <td class="w-50 text-center">23</td>
-            </tr>
-            <tr>
-              <td class="w-50 text-center">Centrifugal</td>
-              <td class="w-50 text-center">21</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
+    <h6>
+      Annual Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of annual operating hours for the equipment.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
+  <div class="my-2" *ngIf="currentField == 'utilityType'">
+    <h6>
+      Utility Type
+      <small class="text-muted">
+        <br>
+        Select the appropriate utility type to determine energy use and cost.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'utilityCost'">
+    <h6>
+      Utility Cost
+      <small class="text-muted">
+        <br>
+        Per unit cost of electricity or compressed air.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'measurementMethod'">
+    <h6>
+      Method of Measurement
+      <small class="text-muted">
+        <br>
+        Choose the method to be used to determine compressed air consumption.
+        <hr class="my-1">Estimate - The most high-level way to determine the leak rate is to estimate it based on the
+        visual and audible clues.
+        <hr class="my-1">Decibel Method - The decibels method is used when an Ultrasonic probe is used to scan for
+        leaks. Use the dB vs CFM chart that comes along with the specific leak detector to estimate loss.
+        <hr class="my-1">Bag Method – The bag method estimates air loss by counting the time it takes to fill a trash
+        bag.
+        <hr class="my-1">Orifice Method - Estimation of air loss using the pressure at the point of use and the diameter
+        of the orifice. The user must know the air pressure at the point of use for this to be accurate.
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fillTime'">
+    <h6>
+      Bag Fill Time (seconds)
+      <small class="text-muted">
+        <br>
+        The number of seconds it takes to fill the bag.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'height'">
+    <h6>
+      Height of Bag
+      <small class="text-muted">
+        <br>
+        The height of the bag after inflation in inches.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'diameter'">
+    <h6>
+      Diameter of Bag
+      <small class="text-muted">
+        <br>
+        The diameter of the bag after inflation in inches.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'leakDescription'">
+    <h6>
+      Leak Description
+      <small class="text-muted">
+        <br>
+        Provide information that can be used to characterize and find the leak.
+        For example, what is leaking, where is it located, can you hear it, what’s
+        the tag number you used to identify it.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'leakRateEstimate'">
+    <h6>
+      Leak Rate Estimate
+      <small class="text-muted">
+        <br>
+        The standard criteria and associated leak rate for this method are given below. The user should use discretion
+        in their estimate.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <td class="w-25 text-center">Minimal</td>
+            <td class="w-25 text-center">Feel but can not hear in quiet environment</td>
+            <td class="w-25 text-center">0.2 CFM</td>
+          </tr>
+          <tr>
+            <td class="w-25 text-center">Small</td>
+            <td class="w-25 text-center">Feel and hear in quiet environment</td>
+            <td class="w-25 text-center">0.8 CFM</td>
+          </tr>
+          <tr>
+            <td class="w-25 text-center">Medium</td>
+            <td class="w-25 text-center">Feel and hear in moderate noise</td>
+            <td class="w-25 text-center">3.0 CFM</td>
+          </tr>
+          <tr>
+            <td class="w-25 text-center">Large</td>
+            <td class="w-25 text-center">Feel and hear in moderate noise</td>
+            <td class="w-25 text-center">5.0 CFM</td>
+          </tr>
+          <tr>
+            <td class="w-25 text-center">Severe</td>
+            <td class="w-25 text-center">Feel and hear at a great distance</td>
+            <td class="w-25 text-center">10.0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'compressorAirTemp'">
+    <h6>
+      Compressor Air Temperature
+      <small class="text-muted">
+        <br>
+        Compressed air temperature is usually between 200 and 300 ℉. Use an estimated value if the exact temperature is
+        not known.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+    <h6>
+      Atmospheric Pressure
+      <small class="text-muted">
+        <br>
+        Standard atmospheric pressure is 14.7 psia.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
+    <h6>
+      Discharge Coefficient
+      <small class="text-muted">
+        <br>
+        This is used to capture the effect of the shape of the outlet on air loss.
+        Typical values:
+        <hr class="my-1">100% coefficient of flow (un-adjusted for orifice geometry): 1
+        <hr class="my-1">Well-rounded orifices: 0.97
+        <hr class="my-1">Sharp orifices: 0.61
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'orificeDiameter'">
+    <h6>
+      Orifice Diameter
+      <small class="text-muted">
+        <br>
+        Enter the diameter of orifice in inches.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'supplyPressure'">
+    <h6>
+      Supply Pressure
+      <small class="text-muted">
+        <br>
+        Enter the supply pressure to the orifice in psi.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'numberOfOrifices'">
+    <h6>
+      Number of Orifices
+      <small class="text-muted">
+        <br>
+        Enter the number of orifices.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'compressorControl'">
+    <h6>
+      Compressor Control Type Adjustment Factor
+      <small class="text-muted">
+        <br>
+        Select your compressor control type from the dropdown list. Different compressor control strategies
+        react differently to reduced air demand and it is important to take this into consideration when
+        estimating the energy reduction by reducing the demand.
+        <hr>
+        Values for associated fraction of average power are based off the
+        <a href="https://www.nrel.gov/docs/fy17osti/68577.pdf" target="_blank">NREL Compressed Air Evaluation
+          Protocol</a>
+        <hr>
+        IBV - Inlet Butterfly Value<br>
+        IGV - Inlet Guide Vanes
+        <hr>
+        Each CCAF value represents the slope of the performance curve when operating within the 40% to 80% capacity range as this is a common operating range for a trim compressor.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Compressor Control</th>
+            <th class="w-50 text-center">Control Adjustment(% of Average Power)</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Screw Compressor - Inlet Modulation</td>
+            <td class="w-50 text-center">30%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Screw Compressor - Variable Displacement</td>
+            <td class="w-50 text-center">60%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Screw Compressor – Variable Speed Drives</td>
+            <td class="w-50 text-center">97%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Oil Injected Screw - Load/Unload (short cycle)</td>
+            <td class="w-50 text-center">48%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Oil Injected Screw - Load/Unload (2+ minutes cycle)</td>
+            <td class="w-50 text-center">68%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Oil Free Screw - Load/Unload</td>
+            <td class="w-50 text-center">73%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Reciprocating Compressor - Load/Unload</td>
+            <td class="w-50 text-center">74%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Reciprocating Compressor - On/Off</td>
+            <td class="w-50 text-center">100%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Centrifugal Compressor – In blowoff (Venting)</td>
+            <td class="w-50 text-center">0%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Centrifugal – Modulating (IBV) in throttle range (Non-Venting)</td>
+            <td class="w-50 text-center">67%</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Centrifugal– Modulating (IGV) in throttle range (Non-Venting)</td>
+            <td class="w-50 text-center">86%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'compressorType'">
+    <h6>
+      Compressor Type
+      <small class="text-muted">
+        <br>
+        Select a compressor type from the dropdown list. To find the savings in terms of energy (kWh) we need
+        to know the electricity consumed by the compressor to produce unit compressed air (specific power of
+        the compressor).
+        These values can be found from previous compressed air studies or from the CAGI
+        data sheets for the specific compressor found online.
+        In a multi-compressor system the energy savings associated with reduced air demand are usually only
+        seen at the trim compressor, hence the “Specific Power” and the “Control-Type Adjustment Factor” are
+        to be specified by the trim compressor.
+        <hr class="my-1">
+        <b>Note:</b> It is recommended that the Specific Power of the compressor is defined by the user for most
+        accurate results.
+        <hr class="my-1">
+        <b>Note:</b> These values are only valid for compressors operating at full load. Please check data sheets for more
+        appropriate numbers if not at full load
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Compressor</th>
+            <th class="w-50 text-center">Typical Specific Power (kW/100 scfm)</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Reciprocating</td>
+            <td class="w-50 text-center">16</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Rotary Screw (Lubricant-Injected)</td>
+            <td class="w-50 text-center">20</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Rotary Screw (Lubricant-Free)</td>
+            <td class="w-50 text-center">23</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Centrifugal</td>
+            <td class="w-50 text-center">21</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
