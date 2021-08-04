@@ -107,7 +107,6 @@ export interface CoolingTowerData {
     savingsEnergy: number,
   }
 
-  //====== Cooling Tower Fan Energy ======
 
 export interface CoolingTowerFanInput {
   towerType: number,
@@ -130,3 +129,38 @@ export interface CoolingTowerFanOutput {
   modEnergy: number,
   savingsEnergy: number,
 }
+
+
+  // Chiller staging 
+  export interface ChillerStagingInput {
+    // chiller characteristics
+    chillerType: number,
+    condenserCoolingType: number,
+    motorDriveType: number,
+    compressorConfigType: number
+    // chiller rated conditions
+    ariCapacity: number,
+    ariEfficiency: number,
+    maxCapacityRatio: number,
+    // chiller operating conditions
+    waterSupplyTemp: number,
+    waterEnteringTemp: number,
+    coolingLoad: number,
+    operatingHours: number,
+    // bl/mod
+    baselineLoadList: Array<number>,
+    modLoadList: Array<number>,
+  }
+
+
+  export interface ChillerStagingOutput {
+    baselineTotalPower: number,
+    baselineTotalEnergy: number,
+    modTotalPower: number,
+    modTotalEnergy: number,
+    savingsEnergy: number,
+    baselinePowerList: Array<number>,
+    modPowerList: Array<number>,
+    chillerLoadResults?: Array<{baseline: number, modification: number}>
+  }
+

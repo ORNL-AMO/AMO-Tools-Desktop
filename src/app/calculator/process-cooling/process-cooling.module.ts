@@ -8,6 +8,7 @@ import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.mo
 import { ChillerPerformanceModule } from './chiller-performance/chiller-performance.module';
 import { CoolingTowerFanModule } from './cooling-tower-fan/cooling-tower-fan.module';
 import { CoolingTowerBasinModule } from './cooling-tower-basin/cooling-tower-basin.module';
+import { ChillerStagingModule } from './chiller-staging/chiller-staging.module';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { CoolingTowerBasinModule } from './cooling-tower-basin/cooling-tower-bas
     CoolingTowerFanModule,
     CoolingTowerBasinModule,
     ChillerPerformanceModule,
+    ChillerStagingModule,
     FanPsychrometricModule
   ],
   exports: [

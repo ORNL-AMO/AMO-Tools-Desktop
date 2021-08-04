@@ -1,0 +1,38 @@
+.modal-header{
+    background: #fff;
+}
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+.modal-lg{
+    max-width: 90%; 
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
+
+.btn-delete-field {
+    color: #dc3545;
+    margin-left: 1rem;
+    padding-left: 8px;
+    max-height:23px;
+    padding-right: 8px;
+    background-color: white;
+    box-sizing: border-box;
+    transition: all .2s ease-in-out;
+}
+
+.btn-delete-field:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #dc3545;
+}
+
+.standalone-calculator .ng-invalid:not(form) {
+    border: initial;
+}

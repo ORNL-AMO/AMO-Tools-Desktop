@@ -5,6 +5,20 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower.png"
+                        class="calc-img" [routerLink]="['/calculators/chiller-staging']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/chiller-staging']">Chiller Staging</a>
+                <p>
+                    Analyze the impact of chiller staging on energy performance of chilled water systems.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower.png"
                         class="calc-img" [routerLink]="['/calculators/chiller-performance']">
                 </div>
             </div>
@@ -19,13 +33,13 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower.png"
-                        class="calc-img" [routerLink]="['/calculators/cooling-tower']">
+                        class="calc-img" [routerLink]="['/calculators/cooling-tower-basin']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a [routerLink]="['/calculators/cooling-tower']">Cooling Tower Makeup Water</a>
+                <a [routerLink]="['/calculators/cooling-tower-basin']">Cooling Tower Basin Heater Energy</a>
                 <p>
-                    Calculator for analyzing cooling tower water consumption.
+                    Calculator for analyzing basin heater energy consumption.
                 </p>
             </div>
         </div>
@@ -61,13 +75,13 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/process-cooling-icons/cooling-tower.png"
-                        class="calc-img" [routerLink]="['/calculators/cooling-tower-basin']">
+                        class="calc-img" [routerLink]="['/calculators/cooling-tower']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a [routerLink]="['/calculators/cooling-tower-basin']">Cooling Tower Basin Heater Energy</a>
+                <a [routerLink]="['/calculators/cooling-tower']">Cooling Tower Makeup Water</a>
                 <p>
-                    Calculator for analyzing basin heater energy consumption.
+                    Calculator for analyzing cooling tower water consumption.
                 </p>
             </div>
         </div>
