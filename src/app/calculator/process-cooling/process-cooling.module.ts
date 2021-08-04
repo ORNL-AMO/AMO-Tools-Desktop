@@ -7,6 +7,7 @@ import { ChillerService } from './chiller.service';
 import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
 import { ChillerPerformanceModule } from './chiller-performance/chiller-performance.module';
 import { CoolingTowerFanModule } from './cooling-tower-fan/cooling-tower-fan.module';
+import { CoolingTowerBasinModule } from './cooling-tower-basin/cooling-tower-basin.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { CoolingTowerFanModule } from './cooling-tower-fan/cooling-tower-fan.mod
     CommonModule,
     CoolingTowerModule,
     CoolingTowerFanModule,
+    CoolingTowerBasinModule,
     ChillerPerformanceModule,
     FanPsychrometricModule
   ],

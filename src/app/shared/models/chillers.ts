@@ -47,6 +47,28 @@ export interface CoolingTowerData {
     driftLossFactor: number;
     cyclesOfConcentration: number;
   }
+
+  export interface CoolingTowerBasinInput {
+    ratedCapacity: number,
+    ratedTempSetPoint: number,
+    ratedTempDryBulb: number,
+    ratedWindSpeed: number,
+    panLossRatio: number,
+    operatingTempDryBulb: number,
+    operatingWindSpeed: number,
+    operatingHours: number,
+    baselineTempSetPoint: number,
+    modTempSetPoint: number
+  }
+
+  export interface CoolingTowerBasinOutput {
+    baselinePower: number,
+    baselineEnergy: number,
+    modPower: number,
+    modEnergy: number,
+    savingsEnergy: number
+  }
+
   
 
   //====== Chiller Performance and Temperature ======

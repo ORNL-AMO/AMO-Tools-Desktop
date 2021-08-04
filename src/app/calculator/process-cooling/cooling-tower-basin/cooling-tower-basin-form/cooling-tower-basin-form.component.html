@@ -1,0 +1,200 @@
+<!-- Shared inputs -->
+<div class="d-flex w-100 my-2">
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <form #formElement [formGroup]="form">
+      <label class="group-label my-1">
+        Cooling Tower Characteristics
+      </label>
+
+      <div class="form-group">
+        <label class="small" for="ratedCapacity">Rated Capacity</label>
+        <div class="input-group">
+          <input class="form-control" name="ratedCapacity" id="ratedCapacity" formControlName="ratedCapacity"
+            type="number" (input)="calculate()" (focus)="focusField('ratedCapacity')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">tons</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ratedCapacity.invalid && !form.controls.ratedCapacity.pristine">
+          <span *ngIf="form.controls.ratedCapacity.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ratedCapacity.errors.max">Value can't be greater than
+          {{form.controls.ratedCapacity.errors.max.max}}.</span>
+        <span *ngIf="form.controls.ratedCapacity.errors.min">Value can't be less than
+          {{form.controls.ratedCapacity.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <label class="group-label mt-3 mb-1">
+        Rated Conditions For Pan Heat Loss
+      </label>
+
+      <div class="form-group">
+        <label class="small" for="ratedTempSetPoint">Basin Temperature Setpoint</label>
+        <div class="input-group">
+          <input class="form-control" name="ratedTempSetPoint" id="ratedTempSetPoint" formControlName="ratedTempSetPoint"
+            type="number" (input)="calculate()" (focus)="focusField('ratedTempSetPoint')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ratedTempSetPoint.invalid && !form.controls.ratedTempSetPoint.pristine">
+          <span *ngIf="form.controls.ratedTempSetPoint.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="ratedTempDryBulb">Ambient Dry Bulb Temperature</label>
+        <div class="input-group">
+          <input class="form-control" name="ratedTempDryBulb" id="ratedTempDryBulb" formControlName="ratedTempDryBulb"
+            type="number" (input)="calculate()" (focus)="focusField('ratedTempDryBulb')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ratedTempDryBulb.invalid && !form.controls.ratedTempDryBulb.pristine">
+          <span *ngIf="form.controls.ratedTempDryBulb.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="ratedWindSpeed">Windspeed</label>
+        <div class="input-group">
+          <input class="form-control" name="ratedWindSpeed" id="ratedWindSpeed" formControlName="ratedWindSpeed"
+            type="number" (input)="calculate()" (focus)="focusField('ratedWindSpeed')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/h</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ratedWindSpeed.invalid && !form.controls.ratedWindSpeed.pristine">
+          <span *ngIf="form.controls.ratedWindSpeed.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="panLossRatio">Pan Loss Ratio</label>
+        <div class="input-group">
+          <input class="form-control" name="panLossRatio" id="panLossRatio" formControlName="panLossRatio"
+            type="number" (input)="calculate()" (focus)="focusField('panLossRatio')" onfocus="this.select();">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.panLossRatio.invalid && !form.controls.panLossRatio.pristine">
+          <span *ngIf="form.controls.panLossRatio.errors.required">Value required.</span>
+        </span>
+      </div>
+
+
+    </form>
+  </div>
+
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Basin Heater Operating Conditions
+    </label>
+    <form #formElement [formGroup]="form">
+
+      <div class="form-group">
+        <label class="small" for="operatingHours">Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
+            type="number" (input)="calculate()" (focus)="focusField('operatingHours')" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+          <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+            {{form.controls.operatingHours.errors.max.max}}.</span>
+          <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+            {{form.controls.operatingHours.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="operatingWindSpeed">Windspeed</label>
+        <div class="input-group">
+          <input class="form-control" name="operatingWindSpeed" id="operatingWindSpeed" formControlName="operatingWindSpeed"
+            type="number" (input)="calculate()" (focus)="focusField('operatingWindSpeed')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/h</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingWindSpeed.invalid && !form.controls.operatingWindSpeed.pristine">
+          <span *ngIf="form.controls.operatingWindSpeed.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="operatingTempDryBulb">Ambient Dry Bulb Temperature</label>
+        <div class="input-group">
+          <input class="form-control" name="operatingTempDryBulb" id="operatingTempDryBulb" formControlName="operatingTempDryBulb"
+            type="number" (input)="calculate()" (focus)="focusField('operatingTempDryBulb')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingTempDryBulb.invalid && !form.controls.operatingTempDryBulb.pristine">
+          <span *ngIf="form.controls.operatingTempDryBulb.errors.required">Value required.</span>
+        </span>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<div class="w-100 header mx-2 mb-4">
+  <h3>Optimize Basin Temperature Setpoint</h3>
+</div>
+<div class="d-flex w-100">
+
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Baseline
+    </label>
+    <form #formElement [formGroup]="form">
+      <div class="form-group">
+        <label class="small" for="baselineTempSetPoint">Basin Temperature Setpoint</label>
+        <div class="input-group">
+          <input class="form-control" name="baselineTempSetPoint" id="baselineTempSetPoint" formControlName="baselineTempSetPoint"
+            type="number" (input)="calculate()" (focus)="focusField('baselineTempSetPoint')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.baselineTempSetPoint.invalid && !form.controls.baselineTempSetPoint.pristine">
+          <span *ngIf="form.controls.baselineTempSetPoint.errors.required">Value required.</span>
+        </span>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="w-50 d-flex flex-column mx-4 mb-4">
+    <label class="group-label my-1">
+      Modification
+    </label>
+    <form #formElement [formGroup]="form">
+      <div class="form-group">
+        <label class="small" for="modTempSetPoint">Basin Temperature Setpoint</label>
+        <div class="input-group">
+          <input class="form-control" name="modTempSetPoint" id="modTempSetPoint" formControlName="modTempSetPoint"
+            type="number" (input)="calculate()" (focus)="focusField('modTempSetPoint')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.modTempSetPoint.invalid && !form.controls.modTempSetPoint.pristine">
+          <span *ngIf="form.controls.modTempSetPoint.errors.required">Value required.</span>
+        </span>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<app-operating-hours-modal *ngIf="showOpHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>
