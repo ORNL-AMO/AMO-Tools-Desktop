@@ -84,6 +84,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.options = this.suiteDbService.selectGasFlueGasMaterials();
           this.enableForm();
         }
       }

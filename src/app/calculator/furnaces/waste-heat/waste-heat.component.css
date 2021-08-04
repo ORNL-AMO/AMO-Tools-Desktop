@@ -7,10 +7,10 @@
    .fa.fa-times-circle-o:hover {
        cursor: pointer;
    }
-   
-   .flue-gas-icon {
-       width: 53px;
-   }
+
+   .icon-width {
+    width: 48px;
+}
    
    .no-data {
        background: none;
@@ -58,10 +58,6 @@
    .treasure-hunt-help {
        margin-right: .5rem;
        margin-bottom: 0px;
-   }
-   
-   .add-fixture{
-       margin-top: 10px;
    }
    
    .opp-sheet-icon{

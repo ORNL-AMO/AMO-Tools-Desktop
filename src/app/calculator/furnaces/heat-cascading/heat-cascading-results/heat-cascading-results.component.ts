@@ -12,9 +12,15 @@ import { HeatCascadingService } from '../heat-cascading.service';
 export class HeatCascadingResultsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
+  
+  displayAdditionalResults: boolean = true;
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
+  table1String: any;
   
   outputSubscription: Subscription;
   output: HeatCascadingOutput;
@@ -22,9 +28,11 @@ export class HeatCascadingResultsComponent implements OnInit {
   constructor(private heatCascadingService: HeatCascadingService) { }
 
   ngOnInit(): void {
+    this.displayAdditionalResults = !this.inTreasureHunt;
     this.outputSubscription = this.heatCascadingService.heatCascadingOutput.subscribe(val => {
       this.output = val;
-    })
+    });
+
   }
 
   ngOnDestroy() {
@@ -33,6 +41,14 @@ export class HeatCascadingResultsComponent implements OnInit {
 
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;
+  }
+
+  updateTable1String() {
+    this.table1String = this.copyTable1.nativeElement.innerText;
+  }
+
+  toggleResults() {
+    this.displayAdditionalResults = !this.displayAdditionalResults;
   }
 
 }

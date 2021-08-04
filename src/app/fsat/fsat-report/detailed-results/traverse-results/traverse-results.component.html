@@ -1,0 +1,208 @@
+<div *ngIf="planeResults && !planeResults.error">
+    <label>{{fsatName}} Plane Data Table</label>
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td><span>Plane #</span></td>
+                <td><span>Plane Description</span></td>
+                <td><span>Gas Density</span>
+                    <br>
+                    <span [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
+                </td>
+                <td><span>Planar Area</span>
+                    <br>
+                    <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
+                    <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
+                </td>
+                <td><span>Volume Flow</span>
+                    <br>
+                    <span [innerHTML]="settings.fanFlowRate |  settingsLabel"></span>
+                </td>
+                <td><span>Gas Velocity</span>
+                    <br>
+                    <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft/min</span>
+                    <span *ngIf="settings.fanFlowRate == 'm3/s'">m/s</span>
+                </td>
+                <td><span>Dry Bulb Temp</span>
+                    <br>
+                    <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+                </td>
+                <td><span>Static Pressure</span>
+                    <br>
+                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+                </td>
+                <td><span>Velocity Pressure</span>
+                    <br>
+                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+                </td>
+                <td><span>Total Pressure</span>
+                    <br>
+                    <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+                </td>
+                <td><span>Barometric Pressure</span>
+                    <br>
+                    <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>3a</td>
+                <td>Flow Traverse</td>
+                <td>{{planeResults.FlowTraverse.gasDensity | sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.FlowTraverse.area |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.FlowTraverse.gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.FlowTraverse.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FlowTraverse.dryBulbTemp | sigFigs:
+                    '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.FlowTraverse.staticPressure | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.FlowTraverse.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.FlowTraverse.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FlowTraverse.barometricPressure |
+                    sigFigs: '6'}}</td>
+            </tr>
+            <tr *ngIf="fsat.fan203InputsForPlaneResults.FanRatedInfo.traversePlanes > 1">
+                <td>3b</td>
+                <td>Add'l Traverse Plane 1</td>
+                <td>{{planeResults.AddlTraversePlanes[0].gasDensity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[0].area | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[0].gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[0].gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[0].dryBulbTemp |
+                    sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[0].staticPressure |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[0].gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[0].gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[0].barometricPressure
+                    | sigFigs: '6'}}</td>
+            </tr>
+            <tr *ngIf="fsat.fan203InputsForPlaneResults.FanRatedInfo.traversePlanes > 2">
+                <td>3c</td>
+                <td>Add'l Traverse Plane 2</td>
+                <td>{{planeResults.AddlTraversePlanes[1].gasDensity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[1].area | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[1].gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[1].gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[1].dryBulbTemp |
+                    sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[1].staticPressure |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[1].gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.AddlTraversePlanes[1].gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.AddlTraversePlanes[1].barometricPressure
+                    | sigFigs: '6'}}</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Inlet Measurement Plane</td>
+                <td>{{planeResults.InletMstPlane.gasDensity | sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.InletMstPlane.area |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.InletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.InletMstPlane.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.InletMstPlane.dryBulbTemp | sigFigs:
+                    '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.InletMstPlane.staticPressure | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.InletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.InletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.InletMstPlane.barometricPressure |
+                    sigFigs: '6'}}</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Fan Inlet Flange</td>
+                <td>{{planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.FanInletFlange.area |
+                    sigFigs: '6'}}</td>
+                <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
+                    {{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}
+                </td>
+                <td>{{planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FanInletFlange.dryBulbTemp | sigFigs:
+                    '6'}}</td>
+                <td>
+                    {{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FanInletFlange.barometricPressure |
+                    sigFigs: '6'}}</td>
+            </tr>
+            <tr *ngIf="fsat.fan203InputsForPlaneResults.FanRatedInfo.upDownStream != 'Downstream'">
+                <td>5</td>
+                <td>Outlet Measurement Plane</td>
+                <td>{{planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.area |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.dryBulbTemp | sigFigs:
+                    '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.staticPressure | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.barometricPressure |
+                    sigFigs: '6'}}</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Fan or Evase Outlet Flange</td>
+                <td>{{planeResults.FanOrEvaseOutletFlange.gasDensity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FanEvaseOrOutletFlange.area | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp |
+                    sigFigs: '6'}}</td>
+                <td>
+                    {{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.FanEvaseOrOutletFlange.barometricPressure
+                    | sigFigs: '6'}}</td>
+            </tr>
+            <tr *ngIf="fsat.fan203InputsForPlaneResults.FanRatedInfo.upDownStream == 'Downstream'">
+                <td>5</td>
+                <td>Outlet Measurement Plane</td>
+                <td>{{planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.area |
+                    sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.dryBulbTemp | sigFigs:
+                    '6'}}</td>
+                <td>{{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.staticPressure | sigFigs:
+                    '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
+                <td>{{planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
+                <td>
+                    {{fsat.fan203InputsForPlaneResults.PlaneData.OutletMstPlane.barometricPressure |
+                    sigFigs: '6'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

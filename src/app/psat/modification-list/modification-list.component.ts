@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { Modification } from '../../shared/models/psat';
 import { PsatTabService } from '../psat-tab.service';
 import { Settings } from '../../shared/models/settings';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-modification-list',
@@ -31,17 +32,24 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
+  
   constructor(private compareService: CompareService, private psatService: PsatService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
     this.initDropdown();
     this.assessmentTabSubscription = this.psatTabService.secondaryTab.subscribe(val => {
       this.asssessmentTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
+  }
+
+  saveScenarioChange(isWhatIfScenario: boolean, modIndex: number){
+    this.psat.modifications[modIndex].psat.inputs.whatIfScenario = isWhatIfScenario;
+    this.save.emit(true);
+    this.selectModification(modIndex, true);
   }
 
   initDropdown() {
@@ -144,7 +152,7 @@ export class ModificationListComponent implements OnInit {
         motorNotes: '',
         pumpFluidNotes: '',
         systemBasicsNotes: ''
-      },
+      },      
     }
     if (this.asssessmentTab == 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
@@ -152,6 +160,7 @@ export class ModificationListComponent implements OnInit {
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(psat.inputs)));
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
+    tmpModification.psat.inputs.whatIfScenario = true;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);

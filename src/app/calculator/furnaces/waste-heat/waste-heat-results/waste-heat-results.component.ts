@@ -13,14 +13,13 @@ export class WasteHeatResultsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  modificationExists: boolean;
-
+  inTreasureHunt: boolean;
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
-  table0String: any;
+  table0String: string;
   @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
-  table1String: any;
-  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
-  table2String: any;
+  table1String: string;
+  
+  displayAdditionalResults: boolean = true;
 
   outputSubscription: Subscription;
   output: WasteHeatOutput;
@@ -28,6 +27,7 @@ export class WasteHeatResultsComponent implements OnInit {
   constructor(private wasteHeatService: WasteHeatService) { }
 
   ngOnInit(): void {
+    this.displayAdditionalResults = !this.inTreasureHunt;
     this.outputSubscription = this.wasteHeatService.wasteHeatOutput.subscribe(val => {
       this.output = val;
     })
@@ -45,8 +45,7 @@ export class WasteHeatResultsComponent implements OnInit {
     this.table1String = this.copyTable1.nativeElement.innerText;
   }
 
-  updateTable2String() {
-    this.table2String = this.copyTable2.nativeElement.innerText;
+  toggleResults() {
+    this.displayAdditionalResults = !this.displayAdditionalResults;
   }
-
 }

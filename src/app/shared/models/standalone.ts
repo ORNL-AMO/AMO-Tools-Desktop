@@ -455,6 +455,7 @@ export interface CompEEM_kWAdjustedInput {
 
 export interface CompressedAirPressureReductionData {
   name: string,
+  powerType?: string,
   isBaseline: boolean,
   hoursPerYear: number,
   electricityCost: number,

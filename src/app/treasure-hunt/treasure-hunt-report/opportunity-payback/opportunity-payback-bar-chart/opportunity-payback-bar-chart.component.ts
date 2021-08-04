@@ -70,7 +70,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         title: {
           // text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 14
           }
         },
@@ -124,7 +124,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         title: {
           // text: this.yAxisLabel,
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 14
           }
         },

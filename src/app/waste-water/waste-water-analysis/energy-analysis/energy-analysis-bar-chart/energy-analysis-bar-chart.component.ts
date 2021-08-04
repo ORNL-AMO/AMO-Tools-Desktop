@@ -1,3 +1,4 @@
+
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
@@ -32,7 +33,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
         title: {
           text: 'MWh/yr',
           font: {
-            family: 'Arial',
+            family: 'Roboto',
             size: 16
           }
         },

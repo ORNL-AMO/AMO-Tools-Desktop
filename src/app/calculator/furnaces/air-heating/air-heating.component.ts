@@ -1,8 +1,9 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { AirHeatingOutput } from '../../../shared/models/phast/airHeating';
+import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
+import { AirHeatingTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { AirHeatingService } from './air-heating.service';
 
 @Component({
@@ -13,13 +14,22 @@ import { AirHeatingService } from './air-heating.service';
 export class AirHeatingComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Output("emitSave")
+  emitSave = new EventEmitter<AirHeatingTreasureHunt>();
+  @Output("emitCancel")
+  emitCancel = new EventEmitter<boolean>();
+  @Input()
+  operatingHours: OperatingHours;
+  @Input()
+  inTreasureHunt: boolean; 
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
+  containerHeight: number;
   
   airFlowConversionInputSub: Subscription;
   modalSubscription: Subscription;
@@ -32,12 +42,19 @@ export class AirHeatingComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.airHeatingService.airHeatingInput.getValue();
     if(!existingInputs) {
-      this.airHeatingService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.airHeatingService.initDefaultEmptyInputs(this.settings.fuelCost);
+      } else {
+        this.airHeatingService.initDefaultEmptyInputs();
+      }
       this.airHeatingService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
@@ -55,8 +72,10 @@ export class AirHeatingComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(value => {
-      this.calculate();
+    this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(input => {
+      if (input) {
+        this.calculate();
+      }
     });
     this.modalSubscription = this.airHeatingService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
@@ -81,9 +100,27 @@ export class AirHeatingComponent implements OnInit {
     this.tabSelect = str;
   }
 
+  save() {
+    let inputData = this.airHeatingService.airHeatingInput.getValue(); 
+    let treasureHuntEnergyType = inputData.gasFuelType? inputData.utilityType : 'Other Fuel';
+    this.emitSave.emit({
+      inputData: inputData,
+      energySourceData: {
+        energySourceType: treasureHuntEnergyType,  
+        unit: 'MMBtu'
+      },
+      opportunityType: Treasure.airHeating
+    });
+  }
+
+  cancel() {
+    this.airHeatingService.initDefaultEmptyInputs();
+    this.emitCancel.emit(true);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 

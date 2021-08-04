@@ -8,19 +8,10 @@ export interface WasteHeatInput {
     chillerOutTemperature: number,
     copChiller: number,
     chillerEfficiency: number,
-    copCompressor: number,
-    energySourceType: string
+    copCompressor: number
 }
 
 export interface WasteHeatOutput {
-    baseline: WasteHeatResults,
-    modification?: WasteHeatResults,
-    annualEnergySavings?: number,
-    annualCostSavings?: number,
-    energyUnit?: string
-}
-
-export interface WasteHeatResults {
     recoveredHeat: number,
     hotWaterFlow: number,
     tonsRefrigeration: number,

@@ -58,19 +58,13 @@
     <div class="form-section">
 
       <div class="form-group">
-        <label class="small" for="{{'compressorPower_'+idString}}">Compressor Power</label>
-        <div class="input-group">
-          <input class="form-control" type="number" name="compressorPower" id="{{'compressorPower_'+idString}}"
-            formControlName="compressorPower" (input)="calculate()" (focus)="focusField('compressorPower')"
-            (blur)="focusOut()">
-          <span class="units input-group-addon">kW</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.compressorPower.invalid && !form.controls.compressorPower.pristine">
-          <span *ngIf="form.controls.compressorPower.errors.required">Value required.</span>
-          <span *ngIf="form.controls.compressorPower.errors.min">Value can't be less than
-            {{form.controls.compressorPower.errors.min.min}}.</span>
-        </span>
+        <label class="small" for="powerType">Power Type
+        </label>
+        <select name="powerType" class="form-control" formControlName="powerType" id="powerType"
+          (change)="calculate()" (focus)="focusField('powerType')" >
+          <option for="powerType" [ngValue]="'Measured'">Measured</option>
+          <option for="powerType" [ngValue]="'Rated'">Rated</option>
+        </select>
       </div>
 
       <div class="form-group" *ngIf="isBaseline">
@@ -112,7 +106,7 @@
       </div>
 
 
-      <div class="form-group">
+      <div *ngIf="isBaseline && form.controls.powerType.value === 'Rated'" class="form-group">
         <label class="small" for="{{'pressureRated_'+idString}}">Rated Pressure</label>
         <div class="input-group">
           <input class="form-control" type="number" name="pressureRated" id="{{'pressureRated_'+idString}}"
@@ -147,6 +141,25 @@
           <span *ngIf="form.controls.atmosphericPressure.errors.required">Value required.</span>
           <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
             {{form.controls.atmosphericPressure.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div *ngIf="isBaseline" class="form-group">
+        <label class="small" for="{{'compressorPower_'+idString}}">
+          <span *ngIf="form.controls.powerType.value === 'Measured'">Measured Compressor Power</span>
+          <span *ngIf="form.controls.powerType.value === 'Rated'">Rated Compressor Power</span>
+        </label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="compressorPower" id="{{'compressorPower_'+idString}}"
+            formControlName="compressorPower" (input)="calculate()" (focus)="focusField('compressorPower')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.compressorPower.invalid && !form.controls.compressorPower.pristine">
+          <span *ngIf="form.controls.compressorPower.errors.required">Value required.</span>
+          <span *ngIf="form.controls.compressorPower.errors.min">Value can't be less than
+            {{form.controls.compressorPower.errors.min.min}}.</span>
         </span>
       </div>
 

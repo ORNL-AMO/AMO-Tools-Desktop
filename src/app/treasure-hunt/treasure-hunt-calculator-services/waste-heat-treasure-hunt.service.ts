@@ -17,8 +17,7 @@ export class WasteHeatTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(wasteHeat: WasteHeatTreasureHunt) {
-    this.wasteHeatService.baselineData.next(wasteHeat.baseline);
-    this.wasteHeatService.modificationData.next(wasteHeat.modification);
+    this.wasteHeatService.wasteHeatInput.next(wasteHeat.inputData);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -35,8 +34,7 @@ export class WasteHeatTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.wasteHeatService.baselineData.next(undefined);
-    this.wasteHeatService.modificationData.next(undefined);
+    this.wasteHeatService.wasteHeatInput.next(undefined)
   }
 
 
@@ -45,33 +43,17 @@ export class WasteHeatTreasureHuntService {
     this.wasteHeatService.calculate(settings);
     let results: WasteHeatOutput = this.wasteHeatService.wasteHeatOutput.getValue();
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
-      costSavings: results.annualCostSavings,
-      energySavings: results.annualEnergySavings,
-      baselineCost: results.baseline.annualCost,
-      modificationCost: results.modification.annualCost,
-      utilityType: wasteHeatTreasureHunt.baseline.energySourceType,
+      costSavings: results.annualCost,
+      energySavings: results.annualEnergy,
+      baselineCost: results.annualEnergy * wasteHeatTreasureHunt.inputData.cost,
+      modificationCost: 0,
+      utilityType: 'Electricity',
     }
 
     return treasureHuntOpportunityResults;
   }
 
   getWasteHeatCardData(wasteHeat: WasteHeatTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let currentCosts: number;
-    let unitStr: string = 'MMBtu';
-    if (settings.unitsOfMeasure != 'Imperial') {
-      unitStr = 'GJ';
-    }
-
-    if (wasteHeat.baseline.energySourceType == 'Electricity') {
-      currentCosts = currentEnergyUsage.electricityCosts;
-    } else if (wasteHeat.baseline.energySourceType == 'Natural Gas') {
-      currentCosts = currentEnergyUsage.naturalGasCosts
-    } else if (wasteHeat.baseline.energySourceType == 'Other Fuel') {
-      currentCosts = currentEnergyUsage.otherFuelCosts;
-    } else if (wasteHeat.baseline.energySourceType == 'Steam') {
-      currentCosts = currentEnergyUsage.steamCosts
-    }
-
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -81,12 +63,12 @@ export class WasteHeatTreasureHuntService {
       annualCostSavings: opportunitySummary.costSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
+        energyUnit: 'kWh',
         label: opportunitySummary.utilityType
       }],
       utilityType: [opportunitySummary.utilityType],
       percentSavings: [{
-        percent: (opportunitySummary.costSavings / currentCosts) * 100,
+        percent: (opportunitySummary.costSavings / currentEnergyUsage.electricityCosts) * 100,
         label: opportunitySummary.utilityType,
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
@@ -102,10 +84,7 @@ export class WasteHeatTreasureHuntService {
 
   convertWasteHeatReductions(wasteHeatReductions: Array<WasteHeatTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WasteHeatTreasureHunt> {
     wasteHeatReductions.forEach(wasteHeat => {
-        wasteHeat.baseline = this.convertWasteHeatInput(wasteHeat.baseline, oldSettings, newSettings);
-        if (wasteHeat.modification) {
-          wasteHeat.modification = this.convertWasteHeatInput(wasteHeat.modification, oldSettings, newSettings);
-        }
+        wasteHeat.inputData = this.convertWasteHeatInput(wasteHeat.inputData, oldSettings, newSettings);
     });
     return wasteHeatReductions;
   }

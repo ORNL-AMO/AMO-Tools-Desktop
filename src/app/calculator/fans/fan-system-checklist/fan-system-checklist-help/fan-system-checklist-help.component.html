@@ -1,6 +1,6 @@
 <div class="p-3 pt-3 d-flex flex-column help-info">
   <h5>
-    Fan System Optimization Checklist
+    Fan System Optimization Checklist Help
     <br>
     <small class="text-muted">
       <small><i>For fans over 50 hp that operate more than 4000 hours per year</i></small>
@@ -27,6 +27,20 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <hr *ngIf="currentField != undefined">
 </div>

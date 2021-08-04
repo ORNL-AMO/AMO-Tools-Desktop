@@ -23,7 +23,7 @@
             </div>
             <app-flue-gas-form-mass *ngIf="method == 'By Mass'" [settings]="settings" [selected]="baselineSelected"
              [isBaseline]="true" [inModal]="true"></app-flue-gas-form-mass>
-            <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="baselineSelected" 
+            <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="baselineSelected" [selectedFuelId]="selectedFuelId"
             [settings]="settings" [treasureHuntEnergySource]="treasureHuntEnergySource" [settings]="settings"
              [isBaseline]="true" [inModal]="true"></app-flue-gas-form-volume>
 

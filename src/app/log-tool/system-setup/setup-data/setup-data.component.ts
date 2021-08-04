@@ -8,6 +8,8 @@ import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-
 import { IndividualDataFromCsv } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { Subscription } from 'rxjs';
+import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -26,6 +28,10 @@ export class SetupDataComponent implements OnInit {
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   previousDataAvailableSub: Subscription;
   previousDataAvailable: Date;
+  workSheets: Array<String>;
+  workSheetsAvailable: boolean = false;
+  selectedSheet: string;
+  workBook: XLSX.WorkBook;
   headerRowOptions: Array<{ value: number, display: number }> = [
     { value: 0, display: 1 },
     { value: 1, display: 2 },
@@ -63,7 +69,7 @@ export class SetupDataComponent implements OnInit {
     }
   }
 
-  setImportFile($event) {
+  setCSVImport($event) {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {
         let regex = /.csv$/;
@@ -79,6 +85,21 @@ export class SetupDataComponent implements OnInit {
     }
   }
 
+  setImport($event) {
+    let splitName = $event.target.files[0].name.split(".");
+    if (splitName[splitName.length - 1] == "xlsx") {
+      this.setExcelImport($event);
+    }
+    else {
+      this.setCSVImport($event);
+    }
+  }
+
+  setExcelImport($event) {
+    this.fileReference = $event.target.files[0];
+    this.importExcel();
+  }
+
   importFile() {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference);
@@ -88,6 +109,39 @@ export class SetupDataComponent implements OnInit {
     };
   }
 
+  parseExcel() {
+    setTimeout(() => {
+      this.logToolService.addCsvData(this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow)), this.fileReference.name);
+      this.importSuccesful = true;
+      this.importData = undefined;
+      this.importingData = false;
+      this.logToolService.dataSubmitted.next(true);
+      this.previousDataAvailable = undefined;
+      this.logToolDbService.saveData();
+      this.cd.detectChanges();
+      }, 100);
+    
+  }
+
+  importExcel() {
+    let fr: FileReader = new FileReader();
+    fr.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      this.workBook = XLSX.read(bstr, { type: 'binary', cellDates: true, cellText: false, cellNF: false });
+      this.selectedSheet = this.workBook.SheetNames[0];
+      this.workSheets = this.workBook.SheetNames;
+      this.workSheetsAvailable = true;
+      this.finishImportExcel();
+    }
+    fr.readAsBinaryString(this.fileReference);
+  }
+
+  finishImportExcel() {
+    let rowObject  =  XLSX.utils.sheet_to_csv(this.workBook.Sheets[this.selectedSheet], {dateNF: "mm/dd/yyyy hh:mm:ss"});
+    this.importData = rowObject;
+    this.parsePreviewData();
+  }
+ 
 
   parsePreviewData() {
     this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);

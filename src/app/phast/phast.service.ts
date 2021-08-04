@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasHeatingValue, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -589,7 +589,7 @@ export class PhastService {
     }
   }
 
-  flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial) {
+  flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial): FlueGasHeatingValue {
     return phastAddon.flueGasByVolumeCalculateHeatingValue(inputs);
   }
 
