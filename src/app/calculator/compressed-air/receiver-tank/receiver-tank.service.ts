@@ -181,7 +181,7 @@ export class ReceiverTankService {
   convertTankMeteredStorageExample(inputs: ReceiverTankMeteredStorage, settings: Settings) {
     let tmpInputs: ReceiverTankMeteredStorage = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('m3').to('ft3') * 100) / 100;
       tmpInputs.meteredControl = Math.round(this.convertUnitsService.value(tmpInputs.meteredControl).from('m3').to('ft3') * 100) / 100;
       tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('kPa') * 100) / 100;
       tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('kPa') * 100) / 100;
