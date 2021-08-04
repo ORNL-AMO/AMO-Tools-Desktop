@@ -59,7 +59,7 @@
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
       <td *ngIf="output.savingsEnergy" class="text-center w-50">
-        {{output.savingsEnergy | number:'1.0-0'}} kWh
+        {{output.savingsEnergy}} kWh
       </td>
       <td *ngIf="!output.savingsEnergy" class="text-center w-50">
         &mdash; &mdash;

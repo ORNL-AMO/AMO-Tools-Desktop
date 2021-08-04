@@ -65,6 +65,11 @@ export class CoolingTowerFanService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let coolingTowerFanOutput: CoolingTowerFanOutput = chillersAddon.coolingTowerFanEnergyConsumption(inputCopy);
+      if (coolingTowerFanOutput.savingsEnergy < 100) {
+        coolingTowerFanOutput.savingsEnergy = Number(coolingTowerFanOutput.savingsEnergy.toFixed(3));
+      } else {
+        coolingTowerFanOutput.savingsEnergy = Number(coolingTowerFanOutput.savingsEnergy.toFixed(2));
+      }
       coolingTowerFanOutput = this.convertResultUnits(coolingTowerFanOutput, settings);
       this.coolingTowerFanOutput.next(coolingTowerFanOutput);
     }
