@@ -14,7 +14,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
   @Input()
   dataOption: string;
   @Input()
-  energyUnit: string;
+  energyUnit: string; 
+  
 
   @ViewChild('rollupSummaryPieChart', { static: false }) rollupSummaryPieChart: ElementRef;
 
@@ -55,6 +56,18 @@ export class RollupSummaryPieChartComponent implements OnInit {
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
+    }
+    else if (this.dataOption == 'energySavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energySavings
+      });
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
+    }
+    else if (this.dataOption == 'costSavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.costSavings
       });
       textTemplate = '%{label}:<br>%{value:$,.0f}';
     }
@@ -108,6 +121,18 @@ export class RollupSummaryPieChartComponent implements OnInit {
       });
       textTemplate = '%{label}:<br>%{value:$,.0f}';
     }
+    else if (this.dataOption == 'energySavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energySavings
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}' + this.energyUnit;
+    }
+    else if (this.dataOption == 'costSavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.costSavings
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
+    }
     var data = [{
       values: valuesArr,
       labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),
@@ -143,6 +168,8 @@ export interface PieChartDataItem {
   equipmentName: string,
   energyUsed: number,
   annualCost: number,
+  energySavings: number,
+  costSavings: number,
   percentCost: number,
   percentEnergy: number,
   color: string,

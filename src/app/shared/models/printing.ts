@@ -16,5 +16,6 @@ export interface PrintOptions {
     printReportOpportunitySummary: boolean;
     printSsmtRollup: boolean;
     printWasteWaterRollup: boolean;
+    printDetailedResults: boolean;
     selectAll: boolean;
   }

@@ -1,6 +1,6 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
   <h5>
-    Input Plane Data Help
+    Pitot Tube Traverse Readings Help
     <br>
     <small class="text-muted">This section is where the user enters more specific data about the fan system (e.g.,
       ductwork arrangement and dimensions, the
@@ -44,9 +44,6 @@
       <small class="text-muted">
         Plane 3 is the plane used for the Pitot-static traverse for purpose of determining flow rate. This plane is "Plane 5" in the ISO 5802 standard.
       </small>
-      <div class="my-2 d-flex w-100 justify-content-center align-items-center">
-        <img class="w-75" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
-      </div>
     </span>
 
     <span *ngIf="planeStep == '4'">
@@ -132,7 +129,7 @@
       <br>
       <small class="text-muted">
         The inner clear
-        <span *ngIf="planeType == 'Rectangular'">Height</span>
+        <span *ngIf="planeType == 'Rectangular'">height</span>
         <span *ngIf="planeType == 'Circular'">diameter</span> of the plane.
         <hr>
       </small>
@@ -159,7 +156,7 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp' && planeStep == '3b'">
     <h6>
       Dry Bulb Temp
       <br>
@@ -169,6 +166,19 @@
       </small>
     </h6>
   </div>
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp' && planeStep == '3a'">
+    <h6>
+      Dry Bulb Temp
+      <br>
+      <small class="text-muted">
+        Dry bulb temperature measured near the plane. The density at this plane is based on the density defined on the Fluid page. The density for the 
+        other planes are adjusted using the dry bulb temperatures of the respective plane. If a temperature 
+        was specified on the Fluid page (because density was calculated), be sure the temperature entered for this field matches.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'barometricPressure'">
     <h6>
       Barometric Pressure
@@ -265,4 +275,9 @@
       </small>
     </h6>
   </div>
+  <span *ngIf="planeStep == '3a'||planeStep == '3b'||planeStep == '3c'">
+    <div class="my-2 d-flex w-100 justify-content-center align-items-center">
+      <img class="w-75" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
+    </div>
+  </span>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, HeatCascadingTreasureHunt, AirHeatingTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -61,10 +61,14 @@ export class ExportOpportunitiesComponent implements OnInit {
       pipeInsulationReductions: this.getSelectedPipeInsulationReductions(this.treasureHunt.pipeInsulationReductions),
       tankInsulationReductions: this.getSelectedTankInsulationReductions(this.treasureHunt.tankInsulationReductions),
       airLeakSurveys: this.getSelectedAirLeakSurveys(this.treasureHunt.airLeakSurveys),
+      airHeatingOpportunities: this.getSelectedAirHeatingOpportunities(this.treasureHunt.airHeatingOpportunities),
       openingLosses: this.getSelectedOpeningLosses(this.treasureHunt.openingLosses),
       wallLosses: this.getSelectedWallLosses(this.treasureHunt.wallLosses),
       leakageLosses: this.getSelectedLeakageLosses(this.treasureHunt.leakageLosses),
-      flueGasLosses: this.getSelectedFlueGasLosses(this.treasureHunt.flueGasLosses)
+      flueGasLosses: this.getSelectedFlueGasLosses(this.treasureHunt.flueGasLosses),
+      wasteHeatReductions: this.getSelectedWasteHeatReductions(this.treasureHunt.wasteHeatReductions),
+      heatCascadingOpportunities: this.getHeatCascadingOpportunities(this.treasureHunt.heatCascadingOpportunities),
+      waterHeatingOpportunities: this.getWaterHeatingOpportunities(this.treasureHunt.waterHeatingOpportunities),
     }
   }
   getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
@@ -175,10 +179,34 @@ export class ExportOpportunitiesComponent implements OnInit {
     }
     return undefined;
   }
+  getSelectedAirHeatingOpportunities(airHeating: Array<AirHeatingTreasureHunt>): Array<AirHeatingTreasureHunt> {
+    if (airHeating) {
+      return _.filter(airHeating, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
 
   getSelectedLeakageLosses(losses: Array<LeakageLossTreasureHunt>): Array<LeakageLossTreasureHunt> {
     if (losses) {
       return _.filter(losses, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getSelectedWasteHeatReductions(reductions: Array<WasteHeatTreasureHunt>): Array<WasteHeatTreasureHunt> {
+    if (reductions) {
+      return _.filter(reductions, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getHeatCascadingOpportunities(opportunities: Array<HeatCascadingTreasureHunt>): Array<HeatCascadingTreasureHunt> {
+    if (opportunities) {
+      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getWaterHeatingOpportunities(opportunities: Array<WaterHeatingTreasureHunt>): Array<WaterHeatingTreasureHunt> {
+    if (opportunities) {
+      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
     }
     return undefined;
   }

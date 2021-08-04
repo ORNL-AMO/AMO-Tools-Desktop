@@ -153,13 +153,13 @@ export class PhastRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       phastResultsCpy.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
         projectedCosts.push(result.modificationResults.annualCost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       phastResultsCpy.forEach(result => {
         result.baselineResults.annualEnergyUsed = this.getConvertedEnergyValue(result.baselineResults.annualEnergyUsed, result.settings);
         result.modificationResults.annualEnergyUsed = this.getConvertedEnergyValue(result.modificationResults.annualEnergyUsed, result.settings);
@@ -210,6 +210,8 @@ export class PhastRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergyUsed,
         annualCost: result.baselineResults.annualCost,
+        energySavings: result.baselineResults.annualEnergyUsed - result.modificationResults.annualEnergyUsed,
+        costSavings: result.baselineResults.annualCost - result.modificationResults.annualCost,
         percentCost: result.baselineResults.annualCost / totalCost * 100,
         percentEnergy: result.baselineResults.annualEnergyUsed / totalEnergyUse * 100,
         color: graphColors[colorIndex],

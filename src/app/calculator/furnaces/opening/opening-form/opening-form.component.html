@@ -16,9 +16,9 @@
     <div *ngIf="index == 0" class="form-section">
       <div *ngIf="!inTreasureHunt" class="d-flex flex-column w-100 justify-content-center pb-3">
         <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  openingLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Fuel')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Electricity')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Steam')" [ngClass]="{'active':  openingLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
         </div>
       </div>
 
@@ -26,8 +26,8 @@
         <label class="small" for="{{'energySourceType'+idString}}"> Energy Source Type
         </label>
         <select name="{{'energySourceType'+idString}}" class="form-control" id="{{'energySourceType'+idString}}"
-          formControlName="energySourceType" (change)="setEnergySource()" (focus)="focusField('energySourceType')">
-          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option.utilityName">{{option.display}}</option>
+          formControlName="energySourceType" (change)="setEnergyData()" (focus)="focusField('energySourceType')">
+          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option">{{option}}</option>
         </select>
       </div>
  
@@ -76,7 +76,7 @@
 
       <div class="form-group">
         <label class="small" for="{{'availableHeat'+idString}}">
-           <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Fuel'">
+           <span *ngIf="openingLossesForm.controls.energySourceType.value !== 'Steam' && openingLossesForm.controls.energySourceType.value !== 'Electricity'">
             Available Heat
           </span>
           <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Steam'">
@@ -320,7 +320,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+        <app-flue-gas-modal *ngIf="showFlueGasModal" 
+        [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" [inTreasureHunt]="inTreasureHunt" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
           [settings]="settings"></app-flue-gas-modal>
       </div>
     </div>

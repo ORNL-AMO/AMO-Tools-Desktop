@@ -5,6 +5,11 @@ export interface FlueGas {
     name?: string;
 }
 
+export interface AvailableHeatData {
+    availableHeat: number,
+    higherHeatingValue: number;
+}
+
 export interface FlueGasByMass {
     gasTypeId?: number;
     flueGasTemperature?: number;
@@ -28,6 +33,7 @@ export interface FlueGasByMass {
 
 export interface FlueGasByVolume {
     gasTypeId?: number;
+    utilityType?: string;
     flueGasTemperature?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
@@ -46,6 +52,12 @@ export interface FlueGasByVolume {
     SO2?: number;
     O2?: number;
     heatInput?: number;
+}
+
+export interface FlueGasHeatingValue {
+    heatingValue: number;
+    heatingValueVolume: number;
+    specificGravity: number;
 }
 
 export interface MaterialInputProperties {

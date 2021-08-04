@@ -20,10 +20,15 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
+  
+
+  notes: Array<SummaryNote>;
+
   constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
+    this.notes = new Array();
     if (this.inRollup) {
       this.psatReportRollupService.selectedPsats.forEach(val => {
         if (val) {
@@ -35,6 +40,11 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+
+    if(this.psat.modifications){
+      this.notes = this.buildSummaryNotes(this.psat);
+    }
+
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
@@ -78,4 +88,42 @@ export class OutputSummaryComponent implements OnInit {
     }
     return result;
   }
+
+  buildSummaryNotes(psat: PSAT): Array<SummaryNote>{
+    let tmpNotesArr: Array<SummaryNote> = new Array<SummaryNote>();
+    psat.modifications.forEach(mod =>{
+      if(mod.notes){
+        if(mod.notes.pumpFluidNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Pump and Fluid', mod.notes.pumpFluidNotes);
+          tmpNotesArr.push(note);
+        }
+        if(mod.notes.motorNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Motor', mod.notes.motorNotes);
+          tmpNotesArr.push(note);
+        }
+        if(mod.notes.fieldDataNotes){
+          let note = this.buildNoteObject(mod.psat.name, 'Field Data', mod.notes.fieldDataNotes);
+          tmpNotesArr.push(note);
+        }
+      }
+    });
+    return tmpNotesArr;
+  }
+
+  buildNoteObject(modName: string, modMade: string, modNote: string): SummaryNote {
+    let summaryNote: SummaryNote = {
+      modName: modName,
+      modMade: modMade,
+      modNote: modNote
+    };
+    return summaryNote;
+  }
+
 }
+
+export interface SummaryNote {
+  modName: string;
+  modMade: string;
+  modNote: string;
+}
+

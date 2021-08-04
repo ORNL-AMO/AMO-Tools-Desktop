@@ -22,7 +22,17 @@
             {{form.controls.operatingHours.errors.min.min}}.</span>
         </span>
       </div>
-    
+
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="boilerUtilityType">Boiler Utility Type
+        </label>
+        <select name="boilerUtilityType" class="form-control" formControlName="boilerUtilityType" id="boilerUtilityType"
+          (change)="setUtilityType()" (focus)="focusField('boilerUtilityType')" >
+          <option for="boilerUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="boilerUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
+      </div>
+      
       <div class="form-group">
         <label class="small" for="fuelCost">
           Cost of Fuel (Water Heater)
@@ -126,6 +136,16 @@
       <label class="group-label my-1">
         Heat Exchanger (HX)
       </label>
+
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="hxUtilityType">Heat Exchanger Utility Type
+        </label>
+        <select name="hxUtilityType" class="form-control" formControlName="hxUtilityType" id="hxUtilityType"
+          (change)="calculate()" (focus)="focusField('hxUtilityType')" >
+          <option for="hxUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="hxUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
+      </div>
 
       <div class="form-group">
         <label class="small" for="effWaterHeater">Current Water Heater Efficiency</label>

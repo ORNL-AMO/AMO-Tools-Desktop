@@ -37,7 +37,7 @@
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of baselineData; let i = index;">
-					<app-wall-form [index]="i" [inTreasureHunt]="inTreasureHunt" [operatingHours]="operatingHours" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-wall-form>
+					<app-wall-form [index]="i" [inTreasureHunt]="inTreasureHunt" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-wall-form>
 				</div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -61,7 +61,7 @@
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of modificationData; let i = index;">
-					<app-wall-form [operatingHours]="operatingHours" [inTreasureHunt]="inTreasureHunt" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-wall-form>
+					<app-wall-form [inTreasureHunt]="inTreasureHunt" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-wall-form>
 				  </div>
 			</div>
 		  </div>

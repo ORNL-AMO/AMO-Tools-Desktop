@@ -6,7 +6,12 @@ import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
 import { LeakageLoss } from "./phast/losses/leakageLoss";
+import { WasteHeatInput } from "./phast/wasteHeat";
 import { OpeningLoss } from "./phast/losses/openingLoss";
+import { AirHeatingInput } from "./phast/airHeating";
+import { HeatCascadingInput } from "./phast/heatCascading";
+import { WaterHeatingInput } from "./steam/waterHeating";
+import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
 
 export interface TreasureHunt {
     name: string,
@@ -23,10 +28,14 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
     openingLosses?: Array<OpeningLossTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
+    waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -48,9 +57,13 @@ export enum Treasure {
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
     wallLoss = 'wall-loss',
+    airHeating = 'air-heating',
     flueGas = 'flue-gas',
     leakageLoss = 'leakage-loss',
-    openingLoss = 'opening-loss'
+    wasteHeat = 'waste-heat',
+    openingLoss = 'opening-loss',
+    heatCascading = 'heat-cascading',
+    waterHeating = 'water-heating'
 }
 
 export interface FilterOption {
@@ -204,6 +217,19 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
 }
 
+export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
+    inputData: WasteHeatInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface AirHeatingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: AirHeatingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
     baseline: Array<WallLoss>;
     modification: Array<WallLoss>;
@@ -223,8 +249,8 @@ export interface LeakageLossTreasureHunt extends TreasureHuntOpportunity {
 export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
     baseline: FlueGas;
     modification: FlueGas;
-    baselineEnergyData: EnergyData;
-    modificationEnergyData: EnergyData;
+    baselineEnergyData: FlueGasEnergyData;
+    modificationEnergyData: FlueGasEnergyData;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
@@ -237,9 +263,27 @@ export interface OpeningLossTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface HeatCascadingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: HeatCascadingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface WaterHeatingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: WaterHeatingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 
 export interface EnergySourceData {
     energySourceType: string,
+    fuelCost?: {
+        baseline: number,
+        modification: number
+    }
     unit: string
 }
 
@@ -373,7 +417,11 @@ export interface ImportExportOpportunities {
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     openingLosses?: Array<OpeningLossTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
     wallLosses?: Array<WallLossTreasureHunt>;
     leakageLosses?: Array<LeakageLossTreasureHunt>;
     flueGasLosses?: Array<FlueGasTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
+    waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
 }

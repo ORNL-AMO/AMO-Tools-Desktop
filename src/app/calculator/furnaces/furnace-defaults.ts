@@ -1,9 +1,10 @@
-export const treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption> = [
-    {utilityName: 'Natural Gas', display: 'Natural Gas'},
-    {utilityName: 'Other Fuel', display: 'Other Fuel'},
-    {utilityName: 'Electricity', display: 'Electrotechnology'},
-    {utilityName: 'Steam', display: 'Steam-based'},
-  ];
+export const treasureHuntUtilityOptions: Array<string> = [
+  'Natural Gas',
+  'Other Fuel',
+  'Electricity',
+  'Steam',
+];
+
 
 export interface TreasureHuntUtilityOption {
     utilityName: string,

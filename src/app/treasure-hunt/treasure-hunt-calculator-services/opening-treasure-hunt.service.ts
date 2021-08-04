@@ -11,14 +11,17 @@ export class OpeningTreasureHuntService {
   constructor(
     private openingService: OpeningService, private convertUnitsService: ConvertUnitsService) { }
 
-
   initNewCalculator() {
     this.resetCalculatorInputs();
   }
 
   setCalculatorInputFromOpportunity(openingLoss: OpeningLossTreasureHunt) {
-    this.openingService.baselineData.next(openingLoss.baseline);
+    // Use copy. on cancel energysource reset will change reference before form destroys
+    openingLoss = JSON.parse(JSON.stringify(openingLoss));
+    this.openingService.energySourceType.next(openingLoss.baseline[0].energySourceType);
+    this.openingService.treasureHuntFuelCost.next(undefined);
     this.openingService.modificationData.next(openingLoss.modification);
+    this.openingService.baselineData.next(openingLoss.baseline);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -37,6 +40,8 @@ export class OpeningTreasureHuntService {
   resetCalculatorInputs() {
     this.openingService.baselineData.next(undefined);
     this.openingService.modificationData.next(undefined);
+    this.openingService.energySourceType.next(undefined);
+    this.openingService.treasureHuntFuelCost.next(undefined);
   }
 
 

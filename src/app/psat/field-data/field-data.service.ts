@@ -7,12 +7,12 @@ export class FieldDataService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean): FormGroup {
+  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean, isWhatIfScenario?: boolean): FormGroup {
     let loadEstimationMethodValidators: Array<ValidatorFn> = [];
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
     let measuredVoltageValidators: Array<ValidatorFn> = [];
-    if (isBaseline) {
+    if (isBaseline || !psatInputs.whatIfScenario) {
       loadEstimationMethodValidators = [Validators.required];
       measuredVoltageValidators = [Validators.required];
       if (psatInputs.load_estimation_method == 0) {
@@ -35,7 +35,7 @@ export class FieldDataService {
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],
       measuredVoltage: [psatInputs.motor_field_voltage, measuredVoltageValidators],
-      implementationCosts: [psatInputs.cost]
+      implementationCosts: [psatInputs.implementationCosts]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {

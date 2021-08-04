@@ -58,10 +58,10 @@
       <!-- simple patback -->
       <td *ngIf="data.modificationName">
         <span *ngIf="data.payBackPeriod">
-          {{data.payBackPeriod | sigFigs:'3'}}
+          {{data.payBackPeriod | number: '1.0-0'}}
         </span>
         <span *ngIf="!data.payBackPeriod">
-          &mdash;
+          0
         </span>
       </td>
       <td *ngIf="!data.modificationName">&mdash;</td>
@@ -90,7 +90,7 @@
       <td *ngIf="!totalImplementationCosts">&mdash;</td>
       <!-- simple patback -->
       <td *ngIf="totalPaybackPeriod">
-        {{totalPaybackPeriod | sigFigs:'3'}}
+        {{totalPaybackPeriod | number: '1.0-0'}}
       </td>
       <td *ngIf="!totalPaybackPeriod">&mdash;</td>
     </tr>

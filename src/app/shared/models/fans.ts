@@ -8,6 +8,7 @@ export interface FSAT {
   fieldData?: FieldData;
   fanMotor?: FanMotor;
   fanSetup?: FanSetup;
+  fan203InputsForPlaneResults?: Fan203Inputs;
   baseGasDensity?: BaseGasDensity;
   notes: Notes;
   implementationCosts?: number;
@@ -18,6 +19,7 @@ export interface FSAT {
   valid?: FsatValid;
   modalFieldData?: FieldData;
   existingDataUnits?: string;
+  whatIfScenario?: boolean;
 }
 
 export interface FsatValid {
@@ -364,6 +366,8 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  planeResults?: PlaneResults;
+  psychrometricResults?: PsychrometricResults;
 }
 
 export interface InletPressureData {
@@ -405,3 +409,84 @@ export interface CompressibilityFactor {
   flowRate: number;
   specificHeatRatio: number;
 };
+
+
+export interface FanSystemChecklistInput {
+  operatingHours: number,
+  motorPower: number,
+  fanType: number,
+  notes: string,
+  name: string,
+  // Control
+  control: {
+    motorOverloads: number,
+    spillOrBypass: number,
+    dischargeDamper: number,
+    inletDamper: number,
+    variableInletVane: number,
+    systemDamper: number,
+    damperClosed: number,
+  }
+  // System
+  system: {
+    turnRight: number,
+    turnNear: number,
+    dirtLeg: number,
+    noOutletDuct: number,
+    restrictedInlet: number,
+  }
+  // Production
+  production: {
+    excessFlowOrPressure: number,
+    unstableSystem: number,
+    unreliableSystem: number,
+    lowFlowOrPressure: number,
+    systemNoisy: number,
+    fanBladeBuildup: number,
+    weldingDuctwork: number,
+    radialFanCleanAir: number,
+  }
+}
+
+
+export interface FanSystemChecklistOutput {
+  equipmentResults: Array<FanSystemChecklistResult>;
+}
+
+export interface FanSystemChecklistResult {
+  totalScore: number;
+  priority: string,
+  motorPowerScore: number;
+  operatingHoursScore: number;
+  controlsScore: number;
+  productionScore: number;
+  systemScore: number;
+  name: string;
+  hasMotorPowerPriority: boolean;
+  notes: string;
+  checklistAnswers?: {[key: string]: string} 
+}
+
+export const fanChecklistQuestions =  {
+  motorOverloads: 'Motor overloads unless damper restricts flow.',
+  spillOrBypass: 'Spill or bypass',
+  dischargeDamper: 'Discharge damper',
+  inletDamper: 'Inlet damper',
+  variableInletVane: 'Variable Inlet Vane',
+  systemDamper: 'System Damper',
+  damperClosed: 'Damper is mostly closed',
+  turnRight: '90% turn right at fan outlet or inlet',
+  turnNear: '90% turn near fan outlet or inlet',
+  dirtLeg: 'Dirt leg at bottom of inlet duct',
+  noOutletDuct: 'No outlet duct',
+  restrictedInlet: 'Restricted or sharp inlet',
+  excessFlowOrPressure: 'Too much flow or pressure for production',
+  unstableSystem: 'Unstable or hard to control system',
+  unreliableSystem: 'Unreliable system breaks down regularly',
+  lowFlowOrPressure: 'Not enough flow or pressure for production',
+  systemNoisy: 'System is excessively noisy',
+  fanBladeBuildup: 'Buildup on fan blades',
+  weldingDuctwork: 'Need to weld ductwork cracks regularly',
+  radialFanCleanAir: 'Radial fan handling clean air',
+};
+

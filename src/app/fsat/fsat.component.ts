@@ -46,7 +46,6 @@ export class FsatComponent implements OnInit {
 
   stepTabs: Array<string> = [
     'system-basics',
-    'fsat-fluid',
     'fan-setup',
     'fan-motor',
     'fan-field-data'

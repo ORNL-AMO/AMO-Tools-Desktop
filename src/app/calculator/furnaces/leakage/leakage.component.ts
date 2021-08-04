@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
 import { LeakageLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { LeakageService } from './leakage.service';
 
 @Component({
@@ -46,7 +47,7 @@ export class LeakageComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService, 
               private leakageService: LeakageService) { }
 
   ngOnInit() {
@@ -72,7 +73,11 @@ export class LeakageComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     if (this.inTreasureHunt) {
-      this.leakageService.initDefaultEmptyInputs();
+      this.leakageService.modificationData.next(undefined);
+      this.leakageService.baselineData.next(undefined);
+      this.leakageService.energySourceType.next(undefined);
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
     }
   }
 
@@ -99,7 +104,10 @@ export class LeakageComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.leakageService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -164,7 +172,7 @@ export class LeakageComponent implements OnInit {
 
   resetLeakageInputs() {
     if (this.inTreasureHunt) {
-      this.leakageService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+      this.leakageService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
     } else {
       this.leakageService.initDefaultEmptyInputs();
     }

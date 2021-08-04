@@ -45,7 +45,7 @@ export class InventorySummaryGraphComponent implements OnInit {
           title: {
             text: 'Motor Inventory',
             font: {
-              family: 'Arial',
+              family: 'Roboto',
               size: 22
             }
           },
@@ -54,7 +54,7 @@ export class InventorySummaryGraphComponent implements OnInit {
             title: {
               text: '# of Motors',
               font: {
-                family: 'Arial',
+                family: 'Roboto',
                 size: 16
               }
             },
@@ -67,7 +67,7 @@ export class InventorySummaryGraphComponent implements OnInit {
               text: val.display
             },
             font: {
-              family: 'Arial',
+              family: 'Roboto',
               size: 16
             },
             type: 'category',

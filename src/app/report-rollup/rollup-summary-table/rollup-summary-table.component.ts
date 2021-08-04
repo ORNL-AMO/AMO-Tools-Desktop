@@ -34,7 +34,13 @@ export class RollupSummaryTableComponent implements OnInit {
       this.totalCostSavings += dataItem.costSavings;
       this.totalImplementationCosts += dataItem.implementationCosts;
     });
-    this.totalPaybackPeriod = this.totalImplementationCosts / this.totalCostSavings;
+    if(this.totalImplementationCosts <= 0){
+      this.totalImplementationCosts = 0;
+      this.totalPaybackPeriod = 0;
+    }else{
+      this.totalPaybackPeriod = this.totalImplementationCosts / this.totalCostSavings;
+    }
+    
   }
 
 }

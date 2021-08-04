@@ -99,11 +99,35 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
     }
+    if(data.wasteHeatReductions){
+      if (treasureHunt.wasteHeatReductions == undefined) {
+        treasureHunt.wasteHeatReductions = new Array();
+      }
+      treasureHunt.wasteHeatReductions = treasureHunt.wasteHeatReductions.concat(data.wasteHeatReductions);
+    }
+    if(data.airHeatingOpportunities){
+      if (treasureHunt.airHeatingOpportunities == undefined) {
+        treasureHunt.airHeatingOpportunities = new Array();
+      }
+      treasureHunt.airHeatingOpportunities = treasureHunt.airHeatingOpportunities.concat(data.airHeatingOpportunities);
+    }
     if(data.leakageLosses){
       if (treasureHunt.leakageLosses == undefined) {
         treasureHunt.leakageLosses = new Array();
       }
       treasureHunt.leakageLosses = treasureHunt.leakageLosses.concat(data.leakageLosses);
+    }
+    if(data.heatCascadingOpportunities){
+      if (treasureHunt.heatCascadingOpportunities == undefined) {
+        treasureHunt.heatCascadingOpportunities = new Array();
+      }
+      treasureHunt.heatCascadingOpportunities = treasureHunt.heatCascadingOpportunities.concat(data.heatCascadingOpportunities);
+    }
+    if(data.waterHeatingOpportunities){
+      if (treasureHunt.waterHeatingOpportunities == undefined) {
+        treasureHunt.waterHeatingOpportunities = new Array();
+      }
+      treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
     }
     return treasureHunt;
   }

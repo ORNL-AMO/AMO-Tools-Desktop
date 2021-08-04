@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { OpeningLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { OpeningService } from './opening.service';
 
 @Component({
@@ -45,7 +46,7 @@ export class OpeningComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService,
               private openingService: OpeningService) { }
 
   ngOnInit() {
@@ -57,7 +58,7 @@ export class OpeningComponent implements OnInit {
     }
 
     let existingInputs = this.openingService.baselineData.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.resetOpeningInputs();
     }
     this.initSubscriptions();
@@ -71,7 +72,11 @@ export class OpeningComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     if (this.inTreasureHunt) {
-      this.openingService.initDefaultEmptyInputs();
+      this.openingService.modificationData.next(undefined);
+      this.openingService.baselineData.next(undefined);
+      this.openingService.energySourceType.next(undefined);
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
     }
   }
 
@@ -98,7 +103,10 @@ export class OpeningComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear: number;
+    if (this.inTreasureHunt) {
+      hoursPerYear = this.operatingHours.hoursPerYear;
+    }
     this.openingService.addLoss(hoursPerYear, this.modificationExists);
   }
 
@@ -116,7 +124,7 @@ export class OpeningComponent implements OnInit {
 
   resetOpeningInputs() {
     if (this.inTreasureHunt) {
-      this.openingService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear);
+      this.openingService.initTreasureHuntEmptyInputs(this.operatingHours.hoursPerYear, this.settings);
     } else {
       this.openingService.initDefaultEmptyInputs();
     }

@@ -12,6 +12,14 @@
             </option>
         </select>
     </div>
+    <!--display type (for scatterplots)-->
+    <div class = "form-group pt-2">
+        <select *ngIf = "isTimeSeries && selectedGraphObj.data[0].type == 'scattergl'" class="form-control w-100" name="markerType" (ngModelChange) = "markerType = $event" [ngModel]="selectedGraphObj.data[0].mode"
+            (change)="setLinesMarkers()" (focus)="focusField()" (blur)="focusOut()">
+            <option *ngFor="let markerTypeValue of markerTypes" [ngValue]="markerTypeValue.value">{{markerTypeValue.label}}
+            </option>
+        </select>
+    </div>
     <!--% vs # of poitns-->
     <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(true)"

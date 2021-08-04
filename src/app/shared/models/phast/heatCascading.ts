@@ -1,9 +1,9 @@
 export interface HeatCascadingInput {
+    utilityType?: string,
     priFiringRate: number,
     priExhaustTemperature: number,
     priExhaustO2: number,
     priCombAirTemperature: number,
-    priAvailableHeat: number,
     priOpHours: number,
     priFuelHV: number,
 
@@ -39,5 +39,7 @@ export interface HeatCascadingOutput {
     effOppHours: number,
     energySavings: number,
     costSavings: number
+    baselineEnergy?: number,
+    modificationEnergy?: number
 }
 

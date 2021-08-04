@@ -7,7 +7,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { WallLoss, WallLossOutput, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
+import { treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WallFormService } from '../wall-form.service';
 import { WallService } from '../wall.service';
 
@@ -27,35 +27,35 @@ export class WallFormComponent implements OnInit {
   index: number;
   @Input()
   selected: boolean;
-  @Input()
-  operatingHours: OperatingHours;
+
   @ViewChild('surfaceModal', { static: false }) public surfaceModal: ModalDirective;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   surfaceOptions: Array<WallLossesSurface>;
-  treasureHuntUtilityOptions: Array<TreasureHuntUtilityOption>;
+  treasureHuntUtilityOptions: Array<string>;
   showSurfaceModal: boolean = false;
-
+  
   wallLossesForm: FormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   showFlueGasModal: boolean;
-
+  defaultFlueGasModalEnergySource: string;
+  
   showOperatingHoursModal: boolean;
   formWidth: number;
   energyUnit: string;
   energySourceTypeSub: Subscription;
   outputSubscription: Subscription;
   lossResult: WallLossResult;
+  treasureHuntFuelCostSub: Subscription;
   isEditingName: boolean;
 
-  trackingEnergySource: boolean;
   idString: string;
 
   constructor(private wallFormService: WallFormService,
@@ -70,19 +70,11 @@ export class WallFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.index;
     }
-    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
-    this.initSubscriptions();
-    this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
-    if (this.trackingEnergySource) {
-      let energySource = this.wallService.energySourceType.getValue();
-      this.setEnergySource(energySource);
-    } else {
-      this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
-    }
     if (this.inTreasureHunt) {
       this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
     }
-    this.setEnergySource();
+    this.initSubscriptions();
+    this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,7 +82,6 @@ export class WallFormComponent implements OnInit {
       this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
-      this.checkEnergySourceSub();
       this.setFormState();
       let output: WallLossOutput = this.wallService.output.getValue();
       this.setLossResult(output);
@@ -105,8 +96,11 @@ export class WallFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
-    if (this.trackingEnergySource) {
+    if ((this.isBaseline && this.index > 0) || (!this.isBaseline)) {
       this.energySourceTypeSub.unsubscribe();
+      if (this.inTreasureHunt) {
+        this.treasureHuntFuelCostSub.unsubscribe();
+      }
     }
   }
 
@@ -120,10 +114,24 @@ export class WallFormComponent implements OnInit {
     this.outputSubscription = this.wallService.output.subscribe(output => {
       this.setLossResult(output);
     });
-    if (this.trackingEnergySource) {
+    if ((this.isBaseline && this.index > 0) || !this.isBaseline) {
       this.energySourceTypeSub = this.wallService.energySourceType.subscribe(energySourceType => {
-        this.setEnergySource(energySourceType);
+        if (energySourceType) {
+          this.wallLossesForm.patchValue({ energySourceType: energySourceType });
+          this.cd.detectChanges();
+          this.calculate();
+        }
       });
+
+      if (this.inTreasureHunt) {
+        this.treasureHuntFuelCostSub = this.wallService.treasureHuntFuelCost.subscribe(treasureHuntFuelCost => {
+          if (treasureHuntFuelCost) {
+            this.wallLossesForm.patchValue({ fuelCost: treasureHuntFuelCost });
+            this.cd.detectChanges();
+            this.calculate();
+          }
+        });
+      }
     }
   }
 
@@ -135,44 +143,39 @@ export class WallFormComponent implements OnInit {
     }
   }
 
-  checkEnergySourceSub() {
-    let isCurrentlySubscribed = this.trackingEnergySource;
-    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
-
-    if (!this.trackingEnergySource && isCurrentlySubscribed) {
-      this.energySourceTypeSub.unsubscribe();
-    }
-  }
-
   setFormState() {
     if (this.selected == false) {
       this.wallLossesForm.disable();
     } else {
+      this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
       this.wallLossesForm.enable();
     }
 
     if (this.inTreasureHunt && !this.isBaseline) {
       this.wallLossesForm.controls.energySourceType.disable();
     }
-    if (this.index > 0) {
-      this.wallLossesForm.controls.hoursPerYear.disable();
-      this.wallLossesForm.controls.fuelCost.disable();
-      this.wallLossesForm.controls.availableHeat.disable();
-    }
   }
 
-  setEnergySource(baselineEnergySource?: string) {
-    if (baselineEnergySource) {
-      this.wallLossesForm.patchValue({
-        energySourceType: baselineEnergySource
-      });
-    }
-    this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
+  setEnergySourceFromToggle(energySourceType: string) {
+    this.wallLossesForm.patchValue({
+      energySourceType: energySourceType
+    });
+    this.setEnergyData();
+  }
 
-    if (!this.trackingEnergySource) {
-      this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
+  setEnergyData() {
+    let energySourceType = this.wallLossesForm.controls.energySourceType.value;
+    this.energyUnit = this.wallService.getAnnualEnergyUnit(energySourceType, this.settings);
+
+    if (this.inTreasureHunt) {
+      let treasureHuntFuelCost = this.wallService.getTreasureHuntFuelCost(energySourceType, this.settings);
+      this.wallLossesForm.patchValue({fuelCost: treasureHuntFuelCost});
+      this.wallService.treasureHuntFuelCost.next(treasureHuntFuelCost);
     }
+    this.wallService.energySourceType.next(energySourceType);
+
     this.cd.detectChanges();
+    this.defaultFlueGasModalEnergySource = this.wallLossesForm.value.energySourceType;
     this.calculate();
   }
 
@@ -201,6 +204,7 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm = this.wallFormService.initForm();
     }
 
+    this.defaultFlueGasModalEnergySource = this.wallLossesForm.value.energySourceType;
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     this.calculate();
     this.setFormState();
@@ -276,6 +280,7 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });
+      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

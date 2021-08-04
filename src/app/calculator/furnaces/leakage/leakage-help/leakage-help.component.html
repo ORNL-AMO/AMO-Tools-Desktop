@@ -63,6 +63,20 @@
             <hr>
           </small>
         </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0 hrs/yr</td>
+                <td class="text-center">8760 hrs/yr</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     
       <div class="my-2" *ngIf="currentField == 'fuelCost'">
@@ -110,31 +124,6 @@
           <hr>
         </small>
       </h6>
-      <div class="w-100 justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-              <th class="text-center">Maximum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                  <span>ft
-                    <sup>2</sup>
-                  </span>
-                </span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                  <span>m
-                    <sup>2</sup>
-                  </span>
-                </span>
-              </td>
-              <td class="text-center">&mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   
   
@@ -159,23 +148,6 @@
           <hr>
         </small>
       </h6>
-      <div class="w-100 justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-              <th class="text-center">Maximum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-              </td>
-              <td class="text-center">&mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   
   

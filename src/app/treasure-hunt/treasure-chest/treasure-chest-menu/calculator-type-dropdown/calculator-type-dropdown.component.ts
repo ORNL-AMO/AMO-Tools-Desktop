@@ -106,10 +106,18 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Flue Gas';
       case Treasure.wallLoss:
         return 'Wall Loss';
+      case Treasure.airHeating:
+        return 'Air Heating'
       case Treasure.leakageLoss:
         return 'Leakage Loss';
+      case Treasure.wasteHeat:
+        return 'Waste Heat';
       case Treasure.openingLoss:
         return 'Opening Loss'
+      case Treasure.heatCascading:
+        return 'Heat Cascading'
+      case Treasure.waterHeating:
+        return 'Water Heating'
     }
   }
 }

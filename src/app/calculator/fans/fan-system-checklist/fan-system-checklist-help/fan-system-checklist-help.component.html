@@ -1,0 +1,46 @@
+<div class="p-3 pt-3 d-flex flex-column help-info">
+  <h5>
+    Fan System Optimization Checklist Help
+    <br>
+    <small class="text-muted">
+      <small><i>For fans over 50 hp that operate more than 4000 hours per year</i></small>
+      <br>
+      Use this checklist to qualitatively select the top optimization projects
+      for FSAT analysis. Make a copy of this list for each of your major systems, then go
+      through the list and add up the points for the conditions that apply.
+      ood optimization opportunity. A total score of four or more points probably indicates a very good opportunity.
+      <br>
+      <div class="alert-info p-2 mt-2 small w-100">
+        Note: Fans with adjustable speed drives usually are not good candidates for optimization.
+      </div>
+
+    </small>
+    <hr>
+  </h5>
+  <div class="my-2" *ngIf="currentField == 'operatingHours'">
+    <h6>
+      Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <hr *ngIf="currentField != undefined">
+</div>

@@ -22,6 +22,8 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   @Input()
   pressure: number;
   @Input()
+  powerType: string;
+  @Input()
   isBaseline: boolean;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<CompressedAirPressureReductionData>();
@@ -62,6 +64,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
     this.form = this.compressedAirPressureReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (!this.isBaseline) {
       this.form.controls.compressorPower.disable();
+      this.form.controls.powerType.disable();
     }
     if (this.selected == false) {
       this.form.disable();
@@ -78,6 +81,11 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
     if (!this.isBaseline && changes.pressure && !changes.pressure.firstChange) {
       this.data.pressure = this.pressure;
       this.form.controls.pressure.patchValue(this.data.pressure);
+      this.calculate();
+    }
+    if (!this.isBaseline && changes.powerType && !changes.powerType.firstChange) {
+      this.data.powerType = this.powerType;
+      this.form.controls.powerType.patchValue(this.data.powerType);
       this.calculate();
     }
 
@@ -99,6 +107,7 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
         this.form.enable();
         if (!this.isBaseline) {
           this.form.controls.compressorPower.disable();
+          this.form.controls.powerType.disable();
         }
       }
     }
@@ -111,9 +120,12 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
+    let inputData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
+    if (inputData.powerType === 'Measured') {
+      inputData.pressureRated = inputData.pressure;
+    } 
     this.calculateIndividualResult();
-    this.emitCalculate.emit(tmpObj);
+    this.emitCalculate.emit(inputData);
   }
 
   removeEquipment() {
@@ -121,8 +133,14 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   }
 
   calculateIndividualResult() {
-    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
-    this.individualResults = this.compressedAirPressureReductionService.calculateIndividualEquipment(tmpObj, this.settings);
+    let inputData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
+    if (inputData.powerType === 'Measured') {
+      inputData.pressureRated = inputData.pressure;
+    } 
+    if(!this.isBaseline){
+      inputData.pressure = inputData.proposedPressure;
+    }
+    this.individualResults = this.compressedAirPressureReductionService.calculateIndividualEquipment(inputData, this.settings);
   }
 
   editEquipmentName() {

@@ -1,6 +1,52 @@
+<label class="group-label">
+    Annual Savings
+</label>
  <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
     <tbody>
-      <tr>
+        <tr>
+          <td class="bold w-50">Baseline Electricity</td>
+          <td *ngIf="output.annualEnergy" class="text-center w-50">
+            {{output.annualEnergy | number:'1.0-0'}} kW/yr
+          </td>
+          <td *ngIf="!output.annualEnergy" class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Modification Electricity</td>
+          <td class="text-center w-50">
+            0 kW/yr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Annual Energy Savings</td>
+          <td *ngIf="output.annualEnergy" class="text-center w-50">
+            {{output.annualEnergy | number:'1.0-0'}} kW/yr
+          </td>
+          <td *ngIf="!output.annualEnergy" class="text-center w-50">
+            &mdash; &mdash;
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <!-- export table component -->
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+  </app-exportable-results-table>
+  
+
+  
+<div>
+  <label class="group-label p-1" (click)="toggleResults()">
+    <span class="fa fa-chevron-down" *ngIf="displayAdditionalResults"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayAdditionalResults"></span>
+    <span class="pl-1">
+      Additional Results
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displayAdditionalResults">
+    <table *ngIf="output" #copyTable1 class="table table-hover table-striped">
+      <tbody>
+        <tr>
           <td class="bold w-50">Recovered Heat</td>
           <td *ngIf="output.recoveredHeat" class="text-center w-50">
             {{output.recoveredHeat | number:'1.0-3'}}
@@ -61,16 +107,7 @@
             &mdash; &mdash;
           </td>
         </tr>
-        <tr>
-          <td class="bold w-50">Annual Energy Savings</td>
-          <td *ngIf="output.annualEnergy" class="text-center w-50">
-            {{output.annualEnergy | number:'1.0-0'}} kW
-          </td>
-          <td *ngIf="!output.annualEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
+        <!-- <tr>
           <td class="bold w-50">Annual Cost Savings</td>
           <td *ngIf="output.annualCost" class="text-center w-50">
             {{output.annualCost | currency:'USD':'symbol':'1.0-0'}}
@@ -78,10 +115,13 @@
           <td *ngIf="!output.annualCost" class="text-center w-50">
             &mdash; &mdash;
           </td>
-        </tr>
-    </tbody>
-  </table>
-  <!-- export table component -->
-  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
-  </app-exportable-results-table>
+        </tr> -->
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()">
+    </app-exportable-results-table>
+  </div>
+
+  </div>
+
   

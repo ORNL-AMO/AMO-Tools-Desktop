@@ -1,4 +1,5 @@
 export interface AirHeatingInput {
+    utilityType?: string,
     operatingHours: number,
     gasFuelType: boolean,
     fuelCost: number,
@@ -43,4 +44,6 @@ export interface AirHeatingOutput {
     costSavings: number,
     heatCapacityFlue: number,
     heatCapacityAir: number
+    baselineEnergy: number,
+    modificationEnergy: number,
 }

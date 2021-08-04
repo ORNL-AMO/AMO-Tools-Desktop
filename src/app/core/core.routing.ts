@@ -102,6 +102,7 @@ import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
 import { ChillerStagingComponent } from '../calculator/process-cooling/chiller-staging/chiller-staging.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
 
 export const coreRoutes: Routes = [
   {
@@ -237,6 +238,10 @@ export const coreRoutes: Routes = [
           {
             path: 'fan-analysis',
             component: FanAnalysisComponent
+          },
+          {
+            path: 'fan-system-checklist',
+            component: FanSystemChecklistComponent
           },
           {
             path: 'fan-efficiency',
