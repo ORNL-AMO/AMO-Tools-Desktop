@@ -5,9 +5,8 @@ import { FullLoadAmpsService } from '../full-load-amps.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
-import { ViewChild } from '@angular/core';
-import { OperatingHours } from '../../../../shared/models/operations';
 import { FanMotor } from '../../../../shared/models/fans';
+import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
   selector: 'app-full-load-amps-form',
@@ -17,12 +16,12 @@ import { FanMotor } from '../../../../shared/models/fans';
 export class FullLoadAmpsFormComponent implements OnInit {
   @Input()
   settings: Settings;
-
   form: FormGroup;
   formWidth: number;
   idString: string;
   fullLoadAmps: number;
 
+  motor: FanMotor;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   fullLoadAmpsResultSub: Subscription;
@@ -35,7 +34,11 @@ export class FullLoadAmpsFormComponent implements OnInit {
   
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.settings = this.settingsDbService.globalSettings;
+    this.efficiencyClasses = motorEfficiencyConstants;
+    this.idString = 'fla_calc';
+  
     this.initSubscriptions();
   }
 

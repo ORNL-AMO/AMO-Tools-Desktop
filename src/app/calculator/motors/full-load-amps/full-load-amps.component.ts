@@ -12,13 +12,6 @@ import { FullLoadAmpsService } from './full-load-amps.service';
 export class FullLoadAmpsComponent implements OnInit {
   @Input()
   settings: Settings;
-  flaInputSub: Subscription;
-
-  // @Input()
-  // inTreasureHunt: boolean;
-  // @Input()
-  // operatingHours: OperatingHours;
-  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -31,7 +24,10 @@ export class FullLoadAmpsComponent implements OnInit {
   
   containerHeight: number;
   tabSelect: string = 'help';
+  headerHeight: number;
 
+  flaInputSub: Subscription;
+  currentField: string;
   constructor(private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit() {
@@ -90,5 +86,4 @@ export class FullLoadAmpsComponent implements OnInit {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
-
 }

@@ -20,7 +20,7 @@ export class FullLoadAmpsService {
     this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
     this.fullLoadAmpsResult = new BehaviorSubject<number>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-    this.currentField = new BehaviorSubject<string>(undefined);
+    this.currentField = new BehaviorSubject<string>('default');
   }
 
   getFormFromObj(obj: FanMotor): FormGroup {
