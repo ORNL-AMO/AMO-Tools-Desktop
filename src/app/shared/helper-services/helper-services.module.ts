@@ -7,8 +7,6 @@ import { UpdateDataService } from './update-data.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { CsvToJsonService } from './csv-to-json.service';
 
-
-
 @NgModule({
   declarations: [],
   imports: [

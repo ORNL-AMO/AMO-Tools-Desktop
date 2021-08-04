@@ -1,0 +1,10 @@
+
+.form-section{
+    border-bottom: #bbb dashed 1px;
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+}
+
+.btn{
+    padding: 4px;
+}

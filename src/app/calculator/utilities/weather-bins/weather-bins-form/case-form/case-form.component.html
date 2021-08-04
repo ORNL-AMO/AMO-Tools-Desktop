@@ -1,0 +1,75 @@
+<div class="p-2">
+    <div class="form-section" *ngFor="let case of inputData.cases; let caseIndex = index;">
+        <label class=" d-flex group-label w-100 justify-content-between">
+            <span class="fa fa-times-circle pr-2 delete click-link" (click)="deleteCase(caseIndex)"></span>
+            <span class="large">{{case.caseName}}</span>
+            <a class="click-link small" (click)="addParameter(caseIndex)">+Add Parameter</a>
+        </label>
+        <form class="form-section" *ngFor="let parameter of case.caseParameters; let parameterIndex = index;">
+            <div class="form-group">
+                <label for="{{'field'+parameterIndex}}">Weather Parameter</label>
+                <select name="{{'field'+parameterIndex}}" id="{{'field'+parameterIndex}}" class="form-control"
+                    [(ngModel)]="parameter.field" (change)="save()">
+                    <!-- <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option> -->
+                    <option [ngValue]="'Dry-bulb (C)'">
+                        Dry-bulb Temperature
+                        <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dry-bulb (C)'"></app-parameter-unit> -->
+                    </option>
+                    <option [ngValue]="'RHum (%)'">Relative Humidity</option>
+                    <option [ngValue]="'Dew-point (C)'">
+                        Dew-point
+                        <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dew-point (C)'"></app-parameter-unit> -->
+                    </option>
+                    <option [ngValue]="'Wspd (m/s)'">
+                        Wind Speed
+                        <!-- <app-parameter-unit [settings]="settings" [parameter]="'Wspd (m/s)'"></app-parameter-unit> -->
+                    </option>
+                    <option [ngValue]="'Wdir (degrees)'">Wind Direction</option>
+                    <option [ngValue]="'Lprecip depth (mm)'">Liquid Precipitation Depth
+                        <!-- <app-parameter-unit [settings]="settings" [parameter]="'Lprecip depth (mm)'">
+                        </app-parameter-unit> -->
+                    </option>
+                    <option [ngValue]="'Pressure (mbar)'">Pressure
+                        <!-- <app-parameter-unit [settings]="settings" [parameter]="'Pressure (mbar)'"></app-parameter-unit> -->
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
+                <div class="input-group">
+                    <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
+                    <span class="input-group-addon units">
+                        <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
+                        </app-parameter-unit>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
+                <div class="input-group">
+                    <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
+                    <span class="input-group-addon units">
+                        <app-parameter-unit [settings]="settings" [parameter]="parameter.field">
+                        </app-parameter-unit>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group text-right">
+                <a class="click-link delete small" (click)="deleteParameter(caseIndex, parameterIndex)">Delete
+                    Parameter</a>
+            </div>
+        </form>
+        <div class="form-group">
+            <label>Case Number of Hours</label>
+            <div class="text-center">{{case.totalNumberOfDataPoints}}</div>
+        </div>
+    </div>
+
+    <div class="d-flex w-100 justify-content-end" *ngIf="importDataFromCsv != undefined">
+        <a class="click-link p-2" (click)="addCase()">+Add Case</a>
+    </div>
+</div>

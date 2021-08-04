@@ -1,0 +1,66 @@
+<div class="p-2">
+    <div class="form-group">
+        <label>
+            Weather Data File
+        </label>
+        <div class="bold" *ngIf="inputData.fileName && validFile == true">
+            {{inputData.fileName}}
+        </div>
+        <input *ngIf="!inputData.fileName || validFile == false" type="file" class="form-control"
+            (change)="setImportFile($event)">
+        <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
+            have a .csv file extension</span>
+
+    </div>
+    <div *ngIf="!inputData.fileName || validFile == false" class="d-flex w-100 justify-content-end">
+        <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
+            [disabled]="importData == undefined">Parse CSV Data</button>
+    </div>
+
+    <!-- <div class="text-center pt-2" *ngIf="importSuccesful">
+                <div class="alert-success router-link">
+                    Data parsing successful! </div>
+            </div> -->
+    <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <span class="importing-text">Importing Data, One Moment...</span>
+    </div>
+    <div class="form-section">
+        <form>
+            <div class="form-group">
+                <label for="startMonth">Start Day</label>
+                <div class="d-flex w-50">
+                    <select name="startMonth" id="startMonth" class="form-control" [(ngModel)]="inputData.startMonth"
+                        (change)="setStartMonth()">
+                        <option *ngFor="let dateSelection of dateSelectionData" [ngValue]="dateSelection.monthValue">
+                            {{dateSelection.month}}</option>
+                    </select>
+                    <select name="startDay" id="startDay" class="form-control" [(ngModel)]="inputData.startDay"
+                        (change)="save()">
+                        <option *ngFor="let day of startMonthDays" [ngValue]="day">
+                            {{day}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endMonth">End Day</label>
+                <div class="d-flex w-50">
+                    <select name="endMonth" id="endMonth" class="form-control" [(ngModel)]="inputData.endMonth"
+                        (change)="setEndMonth()">
+                        <option *ngFor="let dateSelection of dateSelectionData" [ngValue]="dateSelection.monthValue">
+                            {{dateSelection.month}}</option>
+                    </select>
+                    <select name="endDay" id="endDay" class="form-control" [(ngModel)]="inputData.endDay"
+                        (change)="save()">
+                        <option *ngFor="let day of endMonthDays" [ngValue]="day">
+                            {{day}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

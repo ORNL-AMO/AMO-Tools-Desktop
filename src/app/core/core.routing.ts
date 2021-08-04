@@ -73,6 +73,7 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { WeatherBinsComponent } from '../calculator/utilities/weather-bins/weather-bins.component';
 import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
@@ -458,6 +459,10 @@ export const coreRoutes: Routes = [
           {
             path: 'cooling-tower-fan',
             component: CoolingTowerFanComponent
+          },
+          {
+            path: 'weather-bins',
+            component: WeatherBinsComponent
           },
           {
             path: 'cooling-tower',

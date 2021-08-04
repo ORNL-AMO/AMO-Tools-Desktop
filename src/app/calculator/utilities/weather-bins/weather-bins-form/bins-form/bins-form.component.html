@@ -1,0 +1,53 @@
+<div class="form-section p-2" *ngIf="importDataFromCsv != undefined">
+    <form>
+        <div class="form-group">
+            <label for="field">Auto-bin Parameter</label>
+            <select name="autoBinParameter" id="field" class="form-control" [(ngModel)]="inputData.autoBinParameter" (change)="setParameterMinMax()">
+                <option [ngValue]="'Dry-bulb (C)'">
+                    Dry-bulb Temperature
+                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dry-bulb (C)'"></app-parameter-unit> -->
+                </option>
+                <option [ngValue]="'RHum (%)'">Relative Humidity</option>
+                <option [ngValue]="'Dew-point (C)'">
+                    Dew-point
+                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dew-point (C)'"></app-parameter-unit> -->
+                </option>
+                <option [ngValue]="'Wspd (m/s)'">
+                    Wind Speed
+                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Wspd (m/s)'"></app-parameter-unit> -->
+                </option>
+                <option [ngValue]="'Wdir (degrees)'">Wind Direction</option>
+                <option [ngValue]="'Lprecip depth (mm)'">Liquid Precipitation Depth
+                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Lprecip depth (mm)'"></app-parameter-unit> -->
+                </option>
+                <option [ngValue]="'Pressure (mbar)'">Pressure
+                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Pressure (mbar)'"></app-parameter-unit> -->
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Parameter Data Range</label>
+            <div class="small text-center">
+                ({{parameterMin}} <app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
+                </app-parameter-unit>) - ({{parameterMax}} <app-parameter-unit [settings]="settings"
+                    [parameter]="inputData.autoBinParameter"></app-parameter-unit>)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="autoBinRangeValue">Bin Size</label>
+            <div class="input-group">
+                <input name="autoBinRangeValue" type="number" class="form-control" id="autoBinRangeValue"
+                    [(ngModel)]="inputData.autoBinRangeValue">
+                <span class="input-group-addon units">
+                    <app-parameter-unit [settings]="settings" [parameter]="inputData.autoBinParameter">
+                    </app-parameter-unit>
+                </span>
+            </div>
+        </div>
+    </form>
+    <div class="row no-gutters justify-content-end">
+        <button class="btn btn-primary" (click)="save()">Set Bins</button>
+    </div>
+</div>
