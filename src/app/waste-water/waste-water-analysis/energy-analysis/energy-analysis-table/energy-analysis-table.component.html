@@ -46,11 +46,11 @@
                         {{baselineResults.AeCost | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!baselineResults.AeCost">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
                 <td>
-                   $ &mdash;
+                    &mdash;
                 </td>
             </tr>
             <tr class="department-item-row" *ngFor="let modificationResults of modificationsResultsArr"
@@ -82,7 +82,7 @@
                         {{modificationResults.results.AeCost | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!modificationResults.results.AeCost">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
                 <td>
@@ -90,7 +90,7 @@
                         {{modificationResults.results.costSavings | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!modificationResults.results.costSavings">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
             </tr>

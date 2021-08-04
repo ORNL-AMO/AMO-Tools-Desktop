@@ -19,7 +19,7 @@
         </span>
       </td>
       <td (click)="setSortBy('totalEnergySavings')" [ngClass]="{ active: sortBy == 'totalEnergySavings' }">
-        Utility Savings ({{settings.currency}})
+        Utility Savings 
         <span *ngIf="sortBy == 'totalEnergySavings'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>

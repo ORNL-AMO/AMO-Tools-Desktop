@@ -197,7 +197,7 @@
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
       <span class="bold table-text" *ngIf="modificationResults.annual_cost"
-        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</span>
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annual_cost">&mdash;</span>
     </div>
   </div>

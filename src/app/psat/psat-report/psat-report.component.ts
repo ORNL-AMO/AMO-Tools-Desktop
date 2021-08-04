@@ -51,6 +51,7 @@ export class PsatReportComponent implements OnInit {
   createdDate: Date;
   reportContainerHeight: number;
   printOptions: PrintOptions;
+
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private settingsService: SettingsService, private printOptionsMenuService: PrintOptionsMenuService,
     private psatService: PsatService) { }

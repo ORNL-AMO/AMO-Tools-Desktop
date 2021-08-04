@@ -65,8 +65,8 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         size: 14,
       },
       yaxis: {
-        hoverformat: '$.2s',
-        tickformat: '$.2s',
+        hoverformat: '.2s',
+        tickformat: '.2s',
         title: {
           // text: this.yAxisLabel,
           font: {

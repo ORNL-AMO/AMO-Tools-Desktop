@@ -6,10 +6,10 @@
     </div>
     <div class="row no-gutters w-100 min-row-height">
         <div class="col-6">
-            <app-energy-analysis-bar-chart [chartInfo]="'energyUse'"></app-energy-analysis-bar-chart>
+            <app-energy-analysis-bar-chart [settings] = "settings" [chartInfo]="'energyUse'"></app-energy-analysis-bar-chart>
         </div>
         <div class="col-6">
-            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'"></app-energy-analysis-bar-chart>
+            <app-energy-analysis-bar-chart [settings] = "settings" [chartInfo]="'energyCost'"></app-energy-analysis-bar-chart>
         </div>
     </div>
 </div>
@@ -22,10 +22,10 @@
     </div>
     <div class="row no-gutters w-100">
         <div class="col-12 min-row-height">
-            <app-energy-analysis-bar-chart [chartInfo]="'energyUse'" [printView]="true"></app-energy-analysis-bar-chart>
+            <app-energy-analysis-bar-chart [chartInfo]="'energyUse'" [settings] = "settings" [printView]="true"></app-energy-analysis-bar-chart>
         </div>
         <div class="col-12 min-row-height">
-            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'" [printView]="true">
+            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'" [settings] = "settings" [printView]="true">
             </app-energy-analysis-bar-chart>
         </div>
     </div>

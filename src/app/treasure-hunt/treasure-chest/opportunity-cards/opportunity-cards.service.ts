@@ -102,18 +102,7 @@ export class OpportunityCardsService {
     opportunityCardsData.forEach(card => {
       card.index = index;
       index++;
-      console.log(this.currCurrency);
-      if (this.currCurrency == "$" && settings.currency != "$") {
-        console.log("doing");
-        card.annualCostSavings = this.convertUnitsService.convertValue(card.annualCostSavings, "$", settings.currency);
-        card.implementationCost = this.convertUnitsService.convertValue(card.implementationCost, "$", settings.currency);
-        card.percentSavings.forEach(saving => {
-          saving.baselineCost = this.convertUnitsService.convertValue(saving.baselineCost, "$", settings.currency);
-          saving.modificationCost = this.convertUnitsService.convertValue(saving.modificationCost, "$", settings.currency);
-        }); 
-      }
-      else if (this.currCurrency != "$" && settings.currency == "$") {
-        console.log("doing 2");
+      if (this.currCurrency !== settings.currency) {
         card.annualCostSavings = this.convertUnitsService.convertValue(card.annualCostSavings, this.currCurrency, settings.currency);
         card.implementationCost = this.convertUnitsService.convertValue(card.implementationCost, this.currCurrency, settings.currency);
         card.percentSavings.forEach(saving => {
@@ -121,8 +110,8 @@ export class OpportunityCardsService {
           saving.modificationCost = this.convertUnitsService.convertValue(saving.modificationCost, this.currCurrency, settings.currency);
         }); 
       }
-      this.currCurrency = settings.currency;
-    })
+    });
+    // this.currCurrency = settings.currency;
     // this.opportunityCards.next(opportunityCardsData);
 
     return opportunityCardsData;

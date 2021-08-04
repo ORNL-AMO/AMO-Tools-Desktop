@@ -23,7 +23,6 @@
         </td>
       </tr>
       <tr>
-        <td [ngStyle]="{ 'width.%': 15 }" class="bold">({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{ 'width.%': tableCellWidth }" class="bold text-center">
           Baseline
@@ -81,7 +80,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Power Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Power Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{ baselineOutput.operationsOutput.powerGenerationCost }}
@@ -112,7 +111,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.boilerFuelCost">
             {{
@@ -147,7 +146,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Make-up Water Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Make-up Water Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.makeupWaterCost">
             {{
@@ -182,7 +181,7 @@
         </td>
       </tr>
       <tr class="bold">
-        <td>Annual Cost</td>
+        <td>Annual Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.totalOperatingCost">
             {{
@@ -208,7 +207,7 @@
         </td>
       </tr>
       <tr class="bold">
-        <td>Annual Savings</td>
+        <td>Annual Savings ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>

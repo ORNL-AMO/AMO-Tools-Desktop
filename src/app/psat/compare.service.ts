@@ -3,6 +3,7 @@ import { PSAT } from '../shared/models/psat';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 @Injectable()
 export class CompareService {
 
@@ -11,7 +12,8 @@ export class CompareService {
   selectedModification: BehaviorSubject<PSAT>;
   openModificationModal: BehaviorSubject<boolean>;
   openNewModal: BehaviorSubject<boolean>;
-  constructor(private psatService: PsatService) {
+  currCurrency: string = "$";
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
     this.openNewModal = new BehaviorSubject<boolean>(undefined);
@@ -41,6 +43,7 @@ export class CompareService {
     if (!modification) {
       modification = this.modifiedPSAT;
     }
+
     if (baseline && modification) {
       return (
         this.isPumpTypeDifferent(baseline, modification) ||
@@ -126,6 +129,9 @@ export class CompareService {
     }
     if (baseline && baseline.setupDone) {
       baseline.outputs = this.psatService.resultsExisting(baseline.inputs, settings);
+      if (settings.currency != this.currCurrency && baseline.outputs.annual_cost) {
+        baseline.outputs.annual_cost = this.convertUnitsService.convertValue(baseline.outputs.annual_cost, this.currCurrency, settings.currency);
+      }
     }
     if (!modification) {
       modification = this.modifiedPSAT;

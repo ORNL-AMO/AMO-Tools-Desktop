@@ -5,6 +5,7 @@ import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outpu
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
 import { CalculateLossesService } from '../../calculate-losses.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-ssmt-results-panel',
@@ -36,7 +37,8 @@ export class SsmtResultsPanelComponent implements OnInit {
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
-  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService) { }
+  currCurrency: string = "$";
+  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -66,8 +68,25 @@ export class SsmtResultsPanelComponent implements OnInit {
     if (this.modValid) {
       this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
     }
+    /*if (this.currCurrency != this.settings.currency) {
+      this.baselineOutput.operationsOutput.boilerFuelCost = this.convertCurrency(this.baselineOutput.operationsOutput.boilerFuelCost);
+      this.modificationOutput.operationsOutput.boilerFuelCost = this.convertCurrency(this.modificationOutput.operationsOutput.boilerFuelCost);
+      this.baselineOutput.operationsOutput.powerGenerationCost = this.convertCurrency(this.baselineOutput.operationsOutput.powerGenerationCost);
+      this.modificationOutput.operationsOutput.powerGenerationCost = this.convertCurrency(this.modificationOutput.operationsOutput.powerGenerationCost);
+      this.baselineOutput.operationsOutput.makeupWaterCost = this.convertCurrency(this.baselineOutput.operationsOutput.makeupWaterCost);
+      this.modificationOutput.operationsOutput.makeupWaterCost = this.convertCurrency(this.modificationOutput.operationsOutput.makeupWaterCost);
+      this.baselineOutput.operationsOutput.makeupWaterCost = this.convertCurrency(this.baselineOutput.operationsOutput.makeupWaterCost);
+      this.modificationOutput.operationsOutput.makeupWaterCost = this.convertCurrency(this.modificationOutput.operationsOutput.makeupWaterCost);
+      this.baselineOutput.operationsOutput.totalOperatingCost = this.convertCurrency(this.baselineOutput.operationsOutput.totalOperatingCost);
+      this.modificationOutput.operationsOutput.totalOperatingCost = this.convertCurrency(this.modificationOutput.operationsOutput.totalOperatingCost);
+      this.annualSavings = this.convertCurrency(this.annualSavings);
+    }*/
     this.getLosses();
 
+  }
+
+  convertCurrency(toConvert: number) {
+    return this.convertUnitsService.convertValue(toConvert, this.currCurrency, this.settings.currency);
   }
 
   checkValid() {

@@ -8,6 +8,7 @@ import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { SortCardsService } from '../opportunity-cards/sort-cards.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-summary-card',
@@ -32,8 +33,9 @@ export class SummaryCardComponent implements OnInit {
   sortBySub: Subscription;
   sortCardsData: SortCardsData;
   opportunityCards: Array<OpportunityCardData>;
+  currCurrency: string = "$";
   constructor(private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
-    private sortCardsService: SortCardsService, private treasureHuntService: TreasureHuntService) { }
+    private sortCardsService: SortCardsService, private treasureHuntService: TreasureHuntService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(val => {
@@ -66,6 +68,7 @@ export class SummaryCardComponent implements OnInit {
       this.steamData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.steamUsed, treasureHunt.currentEnergyUsage.steamCosts, 'Steam');
       this.wasteWaterData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.wasteWaterUsed, treasureHunt.currentEnergyUsage.wasteWaterCosts, 'Waste Water');
       this.otherFuelData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.otherFuelUsed, treasureHunt.currentEnergyUsage.otherFuelCosts, 'Other Fuel');
+      this.currCurrency = this.settings.currency;
       let baselineCost: number = this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost;
       this.additionalAnnualSavings = this.calculateAdditionalSavings(baselineCost, opportunityCards);
       let totalCostSavings: number = this.electricityData.totalCostSavings + this.naturalGasData.totalCostSavings + this.waterData.totalCostSavings + this.compressedAirData.totalCostSavings + this.steamData.totalCostSavings + this.wasteWaterData.totalCostSavings + this.otherFuelData.totalCostSavings + this.additionalAnnualSavings.totalCostSavings;
@@ -84,6 +87,9 @@ export class SummaryCardComponent implements OnInit {
     opportunityCards = this.sortCardsService.sortCards(opportunityCards, this.sortCardsData);
     if (utilityUsed) {
       let utilityData: UtilityTotal = this.getSavingsByUtilityType(opportunityCards, utilityType);
+      if (this.currCurrency !== this.settings.currency) {
+        baselineCost = this.convertUnitsService.convertValue(baselineCost, this.currCurrency, this.settings.currency);
+      }
       return {
         baselineCost: baselineCost,
         modificationCost: baselineCost - utilityData.totalCostSavings,

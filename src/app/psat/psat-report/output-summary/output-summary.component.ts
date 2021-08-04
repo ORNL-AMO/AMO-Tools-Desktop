@@ -4,7 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -20,7 +20,8 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
+  currCurrency: string = "$";
+  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
@@ -35,27 +36,44 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+    if (this.currCurrency != this.settings.currency) {
+      this.convertCurrency();
+    }
+  }
+
+  convertCurrency() {
+    this.psat.modifications.forEach((modification) => {
+      modification.psat.outputs.annual_cost = this.convertUnitsService.convertValue(modification.psat.outputs.annual_cost, this.currCurrency, this.settings.currency);
+      modification.psat.inputs.implementationCosts = this.convertUnitsService.convertValue(modification.psat.inputs.implementationCosts, this.currCurrency, this.settings.currency);
+    });
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
+    
     let modificationsMadeList: Array<string> = new Array();
 
     let isPumpAndFluidDifferent: boolean = this.compareService.checkPumpDifferent(this.settings, this.psat, modifiedPsat);
     if(isPumpAndFluidDifferent == true){
       modificationsMadeList.push('Pump and Fluid');
     }
+
+    
+
     let isMotorDifferent: boolean = this.compareService.checkMotorDifferent(this.psat, modifiedPsat);
     if(isMotorDifferent == true){
       modificationsMadeList.push('Motor');
     }
+    
     let isFieldDataDifferent: boolean = this.compareService.checkFieldDataDifferent(this.psat, modifiedPsat);
     if(isFieldDataDifferent == true){
       modificationsMadeList.push('Field Data');
     }
+    
     return modificationsMadeList;
   }
 
   useModification() {
+    console.log("Changed");
     this.psatReportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 

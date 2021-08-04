@@ -81,8 +81,18 @@ export class WasteWaterService {
         wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
       }
       if (baselineResults != undefined) {
-        wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
+        // temporarily reverses currency conversion so savings are calculated correctly
+        if (settings.currency != "$") {
+          baselineResults.AeCost = this.convertUnitsService.convertValue(baselineResults.AeCost, settings.currency, "$");
+          wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
+          baselineResults.AeCost = this.convertUnitsService.convertValue(baselineResults.AeCost, "$", settings.currency);
+        }
+        else {
+          wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
+        }
+        
       }
+      console.log(wasteWaterResults.costSavings);
       wasteWaterResults = this.convertWasteWaterService.convertResultsCosts(wasteWaterResults, settings);
       return wasteWaterResults;
     }
@@ -180,9 +190,13 @@ export class WasteWaterService {
 
 
   setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
+    console.log(baselineResults.AeCost);
+    console.log(modificationResults.AeCost);
+
     modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
     modificationResults.energySavings = baselineResults.AeEnergyAnnual - modificationResults.AeEnergyAnnual;
     modificationResults.percentCostSavings = (modificationResults.costSavings / baselineResults.AeCost) * 100;
+    console.log(modificationResults.costSavings);
     return modificationResults;
   }
 
