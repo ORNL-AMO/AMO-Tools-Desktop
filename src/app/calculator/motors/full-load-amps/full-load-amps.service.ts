@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from '../../../psat/psat.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FanMotor } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 
@@ -14,7 +15,7 @@ export class FullLoadAmpsService {
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService) { 
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     // Behavior subjects must be instantiated with some value
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
@@ -23,17 +24,15 @@ export class FullLoadAmpsService {
     this.currentField = new BehaviorSubject<string>('default');
   }
 
-  // TODO rhernandez Do we need further validation here?
-  
   getFormFromObj(obj: FanMotor): FormGroup {
     let specifiedEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(obj.efficiencyClass);
     let form: FormGroup = this.formBuilder.group({
-      lineFrequency: [obj.lineFrequency],
-      motorRatedPower: [obj.motorRatedPower],
-      motorRpm: [obj.motorRpm],
-      efficiencyClass: [obj.efficiencyClass],
+      lineFrequency: [obj.lineFrequency, Validators.required],
+      motorRatedPower: [obj.motorRatedPower, Validators.required],
+      motorRpm: [obj.motorRpm, Validators.required],
+      efficiencyClass: [obj.efficiencyClass, Validators.required],
       specifiedEfficiency: [obj.specifiedEfficiency, specifiedEfficiencyValidators],
-      motorRatedVoltage: [obj.motorRatedVoltage],
+      motorRatedVoltage: [obj.motorRatedVoltage, Validators.required],
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -73,7 +72,7 @@ export class FullLoadAmpsService {
   estimateFullLoadAmps(settings: Settings) {
     let flaInput = this.fullLoadAmpsInputs.getValue();
     let tmpEfficiency: number;
-    
+
     if (flaInput.efficiencyClass !== 3) {
       tmpEfficiency = flaInput.efficiencyClass;
     } else {
@@ -88,8 +87,8 @@ export class FullLoadAmpsService {
       tmpEfficiency,
       flaInput.motorRatedVoltage,
       settings
-      );
-      // TODO rhernandez find out if this should be converted
+    );
+    // TODO rhernandez find out if this should be converted
 
     this.fullLoadAmpsResult.next(fullLoadAmpsResult);
   }
@@ -107,7 +106,7 @@ export class FullLoadAmpsService {
     return Number(val.toFixed(digits))
   }
 
-  generateExampleData(settings: Settings){
+  generateExampleData(settings: Settings) {
     let defaultData: FanMotor = {
       lineFrequency: 60,
       motorRatedPower: 600,
@@ -122,8 +121,7 @@ export class FullLoadAmpsService {
     this.fullLoadAmpsInputs.next(defaultData);
   }
 
-  // TODO Need defaults for efficiencyClass and line frequency
-  initDefualtEmptyInputs(settings: Settings){
+  initDefualtEmptyInputs(settings: Settings) {
     let emptyInput: FanMotor = {
       lineFrequency: 50,
       motorRatedPower: 0,
@@ -136,8 +134,200 @@ export class FullLoadAmpsService {
     this.fullLoadAmpsInputs.next(emptyInput);
   }
 
-  initDefualtEmptyOutputs(){
+  initDefualtEmptyOutputs() {
     this.fullLoadAmpsResult.next(undefined);
   }
-  
+
+
+  checkMotorWarnings(motor: FanMotor, settings: Settings): FLAMotorWarnings {
+    let efficiencyError: string = null;
+    if (motor.efficiencyClass === 3) {
+      efficiencyError = this.checkEfficiency(motor);
+    }
+    let warnings: FLAMotorWarnings ={
+      rpmError: this.checkMotorRpm(motor),
+      voltageError: this.checkMotorVoltage(motor),
+      flaError: this.checkFLA(motor, settings),
+      efficiencyError: efficiencyError,
+      ratedPowerError: this.checkRatedPower(motor, settings)
+    };
+
+    return warnings;
+  }
+
+  checkEfficiency(motor: FanMotor) {
+    if (motor.specifiedEfficiency) {
+      if (motor.specifiedEfficiency > 100) {
+        return "Unrealistic efficiency, cannot be greater than 100%";
+      }
+      else if (motor.specifiedEfficiency === 0) {
+        return "Cannot have 0% efficiency";
+      }
+      else if (motor.specifiedEfficiency < 0) {
+        return "Cannot have negative efficiency";
+      } else {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
+  checkMotorVoltage(motor: FanMotor) {
+    if (motor.motorRatedVoltage < 208) {
+      return "Voltage must be greater than 208";
+    } else if (motor.motorRatedVoltage > 15180) {
+      return "Voltage must be less than 15,180";
+    } else {
+      return null;
+    }
+  }
+
+  checkMotorRpm(motor: FanMotor) {
+    let range: { min: number, max: number } = this.getMotorRpmMinMax(motor.lineFrequency, motor.efficiencyClass);
+    if (motor.motorRpm < range.min) {
+      return 'Motor RPM too small for selected efficiency class';
+    } else if (motor.motorRpm > range.max) {
+      return 'Motor RPM too large for selected efficiency class';
+    } else {
+      return null;
+    }
+  }
+
+  getMotorRpmMinMax(lineFreqEnum: number, effClass: number): { min: number, max: number } {
+    let rpmRange = {
+      min: 1,
+      max: 3600
+    };
+    if (lineFreqEnum === 0 && (effClass === 0 || effClass === 1)) { // if 60Hz and Standard or Energy Efficiency
+      rpmRange.min = 540;
+      rpmRange.max = 3600;
+    } else if (lineFreqEnum === 1 && (effClass === 0 || effClass === 1)) { // if 50Hz and Standard or Energy Efficiency
+      rpmRange.min = 450;
+      rpmRange.max = 3300;
+    } else if (lineFreqEnum === 0 && effClass === 2) { // if 60Hz and Premium Efficiency
+      rpmRange.min = 1080;
+      rpmRange.max = 3600;
+    } else if (lineFreqEnum === 1 && effClass === 2) { // if 50Hz and Premium Efficiency
+      rpmRange.min = 900;
+      rpmRange.max = 3000;
+    }
+    return rpmRange;
+  }
+
+  checkFLA(motor: FanMotor, settings: Settings) {
+    if (
+      motor.motorRatedPower &&
+      motor.motorRpm &&
+      motor.lineFrequency &&
+      motor.efficiencyClass &&
+      motor.motorRatedVoltage
+    ) {
+      if (!motor.specifiedEfficiency) {
+        motor.specifiedEfficiency = motor.efficiencyClass;
+      }
+      let estEfficiency = this.psatService.estFLA(
+        motor.motorRatedPower,
+        motor.motorRpm,
+        motor.lineFrequency,
+        motor.efficiencyClass,
+        motor.specifiedEfficiency,
+        motor.motorRatedVoltage,
+        settings
+      );
+
+      // Keep - may use min/max in the future
+      // let flaMax = estEfficiency * 1.05;
+      // let flaMin = estEfficiency * .95;
+      // if (fsat.fanMotor.fullLoadAmps < flaMin) {
+      //   return 'Value should be greater than ' + Math.round(flaMin) + ' A';
+      // } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
+      //   return 'Value should be less than ' + Math.round(flaMax) + ' A';
+      // } else {
+      // return null;
+
+      let limit = .05;
+      let percentDifference = Math.abs(motor.fullLoadAmps - estEfficiency) / estEfficiency;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from estimated FLA (${Math.round(estEfficiency)} A). Consider using the 'Estimate Full-Load Amps' button.`;
+      }
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  checkRatedPower(motor: FanMotor, settings: Settings) {
+    // let motorPowerStr: string;
+    // if (fsat.fieldData.loadEstimatedMethod === 0) {
+    //   motorPowerStr = 'Motor Power';
+    // } else {
+    //   motorPowerStr = 'Motor Current';
+    // }
+
+    let tmpVal = motor.motorRatedPower;
+    let min: number = 5;
+    let max: number = 10000;
+    if (tmpVal < this.convertUnitsService.value(min).from('hp').to(settings.fanPowerMeasurement)) {
+      return 'Rated motor power is too small.';
+    } else if (tmpVal > this.convertUnitsService.value(max).from('hp').to(settings.fanPowerMeasurement)) {
+      return 'Rated motor power is too large.';
+    } else {
+      return null;
+      // if (fsat.fieldData.motorPower && tmpVal) {
+      // let val, compare;
+      // if (settings.fanPowerMeasurement === 'hp') {
+      //   val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
+      //   if (isModification) {
+      //     let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
+      //     if (isModValid) {
+      //       let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
+      //       let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
+      //       compare = fsatOutput.motorPower;
+      //     }
+      //     else {
+      //       compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+      //     }
+      //   }
+      //   else {
+      //     compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+      //   }
+      // } else {
+      //     val = tmpVal;
+      //     if (isModification) {
+      //       let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
+      //       if (isModValid) {
+      //         let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
+      //         let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
+      //         compare = fsatOutput.motorPower;
+      //       }
+      //       else {
+      //         compare = fsat.fieldData.motorPower;
+      //       }
+      //     }
+      //     else {
+      //       compare = fsat.fieldData.motorPower;
+      //     }
+      //   }
+      //   val = val * 1.5;
+      //   if (val < compare) {
+      //     return 'The Field Data ' + motorPowerStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
+      //   } else {
+      //     return null;
+      //   }
+      // } else {
+      //   return null;
+      // }
+    }
+  }
+
+}
+
+export interface FLAMotorWarnings {
+  rpmError: string;
+  voltageError: string;
+  flaError: string;
+  efficiencyError: string;
+  ratedPowerError: string;
 }

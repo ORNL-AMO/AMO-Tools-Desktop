@@ -13,25 +13,37 @@
     </select>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'error': warnings.ratedPowerError !== null, 'invalid': form.controls.motorRatedPower.invalid}">
     <label for="{{'motorRatedPower_'+idString}}">Rated Motor Power</label>
     <div name="motorRatedPower" class="input-group">
       <input type="number" step="any" min="0" class="form-control number-input-field"
-        id="{{'motorRatedPower_'+idString}}" formControlName="motorRatedPower" (input)="calculate()" (focus)="focusField('motorRatedPower')"
-        onfocus="this.select();">
+        id="{{'motorRatedPower_'+idString}}" formControlName="motorRatedPower" (input)="calculate()"
+        (focus)="focusField('motorRatedPower')" onfocus="this.select();">
       <!-- <span class="input-group-addon units">{{settings.powerMeasurement}}</span> -->
       <!-- TODO rhernandez find out units for imp/metric power -->
       <span class="input-group-addon units">hp</span>
     </div>
+    <span *ngIf="form.controls.motorRatedPower.invalid && !form.controls.motorRatedPower.pristine">
+      <span class="alert-danger pull-right small" *ngIf="form.controls.motorRatedPower.errors.required">Value
+        Required</span>
+    </span>
+    <span class="alert-warning pull-right small"
+      *ngIf="warnings.ratedPowerError !== null && !form.controls.motorRatedPower.pristine">{{warnings.ratedPowerError}}</span>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'error': warnings.rpmError !== null, 'invalid': form.controls.motorRpm.invalid}">
     <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
     <div name="motorRpm" class="input-group">
       <input type="number" step="10" min="0" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
         formControlName="motorRpm" (focus)="focusField('motorRpm')" (input)="calculate()" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span *ngIf="form.controls.motorRpm.invalid && !form.controls.motorRpm.pristine">
+      <span class="alert-danger pull-right small" *ngIf="form.controls.motorRpm.errors.required">Value
+        Required</span>
+    </span>
+    <span class="alert-warning pull-right small"
+      *ngIf="warnings.rpmError !== null && !form.controls.motorRpm.pristine && !form.controls.motorRpm.invalid">{{warnings.rpmError}}</span>
   </div>
 
   <div class="form-group">
@@ -43,7 +55,7 @@
     </select>
   </div>
 
-  <div class="form-group" *ngIf="form.controls.efficiencyClass.value == 3">
+  <div class="form-group" *ngIf="form.controls.efficiencyClass.value == 3" [ngClass]="{'invalid': form.controls.specifiedEfficiency.invalid }">
     <label for="{{'specifiedEfficiency_'+idString}}">Efficiency</label>
     <div class="input-group">
       <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control"
@@ -51,9 +63,17 @@
         (focus)="focusField('specifiedEfficiency')" (input)="calculate()" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small"
+      *ngIf="form.controls.specifiedEfficiency.invalid && !form.controls.specifiedEfficiency.pristine">
+      <span *ngIf="form.controls.specifiedEfficiency.errors.required">Value Required</span>
+      <span *ngIf="form.controls.specifiedEfficiency.errors.max">Value can't be greater than
+        {{form.controls.specifiedEfficiency.errors.max.max}} %.</span>
+      <span *ngIf="form.controls.specifiedEfficiency.errors.min">Value can't be less than
+        {{form.controls.specifiedEfficiency.errors.min.min}} %.</span>
+    </span>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'error': warnings.voltageError !== null, 'invalid':form.controls.motorRatedVoltage.invalid}">
     <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
     <div class="input-group">
       <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field"
@@ -61,11 +81,17 @@
         (focus)="focusField('motorRatedVoltage')" (input)="calculate()" onfocus="this.select();">
       <span class="input-group-addon units">V</span>
     </div>
+    <span *ngIf="form.controls.motorRatedVoltage.invalid && !form.controls.motorRatedVoltage.pristine">
+      <span class="alert-danger pull-right small" *ngIf="form.controls.motorRatedVoltage.errors.required">Value
+        Required</span>
+    </span>
+    <span class="alert-warning pull-right small"
+      *ngIf="warnings.voltageError !== null && !form.controls.motorRatedVoltage.pristine">{{warnings.voltageError}}</span>
   </div>
 
   <div class="form-group">
     <label class="bold">
-      Full-Load Amps     
+      Full-Load Amps
     </label>
     <span class="input-group text-center">
       {{fullLoadAmps}} A

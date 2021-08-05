@@ -1,8 +1,7 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
-import { FullLoadAmpsService } from '../full-load-amps.service';
-import { PsatService } from '../../../../psat/psat.service';
+import { FLAMotorWarnings, FullLoadAmpsService } from '../full-load-amps.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 import { FanMotor } from '../../../../shared/models/fans';
@@ -21,6 +20,8 @@ export class FullLoadAmpsFormComponent implements OnInit {
   idString: string;
   fullLoadAmps: number;
 
+  formValid: boolean;
+  warnings: FLAMotorWarnings;
   motor: FanMotor;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -63,6 +64,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
   initForm() {
     let fullLoadAmpsInput: FanMotor = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
     this.form = this.fullLoadAmpsService.getFormFromObj(fullLoadAmpsInput);
+    this.checkWarnings(fullLoadAmpsInput);
     this.calculate();
   }
 
@@ -84,6 +86,10 @@ export class FullLoadAmpsFormComponent implements OnInit {
     this.calculate();
   }
 
+  checkWarnings(motor: FanMotor) {
+    this.warnings = this.fullLoadAmpsService.checkMotorWarnings(motor, this.settings);
+  }
+
   focusField(str: string) {
     this.fullLoadAmpsService.currentField.next(str);
   }
@@ -91,6 +97,7 @@ export class FullLoadAmpsFormComponent implements OnInit {
   calculate() {
     let updatedInput: FanMotor = this.fullLoadAmpsService.getObjFromForm(this.form);
     this.fullLoadAmpsService.fullLoadAmpsInputs.next(updatedInput);
+    this.checkWarnings(updatedInput);
   }
 
 }
