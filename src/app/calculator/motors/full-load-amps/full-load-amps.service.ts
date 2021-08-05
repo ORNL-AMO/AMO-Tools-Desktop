@@ -16,7 +16,6 @@ export class FullLoadAmpsService {
   currentField: BehaviorSubject<string>;
 
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
-    // Behavior subjects must be instantiated with some value
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.fullLoadAmpsInputs = new BehaviorSubject<FanMotor>(undefined);
     this.fullLoadAmpsResult = new BehaviorSubject<number>(undefined);
@@ -88,7 +87,6 @@ export class FullLoadAmpsService {
       flaInput.motorRatedVoltage,
       settings
     );
-    // TODO rhernandez find out if this should be converted
 
     this.fullLoadAmpsResult.next(fullLoadAmpsResult);
   }
@@ -117,7 +115,7 @@ export class FullLoadAmpsService {
       fullLoadAmps: 683.25
     };
 
-    // TODO rhernandez  Do we need to convert the example?
+    
     this.fullLoadAmpsInputs.next(defaultData);
   }
 
@@ -259,13 +257,6 @@ export class FullLoadAmpsService {
   }
 
   checkRatedPower(motor: FanMotor, settings: Settings) {
-    // let motorPowerStr: string;
-    // if (fsat.fieldData.loadEstimatedMethod === 0) {
-    //   motorPowerStr = 'Motor Power';
-    // } else {
-    //   motorPowerStr = 'Motor Current';
-    // }
-
     let tmpVal = motor.motorRatedPower;
     let min: number = 5;
     let max: number = 10000;
@@ -275,50 +266,6 @@ export class FullLoadAmpsService {
       return 'Rated motor power is too large.';
     } else {
       return null;
-      // if (fsat.fieldData.motorPower && tmpVal) {
-      // let val, compare;
-      // if (settings.fanPowerMeasurement === 'hp') {
-      //   val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
-      //   if (isModification) {
-      //     let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
-      //     if (isModValid) {
-      //       let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
-      //       let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
-      //       compare = fsatOutput.motorPower;
-      //     }
-      //     else {
-      //       compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
-      //     }
-      //   }
-      //   else {
-      //     compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
-      //   }
-      // } else {
-      //     val = tmpVal;
-      //     if (isModification) {
-      //       let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
-      //       if (isModValid) {
-      //         let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
-      //         let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
-      //         compare = fsatOutput.motorPower;
-      //       }
-      //       else {
-      //         compare = fsat.fieldData.motorPower;
-      //       }
-      //     }
-      //     else {
-      //       compare = fsat.fieldData.motorPower;
-      //     }
-      //   }
-      //   val = val * 1.5;
-      //   if (val < compare) {
-      //     return 'The Field Data ' + motorPowerStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
-      //   } else {
-      //     return null;
-      //   }
-      // } else {
-      //   return null;
-      // }
     }
   }
 
