@@ -19,7 +19,6 @@ export class DesignDetailsComponent implements OnInit {
   warnings: CompressorInventoryItemWarnings;
   isFormChange: boolean = false;
   displayBlowdownTime: boolean;
-  displayUnloadSumpPressure: boolean;
   displayModulation: boolean;
   displayNoLoadPowerFM: boolean;
   displayNoLoadPowerUL: boolean;
@@ -37,7 +36,6 @@ export class DesignDetailsComponent implements OnInit {
           this.warnings = this.inventoryService.checkWarnings(compressor);
           this.form = this.inventoryService.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayBlowdownTime(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-          this.setDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayModulation(compressor.compressorControls.controlType)
           this.setDisplayMaxFullFlow(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayNoLoadPowerFM(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
@@ -74,10 +72,6 @@ export class DesignDetailsComponent implements OnInit {
 
   setDisplayBlowdownTime(compressorType: number, controlType: number) {
     this.displayBlowdownTime = this.inventoryService.checkDisplayBlowdownTime(compressorType, controlType);
-  }
-
-  setDisplayUnloadSumpPressure(compressorType: number, controlType: number) {
-    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
   }
 
   setDisplayModulation(controlType: number) {

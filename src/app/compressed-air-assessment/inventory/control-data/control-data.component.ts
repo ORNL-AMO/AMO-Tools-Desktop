@@ -20,7 +20,9 @@ export class ControlDataComponent implements OnInit {
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   displayUnload: boolean;
   displayAutomaticShutdown: boolean;
+  displayUnloadSumpPressure: boolean;
   contentCollapsed: boolean;
+  compressorType: number;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
@@ -29,6 +31,7 @@ export class ControlDataComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
+          this.compressorType = val.nameplateData.compressorType;
           this.form = this.inventoryService.getCompressorControlsFormFromObj(val.compressorControls);
           this.toggleDisableControls();
           this.setControlTypeOptions(val.nameplateData.compressorType);
@@ -92,6 +95,7 @@ export class ControlDataComponent implements OnInit {
   setDisplayValues() {
     this.displayUnload = this.inventoryService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
     this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
+    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType)
   }
 
   save() {

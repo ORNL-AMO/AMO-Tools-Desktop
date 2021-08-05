@@ -258,7 +258,9 @@ export class CompressedAirCalculationService {
       receiverVolume: receiverVolume,
       loadFactorUnloaded: 1,
 
-      unloadPointCapacity: compressor.compressorControls.unloadPointCapacity
+      unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
+      blowdownTime: compressor.designDetails.blowdownTime,
+      unloadSumpPressure: compressor.compressorControls.unloadSumpPressure
 
     }
   }
@@ -378,7 +380,9 @@ export interface CompressorsCalcInput {
   //Start stop
   powerMaxPercentage: number
   powerAtFullLoadPercentage: number,
-  unloadPointCapacity: number
+  unloadPointCapacity: number,
+  blowdownTime: number,
+  unloadSumpPressure: number
 }
 
 

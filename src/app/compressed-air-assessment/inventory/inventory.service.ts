@@ -356,10 +356,10 @@ export class InventoryService {
     return false;
   }
 
-  checkDisplayUnloadSlumpPressure(compressorType: number, controlType: number): boolean {
+  checkDisplayUnloadSlumpPressure(compressorType: number): boolean {
     //"lubricant-injected rotary screws"
     //controlType "load/unload"
-    if ((compressorType == 1 || compressorType == 2) && controlType == 4) {
+    if (compressorType == 1 || compressorType == 2) {
       return true;
     }
     return false;
