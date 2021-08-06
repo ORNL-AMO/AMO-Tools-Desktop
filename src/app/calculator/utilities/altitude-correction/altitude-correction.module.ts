@@ -4,13 +4,15 @@ import { AltitudeCorrectionFormComponent } from './altitude-correction-form/alti
 import { AltitudeCorrectionComponent } from './altitude-correction.component';
 import { AltitudeCorrectionService } from './altitude-correction.service';
 import { AltitudeCorrectionHelpComponent } from './altitude-correction-help/altitude-correction-help.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [AltitudeCorrectionComponent, AltitudeCorrectionFormComponent, AltitudeCorrectionHelpComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
   providers: [AltitudeCorrectionService],
   exports: [AltitudeCorrectionComponent]
