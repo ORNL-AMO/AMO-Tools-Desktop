@@ -145,7 +145,6 @@ export class FullLoadAmpsService {
     let warnings: FLAMotorWarnings ={
       rpmError: this.checkMotorRpm(motor),
       voltageError: this.checkMotorVoltage(motor),
-      flaError: this.checkFLA(motor, settings),
       efficiencyError: efficiencyError,
       ratedPowerError: this.checkRatedPower(motor, settings)
     };
@@ -274,7 +273,6 @@ export class FullLoadAmpsService {
 export interface FLAMotorWarnings {
   rpmError: string;
   voltageError: string;
-  flaError: string;
   efficiencyError: string;
   ratedPowerError: string;
 }

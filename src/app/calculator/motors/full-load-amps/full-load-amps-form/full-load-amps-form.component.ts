@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { FLAMotorWarnings, FullLoadAmpsService } from '../full-load-amps.service';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 import { FanMotor } from '../../../../shared/models/fans';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
@@ -15,14 +14,13 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 export class FullLoadAmpsFormComponent implements OnInit {
   @Input()
   settings: Settings;
+
   form: FormGroup;
   formWidth: number;
-  idString: string;
+  idString: string = 'fla_calc';
   fullLoadAmps: number;
-
-  formValid: boolean;
   warnings: FLAMotorWarnings;
-  motor: FanMotor;
+  
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   fullLoadAmpsResultSub: Subscription;
@@ -31,16 +29,11 @@ export class FullLoadAmpsFormComponent implements OnInit {
     50,
     60
   ];
-  efficiencyClasses: Array<{ display: string, value: number }>;
+  efficiencyClasses: Array<{ display: string, value: number }> = motorEfficiencyConstants;
   
-  constructor(private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
+  constructor(private fullLoadAmpsService: FullLoadAmpsService) { }
 
-  ngOnInit(): void {
-    this.settings = this.settingsDbService.globalSettings;
-    this.efficiencyClasses = motorEfficiencyConstants;
-    
-    this.idString = 'fla_calc';
-  
+  ngOnInit(): void {  
     this.initSubscriptions();
   }
 

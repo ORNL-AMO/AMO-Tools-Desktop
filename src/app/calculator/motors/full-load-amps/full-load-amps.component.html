@@ -16,7 +16,7 @@
             <div class="scroll-item col-7 bg-white" [ngStyle]="{'height.px' : containerHeight}">
                 <div class="d-flex flex-column p-2">
                     <div class="pb-2">
-                        <app-full-load-amps-form></app-full-load-amps-form>
+                        <app-full-load-amps-form [settings]="settings"></app-full-load-amps-form>
                         <div class="w-100 justify-content-center btn-group btn-group-sm">
                             <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
                                 (click)="btnResetData()">
