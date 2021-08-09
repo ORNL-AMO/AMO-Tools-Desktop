@@ -99,6 +99,7 @@ import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/he
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+
 import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
 
 export const coreRoutes: Routes = [
