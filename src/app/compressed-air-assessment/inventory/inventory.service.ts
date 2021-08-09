@@ -349,7 +349,7 @@ export class InventoryService {
     //"lubricant-injected rotary screws"
     if (compressorType == 1 || compressorType == 2) {
       //has word "unloading"
-      if (controlType == 1 || controlType == 2 || controlType == 3) {
+      if (controlType == 1 || controlType == 2 || controlType == 3 || controlType == 4 || controlType == 6) {
         return true;
       }
     }

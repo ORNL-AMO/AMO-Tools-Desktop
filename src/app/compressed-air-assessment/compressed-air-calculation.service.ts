@@ -115,7 +115,7 @@ export class CompressedAirCalculationService {
         // console.log(computeFromVal);
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
         // console.log(inputData.receiverVolume);
-        // console.log(inputData);
+        console.log(inputData);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
         // console.log(results);
         results.percentagePower = results.percentagePower * 100;
@@ -200,6 +200,13 @@ export class CompressedAirCalculationService {
       receiverVolume = receiverVolume + additionalRecieverVolume;
     }
     receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
+
+    //lubricant free
+    if(lubricantTypeEnumValue == 1){
+      compressor.designDetails.blowdownTime = .0003;
+      compressor.compressorControls.unloadSumpPressure = 15;
+    }
+
     return {
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,
