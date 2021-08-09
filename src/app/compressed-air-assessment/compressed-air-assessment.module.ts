@@ -100,7 +100,8 @@ import { AdjustCompressorComponent } from './explore-opportunities/use-unloading
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { DayTypeService } from './day-types/day-type.service';
-
+import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
+import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -189,7 +190,9 @@ import { DayTypeService } from './day-types/day-type.service';
     FormsModule,
     ModalModule,
     NgbModule,
-    ConfirmDeleteModalModule
+    ConfirmDeleteModalModule, 
+    FullLoadAmpsModule,
+    AltitudeCorrectionModule
   ],
   providers: [
     CompressedAirAssessmentService,
