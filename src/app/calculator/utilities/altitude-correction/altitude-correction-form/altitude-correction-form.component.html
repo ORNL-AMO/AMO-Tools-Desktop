@@ -4,18 +4,10 @@
             <label for="altitude">Altitude</label>
             <div class="input-group">
                 <input class="form-control number-input-field" name="altitude" id="altitude" formControlName="altitude"
-                    type="number" (input)="save()" (change)="calculateBarometricPressure()"
+                    type="number" (input)="save()"
                     (focus)="focusField('altitude')" onfocus="this.select();">
                 <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-                <!-- <span class="alert-danger pull-right small"
-                    *ngIf="form.controls.altitude.invalid && !form.controls.altitude.pristine">
-                    <span *ngIf="form.controls.altitude.errors.min">Value can't be less than
-                        {{form.controls.altitude.errors.min.min}}
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.
-                    </span>
-                </span> -->
             </div>
         </div>
         <div class="form-group">

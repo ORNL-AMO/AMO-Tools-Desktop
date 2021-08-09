@@ -49,41 +49,14 @@ export class AltitudeCorrectionFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
     this.generateFormSubscription.unsubscribe();
+    this.altitudeCorrectionResultsSub.unsubscribe();
   }
 
   save() {
    let updatedInputs: number = this.altitudecorrectionService.getObjFromForm(this.form);
    this.altitudecorrectionService.altitudeCorrectionInputs.next(updatedInputs);
   }
-
-  calculateBarometricPressure() {
-    let altitude = this.form.controls.altitude.value;
-    if (this.settings.unitsOfMeasure != 'Metric') {
-      altitude = this.convertUnitsService.value(altitude).from('ft').to('m');
-    }
-    let parensOp = 1 - .0000225577 * altitude;
-    let exponentOp = Math.pow(parensOp, 5.2559);
-    let barometricPressure = 101.325 * exponentOp;
-    if (this.settings.unitsOfMeasure != 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('inHg');
-    }
-    return barometricPressure;
-  }
-
-  setValidators() {
-    //this.form = this.altitudecorrectionService.setValidators(this.form, this.settings);
-    this.save();
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
+  
   focusField(str: string) {
     this.altitudecorrectionService.currentField.next(str);
   }

@@ -36,11 +36,11 @@ export class AltitudeCorrectionComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    this.altitudeCorrectionService.getDefaultData(this.settings);
+    this.altitudeCorrectionService.initDefaultData();
     let existingInputs = this.altitudeCorrectionService.altitudeCorrectionInputs.getValue();
     if (!existingInputs) {
-      this.altitudeCorrectionService.getDefaultData(this.settings);
-      this.altitudeCorrectionService.getDefualtResults();
+      this.altitudeCorrectionService.initDefaultData();
+      this.altitudeCorrectionService.initDefualtResults();
     }
     this.initSubscriptions();
   }
@@ -78,12 +78,12 @@ export class AltitudeCorrectionComponent implements OnInit {
   }
 
   btnResetData() {
-    this.altitudeCorrectionService.getDefaultData(this.settings);
+    this.altitudeCorrectionService.initDefaultData();
     this.altitudeCorrectionService.resetData.next(true);
   }
 
   btnGenerateExample() {
-    this.altitudeCorrectionService.getExampleData(this.settings);
+    this.altitudeCorrectionService.initExampleData(this.settings);
     this.altitudeCorrectionService.generateExample.next(true);
    
   }
