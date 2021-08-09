@@ -100,6 +100,9 @@ import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
+
+import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
 
 export const coreRoutes: Routes = [
   {
@@ -269,6 +272,10 @@ export const coreRoutes: Routes = [
             component: CompressedAirReductionComponent
           },
           {
+            path: 'altitude-correction',
+            component: AltitudeCorrectionComponent
+          },
+          {
             path: 'electricity-reduction',
             component: ElectricityReductionComponent
           },
@@ -327,6 +334,10 @@ export const coreRoutes: Routes = [
           {
             path: 'replace-existing',
             component: ReplaceExistingComponent
+          },
+          {
+            path: 'full-load-amps',
+            component: FullLoadAmpsComponent
           },
           {
             path: 'efficiency-improvement',

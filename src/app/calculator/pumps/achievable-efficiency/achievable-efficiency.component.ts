@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
@@ -28,6 +28,7 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   headerHeight: number;
 
+  currentField:string;
   efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
   toggleResetData: boolean = true;
@@ -110,6 +111,10 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  changeField(str: string) {
+    this.currentField = str;
   }
 
   btnResetData() {
