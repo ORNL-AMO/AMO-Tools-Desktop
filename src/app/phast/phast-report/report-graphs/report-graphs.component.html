@@ -10,6 +10,10 @@
       <app-plotly-pie-chart *ngIf="selectedBaselineData.valid.isValid" [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="lossUnit">
       </app-plotly-pie-chart>
     </div>
+    <div class="p-2 pie-chart-container" *ngIf="hasDeliverInput">
+      <app-plotly-pie-chart *ngIf="selectedBaselineData.valid.isValid" [valuesAndLabels]="selectedBaselineData.deliverValuesLabels" [valuesUnit]="deliverUnit">
+      </app-plotly-pie-chart>
+    </div>
     <app-invalid-phast *ngIf="!selectedBaselineData.valid.isValid" [phastValid]="selectedBaselineData.valid"></app-invalid-phast>
   </div>
   <div *ngIf="selectedModificationData" class="d-flex w-50 flex-column">
@@ -22,6 +26,11 @@
     <div class="p-2 pie-chart-container">
       <app-plotly-pie-chart *ngIf="selectedModificationData.valid.isValid" 
       [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="lossUnit">
+      </app-plotly-pie-chart>
+    </div>
+    <div class = "p-2 pie-chart-container" *ngIf="hasDeliverInput">
+      <app-plotly-pie-chart *ngIf="selectedModificationData.valid.isValid" 
+      [valuesAndLabels]="selectedModificationData.deliverValuesLabels" [valuesUnit]="deliverUnit">
       </app-plotly-pie-chart>
     </div>
    <app-invalid-phast *ngIf="!selectedModificationData.valid.isValid" [phastValid]="selectedModificationData.valid"></app-invalid-phast>
