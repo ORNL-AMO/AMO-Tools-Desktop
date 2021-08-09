@@ -190,13 +190,10 @@ export class WasteWaterService {
 
 
   setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
-    console.log(baselineResults.AeCost);
-    console.log(modificationResults.AeCost);
 
     modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
     modificationResults.energySavings = baselineResults.AeEnergyAnnual - modificationResults.AeEnergyAnnual;
     modificationResults.percentCostSavings = (modificationResults.costSavings / baselineResults.AeCost) * 100;
-    console.log(modificationResults.costSavings);
     return modificationResults;
   }
 

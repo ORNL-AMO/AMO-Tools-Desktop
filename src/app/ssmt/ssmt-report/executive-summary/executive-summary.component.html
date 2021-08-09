@@ -83,7 +83,7 @@
         <td class="bold" [ngStyle]="{ 'width.%': 15 }">Power Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
-            {{ baselineOutput.operationsOutput.powerGenerationCost }}
+            {{ baselineOutput.operationsOutput.powerGenerationCost | number: "1.0-0" }}
           </span>
           <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
         </td>

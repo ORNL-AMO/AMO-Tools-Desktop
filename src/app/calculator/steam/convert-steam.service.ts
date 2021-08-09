@@ -346,7 +346,6 @@ export class ConvertSteamService {
     ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('m3/h').to(settings.steamVolumeFlowMeasurement);
     ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlowAnnual).from('m3').to(settings.steamVolumeMeasurement);
     if (settings.currency !== "$") {
-      console.log("Completed");
       ssmtOperationsOutput.boilerFuelCost = this.convertUnitsService.value(ssmtOperationsOutput.boilerFuelCost).from('$').to(settings.currency);
       ssmtOperationsOutput.makeupWaterCost = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterCost).from('$').to(settings.currency);
       ssmtOperationsOutput.totalOperatingCost = this.convertUnitsService.value(ssmtOperationsOutput.totalOperatingCost).from('$').to(settings.currency);

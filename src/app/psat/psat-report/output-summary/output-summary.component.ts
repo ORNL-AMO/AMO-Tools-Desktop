@@ -83,7 +83,6 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   useModification() {
-    console.log("Changed");
     this.psatReportRollupService.updateSelectedPsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
