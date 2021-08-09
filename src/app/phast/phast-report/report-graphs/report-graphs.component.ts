@@ -83,8 +83,9 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   addChartData(phast: PHAST, name: string, isValid: PhastValid,  modification?: Modification) {
-    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(phast);
-    let deliverValuesLabels: Array<{ value: number, label: string }> = this.getDeliverValuesAndLabels(phast);
+    let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);
+    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(results);
+    let deliverValuesLabels: Array<{ value: number, label: string }> = this.getDeliverValuesAndLabels(results);
     this.allChartData.push({
       name: name,
       valuesAndLabels: valuesAndLabels,
@@ -96,8 +97,7 @@ export class ReportGraphsComponent implements OnInit {
     })
   }
 
-  getDeliverValuesAndLabels(phast: PHAST): Array<{ value: number, label: string }> {
-    let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);
+  getDeliverValuesAndLabels(results: PhastResults): Array<{ value: number, label: string }> {
     let pieData = new Array<{label: string, value: number}>();
     if (results.energyInputTotalChemEnergy) {
       pieData.push({ label: "Chemical Energy Input", value: results.energyInputTotalChemEnergy});
@@ -111,8 +111,7 @@ export class ReportGraphsComponent implements OnInit {
     return pieData;
   }
 
-  getValuesAndLabels(phast: PHAST): Array<{ value: number, label: string }> {
-    let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);
+  getValuesAndLabels(results: PhastResults): Array<{ value: number, label: string }> {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(this.settings);
     let pieData = new Array<{ label: string, value: number }>();
 
