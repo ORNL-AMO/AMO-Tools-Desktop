@@ -14,7 +14,8 @@
         <input name="barometricPressure" type="number" step="any" class="form-control"
           formControlName="barometricPressure" id="{{'barometricPressure_'+idString}}" (input)="getResults()"
           (focus)="focusField('barometricPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">Paa</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">in Hg</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="gasDensityForm.controls.barometricPressure.invalid && !gasDensityForm.controls.barometricPressure.pristine">
