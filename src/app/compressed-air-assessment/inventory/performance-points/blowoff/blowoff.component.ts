@@ -59,13 +59,28 @@ export class BlowoffComponent implements OnInit {
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.performancePoints.blowoff = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
     this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.blowoff.power, selectedCompressor);
-   
+
     selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
     this.updateForm(selectedCompressor.performancePoints.blowoff);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (!this.inModification) {
       let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
       compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+      compressedAirAssessment.modifications.forEach(modification => {
+        let adjustedCompressorIndex: number = modification.useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => {
+          return adjustedCompressor.compressorId == selectedCompressor.itemId;
+        });
+        modification.useUnloadingControls.adjustedCompressors[adjustedCompressorIndex] = {
+          selected: false,
+          compressorId: selectedCompressor.itemId,
+          originalControlType: selectedCompressor.compressorControls.controlType,
+          compressorType: selectedCompressor.nameplateData.compressorType,
+          unloadPointCapacity: selectedCompressor.compressorControls.unloadPointCapacity,
+          controlType: selectedCompressor.compressorControls.controlType,
+          performancePoints: selectedCompressor.performancePoints,
+          automaticShutdown: selectedCompressor.compressorControls.automaticShutdown
+        }
+      });
     } else {
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });

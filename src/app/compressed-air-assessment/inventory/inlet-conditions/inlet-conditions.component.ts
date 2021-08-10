@@ -46,6 +46,21 @@ export class InletConditionsComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
     compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    compressedAirAssessment.modifications.forEach(modification => {
+      let adjustedCompressorIndex: number = modification.useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => {
+        return adjustedCompressor.compressorId == selectedCompressor.itemId;
+      });
+      modification.useUnloadingControls.adjustedCompressors[adjustedCompressorIndex] = {
+        selected: false,
+        compressorId: selectedCompressor.itemId,
+        originalControlType: selectedCompressor.compressorControls.controlType,
+        compressorType: selectedCompressor.nameplateData.compressorType,
+        unloadPointCapacity: selectedCompressor.compressorControls.unloadPointCapacity,
+        controlType: selectedCompressor.compressorControls.controlType,
+        performancePoints: selectedCompressor.performancePoints,
+        automaticShutdown: selectedCompressor.compressorControls.automaticShutdown
+      }
+    });
     this.isFormChange = true;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.inventoryService.selectedCompressor.next(selectedCompressor);

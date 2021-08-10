@@ -59,6 +59,12 @@ export class InventoryTableComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId});
     compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
+    
+    compressedAirAssessment.modifications.forEach(modification => {
+      modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
+      modification.useUnloadingControls.adjustedCompressors = modification.useUnloadingControls.adjustedCompressors.filter(compressor => { return compressor.compressorId != this.deleteSelectedId });
+    });
+
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
       let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
