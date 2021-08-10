@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
-import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-inlet-conditions',
@@ -18,7 +17,7 @@ export class InletConditionsComponent implements OnInit {
   isFormChange: boolean = false;
   contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseInletConditions;
@@ -33,44 +32,22 @@ export class InletConditionsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
     this.inventoryService.collapseInletConditions = this.contentCollapsed;
   }
 
-  save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.inletConditions = this.inventoryService.getInletConditionsObjFromForm(this.form);
-    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    compressedAirAssessment.modifications.forEach(modification => {
-      let adjustedCompressorIndex: number = modification.useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => {
-        return adjustedCompressor.compressorId == selectedCompressor.itemId;
-      });
-      modification.useUnloadingControls.adjustedCompressors[adjustedCompressorIndex] = {
-        selected: false,
-        compressorId: selectedCompressor.itemId,
-        originalControlType: selectedCompressor.compressorControls.controlType,
-        compressorType: selectedCompressor.nameplateData.compressorType,
-        unloadPointCapacity: selectedCompressor.compressorControls.unloadPointCapacity,
-        controlType: selectedCompressor.compressorControls.controlType,
-        performancePoints: selectedCompressor.performancePoints,
-        automaticShutdown: selectedCompressor.compressorControls.automaticShutdown
-      }
-    });
+  save(isAtmosphericPressureChange: boolean) {
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    let inletConditions = this.inventoryService.getInletConditionsObjFromForm(this.form);
+    this.compressedAirDataManagementService.updateInletConditions(inletConditions, isAtmosphericPressureChange);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  toggleCollapse(){
+  toggleCollapse() {
     this.contentCollapsed = !this.contentCollapsed;
   }
 

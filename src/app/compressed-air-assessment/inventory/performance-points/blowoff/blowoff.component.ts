@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
 import { BlowoffCalculationsService } from '../calculations/blowoff-calculations.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
@@ -31,19 +32,20 @@ export class BlowoffComponent implements OnInit {
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private performancePointCalculationsService: PerformancePointCalculationsService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        // this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
+        this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
         if (this.isFormChange == false) {
-          this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
           this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', this.inModification);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
+          this.updateForm(compressor.performancePoints.blowoff);
           this.isFormChange = false;
         }
       }
@@ -55,41 +57,21 @@ export class BlowoffComponent implements OnInit {
   }
 
   save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.performancePoints.blowoff = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
-    this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(selectedCompressor.performancePoints.blowoff.power, selectedCompressor);
-
-    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    this.updateForm(selectedCompressor.performancePoints.blowoff);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.isFormChange = true;
     if (!this.inModification) {
-      let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-      compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-      compressedAirAssessment.modifications.forEach(modification => {
-        let adjustedCompressorIndex: number = modification.useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => {
-          return adjustedCompressor.compressorId == selectedCompressor.itemId;
-        });
-        modification.useUnloadingControls.adjustedCompressors[adjustedCompressorIndex] = {
-          selected: false,
-          compressorId: selectedCompressor.itemId,
-          originalControlType: selectedCompressor.compressorControls.controlType,
-          compressorType: selectedCompressor.nameplateData.compressorType,
-          unloadPointCapacity: selectedCompressor.compressorControls.unloadPointCapacity,
-          controlType: selectedCompressor.compressorControls.controlType,
-          performancePoints: selectedCompressor.performancePoints,
-          automaticShutdown: selectedCompressor.compressorControls.automaticShutdown
-        }
-      });
+      let blowoff: PerformancePoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+      this.compressedAirDataManagementService.updateBlowoff(blowoff)
     } else {
+      let blowoff: PerformancePoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+      this.selectedCompressor.performancePoints.blowoff = blowoff;
+      this.selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(this.selectedCompressor);
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-      let adjustedCompressorIndex: number = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => { return adjustedCompressor.compressorId == selectedCompressor.itemId });
-      compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors[adjustedCompressorIndex].performancePoints = selectedCompressor.performancePoints;
+      let adjustedCompressorIndex: number = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => { return adjustedCompressor.compressorId == this.selectedCompressor.itemId });
+      compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors[adjustedCompressorIndex].performancePoints = this.selectedCompressor.performancePoints;
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     }
-    this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
   }
 
   focusField(str: string) {
