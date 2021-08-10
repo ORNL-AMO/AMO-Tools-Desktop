@@ -97,7 +97,8 @@
       </span>
     </div>
 
-    <div class="form-group" *ngIf="baseline">
+    <div class="form-group" *ngIf="baseline"
+      [ngClass]="{'indicate-different': isLoadEstimationMethodDifferent()}">
       <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
       <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod"
         id="{{'loadEstimatedMethod_'+idString}}" (change)="changeLoadMethod()"

@@ -7,6 +7,7 @@ import { MotorDriveModule } from './motor-drive/motor-drive.module';
 import { ReplaceExistingModule } from './replace-existing/replace-existing.module';
 import { RouterModule } from '@angular/router';
 import { MotorsListComponent } from './motors-list/motors-list.component';
+import { FullLoadAmpsModule } from './full-load-amps/full-load-amps.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MotorsListComponent } from './motors-list/motors-list.component';
     PercentLoadEstimationModule,
     MotorDriveModule,
     ReplaceExistingModule,
+    FullLoadAmpsModule,
     RouterModule
   ]
 })

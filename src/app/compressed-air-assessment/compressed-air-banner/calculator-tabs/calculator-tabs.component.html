@@ -24,5 +24,11 @@
     <li [ngClass]="{'active': calcTab == 'compressed-air-pressure-reduction'}">
       <a (click)="changeCalcTab('compressed-air-pressure-reduction')">Compressed Air Pressure Reduction</a>
     </li>
+    <li [ngClass]="{'active': calcTab == 'full-load-amps'}">
+      <a (click)="changeCalcTab('full-load-amps')">Full-Load Amps</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'altitude-correction'}">
+      <a (click)="changeCalcTab('altitude-correction')">Altitude Correction</a>
+    </li>
  
   </ul>

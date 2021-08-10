@@ -3,23 +3,28 @@
     <ul class="list-group">
       <li class="list-group-item title-item">
         <div class="row">
-          <div class="col-6 border-right">
+          <div class="col-4 border-right">
             <span class="bold">Name</span>
+          </div>
+          <div class="col-3 border-right">
+            <span class="bold">Compare two existing fans or what-if scenario?</span>
           </div>
           <div class="col-1 border-right">
 
           </div>
-          <div class="col-5">
+          <div class="col-4">
             <span class="bold">Modifications</span>
           </div>
         </div>
       </li>
 
-      <li class="list-group-item modification-item" *ngFor="let modification of fsat.modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
+      <li class="list-group-item modification-item" *ngFor="let modification of fsat.modifications; let index = index"
+        [ngClass]="{'active-item': index == modificationIndex}">
         <div class="row">
-          <div class="col-6 border-right">
+          <div class="col-4 border-right">
             <div *ngIf="!rename[index] && !deleteArr[index]">
-              <a class="click-link small" (click)="selectModificationBadge(modification.fsat, index)">{{modification.fsat.name}}</a>
+              <a class="click-link small"
+                (click)="selectModificationBadge(modification.fsat, index)">{{modification.fsat.name}}</a>
             </div>
             <div *ngIf="rename[index]">
               <div class="input-group">
@@ -45,6 +50,29 @@
               </div>
             </div>
           </div>
+
+          <div class="col-3 border-right text-center">
+            <div class="align-self-center small text-left">
+              <form [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
+
+                <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
+                  <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
+                    <span>
+
+                      <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
+                        (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.fsat.whatIfScenario">
+                      <label for="{{'twoExisting_'+index}}">Two Existing Fans</label><br>
+
+                      <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
+                        [(ngModel)]="modification.fsat.whatIfScenario" (input)="saveScenarioChange(true, index)">
+                      <label for="{{'whatIf_'+index}}">What If Scenario</label><br>
+                    </span>
+
+                  </div>
+                </span>
+              </form>
+            </div>
+          </div>
           <div class="col-1 border-right text-center">
             <div class="btn-group">
               <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
@@ -56,9 +84,10 @@
               </div>
             </div>
           </div>
-          <div class="col-5">
+          <div class="col-4">
             <div class="d-flex flex-wrap">
-              <div *ngFor="let badge of getBadges(modification.fsat)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
+              <div *ngFor="let badge of getBadges(modification.fsat)" class="badge badge-primary"
+                (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
               <div *ngIf="modification.fsat.fanMotor.optimize" class="badge badge-secondary ml-auto">Optimized</div>
             </div>
           </div>
@@ -77,12 +106,14 @@
         <div class="form-section">
           <div class="form-group">
             <!-- <label>New Modification</label> -->
-            <input name="newModificationName" class="form-control w-100" type="text" placeholder="New Scenario Name" [(ngModel)]="newModificationName">
+            <input name="newModificationName" class="form-control w-100" type="text" placeholder="New Scenario Name"
+              [(ngModel)]="newModificationName">
           </div>
         </div>
       </form>
       <div class="p-2 text-center">
-        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New Scenario</button>
+        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New
+          Scenario</button>
       </div>
     </div>
   </div>

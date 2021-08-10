@@ -7,6 +7,7 @@ import { CompressedAirPressureReductionTreasureHunt, LightingReplacementTreasure
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
+import { PSAT } from '../models/psat';
 declare const packageJson;
 
 @Injectable()
@@ -48,7 +49,21 @@ export class UpdateDataService {
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
+
+        if(assessment.psat.modifications){
+            assessment.psat.modifications.forEach(mod => {
+                mod.psat = this.addWhatIfScenarioPsat(mod.psat);
+            })
+        }
+
         return assessment;
+    }
+
+    addWhatIfScenarioPsat(psat: PSAT): PSAT {
+        if(!psat.inputs.whatIfScenario) {
+            psat.inputs.whatIfScenario = true;
+        }
+        return psat;
     }
 
     updateFsat(assessment: Assessment): Assessment {
@@ -63,9 +78,17 @@ export class UpdateDataService {
         if(assessment.fsat.modifications){
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+                mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
             });
         }
         return assessment;
+    }
+
+    addWhatIfScenarioFsat(fsat: FSAT): FSAT {
+        if(!fsat.whatIfScenario) {
+            fsat.whatIfScenario = true;
+        }
+        return fsat;
     }
 
     updateSpecificHeatRatio(fsat: FSAT): FSAT {

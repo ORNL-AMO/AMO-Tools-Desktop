@@ -28,6 +28,10 @@ export class SetupDataComponent implements OnInit {
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   previousDataAvailableSub: Subscription;
   previousDataAvailable: Date;
+  workSheets: Array<String>;
+  workSheetsAvailable: boolean = false;
+  selectedSheet: string;
+  workBook: XLSX.WorkBook;
   headerRowOptions: Array<{ value: number, display: number }> = [
     { value: 0, display: 1 },
     { value: 1, display: 2 },
@@ -65,7 +69,7 @@ export class SetupDataComponent implements OnInit {
     }
   }
 
-  setImportFile($event) {
+  setCSVImport($event) {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {
         let regex = /.csv$/;
@@ -78,6 +82,16 @@ export class SetupDataComponent implements OnInit {
           this.validFile = false;
         }
       }
+    }
+  }
+
+  setImport($event) {
+    let splitName = $event.target.files[0].name.split(".");
+    if (splitName[splitName.length - 1] == "xlsx") {
+      this.setExcelImport($event);
+    }
+    else {
+      this.setCSVImport($event);
     }
   }
 
@@ -113,14 +127,21 @@ export class SetupDataComponent implements OnInit {
     let fr: FileReader = new FileReader();
     fr.onload = (e: any) => {
       const bstr: string = e.target.result;
-      let workBook: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary', cellDates: true });
-      let rowObject  =  XLSX.utils.sheet_to_csv(workBook.Sheets[workBook.SheetNames[0]]);
-      this.importData = rowObject;
-      this.parsePreviewData();
+      this.workBook = XLSX.read(bstr, { type: 'binary', cellDates: true, cellText: false, cellNF: false });
+      this.selectedSheet = this.workBook.SheetNames[0];
+      this.workSheets = this.workBook.SheetNames;
+      this.workSheetsAvailable = true;
+      this.finishImportExcel();
     }
     fr.readAsBinaryString(this.fileReference);
   }
 
+  finishImportExcel() {
+    let rowObject  =  XLSX.utils.sheet_to_csv(this.workBook.Sheets[this.selectedSheet], {dateNF: "mm/dd/yyyy hh:mm:ss"});
+    this.importData = rowObject;
+    this.parsePreviewData();
+  }
+ 
 
   parsePreviewData() {
     this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);

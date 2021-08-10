@@ -17,6 +17,7 @@ export class ImportModalComponent implements OnInit {
   importInProgress: boolean = false;
   fileReference: any;
   validFile: boolean;
+  treasureFile: boolean;
   importJson: any = null;
   constructor(private importService: ImportService, private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -87,7 +88,13 @@ export class ImportModalComponent implements OnInit {
         this.dashboardService.updateDashboardData.next(true);
       }, 1500);
     }
+    else if (importData.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
+      this.treasureFile = true;
+      this.validFile = false;
+      this.dashboardService.dashboardToastMessage.next('INVALID FILE DESTINATION - This is a treasure hunt opportunites file and must be imported from within a treasure hunt.');
+    }
     else {
+      this.treasureFile = false;
       this.validFile = false;
       this.dashboardService.dashboardToastMessage.next('INVALID FILE');
     }
