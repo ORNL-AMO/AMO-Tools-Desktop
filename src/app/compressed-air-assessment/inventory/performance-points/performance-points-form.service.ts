@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CompressorInventoryItem, PerformancePoint } from '../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, PerformancePoint, PerformancePoints } from '../../../shared/models/compressed-air-assessment';
 import { EqualToValidator } from '../../../shared/validators/equal-to';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { LessThanValidator } from '../../../shared/validators/less-than';
@@ -42,7 +42,7 @@ export class PerformancePointsFormService {
         form.controls.dischargePressure.enable();
       }
     }
-    
+
     for (let key in form.controls) {
       if (form.controls[key].value !== null) {
         form.controls[key].markAsDirty();
@@ -291,6 +291,25 @@ export class PerformancePointsFormService {
     }
     return false;
   }
+
+  getPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
+    let min: number = performancePoints.fullLoad.dischargePressure;
+    let max: number = 0;
+    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 6) {
+      max = performancePoints.unloadPoint.dischargePressure;
+    } else if (controlType == 1) {
+      max = performancePoints.noLoad.dischargePressure;
+    } else if (controlType == 5 || controlType == 4) {
+      max = performancePoints.maxFullFlow.dischargePressure;
+    } else if (controlType == 7 || controlType == 9) {
+      max = performancePoints.blowoff.dischargePressure;
+    }
+    return { min: min, max: max };
+  }
+
+
+
+
 }
 
 
