@@ -9,7 +9,7 @@
             <label for="nominalPressure">Nominal Pressure</label>
             <div class="input-group">
                 <input name="nominalPressure" type="number" step="any" class="form-control" id="nominalPressure"
-                    formControlName="nominalPressure" (change)="save()"
+                    formControlName="nominalPressure" (input)="save()"
                     (focus)="focusField('nominalPressure')">
                 <span class="units input-group-addon">psig</span>
             </div>
@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="systemElevation">System Elevation</label>
             <div class="input-group">
-                <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
+                <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
                     formControlName="systemElevation" (input)="save()" (focus)="focusField('systemElevation')">
                 <span class="units input-group-addon">ft</span>
             </div>
@@ -45,7 +45,7 @@
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
-                    formControlName="totalAirStorage" (change)="save()" (focus)="focusField('totalAirStorage')">
+                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
             </div>
@@ -59,7 +59,7 @@
         <!--Is a target pressure sequencer used?-->
         <div class="form-group">
             <label for="utilityType">Is a target pressure sequencer used?</label>
-            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="changeIsSequencerUsed()"
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (input)="changeIsSequencerUsed()"
                 (focus)="focusField('isSequencerUsed')">
                 <option [ngValue]="true">Yes</option>
                 <option [ngValue]="false">No</option>
@@ -71,7 +71,7 @@
             </label>
             <div class="input-group">
                 <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
-                    formControlName="targetPressure" (change)="save()" (focus)="focusField('targetPressure')">
+                    formControlName="targetPressure" (input)="save()" (focus)="focusField('targetPressure')">
                 <span class="units input-group-addon">psig</span>
             </div>
             <span class="alert-danger pull-right small"

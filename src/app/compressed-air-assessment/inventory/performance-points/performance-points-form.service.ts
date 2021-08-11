@@ -28,17 +28,10 @@ export class PerformancePointsFormService {
       isDefaultPower: [performancePoint.isDefaultPower],
     });
 
-    for (let key in form.controls) {
-      if (form.controls[key].value) {
-        form.controls[key].markAsDirty();
-      }
-    }
-
     if (pointName == 'blowoff' || (pointName == 'unloadPoint' &&
       (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10))) {
       form.controls.airflow.disable();
     }
-
     if (isModification) {
       form.controls.airflow.disable();
       form.controls.power.disable();
@@ -47,6 +40,12 @@ export class PerformancePointsFormService {
         || (pointName == 'noLoad' && compressor.compressorControls.controlType == 3)
         || (pointName == 'noLoad' && compressor.compressorControls.controlType == 4)) {
         form.controls.dischargePressure.enable();
+      }
+    }
+    
+    for (let key in form.controls) {
+      if (form.controls[key].value !== null) {
+        form.controls[key].markAsDirty();
       }
     }
     return form;
