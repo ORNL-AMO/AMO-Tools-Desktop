@@ -109,7 +109,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         let isValid: boolean = this.inventoryService.isCompressorValid(item)
         if (isValid) {
           for (let airFlow = 0; airFlow <= 100;) {
-            let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(item, 1, airFlow);
+            let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(item, 1, airFlow, 0, false);
             compressorData.push(results);
             airFlow = airFlow + 2.5;
           }
@@ -124,7 +124,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       let isValid: boolean = this.inventoryService.isCompressorValid(this.selectedCompressor);
       if (isValid) {
         for (let airFlow = 0; airFlow <= 100;) {
-          let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(this.selectedCompressor, 1, airFlow);
+          let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(this.selectedCompressor, 1, airFlow, 0, false);
           compressorData.push(results);
           airFlow = airFlow + 2.5;
         }
