@@ -24,6 +24,7 @@ export interface Calculator {
     motorPerformanceInputs?: MotorPerformanceInputs;
     nemaInputs?: NemaInputs;
     specificSpeedInputs?: SpecificSpeedInputs;
+    pipeSizingInputs?: PipeSizingInputs;
     o2EnrichmentInputs?: Array<EnrichmentInput>;
     efficiencyImprovementInputs?: EfficiencyImprovementInputs;
     energyEquivalencyInputs?: {
@@ -115,6 +116,12 @@ export interface SpecificSpeedInputs {
     head: number;
 }
 
+export interface PipeSizingInputs {
+     airFlow: number;
+     airlinePressure: number;
+     designVelocity: number;
+     atmosphericPressure: number;
+}
 
 
 export interface ReplaceExistingData {
