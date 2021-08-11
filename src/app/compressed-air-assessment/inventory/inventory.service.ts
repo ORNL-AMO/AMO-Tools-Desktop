@@ -181,7 +181,7 @@ export class InventoryService {
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 6);
+    return (controlType != 5 && controlType != 7 && controlType != 9);
   }
 
   setCompressorControlValidators(form: FormGroup): FormGroup {
