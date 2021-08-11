@@ -112,9 +112,12 @@ export class CompressedAirCalculationService {
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
       } else {
+        // console.log(computeFromVal);
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
+        // console.log(inputData.receiverVolume);
         // console.log(inputData);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        // console.log(results);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
@@ -197,6 +200,13 @@ export class CompressedAirCalculationService {
       receiverVolume = receiverVolume + additionalRecieverVolume;
     }
     receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
+
+    //lubricant free
+    if(lubricantTypeEnumValue == 1){
+      compressor.designDetails.blowdownTime = .0003;
+      compressor.compressorControls.unloadSumpPressure = 15;
+    }
+
     return {
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,
@@ -253,7 +263,11 @@ export class CompressedAirCalculationService {
 
 
       receiverVolume: receiverVolume,
-      loadFactorUnloaded: 1
+      loadFactorUnloaded: 1,
+
+      unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
+      blowdownTime: compressor.designDetails.blowdownTime,
+      unloadSumpPressure: compressor.compressorControls.unloadSumpPressure
 
     }
   }
@@ -373,7 +387,9 @@ export interface CompressorsCalcInput {
   //Start stop
   powerMaxPercentage: number
   powerAtFullLoadPercentage: number,
-
+  unloadPointCapacity: number,
+  blowdownTime: number,
+  unloadSumpPressure: number
 }
 
 

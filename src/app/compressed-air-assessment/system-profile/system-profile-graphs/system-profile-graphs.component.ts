@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
 import * as Plotly from 'plotly.js';
@@ -17,11 +17,13 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   compressedAirAssessmentSub: Subscription;
   profileSummary: Array<ProfileSummary>;
+  inventoryItems: Array<CompressorInventoryItem>;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val);
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val, val.systemProfile.systemProfileSetup.dayTypeId);
+      this.inventoryItems = val.compressorInventoryItems;
       this.drawCharts();
     });
   }
@@ -59,7 +61,7 @@ export class SystemProfileGraphsComponent implements OnInit {
             }
           }),
           type: 'bar',
-          name: compressorProfile.compressorName,
+          name:this.getCompressorName(compressorProfile.compressorId),
           marker: {
             color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
@@ -140,7 +142,7 @@ export class SystemProfileGraphsComponent implements OnInit {
             }
           }),
           type: 'bar',
-          name: compressorProfile.compressorName,
+          name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
             color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
@@ -216,7 +218,7 @@ export class SystemProfileGraphsComponent implements OnInit {
             }
           }),
           type: 'bar',
-          name: compressorProfile.compressorName,
+          name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
             color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
@@ -273,6 +275,15 @@ export class SystemProfileGraphsComponent implements OnInit {
         displaylogo: false
       };
       Plotly.newPlot(this.capacityGraph.nativeElement, traceData, layout, config);
+    }
+  }
+
+  getCompressorName(compressorId: string): string {
+    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => {return item.itemId == compressorId});
+    if(compressor){
+      return compressor.name
+    }else{
+      return '';
     }
   }
 }

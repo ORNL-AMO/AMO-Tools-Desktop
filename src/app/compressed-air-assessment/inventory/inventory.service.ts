@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
@@ -243,7 +243,7 @@ export class InventoryService {
       }
     }
   }
-  
+
   setSurgeAirFlowValidators(compressor: CompressorInventoryItem) {
     let surgeAirFlowValidators: Array<ValidatorFn>;
     if (compressor.centrifugalSpecifics.surgeAirflow) {
@@ -321,12 +321,12 @@ export class InventoryService {
     return form;
   }
 
-  
+
   checkWarnings(compressor: CompressorInventoryItem): CompressorInventoryItemWarnings {
     let serviceFactorWarning: string = null;
     if (compressor.designDetails.serviceFactor > 2) {
       serviceFactorWarning = 'Service factor is typically around 1.15 or less than 2';
-    } 
+    }
     return {
       serviceFactor: serviceFactorWarning,
     }
@@ -349,17 +349,17 @@ export class InventoryService {
     //"lubricant-injected rotary screws"
     if (compressorType == 1 || compressorType == 2) {
       //has word "unloading"
-      if (controlType == 1 || controlType == 2 || controlType == 3) {
+      if (controlType == 1 || controlType == 2 || controlType == 3 || controlType == 4 || controlType == 6) {
         return true;
       }
     }
     return false;
   }
 
-  checkDisplayUnloadSlumpPressure(compressorType: number, controlType: number): boolean {
+  checkDisplayUnloadSlumpPressure(compressorType: number): boolean {
     //"lubricant-injected rotary screws"
     //controlType "load/unload"
-    if ((compressorType == 1 || compressorType == 2) && controlType == 4) {
+    if (compressorType == 1 || compressorType == 2) {
       return true;
     }
     return false;
@@ -422,16 +422,42 @@ export class InventoryService {
     newInventoryItem.modifiedDate = new Date();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
+    let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
+    for (let i = 0; i < 24; i++) {
+      intervalData.push({
+        isCompressorOn: false,
+        timeInterval: i
+      })
+    }
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       compressedAirAssessment.systemProfile.profileSummary.push({
         compressorId: newInventoryItem.itemId,
-        compressorName: newInventoryItem.name,
         dayTypeId: dayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
         fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
         fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
       });
-    })
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.reduceRuntime.runtimeData.push({
+          compressorId: newInventoryItem.itemId,
+          dayTypeId: dayType.dayTypeId,
+          fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow,
+          intervalData: intervalData
+        });
+      })
+    });
+    compressedAirAssessment.modifications.forEach(modification => {
+      modification.useUnloadingControls.adjustedCompressors.push({
+        selected: false,
+        compressorId: newInventoryItem.itemId,
+        originalControlType: newInventoryItem.compressorControls.controlType,
+        compressorType: newInventoryItem.nameplateData.compressorType,
+        unloadPointCapacity: newInventoryItem.compressorControls.unloadPointCapacity,
+        controlType: newInventoryItem.compressorControls.controlType,
+        performancePoints: newInventoryItem.performancePoints,
+        automaticShutdown: newInventoryItem.compressorControls.automaticShutdown
+      })
+    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.selectedCompressor.next(newInventoryItem);
   }
@@ -447,22 +473,43 @@ export class InventoryService {
       profileDataType: "percentCapacity"
     };
     compressedAirAssessment.compressedAirDayTypes.push(newDayType);
+
+    let reduceRuntimeData: ReduceRuntimeData;
     compressedAirAssessment.compressorInventoryItems.forEach(item => {
-      compressedAirAssessment.systemProfile.profileSummary.push({
+      let profileSummary: ProfileSummary = {
         compressorId: item.itemId,
-        compressorName: item.name,
         dayTypeId: newDayType.dayTypeId,
         profileSummaryData: this.getEmptyProfileSummaryData(),
         fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,
         fullLoadCapacity: item.performancePoints.fullLoad.airflow
-      })
+      }
+
+      compressedAirAssessment.systemProfile.profileSummary.push(profileSummary);
+
+      let intervalData: Array<{
+        isCompressorOn: boolean,
+        timeInterval: number,
+      }> = new Array();
+      profileSummary.profileSummaryData.forEach(dataItem => {
+        intervalData.push({
+          isCompressorOn: dataItem.order != 0,
+          timeInterval: dataItem.timeInterval
+        })
+      });
+      reduceRuntimeData = {
+        compressorId: item.itemId,
+        fullLoadCapacity: item.performancePoints.fullLoad.airflow,
+        intervalData: intervalData,
+        dayTypeId: newDayType.dayTypeId
+      };
     });
     compressedAirAssessment.modifications.forEach(modification => {
       modification.improveEndUseEfficiency.reductionData.push({
         dayTypeName: dayTypeName,
         dayTypeId: dayTypeId,
         data: this.exploreOpportunitiesService.getDefaultReductionData()
-      })
+      });
+      modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
     })
     return compressedAirAssessment;
   }

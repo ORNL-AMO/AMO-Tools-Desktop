@@ -1,10 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
-import { PerformancePointCalculationsService } from '../../performance-points/calculations/performance-point-calculations.service';
 import { FilterCompressorOptions, FilterCompressorsPipe } from '../filter-compressors.pipe';
 
 @Component({
@@ -23,7 +21,7 @@ export class CompressorOptionsTableComponent implements OnInit {
   pageNumber: number = 1;
   filteredCompressors: Array<GenericCompressor>;
   constructor(private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.genericCompressors = this.genericCompressorDbService.genericCompressors;
@@ -39,13 +37,7 @@ export class CompressorOptionsTableComponent implements OnInit {
   }
 
   selectCompressor(genericCompressor: GenericCompressor) {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor = this.performancePointCalculationsService.setCompressorData(selectedCompressor, genericCompressor);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    this.compressedAirDataManagementService.setCompressorDataFromGenericCompressorDb(genericCompressor)
     this.emitClose.emit(true);
   }
 }

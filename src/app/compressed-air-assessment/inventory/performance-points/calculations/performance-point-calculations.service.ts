@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoints } from '../../../../shared/models/compressed-air-assessment';
-import { GenericCompressor } from '../../../generic-compressor-db.service';
 import { FullLoadCalculationsService } from './full-load-calculations.service';
 import { NoLoadCalculationsService } from './no-load-calculations.service';
 import { MaxFullFlowCalculationsService } from './max-full-flow-calculations.service';
@@ -14,64 +13,8 @@ export class PerformancePointCalculationsService {
     private noLoadCalculationsService: NoLoadCalculationsService, private maxFullFlowCalculationsService: MaxFullFlowCalculationsService,
     private blowoffCalculationsService: BlowoffCalculationsService, private unloadPointCalculationsService: UnloadPointCalculationsService) { }
 
-  setCompressorData(selectedCompressor: CompressorInventoryItem, genericCompressor: GenericCompressor): CompressorInventoryItem {
-    selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
-
-    selectedCompressor.nameplateData.compressorType = genericCompressor.IDCompType;
-    selectedCompressor.compressorControls.controlType = genericCompressor.IDControlType;
-
-    selectedCompressor.nameplateData.motorPower = genericCompressor.HP;
-
-    selectedCompressor.nameplateData.totalPackageInputPower = Number(genericCompressor.TotPackageInputPower.toFixed(1));
-    selectedCompressor.designDetails.noLoadPowerFM = genericCompressor.NoLoadPowerFM;
-    selectedCompressor.compressorControls.unloadSumpPressure = genericCompressor.MinULSumpPressure;
-    selectedCompressor.designDetails.noLoadPowerUL = genericCompressor.NoLoadPowerUL;
-    selectedCompressor.designDetails.maxFullFlowPressure = genericCompressor.MaxFullFlowPressure;
-
-
-    selectedCompressor.compressorControls.unloadPointCapacity = genericCompressor.UnloadPoint;
-    selectedCompressor.compressorControls.numberOfUnloadSteps = genericCompressor.UnloadSteps;
-    selectedCompressor.designDetails.blowdownTime = genericCompressor.BlowdownTime;
-    selectedCompressor.designDetails.modulatingPressureRange = genericCompressor.ModulatingPressRange;
-    selectedCompressor.inletConditions.temperature = genericCompressor.DesignInTemp;
-    selectedCompressor.designDetails.inputPressure = genericCompressor.DesignInPressure;
-    selectedCompressor.nameplateData.fullLoadOperatingPressure = genericCompressor.RatedPressure;
-    selectedCompressor.nameplateData.fullLoadRatedCapacity = genericCompressor.RatedCapacity;
-
-    selectedCompressor.centrifugalSpecifics.minFullLoadPressure = genericCompressor.MinStonewallPressure;
-    selectedCompressor.centrifugalSpecifics.minFullLoadCapacity = genericCompressor.MinPressStonewallFlow;
-    selectedCompressor.centrifugalSpecifics.surgeAirflow = genericCompressor.DesignSurgeFlow;
-    selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = genericCompressor.MaxSurgePressure;
-    selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = genericCompressor.MaxPressSurgeFlow;
-    selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
-    selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
-
-    selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow = true;
-    selectedCompressor.performancePoints.fullLoad.isDefaultPower = true;
-    selectedCompressor.performancePoints.fullLoad.isDefaultPressure = true;
-
-    selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow = true;
-    selectedCompressor.performancePoints.maxFullFlow.isDefaultPower = true;
-    selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure = true;
-
-    selectedCompressor.performancePoints.noLoad.isDefaultAirFlow = true;
-    selectedCompressor.performancePoints.noLoad.isDefaultPower = true;
-    selectedCompressor.performancePoints.noLoad.isDefaultPressure = true;
-
-    selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow = true;
-    selectedCompressor.performancePoints.unloadPoint.isDefaultPower = true;
-    selectedCompressor.performancePoints.unloadPoint.isDefaultPressure = true;
-
-
-    selectedCompressor.performancePoints = this.setPerformancePoints(selectedCompressor);
-    return selectedCompressor;
-  }
-
   updatePerformancePoints(selectedCompressor: CompressorInventoryItem): PerformancePoints {
-    // let genericCompressor: GenericCompressor = this.genericCompressorDbService.genericCompressors.find(compressor => { return selectedCompressor.compressorLibId == compressor.IDCompLib });
-    // if (genericCompressor) {
     selectedCompressor.performancePoints = this.setPerformancePoints(selectedCompressor);
-    // }
     return selectedCompressor.performancePoints;
   }
 

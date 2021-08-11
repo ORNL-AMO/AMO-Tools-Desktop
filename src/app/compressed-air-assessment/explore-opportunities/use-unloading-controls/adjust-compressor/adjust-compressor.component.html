@@ -1,4 +1,4 @@
-<form class="mb-2 pt-1">
+<form class="mb-2 p-0">
     <div class="form-group"
         *ngIf="adjustedCompressor.controlType != 1 && adjustedCompressor.controlType != 7 && adjustedCompressor.controlType != 9">
         <label for="unloadPointCapacity">Unload Point, %C</label>
@@ -32,9 +32,27 @@
     <div class="w-100 text-right">
         <a class="click-link small" (click)="restoreCompressor()">Restore Baseline</a>
     </div>
-    <app-full-load *ngIf="selectedCompressor" [inModification]="true"></app-full-load>
-    <app-max-full-flow *ngIf="showMaxFullFlow && selectedCompressor" [inModification]="true"></app-max-full-flow>
-    <app-unload-point *ngIf="showUnload && selectedCompressor" [inModification]="true"></app-unload-point>
-    <app-no-load *ngIf="showNoLoad && selectedCompressor" [inModification]="true"></app-no-load>
-    <app-blowoff *ngIf="showBlowoff && selectedCompressor" [inModification]="true"></app-blowoff>
+    <table class="table" *ngIf="selectedCompressor">
+        <thead>
+            <tr class="small bold">
+                <th class="p-1"></th>
+                <th class="text-center p-1">
+                    Discharge Pressure
+                </th>
+                <th class="text-center p-1">
+                    Airflow
+                </th>
+                <th class="text-center p-1">
+                    Power
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr [app-full-load] [inModification]="true"></tr>
+            <tr [app-max-full-flow] *ngIf="showMaxFullFlow" [inModification]="true"></tr>
+            <tr [app-unload-point] *ngIf="showUnload" [inModification]="true"></tr>
+            <tr [app-no-load] *ngIf="showNoLoad" [inModification]="true"></tr>
+            <tr [app-blowoff] *ngIf="showBlowoff" [inModification]="true"></tr>
+        </tbody>
+    </table>
 </form>

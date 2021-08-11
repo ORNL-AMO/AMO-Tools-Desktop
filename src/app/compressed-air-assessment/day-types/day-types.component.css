@@ -12,7 +12,9 @@ td, th{
    */
   
   table {
-    box-shadow: 0 4px 8px 0 grey
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
   }
 
   .btn.btn-sm{

@@ -4,7 +4,7 @@
         <br>
     </div>
     <div class="p-2">
-        <table class="table table-striped">
+        <table class="table bg-white">
             <thead>
                 <tr>
                     <th>
@@ -52,37 +52,37 @@
                         </ng-container>
                     </tr>
             </tbody>
+            <tfoot>
+                <tr class="bold">
+                    <td>
+                        Total Annual Days
+                    </td>
+                    <td>
+                        {{totalAnnualDays}}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr class="bold">
+                    <td>
+                        Total Down Days
+                    </td>
+                    <td>
+                        {{totalDownDays}}
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
         </table>
         <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
     </div>
-    <div class="p-2">
-        <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be greater than 0 and less than or equal to 365.
-        </div>
-        <table class="table table-striped">
-            <tbody>
-                <tr>
-                    <td class="w-50">
-                        Total Annual Days
-                    </td>
-                    <td class="w-50">
-                        {{totalAnnualDays}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="w-50">
-                        Total Down Days
-                    </td>
-                    <td class="w-50">
-                        {{totalDownDays}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be
+        greater than 0 and less than or equal to 365.
     </div>
     <div class="p-2 w-100 text-center">
         <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">Find Day Types With Data Explorer</button>
     </div>
 </div>
 
-<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteDayTypeData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteDayTypeData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>

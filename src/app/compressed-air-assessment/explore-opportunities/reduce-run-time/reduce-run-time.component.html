@@ -71,6 +71,6 @@
         </tfoot>
     </table>
 </div>
-<div *ngIf="hasError" class="alert alert-danger p-2 text-center">
+<div *ngIf="hasError && reduceRuntime.selected" class="alert alert-danger p-2 text-center">
     One of more hours have less available airflow then is required.
 </div>

@@ -216,7 +216,7 @@ export interface CentrifugalSpecifics {
 }
 
 export interface ProfileSummary {
-    compressorName: string,
+    // compressorName: string,
     fullLoadPressure: number,
     fullLoadCapacity: number,
     compressorId: string,

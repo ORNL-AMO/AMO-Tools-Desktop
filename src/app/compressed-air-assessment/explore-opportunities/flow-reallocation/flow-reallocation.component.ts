@@ -32,6 +32,7 @@ export class FlowReallocationComponent implements OnInit {
 
         this.dayTypeResults = new Array();
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+          
           let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType, selectedModification, false);
           let calculatedSavings: {
             baselineResults: { cost: number, power: number, peakDemand: number },
