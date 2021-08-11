@@ -2,7 +2,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
-
+import { Settings } from '../../../../shared/models/settings'; 
 @Component({
   selector: 'app-energy-analysis-bar-chart',
   templateUrl: './energy-analysis-bar-chart.component.html',
@@ -13,6 +13,8 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   chartInfo: string;
   @Input()
   printView: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('analysisBarChart', { static: false }) analysisBarChart: ElementRef;
   constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
@@ -35,14 +37,14 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
             size: 16
           }
         },
-        tickprefix: '$',
+        tickprefix: '',
       }
     };
     let traceData;
     if (this.chartInfo == 'energyCost') {
       traceData = this.getEnergyCostData();
       layout.title.text = 'Energy Cost';
-      layout.yaxis.title.text = '$/yr';
+      layout.yaxis.title.text = this.settings.currency + "/yr";
     } else if (this.chartInfo == 'energyUse') {
       traceData = this.getEnergyUsageData();
       layout.yaxis.tickprefix = '';
@@ -76,7 +78,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       type: 'bar',
       textposition: 'auto',
       hoverinfo: 'text',
-      text: yVals.map(val => { return this.getFormatedValue(val, '$') }),
+      text: yVals.map(val => { return this.getFormatedValue(val) }),
       marker: {
         color: markerColors,
         line: {

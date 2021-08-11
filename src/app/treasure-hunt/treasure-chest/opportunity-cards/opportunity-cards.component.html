@@ -33,17 +33,17 @@
                   </td>
                 </tr>
                 <tr [ngClass]="{ active: sortByVal.sortBy == 'annualCostSavings'}">
-                  <td class="w-75">Annual Savings</td>
+                  <td class="w-75">Annual Savings ({{settings.currency}})</td>
                   <td class="w-25">
-                    {{ cardData.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
+                    {{ cardData.annualCostSavings | number:"1.0-0" }}
                   </td>
                 </tr>
                 <tr [ngClass]="{active: sortByVal.sortBy == 'implementationCost'}">
                   <td class="w-75">
-                    Implementation Cost
+                    Implementation Cost ({{settings.currency}})
                   </td>
                   <td class="w-25">
-                    {{cardData.implementationCost | currency: "USD":"symbol":"1.0-0" }}
+                    {{cardData.implementationCost | number:"1.0-0" }}
                   </td>
                 </tr>
                 <tr [ngClass]="{ active: sortByVal.sortBy == 'paybackPeriod' }">

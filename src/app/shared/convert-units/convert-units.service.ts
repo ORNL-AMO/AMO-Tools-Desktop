@@ -23,6 +23,7 @@ import { pressure } from './definitions/pressure';
 import { speed } from './definitions/speed';
 import { power } from './definitions/power';
 import { current } from './definitions/current';
+import { cost } from './definitions/cost';
 import { energy } from './definitions/energy';
 import { voltage } from './definitions/voltage';
 import { apparentPower } from './definitions/apparentPower';
@@ -65,6 +66,7 @@ export class ConvertUnitsService {
     pressure: pressure,
     power: power,
     current: current,
+    cost: cost,
     energy: energy,
     voltage: voltage,
     apparentPower: apparentPower,

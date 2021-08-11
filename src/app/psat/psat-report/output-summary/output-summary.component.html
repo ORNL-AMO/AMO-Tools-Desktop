@@ -168,19 +168,19 @@
         </td>
       </tr>
       <tr class="callout">
-        <td>Annual Cost ($)</td>
+        <td>Annual Cost ({{settings.currency}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.annual_cost |
-          currency:'USD':'symbol':'2.0-0'}}</td>
+          number: '2.0-0'}}</td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost |
-            currency:'USD':'symbol':'2.0-0'}}</span>
+              number: '2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_cost">&mdash;</span>
         </td>
       </tr>
       <tr class="callout">
         <td>
-          Annual Savings ($)
+          Annual Savings ({{settings.currency}})
         </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
@@ -190,7 +190,7 @@
           <span
             *ngIf="getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost) && modification.psat.inputs.whatIfScenario == true">
             {{getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)|
-            currency:'USD':'symbol':'2.0-0'}}</span>
+            number:'2.0-0'}}</span>
           <span
             *ngIf="!getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost) || modification.psat.inputs.whatIfScenario == false">
             &mdash;</span>
@@ -206,7 +206,7 @@
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.implementationCosts">{{modification.psat.inputs.implementationCosts|
-            currency:'USD':'symbol':'2.0-0'}}</span>
+            number:'2.0-0'}}</span>
           <span *ngIf="!modification.psat.inputs.implementationCosts">&mdash;</span>
         </td>
       </tr>

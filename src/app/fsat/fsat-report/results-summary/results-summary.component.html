@@ -159,21 +159,19 @@
           </th>
       </tr>
       <tr>
-        <th>Annual Cost</th>
+        <th>Annual Cost ({{settings.currency}})</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.annualCost | currency:'USD':'symbol':'1.0-0'}}</th>
+          {{fsat.outputs.annualCost | number: '1.0-0'}}</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10,'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.annualCost
-          | currency:'USD':'symbol':'1.0-0'}}</th>
+          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.annualCost | number: '1.0-0'}}</th>
       </tr>
       <tr>
-        <th>Annual Savings</th>
+        <th>Annual Savings ({{settings.currency}})</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.fsat.whatIfScenario == true">
-            {{modification.fsat.outputs.annualSavings | currency:'USD':'symbol':'1.0-0'}}
+            {{modification.fsat.outputs.annualSavings | number:'1.0-0'}}
           </span>
           <span *ngIf="modification.fsat.whatIfScenario == false">
             &mdash;
