@@ -63,7 +63,7 @@ export class SystemProfileService {
                 computeFrom = 3;
                 computeFromVal = summaryData.airflow;
               }
-              let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal);
+              let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal, 0, true);
               summaryData.airflow = calcResult.capacityCalculated;
               summaryData.power = calcResult.powerCalculated;
               summaryData.percentCapacity = calcResult.percentageCapacity;
@@ -169,7 +169,6 @@ export class SystemProfileService {
   }
 
   calculatedNeededAirFlow(total: ProfileSummaryTotal, compressedAirAssessment: CompressedAirAssessment, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, modification: Modification, applyEEEMs: boolean): Array<ProfileSummary> {
-    // console.log('interval: ' + total.timeInterval);
     let neededAirFlow: number = total.airflow;
     if (applyEEEMs) {
       //EEM: Reduce Air leaks
@@ -256,11 +255,11 @@ export class SystemProfileService {
 
         let fullLoadAirFlow: number = compressorCopy.performancePoints.fullLoad.airflow;
         //calc with full load
-        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow, additionalRecieverVolume);
+        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow, additionalRecieverVolume, true);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
         //if excess air added then reduce amount and calc again
         if (tmpNeededAirFlow < 0) {
-          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow + tmpNeededAirFlow, additionalRecieverVolume);
+          calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressorCopy, 3, fullLoadAirFlow + tmpNeededAirFlow, additionalRecieverVolume, true);
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
         }
         neededAirFlow = tmpNeededAirFlow;

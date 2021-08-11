@@ -65,8 +65,8 @@
         <label for="automaticShutdown">Automatic Shutdown Timer</label>
         <select id="automaticShutdown" name="automaticShutdown" formControlName="automaticShutdown" (change)="save()"
             (focus)="focusField('automaticShutdown')" class="form-control">
-            <option [value]="true">Yes</option>
-            <option [value]="false">No</option>
+            <option [ngValue]=true>Yes</option>
+            <option [ngValue]=false>No</option>
         </select>
     </div>
     <!-- unloadSumpPressure -->
