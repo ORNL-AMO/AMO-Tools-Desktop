@@ -81,6 +81,22 @@
                     {{form.controls.targetPressure.errors.min.min}} psig.</span>
             </span>
         </div>
+         <!-- Variance (+/-) -->
+         <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
+            <label for="variance">Variance (+/-)
+            </label>
+            <div class="input-group">
+                <input name="variance" type="number" step="any" class="form-control" id="variance"
+                    formControlName="variance" (input)="save()" (focus)="focusField('variance')">
+                <span class="units input-group-addon">psig</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
+                <span *ngIf="form.controls.variance.errors.required">Value Required</span>
+                <span *ngIf="form.controls.variance.errors.min">Value can't be less than
+                    {{form.controls.variance.errors.min.min}} psig.</span>
+            </span>
+        </div>
     </form>
 </div>
 

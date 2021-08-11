@@ -54,5 +54,27 @@
         </h6>
     </div>
 
+    <div class="my-2" *ngIf="focusedField == 'targetPressure'">
+        <h6>
+            Target Pressure
+            <br>
+            <small class="text-muted">
+                Defined pressure band that the compressors maintain by a sequenced operation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'variance'">
+        <h6>
+            Variance (+/-)
+            <br>
+            <small class="text-muted">
+                The defined pressure range for the target pressure that the compressors will operate around when sequenced.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
 
 </div>
