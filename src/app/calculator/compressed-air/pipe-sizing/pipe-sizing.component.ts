@@ -7,10 +7,8 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
 import {FormGroup} from '@angular/forms';
 import {Assessment} from '../../../shared/models/assessment';
-import {Calculator, PipeSizingInputs} from '../../../shared/models/calculators';
+import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
-import { CompressedAirAssessment } from "../../../shared/models/compressed-air-assessment"
-import { CompressedAirAssessmentComponent } from '../../../compressed-air-assessment/compressed-air-assessment.component';
 
 
 @Component({
@@ -20,8 +18,8 @@ import { CompressedAirAssessmentComponent } from '../../../compressed-air-assess
 })
 export class PipeSizingComponent implements OnInit {
   // No compressedAirAssessment Input is coming from the parent. Remove it
-  @Input()
-  compressedAirAssessment: CompressedAirAssessment;
+  // @Input()
+  // compressedAirAssessment: CompressedAirAssessment;
   @Input()
   settings: Settings;
   @Input()
@@ -45,9 +43,9 @@ export class PipeSizingComponent implements OnInit {
   toggleCalculate: boolean = true;
   toggleResetData: boolean = true;
   tabSelect: string = 'results';
-  calcExists: boolean;
+  // calcExists: boolean;
   saving: boolean;
-  calculator: Calculator;
+  assessmentCalculator: Calculator;
 
   constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
@@ -57,15 +55,11 @@ export class PipeSizingComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-  
-    if (this.settingsDbService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    }
 
     if (this.assessment) {
       this.getCalculatorForAssessment();
     } else {
-      // Still need to set calculator inputs if we're not inthe assessment
+      // Set calc inputs from service defaults
       this.inputs = this.pipeSizingService.inputs;
       this.calculatePipeSize(this.inputs);
     }
@@ -83,30 +77,26 @@ export class PipeSizingComponent implements OnInit {
     }
   }
 
-
-  calculate() {
-    // Revert this method back to original, use
-    // this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
-
-    this.toggleCalculate = !this.toggleCalculate;
-    if (!this.compressedAirAssessment) {
-      this.pipeSizingService.inputs = this.pipeSizingService.getObjFromForm(this.sizingForm);
-    } else if (this.assessment && this.calcExists) {
-      this.calculator.pipeSizingInputs = this.pipeSizingService.getObjFromForm(this.sizingForm);
+  calculatePipeSize(inputs: PipeSizingInput) {
+    this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
+    // Changes to inputs have been made, save them to calculator otherwise update service
+    if (this.assessmentCalculator) {
+      this.assessmentCalculator.pipeSizingInputs = this.inputs;
       this.saveAssessmentCalculator();
+    } else {
+      this.pipeSizingService.inputs = this.inputs;
     }
   }
+
 
   setTab(str: string) {
     this.tabSelect = str;
   }
 
   ngOnDestroy(){
-    this.pipeSizingService.inputs = this.inputs;
-  }
-
-  calculatePipeSize(inputs: PipeSizingInput) {
-    this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
+    if (this.assessmentCalculator) {
+      this.pipeSizingService.inputs = this.pipeSizingService.getDefaultData();
+    }
   }
 
   setField(str: string) {
@@ -118,30 +108,20 @@ export class PipeSizingComponent implements OnInit {
   }
 
   getCalculatorForAssessment() {
-    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if (this.calculator) {
-      this.calcExists = true;
-      debugger;
-      if (this.calculator.pipeSizingInputs) {
-        this.inputs = this.calculator.pipeSizingInputs;
-      } else {
-        // We don't have inputs form assessment calculators so take defaults from service
-        this.inputs = this.pipeSizingService.inputs;
-        this.saveAssessmentCalculator();
-      }
-      this.calculatePipeSize(this.inputs);
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.assessmentCalculator && this.assessmentCalculator.pipeSizingInputs) {
+        this.inputs = this.assessmentCalculator.pipeSizingInputs;
+        this.calculatePipeSize(this.inputs);
     } else {
       // create new calculator obj for assessment
-      this.calculator = this.initCalculator();
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
       this.saveAssessmentCalculator();
     }
   }
 
- initCalculator(): Calculator {
-    // If we're setting any inputs from the assessment, do it here otherwise set as usual
+ initNewAssessmentCalculator(): Calculator {
     this.inputs = this.pipeSizingService.inputs;
     this.calculatePipeSize(this.inputs);
-
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       pipeSizingInputs: this.inputs
@@ -151,19 +131,18 @@ export class PipeSizingComponent implements OnInit {
 
   
   saveAssessmentCalculator() {
-    debugger;
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
+    // Saving flag incase we get user keybaord input while already saving
+    if (!this.saving) {
+      if (this.assessmentCalculator) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
           this.calculatorDbService.setAll();
         });
       } else {
         this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
           this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
+            this.assessmentCalculator.id = result;
             this.saving = false;
           });
         });
@@ -172,20 +151,16 @@ export class PipeSizingComponent implements OnInit {
   }
 
   btnResetData() {
-    this.inputs = this.pipeSizingService.getDefaultData();
+    let defaultInputs = this.pipeSizingService.getDefaultData();
+    this.pipeSizingService.inputs = defaultInputs;
+    this.inputs = defaultInputs;
     this.calculatePipeSize(this.inputs);
-    // this.toggleResetData = !this.toggleResetData;
-    // this.sizingForm = this.pipeSizingService.resetForm(this.settings);
-    // this.calculate();
   }
 
   btnGenerateExample() {
     let tempInputs: PipeSizingInput = this.pipeSizingService.getExampleData();
     this.inputs = this.pipeSizingService.convertPipeSizingExample(tempInputs, this.settings);
     this.calculatePipeSize(this.inputs);
-    // this.toggleResetData = !this.toggleResetData;
-    // this.sizingForm = this.pipeSizingService.initForm(this.settings);
-    // this.calculate();
   }
 }
 
