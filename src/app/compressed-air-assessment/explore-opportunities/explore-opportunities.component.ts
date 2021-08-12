@@ -22,6 +22,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   selectedModificationSub: Subscription;
   modification: Modification;
   tabSelect: string = 'compressor-profile';
+  secondaryAssessmentTab: string;
+  secondaryAssessmentTabSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService) { }
 
@@ -42,12 +44,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
           this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
         }
       }
-    })
+    });
+    this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
+      this.secondaryAssessmentTab = val;
+    });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
+    this.secondaryAssessmentTabSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
   }
 

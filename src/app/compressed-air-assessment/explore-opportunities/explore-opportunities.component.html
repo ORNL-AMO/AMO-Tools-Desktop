@@ -1,4 +1,4 @@
-<div class="d-flex compressed-air modify-conditions panel-container">
+<div class="d-flex compressed-air modify-conditions panel-container" *ngIf="secondaryAssessmentTab == 'modifications'">
     <div *ngIf="modificationExists" class="w-50 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
         <div class="header mr-2 ml-2">
             <h3>Select Potential Adjustment Projects</h3>
@@ -40,11 +40,11 @@
         <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
         <p>Data will be copied from your current baseline condition.</p>
     </div>
-    <div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
+    <div class="w-50 d-flex flex-column mr-2 ml-2 scroll-item" [ngStyle]="{'height.px': containerHeight}">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-            <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'day-type-profile'}">
-                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('day-type-profile')">
-                    <div>Day Type Profile</div>
+            <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'results'}">
+                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+                    <div>Modification Results</div>
                 </a>
             </div>
             <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'compressor-profile'}">
@@ -53,11 +53,6 @@
                     <div>Compressor Profile</div>
                 </a>
             </div>
-            <!-- <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'eem-savings'}">
-                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('eem-savings')">
-                    <div>EEM Savings</div>
-                </a>
-            </div> -->
             <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">
                 <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
                     <div>Help</div>
@@ -65,19 +60,18 @@
             </div>
         </div>
 
-        <!-- <app-results-panel *ngIf="modificationExists"></app-results-panel>-->
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
         </div>
-        <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'day-type-profile'">
+        <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
         </app-explore-opportunities-results>
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
-        <!-- <div class="p-2" *ngIf="modificationExists && tabSelect == 'eem-savings'">
-            <app-eem-savings-panel></app-eem-savings-panel>
-        </div> -->
-        <!-- End .help-panel -->
     </div>
+</div>
+
+<div class="compressed-air modify-conditions panel-container" *ngIf="secondaryAssessmentTab == 'table'">
+    <app-explore-opportunities-profile-table class="w-100"></app-explore-opportunities-profile-table>
 </div>

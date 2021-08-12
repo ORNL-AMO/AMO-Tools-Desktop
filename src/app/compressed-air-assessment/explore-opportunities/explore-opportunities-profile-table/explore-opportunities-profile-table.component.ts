@@ -5,23 +5,18 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { SystemProfileService } from '../../system-profile/system-profile.service';
 
 @Component({
-  selector: 'app-explore-opportunities-results',
-  templateUrl: './explore-opportunities-results.component.html',
-  styleUrls: ['./explore-opportunities-results.component.css']
+  selector: 'app-explore-opportunities-profile-table',
+  templateUrl: './explore-opportunities-profile-table.component.html',
+  styleUrls: ['./explore-opportunities-profile-table.component.css']
 })
-export class ExploreOpportunitiesResultsComponent implements OnInit {
+export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   adjustedProfileSummary: Array<ProfileSummary>;
   totals: Array<ProfileSummaryTotal>;
   selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
-  dayTypeResult: {
-    baselineResults: { cost: number, power: number, peakDemand: number },
-    adjustedResults: { cost: number, power: number, peakDemand: number },
-    savings: { cost: number, power: number, peakDemand: number }
-  };
-  
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
@@ -46,7 +41,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
     this.adjustedProfileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
     this.totals = this.systemProfileService.calculateProfileSummaryTotals(this.compressedAirAssessment, this.selectedDayType, this.adjustedProfileSummary);
-    this.dayTypeResult = this.systemProfileService.calculateSavings(this.compressedAirAssessment.systemProfile.profileSummary, this.adjustedProfileSummary, this.selectedDayType, this.compressedAirAssessment.systemBasics.electricityCost);
   }
 
 }

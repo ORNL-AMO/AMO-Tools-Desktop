@@ -96,3 +96,7 @@
 .br-color-white{
     background: #fff;
 }
+
+.navbar.assessment-bar .nav-pills .nav-link.active{
+    background-color: #7030A0;
+}

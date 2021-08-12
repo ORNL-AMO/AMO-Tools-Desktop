@@ -20,6 +20,8 @@ export class CompressedAirBannerComponent implements OnInit {
   selectedModification: Modification;
   assessmentTab: string;
   assessmentTabSub: Subscription;
+  secondaryAssessmentTabSub: Subscription;
+  secondaryAssessmentTab: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -34,13 +36,17 @@ export class CompressedAirBannerComponent implements OnInit {
 
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
+    this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
+      this.secondaryAssessmentTab = val;
+    });
   }
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
+    this.secondaryAssessmentTabSub.unsubscribe();
   }
 
   changeTab(str: string) {
@@ -55,5 +61,9 @@ export class CompressedAirBannerComponent implements OnInit {
 
   changeAssessmentTab(str: string){
     this.compressedAirAssessmentService.assessmentTab.next(str);
+  }
+
+  changeSecondaryAssessmentTab(str: string){
+    this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
   }
 }
