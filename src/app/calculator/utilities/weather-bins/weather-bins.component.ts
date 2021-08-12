@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { WeatherBinsService } from './weather-bins.service';
 
 @Component({
   selector: 'app-weather-bins',
@@ -13,7 +12,7 @@ export class WeatherBinsComponent implements OnInit {
   settings: Settings;
   tabSelect: string = 'results';
   headerHeight: number;
-  constructor(private settingsDbService: SettingsDbService, private weatherBinsService: WeatherBinsService) { }
+  constructor(private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
@@ -22,9 +21,4 @@ export class WeatherBinsComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
-
-  resetData() {
-    this.weatherBinsService.resetData();
-  }
-
 }

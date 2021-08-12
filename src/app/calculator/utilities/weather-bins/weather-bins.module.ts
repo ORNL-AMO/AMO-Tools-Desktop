@@ -19,6 +19,11 @@ import { ParameterUnitComponent } from './weather-bins-form/parameter-unit/param
     CommonModule,
     FormsModule
   ],
+  exports: [
+    WeatherBinsFormComponent,
+    WeatherBinsHelpComponent,
+    WeatherBinsBarChartComponent
+  ],
   providers: [
     WeatherBinsService
   ]
