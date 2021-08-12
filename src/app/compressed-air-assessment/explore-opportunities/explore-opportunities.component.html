@@ -53,6 +53,11 @@
                     <div>Compressor Profile</div>
                 </a>
             </div>
+            <!-- <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'eem-savings'}">
+                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('eem-savings')">
+                    <div>EEM Savings</div>
+                </a>
+            </div> -->
             <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">
                 <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
                     <div>Help</div>
@@ -70,6 +75,9 @@
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
+        <!-- <div class="p-2" *ngIf="modificationExists && tabSelect == 'eem-savings'">
+            <app-eem-savings-panel></app-eem-savings-panel>
+        </div> -->
         <!-- End .help-panel -->
     </div>
 </div>

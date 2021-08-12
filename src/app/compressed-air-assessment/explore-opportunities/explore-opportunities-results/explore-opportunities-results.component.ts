@@ -16,6 +16,11 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
+  dayTypeResult: {
+    baselineResults: { cost: number, power: number, peakDemand: number },
+    adjustedResults: { cost: number, power: number, peakDemand: number },
+    savings: { cost: number, power: number, peakDemand: number }
+  };
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
@@ -40,6 +45,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
     this.adjustedProfileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
     this.totals = this.systemProfileService.calculateProfileSummaryTotals(this.compressedAirAssessment, this.selectedDayType, this.adjustedProfileSummary);
+    this.dayTypeResult = this.systemProfileService.calculateSavings(this.compressedAirAssessment.systemProfile.profileSummary, this.adjustedProfileSummary, this.selectedDayType, this.compressedAirAssessment.systemBasics.electricityCost);
   }
 
 }

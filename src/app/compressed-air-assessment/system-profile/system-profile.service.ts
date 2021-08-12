@@ -319,6 +319,7 @@ export class SystemProfileService {
   calculateEnergyAndCost(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number): { cost: number, power: number, peakDemand: number } {
     let filteredSummary: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     let flatSummaryData: Array<ProfileSummaryData> = _.flatMap(filteredSummary, (summary) => { return summary.profileSummaryData });
+    flatSummaryData = flatSummaryData.filter(data => {return isNaN(data.power) == false})
     let peakDemand: ProfileSummaryData = _.maxBy(flatSummaryData, 'power');
     let sumPower: number = _.sumBy(flatSummaryData, 'power');
     //todo: divide sumPower by hourInterval amount
