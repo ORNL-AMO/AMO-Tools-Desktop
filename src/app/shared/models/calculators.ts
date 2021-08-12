@@ -9,6 +9,7 @@ import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-ef
 import { Fan203Inputs } from "./fans";
 import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
 
+
 export interface Calculator {
     directoryId?: number;
     assessmentId?: number;
@@ -25,6 +26,8 @@ export interface Calculator {
     nemaInputs?: NemaInputs;
     specificSpeedInputs?: SpecificSpeedInputs;
     pipeSizingInputs?: PipeSizingInputs;
+    airVelocityInputs?: AirVelocityInputs;
+    //airSystemCapacityInputs: AirSystemCapacityInput;
     o2EnrichmentInputs?: Array<EnrichmentInput>;
     efficiencyImprovementInputs?: EfficiencyImprovementInputs;
     energyEquivalencyInputs?: {
@@ -123,6 +126,13 @@ export interface PipeSizingInputs {
      atmosphericPressure: number;
 }
 
+
+
+export interface AirVelocityInputs {
+    airFlow: number;
+    pipePressure: number;
+    atmosphericPressure: number;
+  }
 
 export interface ReplaceExistingData {
     operatingHours: number;

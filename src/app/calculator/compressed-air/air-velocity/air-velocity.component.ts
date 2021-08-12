@@ -4,6 +4,11 @@ import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
 import { Settings } from '../../../shared/models/settings';
 import { AirVelocityService } from './air-velocity.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
+import {Assessment} from '../../../shared/models/assessment';
+import {Calculator} from '../../../shared/models/calculators';
+import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+
 
 @Component({
   selector: 'app-air-velocity',
@@ -11,8 +16,12 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
   styleUrls: ['./air-velocity.component.css']
 })
 export class AirVelocityComponent implements OnInit {
+
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
@@ -22,42 +31,31 @@ export class AirVelocityComponent implements OnInit {
   }
 
   headerHeight: number;
-
-
   inputs: AirVelocityInput;
   outputs: PipeSizes;
-  currentField: string = 'default';
-  constructor(private airVelocityService: AirVelocityService, private standaloneService: StandaloneService, private settingsDbService: SettingsDbService) { }
+  currentField: string;
+  tabSelect: string = 'results';
+  saving: boolean;
+  assessmentCalculator: Calculator;
+
+  constructor(private airVelocityService: AirVelocityService, private standaloneService: StandaloneService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    if(this.assessment) {
+      this.getCalculatorForAssessment();
+    }else{
     this.inputs = this.airVelocityService.airVelocityInputs;
     this.getAirVelocity(this.inputs);
   }
+}
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  btnResetData() {
-    this.inputs = this.airVelocityService.getDefault();
-    this.airVelocityService.airVelocityInputs = this.inputs;
-    this.getAirVelocity(this.inputs);
-  }
-
-  //provide functionality to "Generate Example" button,
-  //reset data function should have most of the structure already
-  btnGenerateExample() {
-    //each calculator will have some form of an input object, assign default values from pdf
-    this.inputs = this.airVelocityService.getExample();
-    //need to handle conversion if unit of measurement is set to Metric
-    this.inputs = this.airVelocityService.convertAirVelocityExample(this.inputs, this.settings);
-    this.airVelocityService.airVelocityInputs = this.inputs;
-    //execute calculation procedure to update calculator with example values
-    this.getAirVelocity(this.inputs);
   }
 
   resizeTabs() {
@@ -65,11 +63,97 @@ export class AirVelocityComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   getAirVelocity(inputs: AirVelocityInput) {
     this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
+     if(this.assessmentCalculator) {
+       this.assessmentCalculator.airVelocityInputs = this.inputs;
+       this.saveAssessmentCalculator();
+     }else{
+       this.airVelocityService.airVelocityInputs = this.inputs;
+     }
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  ngOnDestroy() {
+    if(this.assessmentCalculator) {
+      this.airVelocityService.airVelocityInputs = this.airVelocityService.getDefault();
+    }
   }
 
   setField(str: string) {
     this.currentField = str;
   }
+
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if(this.assessmentCalculator && this.assessmentCalculator.airVelocityInputs) {
+      this.inputs = this.assessmentCalculator.airVelocityInputs;
+      this.getAirVelocity(this.inputs);
+    }else{
+      debugger;
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  initNewAssessmentCalculator(): Calculator {
+    this.inputs = this.airVelocityService.airVelocityInputs;
+    this.getAirVelocity(this.inputs);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      airVelocityInputs: this.inputs
+    };
+    return tmpCalculator;
+  }
+
+  saveAssessmentCalculator(){
+    //saving flag in case we get user keyboard input while already saving
+    if (!this.saving) {
+      if (this.assessmentCalculator) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
+  }
+
+  btnResetData() {
+    let defaultInputs = this.airVelocityService.getDefault();
+    this.airVelocityService.airVelocityInputs = defaultInputs;
+    this.inputs = defaultInputs;
+    this.getAirVelocity(this.inputs);
+  }
+
+  //provide functionality to "Generate Example" button,
+  //reset data function should have most of the structure already
+  btnGenerateExample() {
+    let tmpInputs: AirVelocityInput = this.airVelocityService.getExample();
+    this.inputs = this.airVelocityService.convertAirVelocityExample(tmpInputs, this.settings);
+    this.getAirVelocity(this.inputs);
+  }
+
+ 
+ 
+
+  
 }
+
+
+

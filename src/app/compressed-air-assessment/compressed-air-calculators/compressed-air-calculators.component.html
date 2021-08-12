@@ -5,6 +5,6 @@
       ></app-system-and-equipment-curve> -->
 <app-system-capacity *ngIf="calcTab == 'system-capacity'" [settings]="settings"></app-system-capacity>
 <app-pipe-sizing *ngIf="calcTab == 'pipe-sizing'"[assessment]="assessment" [settings]="settings"></app-pipe-sizing>
-<app-air-velocity *ngIf="calcTab == 'air-velocity'" [settings]="settings"></app-air-velocity>
+<app-air-velocity *ngIf="calcTab == 'air-velocity'"[assessment]="assessment" [settings]="settings"></app-air-velocity>
 <app-air-leak *ngIf="calcTab == 'air-leak-survey'" [settings]="settings" class="w-100"></app-air-leak>
 <app-compressed-air-pressure-reduction *ngIf="calcTab == 'compressed-air-pressure-reduction'" [settings]="settings" class="w-100"></app-compressed-air-pressure-reduction>

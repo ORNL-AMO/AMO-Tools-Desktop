@@ -5,7 +5,6 @@ import { Settings } from '../../../shared/models/settings';
 import { PipeSizingService } from './pipe-sizing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
-import {FormGroup} from '@angular/forms';
 import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
@@ -17,15 +16,12 @@ import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
   styleUrls: ['./pipe-sizing.component.css']
 })
 export class PipeSizingComponent implements OnInit {
-  // No compressedAirAssessment Input is coming from the parent. Remove it
-  // @Input()
-  // compressedAirAssessment: CompressedAirAssessment;
+  
   @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
-  // @Input()
-  // inAssessment: boolean;
+  
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
@@ -37,13 +33,8 @@ export class PipeSizingComponent implements OnInit {
   headerHeight: number;
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
-  sizingForm: FormGroup;
   currentField: string;
-  pipeSize: number;
-  toggleCalculate: boolean = true;
-  toggleResetData: boolean = true;
   tabSelect: string = 'results';
-  // calcExists: boolean;
   saving: boolean;
   assessmentCalculator: Calculator;
 
