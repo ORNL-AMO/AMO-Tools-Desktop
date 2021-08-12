@@ -12,6 +12,10 @@
             have a .csv file extension</span>
 
     </div>
+    <div class="pb-2" *ngIf="previousDataAvailable && !inputData.fileName">
+        <a class="click-link small" (click)="usePreviousData()">Load File from Last Use
+            ({{previousDataAvailable | date:'long'}})</a>
+    </div>
     <div *ngIf="!inputData.fileName || validFile == false" class="d-flex w-100 justify-content-end">
         <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
             [disabled]="importData == undefined">Parse CSV Data</button>

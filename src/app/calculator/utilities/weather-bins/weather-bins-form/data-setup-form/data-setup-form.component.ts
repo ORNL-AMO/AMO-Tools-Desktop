@@ -4,6 +4,7 @@ import { DateSelection, DateSelectionData } from './date-data';
 import { WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../../shared/models/settings';
+import { WeatherDbService } from '../../weather-db.service';
 
 @Component({
   selector: 'app-data-setup-form',
@@ -27,15 +28,32 @@ export class DataSetupFormComponent implements OnInit {
   endMonthDays: Array<number>;
   inputData: WeatherBinsInput;
   inputDataSub: Subscription;
-  constructor(private csvToJsonService: CsvToJsonService, private cd: ChangeDetectorRef, private weatherBinsService: WeatherBinsService) { }
+
+  previousDataAvailableSub: Subscription;
+  previousDataAvailable: Date;
+  dataExists: boolean = false;
+  constructor(private csvToJsonService: CsvToJsonService, 
+    private weatherDbService: WeatherDbService, private cd: ChangeDetectorRef, private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
+    this.weatherDbService.initWeatherData();
+
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {
       this.inputData = inputData;
       if(this.inputData.fileName){
         this.validFile = true;
+        this.dataExists = true;
+      } else {
+        this.dataExists = false;
       }
     });
+    if (this.dataExists == false && this.weatherBinsService.dataSubmitted.getValue() == false) {
+      this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
+        this.previousDataAvailable = val;
+      });
+    }
+
+
     this.dateSelectionData = DateSelectionData;
     this.startMonthDays = this.dateSelectionData.find(dataSelection => { return dataSelection.monthValue == this.inputData.startMonth }).days;
     this.endMonthDays = this.dateSelectionData.find(dataSelection => { return dataSelection.monthValue == this.inputData.endMonth }).days;
@@ -43,6 +61,9 @@ export class DataSetupFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.inputDataSub.unsubscribe();
+    if (this.previousDataAvailableSub) {
+      this.previousDataAvailableSub.unsubscribe();
+    }
   }
 
   setImportFile($event) {
@@ -73,6 +94,14 @@ export class DataSetupFormComponent implements OnInit {
     };
   }
 
+  usePreviousData() {
+    this.weatherDbService.setFromPreviousData();
+    let inputData = this.weatherBinsService.inputData.getValue();
+    if (inputData.cases.length > 0) {
+      this.dataExists = true;
+    }
+  }
+
   parseImportData() {
     this.disableImportFile = true;
     this.importingData = true;
@@ -85,6 +114,9 @@ export class DataSetupFormComponent implements OnInit {
       this.importSuccesful = true;
       this.importData = undefined;
       this.importingData = false;
+      this.weatherBinsService.dataSubmitted.next(true);
+      this.previousDataAvailable = undefined;
+      this.weatherDbService.saveData();
       this.cd.detectChanges();
     }, 100);
   }

@@ -10,6 +10,7 @@ import { CaseFormComponent } from './weather-bins-form/case-form/case-form.compo
 import { WeatherBinsBarChartComponent } from './weather-bins-bar-chart/weather-bins-bar-chart.component';
 import { BinsFormComponent } from './weather-bins-form/bins-form/bins-form.component';
 import { ParameterUnitComponent } from './weather-bins-form/parameter-unit/parameter-unit.component';
+import { WeatherDbService } from './weather-db.service';
 
 
 
@@ -17,7 +18,7 @@ import { ParameterUnitComponent } from './weather-bins-form/parameter-unit/param
   declarations: [WeatherBinsComponent, WeatherBinsFormComponent, WeatherBinsHelpComponent, DataSetupFormComponent, CaseFormComponent, WeatherBinsBarChartComponent, BinsFormComponent, ParameterUnitComponent],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [
     WeatherBinsFormComponent,
@@ -25,6 +26,7 @@ import { ParameterUnitComponent } from './weather-bins-form/parameter-unit/param
     WeatherBinsBarChartComponent
   ],
   providers: [
+    WeatherDbService,
     WeatherBinsService
   ]
 })

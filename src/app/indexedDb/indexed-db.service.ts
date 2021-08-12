@@ -8,10 +8,11 @@ import { UpdateDataService } from '../shared/helper-services/update-data.service
 import { Calculator } from '../shared/models/calculators';
 import { LogToolDbData } from '../log-tool/log-tool-models';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+import { WeatherDataDbData } from '../calculator/utilities/weather-bins/weather-db.service';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 6,
+  version: 7,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -26,6 +27,7 @@ var myDb: any = {
     solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
     calculator: 'calculator',
     logTool: 'logTool',
+    weatherData: 'weatherData',
     inventoryItems: 'inventoryItems'
   },
   defaultErrorHandler: function (e) {
@@ -169,6 +171,15 @@ export class IndexedDbService {
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.logTool)) {
           console.log('creating logTool store...');
           let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.logTool, {
+            autoIncrement: true,
+            keyPath: 'id'
+          });
+          calculatorObjStore.createIndex('id', 'id', { unique: false });
+        }
+        // weather data
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.weatherData)) {
+          console.log('creating weatherData store...');
+          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.weatherData, {
             autoIncrement: true,
             keyPath: 'id'
           });
@@ -1422,6 +1433,75 @@ export class IndexedDbService {
       };
     });
   }
+
+    //Weather Data
+    addWeatherData(weatherData: WeatherDataDbData): Promise<any> {
+      weatherData.modifiedDate = new Date();
+      return new Promise((resolve, reject) => {
+        let transaction = myDb.instance.transaction([myDb.storeNames.weatherData], 'readwrite');
+        let store = transaction.objectStore(myDb.storeNames.weatherData);
+        let addRequest = store.add(weatherData);
+        myDb.setDefaultErrorHandler(addRequest, myDb);
+        addRequest.onsuccess = (e) => {
+          resolve(e.target.result);
+        };
+        addRequest.onerror = (e) => {
+          reject(e.target.result);
+        };
+      });
+    }
+  
+    getAllWeatherData(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        let transaction = myDb.instance.transaction([myDb.storeNames.weatherData], 'readonly');
+        let store = transaction.objectStore(myDb.storeNames.weatherData);
+        let getRequest = store.getAll();
+        myDb.setDefaultErrorHandler(getRequest, myDb);
+        getRequest.onsuccess = (e) => {
+          resolve(e.target.result);
+        };
+        getRequest.onerror = (error) => {
+          reject(error.target.result);
+        };
+      });
+    }
+  
+    putWeatherData(weatherData: WeatherDataDbData): Promise<any> {
+      weatherData.modifiedDate = new Date();
+      return new Promise((resolve, reject) => {
+        let transaction = myDb.instance.transaction([myDb.storeNames.weatherData], 'readwrite');
+        let store = transaction.objectStore(myDb.storeNames.weatherData);
+        let getRequest = store.get(weatherData.id);
+        getRequest.onsuccess = (event) => {
+          let tmpCalc: Calculator = event.target.result;
+          tmpCalc = weatherData;
+          let updateRequest = store.put(tmpCalc);
+          updateRequest.onsuccess = (event) => {
+            resolve(event);
+          };
+          updateRequest.onerror = (event) => {
+            reject(event);
+          };
+        };
+        getRequest.onerror = (event) => {
+          reject(event);
+        };
+      });
+    }
+  
+    deleteWeatherData(id: number): Promise<any> {
+      return new Promise((resolve, reject) => {
+        let transaction = myDb.instance.transaction([myDb.storeNames.weatherData], 'readwrite');
+        let store = transaction.objectStore(myDb.storeNames.weatherData);
+        let deleteRequest = store.delete(id);
+        deleteRequest.onsuccess = (event) => {
+          resolve(event.target.result);
+        };
+        deleteRequest.onerror = (event) => {
+          reject(event.target.result);
+        };
+      });
+    }
 
   //inventoryItems
   addInventoryItem(inventoryItem: InventoryItem): Promise<any> {
