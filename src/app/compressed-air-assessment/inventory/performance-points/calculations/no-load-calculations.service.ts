@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { GenericCompressor } from '../../../generic-compressor-db.service';
 
 @Injectable()
 export class NoLoadCalculationsService {
 
-  constructor() { }
+  constructor(private convertCompressedAirService: ConvertCompressedAirService) { }
 
   setNoLoad(selectedCompressor: CompressorInventoryItem): PerformancePoint {
     selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPressure);
@@ -16,16 +17,18 @@ export class NoLoadCalculationsService {
 
   getNoLoadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
+      let defaultPressure: number;
       if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 5) {
         //centrifugal or start/stop
-        return 0
+        defaultPressure = 0
       } else if (selectedCompressor.compressorControls.controlType == 1) {
         //without unloading
-        return selectedCompressor.performancePoints.fullLoad.dischargePressure + selectedCompressor.designDetails.modulatingPressureRange;
+        defaultPressure = selectedCompressor.performancePoints.fullLoad.dischargePressure + selectedCompressor.designDetails.modulatingPressureRange;
       } else {
         //rest of options
-        return selectedCompressor.compressorControls.unloadSumpPressure;
+        defaultPressure = selectedCompressor.compressorControls.unloadSumpPressure;
       }
+      return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure);
     } else {
       return selectedCompressor.performancePoints.noLoad.dischargePressure;
     }
@@ -41,15 +44,17 @@ export class NoLoadCalculationsService {
 
   getNoLoadPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
+      let defaultPower: number;
       if (selectedCompressor.compressorControls.controlType == 1) {
         //without unloading
-        return this.calculateNoLoadPowerWithoutUnloading(selectedCompressor);
+        defaultPower = this.calculateNoLoadPowerWithoutUnloading(selectedCompressor);
       } else if (selectedCompressor.compressorControls.controlType == 5) {
         //start stop
-        return 0
+        defaultPower = 0
       } else {
-        return this.calculateNoLoadPower(selectedCompressor.designDetails.noLoadPowerUL, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.designDetails.designEfficiency);
+        defaultPower = this.calculateNoLoadPower(selectedCompressor.designDetails.noLoadPowerUL, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.designDetails.designEfficiency);
       }
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
       return selectedCompressor.performancePoints.noLoad.power;
     }

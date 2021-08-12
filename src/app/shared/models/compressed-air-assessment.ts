@@ -129,6 +129,7 @@ export interface CompressorInventoryItem {
     name: string,
     description: string,
     isValid?: boolean,
+    isUpdatingFromGeneric?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     inletConditions: InletConditions,
