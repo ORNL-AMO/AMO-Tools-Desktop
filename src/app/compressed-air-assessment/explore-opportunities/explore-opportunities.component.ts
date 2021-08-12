@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { InventoryService } from '../inventory/inventory.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -20,7 +21,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService) { }
+  tabSelect: string = 'compressor-profile';
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService,
+    private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -45,6 +48,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
+    this.inventoryService.selectedCompressor.next(undefined);
   }
 
   addExploreOpp() {
@@ -53,5 +57,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     this.exploerOpportunitiesService.saveModification(this.modification);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }

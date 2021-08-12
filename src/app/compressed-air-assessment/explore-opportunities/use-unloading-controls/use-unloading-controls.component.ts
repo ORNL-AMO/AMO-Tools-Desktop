@@ -26,6 +26,9 @@ export class UseUnloadingControlsComponent implements OnInit {
         this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.useUnloadingControls = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls;
+        if (!this.selectedAdjustedCompressor && this.useUnloadingControls.selected) {
+          this.initializeSelectedCompressor();
+        }
       } else {
         this.isFormChange = false;
       }
@@ -53,14 +56,25 @@ export class UseUnloadingControlsComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
-  setSelectedCompressor(){
-    let selectedCompressor: CompressorInventoryItem = this.inventoryItems.find(item => {return item.itemId == this.selectedAdjustedCompressor.compressorId});
+  setSelectedCompressor() {
+    let selectedCompressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == this.selectedAdjustedCompressor.compressorId });
     let selectedCompressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(selectedCompressor));
     selectedCompressorCopy.performancePoints = this.selectedAdjustedCompressor.performancePoints;
     selectedCompressorCopy.compressorControls.controlType = this.selectedAdjustedCompressor.controlType;
     selectedCompressorCopy.compressorControls.unloadPointCapacity = this.selectedAdjustedCompressor.unloadPointCapacity;
     selectedCompressorCopy.compressorControls.automaticShutdown = this.selectedAdjustedCompressor.automaticShutdown;
     this.inventoryService.selectedCompressor.next(selectedCompressorCopy);
+  }
+
+  initializeSelectedCompressor() {
+    this.useUnloadingControls.adjustedCompressors.forEach(compressor => {
+      if (compressor.originalControlType != compressor.controlType) {
+        this.selectedAdjustedCompressor = compressor;
+      }
+    });
+    if (!this.selectedAdjustedCompressor) {
+      this.selectedAdjustedCompressor = this.useUnloadingControls.adjustedCompressors[0];
+    }
   }
 
 }

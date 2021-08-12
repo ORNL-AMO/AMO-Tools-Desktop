@@ -396,7 +396,8 @@ export class InventoryService {
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    // let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    let performancePointsValid: boolean = true;
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 

@@ -232,14 +232,7 @@ export class SystemProfileService {
         if (applyEEEMs) {
           //EEM: Use unloading controls
           if (modification.useUnloadingControls.selected) {
-            let adjustedCompressor: AdjustedUnloadingCompressor = modification.useUnloadingControls.adjustedCompressors.find(adjustedCompressor => {
-              return (adjustedCompressor.compressorId == compressorCopy.itemId);
-            });
-            let adjustedCompressorCopy: AdjustedUnloadingCompressor = JSON.parse(JSON.stringify(adjustedCompressor))
-            compressorCopy.compressorControls.controlType = adjustedCompressorCopy.controlType;
-            compressorCopy.performancePoints = adjustedCompressorCopy.performancePoints;
-            compressorCopy.compressorControls.unloadPointCapacity = adjustedCompressorCopy.unloadPointCapacity;
-            compressorCopy.compressorControls.automaticShutdown = adjustedCompressorCopy.automaticShutdown;
+            compressorCopy = this.adjustCompressorControl(modification, compressorCopy);
           }
           //EEM: Reduce System Pressure
           if (modification.reduceSystemAirPressure.selected) {
@@ -287,6 +280,19 @@ export class SystemProfileService {
       }
     });
     return adjustedProfileSummary;
+  }
+
+
+  adjustCompressorControl(modification: Modification, compressorCopy: CompressorInventoryItem): CompressorInventoryItem {
+    let adjustedCompressor: AdjustedUnloadingCompressor = modification.useUnloadingControls.adjustedCompressors.find(adjustedCompressor => {
+      return (adjustedCompressor.compressorId == compressorCopy.itemId);
+    });
+    let adjustedCompressorCopy: AdjustedUnloadingCompressor = JSON.parse(JSON.stringify(adjustedCompressor))
+    compressorCopy.compressorControls.controlType = adjustedCompressorCopy.controlType;
+    compressorCopy.performancePoints = adjustedCompressorCopy.performancePoints;
+    compressorCopy.compressorControls.unloadPointCapacity = adjustedCompressorCopy.unloadPointCapacity;
+    compressorCopy.compressorControls.automaticShutdown = adjustedCompressorCopy.automaticShutdown;
+    return compressorCopy;
   }
 
 

@@ -225,26 +225,51 @@ export class PerformancePointsFormService {
 
   checkPerformancePointsValid(compressor: CompressorInventoryItem): boolean {
     let fullLoadForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad', false);
+    if (!fullLoadForm.valid) {
+      console.log('Full Load');
+      console.log(fullLoadForm);
+      console.log('====')
+    }
     let isValid: boolean = fullLoadForm.valid;
     let showMaxFullFlow: boolean = this.checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     if (isValid && showMaxFullFlow) {
       let maxFlowForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow', false);
       isValid = maxFlowForm.valid;
+      if (!maxFlowForm.valid) {
+        console.log('Max Flow');
+        console.log(maxFlowForm);
+        console.log('====')
+      }
     }
     let showUnloadForm: boolean = this.checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     if (isValid && showUnloadForm) {
       let unloadForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint, compressor, 'unloadPoint', false);
       isValid = unloadForm.valid;
+      if (!unloadForm.valid) {
+        console.log('Unload');
+        console.log(unloadForm);
+        console.log('====')
+      }
     }
     let showNoLoadForm: boolean = this.checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     if (isValid && showNoLoadForm) {
       let noLoadForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.noLoad, compressor, 'noLoad', false);
       isValid = noLoadForm.valid;
+      if (!noLoadForm.valid) {
+        console.log('NO LOAD');
+        console.log(noLoadForm);
+        console.log('====')
+      }
     }
     let showBlowoff: boolean = this.checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     if (isValid && showBlowoff) {
       let blowoffForm: FormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', false);
       isValid = blowoffForm.valid;
+      if (!blowoffForm.valid) {
+        console.log('Blowoff');
+        console.log(blowoffForm);
+        console.log('====')
+      }
     }
     return isValid;
   }

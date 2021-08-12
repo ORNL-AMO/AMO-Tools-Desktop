@@ -41,11 +41,35 @@
         <p>Data will be copied from your current baseline condition.</p>
     </div>
     <div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
-        <!-- <app-results-panel *ngIf="modificationExists"></app-results-panel>
+        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+            <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'day-type-profile'}">
+                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('day-type-profile')">
+                    <div>Day Type Profile</div>
+                </a>
+            </div>
+            <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'compressor-profile'}">
+                <a class="h-100 d-flex justify-content-center align-items-center"
+                    (click)="setTab('compressor-profile')">
+                    <div>Compressor Profile</div>
+                </a>
+            </div>
+            <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">
+                <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                    <div>Help</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- <app-results-panel *ngIf="modificationExists"></app-results-panel>-->
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
-        </div> -->
-        <app-explore-opportunities-results *ngIf="modificationExists"></app-explore-opportunities-results>
+        </div>
+        <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'day-type-profile'">
+        </app-explore-opportunities-results>
+        <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
+            <app-inventory-performance-profile [inAssessment]="true">
+            </app-inventory-performance-profile>
+        </div>
         <!-- End .help-panel -->
     </div>
 </div>
