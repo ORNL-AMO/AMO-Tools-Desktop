@@ -9,3 +9,7 @@ p {
 .btn.btn-primary{
     padding: 6px;
 }
+
+.day-type-select{
+    font-size: 22px;
+}

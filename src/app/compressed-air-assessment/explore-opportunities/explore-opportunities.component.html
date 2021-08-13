@@ -74,14 +74,24 @@
 
 <div class="d-flex flex-column modify-conditions panel-container"
     *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'">
-    <div class="p-2 justify-content-center">
-        <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+    <div class="p-2 text-center">
+        <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
             (change)="changeDayType()">
             <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
         </select>
     </div>
     <app-explore-opportunities-profile-table class="w-100" *ngIf="secondaryAssessmentTab == 'table'">
     </app-explore-opportunities-profile-table>
-    <app-system-profile-graphs class="w-100" *ngIf="secondaryAssessmentTab == 'graphs'" [inModification]="true">
-    </app-system-profile-graphs>
+    <div class="d-flex" *ngIf="secondaryAssessmentTab == 'graphs'">
+        <div class="col-6">
+            <!-- <label class="group-label bg-white">Baseline</label> -->
+            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="true" [labelName]="'Baseline'">
+            </app-system-profile-graphs>
+        </div>
+        <div class="col-6">
+            <!-- <label class="group-label bg-white">{{modification.name}}</label> -->
+            <app-system-profile-graphs class="w-100" [inModification]="true" [labelName]="modification.name">
+            </app-system-profile-graphs>
+        </div>
+    </div>
 </div>

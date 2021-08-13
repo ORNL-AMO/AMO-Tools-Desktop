@@ -525,6 +525,7 @@ export class InventoryService {
         timeInterval: i,
         percentPower: undefined,
         percentSystemCapacity: undefined,
+        percentSystemPower: undefined,
         order: 0
       })
     }
