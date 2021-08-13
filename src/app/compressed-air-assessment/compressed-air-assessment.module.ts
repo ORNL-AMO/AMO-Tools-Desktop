@@ -103,8 +103,8 @@ import { DayTypeService } from './day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
-import { CompressorProfileGraphComponent } from './explore-opportunities/compressor-profile-graph/compressor-profile-graph.component';
 import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
+import { ExploreOpportunitiesBarChartComponent } from './explore-opportunities/explore-opportunities-bar-chart/explore-opportunities-bar-chart.component';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -177,8 +177,8 @@ import { ExploreOpportunitiesProfileTableComponent } from './explore-opportuniti
     AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
-    CompressorProfileGraphComponent,
-    ExploreOpportunitiesProfileTableComponent
+    ExploreOpportunitiesProfileTableComponent,
+    ExploreOpportunitiesBarChartComponent
   ],
   imports: [
     CommonModule,

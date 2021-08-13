@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
@@ -24,14 +24,25 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tabSelect: string = 'compressor-profile';
   secondaryAssessmentTab: string;
   secondaryAssessmentTabSub: Subscription;
+  selectedDayTypeSub: Subscription;
+  selectedDayType: CompressedAirDayType;
+  dayTypeOptions: Array<CompressedAirDayType>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploerOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
+    this.selectedDayTypeSub = this.exploerOpportunitiesService.selectedDayType.subscribe(val => {
+      this.selectedDayType = val;
+    });
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressedAirAssessment = val;
+        this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
+        if(!this.selectedDayType){
+          this.exploerOpportunitiesService.selectedDayType.next(this.compressedAirAssessment.compressedAirDayTypes[0]);
+        }
       }
     });
 
@@ -48,12 +59,14 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
       this.secondaryAssessmentTab = val;
     });
+
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
+    this.selectedDayTypeSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
   }
 
@@ -67,5 +80,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  changeDayType() {
+    this.exploerOpportunitiesService.selectedDayType.next(this.selectedDayType);
   }
 }

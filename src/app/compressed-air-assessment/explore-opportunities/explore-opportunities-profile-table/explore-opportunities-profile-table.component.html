@@ -1,9 +1,4 @@
-<div class="w-100 p-2 justify-content-center">
-    <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-        (change)="calculateProfile()">
-        <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
-    </select>
-</div>
+
 
 <div class="pl-2 pt-3 pr-2 scroll-item">
     <table class="table table-hover bg-white">

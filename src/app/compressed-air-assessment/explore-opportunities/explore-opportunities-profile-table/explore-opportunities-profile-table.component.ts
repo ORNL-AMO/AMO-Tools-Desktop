@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile/system-profile.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
   selector: 'app-explore-opportunities-profile-table',
@@ -14,19 +15,23 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   adjustedProfileSummary: Array<ProfileSummary>;
   totals: Array<ProfileSummaryTotal>;
   selectedDayType: CompressedAirDayType;
+  selectedDayTypeSub: Subscription;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
+    this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
+      this.selectedDayType = val;
+      this.calculateProfile();
+    });
+
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressedAirAssessment = val;
-        this.dayTypeOptions = this.compressedAirAssessment.compressedAirDayTypes;
-        if (!this.selectedDayType) {
-          this.selectedDayType = this.dayTypeOptions[0];
-        }
         this.calculateProfile();
       }
     });
@@ -34,13 +39,16 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+    this.selectedDayTypeSub.unsubscribe();
   }
 
   calculateProfile() {
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
-    this.adjustedProfileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
-    this.totals = this.systemProfileService.calculateProfileSummaryTotals(this.compressedAirAssessment, this.selectedDayType, this.adjustedProfileSummary);
+    if (this.compressedAirAssessment && this.selectedDayType) {
+      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+      let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
+      this.adjustedProfileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
+      this.totals = this.systemProfileService.calculateProfileSummaryTotals(this.compressedAirAssessment, this.selectedDayType, this.adjustedProfileSummary);
+    }
   }
 
 }

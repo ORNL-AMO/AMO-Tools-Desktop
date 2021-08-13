@@ -72,6 +72,16 @@
     </div>
 </div>
 
-<div class="compressed-air modify-conditions panel-container" *ngIf="secondaryAssessmentTab == 'table'">
-    <app-explore-opportunities-profile-table class="w-100"></app-explore-opportunities-profile-table>
+<div class="d-flex flex-column modify-conditions panel-container"
+    *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'">
+    <div class="p-2 justify-content-center">
+        <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+            (change)="changeDayType()">
+            <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
+        </select>
+    </div>
+    <app-explore-opportunities-profile-table class="w-100" *ngIf="secondaryAssessmentTab == 'table'">
+    </app-explore-opportunities-profile-table>
+    <app-system-profile-graphs class="w-100" *ngIf="secondaryAssessmentTab == 'graphs'" [inModification]="true">
+    </app-system-profile-graphs>
 </div>

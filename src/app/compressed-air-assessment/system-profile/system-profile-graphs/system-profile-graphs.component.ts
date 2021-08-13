@@ -1,15 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
 import * as Plotly from 'plotly.js';
+import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
 @Component({
   selector: 'app-system-profile-graphs',
   templateUrl: './system-profile-graphs.component.html',
   styleUrls: ['./system-profile-graphs.component.css']
 })
 export class SystemProfileGraphsComponent implements OnInit {
+  @Input()
+  inModification: boolean;
+
 
   @ViewChild("airflowGraph", { static: false }) airflowGraph: ElementRef;
   @ViewChild("powerGraph", { static: false }) powerGraph: ElementRef;
@@ -18,18 +22,30 @@ export class SystemProfileGraphsComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   profileSummary: Array<ProfileSummary>;
   inventoryItems: Array<CompressorInventoryItem>;
-  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  compressedAirAssessment: CompressedAirAssessment;
+  selectedDayType: CompressedAirDayType;
+  selectedDayTypeSub: Subscription;
+  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(val, val.systemProfile.systemProfileSetup.dayTypeId);
+      this.compressedAirAssessment = val;
       this.inventoryItems = val.compressorInventoryItems;
+      this.setProfileData();
+      this.drawCharts();
+    });
+
+    this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
+      this.selectedDayType = val;
+      this.setProfileData();
       this.drawCharts();
     });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+    this.selectedDayTypeSub.unsubscribe();
   }
 
 
@@ -37,6 +53,15 @@ export class SystemProfileGraphsComponent implements OnInit {
     this.drawCharts();
   }
 
+  setProfileData(){
+    if(!this.inModification && this.compressedAirAssessment){
+      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId);
+    }else if(this.compressedAirAssessment && this.selectedDayType){
+      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+      let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
+      this.profileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
+    }
+  }
 
   drawCharts() {
     this.drawAirflowChart();
@@ -48,8 +73,8 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.airflowGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
-      let rgbaOpacity: number = 1;
+      // let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
+      // let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
@@ -63,7 +88,7 @@ export class SystemProfileGraphsComponent implements OnInit {
           type: 'bar',
           name:this.getCompressorName(compressorProfile.compressorId),
           marker: {
-            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            // color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
               width: 3
             }
@@ -71,7 +96,7 @@ export class SystemProfileGraphsComponent implements OnInit {
 
         }
         traceData.push(trace);
-        rgbaOpacity = rgbaOpacity - rgbaInterval;
+        // rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         showlegend: true,
@@ -128,8 +153,8 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.powerGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
-      let rgbaOpacity: number = 1;
+      // let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
+      // let rgbaOpacity: number = 1;
 
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
@@ -144,14 +169,14 @@ export class SystemProfileGraphsComponent implements OnInit {
           type: 'bar',
           name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
-            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            // color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
               width: 3
             }
           }
         }
         traceData.push(trace);
-        rgbaOpacity = rgbaOpacity - rgbaInterval;
+        // rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         showlegend: true,
@@ -205,8 +230,8 @@ export class SystemProfileGraphsComponent implements OnInit {
     if (this.profileSummary && this.capacityGraph) {
       // let chartData: Array<ProfileChartData> = this.getChartData();
       let traceData = new Array();
-      let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
-      let rgbaOpacity: number = 1;
+      // let rgbaInterval: number = 1 / (this.profileSummary.length + 1);
+      // let rgbaOpacity: number = 1;
       this.profileSummary.forEach(compressorProfile => {
         let trace = {
           x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
@@ -220,14 +245,14 @@ export class SystemProfileGraphsComponent implements OnInit {
           type: 'bar',
           name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
-            color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
+            // color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
               width: 3
             }
           }
         }
         traceData.push(trace);
-        rgbaOpacity = rgbaOpacity - rgbaInterval;
+        // rgbaOpacity = rgbaOpacity - rgbaInterval;
       })
       var layout = {
         showlegend: true,
