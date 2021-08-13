@@ -125,7 +125,7 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 1 && baseline"
-      [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
+      [ngClass]="{'indicate-different': isMotorFieldCurrentDifferent(), 'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
       <label for="{{'motorAmps_'+idString}}">Motor Current</label>
       <div class="input-group">
         <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control"

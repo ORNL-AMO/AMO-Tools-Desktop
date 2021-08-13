@@ -96,7 +96,8 @@ export class CompareService {
         this.isOperatingHoursDifferent(baseline, modification) ||
         this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
-        this.isHeadDifferent(baseline, modification)
+        this.isHeadDifferent(baseline, modification) ||
+        this.isMotorFieldVoltageDifferent(baseline, modification)
       )
     }
     else {

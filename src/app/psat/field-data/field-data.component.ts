@@ -126,6 +126,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   save() {
+    this.psat.inputs.motor_field_current = this.psatForm.controls.motorAmps.value;
     this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);
@@ -250,7 +251,7 @@ export class FieldDataComponent implements OnInit {
   }
   isMotorFieldCurrentDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isMotorFieldCurrentDifferent();
+      return this.compareService.isMotorFieldCurrentDifferent(this.psat);
     } else {
       return false;
     }
