@@ -59,7 +59,7 @@
                 <span *ngIf="form.controls.power.errors.required">Value Required</span>
                 <span *ngIf="form.controls.power.errors.min">Value can't be less than
                     {{form.controls.power.errors.min.min}} kW.</span>
-                <span *ngIf="form.controls.power.errors.max !== undefined">Value cannot be greater than Full Load
+                <span *ngIf="form.controls.power.errors.max !== undefined">Value cannot be greater than Max Full Flow
                     Power
                     ({{form.controls.power.errors.max.max}}) kW.</span>
                 <span *ngIf="form.controls.power.errors.lessThan !== undefined">Value must be less than Unload Point

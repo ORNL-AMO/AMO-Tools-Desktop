@@ -88,7 +88,9 @@ export class PerformancePointsFormService {
           powerValidators.push(GreaterThanValidator.greaterThan(0));
           break;
         case 'maxFullFlow':
-          if (compressor.compressorControls.controlType == 3 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
+          if (compressor.compressorControls.controlType == 3) {
+            powerValidators.push(Validators.min(compressor.performancePoints.fullLoad.power));
+          } else if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
             powerValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.power));
           } else {
             if (compressor.performancePoints.fullLoad.power) {
@@ -118,7 +120,7 @@ export class PerformancePointsFormService {
           if (compressor.compressorControls.controlType == 2) {
             powerValidators.push(Validators.min(0));
           } else if (compressor.compressorControls.controlType == 3) {
-            powerValidators.push(GreaterThanValidator.greaterThan(0), Validators.max(compressor.performancePoints.fullLoad.power))
+            powerValidators.push(GreaterThanValidator.greaterThan(0), Validators.max(compressor.performancePoints.maxFullFlow.power))
           } else if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
             powerValidators.push(Validators.min(0), LessThanValidator.lessThan(compressor.performancePoints.fullLoad.power));
           }
@@ -185,13 +187,16 @@ export class PerformancePointsFormService {
         case 'fullLoad':
           airFlowValidators.push(Validators.min(0));
           break;
-        case 'maxFullFlow':
-          if (compressor.compressorControls.controlType == 4 || compressor.compressorControls.controlType == 5 || compressor.compressorControls.controlType == 6) {
+        case 'maxFullFlow': 
+          if (compressor.compressorControls.controlType == 2) {
+            airFlowValidators.push(LessThanValidator.lessThan(compressor.performancePoints.fullLoad.airflow), GreaterThanValidator.greaterThan(0));
+          } else if (compressor.compressorControls.controlType == 5) {
             airFlowValidators.push(LessThanValidator.lessThan(compressor.performancePoints.fullLoad.airflow));
-          } else if (compressor.compressorControls.controlType == 2 || compressor.compressorControls.controlType == 3) {
+          } else if (compressor.compressorControls.controlType == 3) {
             airFlowValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.airflow));
-          } else if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
-            airFlowValidators.push(Validators.max(compressor.performancePoints.fullLoad.airflow));
+          } else if (compressor.compressorControls.controlType == 4|| compressor.compressorControls.controlType == 6
+             || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
+               airFlowValidators.push(Validators.min(0),Validators.max(compressor.performancePoints.fullLoad.airflow));
           }
           break;
         case 'noLoad':
