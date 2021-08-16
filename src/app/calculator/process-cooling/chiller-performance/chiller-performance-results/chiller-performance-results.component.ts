@@ -30,8 +30,9 @@ export class ChillerPerformanceResultsComponent implements OnInit {
   constructor(private chillerPerformanceService: ChillerPerformanceService) { }
 
   ngOnInit(): void {
-    this.outputSubscription = this.chillerPerformanceService.chillerPerformanceOutput.subscribe(val => {
-      this.output = val;
+    this.outputSubscription = this.chillerPerformanceService.chillerPerformanceOutput.subscribe(updatedOutput => {
+      // TODO handle array
+      this.output = updatedOutput;
     })
   }
 

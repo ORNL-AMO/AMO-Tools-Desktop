@@ -20,6 +20,11 @@ import { WeatherDbService } from './weather-db.service';
     CommonModule,
     FormsModule,
   ],
+  exports: [
+    WeatherBinsFormComponent,
+    WeatherBinsHelpComponent,
+    WeatherBinsBarChartComponent
+  ],
   providers: [
     WeatherDbService,
     WeatherBinsService

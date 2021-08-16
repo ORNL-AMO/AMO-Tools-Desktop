@@ -82,6 +82,10 @@ export class DataSetupFormComponent implements OnInit {
     }
   }
 
+  resetData() {
+    this.weatherBinsService.resetData();
+  }
+
   importFile() {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference);

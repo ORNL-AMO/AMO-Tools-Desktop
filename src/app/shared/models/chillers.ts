@@ -1,3 +1,5 @@
+import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
+
 //====== Cooling Tower ======
 export interface CoolingTowerData {
     name: string;

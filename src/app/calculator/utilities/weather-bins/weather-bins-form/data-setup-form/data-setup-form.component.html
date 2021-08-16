@@ -19,6 +19,11 @@
     <div *ngIf="!inputData.fileName || validFile == false" class="d-flex w-100 justify-content-end">
         <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
             [disabled]="importData == undefined">Parse CSV Data</button>
+            
+    </div>
+    <div *ngIf="inputData.fileName && validFile == true" class="d-flex w-100 justify-content-end">
+        <button class="btn btn-danger pull-right" role="button" (click)="resetData()"
+            >Reset Data</button>     
     </div>
 
     <!-- <div class="text-center pt-2" *ngIf="importSuccesful">

@@ -24,8 +24,12 @@ export class ChillerPerformanceComponent implements OnInit {
   chillerPerformanceInputSub: Subscription;
   modalSubscription: Subscription;
   
+  displayWeatherTab: boolean = false;
   headerHeight: number;
   tabSelect: string = 'results';
+
+  hasWeatherBinsDataSub: Subscription;
+  hasWeatherBinsData: boolean = false;
   
   constructor(private chillerPerformanceService: ChillerPerformanceService,
               private settingsDbService: SettingsDbService) { }
@@ -38,12 +42,17 @@ export class ChillerPerformanceComponent implements OnInit {
     if(!existingInputs) {
       this.chillerPerformanceService.initDefaultEmptyInputs();
       this.chillerPerformanceService.initDefaultEmptyOutputs();
+    } 
+    else {
+      this.chillerPerformanceService.sethasWeatherBinsData();
     }
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
+    this.hasWeatherBinsDataSub.unsubscribe();
+
   }
 
   ngAfterViewInit() {
@@ -52,9 +61,16 @@ export class ChillerPerformanceComponent implements OnInit {
     }, 100);
   }
 
+  setWeatherCalculatorActive(displayWeatherTab: boolean) {
+    this.displayWeatherTab = displayWeatherTab;
+  }
+
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerPerformanceService.chillerPerformanceInput.subscribe(value => {
       this.calculate();
+    });
+    this.hasWeatherBinsDataSub = this.chillerPerformanceService.hasWeatherBinsData.subscribe(value => {
+      this.hasWeatherBinsData = value;
     });
   }
 

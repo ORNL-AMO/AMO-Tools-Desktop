@@ -13,6 +13,7 @@ import { ChillerPerformanceService } from './chiller-performance.service';
 import { ChillerPerformanceFormService } from './chiller-performance-form.service';
 import { ChillerPerformanceChartComponent } from './chiller-performance-chart/chiller-performance-chart.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
+import { WeatherBinsModule } from '../../utilities/weather-bins/weather-bins.module';
 
 
 
@@ -32,7 +33,8 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     OperatingHoursModalModule,
     ExportableResultsTableModule,
     ReactiveFormsModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    WeatherBinsModule
   ],
   exports: [
     ChillerPerformanceComponent
