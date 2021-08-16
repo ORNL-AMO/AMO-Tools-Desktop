@@ -103,6 +103,7 @@ import { DayTypeService } from './day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
+import { ConvertCompressedAirService } from './convert-compressed-air.service';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -213,7 +214,8 @@ import { CompressedAirDataManagementService } from './compressed-air-data-manage
     PerformancePointsFormService,
     ExploreOpportunitiesService,
     DayTypeService,
-    CompressedAirDataManagementService
+    CompressedAirDataManagementService,
+    ConvertCompressedAirService
   ]
 })
 export class CompressedAirAssessmentModule { }
