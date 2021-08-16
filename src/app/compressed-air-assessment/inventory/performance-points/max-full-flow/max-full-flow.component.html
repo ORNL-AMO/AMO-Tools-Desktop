@@ -36,8 +36,7 @@
             </div>
             <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
                 <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
-                <span *ngIf="form.controls.airflow.errors.min">Value can't be less than
-                    Full Load Air Flow ({{form.controls.airflow.errors.min.min}}) acfm.</span>
+                <span *ngIf="form.controls.airflow.errors.min">Value can't be less than 0 acfm.</span>
                 <span *ngIf="form.controls.airflow.errors.equalTo !== undefined">Value must be equal to Full Load Air Flow
                     ({{form.controls.airflow.errors.equalTo}} acfm).</span>
                 <span *ngIf="form.controls.airflow.errors.lessThan !== undefined">
@@ -45,6 +44,8 @@
                 <span *ngIf="form.controls.airflow.errors.max !== undefined">Value cannot be greater than Full Load
                     Airflow
                     ({{form.controls.airflow.errors.max.max}}) acfm.</span>
+                <span *ngIf="form.controls.airflow.errors.greaterThan !== undefined">Value must be greater than
+                    {{form.controls.airflow.errors.greaterThan}} acfm</span>
             
             </span>
         </div>
