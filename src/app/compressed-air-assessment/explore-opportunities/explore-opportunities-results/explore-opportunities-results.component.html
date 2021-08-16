@@ -1,67 +1,179 @@
-<div class="w-100 p-2 justify-content-center">
-    <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-        (change)="calculateProfile()">
-        <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
-    </select>
+<div *ngIf="!calculating">
+    <div class="p-2 text-center">
+        <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+            (change)="calculateProfile()">
+            <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
+        </select>
+    </div>
+
+    <div class="pl-2 pt-3 pr-2">
+        <div class="pb-2">
+            <table class="table table-hover bg-white">
+                <thead>
+                    <tr>
+                        <th class="w-25">
+                            Modification
+                        </th>
+                        <th class="w-25">
+                            Power Savings, kWh/yr
+                        </th>
+                        <th class="w-25">
+                            Cost Savings, $/yr
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Flow Reallocation</td>
+                        <td>
+                            {{flowReallocationSavings.savings.power | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{flowReallocationSavings.savings.cost | currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.reduceAirLeaks.selected">
+                        <td>Reduce Air Leaks</td>
+                        <td>
+                            {{reduceAirLeaksSavings.savings.power - flowReallocationSavings.savings.power |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{reduceAirLeaksSavings.savings.cost - flowReallocationSavings.savings.cost |
+                            currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.improveEndUseEfficiency.selected">
+                        <td>Improve End Use Efficiency</td>
+                        <td>
+                            {{endUseEfficiencySavings.savings.power - flowReallocationSavings.savings.power
+                            |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{endUseEfficiencySavings.savings.cost - flowReallocationSavings.savings.cost |
+                            currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.reduceRuntime.selected">
+                        <td>Reduce Run Time</td>
+                        <td>
+                            {{reduceRunTimeSavings.savings.power - flowReallocationSavings.savings.power |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{reduceRunTimeSavings.savings.cost - flowReallocationSavings.savings.cost |
+                            currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.reduceSystemAirPressure.selected">
+                        <td>Reduce System Air Pressure</td>
+                        <td>
+                            {{reduceSystemAirPressureSavings.savings.power -flowReallocationSavings.savings.power |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{reduceSystemAirPressureSavings.savings.cost -flowReallocationSavings.savings.cost |
+                            currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.useUnloadingControls.selected">
+                        <td>Add Unloading Controls</td>
+                        <td>
+                            {{unloadingControlsSavings.savings.power - flowReallocationSavings.savings.power |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{unloadingControlsSavings.savings.cost - flowReallocationSavings.savings.cost | currency}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="modification.addPrimaryReceiverVolume.selected">
+                        <td>Add Receiver Volume</td>
+                        <td>
+                            {{receiverVolumeSavings.savings.power - flowReallocationSavings.savings.power |
+                            number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{receiverVolumeSavings.savings.cost - flowReallocationSavings.savings.cost | currency}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold">
+                            Total
+                        </td>
+                        <td class="bold">
+                            {{totalSavings.savings.power | number:'1.0-0'}}
+                        </td>
+                        <td class="bold">
+                            {{totalSavings.savings.cost | currency}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <div class="pl-2 pt-3 pr-2">
+        <div class="pb-2">
+            <table class="table table-hover bg-white">
+                <thead>
+                    <tr>
+                        <th class="w-25">
+                            Modification Results
+                        </th>
+                        <th class="w-25">
+                            Baseline
+                        </th>
+                        <th class="w-25">
+                            Adjustment
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">Power, kWh/yr</td>
+                        <td>
+                            {{totalSavings.baselineResults.power | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{totalSavings.adjustedResults.power | number:'1.0-0'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Cost, $/yr</td>
+                        <td>
+                            {{totalSavings.baselineResults.cost | currency}}
+                        </td>
+                        <td>
+                            {{totalSavings.adjustedResults.cost | currency}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Peak Demand, kW</td>
+                        <td>
+                            {{totalSavings.baselineResults.peakDemand | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{totalSavings.adjustedResults.peakDemand | number:'1.0-0'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div class="pl-2 pt-3 pr-2">
-    <div class="pb-2">
-        <table class="table table-hover bg-white">
-            <thead>
-                <tr>
-                    <th class="w-25">
-                        Modification Results
-                    </th>
-                    <th class="w-25">
-                        Baseline
-                    </th>
-                    <th class="w-25">
-                        Adjustment
-                    </th>
-                    <th class="w-25">
-                        Savings
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="bold">Power, kWh/yr</td>
-                    <td>
-                        {{dayTypeResult.baselineResults.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.adjustedResults.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.savings.power | number:'1.0-0'}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="bold">Cost, $/yr</td>
-                    <td>
-                        {{dayTypeResult.baselineResults.cost | currency}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.adjustedResults.cost | currency}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="bold">Peak Demand, kW</td>
-                    <td>
-                        {{dayTypeResult.baselineResults.peakDemand | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.adjustedResults.peakDemand | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeResult.savings.peakDemand | number:'1.0-0'}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
+    <div class="col-10">
+        <div class="main-content text-center">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            <h1>Calculating Results...</h1>
+        </div>
     </div>
 </div>

@@ -173,8 +173,6 @@ export class SystemProfileService {
   }
 
   calculatedNeededAirFlow(total: ProfileSummaryTotal, compressedAirAssessment: CompressedAirAssessment, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, modification: Modification, applyEEEMs: boolean): Array<ProfileSummary> {
-    let allAdjustedCompressors: Array<CompressorInventoryItem> = new Array();
-
     let neededAirFlow: number = total.airflow;
     if (applyEEEMs) {
       //EEM: Reduce Air leaks
@@ -323,11 +321,7 @@ export class SystemProfileService {
   }
 
 
-  calculateSavings(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number): {
-    baselineResults: { cost: number, power: number, peakDemand: number },
-    adjustedResults: { cost: number, power: number, peakDemand: number },
-    savings: { cost: number, power: number, peakDemand: number }
-  } {
+  calculateSavings(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number): EemSavingsResults {
     let baselineResults: { cost: number, power: number, peakDemand: number } = this.calculateEnergyAndCost(profileSummary, dayType, costKwh);
     let adjustedResults: { cost: number, power: number, peakDemand: number } = this.calculateEnergyAndCost(adjustedProfileSummary, dayType, costKwh);
     let savings: { cost: number, power: number, peakDemand: number } = {
@@ -364,4 +358,12 @@ export class SystemProfileService {
     return (c_usage - (c_usage - (c_usage * p)) * .6)
   }
 
+}
+
+
+
+export interface EemSavingsResults {
+  baselineResults: { cost: number, power: number, peakDemand: number },
+  adjustedResults: { cost: number, power: number, peakDemand: number },
+  savings: { cost: number, power: number, peakDemand: number }
 }

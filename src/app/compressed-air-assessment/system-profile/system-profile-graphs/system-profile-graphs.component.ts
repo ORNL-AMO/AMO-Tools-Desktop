@@ -92,7 +92,6 @@ export class SystemProfileGraphsComponent implements OnInit {
           type: 'bar',
           name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
-            // color: 'rgba(112, 48, 160,' + rgbaOpacity + ')',
             line: {
               width: 3
             }
@@ -101,43 +100,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = {
-        showlegend: true,
-        barmode: 'stack',
-        // title: {
-        //   text: 'System Airflow',
-        //   font: {
-        //     size: 18
-        //   },
-        // },
-        xaxis: {
-          autotick: false,
-          title: {
-            text: 'Hour',
-            font: {
-              size: 16
-            },
-          },
-          automargin: true
-        },
-        yaxis: {
-          title: {
-            text: 'Airflow (acfm)',
-            font: {
-              size: 16
-            },
-          },
-          hoverformat: ",.2f",
-        },
-        margin: {
-          t: 20,
-          r: 20
-        },
-        legend: {
-          orientation: "h",
-          y: 1.5
-        }
-      };
+      var layout = this.getLayout("Airflow (acfm)");
       var config = {
         responsive: true,
         displaylogo: false
@@ -171,43 +134,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = {
-        showlegend: true,
-        barmode: 'stack',
-        // title: {
-        //   text: 'System Power',
-        //   font: {
-        //     size: 18
-        //   },
-        // },
-        xaxis: {
-          autotick: false,
-          title: {
-            text: 'Hour',
-            font: {
-              size: 16
-            },
-          },
-          automargin: true
-        },
-        yaxis: {
-          title: {
-            text: 'Power (kW)',
-            font: {
-              size: 16
-            },
-          },
-          hoverformat: ",.2f",
-        },
-        margin: {
-          t: 20,
-          r: 20
-        },
-        legend: {
-          orientation: "h",
-          y: 1.5
-        }
-      };
+      var layout = this.getLayout("Power (kW)");
       var config = {
         responsive: true,
         displaylogo: false
@@ -238,45 +165,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = {
-        showlegend: true,
-        barmode: 'stack',
-        // title: {
-        //   text: 'System Capacity',
-        //   font: {
-        //     size: 18
-        //   },
-        // },
-        xaxis: {
-          autotick: false,
-          title: {
-            text: 'Hour',
-            font: {
-              size: 16
-            },
-          },
-          automargin: true
-        },
-        yaxis: {
-          range: [0, 105],
-          ticksuffix: '%',
-          title: {
-            text: 'Capacity (%)',
-            font: {
-              size: 16
-            },
-          },
-          hoverformat: ",.2f",
-        },
-        margin: {
-          t: 20,
-          r: 20
-        },
-        legend: {
-          orientation: "h",
-          y: 1.5
-        }
-      };
+      var layout = this.getLayout("Capacity (%)");
       var config = {
         responsive: true,
         displaylogo: false
@@ -308,45 +197,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = {
-        showlegend: true,
-        barmode: 'stack',
-        // title: {
-        //   text: 'System Capacity',
-        //   font: {
-        //     size: 18
-        //   },
-        // },
-        xaxis: {
-          autotick: false,
-          title: {
-            text: 'Hour',
-            font: {
-              size: 16
-            },
-          },
-          automargin: true
-        },
-        yaxis: {
-          range: [0, 105],
-          ticksuffix: '%',
-          title: {
-            text: 'Power (%)',
-            font: {
-              size: 16
-            },
-          },
-          hoverformat: ",.2f",
-        },
-        margin: {
-          t: 20,
-          r: 20
-        },
-        legend: {
-          orientation: "h",
-          y: 1.5
-        }
-      };
+      var layout = this.getLayout("Power %");
       var config = {
         responsive: true,
         displaylogo: false
@@ -363,5 +214,41 @@ export class SystemProfileGraphsComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  getLayout(yAxisTitle: string){
+    return {
+      showlegend: true,
+      barmode: 'stack',
+      xaxis: {
+        autotick: false,
+        title: {
+          text: 'Hour',
+          font: {
+            size: 16
+          },
+        },
+        automargin: true
+      },
+      yaxis: {
+        range: [0, 105],
+        ticksuffix: '%',
+        title: {
+          text: yAxisTitle,
+          font: {
+            size: 16
+          },
+        },
+        hoverformat: ",.2f",
+      },
+      margin: {
+        t: 20,
+        r: 20
+      },
+      legend: {
+        orientation: "h",
+        y: 1.5
+      }
+    };
   }
 }

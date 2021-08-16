@@ -21,7 +21,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
-  tabSelect: string = 'compressor-profile';
+  tabSelect: string = 'results';
   secondaryAssessmentTab: string;
   secondaryAssessmentTabSub: Subscription;
   selectedDayTypeSub: Subscription;
