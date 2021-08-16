@@ -97,7 +97,10 @@ export class CompareService {
         this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isHeadDifferent(baseline, modification) ||
-        this.isMotorFieldVoltageDifferent(baseline, modification)
+        this.isMotorFieldVoltageDifferent(baseline, modification) ||
+        this.isMotorFieldCurrentDifferent(baseline, modification) ||
+        this.isMotorFieldPowerDifferent(baseline, modification) ||
+        this.isLoadEstimationMethodDifferent(baseline, modification)
       )
     }
     else {
