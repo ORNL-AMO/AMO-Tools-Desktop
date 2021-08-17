@@ -40,9 +40,11 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.psat.modifications && this.psat.modifications.length > 0) {
-      this.isWhatIfScenario = this.psat.modifications[this.exploreModIndex].psat.inputs.whatIfScenario;
-    }    
+    if (!this.inSetup) {
+      if (this.psat.modifications && this.psat.modifications.length > 0) {
+        this.isWhatIfScenario = this.psat.modifications[this.exploreModIndex].psat.inputs.whatIfScenario;
+      }
+    }
   }
 
 

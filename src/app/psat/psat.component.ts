@@ -293,9 +293,11 @@ export class PsatComponent implements OnInit {
         this.modificationExists = true;
       }
       this._psat.modifications.forEach(mod => {
-        mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
-        mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
-        mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        if(mod.psat.inputs.whatIfScenario){
+          mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
+          mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
+          mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        }
       })
     } else {
       this.modificationExists = false;

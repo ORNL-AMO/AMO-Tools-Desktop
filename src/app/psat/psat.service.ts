@@ -590,7 +590,11 @@ export class PsatService {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
       if (isPsatValid.isValid) {
-        modificationResults = this.resultsModified(modInputs, settings);
+        if (modInputs.whatIfScenario == true) {
+          modificationResults = this.resultsModified(modInputs, settings);
+        } else {
+          modificationResults = this.resultsExisting(modInputs, settings);
+        }
       }
     }
     annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;
