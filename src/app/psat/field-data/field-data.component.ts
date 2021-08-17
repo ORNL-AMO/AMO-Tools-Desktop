@@ -129,9 +129,6 @@ export class FieldDataComponent implements OnInit {
     this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);
-    this.psat.inputs.motor_field_current = this.psatForm.controls.motorAmps.value;
-    this.psat.inputs.motor_field_power = this.psatForm.controls.motorKW.value;
-    this.psat.inputs.load_estimation_method = this.psatForm.controls.loadEstimatedMethod.value;
   }
 
   checkWarnings() {
