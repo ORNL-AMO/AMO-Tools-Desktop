@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { SystemProfileService } from '../system-profile.service';
 import * as Plotly from 'plotly.js';
 import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 @Component({
   selector: 'app-system-profile-graphs',
   templateUrl: './system-profile-graphs.component.html',
@@ -29,8 +29,8 @@ export class SystemProfileGraphsComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
-  constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -59,13 +59,15 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   setProfileData() {
     if (!this.inModification && this.compressedAirAssessment) {
-      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
     } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
-      this.profileSummary = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modification, true);
+      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, modification);
+      let dayTypeModificationResult: DayTypeModificationResult = compressedAirAssessmentResult.dayTypeModificationResults.find(dayTypeResult => {return dayTypeResult.dayTypeId == this.selectedDayType.dayTypeId});
+      this.profileSummary = dayTypeModificationResult.adjustedProfileSummary;
     } else if (this.compressedAirAssessment && this.selectedDayType && this.isBaseline) {
-      this.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType.dayTypeId);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
     }
   }
 
@@ -100,7 +102,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = this.getLayout("Airflow (acfm)");
+      var layout = this.getLayout("Airflow (acfm)", undefined, undefined);
       var config = {
         responsive: true,
         displaylogo: false
@@ -134,7 +136,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = this.getLayout("Power (kW)");
+      var layout = this.getLayout("Power (kW)", undefined, undefined);
       var config = {
         responsive: true,
         displaylogo: false
@@ -165,7 +167,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = this.getLayout("Capacity (%)");
+      var layout = this.getLayout("Capacity (%)", [0, 100], '%');
       var config = {
         responsive: true,
         displaylogo: false
@@ -197,7 +199,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       })
-      var layout = this.getLayout("Power %");
+      var layout = this.getLayout("Power %", [0, 100], '%');
       var config = {
         responsive: true,
         displaylogo: false
@@ -216,7 +218,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
-  getLayout(yAxisTitle: string){
+  getLayout(yAxisTitle: string, yAxisRange: Array<number>, yAxisTickSuffix: string){
     return {
       showlegend: true,
       barmode: 'stack',
@@ -231,8 +233,8 @@ export class SystemProfileGraphsComponent implements OnInit {
         automargin: true
       },
       yaxis: {
-        range: [0, 105],
-        ticksuffix: '%',
+        range: yAxisRange,
+        ticksuffix: yAxisTickSuffix,
         title: {
           text: yAxisTitle,
           font: {

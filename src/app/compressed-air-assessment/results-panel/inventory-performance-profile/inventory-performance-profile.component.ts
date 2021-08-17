@@ -5,7 +5,7 @@ import * as Plotly from 'plotly.js';
 import { CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../../compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { SystemProfileService } from '../../system-profile/system-profile.service';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 @Component({
   selector: 'app-inventory-performance-profile',
   templateUrl: './inventory-performance-profile.component.html',
@@ -22,7 +22,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   showAllCompressors: boolean = false;
   compressedAirAssessment: CompressedAirAssessment;
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     if (!this.inAssessment) {
@@ -147,7 +148,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           data: compressorData
         });
         if (modification.useUnloadingControls.selected) {
-          let adjustedCompressor: CompressorInventoryItem = this.systemProfileService.adjustCompressorControl(modification, JSON.parse(JSON.stringify(compressor)));
+          let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification, JSON.parse(JSON.stringify(compressor)));
           // debugger
           let adjustedCompressorData: Array<CompressorCalcResult> = this.getCompressorData(adjustedCompressor);
           // console.log(adjustedCompressorData);

@@ -24,36 +24,36 @@ export class FlowReallocationComponent implements OnInit {
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
-      if (val && !this.isFormChange) {
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        let selectedModification: Modification = compressedAirAssessment.modifications.find(mod => { return mod.modificationId == val });
-        this.flowReallocation = selectedModification.flowReallocation;
+    // this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
+    //   if (val && !this.isFormChange) {
+    //     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    //     let selectedModification: Modification = compressedAirAssessment.modifications.find(mod => { return mod.modificationId == val });
+    //     this.flowReallocation = selectedModification.flowReallocation;
 
-        this.dayTypeResults = new Array();
-        compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+    //     this.dayTypeResults = new Array();
+    //     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
           
-          let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType, selectedModification, false);
-          let calculatedSavings: {
-            baselineResults: { cost: number, power: number, peakDemand: number },
-            adjustedResults: { cost: number, power: number, peakDemand: number },
-            savings: { cost: number, power: number, peakDemand: number }
-          } = this.systemProfileService.calculateSavings(compressedAirAssessment.systemProfile.profileSummary, adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
-          this.dayTypeResults.push({
-            dayTypeName: dayType.name,
-            baselineResults: calculatedSavings.baselineResults,
-            adjustedResults: calculatedSavings.adjustedResults,
-            savings: calculatedSavings.savings
-          })
-        })
-      } else {
-        this.isFormChange = false;
-      }
-    });
+    //       let adjustedProfileSummary: Array<ProfileSummary> = this.systemProfileService.flowReallocation(compressedAirAssessment, dayType, selectedModification, false);
+    //       let calculatedSavings: {
+    //         baselineResults: { cost: number, power: number, peakDemand: number },
+    //         adjustedResults: { cost: number, power: number, peakDemand: number },
+    //         savings: { cost: number, power: number, peakDemand: number }
+    //       } = this.systemProfileService.calculateSavings(compressedAirAssessment.systemProfile.profileSummary, adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
+    //       this.dayTypeResults.push({
+    //         dayTypeName: dayType.name,
+    //         baselineResults: calculatedSavings.baselineResults,
+    //         adjustedResults: calculatedSavings.adjustedResults,
+    //         savings: calculatedSavings.savings
+    //       })
+    //     })
+    //   } else {
+    //     this.isFormChange = false;
+    //   }
+    // });
   }
 
   ngOnDestroy() {
-    this.selectedModificationIdSub.unsubscribe();
+    // this.selectedModificationIdSub.unsubscribe();
   }
 
   focusField(str: string) {

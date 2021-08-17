@@ -63,11 +63,23 @@
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
         </div>
-        <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
+        <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results' && !calculating">
         </app-explore-opportunities-results>
-        <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
+        <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile' && !calculating">
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
+        </div>
+        <div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
+            <div class="col-10">
+                <div class="main-content text-center">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                    <h1>Calculating Results...</h1>
+                </div>
+            </div>
         </div>
     </div>
 </div>
