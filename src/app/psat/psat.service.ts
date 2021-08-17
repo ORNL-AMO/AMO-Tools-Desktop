@@ -590,7 +590,7 @@ export class PsatService {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
       if (isPsatValid.isValid) {
-        if (modInputs.whatIfScenario = true) {
+        if (modInputs.whatIfScenario == true) {
           modificationResults = this.resultsModified(modInputs, settings);
         } else {
           modificationResults = this.resultsExisting(modInputs, settings);
