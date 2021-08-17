@@ -238,7 +238,7 @@ export class ConvertFanAnalysisService {
 
   convertPsychrometricResults(input: PsychrometricResults, settings: Settings): PsychrometricResults {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
-    input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
+    input.absolutePressure = this.convertNum(input.absolutePressure, 'inHg', settings.fanPressureMeasurement);
     input.relativeHumidity = input.relativeHumidity * 100;
     //metric/imperial
     if(settings.unitsOfMeasure == 'Metric'){

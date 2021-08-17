@@ -320,7 +320,7 @@ export class SettingsService {
         fanPowerMeasurement: 'kW',
         fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
-        fanBarometricPressure: 'kPaa',
+        fanBarometricPressure: 'Pa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
         steamEnergyMeasurement: 'GJ',
@@ -476,7 +476,7 @@ export class SettingsService {
         settings.fanPressureMeasurement = 'Pa';
       }
       if (!settings.fanBarometricPressure) {
-        settings.fanBarometricPressure = 'kPaa';
+        settings.fanBarometricPressure = 'Pa';
       }
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'kJkgC';
