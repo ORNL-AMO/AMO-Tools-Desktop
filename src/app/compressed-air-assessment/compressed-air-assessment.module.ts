@@ -104,6 +104,7 @@ import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-loa
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
 import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
+import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
 
 @NgModule({
   declarations: [
@@ -216,7 +217,8 @@ import { ExploreOpportunitiesProfileTableComponent } from './explore-opportuniti
     PerformancePointsFormService,
     ExploreOpportunitiesService,
     DayTypeService,
-    CompressedAirDataManagementService
+    CompressedAirDataManagementService,
+    CompressedAirAssessmentResultsService
   ]
 })
 export class CompressedAirAssessmentModule { }
