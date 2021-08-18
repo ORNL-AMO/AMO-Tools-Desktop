@@ -17,6 +17,7 @@
     "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --watch",
     "build-wasm": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch",
+    "build-wasm-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --prod --aot",
     "build-prod": "ng build --aot",
     "build-prod-windows": "./scripts/ng.sh build --prod --aot",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",

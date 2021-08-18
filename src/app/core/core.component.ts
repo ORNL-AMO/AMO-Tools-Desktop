@@ -59,20 +59,22 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg === true) {
-        this.showUpdateModal = true;
-        this.assessmentService.updateAvailable.next(true);
-        this.changeDetectorRef.detectChanges();
-      }
-    });
-
-    //send signal to main.js to check for update
-    this.electronService.ipcRenderer.send('ready', null);
-
-    this.electronService.ipcRenderer.once('release-info', (event, info) => {
-      this.info = info;
-    })
+    if (this.electronService.isElectronApp) {
+      this.electronService.ipcRenderer.once('available', (event, arg) => {
+        if (arg === true) {
+          this.showUpdateModal = true;
+          this.assessmentService.updateAvailable.next(true);
+          this.changeDetectorRef.detectChanges();
+        }
+      });
+      
+      //send signal to main.js to check for update
+      this.electronService.ipcRenderer.send('ready', null);
+      
+      this.electronService.ipcRenderer.once('release-info', (event, info) => {
+        this.info = info;
+      })
+    }
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
