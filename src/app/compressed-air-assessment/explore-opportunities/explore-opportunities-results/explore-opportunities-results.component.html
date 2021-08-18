@@ -6,149 +6,85 @@
     </select>
 </div>
 
-<div class="pl-2 pt-3 pr-2" *ngIf="dayTypeModificationResult">
-    <div class="pb-2">
-        <table class="table table-hover bg-white">
-            <thead>
-                <tr>
-                    <th class="w-25">
-                        Modification
-                    </th>
-                    <th class="w-25">
-                        Power Savings, kWh/yr
-                    </th>
-                    <th class="w-25">
-                        Cost Savings, $/yr
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Flow Reallocation</td>
-                    <td>
-                        {{dayTypeModificationResult.flowReallocationResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.flowReallocationResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.reduceAirLeaks.selected">
-                    <td>Reduce Air Leaks</td>
-                    <td>
-                        {{dayTypeModificationResult.reduceAirLeaksResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.reduceAirLeaksResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.improveEndUseEfficiency.selected">
-                    <td>Improve End Use Efficiency</td>
-                    <td>
-                        {{dayTypeModificationResult.improveEndUseEfficiencyResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.improveEndUseEfficiencyResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.reduceRuntime.selected">
-                    <td>Reduce Run Time</td>
-                    <td>
-                        {{dayTypeModificationResult.reduceRunTimeResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.reduceRunTimeResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.reduceSystemAirPressure.selected">
-                    <td>Reduce System Air Pressure</td>
-                    <td>
-                        {{dayTypeModificationResult.reduceSystemAirPressureResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.reduceSystemAirPressureResults.savings.cost| currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.useUnloadingControls.selected">
-                    <td>Add Unloading Controls</td>
-                    <td>
-                        {{dayTypeModificationResult.useUnloadingControlsResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.useUnloadingControlsResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr *ngIf="modification.addPrimaryReceiverVolume.selected">
-                    <td>Add Receiver Volume</td>
-                    <td>
-                        {{dayTypeModificationResult.addReceiverVolumeResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.addReceiverVolumeResults.savings.cost | currency}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="bold">
-                        Total
-                    </td>
-                    <td class="bold">
-                        {{dayTypeModificationResult.allSavingsResults.savings.power | number:'1.0-0'}}
-                    </td>
-                    <td class="bold">
-                        {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="d-flex flex-column my-table" *ngIf="dayTypeModificationResult">
+    <div class="d-flex stripe my-table-bg border-top-0">
+        <div class="col-4">
+        </div>
+        <div class="bold table-text d-flex align-items-center pl-1 pr-1 col-4">
+            Baseline
+        </div>
+        <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+            {{modification.name}}
+        </div>
     </div>
-</div>
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Percent Savings (%)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4">
+            <app-percent-graph *ngIf="dayTypeModificationResult.allSavingsResults.savings.percentSavings"
+                [value]="dayTypeModificationResult.allSavingsResults.savings.percentSavings">
+            </app-percent-graph>
+        </div>
+    </div>
 
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy (kWh)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold  table-text">{{dayTypeModificationResult.allSavingsResults.baselineResults.power |
+                number:'1.0-0'}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.power
+                | number:'1.0-0'}}</span>
+        </div>
+    </div>
 
+    <div class="d-flex stripe my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy Savings (kWh)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.savings.power
+                | number:'1.0-0'}}</span>
+        </div>
+    </div>
 
-<div class="pl-2 pt-3 pr-2" *ngIf="dayTypeModificationResult">
-    <div class="pb-2">
-        <table class="table table-hover bg-white">
-            <thead>
-                <tr>
-                    <th class="w-25">
-                        <!-- Modification Results -->
-                    </th>
-                    <th class="w-25">
-                        Baseline
-                    </th>
-                    <th class="w-25">
-                        Adjustment
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="bold">Power, kWh/yr</td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.baselineResults.power | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.adjustedResults.power | number:'1.0-0'}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="bold">Cost, $/yr</td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.baselineResults.cost | currency}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.adjustedResults.cost | currency}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="bold">Peak Demand, kW</td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.baselineResults.peakDemand | number:'1.0-0'}}
-                    </td>
-                    <td>
-                        {{dayTypeModificationResult.allSavingsResults.adjustedResults.peakDemand | number:'1.0-0'}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeModificationResult.allSavingsResults.baselineResults.cost |
+                currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.cost
+                | currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex stripe my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text" [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">
+                {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}</span>
+        </div>
     </div>
 </div>

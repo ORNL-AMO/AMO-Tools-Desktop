@@ -105,6 +105,7 @@ import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-corre
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
 import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
 import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   declarations: [
@@ -197,7 +198,8 @@ import { CompressedAirAssessmentResultsService } from './compressed-air-assessme
     NgbModule,
     ConfirmDeleteModalModule, 
     FullLoadAmpsModule,
-    AltitudeCorrectionModule
+    AltitudeCorrectionModule,
+    PercentGraphModule
   ],
   providers: [
     CompressedAirAssessmentService,

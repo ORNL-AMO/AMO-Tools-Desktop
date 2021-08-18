@@ -61,15 +61,15 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       adjustedProfileSummary: [],
       profileSummaryTotals: [],
       allSavingsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      flowReallocationResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      addReceiverVolumeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      adjustCascadingSetPointsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      improveEndUseEfficiencyResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      reduceAirLeaksResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      reduceRunTimeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      reduceSystemAirPressureResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      useAutomaticSequencerResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      useUnloadingControlsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // flowReallocationResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // addReceiverVolumeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // adjustCascadingSetPointsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // improveEndUseEfficiencyResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // reduceAirLeaksResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // reduceRunTimeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // reduceSystemAirPressureResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // useAutomaticSequencerResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      // useUnloadingControlsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       dayTypeId: undefined
     }
     this.modificationResults.dayTypeModificationResults.forEach(modResult => {
@@ -84,33 +84,34 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       dayTypeModificationResult.allSavingsResults.adjustedResults.peakDemand += modResult.allSavingsResults.adjustedResults.peakDemand;
 
 
-      dayTypeModificationResult.flowReallocationResults.savings.cost += modResult.flowReallocationResults.savings.cost;
-      dayTypeModificationResult.flowReallocationResults.savings.power += modResult.flowReallocationResults.savings.power;
+      // dayTypeModificationResult.flowReallocationResults.savings.cost += modResult.flowReallocationResults.savings.cost;
+      // dayTypeModificationResult.flowReallocationResults.savings.power += modResult.flowReallocationResults.savings.power;
 
-      dayTypeModificationResult.addReceiverVolumeResults.savings.cost += modResult.addReceiverVolumeResults.savings.cost;
-      dayTypeModificationResult.addReceiverVolumeResults.savings.power += modResult.addReceiverVolumeResults.savings.power;
+      // dayTypeModificationResult.addReceiverVolumeResults.savings.cost += modResult.addReceiverVolumeResults.savings.cost;
+      // dayTypeModificationResult.addReceiverVolumeResults.savings.power += modResult.addReceiverVolumeResults.savings.power;
 
-      dayTypeModificationResult.adjustCascadingSetPointsResults.savings.cost += modResult.adjustCascadingSetPointsResults.savings.cost;
-      dayTypeModificationResult.adjustCascadingSetPointsResults.savings.power += modResult.adjustCascadingSetPointsResults.savings.power;
+      // dayTypeModificationResult.adjustCascadingSetPointsResults.savings.cost += modResult.adjustCascadingSetPointsResults.savings.cost;
+      // dayTypeModificationResult.adjustCascadingSetPointsResults.savings.power += modResult.adjustCascadingSetPointsResults.savings.power;
 
-      dayTypeModificationResult.improveEndUseEfficiencyResults.savings.cost += modResult.improveEndUseEfficiencyResults.savings.cost;
-      dayTypeModificationResult.improveEndUseEfficiencyResults.savings.power += modResult.improveEndUseEfficiencyResults.savings.power;
+      // dayTypeModificationResult.improveEndUseEfficiencyResults.savings.cost += modResult.improveEndUseEfficiencyResults.savings.cost;
+      // dayTypeModificationResult.improveEndUseEfficiencyResults.savings.power += modResult.improveEndUseEfficiencyResults.savings.power;
 
-      dayTypeModificationResult.reduceAirLeaksResults.savings.cost += modResult.reduceAirLeaksResults.savings.cost;
-      dayTypeModificationResult.reduceAirLeaksResults.savings.power += modResult.reduceAirLeaksResults.savings.power;
+      // dayTypeModificationResult.reduceAirLeaksResults.savings.cost += modResult.reduceAirLeaksResults.savings.cost;
+      // dayTypeModificationResult.reduceAirLeaksResults.savings.power += modResult.reduceAirLeaksResults.savings.power;
 
-      dayTypeModificationResult.reduceRunTimeResults.savings.cost += modResult.reduceRunTimeResults.savings.cost;
-      dayTypeModificationResult.reduceRunTimeResults.savings.power += modResult.reduceRunTimeResults.savings.power;
+      // dayTypeModificationResult.reduceRunTimeResults.savings.cost += modResult.reduceRunTimeResults.savings.cost;
+      // dayTypeModificationResult.reduceRunTimeResults.savings.power += modResult.reduceRunTimeResults.savings.power;
 
-      dayTypeModificationResult.reduceSystemAirPressureResults.savings.cost += modResult.reduceSystemAirPressureResults.savings.cost;
-      dayTypeModificationResult.reduceSystemAirPressureResults.savings.power += modResult.reduceSystemAirPressureResults.savings.power;
+      // dayTypeModificationResult.reduceSystemAirPressureResults.savings.cost += modResult.reduceSystemAirPressureResults.savings.cost;
+      // dayTypeModificationResult.reduceSystemAirPressureResults.savings.power += modResult.reduceSystemAirPressureResults.savings.power;
 
-      dayTypeModificationResult.useAutomaticSequencerResults.savings.cost += modResult.useAutomaticSequencerResults.savings.cost;
-      dayTypeModificationResult.useAutomaticSequencerResults.savings.power += modResult.useAutomaticSequencerResults.savings.power;
+      // dayTypeModificationResult.useAutomaticSequencerResults.savings.cost += modResult.useAutomaticSequencerResults.savings.cost;
+      // dayTypeModificationResult.useAutomaticSequencerResults.savings.power += modResult.useAutomaticSequencerResults.savings.power;
 
-      dayTypeModificationResult.useUnloadingControlsResults.savings.cost += modResult.useUnloadingControlsResults.savings.cost;
-      dayTypeModificationResult.useUnloadingControlsResults.savings.power += modResult.useUnloadingControlsResults.savings.power;
+      // dayTypeModificationResult.useUnloadingControlsResults.savings.cost += modResult.useUnloadingControlsResults.savings.cost;
+      // dayTypeModificationResult.useUnloadingControlsResults.savings.power += modResult.useUnloadingControlsResults.savings.power;
     });
+    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
     return dayTypeModificationResult;
   }
 
