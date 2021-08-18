@@ -20,4 +20,5 @@ import 'core-js/es/set';
 import 'core-js/es/reflect';
 import 'zone.js/dist/zone';
 
+// Expose global for use by third party libs
 (window as any).global = window;
