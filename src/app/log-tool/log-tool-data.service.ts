@@ -129,7 +129,7 @@ export class LogToolDataService {
           csvData.csvImportData.data.map(dataItem => { 
                       if (dataItem[csvData.dateField.fieldName]) {
                         dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); 
-                        dataItem[csvData.timeField.fieldName] = undefined;
+                        delete dataItem[csvData.timeField.fieldName];
                       }
                       else {
                         dataItem[csvData.dateField.fieldName] = 'Invalid date';
