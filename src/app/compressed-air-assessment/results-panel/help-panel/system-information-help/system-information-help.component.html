@@ -7,18 +7,6 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-
-    <div class="my-2" *ngIf="focusedField == 'nominalPressure'">
-        <h6>
-            Nominal Pressure
-            <br>
-            <small class="text-muted">
-                The user-assumed average compressed air system operating pressure
-                <hr>
-            </small>
-        </h6>
-    </div>
-
     <div class="my-2" *ngIf="focusedField == 'systemElevation'">
         <h6>
             System Elevation
@@ -49,6 +37,28 @@
             <small class="text-muted">
                 Mark this box if the system air compressors are controlled by an automatic sequencer. A sequencer is a
                 device used to bring air compressors on line according to a programmed schedule
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'targetPressure'">
+        <h6>
+        Target Pressure
+            <br>
+            <small class="text-muted">
+                Defined pressure band that the compressors maintain by a sequenced operation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'variance'">
+        <h6>
+            Variance (+/-)
+            <br>
+            <small class="text-muted">
+                The defined pressure range for the target pressure that the compressors will operate around when sequenced.
                 <hr>
             </small>
         </h6>

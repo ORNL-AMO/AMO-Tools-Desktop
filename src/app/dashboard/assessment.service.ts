@@ -350,7 +350,6 @@ export class AssessmentService {
         notes: undefined
       },
       systemInformation: {
-        nominalPressure: undefined,
         systemElevation: undefined,
         totalAirStorage: undefined,
         isSequencerUsed: false,

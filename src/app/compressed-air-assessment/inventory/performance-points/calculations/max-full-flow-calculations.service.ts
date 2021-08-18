@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
 
 @Injectable()
 export class MaxFullFlowCalculationsService {
 
-  constructor(private sharedPointCalculationsService: SharedPointCalculationsService) { }
+  constructor(private sharedPointCalculationsService: SharedPointCalculationsService,
+    private convertCompressedAirService: ConvertCompressedAirService
+    ) { }
 
   setMaxFullFlow(selectedCompressor: CompressorInventoryItem): PerformancePoint {
     selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure);
@@ -17,7 +20,7 @@ export class MaxFullFlowCalculationsService {
   getMaxFullFlowPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       //all control types the same
-      return selectedCompressor.designDetails.maxFullFlowPressure;
+      return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.designDetails.maxFullFlowPressure);
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
     }
@@ -25,13 +28,15 @@ export class MaxFullFlowCalculationsService {
 
   getMaxFullFlowAirFlow(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
+      let defaultAirflow: number;
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        return this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.inletConditions.atmosphericPressure);
+        defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.inletConditions.atmosphericPressure);
       } else {
         //centrifugal
-        return selectedCompressor.performancePoints.fullLoad.airflow;
+        defaultAirflow = selectedCompressor.performancePoints.fullLoad.airflow;
       }
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow);
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.airflow;
     }
@@ -39,13 +44,15 @@ export class MaxFullFlowCalculationsService {
 
   getMaxFullFlowPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
+      let defaultPower: number;
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        return this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.inletConditions.atmosphericPressure);
+        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.inletConditions.atmosphericPressure);
       } else {
         //centrifugal
-        return selectedCompressor.performancePoints.fullLoad.power;
+        defaultPower = selectedCompressor.performancePoints.fullLoad.power;
       }
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.power;
     }

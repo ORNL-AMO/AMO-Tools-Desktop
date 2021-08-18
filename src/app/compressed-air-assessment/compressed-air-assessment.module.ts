@@ -107,6 +107,7 @@ import { ExploreOpportunitiesProfileTableComponent } from './explore-opportuniti
 import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
+import { ConvertCompressedAirService } from './convert-compressed-air.service';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -220,7 +221,8 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
     ExploreOpportunitiesService,
     DayTypeService,
     CompressedAirDataManagementService,
-    CompressedAirAssessmentResultsService
+    CompressedAirAssessmentResultsService,
+    ConvertCompressedAirService
   ]
 })
 export class CompressedAirAssessmentModule { }
