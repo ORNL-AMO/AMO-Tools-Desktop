@@ -33,7 +33,7 @@ export class FanPsychrometricService {
    getDefaultData(settings: Settings): BaseGasDensity {
     let barometricPressure = 29.92;
     if (settings.unitsOfMeasure == 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('kPaa')
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('Pa')
     }
     let data: BaseGasDensity = {
         dryBulbTemp: undefined,
@@ -55,7 +55,7 @@ export class FanPsychrometricService {
   getExampleData(settings: Settings): BaseGasDensity {
     let barometricPressure = 26.57;
     if (settings.unitsOfMeasure == 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('kPaa')
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('Pa')
     }
 
     let data: BaseGasDensity = {
