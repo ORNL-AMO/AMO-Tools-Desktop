@@ -45,6 +45,10 @@ export class BinsFormComponent implements OnInit {
     this.weatherBinsService.save(this.inputData, this.settings);
   }
 
+  clear(){
+    
+  }
+
   setParameterMinMax() {
     if (this.importDataFromCsv) {
       let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
