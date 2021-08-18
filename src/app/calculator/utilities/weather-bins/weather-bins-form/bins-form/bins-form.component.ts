@@ -49,7 +49,7 @@ export class BinsFormComponent implements OnInit {
     if (this.importDataFromCsv) {
       let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
       // if (this.settings.unitsOfMeasure != 'Metric') {
-      //   if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
+      //   if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Wet Bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
       //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('C').to('F');
       //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('C').to('F');
       //   } else if (this.inputData.autoBinParameter == 'Wspd (m/s)') {
