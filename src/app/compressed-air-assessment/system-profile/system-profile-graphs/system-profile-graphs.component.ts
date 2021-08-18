@@ -35,21 +35,27 @@ export class SystemProfileGraphsComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
+      if (!this.inModification) {
+        this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
+      }
       this.inventoryItems = val.compressorInventoryItems;
       this.setProfileData();
       this.drawCharts();
     });
-
-    this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
-      this.selectedDayType = val;
-      this.setProfileData();
-      this.drawCharts();
-    });
+    if (this.inModification) {
+      this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
+        this.selectedDayType = val;
+        this.setProfileData();
+        this.drawCharts();
+      });
+    }
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
-    this.selectedDayTypeSub.unsubscribe();
+    if (this.selectedDayTypeSub) {
+      this.selectedDayTypeSub.unsubscribe();
+    }
   }
 
 
@@ -58,13 +64,13 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   setProfileData() {
-    if (!this.inModification && this.compressedAirAssessment) {
+    if (!this.inModification && this.compressedAirAssessment && this.selectedDayType) {
       this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
     } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
       let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, modification);
-      let dayTypeModificationResult: DayTypeModificationResult = compressedAirAssessmentResult.dayTypeModificationResults.find(dayTypeResult => {return dayTypeResult.dayTypeId == this.selectedDayType.dayTypeId});
+      let dayTypeModificationResult: DayTypeModificationResult = compressedAirAssessmentResult.dayTypeModificationResults.find(dayTypeResult => { return dayTypeResult.dayTypeId == this.selectedDayType.dayTypeId });
       this.profileSummary = dayTypeModificationResult.adjustedProfileSummary;
     } else if (this.compressedAirAssessment && this.selectedDayType && this.isBaseline) {
       this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
@@ -218,7 +224,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
-  getLayout(yAxisTitle: string, yAxisRange: Array<number>, yAxisTickSuffix: string){
+  getLayout(yAxisTitle: string, yAxisRange: Array<number>, yAxisTickSuffix: string) {
     return {
       showlegend: true,
       barmode: 'stack',
