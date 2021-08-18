@@ -13,7 +13,6 @@ export class SystemInformationFormService {
       sequencerValidators = [Validators.required]
     }
     let form: FormGroup = this.formBuilder.group({
-      nominalPressure: [obj.nominalPressure, [Validators.required, Validators.min(0)]],
       systemElevation: [obj.systemElevation, [Validators.required, Validators.min(0), Validators.max(29000)]],
       totalAirStorage: [obj.totalAirStorage, [Validators.required, Validators.min(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
@@ -31,7 +30,6 @@ export class SystemInformationFormService {
 
   getObjFromForm(form: FormGroup): SystemInformation {
     return {
-      nominalPressure: form.controls.nominalPressure.value,
       systemElevation: form.controls.systemElevation.value,
       totalAirStorage: form.controls.totalAirStorage.value,
       isSequencerUsed: form.controls.isSequencerUsed.value,

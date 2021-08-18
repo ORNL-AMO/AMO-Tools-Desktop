@@ -4,22 +4,6 @@
         <br>
     </div>
     <form class="pl-3 pr-3" [formGroup]="form">
-        <!--Nominal Pressure-->
-        <div class="form-group">
-            <label for="nominalPressure">Nominal Pressure</label>
-            <div class="input-group">
-                <input name="nominalPressure" type="number" step="any" class="form-control" id="nominalPressure"
-                    formControlName="nominalPressure" (input)="save()"
-                    (focus)="focusField('nominalPressure')">
-                <span class="units input-group-addon">psig</span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="form.controls.nominalPressure.invalid && !form.controls.nominalPressure.pristine">
-                <span *ngIf="form.controls.nominalPressure.errors.required">Value Required</span>
-                <span *ngIf="form.controls.nominalPressure.errors.min">Value can't be less than
-                    {{form.controls.nominalPressure.errors.min.min}} psig.</span>
-            </span>
-        </div>
         <!--System Elevation-->
         <div class="form-group">
             <label for="systemElevation">System Elevation</label>
