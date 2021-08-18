@@ -231,6 +231,7 @@ export interface ProfileSummaryData {
     timeInterval: number,
     percentPower: number,
     percentSystemCapacity: number,
+    percentSystemPower: number,
     order: number,
 }
 

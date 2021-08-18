@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { SystemProfileService } from '../system-profile.service';
 
 @Component({
   selector: 'app-system-profile-setup',
@@ -10,15 +7,9 @@ import { SystemProfileService } from '../system-profile.service';
 })
 export class SystemProfileSetupComponent implements OnInit {
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  ngOnDestroy() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.calculateDayTypeProfileSummary(compressedAirAssessment);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
 }

@@ -157,6 +157,7 @@ export class OperatingProfileTableComponent implements OnInit {
         timeInterval: timeInterval,
         percentPower: undefined,
         percentSystemCapacity: 0,
+        percentSystemPower: 0,
         order: undefined
       })
       timeInterval = timeInterval + dataInterval;

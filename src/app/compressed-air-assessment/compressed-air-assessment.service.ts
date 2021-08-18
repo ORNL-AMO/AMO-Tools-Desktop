@@ -15,6 +15,7 @@ export class CompressedAirAssessmentService {
   profileTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
+  secondaryAssessmentTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
   selectedModificationId: BehaviorSubject<string>;
@@ -29,6 +30,7 @@ export class CompressedAirAssessmentService {
     this.profileTab = new BehaviorSubject<string>('setup');
     this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+    this.secondaryAssessmentTab = new BehaviorSubject<string>('modifications');
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.selectedModificationId = new BehaviorSubject<string>(undefined);

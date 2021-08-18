@@ -103,6 +103,10 @@ import { DayTypeService } from './day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
+import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
+import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
 @NgModule({
   declarations: [
@@ -175,7 +179,8 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
     ExploreOpportunitiesResultsComponent,
     AdjustCompressorComponent,
     ModificationListModalComponent,
-    AddModificationModalComponent
+    AddModificationModalComponent,
+    ExploreOpportunitiesProfileTableComponent
   ],
   imports: [
     CommonModule,
@@ -194,7 +199,8 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
     NgbModule,
     ConfirmDeleteModalModule, 
     FullLoadAmpsModule,
-    AltitudeCorrectionModule
+    AltitudeCorrectionModule,
+    PercentGraphModule
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -215,6 +221,7 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
     ExploreOpportunitiesService,
     DayTypeService,
     CompressedAirDataManagementService,
+    CompressedAirAssessmentResultsService,
     ConvertCompressedAirService
   ]
 })

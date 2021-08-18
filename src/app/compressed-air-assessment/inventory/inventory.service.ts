@@ -181,7 +181,7 @@ export class InventoryService {
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return (controlType != 5 && controlType != 7 && controlType != 9);
+    return (controlType != undefined && controlType != 5 && controlType != 7 && controlType != 9);
   }
 
   setCompressorControlValidators(form: FormGroup): FormGroup {
@@ -396,7 +396,8 @@ export class InventoryService {
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    // let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    let performancePointsValid: boolean = true;
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
@@ -524,6 +525,7 @@ export class InventoryService {
         timeInterval: i,
         percentPower: undefined,
         percentSystemCapacity: undefined,
+        percentSystemPower: undefined,
         order: 0
       })
     }
