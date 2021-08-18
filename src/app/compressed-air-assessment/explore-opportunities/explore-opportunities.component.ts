@@ -99,9 +99,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
 
       this.calculating = setTimeout(() => {
-        console.time("test");
         let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification);
-        console.timeEnd("test");
         this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
         this.calculating = undefined;
       }, 750)
