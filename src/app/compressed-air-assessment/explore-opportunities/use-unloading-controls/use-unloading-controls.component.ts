@@ -75,6 +75,7 @@ export class UseUnloadingControlsComponent implements OnInit {
     if (!this.selectedAdjustedCompressor) {
       this.selectedAdjustedCompressor = this.useUnloadingControls.adjustedCompressors[0];
     }
+    this.setSelectedCompressor();
   }
 
 }

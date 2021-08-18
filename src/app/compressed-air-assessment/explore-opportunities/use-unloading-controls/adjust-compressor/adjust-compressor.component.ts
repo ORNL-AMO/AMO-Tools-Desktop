@@ -79,7 +79,11 @@ export class AdjustCompressorComponent implements OnInit {
     } else if (this.adjustedCompressor.originalControlType == 2 || this.adjustedCompressor.originalControlType == 4 || this.adjustedCompressor.originalControlType == 3) {
       //inlet mod w/ unloading, load/unload, Variable displacement
       //potential selections = Start/Stop
-      this.controlTypeOptions = ControlTypes.filter(type => { return type.value == 5 || type.value == this.adjustedCompressor.originalControlType });
+      if(this.adjustedCompressor.compressorType != 6){
+        this.controlTypeOptions = ControlTypes.filter(type => { return type.value == 5 || type.value == this.adjustedCompressor.originalControlType });
+      }else{
+        this.controlTypeOptions = ControlTypes.filter(type => { return type.value == this.adjustedCompressor.originalControlType });
+      }
     } else if (this.adjustedCompressor.originalControlType == 5) {
       //Start/Stop
       //potential selections = Load/Unload
