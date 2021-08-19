@@ -87,7 +87,9 @@ export class SettingsDbService {
     if (!settings.energyResultUnit) {
       settings = this.settingService.setEnergyResultUnitSetting(settings);
     }
-
+    if (settings.currency == "$ - US Dollar") {
+      settings.currency = "$";
+    }
     if (!settings.temperatureMeasurement) {
       settings = this.settingService.setTemperatureUnit(settings);
     }

@@ -22,13 +22,16 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
+  hasDeliverInput: boolean = true;
+
   allChartData: Array<{
     name: string,
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     modification?: Modification,
-    valid: PhastValid
+    valid: PhastValid,
+    deliverValuesLabels?: Array<{ value: number, label: string }>
   }>;
 
   selectedBaselineData: {
@@ -36,17 +39,20 @@ export class ReportGraphsComponent implements OnInit {
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    valid: PhastValid
+    valid: PhastValid,
+    deliverValuesLabels?: Array<{ value: number, label: string }>
   };
   selectedModificationData: {
     name: string,
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    valid: PhastValid
+    valid: PhastValid,
+    deliverValuesLabels?: Array<{ value: number, label: string }>
   };
 
   lossUnit: string;
+  deliverUnit: string;
   barChartYAxisLabel: string;
   constructor(private phastResultsService: PhastResultsService) { }
 
@@ -60,6 +66,8 @@ export class ReportGraphsComponent implements OnInit {
       this.lossUnit = "MMBtu/hr";
       this.barChartYAxisLabel = "Heat Loss (MMBtu/hr)";
     }
+    this.deliverUnit = "kW";
+    
   }
 
   setAllChartData(){
@@ -75,19 +83,35 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   addChartData(phast: PHAST, name: string, isValid: PhastValid,  modification?: Modification) {
-    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(phast);
+    let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);
+    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(results);
+    let deliverValuesLabels: Array<{ value: number, label: string }> = this.getDeliverValuesAndLabels(results);
     this.allChartData.push({
       name: name,
       valuesAndLabels: valuesAndLabels,
       barChartLabels: valuesAndLabels.map(valueItem => {return valueItem.label}),
       barChartValues: valuesAndLabels.map(valueItem => {return valueItem.value}),
       modification: modification,
-      valid: isValid
+      valid: isValid,
+      deliverValuesLabels: deliverValuesLabels
     })
   }
 
-  getValuesAndLabels(phast: PHAST): Array<{ value: number, label: string }> {
-    let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);
+  getDeliverValuesAndLabels(results: PhastResults): Array<{ value: number, label: string }> {
+    let pieData = new Array<{label: string, value: number}>();
+    if (results.energyInputTotalChemEnergy) {
+      pieData.push({ label: "Chemical Energy Input", value: results.energyInputTotalChemEnergy});
+    }
+    if (results.energyInputHeatDelivered) {
+      pieData.push({ label: "Electrical Energy Input", value: results.energyInputHeatDelivered});
+    }
+    if (!results.energyInputHeatDelivered && !results.energyInputTotalChemEnergy) {
+      this.hasDeliverInput = false;
+    }
+    return pieData;
+  }
+
+  getValuesAndLabels(results: PhastResults): Array<{ value: number, label: string }> {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(this.settings);
     let pieData = new Array<{ label: string, value: number }>();
 

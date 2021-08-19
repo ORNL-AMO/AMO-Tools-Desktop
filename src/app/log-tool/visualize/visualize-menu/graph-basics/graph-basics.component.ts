@@ -35,8 +35,22 @@ export class GraphBasicsComponent implements OnInit {
           this.checkBarHistogramData();
         }
       }
+      
+      if (this.selectedGraphObj.layout.xaxis.type == "date") {
+        this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+      }
+      else {
+          this.markerTypes = [{label: "Markers", value: "markers"}];
+          this.markerType = "markers";
+      }
+        
     });
+    if (this.selectedGraphObj.layout.xaxis.type == "date") {
     this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+    }
+    else {
+      this.markerTypes = [{label: "Markers", value: "markers"}];
+    }
     this.markerType = "markers";
     this.isTimeSeries = this.logToolDataService.isTimeSeries;
   }

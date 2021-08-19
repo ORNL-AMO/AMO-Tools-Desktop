@@ -250,7 +250,7 @@ export class FieldDataComponent implements OnInit {
   }
   isMotorFieldCurrentDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isMotorFieldCurrentDifferent();
+      return this.compareService.isMotorFieldCurrentDifferent(); 
     } else {
       return false;
     }

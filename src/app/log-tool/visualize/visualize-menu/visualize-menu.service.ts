@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import { LogToolService } from '../../log-tool.service';
 @Injectable()
 export class VisualizeMenuService {
-
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService, private logToolService: LogToolService) { }
 
   save(selectedGraphObj: GraphObj) {

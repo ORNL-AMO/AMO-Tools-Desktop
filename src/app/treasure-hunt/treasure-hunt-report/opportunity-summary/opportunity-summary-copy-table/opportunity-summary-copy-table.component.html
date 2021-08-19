@@ -17,26 +17,26 @@
                 Owner/Lead
             </td>
             <td>
-                Utility Savings
+                Utility Savings ({{settings.currency}})
             </td>
             <td></td>
             <td>
-                Cost Savings
+                Cost Savings ({{settings.currency}})
             </td>
             <td>
-                Material Cost
+                Material Cost ({{settings.currency}})
             </td>
             <td>
-                Labor Cost
+                Labor Cost ({{settings.currency}})
             </td>
             <td>
-                Engineering Cost
+                Engineering Cost ({{settings.currency}})
             </td>
             <td>
-                Other Cost
+                Other Cost ({{settings.currency}})
             </td>
             <td>
-                Total Cost
+                Total Cost ({{settings.currency}})
             </td>
             <td>
                 Simple Payback
@@ -117,27 +117,27 @@
             </td>
             <!--cost savings-->
             <td>
-                {{ opportunity.costSavings | currency: "USD":"symbol":"1.0-0" }}
+                {{ opportunity.costSavings | number: "1.0-0" }}
             </td>
             <!--material cost-->
             <td>
-                {{getMaterialCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+                {{getMaterialCost(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
             <!--labor cost-->
             <td>
-                {{getLaborCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0" }}
+                {{getLaborCost(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
             <!--engineering cost-->
             <td>
-                {{getEngineeringCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+                {{getEngineeringCost(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
             <!--other cost-->
             <td>
-                {{getOtherCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+                {{getOtherCost(opportunity.opportunityCost) | number: "1.0-0" }}
             </td>
             <!--total cost-->
             <td>
-                {{ opportunity.totalCost | currency: "USD":"symbol":"1.0-0" }}
+                {{ opportunity.totalCost | number: "1.0-0" }}
             </td>
             <!--payback-->
             <td>

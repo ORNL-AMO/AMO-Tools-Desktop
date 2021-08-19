@@ -177,7 +177,7 @@ export const MockFsat: Assessment = {
 
 export const MockFsatSettings: Settings = {
     language: "English",
-    currency: "$ - US Dollar",
+    currency: "$",
     unitsOfMeasure: "Imperial",
     distanceMeasurement: "ft",
     flowMeasurement: "gpm",

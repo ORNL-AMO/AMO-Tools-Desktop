@@ -99,7 +99,10 @@
       </tr>
       <!--absolute pressure-->
       <tr>
-        <td>Barometric Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td>Barometric Pressure 
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(H<sub>2</sub>O)</span>
+        </td>
         <td><span
           *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.barometricPressure | number:'1.0-3' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
@@ -111,7 +114,10 @@
       </tr>
       <!--saturation pressure-->
       <tr>
-        <td>Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
+        <td>Saturation Pressure
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(in Hg)</span>
+        </td>
         <td><span
             *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.saturationPressure | number:'1.0-3' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
@@ -136,7 +142,10 @@
       </tr>
       <!--absolute pressure-->
       <tr>
-        <td>Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td>Absolute Pressure
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(in Hg)</span>
+        </td>
         <td><span
           *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.absolutePressure | number:'1.0-2' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselinePsychrometricResults">&mdash;</span>
