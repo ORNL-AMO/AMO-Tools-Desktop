@@ -56,13 +56,14 @@ export class CaseFormComponent implements OnInit {
   }
 
   deleteCase(index: number) {
+    debugger;
     this.inputData.cases.splice(index, 1);
     let newNameIndex: number = 1;
     this.inputData.cases.forEach(caseItem => {
       caseItem.caseName = 'Bin #' + newNameIndex;
       newNameIndex++;
     });
-
+debugger;
     this.save();
   }
 }
