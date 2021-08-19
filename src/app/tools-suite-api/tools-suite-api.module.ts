@@ -9,6 +9,7 @@ import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
 import { ChillersSuiteApiService } from './chillers-suite-api.service';
 import { StandaloneSuiteApiService } from './standalone-suite-api.service';
 import { SteamSuiteApiService } from './steam-suite-api.service';
+import { CalculatorSuiteApiService } from './calculator-suite-api.service';
 
 
 
@@ -26,7 +27,8 @@ import { SteamSuiteApiService } from './steam-suite-api.service';
     ChillersSuiteApiService,
     WasteWaterSuiteApiService,
     StandaloneSuiteApiService,
-    SteamSuiteApiService
+    SteamSuiteApiService,
+    CalculatorSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }
