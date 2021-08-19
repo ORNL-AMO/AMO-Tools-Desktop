@@ -46,10 +46,8 @@ export class BinsFormComponent implements OnInit {
   }
 
   deleteAllCase(){    
-    this.weatherBinsService.resetData();
     this.inputData.cases = [];
-    this.save();
-    
+    this.weatherBinsService.inputData.next(this.inputData)
   }
 
 
@@ -77,3 +75,7 @@ export class BinsFormComponent implements OnInit {
     }
   }
 }
+function setAutoBinCases() {
+  throw new Error('Function not implemented.');
+}
+
