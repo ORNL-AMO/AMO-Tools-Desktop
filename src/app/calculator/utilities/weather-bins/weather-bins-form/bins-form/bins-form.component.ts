@@ -45,17 +45,12 @@ export class BinsFormComponent implements OnInit {
     this.weatherBinsService.save(this.inputData, this.settings);
   }
 
-  // deleteAllCase(index: number){
-  //   this.inputData.cases.splice;
-  //   debugger;
-  //   let newNameIndex: number = 1;
-  //   this.inputData.cases.forEach(caseItem => {
-  //     caseItem.caseName = 'Bin #' + newNameIndex;
-  //     newNameIndex++;
-  //   });
-  //   this.save();
-  //   debugger;
-  // }
+  deleteAllCase(){    
+    this.weatherBinsService.resetData();
+    this.inputData.cases = [];
+    this.save();
+    
+  }
 
 
 
