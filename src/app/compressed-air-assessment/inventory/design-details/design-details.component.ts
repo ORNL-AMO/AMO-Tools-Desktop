@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
+import { DesignDetails } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { CompressorInventoryItemWarnings, InventoryService } from '../inventory.service';
-import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 import { PerformancePointsFormService } from '../performance-points/performance-points-form.service';
 
 @Component({
@@ -19,7 +19,6 @@ export class DesignDetailsComponent implements OnInit {
   warnings: CompressorInventoryItemWarnings;
   isFormChange: boolean = false;
   displayBlowdownTime: boolean;
-  displayUnloadSumpPressure: boolean;
   displayModulation: boolean;
   displayNoLoadPowerFM: boolean;
   displayNoLoadPowerUL: boolean;
@@ -27,17 +26,16 @@ export class DesignDetailsComponent implements OnInit {
   contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseDesignDetails;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
+        this.warnings = this.inventoryService.checkWarnings(compressor);
         if (this.isFormChange == false) {
-          this.warnings = this.inventoryService.checkWarnings(compressor);
           this.form = this.inventoryService.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayBlowdownTime(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
-          this.setDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayModulation(compressor.compressorControls.controlType)
           this.setDisplayMaxFullFlow(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayNoLoadPowerFM(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
@@ -55,17 +53,9 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.designDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
-    this.warnings = this.inventoryService.checkWarnings(selectedCompressor);
-    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    let designDetails: DesignDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
+    this.compressedAirDataManagementService.updateDesignDetails(designDetails, true);
   }
 
   focusField(str: string) {
@@ -74,10 +64,6 @@ export class DesignDetailsComponent implements OnInit {
 
   setDisplayBlowdownTime(compressorType: number, controlType: number) {
     this.displayBlowdownTime = this.inventoryService.checkDisplayBlowdownTime(compressorType, controlType);
-  }
-
-  setDisplayUnloadSumpPressure(compressorType: number, controlType: number) {
-    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
   }
 
   setDisplayModulation(controlType: number) {
@@ -115,7 +101,7 @@ export class DesignDetailsComponent implements OnInit {
     this.displayMaxFullFlow = this.performancePointsFormService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
   }
 
-  toggleCollapse(){
+  toggleCollapse() {
     this.contentCollapsed = !this.contentCollapsed;
   }
 }

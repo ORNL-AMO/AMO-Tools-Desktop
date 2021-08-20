@@ -1,128 +1,90 @@
-<div class="w-100 p-2 justify-content-center">
-    <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-        (change)="calculateProfile()">
+<div class="p-2 text-center">
+    <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+        (change)="setResults()">
+        <option [ngValue]=undefined>All Day Types</option>
         <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
     </select>
 </div>
-<div class="pl-2 pt-3 pr-2 scroll-item">
-    <table class="table table-hover bg-white">
-        <thead>
-            <tr>
-                <th>
-                    <!-- Compressor Name -->
 
-                </th>
-                <th *ngFor="let data of adjustedProfileSummary[0].profileSummaryData">
-                    {{data.timeInterval}}
-                </th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let summary of adjustedProfileSummary; let compressorIndex = index;">
-            <tr class="compressor-name-row">
-                <td colspan="100" class="bold">{{summary.compressorName}}</td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    Calc Power, kW
-                </td>
-                <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.power | number:'1.0-2'}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    Calc Airflow, acfm
-                </td>
-                <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.airflow | number:'1.0-2'}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    % Capacity
-                </td>
-                <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.percentCapacity | number:'1.0-2'}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    % Power
-                </td>
-                <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.percentPower | number:'1.0-2'}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    Order
-                </td>
-                <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.order}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr class="compressor-name-row">
-                <td class="bold" colspan="100">Totals</td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    Calc Power, kW
-                </td>
-                <td *ngFor="let total of totals;">
-                    {{total.power | number:'1.0-2'}}
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    Calc Airflow, acfm
-                </td>
-                <td *ngFor="let total of totals;">
-                    {{total.airflow | number:'1.0-2'}}
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    % Capacity
-                </td>
-                <td *ngFor="let total of totals;">
-                    {{total.percentCapacity | number:'1.0-2'}}
-                </td>
-            </tr>
-            <tr>
-                <td class="pl-2">
-                    % Power
-                </td>
-                <td *ngFor="let total of totals;">
-                    {{total.percentPower | number:'1.0-2'}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="d-flex flex-column my-table" *ngIf="dayTypeModificationResult">
+    <div class="d-flex stripe my-table-bg border-top-0">
+        <div class="col-4">
+        </div>
+        <div class="bold table-text d-flex align-items-center pl-1 pr-1 col-4">
+            Baseline
+        </div>
+        <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+            {{modification.name}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Percent Savings (%)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4">
+            <app-percent-graph *ngIf="dayTypeModificationResult.allSavingsResults.savings.percentSavings"
+                [value]="dayTypeModificationResult.allSavingsResults.savings.percentSavings">
+            </app-percent-graph>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy (kWh)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold  table-text">{{dayTypeModificationResult.allSavingsResults.baselineResults.power |
+                number:'1.0-0'}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.power
+                | number:'1.0-0'}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex stripe my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy Savings (kWh)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.savings.power
+                | number:'1.0-0'}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeModificationResult.allSavingsResults.baselineResults.cost |
+                currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.cost
+                | currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex stripe my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text" [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">
+                {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}</span>
+        </div>
+    </div>
 </div>

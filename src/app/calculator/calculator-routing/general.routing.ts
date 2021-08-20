@@ -9,6 +9,7 @@ import { PreAssessmentComponent } from "../utilities/pre-assessment/pre-assessme
 import { UnitConverterComponent } from "../utilities/unit-converter/unit-converter.component";
 import { WaterReductionComponent } from "../waste-water/water-reduction/water-reduction.component";
 import { UtilitiesListComponent } from "../utilities/utilities-list/utilities-list.component";
+import { AltitudeCorrectionComponent } from "../utilities/altitude-correction/altitude-correction.component";
 
 export const generalRoutes: Routes = [
     {
@@ -50,5 +51,9 @@ export const generalRoutes: Routes = [
     {
         path: 'water-reduction',
         component: WaterReductionComponent
+    },
+    {
+        path: 'altitude-correction',
+        component: AltitudeCorrectionComponent
     }
 ]

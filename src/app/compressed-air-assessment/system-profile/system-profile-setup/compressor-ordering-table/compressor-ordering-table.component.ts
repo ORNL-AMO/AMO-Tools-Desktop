@@ -18,11 +18,13 @@ export class CompressorOrderingTableComponent implements OnInit {
   isSequencerUsed: boolean;
   selectedDayTypeId: string;
   fillRight: boolean = false;
+  inventoryItems: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.isFormChange == false) {
+        this.inventoryItems = val.compressorInventoryItems;
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.isSequencerUsed = val.systemInformation.isSequencerUsed;
         this.profileSummary = val.systemProfile.profileSummary;

@@ -4,6 +4,7 @@ import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmD
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
+import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../../system-profile/system-profile.service';
 
 @Component({
@@ -18,14 +19,15 @@ export class InventoryTableComponent implements OnInit {
 
   selectedCompressor: CompressorInventoryItem;
   selectedCompressorSub: Subscription;
-  
+
   showConfirmDeleteModal: boolean = false;
   deleteSelectedId: string;
   hasInvalidCompressors: boolean = false;
   confirmDeleteCompressorInventoryData: ConfirmDeleteData;
 
 
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
+  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private systemProfileService: SystemProfileService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -57,8 +59,14 @@ export class InventoryTableComponent implements OnInit {
 
   deleteItem() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId});
+    let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
     compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
+
+    compressedAirAssessment.modifications.forEach(modification => {
+      modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
+      modification.useUnloadingControls.adjustedCompressors = modification.useUnloadingControls.adjustedCompressors.filter(compressor => { return compressor.compressorId != this.deleteSelectedId });
+    });
+
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
       let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
@@ -84,9 +92,14 @@ export class InventoryTableComponent implements OnInit {
 
   onConfirmDeleteClose(deleteInventoryItem: boolean) {
     if (deleteInventoryItem) {
-     this.deleteItem();
+      this.deleteItem();
     }
     this.showConfirmDeleteModal = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
+  }
+
+  getPressureMinMax(compressor: CompressorInventoryItem): string {
+    let minMax: {min: number, max: number} = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+    return minMax.min + ' - ' + minMax.max + ' psig';
   }
 }

@@ -1,0 +1,34 @@
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+
+.fa-save, .fa-times, .fa-edit{
+    font-size: xx-large;
+}
+
+.action-item:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.help-holder{
+    max-width: 500px;
+}
+
+
+.opp-sheet-icon{
+    width: 35px;
+}
+.btn-form {
+  border-radius: 4px !important;
+}

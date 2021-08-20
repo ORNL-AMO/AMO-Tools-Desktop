@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../../../inventory/inventory.service';
 import { ControlTypes } from '../../../inventory/inventoryOptions';
@@ -58,7 +58,9 @@ export class AdjustCompressorComponent implements OnInit {
     this.selectedCompressor.compressorControls.controlType = this.adjustedCompressor.controlType;
     this.selectedCompressor.compressorControls.unloadPointCapacity = this.adjustedCompressor.unloadPointCapacity;
     this.selectedCompressor.compressorControls.automaticShutdown = this.adjustedCompressor.automaticShutdown;
+    this.selectedCompressor.performancePoints = this.adjustedCompressor.performancePoints;
     this.selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(this.selectedCompressor);
+    this.adjustedCompressor.performancePoints = this.selectedCompressor.performancePoints;
     this.inventoryService.selectedCompressor.next(this.selectedCompressor);
 
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -77,7 +79,11 @@ export class AdjustCompressorComponent implements OnInit {
     } else if (this.adjustedCompressor.originalControlType == 2 || this.adjustedCompressor.originalControlType == 4 || this.adjustedCompressor.originalControlType == 3) {
       //inlet mod w/ unloading, load/unload, Variable displacement
       //potential selections = Start/Stop
-      this.controlTypeOptions = ControlTypes.filter(type => { return type.value == 5 || type.value == this.adjustedCompressor.originalControlType });
+      if(this.adjustedCompressor.compressorType != 6){
+        this.controlTypeOptions = ControlTypes.filter(type => { return type.value == 5 || type.value == this.adjustedCompressor.originalControlType });
+      }else{
+        this.controlTypeOptions = ControlTypes.filter(type => { return type.value == this.adjustedCompressor.originalControlType });
+      }
     } else if (this.adjustedCompressor.originalControlType == 5) {
       //Start/Stop
       //potential selections = Load/Unload

@@ -4,27 +4,11 @@
         <br>
     </div>
     <form class="pl-3 pr-3" [formGroup]="form">
-        <!--Nominal Pressure-->
-        <div class="form-group">
-            <label for="nominalPressure">Nominal Pressure</label>
-            <div class="input-group">
-                <input name="nominalPressure" type="number" step="any" class="form-control" id="nominalPressure"
-                    formControlName="nominalPressure" (change)="save()"
-                    (focus)="focusField('nominalPressure')">
-                <span class="units input-group-addon">psig</span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="form.controls.nominalPressure.invalid && !form.controls.nominalPressure.pristine">
-                <span *ngIf="form.controls.nominalPressure.errors.required">Value Required</span>
-                <span *ngIf="form.controls.nominalPressure.errors.min">Value can't be less than
-                    {{form.controls.nominalPressure.errors.min.min}} psig.</span>
-            </span>
-        </div>
         <!--System Elevation-->
         <div class="form-group">
             <label for="systemElevation">System Elevation</label>
             <div class="input-group">
-                <input name="demandCost" type="number" step="any" class="form-control" id="demandCost"
+                <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
                     formControlName="systemElevation" (input)="save()" (focus)="focusField('systemElevation')">
                 <span class="units input-group-addon">ft</span>
             </div>
@@ -45,7 +29,7 @@
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
-                    formControlName="totalAirStorage" (change)="save()" (focus)="focusField('totalAirStorage')">
+                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
             </div>
@@ -59,7 +43,7 @@
         <!--Is a target pressure sequencer used?-->
         <div class="form-group">
             <label for="utilityType">Is a target pressure sequencer used?</label>
-            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (change)="changeIsSequencerUsed()"
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed" (input)="changeIsSequencerUsed()"
                 (focus)="focusField('isSequencerUsed')">
                 <option [ngValue]="true">Yes</option>
                 <option [ngValue]="false">No</option>
@@ -71,7 +55,7 @@
             </label>
             <div class="input-group">
                 <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
-                    formControlName="targetPressure" (change)="save()" (focus)="focusField('targetPressure')">
+                    formControlName="targetPressure" (input)="save()" (focus)="focusField('targetPressure')">
                 <span class="units input-group-addon">psig</span>
             </div>
             <span class="alert-danger pull-right small"
@@ -79,6 +63,22 @@
                 <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
                     {{form.controls.targetPressure.errors.min.min}} psig.</span>
+            </span>
+        </div>
+        <!--Variance (+/-)-->
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
+            <label for="variance">Variance (+/-)
+            </label>
+            <div class="input-group">
+                <input name="variance" type="number" step="any" class="form-control" id="variance"
+                    formControlName="variance" (input)="save()" (focus)="focusField('variance')">
+                <span class="units input-group-addon">psig</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
+                <span *ngIf="form.controls.variance.errors.required">Value Required</span>
+                <span *ngIf="form.controls.variance.errors.min">Value can't be less than
+                    {{form.controls.variance.errors.min.min}} psig.</span>
             </span>
         </div>
     </form>

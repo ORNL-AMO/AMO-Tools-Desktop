@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { SystemProfileService } from '../../system-profile.service';
 
 @Component({
   selector: 'app-operating-profile-table',
@@ -29,7 +30,8 @@ export class OperatingProfileTableComponent implements OnInit {
 
   validProfileSummaryData: boolean;
   assessmentDayTypes: Array<CompressedAirDayType>
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  inventoryItems: Array<CompressorInventoryItem>;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileService: SystemProfileService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -45,6 +47,7 @@ export class OperatingProfileTableComponent implements OnInit {
         this.profileSummary = val.systemProfile.profileSummary;
         this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(val);
         this.setHourIntervals(val.systemProfile.systemProfileSetup);
+        this.inventoryItems = val.compressorInventoryItems;
         if (this.profileDataType) {
           this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
         }
@@ -134,7 +137,7 @@ export class OperatingProfileTableComponent implements OnInit {
       let profileSummaryData: Array<ProfileSummaryData> = this.getDummyData(systemProfileSetup.numberOfHours, systemProfileSetup.dataInterval);
       profileSummary = {
         compressorId: inventoryItem.itemId,
-        compressorName: inventoryItem.name,
+        // compressorName: inventoryItem.name,
         dayTypeId: dayTypeId,
         profileSummaryData: profileSummaryData,
         fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
@@ -154,6 +157,7 @@ export class OperatingProfileTableComponent implements OnInit {
         timeInterval: timeInterval,
         percentPower: undefined,
         percentSystemCapacity: 0,
+        percentSystemPower: 0,
         order: undefined
       })
       timeInterval = timeInterval + dataInterval;

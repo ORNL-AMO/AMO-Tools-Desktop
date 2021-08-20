@@ -1,0 +1,128 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Pump Achievable Efficiency Help
+    <br>
+    <small class="text-muted">
+      Determine the achievable pump efficiency for various pump styles which are based on the 
+      Hydraulic Institute (HI) standard ANSI/HI 1.3-2000.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'pumpType'">
+    <h6>
+    Pump Type
+    <br>
+    <small class="text-muted">
+      Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI
+      1.3-2000.
+      <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating
+      conditions.
+      <hr>
+    </small>
+    <div class="d-flex flex-column table">
+      <label class="group-label">Overhung Impeller</label>
+      <div class="d-flex align-items-center">
+        <div class="d-flex flex-column w-25">
+          <img class="w-100 p-2" src="assets/images/pump-types/overhung-impeller-pump.png">
+        </div>
+        <div class="d-flex w-75 p-2">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <td class="text-center">End Suction Slurry</td>
+                <td class="text-center">Slurry pumps, end suction</td>
+              </tr>
+              <tr>
+                <td class="text-center">End Suction Sewage (and Submersible)</td>
+                <td class="text-center">Solids-handling, end suction (Submersible)</td>
+              </tr>
+              <tr>
+                <td class="text-center">End Suction Stock</td>
+                <td class="text-center">Stock, end suction</td>
+              </tr>
+              <tr>
+                <td class="text-center">End Suction ANSI/API</td>
+                <td class="text-center">End suction - small, API end suction, ASME B73</td>
+              </tr>
+              <tr>
+                <td class="text-center">Large End Suction</td>
+                <td class="text-center">End suction - large (>5000 gpm)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <label class="group-label">Between Bearings Impeller</label>
+      <div class="d-flex align-items-center">
+        <div class="d-flex flex-column w-25">
+          <img class="w-100 p-2" src="assets/images/pump-types/between-bearings-impeller-pump.png">
+        </div>
+        <div class="d-flex w-75 p-2">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <td class="text-center">Multistage Boiler Feed</td>
+                <td class="text-center">Horizontal multistage pumps; axially split, segmented ring diffuser barrel
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">API Double Suction</td>
+                <td class="text-center">API Double suction</td>
+              </tr>
+              <tr>
+                <td class="text-center">Double Suction</td>
+                <td class="text-center">Double suction</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <label class="group-label">Vertical Turbine</label>
+      <div class="d-flex align-items-center">
+        <div class="d-flex flex-column w-25">
+          <img class="w-100 p-2" src="assets/images/pump-types/vertical-turbine.png">
+        </div>
+        <div class="d-flex w-75 p-2">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <td class="text-center">Vertical Turbine and Axial Flow</td>
+                <td class="text-center">Vertical turbine, mixed-flow and propeller, single and multistage diffuser
+                  type</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <small class="text-muted">
+      Overhung impeller pumps have the impeller(s) is mounted on the end of a shaft that is “overhung” from its
+      bearing supports. The impeller can be mounted directly on the driver shaft or on a separate pump shaft supported
+      by its own bearings.
+      <hr class="mt-1 mb-1">
+      Between Bearings pumps have the impeller(s) mounted on a shaft with bearings on both sides.
+      <hr class="mt-1 mb-1">
+      Vertically suspended pumps’ have an impeller with a vertical axis of rotation. Vertical turbine pumps typically
+      use radial, modified radial or mixed flow impellers.
+      <hr class="mb-1 mt-1">
+      See ANSI/HI 1.1-1.2, 1.3, 2.1-2.2, 2.3 and 20.3 or
+      <a href="http://pumps.org/Pump_Fundamentals_Rotodynamic_Pumps.aspx" target="_blank">Hydraulic
+        Institue webpage</a> for more information.
+    </small>
+    </h6>
+  </div>
+  
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Flow Rate
+      <br>
+      <small class="text-muted">
+        Represents either the measured or required rate of flow.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

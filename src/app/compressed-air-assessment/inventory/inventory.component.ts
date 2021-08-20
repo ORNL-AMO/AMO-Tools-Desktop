@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
-import { SystemProfileService } from '../system-profile/system-profile.service';
+import { CompressedAirDataManagementService } from '../compressed-air-data-management.service';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -23,7 +23,8 @@ export class InventoryComponent implements OnInit {
   hasValidCompressors: boolean = true;
   selectedCompressor: CompressorInventoryItem;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private inventoryService: InventoryService, private cd: ChangeDetectorRef, private systemProfileService: SystemProfileService) { }
+    private inventoryService: InventoryService, private cd: ChangeDetectorRef,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.initializeInventory();
@@ -35,7 +36,6 @@ export class InventoryComponent implements OnInit {
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
           this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name, val.description);
-          this.checkSystemProfile();
         } else {
           this.isFormChange = false;
         }
@@ -75,23 +75,9 @@ export class InventoryComponent implements OnInit {
     this.hasInventoryItems = true;
   }
 
-
   save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.name = this.form.controls.name.value;
-    selectedCompressor.description = this.form.controls.description.value;
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
-    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
-      if (summary.compressorId == this.selectedCompressor.itemId) {
-        summary.compressorName = this.selectedCompressor.name;
-      }
-    });
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    this.compressedAirDataManagementService.updateNameAndDescription(this.form.controls.name.value, this.form.controls.description.value);
   }
 
   openCompressorModal() {
@@ -106,26 +92,5 @@ export class InventoryComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
-  }
-
-  checkSystemProfile() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let recalculateOrdering: boolean = false;
-    compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
-      if (summary.compressorId == this.selectedCompressor.itemId) {
-        if (summary.fullLoadPressure != this.selectedCompressor.performancePoints.fullLoad.dischargePressure) {
-          summary.fullLoadPressure = this.selectedCompressor.performancePoints.fullLoad.dischargePressure;
-          recalculateOrdering = true;
-        }
-      }
-    });
-    if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
-      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
-      })
-      this.isFormChange = true;
-      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-      this.inventoryService.selectedCompressor.next(this.selectedCompressor);
-    }
   }
 }

@@ -97,7 +97,8 @@
       </span>
     </div>
 
-    <div class="form-group" *ngIf="baseline">
+    <div class="form-group" *ngIf="baseline"
+      [ngClass]="{'indicate-different': isLoadEstimationMethodDifferent()}">
       <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
       <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod"
         id="{{'loadEstimatedMethod_'+idString}}" (change)="changeLoadMethod()"
@@ -107,7 +108,7 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 0 && baseline"
-      [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorKW.invalid}">
+      [ngClass]="{'indicate-different': isMotorFieldPowerDifferent(), 'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorKW.invalid}">
       <label for="{{'motorKW_'+idString}}">Motor Power</label>
       <div class="input-group">
         <input [readonly]="!selected" name="motorKW" type="number" min="0" step="any" class="form-control"
@@ -124,7 +125,7 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 1 && baseline"
-      [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
+      [ngClass]="{'indicate-different': isMotorFieldCurrentDifferent(), 'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
       <label for="{{'motorAmps_'+idString}}">Motor Current</label>
       <div class="input-group">
         <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control"

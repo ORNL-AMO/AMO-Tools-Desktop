@@ -99,7 +99,15 @@ import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/ex
 import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
+import { DayTypeService } from './day-types/day-type.service';
+import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
+import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
+import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
+import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
+import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
+import { ConvertCompressedAirService } from './convert-compressed-air.service';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -171,7 +179,8 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     ExploreOpportunitiesResultsComponent,
     AdjustCompressorComponent,
     ModificationListModalComponent,
-    AddModificationModalComponent
+    AddModificationModalComponent,
+    ExploreOpportunitiesProfileTableComponent
   ],
   imports: [
     CommonModule,
@@ -188,7 +197,10 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     FormsModule,
     ModalModule,
     NgbModule,
-    ConfirmDeleteModalModule
+    ConfirmDeleteModalModule, 
+    FullLoadAmpsModule,
+    AltitudeCorrectionModule,
+    PercentGraphModule
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -206,7 +218,11 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
     UnloadPointCalculationsService,
     SharedPointCalculationsService,
     PerformancePointsFormService,
-    ExploreOpportunitiesService
+    ExploreOpportunitiesService,
+    DayTypeService,
+    CompressedAirDataManagementService,
+    CompressedAirAssessmentResultsService,
+    ConvertCompressedAirService
   ]
 })
 export class CompressedAirAssessmentModule { }

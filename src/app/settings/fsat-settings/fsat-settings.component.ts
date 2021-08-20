@@ -49,7 +49,7 @@ export class FsatSettingsComponent implements OnInit {
   ];
 
   barometricPressureOptions: Array<string> = [
-    'kPaa',
+    'Pa',
     'inHg'
   ];
 

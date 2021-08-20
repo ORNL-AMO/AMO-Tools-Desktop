@@ -23,7 +23,6 @@
         </td>
       </tr>
       <tr>
-        <td [ngStyle]="{ 'width.%': 15 }" class="bold">($/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{ 'width.%': tableCellWidth }" class="bold text-center">
           Baseline
@@ -81,23 +80,17 @@
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Power Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Power Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
-            {{
-              baselineOutput.operationsOutput.powerGenerationCost 
-                | currency: "USD":"symbol":"1.0-0"
-            }}
+            {{ baselineOutput.operationsOutput.powerGenerationCost | number: "1.0-0" }}
           </span>
           <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
         </td>
         <td *ngFor="let modResults of modificationOutputs; let index = index"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
-            {{
-              modResults.outputData.operationsOutput.powerGenerationCost 
-                | currency: "USD":"symbol":"1.0-0"
-            }}
+            {{ modResults.outputData.operationsOutput.powerGenerationCost | number: "1.0-0" }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -111,20 +104,18 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              (baselineOutput.operationsOutput.powerGenerationCost -
-                modResults.outputData.operationsOutput.powerGenerationCost) | currency: "USD":"symbol":"1.0-0"
+              (baselineOutput.operationsOutput.powerGenerationCost - modResults.outputData.operationsOutput.powerGenerationCost) | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.boilerFuelCost">
             {{
-              baselineOutput.operationsOutput.boilerFuelCost 
-                | currency: "USD":"symbol":"1.0-0"
+              baselineOutput.operationsOutput.boilerFuelCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!baselineOutput.operationsOutput.boilerFuelCost">&mdash;</span>
@@ -133,8 +124,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.boilerFuelCost 
-                | currency: "USD":"symbol":"1.0-0"
+              modResults.outputData.operationsOutput.boilerFuelCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
@@ -149,20 +139,18 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              (baselineOutput.operationsOutput.boilerFuelCost -
-                modResults.outputData.operationsOutput.boilerFuelCost) | currency: "USD":"symbol":"1.0-0"
+              (baselineOutput.operationsOutput.boilerFuelCost - modResults.outputData.operationsOutput.boilerFuelCost) | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Make-up Water Cost</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Make-up Water Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.makeupWaterCost">
             {{
-              baselineOutput.operationsOutput.makeupWaterCost 
-                | currency: "USD":"symbol":"1.0-0"
+              baselineOutput.operationsOutput.makeupWaterCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!baselineOutput.operationsOutput.makeupWaterCost">&mdash;</span>
@@ -171,8 +159,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.makeupWaterCost 
-                | currency: "USD":"symbol":"1.0-0"
+              modResults.outputData.operationsOutput.makeupWaterCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
@@ -187,20 +174,18 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              (baselineOutput.operationsOutput.makeupWaterCost -
-                modResults.outputData.operationsOutput.makeupWaterCost) | currency: "USD":"symbol":"1.0-0"
+              (baselineOutput.operationsOutput.makeupWaterCost - modResults.outputData.operationsOutput.makeupWaterCost) | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="bold">
-        <td>Annual Cost</td>
+        <td>Annual Cost ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.operationsOutput.totalOperatingCost">
             {{
-              baselineOutput.operationsOutput.totalOperatingCost 
-                | currency: "USD":"symbol":"1.0-0"
+              baselineOutput.operationsOutput.totalOperatingCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!baselineOutput.operationsOutput.totalOperatingCost">&mdash;</span>
@@ -215,15 +200,14 @@
           }">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.totalOperatingCost 
-                | currency: "USD":"symbol":"1.0-0"
+              modResults.outputData.operationsOutput.totalOperatingCost | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="bold">
-        <td>Annual Savings</td>
+        <td>Annual Savings ({{settings.currency}}/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
@@ -237,8 +221,7 @@
           }">
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
-              (baselineOutput.operationsOutput.totalOperatingCost -
-                modResults.outputData.operationsOutput.totalOperatingCost) | currency: "USD":"symbol":"1.0-0"
+              (baselineOutput.operationsOutput.totalOperatingCost - modResults.outputData.operationsOutput.totalOperatingCost) | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
@@ -253,8 +236,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.ssmt.operatingCosts.implementationCosts">
             {{
-              modification.ssmt.operatingCosts.implementationCosts
-                | currency: "USD":"symbol":"1.0-0"
+              modification.ssmt.operatingCosts.implementationCosts | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modification.ssmt.operatingCosts.implementationCosts">&mdash;</span>

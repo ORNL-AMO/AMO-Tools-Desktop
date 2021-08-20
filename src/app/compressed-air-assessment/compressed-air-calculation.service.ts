@@ -96,15 +96,14 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number): CompressorCalcResult {
-    // let inputData: CentrifugalBlowOffInput = this.getCentrifugalBlowOffInput(compressor, computeFrom, computeFromVal)
-    // let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
-    // results.percentagePower = results.percentagePower * 100;
-    // results.percentageCapacity = results.percentageCapacity * 100;
-    // return results;
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+    let isShutdown: boolean = false;
+    if (canShutdown && compressor.compressorControls.automaticShutdown == true && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
+      isShutdown = true;
+    }
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
-    if (isValid) {
+    if (isValid && !isShutdown) {
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
@@ -113,7 +112,6 @@ export class CompressedAirCalculationService {
         return results;
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
-        // console.log(inputData);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
@@ -197,6 +195,13 @@ export class CompressedAirCalculationService {
       receiverVolume = receiverVolume + additionalRecieverVolume;
     }
     receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
+
+    //lubricant free
+    if (lubricantTypeEnumValue == 1) {
+      compressor.designDetails.blowdownTime = .0003;
+      compressor.compressorControls.unloadSumpPressure = 15;
+    }
+
     return {
       computeFrom: computeFrom,
       computeFromVal: computeFromVal,
@@ -253,7 +258,11 @@ export class CompressedAirCalculationService {
 
 
       receiverVolume: receiverVolume,
-      loadFactorUnloaded: 1
+      loadFactorUnloaded: 1,
+
+      unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
+      blowdownTime: compressor.designDetails.blowdownTime,
+      unloadSumpPressure: compressor.compressorControls.unloadSumpPressure
 
     }
   }
@@ -373,7 +382,9 @@ export interface CompressorsCalcInput {
   //Start stop
   powerMaxPercentage: number
   powerAtFullLoadPercentage: number,
-
+  unloadPointCapacity: number,
+  blowdownTime: number,
+  unloadSumpPressure: number
 }
 
 

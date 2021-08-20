@@ -15,10 +15,10 @@
                     Annual Energy Savings
                 </th>
                 <th>
-                    Annual Energy Cost
+                    Annual Energy Cost ({{settings.currency}})
                 </th>
                 <th>
-                    Annual Cost Savings
+                    Annual Cost Savings ({{settings.currency}})
                 </th>
             </tr>
         </thead>
@@ -43,14 +43,14 @@
                 </td>
                 <td>
                     <span *ngIf="baselineResults.AeCost">
-                        {{baselineResults.AeCost | currency:'USD':'symbol':'2.0-0'}}
+                        {{baselineResults.AeCost | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!baselineResults.AeCost">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
                 <td>
-                   $ &mdash;
+                    &mdash;
                 </td>
             </tr>
             <tr class="department-item-row" *ngFor="let modificationResults of modificationsResultsArr"
@@ -79,18 +79,18 @@
                 </td>
                 <td>
                     <span *ngIf="modificationResults.results.AeCost">
-                        {{modificationResults.results.AeCost | currency:'USD':'symbol':'2.0-0'}}
+                        {{modificationResults.results.AeCost | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!modificationResults.results.AeCost">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
                 <td>
                     <span *ngIf="modificationResults.results.costSavings">
-                        {{modificationResults.results.costSavings | currency:'USD':'symbol':'2.0-0'}}
+                        {{modificationResults.results.costSavings | number:'2.0-0'}}
                     </span>
                     <span *ngIf="!modificationResults.results.costSavings">
-                        $ &mdash;
+                         &mdash;
                     </span>
                 </td>
             </tr>

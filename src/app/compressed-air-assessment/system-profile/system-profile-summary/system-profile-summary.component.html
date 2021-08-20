@@ -13,7 +13,7 @@
         </thead>
         <tbody *ngFor="let summary of profileSummary; let compressorIndex = index;">
             <tr class="compressor-name-row">
-                <td colspan="100" class="bold">{{summary.compressorName}}</td>
+                <td colspan="100" class="bold">{{summary.compressorId|compressorName:inventoryItems}}</td>
             </tr>
             <tr>
                 <td class="pl-2">

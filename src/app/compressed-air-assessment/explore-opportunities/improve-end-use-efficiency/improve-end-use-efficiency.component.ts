@@ -23,7 +23,6 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
         this.improveEndUseEfficiency = compressedAirAssessment.modifications[modificationIndex].improveEndUseEfficiency;
-        console.log(this.improveEndUseEfficiency);
       } else {
         this.isFormChange = false;
       }

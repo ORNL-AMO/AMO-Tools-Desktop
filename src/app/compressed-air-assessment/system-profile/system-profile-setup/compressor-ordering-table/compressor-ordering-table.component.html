@@ -1,15 +1,29 @@
 <label class="group-label w-100">
     Compressor Ordering
-    <span *ngIf="isSequencerUsed" class="pull-right">
-        Has Sequencer
+    <span *ngIf="isSequencerUsed">
+        (Has Sequencer)
     </span>
-    <span *ngIf="!isSequencerUsed" class="pull-right">
-        No Sequencer
+    <span *ngIf="!isSequencerUsed">
+        (No Sequencer)
     </span>
 </label>
+<div class="w-100 d-flex justify-content-start mb-1 mt-1">
+    <div class="pl-2 pr-2 border-left">
+        <label class="small" for="fillRightOrdering">
+            <input type="checkbox" [(ngModel)]="fillRight" name="fillRightOrdering" id="fillRightOrdering">
+            Fill right on change
+        </label>
+    </div>
+    <div class="pl-2 pr-2 border-right border-left">
+        <a class="click-link small" (click)="resetOrdering()">Turn All Off</a>
+    </div>
+    <div class="pl-2 pr-2 border-right">
+        <a class="click-link small" (click)="turnAllOn()">Turn All On</a>
+    </div>
+</div>
 
 <div class="scroll-item">
-    <table class="table table-striped bg-white">
+    <table class="table bg-white">
         <thead>
             <tr>
                 <th>
@@ -26,7 +40,7 @@
         <tbody *ngIf="isSequencerUsed">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorName}}
+                    {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     {{summary.fullLoadPressure}}
@@ -52,7 +66,7 @@
         <tbody *ngIf="!isSequencerUsed">
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorName}}
+                    {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     {{summary.fullLoadPressure}}
@@ -69,19 +83,4 @@
             </tr>
         </tbody>
     </table>
-</div>
-
-<div class="w-100 d-flex justify-content-end">
-    <div class="pl-2 pr-2 border-left">
-        <label class="small" for="fillRight">
-            <input type="checkbox" [(ngModel)]="fillRight" name="fillRight" id="fillRight">
-            Fill right on change
-        </label>
-    </div>
-    <div class="pl-2 pr-2 border-right border-left">
-        <a class="click-link small" (click)="resetOrdering()">Turn All Off</a>
-    </div>
-    <div class="pl-2 pr-2 border-right">
-        <a class="click-link small" (click)="turnAllOn()">Turn All On</a>
-    </div>
 </div>

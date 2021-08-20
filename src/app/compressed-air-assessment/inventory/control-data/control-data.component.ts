@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../shared/models/compressed-air-assessment';
+import { CompressorControls } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
 import { ControlTypes } from '../inventoryOptions';
-import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-control-data',
@@ -20,15 +20,18 @@ export class ControlDataComponent implements OnInit {
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
   displayUnload: boolean;
   displayAutomaticShutdown: boolean;
+  displayUnloadSumpPressure: boolean;
   contentCollapsed: boolean;
+  compressorType: number;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseControls;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
+          this.compressorType = val.nameplateData.compressorType;
           this.form = this.inventoryService.getCompressorControlsFormFromObj(val.compressorControls);
           this.toggleDisableControls();
           this.setControlTypeOptions(val.nameplateData.compressorType);
@@ -92,26 +95,20 @@ export class ControlDataComponent implements OnInit {
   setDisplayValues() {
     this.displayUnload = this.inventoryService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
     this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
+    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType)
   }
 
   save() {
-    let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-    selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.compressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
-    selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    let compressorControls: CompressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
+    this.compressedAirDataManagementService.updateControlData(compressorControls, true);
   }
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  toggleCollapse(){
+  toggleCollapse() {
     this.contentCollapsed = !this.contentCollapsed;
   }
 }

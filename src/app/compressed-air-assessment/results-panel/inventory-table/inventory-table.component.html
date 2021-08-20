@@ -11,6 +11,7 @@
                     </th>
                     <th>Compressor Type</th>
                     <th>Control Type</th>
+                    <th>Pressure Range</th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,6 +30,9 @@
                     </td>
                     <td>
                         {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                    </td>
+                    <td>
+                        {{getPressureMinMax(compressorInventoryItem)}}
                     </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>

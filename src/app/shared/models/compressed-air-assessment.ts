@@ -132,7 +132,6 @@ export interface CASystemBasics {
 }
 
 export interface SystemInformation {
-    nominalPressure: number,
     systemElevation: number,
     totalAirStorage: number,
     isSequencerUsed: boolean,
@@ -233,7 +232,7 @@ export interface CentrifugalSpecifics {
 }
 
 export interface ProfileSummary {
-    compressorName: string,
+    // compressorName: string,
     fullLoadPressure: number,
     fullLoadCapacity: number,
     compressorId: string,
@@ -249,6 +248,7 @@ export interface ProfileSummaryData {
     timeInterval: number,
     percentPower: number,
     percentSystemCapacity: number,
+    percentSystemPower: number,
     order: number,
 }
 
