@@ -32,6 +32,7 @@ export class InventoryComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.hasInventoryItems = true;
+        this.hasValidCompressors = this.inventoryService.hasValidCompressors();
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
