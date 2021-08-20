@@ -22,6 +22,7 @@ export class AssessmentSettingsComponent implements OnInit {
   showSteamSettings: boolean = false;
   showFsatSettings: boolean = false;
   showTutorialSettings: boolean = false;
+  showPrintSettings: boolean = false;
   showSettingsModal: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
@@ -85,6 +86,10 @@ export class AssessmentSettingsComponent implements OnInit {
 
   toggleTutorialSettings() {
     this.showTutorialSettings = !this.showTutorialSettings;
+  }
+
+  togglePrintSettings() {
+    this.showPrintSettings = !this.showPrintSettings;
   }
 
   showResetSystemSettingsModal() {

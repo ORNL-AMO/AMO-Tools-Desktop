@@ -16,6 +16,8 @@ import { ResetDataModalComponent } from './assessment-settings/reset-data-modal/
 import { ModalModule } from 'ngx-bootstrap';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 import { RouterModule } from '@angular/router';
+import { PrintSettingsComponent } from './print-settings/print-settings.component';
+import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
 
 @NgModule({
     declarations: [
@@ -29,6 +31,7 @@ import { RouterModule } from '@angular/router';
         TreasureHuntSettingsComponent,
         AssessmentSettingsComponent,
         ResetDataModalComponent,
+        PrintSettingsComponent,
 
     ],
     imports: [
@@ -40,7 +43,8 @@ import { RouterModule } from '@angular/router';
         AnimatedCheckmarkModule
     ],
     providers: [
-        SettingsService
+        SettingsService,
+        PrintOptionsMenuService
     ],
     exports: [
         PsatSettingsComponent,

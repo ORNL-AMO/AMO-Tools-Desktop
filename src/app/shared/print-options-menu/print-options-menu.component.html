@@ -196,7 +196,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="!showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                <div *ngIf="!showTHReportOptions || showRollupReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
                     </div>

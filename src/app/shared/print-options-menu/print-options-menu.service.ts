@@ -94,6 +94,10 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printDetailedResults = !currentPrintOptions.printDetailedResults;
         break;
       }
+      case "reportDiagram": {
+        currentPrintOptions.printReportDiagram = !currentPrintOptions.printReportDiagram;
+        break;
+      }
       default: {
         break;
       }
@@ -120,6 +124,7 @@ export class PrintOptionsMenuService {
       printSsmtRollup: bool,
       printWasteWaterRollup: bool,
       printDetailedResults: bool,
+      printReportDiagram: bool,
       selectAll: bool
     }
   }
