@@ -519,9 +519,9 @@ export class InventoryService {
     let summaryData: Array<ProfileSummaryData> = new Array();
     for (let i = 0; i < 24; i++) {
       summaryData.push({
-        power: undefined,
-        airflow: undefined,
-        percentCapacity: undefined,
+        power: 0,
+        airflow: 0,
+        percentCapacity: 0,
         timeInterval: i,
         percentPower: undefined,
         percentSystemCapacity: undefined,
