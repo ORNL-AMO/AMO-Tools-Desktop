@@ -94,7 +94,7 @@
           </label>
           <div *ngIf="showPrintSettings">
             <p class="help-text">Select all report items you would like to include in your printed report.</p>
-            <app-print-settings></app-print-settings>
+            <app-print-settings [(settings)]="settings" (savePrintSettings)="savePrintSettings()"></app-print-settings>
           </div>
         </div>
 

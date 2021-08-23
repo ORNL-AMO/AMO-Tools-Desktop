@@ -66,6 +66,16 @@ export class AssessmentSettingsComponent implements OnInit {
     );
   }
 
+  savePrintSettings(){
+    this.indexedDbService.putSettings(this.settings).then(
+      results => {
+        this.settingsDbService.setAll().then(() => {
+          this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
+        });
+      }
+    );
+  }
+
   //simple toggle function needed for each section
   toggleGeneralSettings() {
     this.showGeneralSettings = !this.showGeneralSettings;
