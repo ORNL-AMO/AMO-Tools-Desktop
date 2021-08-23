@@ -129,17 +129,6 @@
                     </div>
                 </div>
 
-                <div *ngIf="showPhastReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('energyUsed')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printEnergyUsed"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Energy Used
-                    </div>
-                </div>
-
-
                 <!-- treasure hunt specific options -->
                 <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('opportunitySummary')">
@@ -176,7 +165,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
+                <div *ngIf="showSsmtReportOptions || showPhastReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('energySummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>

@@ -62,10 +62,6 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printInputData = !currentPrintOptions.printInputData;
         break;
       }
-      case "energyUsed": {
-        currentPrintOptions.printEnergyUsed = !currentPrintOptions.printEnergyUsed;
-        break;
-      }
       case "executiveSummary": {
         currentPrintOptions.printExecutiveSummary = !currentPrintOptions.printExecutiveSummary;
         break;
@@ -116,7 +112,6 @@ export class PrintOptionsMenuService {
       printResults: bool,
       printInputData: bool,
       printExecutiveSummary: bool,
-      printEnergyUsed: bool,
       printEnergySummary: bool,
       printLossesSummary: bool,
       printReportOpportunityPayback: bool,
