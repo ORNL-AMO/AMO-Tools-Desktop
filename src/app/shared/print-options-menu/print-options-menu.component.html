@@ -78,7 +78,7 @@
                         <app-animated-checkmark [active]="printOptions.printWasteWaterRollup">
                         </app-animated-checkmark>
                     </div>
-                    <div class="col-8 bottom-divider">
+                    <div class="col-8 bold-bottom-divider">
                         Waste Water Rollup Summary
                     </div>
                 </div>
@@ -89,27 +89,10 @@
                         <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
-                        Results
+                        Result Data
                     </div>
-                </div>
-                <div *ngIf="showFsatReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('detailedResults')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printDetailedResults"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Detailed Results
-                    </div>
-                </div>
-                <!-- <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('reportDiagram')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printReportDiagram"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Report Diagram
-                    </div>
-                </div> -->
+                </div>                
+                
                 <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
@@ -118,49 +101,23 @@
                         Report Graphs
                     </div>
                 </div>
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions"
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions || showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
+                        [ngClass]="{'bold-bottom-divider' : (showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions || showFsatReportOptions}">
                         Report Sankey
                     </div>
-                </div>
-
-                <!-- treasure hunt specific options -->
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('opportunitySummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Opportunity Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('opportunityPayback')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Opportunity Payback Details
-                    </div>
-                </div>
-                <!-- end treasure hunt specific options -->
-
+                </div>    
 
                 <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printExecutiveSummary"></app-animated-checkmark>
                     </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
+                    <div class="col-8 bottom-divider">
                         Executive Summary
                     </div>
                 </div>
@@ -170,8 +127,19 @@
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
                     </div>
-                    <div class="col-8 bottom-divider">
+                    <div class="col-8"
+                        [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
                         Energy Summary
+                    </div>
+                </div>
+
+                <div *ngIf="showFsatReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('detailedResults')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printDetailedResults"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8"
+                        [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
+                        Detailed Results
                     </div>
                 </div>
 
@@ -180,12 +148,44 @@
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
                     </div>
-                    <div class="col-8 bold-bottom-divider">
+                    <div class="col-8 bottom-divider">
                         Losses Summary
                     </div>
                 </div>
 
-                <div *ngIf="!showTHReportOptions || showRollupReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('reportDiagram')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportDiagram"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8" [ngClass]="{'bold-bottom-divider' : showSsmtReportOptions && !showRollupReportOptions, 'bottom-divider' : showRollupReportOptions}">
+                        Report Diagram
+                    </div>
+                </div>
+
+                <!-- treasure hunt specific options -->
+                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunitySummary')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Opportunity Summary
+                    </div>
+                </div>
+                
+                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunityPayback')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Opportunity Payback Details
+                    </div>
+                </div>
+                <!-- end treasure hunt specific options -->
+
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showWasteWaterOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
                     </div>
