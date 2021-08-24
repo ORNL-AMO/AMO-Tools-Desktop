@@ -75,7 +75,3 @@ export class BinsFormComponent implements OnInit {
     }
   }
 }
-function setAutoBinCases() {
-  throw new Error('Function not implemented.');
-}
-
