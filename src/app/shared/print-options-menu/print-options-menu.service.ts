@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PrintOptions } from '../models/printing';
+import { Settings } from '../models/settings';
 
 @Injectable()
 export class PrintOptionsMenuService {
 
+  settings: Settings;
   printOptions: BehaviorSubject<PrintOptions>;
   showPrintView: BehaviorSubject<boolean>;
   printContext: BehaviorSubject<string>;
   showPrintMenu: BehaviorSubject<boolean>;
-  constructor() {
-    let initPrintOptions: PrintOptions = this.setAll(true);
+  constructor(private settingsDbService: SettingsDbService) {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    let initPrintOptions: PrintOptions = this.setAllFromSettings(this.settings);
     this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
     this.printContext = new BehaviorSubject<string>(undefined);
@@ -121,6 +127,29 @@ export class PrintOptionsMenuService {
       printDetailedResults: bool,
       printReportDiagram: bool,
       selectAll: bool
+    }
+  }
+
+  setAllFromSettings(settings: Settings): PrintOptions {
+    return {
+      printPsatRollup: settings.printPsatRollup,
+      printPhastRollup: settings.printPhastRollup,
+      printFsatRollup: settings.printFsatRollup,
+      printTreasureHuntRollup: settings.printTreasureHuntRollup,
+      printReportGraphs: settings.printReportGraphs,
+      printReportSankey: settings.printReportSankey,
+      printResults: settings.printResults,
+      printInputData: settings.printInputData,
+      printExecutiveSummary: settings.printExecutiveSummary,
+      printEnergySummary: settings.printEnergySummary,
+      printLossesSummary: settings.printLossesSummary,
+      printReportOpportunityPayback: settings.printReportOpportunityPayback,
+      printReportOpportunitySummary: settings.printReportOpportunitySummary,
+      printSsmtRollup: settings.printSsmtRollup,
+      printWasteWaterRollup: settings.printWasteWaterRollup,
+      printDetailedResults: settings.printDetailedResults,
+      printReportDiagram: settings.printReportDiagram,
+      selectAll: settings.printAll
     }
   }
 }

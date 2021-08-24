@@ -135,7 +135,7 @@ export class SettingsService {
       'printWasteWaterRollup': settings.printWasteWaterRollup || true,
       'printDetailedResults': settings.printDetailedResults || true,
       'printReportDiagram': settings.printReportDiagram || true,
-      'selectAll': settings.selectAll || true
+      'printAll': settings.printAll || true
     
     });
   }
@@ -218,7 +218,7 @@ export class SettingsService {
       printWasteWaterRollup: form.controls.printWasteWaterRollup.value,
       printDetailedResults: form.controls.printDetailedResults.value,
       printReportDiagram: form.controls.printReportDiagram.value,
-      selectAll: form.controls.selectAll.value
+      printAll: form.controls.printAll.value
     };
     return tmpSettings;
   }
@@ -300,7 +300,7 @@ export class SettingsService {
       printWasteWaterRollup: settings.printWasteWaterRollup,
       printDetailedResults: settings.printDetailedResults,
       printReportDiagram: settings.printReportDiagram,
-      selectAll: settings.selectAll
+      printAll: settings.printAll
     }
     return newSettings;
   }

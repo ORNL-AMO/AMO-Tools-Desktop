@@ -99,7 +99,7 @@ export interface Settings {
     printWasteWaterRollup?: boolean,
     printDetailedResults?: boolean,
     printReportDiagram?: boolean,
-    selectAll?: boolean
+    printAll?: boolean
 }
 
 
