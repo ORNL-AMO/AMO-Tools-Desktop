@@ -43,41 +43,5 @@ export class PipeSizingService {
     return tmpInputs;
   }
 
-  initForm(settings: Settings): FormGroup {
-    return this.formBuilder.group({
-      airFlow: [1010, Validators.required],
-      airlinePressure: [90, [Validators.required, Validators.min(0)]],
-      designVelocity: [20, [Validators.required, Validators.min(0)]],
-      atmosphericPressure: [14.7, [Validators.required, Validators.min(0)]],
-    });
-  }
-
-  initFormFromObj(obj: PipeSizingInputs): FormGroup {
-    return this.formBuilder.group({
-      airFlow: [obj.airFlow, Validators.required],
-      airlinePressure: [obj.airlinePressure, Validators.required],
-      designVelocity: [obj.designVelocity, Validators.required],
-      atmosphericPressure: [obj.atmosphericPressure, Validators.required]
-    });
-  }
-
-  getObjFromForm(form: FormGroup): PipeSizingInputs {
-    return {
-      airFlow: form.controls.airFlow.value,
-      airlinePressure: form.controls.airlinePressure.value,
-      designVelocity: form.controls.designVelocity.value,
-      atmosphericPressure: form.controls.atmosphericPressure.value
-    };
-  }
-
-  resetForm(settings: Settings): FormGroup {
-    return this.formBuilder.group({
-      airFlow: [0, Validators.required],
-      airlinePressure: [0, Validators.required],
-      designVelocity: [20, Validators.required],
-      atmosphericPressure: [14.7, Validators.required]
-    });
-  }
-
 }
 

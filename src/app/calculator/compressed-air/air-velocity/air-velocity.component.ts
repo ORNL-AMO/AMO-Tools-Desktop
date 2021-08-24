@@ -47,7 +47,7 @@ export class AirVelocityComponent implements OnInit {
     }
     if(this.assessment) {
       this.getCalculatorForAssessment();
-    }else{
+    } else{
     this.inputs = this.airVelocityService.airVelocityInputs;
     this.getAirVelocity(this.inputs);
   }
@@ -94,11 +94,16 @@ export class AirVelocityComponent implements OnInit {
 
   getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if(this.assessmentCalculator && this.assessmentCalculator.airVelocityInputs) {
-      this.inputs = this.assessmentCalculator.airVelocityInputs;
-      this.getAirVelocity(this.inputs);
+    if(this.assessmentCalculator) {
+      if (this.assessmentCalculator.airVelocityInputs) {
+        this.inputs = this.assessmentCalculator.airVelocityInputs;
+        this.getAirVelocity(this.inputs);
+      } else {
+        this.inputs = this.airVelocityService.airVelocityInputs;
+        this.assessmentCalculator.airVelocityInputs = this.inputs;
+        this.getAirVelocity(this.inputs);
+      }
     }else{
-      debugger;
       this.assessmentCalculator = this.initNewAssessmentCalculator();
       this.saveAssessmentCalculator();
     }
@@ -115,9 +120,8 @@ export class AirVelocityComponent implements OnInit {
   }
 
   saveAssessmentCalculator(){
-    //saving flag in case we get user keyboard input while already saving
     if (!this.saving) {
-      if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.id) {
         this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
           this.calculatorDbService.setAll();
         });

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Settings } from 'http2';
 import { Subscription } from 'rxjs';
+import { Assessment } from '../../shared/models/assessment';
 import { CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
@@ -12,7 +13,7 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 export class CompressedAirCalculatorsComponent implements OnInit {
 
   @Input()
-  assessment: CompressedAirAssessment;
+  assessment: Assessment;
   @Input()
   settings: Settings;
   

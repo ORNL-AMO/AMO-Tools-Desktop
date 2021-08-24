@@ -50,7 +50,6 @@ export class PipeSizingComponent implements OnInit {
     if (this.assessment) {
       this.getCalculatorForAssessment();
     } else {
-      // Set calc inputs from service defaults
       this.inputs = this.pipeSizingService.inputs;
       this.calculatePipeSize(this.inputs);
     }
@@ -70,7 +69,6 @@ export class PipeSizingComponent implements OnInit {
 
   calculatePipeSize(inputs: PipeSizingInput) {
     this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
-    // Changes to inputs have been made, save them to calculator otherwise update service
     if (this.assessmentCalculator) {
       this.assessmentCalculator.pipeSizingInputs = this.inputs;
       this.saveAssessmentCalculator();
@@ -100,11 +98,15 @@ export class PipeSizingComponent implements OnInit {
 
   getCalculatorForAssessment() {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if (this.assessmentCalculator && this.assessmentCalculator.pipeSizingInputs) {
+    if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.pipeSizingInputs) {
         this.inputs = this.assessmentCalculator.pipeSizingInputs;
-        this.calculatePipeSize(this.inputs);
+      } else {
+        this.inputs = this.pipeSizingService.inputs;
+        this.assessmentCalculator.pipeSizingInputs = this.inputs;
+      }
+      this.calculatePipeSize(this.inputs);
     } else {
-      // create new calculator obj for assessment
       this.assessmentCalculator = this.initNewAssessmentCalculator();
       this.saveAssessmentCalculator();
     }
@@ -122,9 +124,8 @@ export class PipeSizingComponent implements OnInit {
 
   
   saveAssessmentCalculator() {
-    // Saving flag incase we get user keybaord input while already saving
     if (!this.saving) {
-      if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.id) {
         this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
           this.calculatorDbService.setAll();
         });
