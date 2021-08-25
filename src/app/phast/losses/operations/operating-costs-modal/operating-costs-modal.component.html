@@ -49,10 +49,9 @@
   
               <!-- Somewhere down here display mixedFuelResults -->
               <div class="form-group pt-1">
-                <label class="bold" for="fuelCost">Total Cost:</label>            
-                <div class="small bold text-center">${{this.mixedFuelCostsResult | number:'1.2-2'}}<span [innerHTML]="settings.fuelCost | settingsLabel"></span></div>
-             
-              </div>
+                            
+                <div class="small bold text-center"><label class="bold" for="fuelCost">Total Cost:</label>${{this.mixedFuelCostsResult | number:'1.2-2'}}<span [innerHTML]="settings.fuelCost | settingsLabel"></span></div>
+               </div>
               
               <div class="card-footer d-flex justify-content-between">
                 <button class="btn btn-danger" (click)="hideMixedFuelModal()">Close</button>
