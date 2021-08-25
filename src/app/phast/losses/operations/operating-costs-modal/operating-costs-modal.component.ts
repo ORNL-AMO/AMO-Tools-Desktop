@@ -25,7 +25,7 @@ export class OperatingCostsModalComponent implements OnInit {
       usage: 0,
       cost: 0
   }];
-  
+
   constructor() { }
 
   ngOnInit(): void {}
@@ -58,7 +58,7 @@ export class OperatingCostsModalComponent implements OnInit {
     this.closeModal.emit(this.mixedFuelCostsResult);
   }
 
-  hideMaterialModal() {
+  hideMixedFuelModal() {
     this.hideModal.emit();
   }
 }
