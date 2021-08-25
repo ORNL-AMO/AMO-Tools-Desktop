@@ -62,7 +62,6 @@ export class CaseFormComponent implements OnInit {
       caseItem.caseName = 'Bin #' + newNameIndex;
       newNameIndex++;
     });
-
     this.save();
   }
 }

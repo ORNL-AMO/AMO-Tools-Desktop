@@ -1,10 +1,22 @@
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;    
+} 
 
-.form-section{
-    border-bottom: #bbb dashed 1px;
-    padding-top: 1rem;
-    padding-bottom: .5rem;
+.btn-group {
+    display: block;
+    text-align: center;
 }
 
-.btn{
-    padding: 4px;
+.btn-group .btn-sm {
+    font-size: small !important;
 }
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
+}   
