@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
-import { WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
+import {  WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
@@ -44,6 +44,13 @@ export class BinsFormComponent implements OnInit {
     this.inputData = this.weatherBinsService.setAutoBinCases(this.inputData, this.settings);
     this.weatherBinsService.save(this.inputData, this.settings);
   }
+
+  deleteAllCase(){    
+    this.inputData.cases = [];
+    this.weatherBinsService.inputData.next(this.inputData)
+  }
+
+
 
   setParameterMinMax() {
     if (this.importDataFromCsv) {
