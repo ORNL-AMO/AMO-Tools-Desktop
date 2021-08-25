@@ -17,7 +17,6 @@ import { ModalModule } from 'ngx-bootstrap';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 import { RouterModule } from '@angular/router';
 import { PrintSettingsComponent } from './print-settings/print-settings.component';
-import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
 
 @NgModule({
     declarations: [
@@ -44,7 +43,6 @@ import { PrintOptionsMenuService } from '../shared/print-options-menu/print-opti
     ],
     providers: [
         SettingsService,
-        PrintOptionsMenuService
     ],
     exports: [
         PsatSettingsComponent,
