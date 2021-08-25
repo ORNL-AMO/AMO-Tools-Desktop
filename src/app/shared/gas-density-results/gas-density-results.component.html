@@ -101,7 +101,7 @@
       <tr>
         <td>Barometric Pressure 
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span>
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(H<sub>2</sub>O)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(in H<sub>2</sub>O)</span>
         </td>
         <td><span
           *ngIf="!isBaselineTypeCustom && baselinePsychrometricResults">{{ baselinePsychrometricResults.barometricPressure | number:'1.0-3' }}</span>
