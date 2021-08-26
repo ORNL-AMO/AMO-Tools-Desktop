@@ -1,25 +1,30 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PrintOptions } from '../models/printing';
+import { Settings } from '../models/settings';
 
 @Injectable()
 export class PrintOptionsMenuService {
-
   printOptions: BehaviorSubject<PrintOptions>;
   showPrintView: BehaviorSubject<boolean>;
   printContext: BehaviorSubject<string>;
   showPrintMenu: BehaviorSubject<boolean>;
-  constructor() {
-    let initPrintOptions: PrintOptions = this.setAll(true);
+  constructor(private settingsDbService: SettingsDbService) {
+    let initPrintOptions: PrintOptions = this.setPrintOptionsFromSettings();
     this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
     this.printContext = new BehaviorSubject<string>(undefined);
     this.showPrintMenu = new BehaviorSubject<boolean>(false);
   }
 
+  setPrintOptionsFromSettings() {
+    let globalSettings = this.settingsDbService.globalSettings;
+    let printOptions: PrintOptions = this.setValuesFromSettings(globalSettings);
+    return printOptions;
+  }
 
-  toggleSection(section: string): void {
-    let currentPrintOptions: PrintOptions = this.printOptions.getValue();
+  toggleSection(section: string, currentPrintOptions: PrintOptions) {
     switch (section) {
       case "selectAll": {
         currentPrintOptions.selectAll = !currentPrintOptions.selectAll;
@@ -62,10 +67,6 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printInputData = !currentPrintOptions.printInputData;
         break;
       }
-      case "energyUsed": {
-        currentPrintOptions.printEnergyUsed = !currentPrintOptions.printEnergyUsed;
-        break;
-      }
       case "executiveSummary": {
         currentPrintOptions.printExecutiveSummary = !currentPrintOptions.printExecutiveSummary;
         break;
@@ -94,11 +95,39 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printDetailedResults = !currentPrintOptions.printDetailedResults;
         break;
       }
+      case "reportDiagram": {
+        currentPrintOptions.printReportDiagram = !currentPrintOptions.printReportDiagram;
+        break;
+      }
       default: {
         break;
       }
     }
+
     this.printOptions.next(currentPrintOptions);
+  }
+
+  setValuesFromSettings(settings: Settings): PrintOptions {
+    return {
+      printPsatRollup: settings.printPsatRollup,
+      printPhastRollup: settings.printPhastRollup,
+      printFsatRollup: settings.printFsatRollup,
+      printTreasureHuntRollup: settings.printTreasureHuntRollup,
+      printReportGraphs: settings.printReportGraphs,
+      printReportSankey: settings.printReportSankey,
+      printResults: settings.printResults,
+      printInputData: settings.printInputData,
+      printExecutiveSummary: settings.printExecutiveSummary,
+      printEnergySummary: settings.printEnergySummary,
+      printLossesSummary: settings.printLossesSummary,
+      printReportOpportunityPayback: settings.printReportOpportunityPayback,
+      printReportOpportunitySummary: settings.printReportOpportunitySummary,
+      printSsmtRollup: settings.printSsmtRollup,
+      printWasteWaterRollup: settings.printWasteWaterRollup,
+      printDetailedResults: settings.printDetailedResults,
+      printReportDiagram: settings.printReportDiagram,
+      selectAll: settings.printAll
+    }
   }
 
   setAll(bool: boolean): PrintOptions {
@@ -112,7 +141,6 @@ export class PrintOptionsMenuService {
       printResults: bool,
       printInputData: bool,
       printExecutiveSummary: bool,
-      printEnergyUsed: bool,
       printEnergySummary: bool,
       printLossesSummary: bool,
       printReportOpportunityPayback: bool,
@@ -120,7 +148,9 @@ export class PrintOptionsMenuService {
       printSsmtRollup: bool,
       printWasteWaterRollup: bool,
       printDetailedResults: bool,
+      printReportDiagram: bool,
       selectAll: bool
     }
   }
+ 
 }
