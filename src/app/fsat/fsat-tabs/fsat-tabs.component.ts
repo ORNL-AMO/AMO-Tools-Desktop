@@ -23,11 +23,13 @@ export class FsatTabsComponent implements OnInit {
   fsat: FSAT;
 
 
+  operationsTabStatus: Array<string> = [];
   settingsClassStatus: Array<string> = [];
   fanClassStatus: Array<string> = [];
   fluidClassStatus: Array<string> = [];
   motorClassStatus: Array<string> = [];
   fieldDataClassStatus: Array<string> = [];
+  operationsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   fluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
