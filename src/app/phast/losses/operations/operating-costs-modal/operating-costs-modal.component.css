@@ -1,2 +1,76 @@
+   
+    .tab-content p{
+        padding-top: 10px;
+        text-align: center
+    }
+    
+    .form-section{
+        padding-bottom: .25rem;
+        border-bottom: 1px dashed;
+    }
+  
+    .btn-group {
+        display: block;
+        text-align: center;
+        
+    }
+    
+    .btn-group .btn-sm {
+        font-size: small !important;
+    }
+    
+    .btn-margin-10 {
+        margin: 10px 0px;
+    }
+    .btn-form {
+      border-radius: 4px !important;
+    }
+    
+    .input-group-addon.units.op-hour-addon{
+        border-left: solid 1px;
+        border-right: none;
+    }
+    
+    .btn-delete-fuel-container {
+        padding-bottom: .25rem;
+        border-bottom: 1px dashed;
+    }
+    
+    .btn-delete-fuel {
+        color: #dc3545;
+        margin-right: 200px;
+    }
+    
+    .btn-delete-fuel:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 
+    .card-footer {
+        justify-content: flex-end;
+    }
+  
+    .btn-delete-field {
+        color: #dc3545;
+        margin-left: 320px;
+        padding-left: 8px;
+        padding-right: 8px;
+        background-color: white;
+        box-sizing: border-box;
+        transition: all .2s ease-in-out;
+    }
+    
+    .btn-delete-field:hover {
+        cursor: pointer;
+        color: white;
+        background-color: #dc3545;
+    }
 
+    .centered {
+        justify-content: center;
+    }
+
+    .re-sized {
+        width: 80%;
+    }
+    

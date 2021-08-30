@@ -41,6 +41,7 @@ export class OperatingCostsModalComponent implements OnInit {
 
   deleteFuel(i: number) {
     this.fuels.splice(i, 1);
+    this.calculateMixedFuelCosts();
   }
 
   // called every time a fuel field changes

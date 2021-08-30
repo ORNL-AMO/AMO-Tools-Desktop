@@ -1,64 +1,87 @@
-<div class="panel-container d-flex w-100">
-  <div class="col-12 h-100">
-      <div class="row h-100">
-        <div class="col-12">
-          <div class="modification col-auto reset-size p-3 mx-auto">
-            <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-              <div class="col-md-auto ico-col">
+  <div class="tab-content">
+    <div class="flex-column d-flex m-4">
+      <div class="col-12 h-100">
+        <div class="row h-100">
+          <div class="col-12">
+           <div class="modification col-auto reset-size p-3 mx-auto re-sized">
+   
+
+    
+       <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+         <div class="col-md-auto ico-col">
               </div>
               <div class="pl-2">
                 <h3>Operating Costs - Net Costs From Mixed Fuel</h3>
               </div>
+       </div>
+
+      <form>
+      
+      <div *ngFor="let fuel of fuels; let index=index;"> 
+        <div class="form-section">
+          <div class="row pt-1">
+            <div class="col-12 text-center">
+              <label class="bold">Fuel {{index + 1}}</label>
             </div>
-              <form>
-                  <div class="form-section">
-                  <!-- iterate over the number of  Operating Fuels we have in our array-->
-                  <div *ngFor="let fuel of fuels; let index=index;">  
-                    <div class="form-group">                
-                       <label class="small" for="text">Fuel Name</label>
-                       <div class="input-group">
-                          <!-- need input for each property of fuel. Each should have a unique id using 'index' -->
-                          <input name="{{index+'_name'}}" type="text" id="text" class="form-control"
-                            [(ngModel)]="fuel.name" id="{{'fuel'+index}}"
-                            (input)="calculateMixedFuelCosts()" (focus)="focusField('text')" />
-                        </div>
-                    </div>                 
-                    <div class="form-group">
-                      <label class="small" for="fraction">Usage Fraction</label>
-                      <div class="input-group">
-                        <input name="{{index+'_usage'}}" type="number" id="fraction" class="form-control"
-                            [(ngModel)]="fuel.usage" id="{{'usage'+index}}"
-                            (input)="calculateMixedFuelCosts()" (focus)="focusField('fraction');" />
-                       </div>
-                    </div>                          
-                    <div class="form-group">
-                       <label class="small" for="number">Cost</label>
-                       <div class="input-group">
-                           <input name="{{index+'_cost'}}" type="number" id="number" class="form-control"
-                              [(ngModel)]="fuel.cost" id="{{'cost'+index}}"
-                              (input)="calculateMixedFuelCosts()" (focus)="focusField('number');" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-                  
-                  <button class="btn btn-primary input-group-addon units left" (click)="addFuel(index)">
-                      Add Fuel
-                  </button>
-              </form>
-  
-              <!-- Somewhere down here display mixedFuelResults -->
-              <div class="form-group pt-1">
-                            
-                <div class="small bold text-center"><label class="bold" for="fuelCost">Total Cost:</label>${{this.mixedFuelCostsResult | number:'1.2-2'}}<span [innerHTML]="settings.fuelCost | settingsLabel"></span></div>
-               </div>
-              
-              <div class="card-footer d-flex justify-content-between">
-                <button class="btn btn-danger" (click)="hideMixedFuelModal()">Close</button>
-                <button class="btn btn-success" type="submit" (click)="setMixedFuelCosts()">Save</button>
-              </div>
           </div>
+          <br>
+          <div class="m-0 form-group row no-gutters centered">
+            <div class="col-6">
+              <div class="input-group">
+               <label for="text">Fuel Name</label>            
+              <input name="{{index+'_name'}}" class="form-control" type="text" step="any" [(ngModel)]="fuel.name" id="text"
+               (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('text')">
+             </div>
+           </div>
+           </div>
+
+
+      <div class="m-0 form-group row no-gutters centered"> 
+        <div class="col-6">
+        <div class="input-group">    
+        <label for="fraction">Usage Fraction</label>        
+          <input name="{{index+'_usage'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.usage" id="fraction"
+          (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('fraction')">
+        </div>
+      </div>
+      </div>
+   
+      <div class="m-0 form-group row no-gutters centered">   
+        <div class="col-6">  
+          <div class="input-group">
+           <label for="number">Cost</label>        
+           <input name="{{index+'_cost'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.cost" id="number"
+          (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('number')">
+          
+        </div>
+        <div class="btn-delete-field" (click)="deleteFuel(index)"> &times;</div>
+      </div>
+      </div>
+      </div>
+    </div>
+   
+
+    <div class="pt-1">
+      <a class="click-link pull-left small" (click)="addFuel(index)">Add New Fuel</a>
+    </div>
+    <br>
+    <div class="form-group pt-1 row justify-content-end">
+      <div class="small bold text-center">
+        <label class="bold" for="fuelCost">Total Cost:</label>
+        ${{this.mixedFuelCostsResult | number:'1.2-2'}}
+        <span [innerHTML]="settings.fuelCost | settingsLabel"></span>
+      </div>
+    </div>
+
+     <div class="card-footer d-flex">
+      <button type="button" class="btn btn-danger pull-right btn-form m-2" (click)="hideMixedFuelModal()">Close</button>
+      <button type="button" class="btn btn-primary pull-right btn-form m-2" type="submit" (click)="setMixedFuelCosts()">Save</button>
+    </div>
+ 
+    </form>
+        </div>
+       </div>
       </div>
     </div>
   </div>
-</div>
+</div> 
