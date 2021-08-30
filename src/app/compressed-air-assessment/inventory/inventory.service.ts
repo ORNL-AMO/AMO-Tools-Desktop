@@ -125,13 +125,13 @@ export class InventoryService {
   getNameplateDataFormFromObj(nameplateData: CompressorNameplateData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       compressorType: [nameplateData.compressorType, Validators.required],
-      motorPower: [nameplateData.motorPower, [Validators.required, Validators.min(0)]],
+      motorPower: [nameplateData.motorPower, [Validators.min(0)]],
       fullLoadOperatingPressure: [nameplateData.fullLoadOperatingPressure, [Validators.required, Validators.min(0)]],
       fullLoadRatedCapacity: [nameplateData.fullLoadRatedCapacity, [Validators.required, Validators.min(0)]],
       ratedLoadPower: [nameplateData.ratedLoadPower],
       ploytropicCompressorExponent: [nameplateData.ploytropicCompressorExponent],
       fullLoadAmps: [nameplateData.fullLoadAmps, Validators.min(0)],
-      totalPackageInputPower: [nameplateData.totalPackageInputPower]
+      totalPackageInputPower: [nameplateData.totalPackageInputPower, Validators.required]
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -169,7 +169,7 @@ export class InventoryService {
       unloadPointCapacity: [compressorControls.unloadPointCapacity],
       numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
       automaticShutdown: [compressorControls.automaticShutdown],
-      unloadSumpPressure: [compressorControls.unloadSumpPressure]
+      unloadSumpPressure: [compressorControls.unloadSumpPressure, Validators.required]
     });
     form = this.setCompressorControlValidators(form);
     this.markFormDirtyToDisplayValidation(form);
@@ -310,12 +310,12 @@ export class InventoryService {
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
       modulatingPressureRange: [designDetails.modulatingPressureRange, modulatingPressureValidators],
-      inputPressure: [designDetails.inputPressure, [Validators.min(0), Validators.max(16)]],
-      designEfficiency: [designDetails.designEfficiency, [GreaterThanValidator.greaterThan(0), Validators.max(100)]],
-      serviceFactor: [designDetails.serviceFactor, [Validators.min(1)]],
-      noLoadPowerFM: [designDetails.noLoadPowerFM],
-      noLoadPowerUL: [designDetails.noLoadPowerUL],
-      maxFullFlowPressure: [designDetails.maxFullFlowPressure]
+      inputPressure: [designDetails.inputPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
+      designEfficiency: [designDetails.designEfficiency, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
+      serviceFactor: [designDetails.serviceFactor, [Validators.required, Validators.min(1)]],
+      noLoadPowerFM: [designDetails.noLoadPowerFM, Validators.required],
+      noLoadPowerUL: [designDetails.noLoadPowerUL, Validators.required],
+      maxFullFlowPressure: [designDetails.maxFullFlowPressure, Validators.required]
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -377,7 +377,7 @@ export class InventoryService {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
       atmosphericPressure: [inletConditions.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
-      temperature: [inletConditions.temperature, [Validators.min(0), Validators.max(1000)]],
+      temperature: [inletConditions.temperature, [Validators.required, Validators.min(0), Validators.max(1000)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -396,8 +396,8 @@ export class InventoryService {
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    // let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
-    let performancePointsValid: boolean = true;
+    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
+    // let performancePointsValid: boolean = true;
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
@@ -519,9 +519,9 @@ export class InventoryService {
     let summaryData: Array<ProfileSummaryData> = new Array();
     for (let i = 0; i < 24; i++) {
       summaryData.push({
-        power: undefined,
-        airflow: undefined,
-        percentCapacity: undefined,
+        power: 0,
+        airflow: 0,
+        percentCapacity: 0,
         timeInterval: i,
         percentPower: undefined,
         percentSystemCapacity: undefined,
