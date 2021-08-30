@@ -201,6 +201,7 @@ export class CompressedAirCalculationService {
       compressor.designDetails.blowdownTime = .0003;
       compressor.compressorControls.unloadSumpPressure = 15;
     }
+    let loadFactorUnloaded: number = compressor.performancePoints.noLoad.power / compressor.performancePoints.fullLoad.power;
 
     return {
       computeFrom: computeFrom,
@@ -231,7 +232,7 @@ export class CompressedAirCalculationService {
 
 
       //base on use default selection in performance points
-      adjustForDischargePressure: true,
+      adjustForDischargePressure: false,
       applyPressureInletCorrection: false,
 
       powerMax: compressor.performancePoints.maxFullFlow.power,
@@ -258,7 +259,7 @@ export class CompressedAirCalculationService {
 
 
       receiverVolume: receiverVolume,
-      loadFactorUnloaded: 1,
+      loadFactorUnloaded: loadFactorUnloaded,
 
       unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
       blowdownTime: compressor.designDetails.blowdownTime,

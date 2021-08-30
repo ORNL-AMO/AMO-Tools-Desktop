@@ -8,8 +8,8 @@ export class UnloadPointCalculationsService {
   constructor(private convertCompressedAirService: ConvertCompressedAirService) { }
 
   setUnload(selectedCompressor: CompressorInventoryItem): PerformancePoint {
-    selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor,selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
     selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow);
+    selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
     selectedCompressor.performancePoints.unloadPoint.power = this.getUnloadPower(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPower);
     return selectedCompressor.performancePoints.unloadPoint;
   }
@@ -21,7 +21,7 @@ export class UnloadPointCalculationsService {
         //centrifugal
         defaultPressure = selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
       } else {
-        defaultPressure =  this.calculateUnloadPointDischargePressure(selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.designDetails.modulatingPressureRange, selectedCompressor.compressorControls.unloadPointCapacity);
+        defaultPressure = this.calculateUnloadPointDischargePressure(selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.designDetails.modulatingPressureRange, selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.unloadPoint.airflow);
       }
       return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure);
     } else {
@@ -64,7 +64,7 @@ export class UnloadPointCalculationsService {
       return selectedCompressor.performancePoints.unloadPoint.power;
     }
   }
-  
+
   calculateUnloadPointPower(NoLoadPowerFM: number, unloadPointCapacity: number, exponent: number, maxFullFlowPower: number): number {
     let unloadPointPower: number = ((NoLoadPowerFM / 100) * (1 - Math.pow((unloadPointCapacity / 100), exponent)) + Math.pow((unloadPointCapacity / 100), exponent)) * maxFullFlowPower;
     return Number(unloadPointPower.toFixed(1));
@@ -75,8 +75,8 @@ export class UnloadPointCalculationsService {
     return Number(unloadPointAirFlow.toFixed(0));
   }
 
-  calculateUnloadPointDischargePressure(maxFullFlowPressure: number, modulatingPressureRange: number, unloadPointCapacity: number): number {
-    let unloadPointDischargePressure: number = maxFullFlowPressure + (modulatingPressureRange * (1 - (unloadPointCapacity / 100)));
+  calculateUnloadPointDischargePressure(maxFullFlowPressure: number, modulatingPressureRange: number, fullLoadAirFlow: number, unloadPointAirFlow: number): number {
+    let unloadPointDischargePressure: number = maxFullFlowPressure + (modulatingPressureRange * (1 - (fullLoadAirFlow / unloadPointAirFlow)));
     return Number(unloadPointDischargePressure.toFixed(0));
   }
 
@@ -86,7 +86,7 @@ export class UnloadPointCalculationsService {
     let C22: number = selectedCompressor.centrifugalSpecifics.maxFullLoadPressure;
     let C23: number = selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity;
     let C26: number = selectedCompressor.centrifugalSpecifics.surgeAirflow;
-    let result: number =  (C37 - (C24 - (((C22 - C24) / (C23 - C26)) * C26))) / ((C22 - C24) / (C23 - C26));
+    let result: number = (C37 - (C24 - (((C22 - C24) / (C23 - C26)) * C26))) / ((C22 - C24) / (C23 - C26));
     return Number(result.toFixed(0));
   }
 }
