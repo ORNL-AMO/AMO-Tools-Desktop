@@ -365,6 +365,23 @@ export class CompareService {
     }
   }
 
+  checkFanOperationsDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isOperatingHoursDifferent(baseline, modification) ||
+        this.isCostDifferent(baseline, modification)
+      );
+    } else {
+      return false;
+    }
+  }
+
 
   //Fan Field Data
   checkFanFieldDataDifferent(baseline?: FSAT, modification?: FSAT) {

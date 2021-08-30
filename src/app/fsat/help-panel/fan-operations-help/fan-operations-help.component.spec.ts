@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OperatingCostsComponent } from './operating-costs.component';
+import { FanOperationsHelpComponent } from './fan-operations-help.component';
 
-describe('OperatingCostsComponent', () => {
-  let component: OperatingCostsComponent;
-  let fixture: ComponentFixture<OperatingCostsComponent>;
+describe('FanOperationsHelpComponent', () => {
+  let component: FanOperationsHelpComponent;
+  let fixture: ComponentFixture<FanOperationsHelpComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OperatingCostsComponent ]
+      declarations: [ FanOperationsHelpComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OperatingCostsComponent);
+    fixture = TestBed.createComponent(FanOperationsHelpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

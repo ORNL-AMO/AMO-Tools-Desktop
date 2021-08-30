@@ -1,13 +1,62 @@
-<div class="d-flex flex-column">
-    <div *ngIf="inSetup" class="header mr-2 ml-2">
-      <h3>Operating Conditions</h3>
-    </div>
-    <div class="p-3">
-      <app-general-operations [(form)]="operationsForm" [selected]="selected" [settings]="settings" (emitSave)="save()"
-        [inSetup]="inSetup" [idString]="idString" [ssmt]="ssmt" [isBaseline]="isBaseline"></app-general-operations>
-      <div class="pt-2">
-        <app-operating-costs [(form)]="operationsForm" [selected]="selected" [settings]="settings" (emitSave)="save()"
-          [inSetup]="inSetup" [idString]="idString" [isBaseline]="isBaseline"></app-operating-costs>
-      </div>
+<form [formGroup]="operationsForm" #formElement>
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Operations</h3>
     </div>
   </div>
+
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+    <!--min/max-->
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isOperatingHoursDifferent(), 'invalid': operationsForm.controls.operatingHours.invalid}">
+      <label for="{{'operatingHours_'+idString}}">Operating Hours</label>
+      <div class="input-group">
+        <span class="input-group-addon op-hour-addon units">
+          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+        </span>
+        <input name="operatingHours" type="number" min="0" max="1" step="any" class="form-control"
+          formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()"
+          (focus)="focusField('operatingHours')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">hrs/yr</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="operationsForm.controls.operatingHours.invalid && !operationsForm.controls.operatingHours.pristine">
+        <span *ngIf="operationsForm.controls.operatingHours.errors.required">Value Required</span>
+        <span *ngIf="operationsForm.controls.operatingHours.errors.max">Value can't be greater than
+          {{operationsForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+        <span *ngIf="operationsForm.controls.operatingHours.errors.min">Value can't be less than
+          {{operationsForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
+      </span>
+    </div>
+    <!--min-->
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null, 'invalid':operationsForm.controls.cost.invalid}">
+      <label for="{{'cost_'+idString}}">Electricity Cost</label>
+      <div class="input-group">
+        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost"
+          id="{{'cost_'+idString}}" (input)="save()" (focus)="focusField('cost')" onfocus="this.select();"
+          [readonly]="!selected">
+        <span class="input-group-addon units">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="operationsForm.controls.cost.invalid && !operationsForm.controls.cost.pristine">
+        <span *ngIf="operationsForm.controls.cost.errors.required">Value Required</span>
+        <span *ngIf="operationsForm.controls.cost.errors.min">Value can't be less than
+          {{operationsForm.controls.cost.errors.min.min}} $/kWh.</span>
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="warnings.costError !== null && !operationsForm.controls.cost.pristine && !operationsForm.controls.cost.invalid">{{warnings.costError}}
+        $/kWh.</span>
+    </div>
+
+
+
+
+
+  </div>
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="fsat.operatingHours">
+</app-operating-hours-modal>

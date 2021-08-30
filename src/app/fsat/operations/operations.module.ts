@@ -5,9 +5,6 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { OperationsComponent } from './operations.component';
 import { OperationsService } from './operations.service';
-import { OperatingCostsComponent } from './operating-costs/operating-costs.component';
-import { GeneralOperationsComponent } from './general-operations/general-operations.component';
-
 
 
 @NgModule({
@@ -18,9 +15,7 @@ import { GeneralOperationsComponent } from './general-operations/general-operati
     SharedPipesModule
   ],
   declarations: [
-    OperationsComponent,
-    OperatingCostsComponent,
-    GeneralOperationsComponent
+    OperationsComponent
   ],
   providers: [OperationsService],
   exports: [OperationsComponent]

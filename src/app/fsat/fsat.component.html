@@ -9,6 +9,10 @@
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+        
+      <app-operations *ngIf="stepTab == 'operations'" [settings]="settings" [inSetup]="true" [selected]="true"
+      [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-operations>
+
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
         [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"
         (emitSave)="saveFanSetup($event)"></app-fan-setup>

@@ -10,6 +10,7 @@ import { FanSetupService } from '../fan-setup/fan-setup.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
 import { FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -56,7 +57,8 @@ export class FsatTabsComponent implements OnInit {
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
     private modifyConditionsService: ModifyConditionsService,
-    private fsatWarningService: FsatWarningService) { }
+    private fsatWarningService: FsatWarningService,
+    private fanOperationsService: OperationsService) { }
 
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -107,6 +109,7 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
+    //let fanOperations: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.)
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, this.settings);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
@@ -115,6 +118,10 @@ export class FsatTabsComponent implements OnInit {
         this.fsatService.stepTab.next(str);
       }
     } else if (str === 'fan-field-data') {
+      if (fluidValid && fanValid && motorValid) {
+        this.fsatService.stepTab.next(str);
+      }
+    } else if (str == 'operations') {
       if (fluidValid && fanValid && motorValid) {
         this.fsatService.stepTab.next(str);
       }

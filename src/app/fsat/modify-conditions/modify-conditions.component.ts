@@ -83,6 +83,11 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
+  saveBaselineFanOperations(newFieldData: FieldData) {
+    this.assessment.fsat.fieldData = newFieldData;
+    this.saveAssessment();
+  }
+
   saveBaselineFanMotor(newFanMotor: FanMotor) {
     this.assessment.fsat.fanMotor = newFanMotor;
     this.saveAssessment();
@@ -109,6 +114,11 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   saveModFieldData(newFieldData: FieldData) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.fieldData = newFieldData;
+    this.saveAssessment();
+  }
+
+  saveModFanOperations(newFieldData: FieldData) {
     this.assessment.fsat.modifications[this.modificationIndex].fsat.fieldData = newFieldData;
     this.saveAssessment();
   }
