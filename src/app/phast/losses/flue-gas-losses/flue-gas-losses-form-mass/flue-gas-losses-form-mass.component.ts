@@ -10,7 +10,6 @@ import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
-import { RemoveCommasPipe } from '../../../../shared/shared-pipes/remove-commas.pipe';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
@@ -196,7 +195,14 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   save() {
     this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
+
+    // backend method needs moistureInAirComposition to be ''
+    // moistureInAirComposition is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
+    if (this.flueGasLossForm.controls.moistureInAirComposition === undefined) {
+      this.flueGasLossForm.patchValue({moistureInAirComposition: ''});
+    }
+    // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
   }
 
