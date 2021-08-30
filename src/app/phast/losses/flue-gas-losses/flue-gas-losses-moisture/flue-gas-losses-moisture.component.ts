@@ -7,7 +7,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompareService } from '../../../../fsat/compare.service';
 import { GasDensityFormService } from '../../../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flue-gas-losses-moisture',
