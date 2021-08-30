@@ -2,33 +2,10 @@
     <form>
         <div class="form-group">
             <label for="field">Auto-bin Parameter</label>
-            <select name="autoBinParameter" id="field" class="form-control" [(ngModel)]="inputData.autoBinParameter" (change)="setParameterMinMax()">
-                <option [ngValue]="'Dry-bulb (C)'">
-                    Dry-bulb Temperature
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dry-bulb (C)'"></app-parameter-unit> -->
-                </option>
-                <option [ngValue]="'Wet Bulb (C)'">
-                    Wet-bulb Temperature
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Wet Bulb (C)'"></app-parameter-unit> -->
-                </option>
-                <option [ngValue]="'RHum (%)'">Relative Humidity</option>
-                <option [ngValue]="'Dew-point (C)'">
-                    Dew-point
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Dew-point (C)'"></app-parameter-unit> -->
-                </option>
-                
-                <option [ngValue]="'Wspd (m/s)'">
-                    Wind Speed
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Wspd (m/s)'"></app-parameter-unit> -->
-                </option>
-                <option [ngValue]="'Wdir (degrees)'">Wind Direction</option>
-                <option [ngValue]="'Lprecip depth (mm)'">Liquid Precipitation Depth
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Lprecip depth (mm)'"></app-parameter-unit> -->
-                </option>
-                <option [ngValue]="'Pressure (mbar)'">Pressure
-                    <!-- <app-parameter-unit [settings]="settings" [parameter]="'Pressure (mbar)'"></app-parameter-unit> -->
-                </option>
-            </select>
+            <select class="form-control" name="autoBinParameter" id="autoBinParameter" [disabled]="hasIntegratedCalculatorParameter"
+            [(ngModel)]="inputData.autoBinParameter" (change)="setParameterMinMax()">
+            <option *ngFor="let option of parameterOptions" [ngValue]="option.value">{{option.display}}</option>
+          </select>
         </div>
 
         <div class="form-group">

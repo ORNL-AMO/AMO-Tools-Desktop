@@ -92,3 +92,22 @@
    .w-33 {
     width: 33.333%;
    }
+
+
+div.clickable-tab {
+ cursor: pointer;
+}
+
+.weather-icon{
+ height: 55px;
+}
+
+div.active{
+ background: #fff;
+ color: black;
+ transition: all .1s ease-in-out;
+}
+
+.bg-grey {
+ background: #c8c8c8;
+}

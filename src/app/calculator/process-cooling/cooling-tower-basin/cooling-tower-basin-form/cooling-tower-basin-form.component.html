@@ -92,7 +92,7 @@
     </label>
     <form #formElement [formGroup]="form">
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="!hasWeatherBinsData">
         <label class="small" for="operatingHours">Operating Hours</label>
         <div class="input-group">
           <span class="input-group-addon op-hour-addon units">
@@ -126,7 +126,7 @@
         </span>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="!hasWeatherBinsData">
         <label class="small" for="operatingTempDryBulb">Ambient Dry Bulb Temperature</label>
         <div class="input-group">
           <input class="form-control" name="operatingTempDryBulb" id="operatingTempDryBulb" formControlName="operatingTempDryBulb"
@@ -139,10 +139,14 @@
           <span *ngIf="form.controls.operatingTempDryBulb.errors.required">Value required.</span>
         </span>
       </div>
-
     </form>
-  </div>
 
+    <div class="w-100 mx-auto mt-3" *ngIf="hasWeatherBinsData">
+      <span class="alert-info pull-right small py-2 px-3">
+        Operating Hours and Operating Ambient Dry Bulb Temperature are set from Weather Data conditions
+      </span>
+    </div>
+  </div>
 </div>
 
 <div class="w-100 header mx-2 mb-4">

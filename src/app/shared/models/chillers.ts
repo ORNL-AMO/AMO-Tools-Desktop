@@ -1,4 +1,4 @@
-import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
+import { CoolingChartData } from "../cooling-weather-chart/cooling-weather-chart.component";
 
 //====== Cooling Tower ======
 export interface CoolingTowerData {
@@ -63,14 +63,34 @@ export interface CoolingTowerData {
     modTempSetPoint: number
   }
 
-  export interface CoolingTowerBasinOutput {
+  export interface CoolingTowerBasinResult {
     baselinePower: number,
     baselineEnergy: number,
     modPower: number,
     modEnergy: number,
-    savingsEnergy: number
+    savingsEnergy: number,
   }
 
+  export interface WeatherBinnedResult {
+    caseName: string,
+    operatingHours: number, 
+    results: CoolingTowerBasinResult
+  }
+
+  export interface CoolingTowerBasinOutput {
+    results: CoolingTowerBasinResult;
+    // todo merge after demo
+    totalResults?: CoolingTowerBasinResult;
+    weatherBinnedResults?: Array<WeatherBinnedResult>;
+    weatherBinnedChartData?: WeatherBinnedChartData;
+  }
+
+  export interface WeatherBinnedChartData {
+    barChartDataArray: Array<CoolingChartData>
+    yValueUnit: string;
+    yAxisLabel: string;
+    parameterUnit: string;
+  }
   
 
   //====== Chiller Performance and Temperature ======
