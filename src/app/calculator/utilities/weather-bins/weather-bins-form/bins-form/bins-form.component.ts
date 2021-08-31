@@ -20,6 +20,18 @@ export class BinsFormComponent implements OnInit {
   importDataFromCsv: CsvImportData;
   parameterMin: number;
   parameterMax: number;
+  parameterOptions: Array<{display: string, value: string}> = [
+    {display: "Dry-bulb Temperature", value: "Dry-bulb (C)"},
+    {display: "Wet-bulb Temperature", value: "Wet Bulb (C)"},
+    {display: "Relative Humidity", value: "RHum (%)"},
+    {display: "Dew-point", value: "Dew-point (C)"},
+    {display: "Wind Speed", value: "Wspd (m/s)"},
+    {display: "Wind Direction", value: "Wdir (degrees)"},
+    {display: "Liquid Precipitation Depth", value: "Lprecip depth (mm)"},
+    {display: "Pressure", value: "Pressure (mbar)"},
+  ];
+  hasIntegratedCalculatorParameter: boolean = false;
+  integratedCalculatorSub: Subscription;
   constructor(private weatherBinsService: WeatherBinsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
@@ -32,11 +44,19 @@ export class BinsFormComponent implements OnInit {
       this.importDataFromCsv = importData;
       this.setParameterMinMax();
     });
+
+    this.integratedCalculatorSub = this.weatherBinsService.integratedCalculator.subscribe(integratedCalculator => {
+      if (integratedCalculator) {
+        this.parameterOptions.filter(option => option.value === integratedCalculator.binningParameters[0]);
+        this.hasIntegratedCalculatorParameter = true;
+      }
+  });
   }
 
   ngOnDestroy() {
     this.inputDataSub.unsubscribe();
     this.importDataFromCsvSub.unsubscribe();
+    this.integratedCalculatorSub.unsubscribe();
   }
 
 
@@ -56,7 +76,7 @@ export class BinsFormComponent implements OnInit {
     if (this.importDataFromCsv) {
       let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
       // if (this.settings.unitsOfMeasure != 'Metric') {
-      //   if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
+      //   if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Wet Bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
       //     minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('C').to('F');
       //     minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('C').to('F');
       //   } else if (this.inputData.autoBinParameter == 'Wspd (m/s)') {

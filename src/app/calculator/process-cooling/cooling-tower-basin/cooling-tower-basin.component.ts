@@ -24,6 +24,10 @@ export class CoolingTowerBasinComponent implements OnInit {
   
   headerHeight: number;
   tabSelect: string = 'results';
+
+  displayWeatherTab: boolean = false;
+  hasWeatherBinsDataSub: Subscription;
+  hasWeatherBinsData: boolean = false;
   
   constructor(private coolingTowerBasinService: CoolingTowerBasinService,
               private settingsDbService: SettingsDbService) { }
@@ -36,12 +40,18 @@ export class CoolingTowerBasinComponent implements OnInit {
     if(!existingInputs) {
       this.coolingTowerBasinService.initDefaultEmptyInputs();
       this.coolingTowerBasinService.initDefaultEmptyOutputs();
+    } else {
+      this.coolingTowerBasinService.setHasWeatherBinsData();
     }
+    this.coolingTowerBasinService.setAsWeatherIntegratedCalculator();
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
     this.coolingTowerBasinInputSub.unsubscribe();
+    this.hasWeatherBinsDataSub.unsubscribe();
+    this.coolingTowerBasinService.resetWeatherIntegratedCalculator();
+
   }
 
   ngAfterViewInit() {
@@ -54,6 +64,13 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.coolingTowerBasinInputSub = this.coolingTowerBasinService.coolingTowerBasinInput.subscribe(value => {
       this.calculate();
     });
+    this.hasWeatherBinsDataSub = this.coolingTowerBasinService.hasWeatherBinsData.subscribe(value => {
+      this.hasWeatherBinsData = value;
+    });
+  }
+
+  setWeatherCalculatorActive(displayWeatherTab: boolean) {
+    this.displayWeatherTab = displayWeatherTab;
   }
 
   calculate() {

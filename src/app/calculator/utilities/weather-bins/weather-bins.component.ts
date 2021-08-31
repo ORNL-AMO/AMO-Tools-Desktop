@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { WeatherBinsService } from './weather-bins.service';
 
 @Component({
   selector: 'app-weather-bins',
@@ -8,7 +9,6 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
   styleUrls: ['./weather-bins.component.css']
 })
 export class WeatherBinsComponent implements OnInit {
-
   settings: Settings;
   tabSelect: string = 'results';
   headerHeight: number;

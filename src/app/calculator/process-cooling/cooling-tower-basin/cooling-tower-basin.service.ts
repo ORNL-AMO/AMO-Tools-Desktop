@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { CoolingTowerBasinInput, CoolingTowerBasinOutput } from '../../../shared/models/chillers';
+import { CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, WeatherBinnedResult } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
+import { WeatherBinsInput, WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
 import { CoolingTowerBasinFormService } from './cooling-tower-basin-form.service';
+import * as _ from 'lodash';
+import { CoolingChartData } from '../../../shared/cooling-weather-chart/cooling-weather-chart.component';
 
 declare var chillersAddon;
 
@@ -16,13 +19,43 @@ export class CoolingTowerBasinService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
+  hasWeatherBinsData: BehaviorSubject<boolean>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private coolingTowerBasinFormService: CoolingTowerBasinFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService,
+    private weatherBinsService: WeatherBinsService, private coolingTowerBasinFormService: CoolingTowerBasinFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.coolingTowerBasinInput = new BehaviorSubject<CoolingTowerBasinInput>(undefined);
     this.coolingTowerBasinOutput = new BehaviorSubject<CoolingTowerBasinOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
+    this.setHasWeatherBinsData();
+  }
+
+  setHasWeatherBinsData() {
+    let weatherBinsData = this.weatherBinsService.inputData.getValue();
+    let hasWeatherBinsData = weatherBinsData && weatherBinsData.cases.length > 0;
+    if (!this.hasWeatherBinsData) {
+      this.hasWeatherBinsData = new BehaviorSubject<boolean>(hasWeatherBinsData);
+    } else {
+      if (hasWeatherBinsData !== this.hasWeatherBinsData.getValue())
+      this.hasWeatherBinsData.next(hasWeatherBinsData);
+    }
+  }
+
+  setAsWeatherIntegratedCalculator() {
+    let coolingTowerBasinParameters = [
+      'Dry-bulb (C)'
+      // , 'Wspd (m/s)'
+    ]
+    this.weatherBinsService.integratedCalculator.next(
+      {
+        binningParameters: coolingTowerBasinParameters
+      }
+    );
+  }
+
+  resetWeatherIntegratedCalculator() {
+    this.weatherBinsService.integratedCalculator.next(undefined);
   }
 
   initDefaultEmptyInputs() {
@@ -43,11 +76,13 @@ export class CoolingTowerBasinService {
 
   initDefaultEmptyOutputs() {
     let emptyOutput: CoolingTowerBasinOutput = {
-      baselinePower: 0,
-      baselineEnergy: 0,
-      modPower: 0,
-      modEnergy: 0,
-      savingsEnergy: 0
+      results: {
+        baselinePower: 0,
+        baselineEnergy: 0,
+        modPower: 0,
+        modEnergy: 0,
+        savingsEnergy: 0
+      },
     };
     this.coolingTowerBasinOutput.next(emptyOutput);
   }
@@ -62,18 +97,112 @@ export class CoolingTowerBasinService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let coolingTowerBasinOutput: CoolingTowerBasinOutput = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
-      coolingTowerBasinOutput = this.convertResultUnits(coolingTowerBasinOutput, settings);
-      this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+      this.setHasWeatherBinsData();
+      if (this.hasWeatherBinsData.getValue() == true) {
+        let weatherBinsData = this.weatherBinsService.inputData.getValue();
+        let coolingTowerBasinOutput: CoolingTowerBasinOutput = this.getWeatherBinnedOutput(inputCopy, weatherBinsData, settings);
+        this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+      } else {
+        let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(inputCopy);
+        let coolingTowerBasinOutput: CoolingTowerBasinOutput = {results: undefined};
+        coolingTowerBasinOutput.results = this.convertResultUnits(coolingTowerBasinResult, settings);
+        this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);
+      }
     }
   }
+
+  getWeatherBinnedOutput(input: CoolingTowerBasinInput, weatherData: WeatherBinsInput, settings: Settings): CoolingTowerBasinOutput {
+    let output: CoolingTowerBasinOutput = {
+      results: undefined,
+      totalResults: {
+        baselinePower: 0,
+        baselineEnergy: 0,
+        modPower: 0,
+        modEnergy: 0,
+        savingsEnergy: 0
+      },
+      weatherBinnedResults: [],
+      weatherBinnedChartData: {
+        barChartDataArray: [],
+        yValueUnit: 'kWh',
+        yAxisLabel: 'Energy (kWh)',
+        parameterUnit: undefined
+      }
+    };
+    let baselineBarData: CoolingChartData = {
+      name: 'Baseline',
+      barChartLabels: [],
+      barChartValues: [],
+      chartHourValues: [],
+    };
+    let modBarData: CoolingChartData = {
+      name: 'Modification',
+      barChartLabels: [],
+      barChartValues: [],
+      chartHourValues: [],
+
+    }
+    weatherData.cases.forEach(weatherBinCase => {
+      let weatherCase = JSON.parse(JSON.stringify(weatherBinCase));
+      let weatherBinnedResult: WeatherBinnedResult = {
+        caseName: weatherCase.caseName,
+        operatingHours: weatherCase.totalNumberOfDataPoints,
+        results: undefined
+      };
+
+      let label = `${weatherCase.caseParameters[0].lowerBound} to ${weatherCase.caseParameters[0].upperBound}`;
+      weatherBinnedResult.caseName = `${weatherCase.caseName} (${label} &#8457;)`;
+      baselineBarData.barChartLabels.push(label);
+      modBarData.barChartLabels.push(label);
+      
+      weatherCase.caseParameters.forEach(parameter => {
+        if (parameter.field == 'Dry-bulb (C)') {
+            let paramDataRange: Array<number> = _.range(parameter.lowerBound, parameter.upperBound + 1);
+            let dryBulbTemp = this.getMedianParameterValue(paramDataRange);
+            
+            input.operatingHours = weatherCase.totalNumberOfDataPoints;
+            input.operatingTempDryBulb = dryBulbTemp;
+            let coolingTowerBasinResult: CoolingTowerBasinResult = chillersAddon.coolingTowerBasinHeaterEnergyConsumption(input);
+            coolingTowerBasinResult = this.convertResultUnits(coolingTowerBasinResult, settings);
+            weatherBinnedResult.results = coolingTowerBasinResult;
+            output.weatherBinnedResults.push(weatherBinnedResult);
+            
+            baselineBarData.barChartValues.push(coolingTowerBasinResult.baselineEnergy);
+            baselineBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
+            modBarData.barChartValues.push(coolingTowerBasinResult.modEnergy);
+            modBarData.chartHourValues.push(weatherCase.totalNumberOfDataPoints);
+          }
+        });
+    });
+
+    output.totalResults.savingsEnergy = output.totalResults.baselineEnergy - output.totalResults.modEnergy;
+    output.weatherBinnedChartData.barChartDataArray = [baselineBarData, modBarData];
+    if (settings.unitsOfMeasure == 'Imperial') {
+      output.weatherBinnedChartData.parameterUnit = '&#8457;';
+    } else {
+      output.weatherBinnedChartData.parameterUnit = '&#8451;';
+    }
+
+    return output;
+  }
+
+  getMedianParameterValue(paramDataRange: Array<number>) {
+      const midIndex = Math.floor(paramDataRange.length / 2);
+      let isEvenLength: boolean = paramDataRange.length % 2 === 0;
+      if (isEvenLength) {
+        let avgOfMiddle: number = (paramDataRange[midIndex - 1] + paramDataRange[midIndex]) / 2; 
+          return avgOfMiddle;
+      }
+      return paramDataRange[midIndex];
+  }
+
 
   generateExampleData(settings: Settings) {
     let exampleInput: CoolingTowerBasinInput = {
       ratedCapacity: 1201.67,
       ratedTempSetPoint: 40,
       ratedTempDryBulb: -10,
-      ratedWindSpeed: 45,
+      ratedWindSpeed: 10,
       panLossRatio: .011,
       operatingTempDryBulb: 28,
       operatingWindSpeed: 9.21,
@@ -132,16 +261,16 @@ export class CoolingTowerBasinService {
     return input;
   }
 
-  convertResultUnits(output: CoolingTowerBasinOutput, settings: Settings): CoolingTowerBasinOutput {
+  convertResultUnits(result: CoolingTowerBasinResult, settings: Settings): CoolingTowerBasinResult {
     if (settings.unitsOfMeasure == "Metric") {
-      output.baselinePower = this.convertUnitsService.value(output.baselinePower).from('hp').to('kW');
-      output.baselinePower = this.roundVal(output.baselinePower, 2);
+      result.baselinePower = this.convertUnitsService.value(result.baselinePower).from('hp').to('kW');
+      result.baselinePower = this.roundVal(result.baselinePower, 2);
 
-      output.modPower = this.convertUnitsService.value(output.modPower).from('hp').to('kW');
-      output.modPower = this.roundVal(output.modPower, 2);
+      result.modPower = this.convertUnitsService.value(result.modPower).from('hp').to('kW');
+      result.modPower = this.roundVal(result.modPower, 2);
     }
 
-    return output;
+    return result;
   }
 
   roundVal(val: number, digits: number): number {

@@ -11,6 +11,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { WeatherBinsModule } from '../../utilities/weather-bins/weather-bins.module';
+import { CoolingWeatherChartModule } from '../../../shared/cooling-weather-chart/cooling-weather-chart.module';
 
 
 
@@ -24,11 +26,13 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
   imports: [
     CommonModule,
     FormsModule,
+    WeatherBinsModule,
     SuiteDbModule,
     SharedPipesModule,
     OperatingHoursModalModule,
     ExportableResultsTableModule,
     ReactiveFormsModule,
+    CoolingWeatherChartModule,
   ],
   exports: [
     CoolingTowerBasinComponent

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
+import { WeatherBinsService, WeatherIntegratedCalculatorData } from '../weather-bins.service';
 
 @Component({
   selector: 'app-weather-bins-form',
@@ -11,7 +13,8 @@ export class WeatherBinsFormComponent implements OnInit {
   settings: Settings;
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
+
+  ngOnDestroy() {}
 
 }

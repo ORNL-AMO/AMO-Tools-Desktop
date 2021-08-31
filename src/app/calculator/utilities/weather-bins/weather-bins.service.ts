@@ -29,6 +29,7 @@ export class WeatherBinsService {
   importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
   dataSubmitted: BehaviorSubject<boolean>;
+  integratedCalculator: BehaviorSubject<WeatherIntegratedCalculatorData>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) {
     let initInputData: WeatherBinsInput = this.initInputData();
@@ -36,7 +37,7 @@ export class WeatherBinsService {
     // this.dataFields = new BehaviorSubject(undefined);
     this.importDataFromCsv = new BehaviorSubject(undefined);
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
-
+    this.integratedCalculator = new BehaviorSubject<WeatherIntegratedCalculatorData>(undefined);
   }
 
   resetData() {
@@ -72,6 +73,7 @@ export class WeatherBinsService {
     }
   }
 
+
   getNewCase(index: number): WeatherBinCase {
     let emptyCaseParameter: CaseParameter = this.getEmptyCaseParameter();
     return {
@@ -96,7 +98,6 @@ export class WeatherBinsService {
       weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, convertedCaseParameters);
     });
     let total = _.sumBy(inputData.cases, 'totalNumberOfDataPoints')
-    console.log('Total ' + total);
     return inputData;
   }
 
@@ -105,7 +106,7 @@ export class WeatherBinsService {
     if (settings.unitsOfMeasure == 'Imperial') {
       caseParametersCopy.forEach(parameter => {
         if (parameter.lowerBound != undefined && parameter.upperBound) {
-          if (parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)') {
+          if (parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)'|| parameter.field == 'Wet Bulb (C)') {
             parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('F').to('C');
             parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('F').to('C');
           } else if (parameter.field == 'Wspd (m/s)') {
@@ -221,7 +222,7 @@ export class WeatherBinsService {
     let min: number = minValueObj[parameter];
     let max: number = maxValueObj[parameter];
     if (settings.unitsOfMeasure != 'Metric') {
-      if (parameter == 'Dry-bulb (C)' || parameter == 'Dew-point (C)') {
+      if (parameter == 'Dry-bulb (C)' || parameter == 'Wet Bulb (C)' || parameter == 'Dew-point (C)') {
         min = this.convertUnitsService.value(min).from('C').to('F');
         max = this.convertUnitsService.value(max).from('C').to('F');
       } else if (parameter == 'Wspd (m/s)') {
@@ -263,4 +264,8 @@ export interface CaseParameter {
   field: string,
   lowerBound: number,
   upperBound: number
+}
+
+export interface WeatherIntegratedCalculatorData {
+  binningParameters: Array<string>
 }
