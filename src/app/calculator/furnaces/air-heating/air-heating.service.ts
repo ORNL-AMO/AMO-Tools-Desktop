@@ -29,12 +29,13 @@ export class AirHeatingService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(treasureHuntFuelCost?: number) {
+    let fuelCost: number = treasureHuntFuelCost? treasureHuntFuelCost : 0;
     let emptyInput: AirHeatingInput = {
       operatingHours: 8760,
       gasFuelType: true,
       utilityType: 'Natural Gas',
-      fuelCost: 0,
+      fuelCost: fuelCost,
       materialTypeId: 1,
       flueTemperature: 0,
       flueGasO2: 0,
@@ -196,6 +197,19 @@ export class AirHeatingService {
   roundVal(val: number, digits: number): number {
     let rounded = Number(val.toFixed(digits));
     return rounded;
+  }
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+      case 'Electricity':
+        return settings.electricityCost;
+      case 'Steam':
+        return settings.steamCost;
+    }
   }
 
 }

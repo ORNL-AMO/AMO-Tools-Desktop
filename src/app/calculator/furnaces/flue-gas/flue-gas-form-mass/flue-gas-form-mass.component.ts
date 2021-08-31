@@ -59,6 +59,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
+      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
       this.setFormState();
     }
   }

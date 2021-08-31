@@ -5,20 +5,21 @@ import { Settings } from '../../shared/models/settings';
 import { OpportunitySummaryService } from './opportunity-summary.service';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class TreasureHuntReportService {
-
-  constructor(private opportunitySummaryService: OpportunitySummaryService, private treasureChestMenuService: TreasureChestMenuService) {
+  
+  constructor(private opportunitySummaryService: OpportunitySummaryService, private treasureChestMenuService: TreasureChestMenuService, private convertUnitsService: ConvertUnitsService) {
   }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
     let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(treasureHunt, settings);
-    let results: TreasureHuntResults = this.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, treasureHunt.currentEnergyUsage);
+    let results: TreasureHuntResults = this.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, treasureHunt.currentEnergyUsage, settings);
     return results;
   }
 
-  calculateTreasureHuntResultsFromSummaries(opportunitySummaries: Array<OpportunitySummary>, currentEnergyUsage: EnergyUsage): TreasureHuntResults {
+  calculateTreasureHuntResultsFromSummaries(opportunitySummaries: Array<OpportunitySummary>, currentEnergyUsage: EnergyUsage, settings: Settings): TreasureHuntResults {
     let totalBaselineCost: number = this.getTotalBaselineCost(currentEnergyUsage);
 
     let totalAdditionalSavings: number = _.sumBy(opportunitySummaries, (summary) => {
@@ -82,7 +83,47 @@ export class TreasureHuntReportService {
       hasMixed: hasMixed,
       totalAdditionalSavings: totalAdditionalSavings
     };
-
+    if (settings.currency !== "$") {
+      thuntResults.totalSavings = this.convertUnitsService.value(thuntResults.totalSavings).from("$").to(settings.currency);
+      thuntResults.totalBaselineCost = this.convertUnitsService.value(thuntResults.totalBaselineCost).from("$").to(settings.currency);
+      thuntResults.totalModificationCost = this.convertUnitsService.value(thuntResults.totalModificationCost).from("$").to(settings.currency);
+      thuntResults.totalImplementationCost = this.convertUnitsService.value(thuntResults.totalImplementationCost).from("$").to(settings.currency);
+      thuntResults.electricity.baselineEnergyCost = this.convertUnitsService.value(thuntResults.electricity.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.electricity.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.electricity.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.electricity.costSavings = this.convertUnitsService.value(thuntResults.electricity.costSavings).from("$").to(settings.currency);
+      thuntResults.electricity.implementationCost = this.convertUnitsService.value(thuntResults.electricity.implementationCost).from("$").to(settings.currency);
+      thuntResults.naturalGas.baselineEnergyCost = this.convertUnitsService.value(thuntResults.naturalGas.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.naturalGas.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.naturalGas.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.naturalGas.costSavings = this.convertUnitsService.value(thuntResults.naturalGas.costSavings).from("$").to(settings.currency);
+      thuntResults.naturalGas.implementationCost = this.convertUnitsService.value(thuntResults.naturalGas.implementationCost).from("$").to(settings.currency);
+      thuntResults.wasteWater.baselineEnergyCost = this.convertUnitsService.value(thuntResults.wasteWater.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.wasteWater.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.wasteWater.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.wasteWater.costSavings = this.convertUnitsService.value(thuntResults.wasteWater.costSavings).from("$").to(settings.currency);
+      thuntResults.wasteWater.implementationCost = this.convertUnitsService.value(thuntResults.wasteWater.implementationCost).from("$").to(settings.currency);
+      thuntResults.otherFuel.baselineEnergyCost = this.convertUnitsService.value(thuntResults.otherFuel.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.otherFuel.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.otherFuel.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.otherFuel.costSavings = this.convertUnitsService.value(thuntResults.otherFuel.costSavings).from("$").to(settings.currency);
+      thuntResults.otherFuel.implementationCost = this.convertUnitsService.value(thuntResults.otherFuel.implementationCost).from("$").to(settings.currency);
+      thuntResults.compressedAir.baselineEnergyCost = this.convertUnitsService.value(thuntResults.compressedAir.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.compressedAir.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.compressedAir.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.compressedAir.costSavings = this.convertUnitsService.value(thuntResults.compressedAir.costSavings).from("$").to(settings.currency);
+      thuntResults.compressedAir.implementationCost = this.convertUnitsService.value(thuntResults.compressedAir.implementationCost).from("$").to(settings.currency);
+      thuntResults.steam.baselineEnergyCost = this.convertUnitsService.value(thuntResults.steam.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.steam.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.steam.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.steam.costSavings = this.convertUnitsService.value(thuntResults.steam.costSavings).from("$").to(settings.currency);
+      thuntResults.steam.implementationCost = this.convertUnitsService.value(thuntResults.steam.implementationCost).from("$").to(settings.currency);
+      thuntResults.other.baselineEnergyCost = this.convertUnitsService.value(thuntResults.other.baselineEnergyCost).from("$").to(settings.currency);
+      thuntResults.other.modifiedEnergyCost = this.convertUnitsService.value(thuntResults.other.modifiedEnergyCost).from("$").to(settings.currency);
+      thuntResults.other.costSavings = this.convertUnitsService.value(thuntResults.other.costSavings).from("$").to(settings.currency);
+      thuntResults.other.implementationCost = this.convertUnitsService.value(thuntResults.other.implementationCost).from("$").to(settings.currency);
+      thuntResults.opportunitySummaries.forEach( (element) => {
+        element.costSavings = this.convertUnitsService.value(element.costSavings).from("$").to(settings.currency);
+        element.totalCost = this.convertUnitsService.value(element.totalCost).from("$").to(settings.currency);
+        element.opportunityCost = this.convertUnitsService.value(element.opportunityCost).from("$").to(settings.currency);
+        element.baselineCost = this.convertUnitsService.value(element.baselineCost).from("$").to(settings.currency);
+        element.modificationCost = this.convertUnitsService.value(element.modificationCost).from("$").to(settings.currency);
+      });
+    }
     return thuntResults;
   }
 

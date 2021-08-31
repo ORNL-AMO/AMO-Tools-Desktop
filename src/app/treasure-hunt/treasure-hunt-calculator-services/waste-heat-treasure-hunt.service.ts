@@ -45,7 +45,7 @@ export class WasteHeatTreasureHuntService {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.annualCost,
       energySavings: results.annualEnergy,
-      baselineCost: wasteHeatTreasureHunt.inputData.cost,
+      baselineCost: results.annualEnergy * wasteHeatTreasureHunt.inputData.cost,
       modificationCost: 0,
       utilityType: 'Electricity',
     }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, Input, SimpleChanges } from '
 import * as Plotly from 'plotly.js';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-utility-bar-chart',
   templateUrl: './utility-bar-chart.component.html',
@@ -14,6 +16,8 @@ export class UtilityBarChartComponent implements OnInit {
   showPrintView: boolean;
   @Input()
   inRollupPrintView: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('utilityBarChart', { static: false }) utilityBarChart: ElementRef;
 
@@ -58,7 +62,7 @@ export class UtilityBarChartComponent implements OnInit {
       yaxis: {
         hoverformat: '.3r',
         // automargin: true,
-        tickformat: '$.2s',
+        tickformat: '.2s',
         fixedrange: true
       },
       xaxis: {
@@ -153,8 +157,8 @@ export class UtilityBarChartComponent implements OnInit {
       x: chartData.labels,
       y: chartData.projectedCosts,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Modification Costs",
+      hovertemplate: '%{y:,.0f}<extra></extra>',
+      name: "Modification Costs (" + this.settings.currency + ")",
       type: "bar",
       marker: {
         color: graphColors[1],
@@ -165,8 +169,8 @@ export class UtilityBarChartComponent implements OnInit {
       x: chartData.labels,
       y: chartData.costSavings,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Savings From Baseline",
+      hovertemplate: '%{y:,.0f}<extra></extra>',
+      name: "Savings From Baseline (" + this.settings.currency + ")",
       type: "bar",
       marker: {
         color: graphColors[0]

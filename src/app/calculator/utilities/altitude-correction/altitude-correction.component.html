@@ -1,0 +1,52 @@
+<div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
+    <div class="d-flex flex-column w-100 h-100">
+        <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+            <div class="d-flex pl-2 align-items-center">
+                <div class="col-md-auto">
+                    <img src="assets/images/calculator-icons/utilities-icons/altitude-correction-icon.png" class="ico-size3">
+                </div>
+                <div class="pl-2">
+                    <h3>Altitude Correction Calculator</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex">
+            <div class="scroll-item col-7 bg-white" [ngStyle]="{'height.px' : containerHeight}">
+                <div class="d-flex flex-column p-2">
+                    <div class="pb-2">
+                        <app-altitude-correction-form [settings]="settings"></app-altitude-correction-form>
+                        <div class="w-100 justify-content-center btn-group btn-group-sm">
+                            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                                (click)="btnResetData()">
+                                Reset Data
+                            </button>
+                            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                                (click)="btnGenerateExample()">
+                                Generate Example
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-5 p-0 help-panel">
+                <div class="d-flex flex-column mh-100 scroll-item">
+                    <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
+                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                                <div>Help</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-flex mr-2 ml-2">
+                        <app-altitude-correction-help></app-altitude-correction-help>                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

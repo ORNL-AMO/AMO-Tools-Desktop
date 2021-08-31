@@ -6,6 +6,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
+import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -38,10 +39,27 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   isBaseline: boolean;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   warnings: FlueGasWarnings;
   options: Array<SolidLiquidFlueGasMaterial>;
   showModal: boolean = false;
+  showMoisture: boolean = false;
+  humidityRatio: number;
+  baseGasDensity: BaseGasDensity = {
+    barometricPressure: 29.92,
+    dewPoint: 0,
+    dryBulbTemp: 68,
+    gasDensity: 0.07516579558441701,
+    gasType: "AIR",
+    inputType: "relativeHumidity",
+    relativeHumidity: 0,
+    specificGravity: 1,
+    specificHeatGas: 0.24,
+    specificHeatRatio: 1.4,
+    staticPressure: 0,
+    wetBulbTemp: 118.999
+  }
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -84,6 +102,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
           this.enableForm();
         }
       }
@@ -176,7 +195,14 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   save() {
     this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
+
+    // backend method needs moistureInAirComposition to be ''
+    // moistureInAirComposition is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
+    if (this.flueGasLossForm.controls.moistureInAirComposition === undefined) {
+      this.flueGasLossForm.patchValue({moistureInAirComposition: ''});
+    }
+    // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
   }
 
@@ -193,6 +219,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.materialModal.show();
   }
 
+  showMoistureModal() {
+    this.showMoisture = true;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.moistureModal.show();
+  }
+
   hideMaterialModal(event?: any) {
     if (event) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
@@ -207,6 +239,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
+  }
+
+  hideMoistureModal(event?: any) {
+    if (event !== -150) {
+      this.humidityRatio = event;
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.save();
   }
 
   canCompare() {

@@ -228,7 +228,7 @@ export class OpportunitySummaryService {
       treasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getTreasureHuntOpportunityResults(waterHeatingOpportunity, settings);
     
     }
-
+    
     return treasureHuntOpportunityResults;
   }
 

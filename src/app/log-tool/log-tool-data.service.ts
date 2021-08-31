@@ -7,6 +7,7 @@ import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-mode
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
+  isTimeSeries: boolean;
   constructor(private logToolService: LogToolService) { }
 
   resetData() {
@@ -118,13 +119,33 @@ export class LogToolDataService {
   };
 
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+    this.isTimeSeries = true;
     individualDataFromCsv.forEach(csvData => {
       if (csvData.hasDateField == false) {
         csvData.startDate = undefined;
         csvData.endDate = undefined;
-      } else {
+        this.isTimeSeries = false;
+      } 
+      else {
         //update date field format
-        csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        if (csvData.hasDateField == true && csvData.hasTimeField == true) {
+          csvData.csvImportData.data.map(dataItem => { 
+                      if (dataItem[csvData.dateField.fieldName]) {
+                        dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); 
+                        delete dataItem[csvData.timeField.fieldName];
+                      }
+                      else {
+                        dataItem[csvData.dateField.fieldName] = 'Invalid date';
+                      }
+                    });
+          csvData.hasTimeField = false;
+          let timeIndex = csvData.fields.indexOf(csvData.timeField);
+          csvData.fields.splice(timeIndex, 1);
+        }
+
+        else {
+          csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        }
         //remove invalid dates
         _.remove(csvData.csvImportData.data, (dataItem) => {
           return dataItem[csvData.dateField.fieldName] == 'Invalid date';
@@ -141,6 +162,7 @@ export class LogToolDataService {
         csvData.dataPointsPerColumn = csvData.csvImportData.data.length;
       }
     });
+    this.logToolService.setFields(individualDataFromCsv);
   }
 
   divideDataIntoDays(data: Array<any>, dateField: string): Array<{ date: Date, data: Array<any> }> {

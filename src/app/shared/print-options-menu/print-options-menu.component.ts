@@ -11,6 +11,8 @@ import { FsatReportRollupService } from '../../report-rollup/fsat-report-rollup.
 import { SsmtReportRollupService } from '../../report-rollup/ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../../report-rollup/waste-water-report-rollup.service';
+import { Settings } from '../models/settings';
+
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
@@ -20,6 +22,7 @@ export class PrintOptionsMenuComponent implements OnInit {
 
   @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
+  settings: Settings;
   printOptions: PrintOptions;
   printOptionsSub: Subscription;
   showRollupReportOptions: boolean = false;
@@ -34,11 +37,12 @@ export class PrintOptionsMenuComponent implements OnInit {
     private ssmtReportRollupService: SsmtReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit() {
-    this.setContext();
-    this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
-      this.printOptions = val;
-    });
-  }
+      this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
+          this.printOptions = val;
+        });
+      this.setContext();
+      this.printOptions = this.printOptionsMenuService.setPrintOptionsFromSettings();
+    }
 
   ngAfterViewInit() {
     this.showPrintModal();
@@ -74,7 +78,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   }
 
   togglePrint(option: string) {
-    this.printOptionsMenuService.toggleSection(option);
+    this.printOptionsMenuService.toggleSection(option, this.printOptions);
   }
 
   showPrintModal(): void {
@@ -110,4 +114,5 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.printOptionsMenuService.showPrintMenu.next(false);
     }, 200);
   }
+
 }

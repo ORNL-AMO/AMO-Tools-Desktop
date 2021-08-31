@@ -116,9 +116,9 @@
     <div class="form-group">
       <label class="small" for="{{'moistureInAirComposition'+idString}}">Moisture in Combustion Air</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassMoistureInAirComposition(), 'error': warnings.moistureInAirCompositionWarning !== null, 'invalid': flueGasLossForm.controls.moistureInAirComposition.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any"
+        <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" 
           min="0" max="100" class="form-control" formControlName="moistureInAirComposition" id="{{'moistureInAirComposition'+idString}}"
-          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" >
+          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" [ngModel] = "humidityRatio | number:'1.0-2' | removeCommas" (ngModelChange) = "humidityRatio=$event">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small"
@@ -129,6 +129,7 @@
       <span *ngIf="flueGasLossForm.controls.moistureInAirComposition.errors.min">Value can't be less than
         {{flueGasLossForm.controls.moistureInAirComposition.errors.min.min}} %.</span>
     </span>
+      <a id="moistureCalc" class="form-text small click-link" (click)="showMoistureModal()" [ngClass]="{'disabled-link': !baselineSelected}">Calculate</a>
     </div>
 
     <div class="form-group">
@@ -175,6 +176,16 @@
         <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
           [settings]="settings"></app-solid-liquid-flue-gas-material>
       </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #moistureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moistureModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <app-flue-gas-moisture-modal *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
+      [settings]="settings"></app-flue-gas-moisture-modal>
     </div>
   </div>
 </div>
