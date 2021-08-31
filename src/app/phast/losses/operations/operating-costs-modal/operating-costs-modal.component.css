@@ -1,4 +1,3 @@
-   
     .tab-content p{
         padding-top: 10px;
         text-align: center
@@ -30,21 +29,6 @@
         border-left: solid 1px;
         border-right: none;
     }
-    
-    .btn-delete-fuel-container {
-        padding-bottom: .25rem;
-        border-bottom: 1px dashed;
-    }
-    
-    .btn-delete-fuel {
-        color: #dc3545;
-        margin-right: 200px;
-    }
-    
-    .btn-delete-fuel:hover {
-        cursor: pointer;
-        text-decoration: underline;
-    }
 
     .card-footer {
         justify-content: flex-end;
@@ -52,7 +36,7 @@
   
     .btn-delete-field {
         color: #dc3545;
-        margin-left: 320px;
+        margin-left: 5px;
         padding-left: 8px;
         padding-right: 8px;
         background-color: white;
@@ -70,7 +54,7 @@
         justify-content: center;
     }
 
-    .re-sized {
-        width: 80%;
+    .section-label {
+        padding-bottom: 5px;
+        text-align: center;
     }
-    

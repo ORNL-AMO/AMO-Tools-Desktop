@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
-import { OperatingHours } from '../../../../shared/models/operations';
+import { OperatingHours, OperatingCosts } from '../../../../shared/models/operations';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';

@@ -3,81 +3,66 @@
       <div class="col-12 h-100">
         <div class="row h-100">
           <div class="col-12">
-           <div class="modification col-auto reset-size p-3 mx-auto re-sized">
-   
-
-    
-       <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
-         <div class="col-md-auto ico-col">
-              </div>
+           <div class="modification col-auto reset-size p-3 mx-auto">    
+            <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+             <div class="col-md-auto ico-col">
+             </div>
               <div class="pl-2">
-                <h3>Operating Costs - Net Costs From Mixed Fuel</h3>
+                <h3>Operating Costs - Net Costs From {{settings.energySourceType}}</h3>
               </div>
        </div>
-
-      <form>
-      
-      <div *ngFor="let fuel of fuels; let index=index;"> 
-        <div class="form-section">
-          <div class="row pt-1">
-            <div class="col-12 text-center">
-              <label class="bold">Fuel {{index + 1}}</label>
+      <form>      
+        <div *ngFor="let fuel of fuels; let index=index;"> 
+        <form>
+            <div class="row align-items-end">
+                <div class="form-group col-4">
+                    <label class="section-label" *ngIf="index == 0" for="fuel">Source Name</label>
+                    <div class="input-group">
+                      <input name="{{index+'_name'}}" class="form-control" type="text" step="any" [(ngModel)]="fuel.name" id="fuel"
+                      (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('fuel')">
+                    </div>
+                </div>
+                <div class="form-group col-4">
+                    <label class="section-label" *ngIf="index == 0" for="fraction">Percent Used</label>
+                    <div class="input-group">
+                      <input name="{{index+'_usage'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.usage" id="fraction"
+                      (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('fraction')">
+                      <span class="input-group-addon units">%</span> 
+                    </div>
+                </div>
+                <div class="form-group col-4">
+                    <label class="section-label" *ngIf="index == 0" for="cost">Cost</label>
+                    <div class="input-group">
+                      <input name="{{index+'_cost'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.cost" id="cost"
+                      (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('cost')">
+                      <span *ngIf="settings.energySourceType == 'Fuel' && settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">$/MMBtu</span>
+                      <span *ngIf="settings.energySourceType == 'Fuel' && settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">$/GJ</span>
+                      <span *ngIf="settings.energySourceType == 'Steam' && settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">$/MMBtu</span>
+                      <span *ngIf="settings.energySourceType == 'Steam' && settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">$/GJ</span>                  
+                      <span *ngIf="settings.energySourceType == 'Electricity'" class="input-group-addon units">$/kWh</span>
+                            <i class="fa fa-times btn-delete-field" (click)="deleteFuel(index)"></i>
+                    </div>                   
+                </div>
             </div>
-          </div>
-          <br>
-          <div class="m-0 form-group row no-gutters centered">
-            <div class="col-6">
-              <div class="input-group">
-               <label for="text">Fuel Name</label>            
-              <input name="{{index+'_name'}}" class="form-control" type="text" step="any" [(ngModel)]="fuel.name" id="text"
-               (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('text')">
-             </div>
-           </div>
-           </div>
-
-
-      <div class="m-0 form-group row no-gutters centered"> 
-        <div class="col-6">
-        <div class="input-group">    
-        <label for="fraction">Usage Fraction</label>        
-          <input name="{{index+'_usage'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.usage" id="fraction"
-          (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('fraction')">
-        </div>
-      </div>
-      </div>
-   
-      <div class="m-0 form-group row no-gutters centered">   
-        <div class="col-6">  
-          <div class="input-group">
-           <label for="number">Cost</label>        
-           <input name="{{index+'_cost'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.cost" id="number"
-          (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('number')">
-          
-        </div>
-        <div class="btn-delete-field" (click)="deleteFuel(index)"> &times;</div>
-      </div>
-      </div>
-      </div>
-    </div>
-   
+        </form>
+    </div>   
 
     <div class="pt-1">
-      <a class="click-link pull-left small" (click)="addFuel(index)">Add New Fuel</a>
+      <a class="click-link pull-left small" (click)="addFuel(index)">Add New Source</a>
     </div>
     <br>
     <div class="form-group pt-1 row justify-content-end">
       <div class="small bold text-center">
         <label class="bold" for="fuelCost">Total Cost:</label>
         ${{this.mixedFuelCostsResult | number:'1.2-2'}}
-        <span [innerHTML]="settings.fuelCost | settingsLabel"></span>
+        <!-- <span [innerHTML]="settings.fuelCost "></span> -->
       </div>
     </div>
 
      <div class="card-footer d-flex">
       <button type="button" class="btn btn-danger pull-right btn-form m-2" (click)="hideMixedFuelModal()">Close</button>
       <button type="button" class="btn btn-primary pull-right btn-form m-2" type="submit" (click)="setMixedFuelCosts()">Save</button>
-    </div>
- 
+    </div> 
     </form>
         </div>
        </div>

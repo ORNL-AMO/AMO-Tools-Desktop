@@ -13,7 +13,9 @@ export class OperatingCostsModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<number>();
   @Output('hideModal')
-  hideModal = new EventEmitter();
+  hideModal = new EventEmitter();  
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   // result to emit back to parent
   mixedFuelCostsResult: number;
@@ -21,7 +23,7 @@ export class OperatingCostsModalComponent implements OnInit {
   // Initial array with first fuel
   fuels: Array<OperatingFuel> = [
     {
-      name: 'New Fuel',
+      name: 'New Source',
       usage: 0,
       cost: 0
   }];
@@ -32,7 +34,7 @@ export class OperatingCostsModalComponent implements OnInit {
 
   addFuel() {
     let newFuel = {
-      name: 'New Fuel',
+      name: 'New Source',
       usage: 0,
       cost: 0,
     };
@@ -46,12 +48,18 @@ export class OperatingCostsModalComponent implements OnInit {
 
   // called every time a fuel field changes
   calculateMixedFuelCosts() {
-    let length = this.fuels.length;
-    let sum = 0;
+    let length: number = this.fuels.length;
+    let sum: number = 0;
+    let summedUse: number = 0;
     for (let i = 0; i < length; i++){
-      sum += this.fuels[i].usage * this.fuels[i].cost;
+      summedUse += this.fuels[i].usage;
+      sum += (this.fuels[i].usage * this.fuels[i].cost) / (summedUse);
     }
-    this.mixedFuelCostsResult = sum;
+    this.mixedFuelCostsResult = this.roundVal(sum);    
+  }
+  
+  roundVal(num: number): number {
+    return Number(num.toFixed(2));
   }
 
   // sum up our mixed fuels and emit them back to parent. See operations-form.html ln 73
@@ -62,7 +70,11 @@ export class OperatingCostsModalComponent implements OnInit {
   hideMixedFuelModal() {
     this.hideModal.emit();
   }
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }
+
 
 export interface OperatingFuel {
     name: string,
