@@ -1,6 +1,6 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { BaseGasDensity } from '../../../../shared/models/fans';
+
 
 @Component({
     selector: 'app-flue-gas-moisture-modal',
@@ -13,17 +13,33 @@ import { BaseGasDensity } from '../../../../shared/models/fans';
     settings: Settings;
     @Output('hideModal')
     hideModal = new EventEmitter<number>();
+    containerHeight: number;
+
+    @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+      this.resizeTabs();
+    }
 
     constructor() {
-       
     }
     
-    ngOnInit() {
-      
+    ngOnInit() {}
+
+    ngAfterViewInit() {
+      setTimeout(() => {
+        this.resizeTabs();
+      }, 100);
     }
 
     hideMoistureModal(event: number) {
-        this.hideModal.emit(event);
+      this.hideModal.emit(event);
+    }
+
+    resizeTabs() {
+      if (this.contentContainer) {
+        this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
+      }
     }
 
   }

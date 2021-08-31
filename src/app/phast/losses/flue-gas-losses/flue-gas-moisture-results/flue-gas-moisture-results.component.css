@@ -1,3 +1,24 @@
 .resultsTable {
     font-size: small;
 }
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    width: 50%;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.mod-exists td{
+    width: 33%;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
