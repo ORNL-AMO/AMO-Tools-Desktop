@@ -6,8 +6,12 @@ import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
-import { Fan203Inputs } from "./fans";
+import { Fan203Inputs, FanMotor } from "./fans";
 import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
+import { AirLeakSurveyInput, AirSystemCapacityInput, CalculateUsableCapacity, CompressedAirPressureReductionData, CompressedAirPressureReductionInput, ReceiverTank, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage } from "./standalone";
+import { AirFlowConversionInput } from "./compressed-air/compressed-air";
+import { ReceiverTankInputs } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
+
 
 export interface Calculator {
     directoryId?: number;
@@ -23,7 +27,20 @@ export interface Calculator {
     headToolType?: string;
     motorPerformanceInputs?: MotorPerformanceInputs;
     nemaInputs?: NemaInputs;
+    fullLoadAmpsInput?: FanMotor;
+    altitudeCorrectionInput?: number;
+    receiverTankInput?: ReceiverTankInputs;
+    compressedAirPressureReduction?: {
+        baselineData: Array<CompressedAirPressureReductionData>,
+        modificationData?: Array<CompressedAirPressureReductionData>;
+    };
+    airSystemCapacityInputs?: AirSystemCapacityInput;
     specificSpeedInputs?: SpecificSpeedInputs;
+    pipeSizingInputs?: PipeSizingInputs;
+    airVelocityInputs?: AirVelocityInputs;
+    airLeakInput?: AirLeakSurveyInput;
+    airFlowConversionInputs?: AirFlowConversionInput;
+    //airSystemCapacityInputs: AirSystemCapacityInput;
     o2EnrichmentInputs?: Array<EnrichmentInput>;
     efficiencyImprovementInputs?: EfficiencyImprovementInputs;
     energyEquivalencyInputs?: {
@@ -115,7 +132,19 @@ export interface SpecificSpeedInputs {
     head: number;
 }
 
+export interface PipeSizingInputs {
+     airFlow: number;
+     airlinePressure: number;
+     designVelocity: number;
+     atmosphericPressure: number;
+}
 
+
+export interface AirVelocityInputs {
+    airFlow: number;
+    pipePressure: number;
+    atmosphericPressure: number;
+  }
 
 export interface ReplaceExistingData {
     operatingHours: number;
