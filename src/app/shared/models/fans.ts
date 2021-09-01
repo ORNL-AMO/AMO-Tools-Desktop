@@ -5,6 +5,7 @@ export interface FSAT {
   name?: string;
   modifications?: Modification[];
   selected?: boolean;
+  fsatOperations?: FsatOperations;
   fieldData?: FieldData;
   fanMotor?: FanMotor;
   fanSetup?: FanSetup;
@@ -22,12 +23,20 @@ export interface FSAT {
   whatIfScenario?: boolean;
 }
 
+export interface FsatOperations {
+  operatingHours: number;
+  cost: number;
+  operatingFraction?: number;
+}
+
+
 export interface FsatValid {
   isValid: boolean;
   fluidValid: boolean;
   fanValid: boolean;
   motorValid: boolean;
   fieldDataValid: boolean;
+  fsatOperationsValid: boolean;
 }
 
 export interface Modification {
@@ -56,16 +65,16 @@ export interface FieldData {
   //TODO: remove operatingFraction support
   //removed from suite v0.3.2
   operatingFraction?: number;
-  operatingHours: number;
-  cost: number;
-  flowRate: number;
-  inletPressure: number;
-  outletPressure: number;
-  loadEstimatedMethod: number;
-  motorPower: number;
+  //operatingHours?: number;
+  //cost?: number;
+  flowRate?: number;
+  inletPressure?: number;
+  outletPressure?: number;
+  loadEstimatedMethod?: number;
+  motorPower?: number;
   // specificHeatRatio: number;
-  compressibilityFactor: number;
-  measuredVoltage: number;
+  compressibilityFactor?: number;
+  measuredVoltage?: number;
   usingStaticPressure?: boolean;
   ductArea?: number,
   inletVelocityPressure?: number;

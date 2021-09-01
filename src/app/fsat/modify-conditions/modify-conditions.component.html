@@ -12,7 +12,7 @@
         <h3>Baseline</h3>
       </div>
       <app-operations *ngIf="modifyConditionsTab == 'fan-operations'" [settings]="settings"
-      [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData" [modificationIndex]="modificationIndex"
+      [selected]="baselineSelected" [fsatOperations]="assessment.fsat.fsatOperations" [modificationIndex]="modificationIndex"
       (emitSave)="saveBaselineFanOperations($event)" [baseline]="true" [fsat]="assessment.fsat"></app-operations>
 
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
@@ -45,7 +45,7 @@
       <!-- Forms -->
 
       <app-operations *ngIf="modifyConditionsTab == 'fan-operations'" [settings]="settings"
-      [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
+      [selected]="modifiedSelected" [fsatOperations]="assessment.fsat.modifications[modificationIndex].fsat.fsatOperations"
        [modificationIndex]="modificationIndex" (emitSave)="saveModFanOperations($event)" 
        [baseline]="assessment.fsat.modifications[modificationIndex].fsat.whatIfScenario == false"
        [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-operations>

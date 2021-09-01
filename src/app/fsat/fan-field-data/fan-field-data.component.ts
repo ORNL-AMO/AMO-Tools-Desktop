@@ -45,12 +45,12 @@ export class FanFieldDataComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.setOpHoursModalWidth();
+    //this.setOpHoursModalWidth();
     this.getBodyHeight();
   }
 
   formWidth: number;
-  showOperatingHoursModal: boolean = false;
+  //showOperatingHoursModal: boolean = false;
   userDefinedCompressibilityFactor: boolean = false;
 
   bodyHeight: number;
@@ -104,7 +104,7 @@ export class FanFieldDataComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.setOpHoursModalWidth();
+      //this.setOpHoursModalWidth();
     }, 100);
 
     this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
@@ -122,9 +122,6 @@ export class FanFieldDataComponent implements OnInit {
 
   init() {
     if (this.fieldData) {
-      if (!this.fieldData.cost) {
-        this.fieldData.cost = this.settings.electricityCost;
-      }
       this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);
       this.save();
     }
@@ -380,28 +377,28 @@ export class FanFieldDataComponent implements OnInit {
     this.hidePressureModal();
   }
 
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-    this.fsatService.modalOpen.next(false);
-  }
+  // closeOperatingHoursModal() {
+  //   this.showOperatingHoursModal = false;
+  //   this.fsatService.modalOpen.next(false);
+  // }
 
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-    this.fsatService.modalOpen.next(true);
-  }
+  // openOperatingHoursModal() {
+  //   this.showOperatingHoursModal = true;
+  //   this.fsatService.modalOpen.next(true);
+  // }
 
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.fsat.operatingHours = oppHours;
-    this.fieldDataForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
-    this.save();
-    this.closeOperatingHoursModal();
-  }
+  // updateOperatingHours(oppHours: OperatingHours) {
+  //   this.fsat.operatingHours = oppHours;
+  //   this.fieldDataForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+  //   this.save();
+  //   this.closeOperatingHoursModal();
+  // }
 
-  setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
+  // setOpHoursModalWidth() {
+  //   if (this.formElement.nativeElement.clientWidth) {
+  //     this.formWidth = this.formElement.nativeElement.clientWidth;
+  //   }
+  // }
 
 
   getBodyHeight() {
@@ -420,20 +417,20 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingHoursDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isOperatingHoursDifferent();
-    } else {
-      return false;
-    }
-  }
-  isCostDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isCostDifferent();
-    } else {
-      return false;
-    }
-  }
+  // isOperatingHoursDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isOperatingHoursDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // isCostDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isCostDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
   isFlowRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isFlowRateDifferent();

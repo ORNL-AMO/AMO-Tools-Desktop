@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
-import { BaseGasDensity, FanSetup, FanMotor, FieldData, FSAT } from '../../shared/models/fans';
+import { BaseGasDensity, FanSetup, FanMotor, FieldData, FSAT, FsatOperations } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -83,8 +83,8 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  saveBaselineFanOperations(newFieldData: FieldData) {
-    this.assessment.fsat.fieldData = newFieldData;
+  saveBaselineFanOperations(newFsatOperations: FsatOperations) {
+    this.assessment.fsat.fsatOperations = newFsatOperations;
     this.saveAssessment();
   }
 
@@ -118,8 +118,8 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  saveModFanOperations(newFieldData: FieldData) {
-    this.assessment.fsat.modifications[this.modificationIndex].fsat.fieldData = newFieldData;
+  saveModFanOperations(newFsatOperations: FsatOperations) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.fsatOperations = newFsatOperations;
     this.saveAssessment();
   }
 

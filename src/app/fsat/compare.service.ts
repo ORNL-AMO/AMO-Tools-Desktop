@@ -393,8 +393,8 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostDifferent(baseline, modification) ||
+        //this.isOperatingHoursDifferent(baseline, modification) ||
+        //this.isCostDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isInletPressureDifferent(baseline, modification) ||
         this.isOutletPressureDifferent(baseline, modification) ||
@@ -414,7 +414,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.operatingHours !== modification.fieldData.operatingHours) {
+      if (baseline.fsatOperations.operatingHours !== modification.fsatOperations.operatingHours) {
         return true;
       } else {
         return false;
@@ -431,7 +431,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.cost !== modification.fieldData.cost) {
+      if (baseline.fsatOperations.cost !== modification.fsatOperations.cost) {
         return true;
       } else {
         return false;

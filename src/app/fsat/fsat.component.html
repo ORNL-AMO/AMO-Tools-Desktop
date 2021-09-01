@@ -11,7 +11,7 @@
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
         
       <app-operations *ngIf="stepTab == 'operations'" [settings]="settings" [inSetup]="true" [selected]="true"
-      [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-operations>
+      [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat"></app-operations>
 
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
         [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"

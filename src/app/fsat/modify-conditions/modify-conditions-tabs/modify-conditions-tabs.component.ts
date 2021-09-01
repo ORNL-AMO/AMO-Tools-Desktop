@@ -138,11 +138,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setFanOperationsBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: string = 'success';
-    let validBaselineTest = this.fanOperationsService.isOperationsDataValid(baseline.fieldData);
+    let validBaselineTest = this.fanOperationsService.isOperationsDataValid(baseline.fsatOperations);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.fanOperationsService.isOperationsDataValid(modification.fieldData);
+      validModTest = this.fanOperationsService.isOperationsDataValid(modification.fsatOperations);
       isDifferent = this.compareService.checkFanOperationsDifferent();
     }
     let inputError = this.checkOperationsWarnings();

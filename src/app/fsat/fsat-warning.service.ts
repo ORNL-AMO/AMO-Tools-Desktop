@@ -28,7 +28,7 @@ export class FsatWarningService {
     }
     
     let warnings: FanFieldDataWarnings = {
-      costError: this.checkCost(fsat),
+      //costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
       suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
@@ -75,7 +75,7 @@ export class FsatWarningService {
 
 
   checkCost(fsat: FSAT) {
-    if (fsat.fieldData.cost > 1) {
+    if (fsat.fsatOperations.cost > 1) {
       return "Shouldn't be greater then 1";
     } else {
       return null;
@@ -354,7 +354,7 @@ export class FsatWarningService {
 
 export interface FanFieldDataWarnings {
   voltageError: string;
-  costError: string;
+  //costError: string;
   ratedPowerError: string;
   suggestedVoltage: string,
   inletPressureError: string;

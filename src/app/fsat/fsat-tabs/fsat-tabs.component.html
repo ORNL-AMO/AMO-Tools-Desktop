@@ -6,7 +6,8 @@
     </div>
     <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
       <a (click)="changeStepTab('operations')">
-        <span class="step-number">2</span>Operations</a>
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)" class="step-number">2</span>Operations</a>
+        <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="fanClassStatus">
       <a (click)="changeStepTab('fan-setup')">

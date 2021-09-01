@@ -1,10 +1,10 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FieldData, FSAT } from '../../shared/models/fans';
+import { FieldData, FSAT, FsatOperations } from '../../shared/models/fans';
 import { OperatingHours } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
-import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
+import { FanOperationsWarnings, FsatWarningService } from '../fsat-warning.service';
 import { FsatService } from '../fsat.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { OperationsService } from './operations.service';
@@ -18,11 +18,11 @@ export class OperationsComponent implements OnInit {
   @Input()
   fsat: FSAT;  
   @Input()
-  fieldData: FieldData;
+  fsatOperations: FsatOperations;
   @Input()
   settings: Settings;
   @Output('emitSave')
-  emitSave = new EventEmitter<FieldData>();
+  emitSave = new EventEmitter<FsatOperations>();
   @Input()
   selected: boolean;
   @Input()
@@ -41,7 +41,7 @@ export class OperationsComponent implements OnInit {
     this.getBodyHeight();
   }
 
-  warnings: FanFieldDataWarnings;
+  warnings: FanOperationsWarnings;
   
   formWidth: number;
   
@@ -68,33 +68,48 @@ export class OperationsComponent implements OnInit {
     }
   }
 
-  init() {
-    if (this.fieldData) {
-      if (!this.fieldData.cost) {
-        this.fieldData.cost = this.settings.electricityCost;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected) {
+        this.enableForm();
+      } else {
+        this.disableForm();
       }
-      this.operationsForm = this.operationsService.getFormFromObj(this.fieldData);
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+      this.init();
+    }
+  }
+
+
+  init() {
+    if (this.fsatOperations) {
+      if (!this.fsatOperations.cost) {
+        this.fsatOperations.cost = this.settings.electricityCost;
+      }
+      this.operationsForm = this.operationsService.getFormFromObj(this.fsatOperations);
       this.save();
     }
   }
 
   disableForm() {
     this.operationsForm.controls.cost.disable();
+    this.operationsForm.controls.operatingHours.disable();
   }
 
   enableForm() {
     this.operationsForm.controls.cost.enable();
+    this.operationsForm.controls.operatingHours.enable();
   }
 
-  save(){
-    this.fieldData.operatingHours = this.operationsService.getHoursFromForm(this.operationsForm);
-    this.fieldData.cost = this.operationsService.getCostFromForm(this.operationsForm);
-    this.emitSave.emit(this.fieldData);
+  save(){  
+    this.fsatOperations = this.operationsService.getObjFromForm(this.operationsForm);
+    this.emitSave.emit(this.fsatOperations);
     this.checkForWarnings();
   }
 
   checkForWarnings() {
-    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
+    this.warnings = this.fsatWarningService.checkOperationsWarnings(this.fsat, this.settings, !this.baseline);
   }
 
   focusField(inputName: string) {

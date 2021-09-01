@@ -67,6 +67,7 @@ export class FsatTabsComponent implements OnInit {
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
+      this.checkOperationsStatus(this.settings);
       this.checkFanStatus(this.settings);
       this.checkFluidStatus(this.settings);
       this.checkMotorStatus(this.settings);
@@ -84,6 +85,7 @@ export class FsatTabsComponent implements OnInit {
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.checkSettingsStatus();
+      this.checkOperationsStatus(this.settings);
       this.checkFanStatus(this.settings);
       this.checkFluidStatus(this.settings);
       this.checkMotorStatus(this.settings);
@@ -109,22 +111,20 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
-    //let fanOperations: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.)
+    let fanOperationsValid: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.fsatOperations);
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, this.settings);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     if (str === 'fan-motor') {
-      if (fluidValid && fanValid) {
+      if (fluidValid && fanValid && fanOperationsValid) {
         this.fsatService.stepTab.next(str);
       }
     } else if (str === 'fan-field-data') {
-      if (fluidValid && fanValid && motorValid) {
+      if (fluidValid && fanValid && motorValid && fanOperationsValid) {
         this.fsatService.stepTab.next(str);
       }
-    } else if (str == 'operations') {
-      if (fluidValid && fanValid && motorValid) {
-        this.fsatService.stepTab.next(str);
-      }
+    } else if (str == 'operations') {      
+      this.fsatService.stepTab.next(str);      
     } else {
       this.fsatService.stepTab.next(str);
     }
@@ -146,6 +146,19 @@ export class FsatTabsComponent implements OnInit {
       this.settingsClassStatus = ['success'];
     }
   }
+
+  checkOperationsStatus(settings: Settings) {
+    let operationsValid: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.fsatOperations);
+    if (!operationsValid) {
+      this.operationsTabStatus = ['missing-data'];
+    } else {
+      this.operationsTabStatus = ['success'];
+    }
+    if (this.stepTab === 'operations') {
+      this.operationsTabStatus.push('active');
+    }
+  }
+
 
   checkFluidStatus(settings: Settings) {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, settings);
