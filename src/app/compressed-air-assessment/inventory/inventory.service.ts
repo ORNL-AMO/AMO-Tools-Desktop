@@ -232,7 +232,9 @@ export class InventoryService {
       minFullLoadCapacity: [compressor.centrifugalSpecifics.minFullLoadCapacity, [Validators.required, Validators.min(0)]]
     });
 
-    this.markFormDirtyToDisplayValidation(form);
+    for (let key in form.controls) {
+        form.controls[key].markAsDirty();
+    }
     return form;
   }
 
