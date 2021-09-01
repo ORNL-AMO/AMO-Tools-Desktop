@@ -73,7 +73,7 @@ export class DesignDetailsComponent implements OnInit {
   setDisplayNoLoadPowerFM(compressorType: number, controlType: number) {
     let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
     if (showNoLoad) {
-      if (controlType == 1) {
+      if (controlType == 1 || controlType == 2 || controlType == 3) {
         this.displayNoLoadPowerFM = true;
       } else {
         this.displayNoLoadPowerFM = false;
