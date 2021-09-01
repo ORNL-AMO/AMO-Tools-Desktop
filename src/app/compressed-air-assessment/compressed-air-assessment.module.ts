@@ -108,6 +108,7 @@ import { CompressedAirAssessmentResultsService } from './compressed-air-assessme
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -200,7 +201,8 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
     ConfirmDeleteModalModule, 
     FullLoadAmpsModule,
     AltitudeCorrectionModule,
-    PercentGraphModule
+    PercentGraphModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     CompressedAirAssessmentService,

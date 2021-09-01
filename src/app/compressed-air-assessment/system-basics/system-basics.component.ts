@@ -7,7 +7,10 @@ import { Assessment } from '../../shared/models/assessment';
 import { CASystemBasics, CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { ConvertCompressedAirService } from '../convert-compressed-air.service';
 import { SystemBasicsFormService } from './system-basics-form.service';
+import * as _ from 'lodash';
+
 
 @Component({
   selector: 'app-system-basics',
@@ -28,6 +31,7 @@ export class SystemBasicsComponent implements OnInit {
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private convertCompressedAirService: ConvertCompressedAirService,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService,
     private systemBasicsFormService: SystemBasicsFormService) { }
 
@@ -39,10 +43,10 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
-    // if (this.assessment.wasteWater.existingDataUnits && this.assessment.wasteWater.existingDataUnits != this.oldSettings.unitsOfMeasure) {
-    //   this.oldSettings = this.getExistingDataSettings(wasteWater);
-    //   this.showUpdateDataReminder = true;
-    // }
+    if (this.assessment.compressedAirAssessment.existingDataUnits && this.assessment.compressedAirAssessment.existingDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings = this.getExistingDataSettings(this.assessment.compressedAirAssessment);
+      this.showUpdateDataReminder = true;
+    }
   }
 
   ngOnDestroy() {
@@ -59,56 +63,55 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveSettings() {
-    // let currentSettings: Settings = this.wasteWaterService.settings.getValue();
-    // let id = currentSettings.id;
-    // let createdDate = currentSettings.createdDate;
-    // let assessmentId = currentSettings.assessmentId;
+    let currentSettings: Settings = this.compressedAirAssessmentService.settings.getValue();
+    let id = currentSettings.id;
+    let createdDate = currentSettings.createdDate;
+    let assessmentId = currentSettings.assessmentId;
 
-    // let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    // if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
-    //   let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    //   wasteWater.existingDataUnits = this.oldSettings.unitsOfMeasure;
-    //   this.wasteWaterService.updateWasteWater(wasteWater);
-    //   this.showUpdateDataReminder = true;
-    // }
+    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      compressedAirAssessment.existingDataUnits = this.oldSettings.unitsOfMeasure;
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+      this.showUpdateDataReminder = true;
+    }
 
-    // if (this.showSuccessMessage === true) {
-    //   this.showSuccessMessage = false;
-    // }
+    if (this.showSuccessMessage === true) {
+      this.showSuccessMessage = false;
+    }
 
-    // newSettings.id = id;
-    // newSettings.createdDate = createdDate;
-    // newSettings.assessmentId = assessmentId;
-    // this.indexedDbService.putSettings(newSettings).then(() => {
-    //   this.settingsDbService.setAll();
-    // });
-    // this.wasteWaterService.settings.next(newSettings);
-
+    newSettings.id = id;
+    newSettings.createdDate = createdDate;
+    newSettings.assessmentId = assessmentId;
+    this.indexedDbService.putSettings(newSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.compressedAirAssessmentService.settings.next(newSettings);
   }
 
   updateData(showSuccess?: boolean) {
-    // if(showSuccess) {
-    //   this.initSuccessMessage();
-    // }
-    // let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    // let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    // wasteWater = this.convertWasteWaterService.convertWasteWater(wasteWater, this.oldSettings, newSettings);
-    // this.showUpdateDataReminder = false;
-    // wasteWater.existingDataUnits = newSettings.unitsOfMeasure;
-    // this.wasteWaterService.updateWasteWater(wasteWater);
-    // this.oldSettings = newSettings;
+    if(showSuccess) {
+      this.initSuccessMessage();
+    }
+    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(compressedAirAssessment, this.oldSettings, newSettings);
+    this.showUpdateDataReminder = false;
+    compressedAirAssessment.existingDataUnits = newSettings.unitsOfMeasure;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.oldSettings = newSettings;
   }
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  // getExistingDataSettings(wasteWater: WasteWater): Settings {
-  //   let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
-  //   existingSettingsForm.patchValue({unitsOfMeasure: wasteWater.existingDataUnits});
-  //   let existingSettings = this.settingsService.setUnits(existingSettingsForm);
-  //   return this.settingsService.getSettingsFromForm(existingSettings);
-  // }
+  getExistingDataSettings(compressedAirAssessment: CompressedAirAssessment): Settings {
+    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    existingSettingsForm.patchValue({unitsOfMeasure: compressedAirAssessment.existingDataUnits});
+    let existingSettings = this.settingsService.setUnits(existingSettingsForm);
+    return this.settingsService.getSettingsFromForm(existingSettings);
+  }
 
   initSuccessMessage() {
     this.showSuccessMessage = true;

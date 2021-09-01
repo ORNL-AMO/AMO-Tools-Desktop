@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../system-profile.service';
@@ -12,7 +13,7 @@ import { SystemProfileService } from '../system-profile.service';
   styleUrls: ['./profile-setup-form.component.css']
 })
 export class ProfileSetupFormComponent implements OnInit {
-
+  settings: Settings;
   form: FormGroup;
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
@@ -21,6 +22,7 @@ export class ProfileSetupFormComponent implements OnInit {
   profileTabSub: Subscription;
   pressureMin: number;
   pressureMax: number;
+  settingsSub: Subscription;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService) { }
 
@@ -40,11 +42,15 @@ export class ProfileSetupFormComponent implements OnInit {
       this.profileTab = val;
       this.enableDisableForm();
     });
+
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.profileTabSub.unsubscribe();
+    this.settingsSub.unsubscribe();
+
   }
 
 

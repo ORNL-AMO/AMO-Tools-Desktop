@@ -2,6 +2,7 @@ import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-
 
 export interface CompressedAirAssessment {
     name?: string;
+    existingDataUnits?: string;
     modifications: Array<Modification>;
     selected?: boolean;
     systemBasics: CASystemBasics,
