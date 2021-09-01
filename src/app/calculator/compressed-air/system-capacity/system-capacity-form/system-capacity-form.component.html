@@ -119,7 +119,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalPipeVolume">
             <strong>{{outputs.totalPipeVolume | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalPipeVolume">
@@ -132,7 +132,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalReceiverVolume">
             <strong>{{outputs.totalReceiverVolume | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalReceiverVolume">
@@ -145,7 +145,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalCapacityOfCompressedAirSystem">
             <strong>{{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalCapacityOfCompressedAirSystem">
