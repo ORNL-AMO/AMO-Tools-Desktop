@@ -167,7 +167,11 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     for (let airFlow = 0; airFlow <= 100;) {
       let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, 0, false);
       compressorData.push(results);
-      airFlow = airFlow + 2.5;
+      if(airFlow < 95){
+        airFlow = airFlow + 1;
+      }else{
+        airFlow = airFlow + .5;
+      }
     }
     return compressorData;
   }
