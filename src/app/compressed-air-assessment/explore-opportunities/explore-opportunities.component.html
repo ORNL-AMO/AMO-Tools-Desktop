@@ -18,15 +18,15 @@
                 </div>
                 <hr>
                 <!-- <app-flow-reallocation></app-flow-reallocation> -->
-                <app-reduce-air-leaks></app-reduce-air-leaks>
-                <app-improve-end-use-efficiency></app-improve-end-use-efficiency>
-                <app-reduce-system-air-pressure></app-reduce-system-air-pressure>
-                <app-use-unloading-controls></app-use-unloading-controls>
+                <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
+                <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order"></app-improve-end-use-efficiency>
+                <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"></app-reduce-system-air-pressure>
+                <app-use-unloading-controls [style.order]="modification.useUnloadingControls.order"></app-use-unloading-controls>
                 <!--TODO: NEED MORE INFO FOR CASCADING POINTS-->
                 <!-- <app-adjust-cascading-set-points></app-adjust-cascading-set-points> -->
-                <app-use-automatic-sequencer></app-use-automatic-sequencer>
-                <app-reduce-run-time></app-reduce-run-time>
-                <app-add-receiver-volume></app-add-receiver-volume>
+                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"></app-use-automatic-sequencer>
+                <app-reduce-run-time [style.order]="modification.reduceRuntime.order"></app-reduce-run-time>
+                <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"></app-add-receiver-volume>
             </div>
 
         </div>

@@ -81,37 +81,45 @@ export class ExploreOpportunitiesService {
       reduceAirLeaks: {
         selected: false,
         leakReduction: undefined,
-        leakFlow: undefined
+        leakFlow: undefined,
+        order: 100
       },
       improveEndUseEfficiency: {
         selected: false,
         reductionType: "Fixed",
         airflowReduction: undefined,
-        reductionData: reductionData
+        reductionData: reductionData,
+        order: 100
       },
       reduceSystemAirPressure: {
         selected: false,
-        averageSystemPressureReduction: undefined
+        averageSystemPressureReduction: undefined,
+        order: 100
       },
       useUnloadingControls: {
         selected: false,
-        adjustedCompressors: adjustedCompressors
+        adjustedCompressors: adjustedCompressors,
+        order: 100
       },
       adjustCascadingSetPoints: {
-        selected: false
+        selected: false,
+        order: 100
       },
       useAutomaticSequencer: {
         selected: false,
         targetPressure: undefined,
-        variance: undefined
+        variance: undefined,
+        order: 100
       },
       reduceRuntime: {
         selected: false,
-        runtimeData: reduceRuntimeData
+        runtimeData: reduceRuntimeData,
+        order: 100
       },
       addPrimaryReceiverVolume: {
         selected: false,
-        increasedVolume: 0
+        increasedVolume: 0,
+        order: 100
       }
     }
   }

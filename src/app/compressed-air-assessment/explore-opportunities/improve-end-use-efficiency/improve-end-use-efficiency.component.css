@@ -34,3 +34,11 @@ td, th{
   .form-control.min-width{
 	  min-width: 35px;
   }
+
+  
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+  background-color: #7030A0;
+  color: white;
+}

@@ -1,12 +1,22 @@
 <div class="checkbox">
     <label class="group-label" for="useAutomaticSequencer">
-        <input type="checkbox" id="useAutomaticSequencer" (focus)="focusField('useAutomaticSequencer')"
-            (change)="setUseAutomaticSequencer()" [(ngModel)]="useAutomaticSequencer.selected" />
+        <!-- <input type="checkbox" id="useAutomaticSequencer" (focus)="focusField('useAutomaticSequencer')"
+            (change)="setUseAutomaticSequencer()" [(ngModel)]="useAutomaticSequencer.selected" /> -->
         Use Automatic Sequencer
+        <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order" class="form-control pull-right">
+            <option [ngValue]=100>Off</option>
+            <option [ngValue]=1>1</option>
+            <option [ngValue]=2>2</option>
+            <option [ngValue]=3>3</option>
+            <option [ngValue]=4>4</option>
+            <option [ngValue]=5>5</option>
+            <option [ngValue]=6>6</option>
+            <option [ngValue]=7>7</option>
+        </select>
     </label>
 </div>
 
-<form *ngIf="useAutomaticSequencer.selected" class="mb-2 pt-1">
+<form *ngIf="useAutomaticSequencer.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label for="targetPressure">Target Pressure</label>
         <div class="input-group">

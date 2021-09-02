@@ -1,11 +1,21 @@
 <div class="checkbox">
     <label class="group-label" for="addPrimaryReceiverVolume">
-        <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
-            (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" />
+        <!-- <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
+            (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" /> -->
         Add Primary Receiver Volume
+        <select id="addPrimaryReceiverVolumeOrder" [(ngModel)]="addPrimaryReceiverVolume.order" class="form-control pull-right">
+            <option [ngValue]=100>Off</option>
+            <option [ngValue]=1>1</option>
+            <option [ngValue]=2>2</option>
+            <option [ngValue]=3>3</option>
+            <option [ngValue]=4>4</option>
+            <option [ngValue]=5>5</option>
+            <option [ngValue]=6>6</option>
+            <option [ngValue]=7>7</option>
+        </select>
     </label>
 </div>
-<form *ngIf="addPrimaryReceiverVolume.selected" class="mb-2 pt-1">
+<form *ngIf="addPrimaryReceiverVolume.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label>Existing air storage capacity</label>
         <div class="text-center small">

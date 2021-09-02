@@ -16,3 +16,11 @@
 	width: auto;
     padding-bottom: 0px;
 }
+
+
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+    background-color: #7030A0;
+    color: white;
+}

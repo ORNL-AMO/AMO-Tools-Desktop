@@ -1,13 +1,23 @@
 <div class="checkbox">
     <label class="group-label" for="reduceAirSystemAirPressure">
-        <input type="checkbox" id="reduceAirSystemAirPressure" (focus)="focusField('reduceAirSystemAirPressure')"
-            (change)="setReduceAirSystemAirPressure()" [(ngModel)]="reduceSystemAirPressure.selected" />
+        <!-- <input type="checkbox" id="reduceAirSystemAirPressure" (focus)="focusField('reduceAirSystemAirPressure')"
+            (change)="setReduceAirSystemAirPressure()" [(ngModel)]="reduceSystemAirPressure.selected" /> -->
         Reduce System Air Pressure
+        <select id="reduceSystemAirPressureOrder" [(ngModel)]="reduceSystemAirPressure.order" class="form-control pull-right">
+            <option [ngValue]=100>Off</option>
+            <option [ngValue]=1>1</option>
+            <option [ngValue]=2>2</option>
+            <option [ngValue]=3>3</option>
+            <option [ngValue]=4>4</option>
+            <option [ngValue]=5>5</option>
+            <option [ngValue]=6>6</option>
+            <option [ngValue]=7>7</option>
+        </select>
     </label>
 </div>
 
 
-<form *ngIf="reduceSystemAirPressure.selected" class="mb-2 pt-1">
+<form *ngIf="reduceSystemAirPressure.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label for="averageSystemPressureReduction">Average System Pressure Reduction</label>
         <div class="input-group">

@@ -1,7 +1,17 @@
 <div class="checkbox">
     <label class="group-label" for="adjustCascadingSetPoints">
-        <input type="checkbox" id="adjustCascadingSetPoints" (focus)="focusField('adjustCascadingSetPoints')"
-            (change)="setAdjustCascadingSetPoints()" [(ngModel)]="adjustCascadingSetPoints.selected" />
+        <!-- <input type="checkbox" id="adjustCascadingSetPoints" (focus)="focusField('adjustCascadingSetPoints')"
+            (change)="setAdjustCascadingSetPoints()" [(ngModel)]="adjustCascadingSetPoints.selected" /> -->
         Adjust Cascading Set Points
+        <select id="adjustCascadingSetPointsOrder" [(ngModel)]="adjustCascadingSetPoints.order" class="form-control pull-right">
+            <option [ngValue]=100>Off</option>
+            <option [ngValue]=1>1</option>
+            <option [ngValue]=2>2</option>
+            <option [ngValue]=3>3</option>
+            <option [ngValue]=4>4</option>
+            <option [ngValue]=5>5</option>
+            <option [ngValue]=6>6</option>
+            <option [ngValue]=7>7</option>
+        </select>
     </label>
 </div>
