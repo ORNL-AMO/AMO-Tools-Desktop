@@ -1,6 +1,10 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { AltitudeCorrectionService } from './altitude-correction.service';
 
@@ -12,6 +16,9 @@ import { AltitudeCorrectionService } from './altitude-correction.service';
 export class AltitudeCorrectionComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -25,11 +32,16 @@ export class AltitudeCorrectionComponent implements OnInit {
   containerHeight: number;
   tabSelect: string = 'help';
   headerHeight: number;
-
+  saving: boolean;
+  assessmentCalculator: Calculator;
+  
   altitudeCorrectionDataSub: Subscription;
   currentField: string;
 
-  constructor(private settingsDbService: SettingsDbService, private altitudeCorrectionService: AltitudeCorrectionService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+    private calculatorDbService: CalculatorDbService, 
+    private indexedDbService: IndexedDbService,
+    private altitudeCorrectionService: AltitudeCorrectionService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -43,6 +55,10 @@ export class AltitudeCorrectionComponent implements OnInit {
       this.altitudeCorrectionService.initDefualtResults();
     }
     this.initSubscriptions();
+
+    if (this.assessment) {
+      this.getCalculatorForAssessment();
+    }
   }
 
   ngAfterViewInit() {
@@ -64,7 +80,54 @@ export class AltitudeCorrectionComponent implements OnInit {
 
   calculate() {
     this.altitudeCorrectionService.calculateBarometricPressure(this.settings);
+    if (this.assessmentCalculator) {
+      this.assessmentCalculator.altitudeCorrectionInput = this.altitudeCorrectionService.altitudeCorrectionInputs.getValue();
+      this.saveAssessmentCalculator();
+     }
   }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.altitudeCorrectionInput) {
+        this.altitudeCorrectionService.altitudeCorrectionInputs.next(this.assessmentCalculator.altitudeCorrectionInput);
+      } else {
+        this.assessmentCalculator.altitudeCorrectionInput = this.altitudeCorrectionService.altitudeCorrectionInputs.getValue();
+      }
+    } else{
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  initNewAssessmentCalculator(): Calculator {
+    let inputs = this.altitudeCorrectionService.altitudeCorrectionInputs.getValue();
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      altitudeCorrectionInput: inputs
+    };
+    return tmpCalculator;
+  }
+
+  saveAssessmentCalculator(){
+    if (!this.saving) {
+      if (this.assessmentCalculator.id) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
+  }
+
 
   resizeTabs() {
     if (this.leftPanelHeader) {

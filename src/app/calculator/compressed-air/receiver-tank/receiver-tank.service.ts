@@ -14,12 +14,28 @@ export class ReceiverTankService {
   receiverTankMethod: number;
   airCapacityInputs: CalculateUsableCapacity;
   setForm: BehaviorSubject<boolean>;
+  inputs: BehaviorSubject<ReceiverTankInputs>;
   currentField: BehaviorSubject<string>;
+  inAssessmentCalculator: boolean = false;
+
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.setForm = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
     this.setDefaults();
     this.setAirCapacityDefault();
+  }
+  
+  setAssessmentCalculatorSubject() {
+    this.inAssessmentCalculator = true;
+    this.inputs = new BehaviorSubject(
+      {
+        dedicatedStorageInputs: undefined,
+        airCapacityInputs: undefined,
+        generalMethodInputs: undefined,
+        meteredStorageInputs: undefined,
+        bridgeCompressorInputs: undefined,
+      }
+    );
   }
 
   setDefaults() {
@@ -225,4 +241,13 @@ export class ReceiverTankService {
     }
     return tmpInputs;
   }
+}
+
+export interface ReceiverTankInputs {
+    dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
+    airCapacityInputs?: CalculateUsableCapacity,
+    generalMethodInputs?: ReceiverTankGeneral,
+    meteredStorageInputs?: ReceiverTankMeteredStorage,
+    bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
+  
 }

@@ -4,6 +4,11 @@ import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standa
 import { Settings } from '../../../shared/models/settings';
 import { PipeSizingService } from './pipe-sizing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
+import {Assessment} from '../../../shared/models/assessment';
+import {Calculator} from '../../../shared/models/calculators';
+import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+
 
 @Component({
   selector: 'app-pipe-sizing',
@@ -11,8 +16,12 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
   styleUrls: ['./pipe-sizing.component.css']
 })
 export class PipeSizingComponent implements OnInit {
+  
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+  
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
@@ -22,33 +31,34 @@ export class PipeSizingComponent implements OnInit {
   }
 
   headerHeight: number;
-
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
-  currentField: string = 'default';
-  constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService) {
+  currentField: string;
+  tabSelect: string = 'results';
+  saving: boolean;
+  assessmentCalculator: Calculator;
+
+  constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
   }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.inputs = this.pipeSizingService.inputs;
-    this.calculatePipeSize(this.inputs);
+
+    if (this.assessment) {
+      this.getCalculatorForAssessment();
+    } else {
+      this.inputs = this.pipeSizingService.inputs;
+      this.calculatePipeSize(this.inputs);
+    }
+  
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  ngOnDestroy(){
-    this.pipeSizingService.inputs = this.inputs;
-  }
-
-  btnResetData() {
-    this.inputs = this.pipeSizingService.getDefaultData();
-    this.calculatePipeSize(this.inputs);
   }
 
   resizeTabs() {
@@ -59,10 +69,84 @@ export class PipeSizingComponent implements OnInit {
 
   calculatePipeSize(inputs: PipeSizingInput) {
     this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
+    if (this.assessmentCalculator) {
+      this.assessmentCalculator.pipeSizingInputs = this.inputs;
+      this.saveAssessmentCalculator();
+    } else {
+      this.pipeSizingService.inputs = this.inputs;
+    }
+  }
+
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  ngOnDestroy(){
+    if (this.assessmentCalculator) {
+      this.pipeSizingService.inputs = this.pipeSizingService.getDefaultData();
+    }
   }
 
   setField(str: string) {
     this.currentField = str;
+  }
+
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.pipeSizingInputs) {
+        this.inputs = this.assessmentCalculator.pipeSizingInputs;
+      } else {
+        this.inputs = this.pipeSizingService.inputs;
+        this.assessmentCalculator.pipeSizingInputs = this.inputs;
+      }
+      this.calculatePipeSize(this.inputs);
+    } else {
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+ initNewAssessmentCalculator(): Calculator {
+    this.inputs = this.pipeSizingService.inputs;
+    this.calculatePipeSize(this.inputs);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      pipeSizingInputs: this.inputs
+    };
+    return tmpCalculator;
+  }
+
+  
+  saveAssessmentCalculator() {
+    if (!this.saving) {
+      if (this.assessmentCalculator.id) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
+  }
+
+  btnResetData() {
+    let defaultInputs = this.pipeSizingService.getDefaultData();
+    this.pipeSizingService.inputs = defaultInputs;
+    this.inputs = defaultInputs;
+    this.calculatePipeSize(this.inputs);
   }
 
   btnGenerateExample() {
@@ -71,3 +155,5 @@ export class PipeSizingComponent implements OnInit {
     this.calculatePipeSize(this.inputs);
   }
 }
+
+

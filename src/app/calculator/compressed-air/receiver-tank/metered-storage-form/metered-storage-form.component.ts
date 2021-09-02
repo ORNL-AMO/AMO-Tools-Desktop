@@ -34,6 +34,13 @@ export class MeteredStorageFormComponent implements OnInit {
 
   getTotalReceiverVolume() {
     this.totalReceiverVolume = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
+    if (this.receiverTankService.inAssessmentCalculator) {
+      this.updateInputsForAssessmentCalculator();
+    }
+  }
+
+  updateInputsForAssessmentCalculator() {
+    this.receiverTankService.inputs.next({meteredStorageInputs: this.inputs})
   }
 
   changeField(str: string) {

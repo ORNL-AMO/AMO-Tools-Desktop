@@ -35,7 +35,15 @@ export class DedicatedStorageFormComponent implements OnInit {
 
   getReceiverVolume() {
     this.receiverVolume = this.standaloneService.receiverTankSizeDedicatedStorage(this.inputs, this.settings);
+    if (this.receiverTankService.inAssessmentCalculator) {
+      this.updateInputsForAssessmentCalculator();
+    }
   }
+  
+  updateInputsForAssessmentCalculator() {
+    this.receiverTankService.inputs.next({dedicatedStorageInputs: this.inputs})
+  }
+
   changeField(str: string) {
     this.receiverTankService.currentField.next(str);
   }

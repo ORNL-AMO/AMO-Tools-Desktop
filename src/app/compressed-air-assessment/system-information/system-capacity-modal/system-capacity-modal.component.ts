@@ -26,9 +26,7 @@ export class SystemCapacityModalComponent implements OnInit {
   }
   
   setSystemCapacity(totalCapacity: number) {
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      totalCapacity = this.convertUnitsService.value(totalCapacity).from('ft3').to('gal');
-    } else {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       totalCapacity = this.convertUnitsService.value(totalCapacity).from('m3').to('L')
     }
     this.totalCapacityOfCompressedAirSystem =  Number(totalCapacity.toFixed(1));
