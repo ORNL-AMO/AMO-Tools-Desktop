@@ -61,6 +61,7 @@ export class BinsFormComponent implements OnInit {
 
 
   save() {
+    this.deleteAllCase();
     this.inputData = this.weatherBinsService.setAutoBinCases(this.inputData, this.settings);
     this.weatherBinsService.save(this.inputData, this.settings);
   }
