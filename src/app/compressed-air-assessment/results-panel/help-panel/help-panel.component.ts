@@ -11,13 +11,21 @@ export class HelpPanelComponent implements OnInit {
 
   selectedTab: string;
   selectedTabSub: Subscription;
+  assessmentTab: string;
+  assessmentTabSub: Subscription;
+
+  mainTab: string;
   constructor(private compressedAirService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
-    let mainTab: string = this.compressedAirService.mainTab.getValue();
-    if (mainTab == 'system-setup') {
+    this.mainTab = this.compressedAirService.mainTab.getValue();
+    if (this.mainTab == 'system-setup') {
       this.selectedTabSub = this.compressedAirService.setupTab.subscribe(val => {
         this.selectedTab = val;
+      });
+    } else if (this.mainTab == 'assessment') {
+      this.assessmentTabSub = this.compressedAirService.assessmentTab.subscribe(val => {
+        this.assessmentTab = val;
       });
     }
   }

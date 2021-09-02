@@ -108,6 +108,14 @@ import { CompressedAirAssessmentResultsService } from './compressed-air-assessme
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
+import { AssessmentHelpComponent } from './results-panel/help-panel/assessment-help/assessment-help.component';
+import { ReduceAirLeaksHelpComponent } from './results-panel/help-panel/assessment-help/reduce-air-leaks-help/reduce-air-leaks-help.component';
+import { ImproveEndUseEfficiencyHelpComponent } from './results-panel/help-panel/assessment-help/improve-end-use-efficiency-help/improve-end-use-efficiency-help.component';
+import { ReduceSystemAirPressureHelpComponent } from './results-panel/help-panel/assessment-help/reduce-system-air-pressure-help/reduce-system-air-pressure-help.component';
+import { UseUnloadingControlsHelpComponent } from './results-panel/help-panel/assessment-help/use-unloading-controls-help/use-unloading-controls-help.component';
+import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
+import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
+import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -180,7 +188,15 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
     AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
-    ExploreOpportunitiesProfileTableComponent
+    ExploreOpportunitiesProfileTableComponent,
+    AssessmentHelpComponent,
+    ReduceAirLeaksHelpComponent,
+    ImproveEndUseEfficiencyHelpComponent,
+    ReduceSystemAirPressureHelpComponent,
+    UseUnloadingControlsHelpComponent,
+    UseAutomaticSequencerHelpComponent,
+    ReduceRunTimeHelpComponent,
+    AddReceiverVolumeHelpComponent
   ],
   imports: [
     CommonModule,

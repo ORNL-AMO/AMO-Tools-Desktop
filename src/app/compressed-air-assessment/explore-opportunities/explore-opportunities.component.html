@@ -69,6 +69,7 @@
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
+        <app-help-panel *ngIf="modificationExists && tabSelect == 'help'"></app-help-panel>
         <!-- <div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
             <div class="col-10">
                 <div class="main-content text-center">

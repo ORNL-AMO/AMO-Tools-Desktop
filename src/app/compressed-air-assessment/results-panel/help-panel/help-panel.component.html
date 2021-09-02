@@ -1,4 +1,5 @@
-<app-system-basics-help *ngIf="selectedTab == 'system-basics'"></app-system-basics-help>
-<app-system-information-help *ngIf="selectedTab == 'system-information'"></app-system-information-help>
-<app-inventory-help *ngIf="selectedTab == 'inventory'"></app-inventory-help>
-<app-day-types-help *ngIf="selectedTab == 'day-types'"></app-day-types-help>
+<app-system-basics-help *ngIf="mainTab == 'system-setup' && selectedTab == 'system-basics'"></app-system-basics-help>
+<app-system-information-help *ngIf="mainTab == 'system-setup' && selectedTab == 'system-information'"></app-system-information-help>
+<app-inventory-help *ngIf="mainTab == 'system-setup' && selectedTab == 'inventory'"></app-inventory-help>
+<app-day-types-help *ngIf="mainTab == 'system-setup' && selectedTab == 'day-types'"></app-day-types-help>
+<app-assessment-help *ngIf="mainTab == 'assessment' && assessmentTab == 'explore-opportunities'"></app-assessment-help>
