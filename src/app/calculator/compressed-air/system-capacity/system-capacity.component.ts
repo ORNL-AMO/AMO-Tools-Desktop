@@ -5,7 +5,6 @@ import { Settings } from '../../../shared/models/settings';
 import { SystemCapacityService } from './system-capacity.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Output, EventEmitter } from '@angular/core';
-import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
