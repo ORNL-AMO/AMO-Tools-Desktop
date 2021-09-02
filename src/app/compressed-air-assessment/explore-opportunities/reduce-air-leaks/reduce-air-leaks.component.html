@@ -3,7 +3,7 @@
         <!-- <input type="checkbox" id="reduceAirLeaks" (focus)="focusField('reduceAirLeaks')" (change)="setReduceAirLeaks()"
             [(ngModel)]="reduceAirLeaks.selected" /> -->
         Reduce Air Leaks
-        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right">
+        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
             <option [ngValue]=1>1</option>
             <option [ngValue]=2>2</option>
@@ -21,7 +21,7 @@
         <label for="leakFlow">Leak Flow</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"
-                id="leakFlow" (input)="save()">
+                id="leakFlow" (input)="save(false)">
             <span class="input-group-addon units">acfm</span>
         </div>
     </div>
@@ -29,7 +29,7 @@
         <label for="leakReduction">Leak Reduction</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakReduction" name="leakReduction"
-                id="leakReduction" (input)="save()">
+                id="leakReduction" (input)="save(false)">
             <span class="input-group-addon units">%</span>
         </div>
     </div>
