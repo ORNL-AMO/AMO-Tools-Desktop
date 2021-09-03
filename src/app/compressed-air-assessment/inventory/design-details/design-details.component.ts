@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DesignDetails } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { CompressorInventoryItemWarnings, InventoryService } from '../inventory.service';
@@ -13,7 +14,7 @@ import { PerformancePointsFormService } from '../performance-points/performance-
   styleUrls: ['./design-details.component.css']
 })
 export class DesignDetailsComponent implements OnInit {
-
+  settings: Settings;
   selectedCompressorSub: Subscription;
   form: FormGroup;
   warnings: CompressorInventoryItemWarnings;
@@ -24,12 +25,14 @@ export class DesignDetailsComponent implements OnInit {
   displayNoLoadPowerUL: boolean;
   displayMaxFullFlow: boolean;
   contentCollapsed: boolean;
+  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseDesignDetails;
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.warnings = this.inventoryService.checkWarnings(compressor);
@@ -49,6 +52,7 @@ export class DesignDetailsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
     this.inventoryService.collapseDesignDetails = this.contentCollapsed;
   }
 

@@ -12,19 +12,32 @@
                 <input name="noLoadDischargePressure" type="number" step="any" class="form-control"
                     id="noLoadDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                     (focus)="focusField('noLoadDischargePressure')">
-                <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
                 <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
-                    {{form.controls.dischargePressure.errors.min.min}} psig.</span>
+                    {{form.controls.dischargePressure.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
                 <span *ngIf="form.controls.dischargePressure.errors.equalTo !== undefined">Value must be equal to
-                    {{form.controls.dischargePressure.errors.equalTo}} psig.</span>
+                    {{form.controls.dischargePressure.errors.equalTo}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
                 <span *ngIf="form.controls.dischargePressure.errors.lessThan !== undefined">
-                    Value must be less than Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.lessThan}}) psig</span>
+                    Value must be less than Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.lessThan}}) 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
                 <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
-                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig.</span>
+                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                .</span>
             </span>
         </div>
     </form>
@@ -38,13 +51,17 @@
                 </span>
                 <input name="noLoadAirflow" type="number" step="any" class="form-control" id="noLoadAirflow"
                     formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('noLoadAirflow')">
-                <span class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
             </div>
             <span class="alert-danger pull-right small"
             *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
             <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
             <span *ngIf="form.controls.airflow.errors.equalTo !== undefined">Value must be equal to
-                {{form.controls.airflow.errors.equalTo}} acfm.</span>
+                {{form.controls.airflow.errors.equalTo}} 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+            </span>
         </span>
         </div>
     </form>

@@ -40,7 +40,10 @@
                     </div>
                     <div class="form-group">
                         <label>Pressure Control Range</label>
-                        <label>{{pressureMin}} - {{pressureMax}} psig</label>
+                        <label>{{pressureMin}} - {{pressureMax}} 
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </label>
                     </div>
                 </div>
             </div>

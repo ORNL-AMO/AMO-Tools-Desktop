@@ -10,7 +10,7 @@
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
-      <app-system-information *ngIf="setupTab == 'system-information'" [settings]="settings"></app-system-information>
+      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
       <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
       <app-end-uses *ngIf="setupTab == 'end-uses'"></app-end-uses>
       <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>
@@ -82,6 +82,8 @@
   <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
     [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
     (emitDisable)="disableDisclaimer()"></app-toast>
+  -->
+
   
-    <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'waste-water'"
-   (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal> -->
+  <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'compressed-air'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

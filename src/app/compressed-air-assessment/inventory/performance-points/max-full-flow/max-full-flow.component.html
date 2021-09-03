@@ -11,14 +11,21 @@
                 <input name="maxFullFlowDischargePressure" type="number" step="any" class="form-control"
                     id="maxFullFlowDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                     (focus)="focusField('maxFullFlowDischargePressure')">
-                <span class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small" *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
                 <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.dischargePressure.errors.min">Value can't be less than
-                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.min.min}}) psig.</span>
+                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.min.min}}) 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
                 <span *ngIf="form.controls.dischargePressure.errors.greaterThan !== undefined">Value must be greater than
-                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) psig</span>
+                    Full Load Discharge Pressure ({{form.controls.dischargePressure.errors.greaterThan}}) 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
             </span>
         </div>
     </form>
@@ -32,20 +39,33 @@
                 </span>
                 <input name="maxFullFlowAirflow" type="number" step="any" class="form-control" id="maxFullFlowAirflow"
                     formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('maxFullFlowAirflow')">
-                <span class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
             </div>
             <span class="alert-danger pull-right small" *ngIf="form.controls.airflow.invalid && !form.controls.airflow.pristine">
                 <span *ngIf="form.controls.airflow.errors.required">Value Required</span>
                 <span *ngIf="form.controls.airflow.errors.min">Value can't be less than 0 acfm.</span>
                 <span *ngIf="form.controls.airflow.errors.equalTo !== undefined">Value must be equal to Full Load Air Flow
-                    ({{form.controls.airflow.errors.equalTo}} acfm).</span>
+                    ({{form.controls.airflow.errors.equalTo}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                        ).</span>
                 <span *ngIf="form.controls.airflow.errors.lessThan !== undefined">
-                    Value must be less than Full Load Air Flow ({{form.controls.airflow.errors.lessThan}}) acfm</span>
+                    Value must be less than Full Load Air Flow ({{form.controls.airflow.errors.lessThan}}) 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                </span>
                 <span *ngIf="form.controls.airflow.errors.max !== undefined">Value cannot be greater than Full Load
                     Airflow
-                    ({{form.controls.airflow.errors.max.max}}) acfm.</span>
+                    ({{form.controls.airflow.errors.max.max}}) 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                        .</span>
                 <span *ngIf="form.controls.airflow.errors.greaterThan !== undefined">Value must be greater than
-                    {{form.controls.airflow.errors.greaterThan}} acfm</span>
+                    {{form.controls.airflow.errors.greaterThan}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                </span>
             
             </span>
         </div>
