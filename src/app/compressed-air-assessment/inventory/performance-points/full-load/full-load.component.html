@@ -6,7 +6,7 @@
             <div class="form-group">
                 <div class="input-group d-inline-flex px-2">
                     <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
-                        <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+                        <a class="click-link" (click)="setPressure()"><span class="fa fa-refresh"></span></a>
                     </span>
                     <input name="fullLoadDischargePressure" type="number" step="any" class="form-control"
                         id="fullLoadDischargePressure" formControlName="dischargePressure"
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <div class="input-group d-inline-flex px-2">
                     <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
-                        <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+                        <a class="click-link" (click)="setAirFlow()"><span class="fa fa-refresh"></span></a>
                     </span>
                     <input name="fullLoadAirflow" type="number" step="any" class="form-control" id="fullLoadAirflow"
                         formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('fullLoadAirflow')">
@@ -47,7 +47,7 @@
             <div class="form-group">
                 <div class="input-group d-inline-flex px-2">
                     <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
-                        <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+                        <a class="click-link" (click)="setPower()"><span class="fa fa-refresh"></span></a>
                     </span>
                     <input name="fullLoadPower" type="number" step="any" class="form-control" id="fullLoadPower"
                         formControlName="power" (input)="savePower()" (focus)="focusField('fullLoadPower')">
