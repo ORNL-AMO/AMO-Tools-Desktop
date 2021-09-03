@@ -17,7 +17,14 @@ td, th{
     border-bottom: solid 1px;
   }
   
+  tfoot tr.bold{
+      border-top: solid;
+  }
 
-  .compressor-name-row{
-      background-color: lightgray !important;
+  thead tr{
+      border-bottom: solid;
+  }
+
+  table.totals{
+    min-width: 400px;
   }
