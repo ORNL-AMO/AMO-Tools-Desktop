@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
@@ -18,7 +19,7 @@ export class BlowoffComponent implements OnInit {
   @Input()
   inModification: boolean;
 
-
+  settings: Settings;
   selectedCompressorSub: Subscription;
   form: FormGroup;
   validationMessages: ValidationMessageMap;
@@ -29,6 +30,7 @@ export class BlowoffComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
+  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
@@ -36,6 +38,7 @@ export class BlowoffComponent implements OnInit {
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -54,6 +57,7 @@ export class BlowoffComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {

@@ -29,13 +29,17 @@
             <input name="modulatingPressureRange" type="number" step="any" class="form-control"
                 id="modulatingPressureRange" formControlName="modulatingPressureRange" (input)="save()"
                 (focus)="focusField('modulatingPressureRange')">
-            <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.modulatingPressureRange.invalid && !form.controls.modulatingPressureRange.pristine">
           <span *ngIf="form.controls.modulatingPressureRange.errors.required">Value Required</span>
           <span *ngIf="form.controls.modulatingPressureRange.errors.min">Value can't be less than
-            {{form.controls.modulatingPressureRange.errors.min.min}} psig</span>
+            {{form.controls.modulatingPressureRange.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+        </span>
         </span>
     </div>
 
@@ -46,15 +50,22 @@
         <div class="input-group">
             <input name="inputPressure" type="number" step="any" class="form-control" id="inputPressure"
                 formControlName="inputPressure" (input)="save()" (focus)="focusField('inputPressure')">
-            <span class="units input-group-addon">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">bara</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.inputPressure.invalid && !form.controls.inputPressure.pristine">
           <span *ngIf="form.controls.inputPressure.errors.required">Value Required</span>
           <span *ngIf="form.controls.inputPressure.errors.min">Value can't be less than
-            {{form.controls.inputPressure.errors.min.min}} psia.</span>
+            {{form.controls.inputPressure.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>
+        </span>
             <span *ngIf="form.controls.inputPressure.errors.max">Value can't be greater than
-            {{form.controls.inputPressure.errors.max.max}} psia.</span>
+            {{form.controls.inputPressure.errors.max.max}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>
+        </span>
         </span>
     </div>
 
@@ -128,13 +139,19 @@
         <div class="input-group">
             <input name="maxFullFlowPressure" type="number" step="any" class="form-control" id="maxFullFlowPressure"
                 formControlName="maxFullFlowPressure" (input)="save()" (focus)="focusField('maxFullFlowPressure')">
-            <span class="units input-group-addon">psig</span>
+            <span class="units input-group-addon">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            </span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.maxFullFlowPressure.invalid && !form.controls.maxFullFlowPressure.pristine">
           <span *ngIf="form.controls.maxFullFlowPressure.errors.required">Value Required</span>
           <span *ngIf="form.controls.maxFullFlowPressure.errors.min">Value can't be less than
-            {{form.controls.maxFullFlowPressure.errors.min.min}} hp.</span>
+            {{form.controls.maxFullFlowPressure.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >barg</span>
+        </span>
         </span>
     </div>
 </form>

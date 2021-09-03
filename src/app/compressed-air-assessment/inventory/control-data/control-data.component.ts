@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressorControls } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
@@ -13,7 +14,7 @@ import { ControlTypes } from '../inventoryOptions';
   styleUrls: ['./control-data.component.css']
 })
 export class ControlDataComponent implements OnInit {
-
+  settings: Settings;
   selectedCompressorSub: Subscription;
   isFormChange: boolean = false;
   form: FormGroup;
@@ -23,11 +24,13 @@ export class ControlDataComponent implements OnInit {
   displayUnloadSumpPressure: boolean;
   contentCollapsed: boolean;
   compressorType: number;
+  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseControls;
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
@@ -45,6 +48,7 @@ export class ControlDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
     this.inventoryService.collapseControls = this.contentCollapsed;
   }
 
