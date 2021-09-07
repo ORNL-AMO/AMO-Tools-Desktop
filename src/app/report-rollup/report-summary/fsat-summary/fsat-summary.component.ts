@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { FsatReportRollupService } from '../../fsat-report-rollup.service';
 
 @Component({
@@ -8,7 +9,9 @@ import { FsatReportRollupService } from '../../fsat-report-rollup.service';
   styleUrls: ['./fsat-summary.component.css', '../report-summary.component.css']
 })
 export class FsatSummaryComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
+  
   fanSavingPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;

@@ -57,7 +57,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = '%{label}:<br>%{value:$,.0f}';
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
     }
     else if (this.dataOption == 'energySavings') {
       valuesArr = this.pieChartData.map(dataItem => {
@@ -69,7 +69,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.costSavings
       });
-      textTemplate = '%{label}:<br>%{value:$,.0f}';
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
     }
     var data = [{
       values: valuesArr,
@@ -174,4 +174,5 @@ export interface PieChartDataItem {
   percentEnergy: number,
   color: string,
   furnaceType?: string
+  currencyUnit?: string
 }

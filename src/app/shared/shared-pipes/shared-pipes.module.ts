@@ -8,6 +8,7 @@ import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
 import { MotorDriveTypePipe } from './motor-drive-type.pipe';
 import { WasteWaterOptionsDisplayPipe } from './waste-water-options-display.pipe';
 import { RemoveCommasPipe } from './remove-commas.pipe';
+import { CurrencyThousandsPipe } from './currency-thousands.pipe';
 
 
 
@@ -21,6 +22,7 @@ import { RemoveCommasPipe } from './remove-commas.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
+    CurrencyThousandsPipe,
   ],
   imports: [
     CommonModule
@@ -34,6 +36,7 @@ import { RemoveCommasPipe } from './remove-commas.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
+    CurrencyThousandsPipe
   ]
 })
 export class SharedPipesModule { }

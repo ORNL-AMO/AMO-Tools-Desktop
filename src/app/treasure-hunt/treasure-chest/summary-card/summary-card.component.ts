@@ -71,6 +71,11 @@ export class SummaryCardComponent implements OnInit {
       this.currCurrency = this.settings.currency;
       let baselineCost: number = this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost;
       this.additionalAnnualSavings = this.calculateAdditionalSavings(baselineCost, opportunityCards);
+      if (this.settings.currency !== '$') {
+        this.additionalAnnualSavings.totalCostSavings = this.convertUnitsService.value(this.additionalAnnualSavings.totalCostSavings).from("$").to(this.settings.currency);
+        this.additionalAnnualSavings.baselineCost = this.convertUnitsService.value(this.additionalAnnualSavings.baselineCost).from("$").to(this.settings.currency);
+        this.additionalAnnualSavings.modificationCost = this.convertUnitsService.value(this.additionalAnnualSavings.modificationCost).from("$").to(this.settings.currency);
+      }
       let totalCostSavings: number = this.electricityData.totalCostSavings + this.naturalGasData.totalCostSavings + this.waterData.totalCostSavings + this.compressedAirData.totalCostSavings + this.steamData.totalCostSavings + this.wasteWaterData.totalCostSavings + this.otherFuelData.totalCostSavings + this.additionalAnnualSavings.totalCostSavings;
       this.totals = {
         totalPercentSavings: (totalCostSavings / baselineCost * 100),

@@ -4,6 +4,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',
@@ -16,6 +17,7 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
 
   tableData: Array<TableDataItem>;
 
+  currencyUnit: string;
   totalBaselineCost: number = 0;
   totalModificationCost: number = 0;
   totalCostSavings: number = 0;
@@ -26,6 +28,7 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
 
   ngOnInit() {
     this.tableData = new Array();
+    this.currencyUnit = this.settings.currency !== '$'? '$k' : '$';
     //use copy for conversions
     let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
     phastResultsCpy.forEach(resultItem => {
@@ -44,6 +47,16 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
   getTableRow(resultItem: PhastResultsData): TableDataItem {
     resultItem.baselineResults.energyPerMass = this.getConvertedValue(resultItem.baselineResults.energyPerMass, resultItem.settings);
     resultItem.modificationResults.energyPerMass = this.getConvertedValue(resultItem.modificationResults.energyPerMass, resultItem.settings);
+    let baselineCost: number = resultItem.baselineResults.annualCost;
+    let modificationCost: number = resultItem.modificationResults.annualCost;
+    let costSavings: number = resultItem.baselineResults.annualCost - resultItem.modificationResults.annualCost;
+    let implementationCosts: number = resultItem.modificationResults.implementationCosts;
+    if (this.settings.currency !== '$') {
+      baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
+      modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
+      costSavings = this.convertUnitsService.value(costSavings).from('$').to(this.settings.currency);
+      implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
+  }
     return {
       baselineName: resultItem.name,
       modificationName: resultItem.modName,
@@ -51,10 +64,10 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
       modifiedEnergyIntensity: resultItem.modificationResults.energyPerMass,
       baselineAvailableHeat: this.phastResultsService.getAvailableHeat(resultItem.baselineResultData, resultItem.settings),
       modifiedAvailableHeat: this.phastResultsService.getAvailableHeat(resultItem.modificationResultData, resultItem.settings),
-      baselineAnnualCost: resultItem.baselineResults.annualCost,
-      modifiedAnnualCost: resultItem.modificationResults.annualCost,
-      costSavings: resultItem.baselineResults.annualCost - resultItem.modificationResults.annualCost,
-      implementationCost: resultItem.modificationResults.implementationCosts,
+      baselineAnnualCost: baselineCost,
+      modifiedAnnualCost: modificationCost,
+      costSavings: costSavings,
+      implementationCost: implementationCosts,
       paybackPeriod: resultItem.modificationResults.paybackPeriod
     }
   }
