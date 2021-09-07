@@ -11,6 +11,7 @@ import * as Plotly from 'plotly.js';
 export class WeatherBinsBarChartComponent implements OnInit {
   @ViewChild('weatherBinsBarChart', { static: false }) weatherBinsBarChart: ElementRef;
 
+  tableData: WeatherBinsInput;
   inputDataSub: Subscription;
   sumTotal: number;
   constructor(private weatherBinsService: WeatherBinsService, private cd: ChangeDetectorRef) { }
@@ -19,7 +20,8 @@ export class WeatherBinsBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {
+    this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {      
+      this.tableData = inputData;
       this.createBarChart(inputData);
     });
   }
