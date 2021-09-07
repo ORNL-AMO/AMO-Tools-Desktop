@@ -32,7 +32,7 @@ export class ControlDataComponent implements OnInit {
       if (val) {
         if (this.isFormChange == false) {
           this.compressorType = val.nameplateData.compressorType;
-          this.form = this.inventoryService.getCompressorControlsFormFromObj(val.compressorControls);
+          this.form = this.inventoryService.getCompressorControlsFormFromObj(val.compressorControls, this.compressorType);
           this.toggleDisableControls();
           this.setControlTypeOptions(val.nameplateData.compressorType);
           this.setDisplayValues();
