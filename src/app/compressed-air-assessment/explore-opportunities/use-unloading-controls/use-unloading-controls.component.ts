@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, UseUnloadingControls } from '../../../shared/models/compressed-air-assessment';
+import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressorInventoryItem, Modification, UseUnloadingControls } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
   selector: 'app-use-unloading-controls',
@@ -17,21 +18,35 @@ export class UseUnloadingControlsComponent implements OnInit {
 
   inventoryItems: Array<CompressorInventoryItem>;
   selectedAdjustedCompressor: AdjustedUnloadingCompressor;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private inventoryService: InventoryService) { }
+  selectedModificationIndex: number;
+  orderOptions: Array<number>;
+  compressedAirAssessmentSub: Subscription;
+  compressedAirAssessment: CompressedAirAssessment;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
+    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
+      if (compressedAirAssessment && !this.isFormChange) {
+        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.setOrderOptions();
+        this.setData()
+      } else {
+        this.isFormChange = false;
+      }
+    });
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
-        let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
-        this.useUnloadingControls = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls;
+        this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
+        this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
+        this.setData();
         if (!this.selectedAdjustedCompressor && this.useUnloadingControls.selected) {
           this.initializeSelectedCompressor();
         }
       } else {
         this.isFormChange = false;
       }
+      this.setOrderOptions();
     });
   }
 
@@ -42,18 +57,43 @@ export class UseUnloadingControlsComponent implements OnInit {
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
-
-  setUseUnloadingControls() {
-    this.save();
+  setData() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.useUnloadingControls = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useUnloadingControls));
+    }
   }
 
-  save() {
+  setOrderOptions() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.orderOptions = new Array();
+      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+      let allOrders: Array<number> = [
+        modification.addPrimaryReceiverVolume.order,
+        modification.adjustCascadingSetPoints.order,
+        modification.improveEndUseEfficiency.order,
+        modification.reduceRuntime.order,
+        modification.reduceSystemAirPressure.order,
+        modification.reduceAirLeaks.order,
+        modification.useAutomaticSequencer.order
+      ];
+      allOrders = allOrders.filter(order => { return order != 100 });
+      let numOrdersOn: number = allOrders.length;
+      for (let i = 1; i <= numOrdersOn + 1; i++) {
+        this.orderOptions.push(i);
+      }
+    }
+  }
+
+  save(isOrderChange: boolean) {
     this.isFormChange = true;
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-    compressedAirAssessment.modifications[modificationIndex].useUnloadingControls = this.useUnloadingControls;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useUnloadingControls.order));
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].useUnloadingControls = this.useUnloadingControls;
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.useUnloadingControls.order;
+      this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useUnloadingControls', previousOrder, newOrder);
+    }
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
   setSelectedCompressor() {

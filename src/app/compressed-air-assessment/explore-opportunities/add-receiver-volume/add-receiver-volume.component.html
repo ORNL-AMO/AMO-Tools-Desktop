@@ -3,15 +3,9 @@
         <!-- <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
             (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" /> -->
         Add Primary Receiver Volume
-        <select id="addPrimaryReceiverVolumeOrder" [(ngModel)]="addPrimaryReceiverVolume.order" class="form-control pull-right">
+        <select id="addPrimaryReceiverVolumeOrder" [(ngModel)]="addPrimaryReceiverVolume.order" class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
-            <option [ngValue]=1>1</option>
-            <option [ngValue]=2>2</option>
-            <option [ngValue]=3>3</option>
-            <option [ngValue]=4>4</option>
-            <option [ngValue]=5>5</option>
-            <option [ngValue]=6>6</option>
-            <option [ngValue]=7>7</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>
@@ -26,7 +20,7 @@
         <label for="increasedVolume">Increased Volume</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="addPrimaryReceiverVolume.increasedVolume"
-                name="increasedVolume" id="increasedVolume" (input)="save()">
+                name="increasedVolume" id="increasedVolume" (input)="save(false)">
             <span class="input-group-addon units">gal</span>
         </div>
     </div>

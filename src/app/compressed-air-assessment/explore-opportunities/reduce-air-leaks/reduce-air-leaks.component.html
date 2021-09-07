@@ -1,17 +1,10 @@
 <div class="checkbox">
     <label class="group-label" for="reduceAirLeaks">
-        <!-- <input type="checkbox" id="reduceAirLeaks" (focus)="focusField('reduceAirLeaks')" (change)="setReduceAirLeaks()"
-            [(ngModel)]="reduceAirLeaks.selected" /> -->
         Reduce Air Leaks
-        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right" (change)="save(true)">
+        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right"
+            (change)="save(true)">
             <option [ngValue]=100>Off</option>
-            <option [ngValue]=1>1</option>
-            <option [ngValue]=2>2</option>
-            <option [ngValue]=3>3</option>
-            <option [ngValue]=4>4</option>
-            <option [ngValue]=5>5</option>
-            <option [ngValue]=6>6</option>
-            <option [ngValue]=7>7</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>

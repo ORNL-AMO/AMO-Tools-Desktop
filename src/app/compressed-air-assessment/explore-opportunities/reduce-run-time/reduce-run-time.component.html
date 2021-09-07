@@ -1,17 +1,9 @@
 <div class="checkbox">
     <label class="group-label" for="reduceRuntime">
-        <!-- <input type="checkbox" id="reduceRuntime" (focus)="focusField('reduceRuntime')" (change)="setReduceRunTime()"
-            [(ngModel)]="reduceRuntime.selected" /> -->
         Reduce Run Time
-        <select id="reduceRuntimeOrder" [(ngModel)]="reduceRuntime.order" class="form-control pull-right">
+        <select id="reduceRuntimeOrder" [(ngModel)]="reduceRuntime.order" class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
-            <option [ngValue]=1>1</option>
-            <option [ngValue]=2>2</option>
-            <option [ngValue]=3>3</option>
-            <option [ngValue]=4>4</option>
-            <option [ngValue]=5>5</option>
-            <option [ngValue]=6>6</option>
-            <option [ngValue]=7>7</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>
@@ -50,7 +42,7 @@
                 <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                     <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                         name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                        (change)="save()">
+                        (change)="save(false)">
                 </td>
             </tr>
         </tbody>
