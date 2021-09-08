@@ -16,12 +16,7 @@ export class WeatherBinsTableComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-    
-  }
-
-  ngOnDestroy() {
-    
+  ngOnInit(): void {    
   }
 
   updateTableString() {
