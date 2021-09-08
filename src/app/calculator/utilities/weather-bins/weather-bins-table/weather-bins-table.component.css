@@ -12,3 +12,8 @@ td{
     border-left: solid 1px darkgray;
     padding: 3px;
 }
+
+
+table {
+    box-shadow: 0 4px 8px 0 grey
+  }
