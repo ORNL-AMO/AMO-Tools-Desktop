@@ -72,6 +72,17 @@ export class CompressedAirAssessmentResultsService {
 
 
   calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification): CompressedAirAssessmentResult {
+    let modificationOrders: Array<number> = [
+      modification.addPrimaryReceiverVolume.order,
+      modification.adjustCascadingSetPoints.order,
+      modification.improveEndUseEfficiency.order,
+      modification.reduceRuntime.order,
+      modification.reduceAirLeaks.order,
+      modification.reduceSystemAirPressure.order,
+      modification.useAutomaticSequencer.order,
+      modification.useUnloadingControls.order,
+    ]
+    modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       // let addReceiverVolumeResults: EemSavingsResults = this.getEmptyEemSavings();
@@ -84,143 +95,35 @@ export class CompressedAirAssessmentResultsService {
       // let useUnloadingControlsResults: EemSavingsResults = this.getEmptyEemSavings();
 
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateDayTypeProfileSummary(compressedAirAssessment, dayType);
+      //1. start with flow allocation
       let adjustedProfileSummary: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modification, true, baselineProfileSummary);
+      //2. iterate modification orders
+      for (let i = 0; i < modificationOrders.length; i++) {
+        let order: number = modificationOrders[i];
+        if (modification.addPrimaryReceiverVolume.order == order) {
+
+        } else if (modification.adjustCascadingSetPoints.order == order) {
+
+        } else if (modification.improveEndUseEfficiency.order == order) {
+
+        } else if (modification.reduceRuntime.order == order) {
+
+        } else if (modification.reduceAirLeaks.order == order) {
+
+        } else if (modification.reduceSystemAirPressure.order == order) {
+
+        } else if (modification.useAutomaticSequencer.order == order) {
+
+        } else if (modification.useUnloadingControls.order == order) {
+
+        }
+      }
+
+
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment, dayType, adjustedProfileSummary);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
 
-      // let modificationCopy: Modification = JSON.parse(JSON.stringify(modification));
-
-      // modificationCopy.addPrimaryReceiverVolume.selected = false;
-      // modificationCopy.adjustCascadingSetPoints.selected = false;
-      // modificationCopy.improveEndUseEfficiency.selected = false;
-      // modificationCopy.reduceAirLeaks.selected = false;
-      // modificationCopy.reduceRuntime.selected = false;
-      // modificationCopy.reduceSystemAirPressure.selected = false;
-      // modificationCopy.useAutomaticSequencer.selected = false;
-      // modificationCopy.useUnloadingControls.selected = false;
-      // let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      // let flowReallocationResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-
-      // if (modification.addPrimaryReceiverVolume.selected) {
-      //   modificationCopy.addPrimaryReceiverVolume.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.improveEndUseEfficiency.selected = false;
-      //   modificationCopy.reduceAirLeaks.selected = false;
-      //   modificationCopy.reduceRuntime.selected = false;
-      //   modificationCopy.reduceSystemAirPressure.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   modificationCopy.useUnloadingControls.selected = false;
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   addReceiverVolumeResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   addReceiverVolumeResults.savings.power = addReceiverVolumeResults.savings.power - flowReallocationResults.savings.power;
-      //   addReceiverVolumeResults.savings.cost = addReceiverVolumeResults.savings.cost - flowReallocationResults.savings.cost;
-
-      // }
-
-      // //not implemented
-      // // if(modificationCopy.adjustCascadingSetPoints.selected){
-      // //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      // //   modificationCopy.improveEndUseEfficiency.selected = false;
-      // //   modificationCopy.reduceAirLeaks.selected = false;
-      // //   modificationCopy.reduceRuntime.selected = false;
-      // //   modificationCopy.reduceSystemAirPressure.selected = false;
-      // //   modificationCopy.useAutomaticSequencer.selected = false;
-      // //   modificationCopy.useUnloadingControls.selected = false;
-      // //   let tmpProfile: Array<ProfileSummary> = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modificationCopy, true);
-      // //   this.receiverVolumeSavings = this.systemProfileService.calculateSavings(this.compressedAirAssessment.systemProfile.profileSummary, tmpProfile, this.selectedDayType, this.compressedAirAssessment.systemBasics.electricityCost);
-      // // }
-
-      // if (modification.improveEndUseEfficiency.selected) {
-      //   modificationCopy.improveEndUseEfficiency.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      //   modificationCopy.reduceAirLeaks.selected = false;
-      //   modificationCopy.reduceRuntime.selected = false;
-      //   modificationCopy.reduceSystemAirPressure.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   modificationCopy.useUnloadingControls.selected = false;
-
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   improveEndUseEfficiencyResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   improveEndUseEfficiencyResults.savings.power = improveEndUseEfficiencyResults.savings.power - flowReallocationResults.savings.power;
-      //   improveEndUseEfficiencyResults.savings.cost = improveEndUseEfficiencyResults.savings.cost - flowReallocationResults.savings.cost;
-      // }
-
-      // if (modification.reduceAirLeaks.selected) {
-      //   modificationCopy.reduceAirLeaks.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      //   modificationCopy.improveEndUseEfficiency.selected = false;
-      //   modificationCopy.reduceRuntime.selected = false;
-      //   modificationCopy.reduceSystemAirPressure.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   modificationCopy.useUnloadingControls.selected = false;
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   reduceAirLeaksResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   reduceAirLeaksResults.savings.power = reduceAirLeaksResults.savings.power - flowReallocationResults.savings.power;
-      //   reduceAirLeaksResults.savings.cost = reduceAirLeaksResults.savings.cost - flowReallocationResults.savings.cost;
-      // }
-
-
-      // if (modification.reduceRuntime.selected) {
-      //   modificationCopy.reduceRuntime.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      //   modificationCopy.improveEndUseEfficiency.selected = false;
-      //   modificationCopy.reduceAirLeaks.selected = false;
-      //   modificationCopy.reduceSystemAirPressure.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   modificationCopy.useUnloadingControls.selected = false;
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   reduceRunTimeResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   reduceRunTimeResults.savings.power = reduceRunTimeResults.savings.power - flowReallocationResults.savings.power;
-      //   reduceRunTimeResults.savings.cost = reduceRunTimeResults.savings.cost - flowReallocationResults.savings.cost;
-      // }
-
-      // if (modification.reduceSystemAirPressure.selected) {
-      //   modificationCopy.reduceSystemAirPressure.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      //   modificationCopy.improveEndUseEfficiency.selected = false;
-      //   modificationCopy.reduceAirLeaks.selected = false;
-      //   modificationCopy.reduceRuntime.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   modificationCopy.useUnloadingControls.selected = false;
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   reduceSystemAirPressureResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   reduceSystemAirPressureResults.savings.power = reduceSystemAirPressureResults.savings.power - flowReallocationResults.savings.power;
-      //   reduceSystemAirPressureResults.savings.cost = reduceSystemAirPressureResults.savings.cost - flowReallocationResults.savings.cost;
-      // }
-
-      // //not implemented
-      // // if(modification.useAutomaticSequencer.selected){
-      // //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      // //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      // //   modificationCopy.improveEndUseEfficiency.selected = false;
-      // //   modificationCopy.reduceAirLeaks.selected = false;
-      // //   modificationCopy.reduceRuntime.selected = false;
-      // //   modificationCopy.reduceSystemAirPressure.selected = false;
-      // //   modificationCopy.useUnloadingControls.selected = false;
-      // //   let tmpProfile: Array<ProfileSummary> = this.systemProfileService.flowReallocation(this.compressedAirAssessment, this.selectedDayType, modificationCopy, true);
-      // //   this.reduceSystemAirPressureSavings = this.systemProfileService.calculateSavings(this.compressedAirAssessment.systemProfile.profileSummary, tmpProfile, this.selectedDayType, this.compressedAirAssessment.systemBasics.electricityCost);
-      // // }
-
-
-      // if (modification.useUnloadingControls.selected) {
-      //   modificationCopy.useUnloadingControls.selected = true;
-      //   modificationCopy.adjustCascadingSetPoints.selected = false;
-      //   modificationCopy.addPrimaryReceiverVolume.selected = false;
-      //   modificationCopy.improveEndUseEfficiency.selected = false;
-      //   modificationCopy.reduceAirLeaks.selected = false;
-      //   modificationCopy.reduceRuntime.selected = false;
-      //   modificationCopy.reduceSystemAirPressure.selected = false;
-      //   modificationCopy.useAutomaticSequencer.selected = false;
-      //   let tmpProfile: Array<ProfileSummary> = this.flowReallocation(compressedAirAssessment, dayType, modificationCopy, true, baselineProfileSummary);
-      //   useUnloadingControlsResults = this.calculateSavings(baselineProfileSummary, tmpProfile, dayType, compressedAirAssessment.systemBasics.electricityCost);
-      //   useUnloadingControlsResults.savings.power = useUnloadingControlsResults.savings.power - flowReallocationResults.savings.power;
-      //   useUnloadingControlsResults.savings.cost = useUnloadingControlsResults.savings.cost - flowReallocationResults.savings.cost;
-      // }
-
+      
       modificationResults.push({
         adjustedProfileSummary: adjustedProfileSummary,
         profileSummaryTotals: totals,
