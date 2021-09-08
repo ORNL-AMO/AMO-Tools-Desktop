@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ReduceAirLeaks } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, Modification, ReduceAirLeaks } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import * as _ from 'lodash';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
   selector: 'app-reduce-air-leaks',
@@ -9,41 +11,83 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
   styleUrls: ['./reduce-air-leaks.component.css']
 })
 export class ReduceAirLeaksComponent implements OnInit {
-  
+
   selectedModificationIdSub: Subscription;
   reduceAirLeaks: ReduceAirLeaks;
   isFormChange: boolean = false;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  selectedModificationIndex: number;
+  orderOptions: Array<number>;
+  compressedAirAssessmentSub: Subscription;
+  compressedAirAssessment: CompressedAirAssessment;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
-      if (val && !this.isFormChange) {
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
-        this.reduceAirLeaks = compressedAirAssessment.modifications[modificationIndex].reduceAirLeaks;
+    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
+      if (compressedAirAssessment && !this.isFormChange) {
+        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.setOrderOptions();
+        this.setData()
       } else {
         this.isFormChange = false;
       }
+    });
+
+
+    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
+      if (val && !this.isFormChange) {
+        this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
+        this.setData();
+      } else {
+        this.isFormChange = false;
+      }
+      this.setOrderOptions();
     });
   }
 
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
+    this.compressedAirAssessmentSub.unsubscribe();
   }
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
-  setReduceAirLeaks() {
-    this.save();
+  setData() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.reduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
+    }
   }
 
-  save() {
+  setOrderOptions() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.orderOptions = new Array();
+      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+      let allOrders: Array<number> = [
+        modification.addPrimaryReceiverVolume.order,
+        modification.adjustCascadingSetPoints.order,
+        modification.improveEndUseEfficiency.order,
+        modification.reduceRuntime.order,
+        modification.reduceSystemAirPressure.order,
+        modification.useAutomaticSequencer.order,
+        modification.useUnloadingControls.order
+      ];
+      allOrders = allOrders.filter(order => { return order != 100 });
+      let numOrdersOn: number = allOrders.length;
+      for (let i = 1; i <= numOrdersOn + 1; i++) {
+        this.orderOptions.push(i);
+      }
+    }
+  }
+
+  save(isOrderChange: boolean) {
     this.isFormChange = true;
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-    compressedAirAssessment.modifications[modificationIndex].reduceAirLeaks = this.reduceAirLeaks;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks.order));
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks = this.reduceAirLeaks;
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.reduceAirLeaks.order;
+      this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceAirLeaks', previousOrder, newOrder);
+    }
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 }

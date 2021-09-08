@@ -9,7 +9,7 @@ export class ExploreOpportunitiesService {
 
   selectedDayType: BehaviorSubject<CompressedAirDayType>;
   modificationResults: BehaviorSubject<CompressedAirAssessmentResult>;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { 
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) {
     this.selectedDayType = new BehaviorSubject<CompressedAirDayType>(undefined);
     this.modificationResults = new BehaviorSubject<CompressedAirAssessmentResult>(undefined);
   }
@@ -81,37 +81,45 @@ export class ExploreOpportunitiesService {
       reduceAirLeaks: {
         selected: false,
         leakReduction: undefined,
-        leakFlow: undefined
+        leakFlow: undefined,
+        order: 100
       },
       improveEndUseEfficiency: {
         selected: false,
         reductionType: "Fixed",
         airflowReduction: undefined,
-        reductionData: reductionData
+        reductionData: reductionData,
+        order: 100
       },
       reduceSystemAirPressure: {
         selected: false,
-        averageSystemPressureReduction: undefined
+        averageSystemPressureReduction: undefined,
+        order: 100
       },
       useUnloadingControls: {
         selected: false,
-        adjustedCompressors: adjustedCompressors
+        adjustedCompressors: adjustedCompressors,
+        order: 100
       },
       adjustCascadingSetPoints: {
-        selected: false
+        selected: false,
+        order: 100
       },
       useAutomaticSequencer: {
         selected: false,
         targetPressure: undefined,
-        variance: undefined
+        variance: undefined,
+        order: 100
       },
       reduceRuntime: {
         selected: false,
-        runtimeData: reduceRuntimeData
+        runtimeData: reduceRuntimeData,
+        order: 100
       },
       addPrimaryReceiverVolume: {
         selected: false,
-        increasedVolume: 0
+        increasedVolume: 0,
+        order: 100
       }
     }
   }
@@ -134,5 +142,106 @@ export class ExploreOpportunitiesService {
       });
     }
     return reductionData;
+  }
+
+
+  setOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number): Modification {
+    if (newOrder != 100) {
+      let allOrders: Array<number> = [
+        modification.addPrimaryReceiverVolume.order,
+        modification.adjustCascadingSetPoints.order,
+        modification.improveEndUseEfficiency.order,
+        modification.reduceRuntime.order,
+        modification.reduceAirLeaks.order,
+        modification.reduceSystemAirPressure.order,
+        modification.useAutomaticSequencer.order,
+        modification.useUnloadingControls.order,
+      ]
+      let selectedOrder: Array<number> = allOrders.filter(order => {return order == newOrder});
+      let hasDuplicate: boolean = selectedOrder.length == 2;
+
+      if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order >= newOrder) {
+        if(hasDuplicate && modification.addPrimaryReceiverVolume.order == newOrder && previousOrder != 100){
+          modification.addPrimaryReceiverVolume.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.addPrimaryReceiverVolume.order++;
+        }
+      }
+      if (modification.adjustCascadingSetPoints.order != 100 && changedOpportunity != 'adjustCascadingSetPoints' && modification.adjustCascadingSetPoints.order >= newOrder) {
+        if(hasDuplicate && modification.adjustCascadingSetPoints.order == newOrder && previousOrder != 100){
+          modification.adjustCascadingSetPoints.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.adjustCascadingSetPoints.order++;
+        }
+      }
+      if (modification.improveEndUseEfficiency.order != 100 && changedOpportunity != 'improveEndUseEfficiency' && modification.improveEndUseEfficiency.order >= newOrder) {
+        if(hasDuplicate && modification.improveEndUseEfficiency.order == newOrder && previousOrder != 100){
+          modification.improveEndUseEfficiency.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.improveEndUseEfficiency.order++;
+        }
+      }
+      if (modification.reduceRuntime.order != 100 && changedOpportunity != 'reduceRuntime' && modification.reduceRuntime.order >= newOrder) {
+        if(hasDuplicate && modification.reduceRuntime.order == newOrder && previousOrder != 100){
+          modification.reduceRuntime.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.reduceRuntime.order++;
+        }
+      }
+      if (modification.reduceAirLeaks.order != 100 && changedOpportunity != 'reduceAirLeaks' && modification.reduceAirLeaks.order >= newOrder) {
+        if(hasDuplicate && modification.reduceAirLeaks.order == newOrder && previousOrder != 100){
+          modification.reduceAirLeaks.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.reduceAirLeaks.order++;
+        }
+      }
+      if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure' && modification.reduceSystemAirPressure.order >= newOrder) {
+        if(hasDuplicate && modification.reduceSystemAirPressure.order == newOrder && previousOrder != 100){
+          modification.reduceSystemAirPressure.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.reduceSystemAirPressure.order++;
+        }
+      }
+      if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer' && modification.useAutomaticSequencer.order >= newOrder) {
+        if(hasDuplicate && modification.useAutomaticSequencer.order == newOrder && previousOrder != 100){
+          modification.useAutomaticSequencer.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.useAutomaticSequencer.order++;
+        }
+      }
+      if (modification.useUnloadingControls.order != 100 && changedOpportunity != 'useUnloadingControls' && modification.useUnloadingControls.order >= newOrder) {
+        if(hasDuplicate && modification.useUnloadingControls.order == newOrder && previousOrder != 100){
+          modification.useUnloadingControls.order = previousOrder;
+        }else if(!hasDuplicate || previousOrder == 100){
+          modification.useUnloadingControls.order++;
+        }
+      }
+    }else{
+      if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order > previousOrder) {
+        modification.addPrimaryReceiverVolume.order--;
+      }
+      if (modification.adjustCascadingSetPoints.order != 100 && changedOpportunity != 'adjustCascadingSetPoints' && modification.adjustCascadingSetPoints.order > previousOrder) {
+        modification.adjustCascadingSetPoints.order--;
+      }
+      if (modification.improveEndUseEfficiency.order != 100 && changedOpportunity != 'improveEndUseEfficiency' && modification.improveEndUseEfficiency.order > previousOrder) {
+        modification.improveEndUseEfficiency.order--;
+      }
+      if (modification.reduceRuntime.order != 100 && changedOpportunity != 'reduceRuntime' && modification.reduceRuntime.order > previousOrder) {
+        modification.reduceRuntime.order--;
+      }
+      if (modification.reduceAirLeaks.order != 100 && changedOpportunity != 'reduceAirLeaks' && modification.reduceAirLeaks.order > previousOrder) {
+        modification.reduceAirLeaks.order--;
+      }
+      if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure' && modification.reduceSystemAirPressure.order > previousOrder) {
+        modification.reduceSystemAirPressure.order--;
+      }
+      if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer' && modification.useAutomaticSequencer.order > previousOrder) {
+        modification.useAutomaticSequencer.order--;
+      }
+      if (modification.useUnloadingControls.order != 100 && changedOpportunity != 'useUnloadingControls' && modification.useUnloadingControls.order > previousOrder) {
+        modification.useUnloadingControls.order--;
+      }
+    }
+    return modification;
   }
 }

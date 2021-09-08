@@ -151,7 +151,7 @@ export class InventoryService {
   }
 
   //CompressorControls
-  getCompressorControlsFormFromObj(compressorControls: CompressorControls): FormGroup {
+  getCompressorControlsFormFromObj(compressorControls: CompressorControls, compressorType: number): FormGroup {
     // control type: 1 Inlet modulation without unloading
     // control type: 2 Inlet modulation with unloading
     // control type: 3 Variable displacement with unloading
@@ -164,12 +164,18 @@ export class InventoryService {
     // control type: 8 Inlet Butterfly modulation with unloading
     // control type: 9 Inlet guide vane modulatio with blowoff
     // control type: 10 Inlet guide vane modulation with unloading
+    let unloadSumpPressureValidators: Array<Validators> = [];
+    let showUnloadSumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType);
+    if(showUnloadSumpPressure){
+      unloadSumpPressureValidators = [Validators.required];
+    }
+
     let form: FormGroup = this.formBuilder.group({
       controlType: [compressorControls.controlType, Validators.required],
       unloadPointCapacity: [compressorControls.unloadPointCapacity],
       numberOfUnloadSteps: [compressorControls.numberOfUnloadSteps],
       automaticShutdown: [compressorControls.automaticShutdown],
-      unloadSumpPressure: [compressorControls.unloadSumpPressure, Validators.required]
+      unloadSumpPressure: [compressorControls.unloadSumpPressure, unloadSumpPressureValidators]
     });
     form = this.setCompressorControlValidators(form);
     this.markFormDirtyToDisplayValidation(form);
@@ -308,6 +314,20 @@ export class InventoryService {
     if (displayModulation) {
       modulatingPressureValidators = [Validators.required, Validators.min(0)];
     }
+
+    let noLoadPowerFMValidators: Array<Validators> = [];
+    let displayNoLoadPowerFM: boolean = this.checkDisplayNoLoadPowerFM(compressorType, controlType);
+    if(displayNoLoadPowerFM){
+      noLoadPowerFMValidators = [Validators.required];
+    }
+
+    let noLoadPowerULValidators: Array<Validators> = [];
+    let displayNoLoadPowerUL: boolean = this.checkDisplayNoLoadPowerUL(compressorType, controlType);
+    if(displayNoLoadPowerUL){
+      noLoadPowerULValidators = [Validators.required];
+    }
+
+
     //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
@@ -315,8 +335,8 @@ export class InventoryService {
       inputPressure: [designDetails.inputPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
       designEfficiency: [designDetails.designEfficiency, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       serviceFactor: [designDetails.serviceFactor, [Validators.required, Validators.min(1)]],
-      noLoadPowerFM: [designDetails.noLoadPowerFM, Validators.required],
-      noLoadPowerUL: [designDetails.noLoadPowerUL, Validators.required],
+      noLoadPowerFM: [designDetails.noLoadPowerFM, noLoadPowerFMValidators],
+      noLoadPowerUL: [designDetails.noLoadPowerUL, noLoadPowerULValidators],
       maxFullFlowPressure: [designDetails.maxFullFlowPressure, Validators.required]
     });
     this.markFormDirtyToDisplayValidation(form);
@@ -375,6 +395,33 @@ export class InventoryService {
     return false;
   }
 
+  checkDisplayNoLoadPowerFM(compressorType: number, controlType: number): boolean {
+    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    if (showNoLoad) {
+      if (controlType == 1 || controlType == 2 || controlType == 3) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+
+    }
+  }
+
+  checkDisplayNoLoadPowerUL(compressorType: number, controlType: number): boolean {
+    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
+    if (showNoLoad) {
+      if (controlType != 1 && controlType != 5) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
     //todo validators
     let form: FormGroup = this.formBuilder.group({
@@ -394,7 +441,7 @@ export class InventoryService {
 
   isCompressorValid(compressor: CompressorInventoryItem): boolean {
     let nameplateForm: FormGroup = this.getNameplateDataFormFromObj(compressor.nameplateData);
-    let compressorControlsForm: FormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls);
+    let compressorControlsForm: FormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls, compressor.nameplateData.compressorType);
     let designDetailsForm: FormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);

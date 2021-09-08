@@ -1,11 +1,13 @@
 <div class="checkbox">
     <label class="group-label" for="useUnloadingControls">
-        <input type="checkbox" id="useUnloadingControls" (focus)="focusField('useUnloadingControls')"
-            (change)="setUseUnloadingControls()" [(ngModel)]="useUnloadingControls.selected" />
         Use Unloading Controls
+        <select id="useUnloadingControlsOrder" [(ngModel)]="useUnloadingControls.order" class="form-control pull-right" (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
     </label>
 </div>
-<div *ngIf="useUnloadingControls.selected">
+<div *ngIf="useUnloadingControls.order != 100">
     <div class="form-group">
         <label>Select Compressor</label>
         <select class="form-control" id="selectedAdjustedCompressor" [(ngModel)]="selectedAdjustedCompressor"

@@ -75,30 +75,11 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayNoLoadPowerFM(compressorType: number, controlType: number) {
-    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
-    if (showNoLoad) {
-      if (controlType == 1 || controlType == 2 || controlType == 3) {
-        this.displayNoLoadPowerFM = true;
-      } else {
-        this.displayNoLoadPowerFM = false;
-      }
-    } else {
-      this.displayNoLoadPowerFM = false;
-
-    }
+    this.displayNoLoadPowerFM = this.inventoryService.checkDisplayNoLoadPowerFM(compressorType, controlType);
   }
 
   setDisplayNoLoadPowerUL(compressorType: number, controlType: number) {
-    let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
-    if (showNoLoad) {
-      if (controlType != 1 && controlType != 5) {
-        this.displayNoLoadPowerUL = true;
-      } else {
-        this.displayNoLoadPowerUL = false;
-      }
-    } else {
-      this.displayNoLoadPowerUL = false;
-    }
+    this.displayNoLoadPowerUL = this.inventoryService.checkDisplayNoLoadPowerUL(compressorType, controlType);
   }
 
   setDisplayMaxFullFlow(compressorType: number, controlType: number) {

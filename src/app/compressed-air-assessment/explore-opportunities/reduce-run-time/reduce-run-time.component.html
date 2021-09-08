@@ -1,19 +1,21 @@
 <div class="checkbox">
     <label class="group-label" for="reduceRuntime">
-        <input type="checkbox" id="reduceRuntime" (focus)="focusField('reduceRuntime')" (change)="setReduceRunTime()"
-            [(ngModel)]="reduceRuntime.selected" />
         Reduce Run Time
+        <select id="reduceRuntimeOrder" [(ngModel)]="reduceRuntime.order" class="form-control pull-right" (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
     </label>
 </div>
 
-<div *ngIf="reduceRuntime.selected" class="w-100 p-2 justify-content-center">
+<div *ngIf="reduceRuntime.order != 100" class="w-100 p-2 justify-content-center">
     <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayTypeId"
         (change)="setAirflowData()">
         <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
     </select>
 </div>
 
-<div class="scroll-item" *ngIf="reduceRuntime.selected">
+<div class="scroll-item" *ngIf="reduceRuntime.order != 100">
     <table class="table bg-white" *ngIf="selectedDayTypeId">
         <thead>
             <tr>
@@ -21,7 +23,7 @@
                     Compressor
                 </th>
                 <th>
-                    Aifrlow Capacity 
+                    Aifrlow Capacity
                 </th>
                 <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
                     {{data.timeInterval}}
@@ -40,7 +42,7 @@
                 <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                     <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                         name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                        (change)="save()">
+                        (change)="save(false)">
                 </td>
             </tr>
         </tbody>
@@ -71,6 +73,6 @@
         </tfoot>
     </table>
 </div>
-<div *ngIf="hasError && reduceRuntime.selected" class="alert alert-danger p-2 text-center">
+<div *ngIf="hasError && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
     One of more hours have less available airflow then is required.
 </div>
