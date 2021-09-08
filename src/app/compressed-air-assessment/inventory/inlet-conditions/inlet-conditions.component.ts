@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
@@ -11,16 +12,18 @@ import { InventoryService } from '../inventory.service';
   styleUrls: ['./inlet-conditions.component.css']
 })
 export class InletConditionsComponent implements OnInit {
-
+  settings: Settings;
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
   contentCollapsed: boolean;
+  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseInletConditions;
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
@@ -34,6 +37,7 @@ export class InletConditionsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
     this.inventoryService.collapseInletConditions = this.contentCollapsed;
   }
 

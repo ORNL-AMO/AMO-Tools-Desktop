@@ -2,8 +2,7 @@ import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-
 
 export interface CompressedAirAssessment {
     name?: string;
-    inputs?: CompressedAirInputs;
-    outouts?: CompressedAirOutputs;
+    existingDataUnits?: string;
     modifications: Array<Modification>;
     selected?: boolean;
     systemBasics: CASystemBasics,
@@ -17,21 +16,6 @@ export interface CompressedAirAssessment {
     },
     compressedAirDayTypes: Array<CompressedAirDayType>
 }
-
-export interface CompressedAirInputs {
-   airFlow?: number;
-   airlinePressure?: number;
-   designVelocity?: number;
-   atmosphericPressure?: number;
-  }
-  
-  export interface CompressedAirOutputs{
-     //these are the outputs on the assessment page
-  }
-
-  export interface CompressedAirCalcResults {
-      //these are the same as the compressedairoutput
-  }
 
 export interface Modification {
     name: string,

@@ -12,15 +12,22 @@
         <div class="input-group">
             <input name="atmosphericPressure" type="number" step="any" class="form-control" id="atmosphericPressure"
                 formControlName="atmosphericPressure" (input)="save(true)" (focus)="focusField('atmosphericPressure')">
-            <span class="units input-group-addon">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.atmosphericPressure.invalid && !form.controls.atmosphericPressure.pristine">
           <span *ngIf="form.controls.atmosphericPressure.errors.required">Value Required</span>
           <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
-            {{form.controls.atmosphericPressure.errors.min.min}} psig</span>
+            {{form.controls.atmosphericPressure.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+        </span>
           <span *ngIf="form.controls.atmosphericPressure.errors.max">Value can't be greater than
-              {{form.controls.atmosphericPressure.errors.max.max}} psig</span>
+              {{form.controls.atmosphericPressure.errors.max.max}} 
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+            </span>
         </span>
     </div>
 
@@ -30,15 +37,22 @@
         <div class="input-group">
             <input name="temperature" type="number" step="any" class="form-control" id="temperature"
                 formControlName="temperature" (input)="save(false)" (focus)="focusField('temperature')">
-            <span class="units input-group-addon">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.temperature.invalid && !form.controls.temperature.pristine">
           <span *ngIf="form.controls.temperature.errors.required">Value Required</span>
           <span *ngIf="form.controls.temperature.errors.min">Value can't be less than
-            {{form.controls.temperature.errors.min.min}} &#8457;</span>
+            {{form.controls.temperature.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        </span>
           <span *ngIf="form.controls.temperature.errors.max">Value can't be greater than
-              {{form.controls.temperature.errors.max.max}} &#8457;</span>
+              {{form.controls.temperature.errors.max.max}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
         </span>
     </div>
 

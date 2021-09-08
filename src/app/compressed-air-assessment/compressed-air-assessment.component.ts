@@ -9,6 +9,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
+import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { DayTypeService } from './day-types/day-type.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -31,6 +32,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
   
   assessment: Assessment;
   settings: Settings;
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
   mainTab: string;
   mainTabSub: Subscription;
   setupTab: string;
@@ -47,7 +50,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
   modalOpenSub: Subscription;
   assessmentTab: string;
   assessmentTabSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
+  constructor(private activatedRoute: ActivatedRoute, 
+    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
     private dayTypeService: DayTypeService,
@@ -145,10 +149,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     });
   }
 
-  initUpdateUnitsModal() {
-
-  }
-
   setDisableNext() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
@@ -213,5 +213,34 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.compressedAirAssessmentService.mainTab.next('system-setup');
+      this.compressedAirAssessmentService.setupTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    } 
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    let currentSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, this.oldSettings, currentSettings);
+    this.assessment.compressedAirAssessment.existingDataUnits = currentSettings.unitsOfMeasure;
+    this.save(this.assessment.compressedAirAssessment);
   }
 }

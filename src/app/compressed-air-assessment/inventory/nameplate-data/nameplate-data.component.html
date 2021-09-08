@@ -15,12 +15,16 @@
         <div class="input-group">
             <input name="motorPower" type="number" step="any" class="form-control" id="motorPower"
                 formControlName="motorPower" (input)="save()" (focus)="focusField('motorPower')">
-            <span class="units input-group-addon">hp</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
           <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} hp.</span>
+            {{form.controls.motorPower.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+            </span>
         </span>
     </div>
 
@@ -30,13 +34,17 @@
         <div class="input-group">
             <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control" id="fullLoadOperatingPressure"
                 formControlName="fullLoadOperatingPressure" (input)="save()" (focus)="focusField('fullLoadOperatingPressure')">
-            <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.fullLoadOperatingPressure.invalid && !form.controls.fullLoadOperatingPressure.pristine">
           <span *ngIf="form.controls.fullLoadOperatingPressure.errors.required">Value Required</span>
           <span *ngIf="form.controls.fullLoadOperatingPressure.errors.min">Value can't be less than
-            {{form.controls.fullLoadOperatingPressure.errors.min.min}} psig</span>
+            {{form.controls.fullLoadOperatingPressure.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >barg</span>
+        </span>
         </span>
     </div>
 
@@ -46,13 +54,16 @@
         <div class="input-group">
             <input name="fullLoadRatedCapacity" type="number" step="any" class="form-control" id="fullLoadRatedCapacity"
                 formControlName="fullLoadRatedCapacity" (input)="save()" (focus)="focusField('fullLoadRatedCapacity')">
-            <span class="units input-group-addon">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.fullLoadRatedCapacity.invalid && !form.controls.fullLoadRatedCapacity.pristine">
           <span *ngIf="form.controls.fullLoadRatedCapacity.errors.required">Value Required</span>
           <span *ngIf="form.controls.fullLoadRatedCapacity.errors.min">Value can't be less than
-            {{form.controls.fullLoadRatedCapacity.errors.min.min}} acfm</span>
+            {{form.controls.fullLoadRatedCapacity.errors.min.min}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
         </span>
     </div>
 
