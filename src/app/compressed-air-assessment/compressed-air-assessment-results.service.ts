@@ -9,6 +9,68 @@ export class CompressedAirAssessmentResultsService {
 
   constructor(private compressedAirCalculationService: CompressedAirCalculationService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
+
+  calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment): BaselineResults {
+    let dayTypeResults: Array<BaselineResult> = new Array();
+    
+    let totalFullLoadCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
+    let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+
+      let baselineProfileSummary: Array<ProfileSummary> = this.calculateDayTypeProfileSummary(compressedAirAssessment, dayType);
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment, dayType, baselineProfileSummary);
+      let baselineResults: { cost: number, power: number, peakDemand: number } = this.calculateEnergyAndCost(baselineProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
+      let totalOperatingHours: number = dayType.numberOfDays * 24;
+      let averageAirFlow: number = _.meanBy(totals, (total) => { return total.airflow });
+      let averagePower: number = _.meanBy(totals, (total) => {return total.power});
+      dayTypeResults.push({
+        cost: baselineResults.cost,
+        energyUse: baselineResults.power,
+        peakDemand: baselineResults.peakDemand,
+        name: dayType.name,
+        averageAirFlow: averageAirFlow,
+        averageAirFlowPercentCapacity: averageAirFlow / totalFullLoadCapacity * 100,
+        operatingDays: dayType.numberOfDays,
+        totalOperatingHours: totalOperatingHours,
+        loadFactorPercent: averagePower / totalFullLoadPower * 100
+      });
+    });
+
+    let sumAverages: number = 0;
+    let totalDays: number = 0;
+    let sumAveragePercent: number = 0;
+    let sumAverageLoadFactor: number = 0;
+    dayTypeResults.forEach(result => {
+      totalDays = totalDays + result.operatingDays;
+      sumAverages = sumAverages + (result.averageAirFlow * result.operatingDays);
+      sumAveragePercent = sumAveragePercent + (result.averageAirFlowPercentCapacity * result.operatingDays);
+      sumAverageLoadFactor = sumAverageLoadFactor + (result.loadFactorPercent * result.operatingDays);
+    });
+
+    let annualEnergyCost: number = _.sumBy(dayTypeResults, (result) => { return result.cost });
+    let peakDemand: number = _.maxBy(dayTypeResults, (result) => { return result.peakDemand }).peakDemand;
+    let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
+
+    return {
+      dayTypeResults: dayTypeResults,
+      total:{
+        cost: annualEnergyCost,
+        peakDemand: peakDemand,
+        energyUse: _.sumBy(dayTypeResults, (result) => { return result.energyUse }),
+        name: 'System Totals',
+        averageAirFlow: (sumAverages / totalDays),
+        averageAirFlowPercentCapacity: sumAveragePercent / totalDays,
+        operatingDays: totalDays,
+        totalOperatingHours: totalDays * 24,
+        loadFactorPercent: sumAverageLoadFactor / totalDays
+      },
+      demandCost: demandCost,
+      totalAnnualOperatingCost: demandCost + annualEnergyCost
+    }
+  }
+
+
+
   calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification): CompressedAirAssessmentResult {
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
@@ -193,12 +255,8 @@ export class CompressedAirAssessmentResultsService {
     let inventoryItems: Array<CompressorInventoryItem> = compressedAirAssessment.compressorInventoryItems;
     let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
     let selectedDayTypeSummary: Array<ProfileSummary> = new Array();
-    let totalFullLoadCapacity: number = _.sumBy(inventoryItems, (inventoryItem) => {
-      return inventoryItem.nameplateData.fullLoadRatedCapacity;
-    });
-    let totalFullLoadPower: number = _.sumBy(inventoryItems, (inventoryItem) => {
-      return inventoryItem.performancePoints.fullLoad.power;
-    });
+    let totalFullLoadCapacity: number = this.getTotalCapacity(inventoryItems);
+    let totalFullLoadPower: number = this.getTotalPower(inventoryItems);
     selectedProfileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = inventoryItems.find(item => { return item.itemId == summary.compressorId });
       if (summary.dayTypeId == dayType.dayTypeId) {
@@ -230,13 +288,9 @@ export class CompressedAirAssessmentResultsService {
   }
 
   calculateProfileSummaryTotals(compressedAirAssessment: CompressedAirAssessment, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>): Array<ProfileSummaryTotal> {
-    let totalSystemCapacity: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
-      return inventoryItem.nameplateData.fullLoadRatedCapacity;
-    });
+    let totalSystemCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
+    let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
 
-    let totalFullLoadPower: number = _.sumBy(compressedAirAssessment.compressorInventoryItems, (inventoryItem) => {
-      return inventoryItem.performancePoints.fullLoad.power;
-    });
     let allData: Array<ProfileSummaryData> = new Array();
     profileSummary.forEach(summary => {
       if (summary.dayTypeId == selectedDayType.dayTypeId) {
@@ -337,13 +391,8 @@ export class CompressedAirAssessmentResultsService {
       adjustedCompressors.push(compressorCopy);
     });
     //calc totals for system percentages
-    let totalFullLoadCapacity: number = _.sumBy(adjustedCompressors, (inventoryItem) => {
-      return inventoryItem.nameplateData.fullLoadRatedCapacity;
-    });
-    let totalFullLoadPower: number = _.sumBy(adjustedCompressors, (inventoryItem) => {
-      return inventoryItem.performancePoints.fullLoad.power;
-    });
-
+    let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
+    let totalFullLoadPower: number = this.getTotalPower(adjustedCompressors);
 
     intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
     intervalData.forEach(data => {
@@ -482,6 +531,18 @@ export class CompressedAirAssessmentResultsService {
     };
   }
 
+  getTotalCapacity(inventoryItems: Array<CompressorInventoryItem>): number {
+    return _.sumBy(inventoryItems, (inventoryItem) => {
+      return inventoryItem.nameplateData.fullLoadRatedCapacity;
+    });
+  }
+
+  getTotalPower(inventoryItems: Array<CompressorInventoryItem>): number {
+    return _.sumBy(inventoryItems, (inventoryItem) => {
+      return inventoryItem.performancePoints.fullLoad.power;
+    });
+  }
+
 }
 
 
@@ -519,4 +580,24 @@ export interface EemSavingsResults {
   adjustedResults: { cost: number, power: number, peakDemand: number },
   savings: { cost: number, power: number, peakDemand: number, percentSavings: number },
   dayTypeId: string,
+}
+
+export interface BaselineResults {
+  total: BaselineResult,
+  dayTypeResults: Array<BaselineResult>,
+  demandCost: number,
+  totalAnnualOperatingCost: number
+}
+
+export interface BaselineResult {
+  cost: number,
+  energyUse: number,
+  peakDemand: number,
+  name: string,
+  averageAirFlow: number,
+  averageAirFlowPercentCapacity: number,
+  operatingDays: number,
+  totalOperatingHours: number,
+  loadFactorPercent: number
+
 }

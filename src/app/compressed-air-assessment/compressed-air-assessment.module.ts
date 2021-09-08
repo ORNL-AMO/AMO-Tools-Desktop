@@ -108,6 +108,7 @@ import { CompressedAirAssessmentResultsService } from './compressed-air-assessme
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
+import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 @NgModule({
   declarations: [
@@ -181,7 +182,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
-    ExploreOpportunitiesProfileTableComponent
+    ExploreOpportunitiesProfileTableComponent,
+    SystemProfileAnnualSummaryComponent
   ],
   imports: [
     CommonModule,
