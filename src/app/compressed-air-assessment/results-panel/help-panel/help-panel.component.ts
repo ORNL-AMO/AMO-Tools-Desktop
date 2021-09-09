@@ -32,6 +32,7 @@ export class HelpPanelComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.selectedTabSub) this.selectedTabSub.unsubscribe();
+    if (this.assessmentTabSub) this.assessmentTabSub.unsubscribe();
   }
 
 }

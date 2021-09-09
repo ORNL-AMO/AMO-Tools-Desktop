@@ -42,6 +42,10 @@ export class UseUnloadingControlsComponent implements OnInit {
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('useUnloadingControls');
+  }
 
   setUseUnloadingControls() {
     this.save();

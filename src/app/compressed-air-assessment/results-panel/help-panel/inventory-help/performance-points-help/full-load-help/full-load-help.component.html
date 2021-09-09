@@ -1,5 +1,5 @@
 <!-- cut-in -->
-<div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '(cut-in)'">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '(cut-in)') || (helpTextField == 'fullLoadDischargePressure' && fullLoadLabel == '(cut-in)')">
     <h6>
         Discharge Pressure
         <br>
@@ -11,7 +11,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'fullLoadAirflow' && fullLoadLabel == '(cut-in)'">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadAirflow' && fullLoadLabel == '(cut-in)') || (helpTextField == 'fullLoadAirflow' && fullLoadLabel == '(cut-in)')">
     <h6>
         Air Flow
         <br>
@@ -23,7 +23,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'fullLoadPower' && fullLoadLabel == '(cut-in)'">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadPower' && fullLoadLabel == '(cut-in)') || (helpTextField == 'fullLoadPower' && fullLoadLabel == '(cut-in)')">
     <h6>
         Power
         <br>
@@ -37,7 +37,7 @@
 </div>
 
 <!-- no label -->
-<div class="my-2" *ngIf="focusedField == 'fullLoadDischargePressure' && fullLoadLabel == ''">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '') || (helpTextField == 'fullLoadDischargePressure' && fullLoadLabel == '')">
     <h6>
         Discharge Pressure
         <br>
@@ -49,7 +49,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'fullLoadAirflow' && fullLoadLabel == ''">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadAirflow' && fullLoadLabel == '') || (helpTextField == 'fullLoadAirflow' && fullLoadLabel == '')">
     <h6>
         Air Flow
         <br>
@@ -61,7 +61,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'fullLoadPower' && fullLoadLabel == ''">
+<div class="my-2" *ngIf="(focusedField == 'fullLoadPower' && fullLoadLabel == '') || (helpTextField == 'fullLoadPower' && fullLoadLabel == '')">
     <h6>
         Power
         <br>

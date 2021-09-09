@@ -1,5 +1,5 @@
 <!-- modulated -->
-<div class="my-2" *ngIf="focusedField == 'noLoadDischargePressure' && noLoadLabel == '(modulated)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadDischargePressure' && noLoadLabel == '(modulated)') || (helpTextField == 'noLoadDischargePressure' && noLoadLabel == '(modulated)')">
     <h6>
         Discharge Pressure
         <br>
@@ -10,7 +10,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadAirflow' && noLoadLabel == '(modulated)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadAirflow' && noLoadLabel == '(modulated)') || (helpTextField == 'noLoadAirflow' && noLoadLabel == '(modulated)')">
     <h6>
         Air Flow
         <br>
@@ -21,7 +21,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadPower' && noLoadLabel == '(modulated)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadPower' && noLoadLabel == '(modulated)') || (helpTextField == 'noLoadPower' && noLoadLabel == '(modulated)')">
     <h6>
         Power
         <br>
@@ -33,7 +33,7 @@
 </div>
 
 <!-- unloaded -->
-<div class="my-2" *ngIf="focusedField == 'noLoadDischargePressure' && noLoadLabel == '(unloaded)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadDischargePressure' && noLoadLabel == '(unloaded)') || (helpTextField == 'noLoadDischargePressure' && noLoadLabel == '(unloaded)')">
     <h6>
         Discharge Pressure
         <br>
@@ -44,7 +44,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadAirflow' && noLoadLabel == '(unloaded)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadAirflow' && noLoadLabel == '(unloaded)') || (helpTextField == 'noLoadAirflow' && noLoadLabel == '(unloaded)')">
     <h6>
         Air Flow
         <br>
@@ -55,7 +55,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadPower' && noLoadLabel == '(unloaded)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadPower' && noLoadLabel == '(unloaded)') || (helpTextField == 'noLoadPower' && noLoadLabel == '(unloaded)')">
     <h6>
         Power
         <br>
@@ -68,7 +68,7 @@
 </div>
 
 <!-- off -->
-<div class="my-2" *ngIf="focusedField == 'noLoadDischargePressure' && noLoadLabel == '(off)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadDischargePressure' && noLoadLabel == '(off)') || (helpTextField == 'noLoadDischargePressure' && noLoadLabel == '(off)')">
     <h6>
         Discharge Pressure
         <br>
@@ -79,7 +79,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadAirflow' && noLoadLabel == '(off)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadAirflow' && noLoadLabel == '(off)') || (helpTextField == 'noLoadAirflow' && noLoadLabel == '(off)')">
     <h6>
         Air Flow
         <br>
@@ -90,7 +90,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'noLoadPower' && noLoadLabel == '(off)'">
+<div class="my-2" *ngIf="(focusedField == 'noLoadPower' && noLoadLabel == '(off)') || (helpTextField == 'noLoadPower' && noLoadLabel == '(off)')">
     <h6>
         Power
         <br>

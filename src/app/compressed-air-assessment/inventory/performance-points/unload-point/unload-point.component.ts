@@ -74,6 +74,10 @@ export class UnloadPointComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+    if(this.inModification){
+      this.compressedAirAssessmentService.focusedField.next('useUnloadingControls');
+      this.compressedAirAssessmentService.helpTextField.next(str);
+    }
   }
 
   saveDischargePressure() {
