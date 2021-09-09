@@ -53,8 +53,9 @@ export class OperatingCostsModalComponent implements OnInit {
     let summedUse: number = 0;
     for (let i = 0; i < length; i++){
       summedUse += this.fuels[i].usage;
-      sum += (this.fuels[i].usage * this.fuels[i].cost) / (summedUse);
+      sum += (this.fuels[i].usage * this.fuels[i].cost);      
     }
+    sum = sum / (summedUse);
     this.mixedFuelCostsResult = this.roundVal(sum);    
   }
   
