@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, WeatherBinnedResult } from '../../../shared/models/chillers';
@@ -16,6 +16,7 @@ export class CoolingTowerBasinService {
   coolingTowerBasinInput: BehaviorSubject<CoolingTowerBasinInput>;
   coolingTowerBasinOutput: BehaviorSubject<CoolingTowerBasinOutput>;
   
+  isWeatherToggled: BehaviorSubject<boolean>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
@@ -34,7 +35,7 @@ export class CoolingTowerBasinService {
   setHasWeatherBinsData() {
     let weatherBinsData = this.weatherBinsService.inputData.getValue();
     let hasWeatherBinsData = weatherBinsData && weatherBinsData.cases.length > 0;
-    if (!this.hasWeatherBinsData) {
+    if (!this.hasWeatherBinsData && !this.isWeatherToggled) {
       this.hasWeatherBinsData = new BehaviorSubject<boolean>(hasWeatherBinsData);
     } else {
       if (hasWeatherBinsData !== this.hasWeatherBinsData.getValue())
@@ -98,7 +99,7 @@ export class CoolingTowerBasinService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       this.setHasWeatherBinsData();
-      if (this.hasWeatherBinsData.getValue() == true) {
+      if (this.hasWeatherBinsData.getValue() == true && this.isWeatherToggled) {
         let weatherBinsData = this.weatherBinsService.inputData.getValue();
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = this.getWeatherBinnedOutput(inputCopy, weatherBinsData, settings);
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);

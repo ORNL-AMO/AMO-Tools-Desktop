@@ -83,7 +83,7 @@
     [weatherBinnedChartData]="output.weatherBinnedChartData">
   </app-cooling-weather-chart>
 
-<ng-container *ngIf="output.weatherBinnedResults">
+<ng-container *ngIf="output.weatherBinnedResults && !isWeatherToggled">
    <label class="group-label mt-3">Total Annual Results</label>
   <table *ngIf="output.totalResults" class="table table-hover table-striped">
     <tbody>

@@ -95,6 +95,14 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
+  }  
+  getBinnedResults() {
+    this.coolingTowerBasinService.getWeatherBinnedOutput;
+    debugger;
+  }
+
+  getCalculatedResults() {
+    
   }
 
 }
