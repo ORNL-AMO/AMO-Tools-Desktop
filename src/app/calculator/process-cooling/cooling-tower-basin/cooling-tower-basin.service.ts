@@ -16,7 +16,7 @@ export class CoolingTowerBasinService {
   coolingTowerBasinInput: BehaviorSubject<CoolingTowerBasinInput>;
   coolingTowerBasinOutput: BehaviorSubject<CoolingTowerBasinOutput>;
   
-  isWeatherToggled: BehaviorSubject<boolean>;
+  isShowingWeatherResults: BehaviorSubject<boolean>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
@@ -29,13 +29,14 @@ export class CoolingTowerBasinService {
     this.coolingTowerBasinOutput = new BehaviorSubject<CoolingTowerBasinOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     this.currentField = new BehaviorSubject<string>(undefined);
+    this.isShowingWeatherResults = new BehaviorSubject<boolean>(undefined);
     this.setHasWeatherBinsData();
   }
 
   setHasWeatherBinsData() {
     let weatherBinsData = this.weatherBinsService.inputData.getValue();
     let hasWeatherBinsData = weatherBinsData && weatherBinsData.cases.length > 0;
-    if (!this.hasWeatherBinsData && !this.isWeatherToggled) {
+    if (!this.hasWeatherBinsData) {
       this.hasWeatherBinsData = new BehaviorSubject<boolean>(hasWeatherBinsData);
     } else {
       if (hasWeatherBinsData !== this.hasWeatherBinsData.getValue())
@@ -99,7 +100,7 @@ export class CoolingTowerBasinService {
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       this.setHasWeatherBinsData();
-      if (this.hasWeatherBinsData.getValue() == true && this.isWeatherToggled) {
+      if (this.hasWeatherBinsData.getValue() == true && this.isShowingWeatherResults.getValue() == true) {
         let weatherBinsData = this.weatherBinsService.inputData.getValue();
         let coolingTowerBasinOutput: CoolingTowerBasinOutput = this.getWeatherBinnedOutput(inputCopy, weatherBinsData, settings);
         this.coolingTowerBasinOutput.next(coolingTowerBasinOutput);

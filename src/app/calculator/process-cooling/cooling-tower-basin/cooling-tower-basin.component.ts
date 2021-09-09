@@ -28,6 +28,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   displayWeatherTab: boolean = false;
   hasWeatherBinsDataSub: Subscription;
   hasWeatherBinsData: boolean = false;
+  isShowingWeatherResults : boolean = false;
   
   constructor(private coolingTowerBasinService: CoolingTowerBasinService,
               private settingsDbService: SettingsDbService) { }
@@ -96,13 +97,10 @@ export class CoolingTowerBasinComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }  
-  getBinnedResults() {
-    this.coolingTowerBasinService.getWeatherBinnedOutput;
-    debugger;
-  }
-
-  getCalculatedResults() {
-    
-  }
+ toggleWeatherResults(weatherResultsOn: boolean) {
+    this.isShowingWeatherResults = weatherResultsOn;
+    this.coolingTowerBasinService.isShowingWeatherResults.next(weatherResultsOn);
+    this.coolingTowerBasinService.calculate(this.settings);
+ }
 
 }

@@ -27,10 +27,12 @@ export class CoolingTowerBasinFormComponent implements OnInit {
   resetDataSub: Subscription;
   hasWeatherBinsDataSub: Subscription;
   generateExampleSub: Subscription;
+  isShowingWeatherResultsSub: Subscription;
 
   showOpHoursModal: boolean = false;
   formWidth: number;
   hasWeatherBinsData: boolean;
+  isShowingWeatherResults: boolean;
 
   constructor(private coolingTowerBasinService: CoolingTowerBasinService, 
               private coolingTowerBasinFormService: CoolingTowerBasinFormService) { }
@@ -49,6 +51,9 @@ export class CoolingTowerBasinFormComponent implements OnInit {
     this.hasWeatherBinsDataSub = this.coolingTowerBasinService.hasWeatherBinsData.subscribe(value => {
       this.hasWeatherBinsData = value;
     });
+    this.isShowingWeatherResultsSub = this.coolingTowerBasinService.isShowingWeatherResults.subscribe(value => {
+      this.isShowingWeatherResults = value;
+    });
   }
 
   ngAfterViewInit() {
@@ -61,6 +66,7 @@ export class CoolingTowerBasinFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.hasWeatherBinsDataSub.unsubscribe();
+    this.isShowingWeatherResultsSub.unsubscribe();
   }
 
   initForm() {

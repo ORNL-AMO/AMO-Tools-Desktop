@@ -57,25 +57,14 @@
 				</a>
 			</div>
 		</div>
-	
-
 	<div class="mb-3 d-block" *ngIf="hasWeatherBinsData">
     	<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
-      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="getBinnedResults()"
-        	[ngClass]="{'active': getWeatherBinnedOutput == 'true'}">See weather binned results</button>
-      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="getCalculatedResults()"
-        	[ngClass]="{'active': hasWeatherBinsData == 'false'}">See calculated results</button>
+      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="toggleWeatherResults(true)"
+        	[ngClass]="{'active': isShowingWeatherResults == 'true'}">See weather binned results</button>
+      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="toggleWeatherResults(false)"
+        	[ngClass]="{'active': isShowingWeatherResults == 'false'}">See calculated results</button>
     	</div>
 	  </div>
-
-  <!-- <div class="mb-3 d-block">
-    <div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
-      <button type="button" class="btn btn-primary btn-sm toggle-btn" (click)="openOperatingHoursModal()"
-        [ngClass]="{'active': selectedFormView == 'Binned'}">See weather binned results</button>
-      <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFormView('Data')"
-        [ngClass]="{'active': selectedFormView == 'Results'}">See calculated results</button>
-    </div>
-  </div> -->
 
 			<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
 			<div class="d-flex flex-column w-100">
