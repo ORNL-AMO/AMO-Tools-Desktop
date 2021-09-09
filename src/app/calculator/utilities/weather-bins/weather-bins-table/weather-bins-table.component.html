@@ -3,16 +3,16 @@
         <thead>
             <tr>
                 <th class="text-center bold w-25">Bin #</th>
-                <th class="text-center bold w-25">Upper Bound</th>
                 <th class="text-center bold w-25">Lower Bound</th>
+                <th class="text-center bold w-25">Upper Bound</th>
                 <th class="text-center bold w-25">Hours</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let case of inputData.cases;">
                 <td class="text-center bold">{{case.caseName}}</td>
-                <td class="text-center">{{case.caseParameters[0].upperBound}}</td>
                 <td class="text-center">{{case.caseParameters[0].lowerBound}}</td>
+                <td class="text-center">{{case.caseParameters[0].upperBound}}</td>
                 <td class="text-center">{{case.totalNumberOfDataPoints}}</td>
             </tr>
         </tbody>
