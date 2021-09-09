@@ -37,6 +37,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
       } else {
         this.isFormChange = false;
       }
+      this.setOrderOptions();
     });
   }
 

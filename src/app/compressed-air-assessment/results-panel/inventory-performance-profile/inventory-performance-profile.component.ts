@@ -147,8 +147,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           compressorName: compressor.name,
           data: compressorData
         });
-        if (modification.useUnloadingControls.selected) {
-          let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification, JSON.parse(JSON.stringify(compressor)));
+        if (modification.useUnloadingControls.order != 100) {
+          let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification.useUnloadingControls, JSON.parse(JSON.stringify(compressor)));
           // debugger
           let adjustedCompressorData: Array<CompressorCalcResult> = this.getCompressorData(adjustedCompressor);
           // console.log(adjustedCompressorData);
