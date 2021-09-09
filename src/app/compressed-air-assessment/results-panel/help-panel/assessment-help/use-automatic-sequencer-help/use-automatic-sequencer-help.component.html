@@ -7,7 +7,7 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-    <div class="my-2">
+    <div class="my-2" *ngIf="helpTextField == 'targetPressure'">
         <h6>
             Target Pressure
             <br>
@@ -18,7 +18,7 @@
         </h6>
     </div>
 
-    <div class="my-2">
+    <div class="my-2" *ngIf="helpTextField == 'variance'">
         <h6>
             Variance
             <br>

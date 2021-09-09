@@ -35,6 +35,11 @@ export class ReduceSystemAirPressureComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('reduceAirSystemAirPressure');
+  }
+
   setReduceAirSystemAirPressure()  {
     this.save();
   }

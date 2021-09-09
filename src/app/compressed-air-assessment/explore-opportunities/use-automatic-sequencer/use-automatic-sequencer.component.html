@@ -11,15 +11,15 @@
         <label for="targetPressure">Target Pressure</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.targetPressure"
-                name="targetPressure" id="targetPressure" (input)="save()">
+                name="targetPressure" id="targetPressure" (input)="save()"  (focus)="helpTextField('targetPressure')">
             <span class="input-group-addon units">psig</span>
         </div>
     </div>
     <div class="form-group">
         <label for="variance">Variance (+/-)</label>
         <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="targetPressure"
-                id="variance" (input)="save()">
+            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="variance"
+                id="variance" (input)="save()"  (focus)="helpTextField('variance')">
             <span class="input-group-addon units">psia</span>
         </div>
     </div>

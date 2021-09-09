@@ -16,7 +16,7 @@
         <label for="increasedVolume">Increased Volume</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="addPrimaryReceiverVolume.increasedVolume"
-                name="increasedVolume" id="increasedVolume" (input)="save()">
+                name="increasedVolume" id="increasedVolume" (input)="save()" (focus)="helpTextField('increasedVolume')">
             <span class="input-group-addon units">gal</span>
         </div>
     </div>

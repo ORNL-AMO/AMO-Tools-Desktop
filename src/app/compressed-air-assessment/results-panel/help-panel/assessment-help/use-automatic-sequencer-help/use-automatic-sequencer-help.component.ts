@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
   selector: 'app-use-automatic-sequencer-help',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UseAutomaticSequencerHelpComponent implements OnInit {
 
-  constructor() { }
+  
+  helpTextField: string;
+  helpTextFieldSub: Subscription;
+  constructor(private compressedAirService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
+    this.helpTextFieldSub = this.compressedAirService.helpTextField.subscribe(val => {
+      this.helpTextField = val;
+    });
+  }
+
+  ngOnDestroy(){
+    this.helpTextFieldSub.unsubscribe();
   }
 
 }

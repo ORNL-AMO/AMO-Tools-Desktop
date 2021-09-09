@@ -36,6 +36,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('useAutomaticSequencer');
+  }
+
   setUseAutomaticSequencer(){
     this.save();
   }

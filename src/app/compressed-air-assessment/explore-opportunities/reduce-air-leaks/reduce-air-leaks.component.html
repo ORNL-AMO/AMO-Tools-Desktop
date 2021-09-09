@@ -11,7 +11,7 @@
         <label for="leakFlow">Leak Flow</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"
-                id="leakFlow" (input)="save()">
+                id="leakFlow" (input)="save()" (focus)="helpTextField('leakFlow')">
             <span class="input-group-addon units">acfm</span>
         </div>
     </div>
@@ -19,7 +19,7 @@
         <label for="leakReduction">Leak Reduction</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakReduction" name="leakReduction"
-                id="leakReduction" (input)="save()">
+                id="leakReduction" (input)="save()" (focus)="helpTextField('leakReduction')">
             <span class="input-group-addon units">%</span>
         </div>
     </div>

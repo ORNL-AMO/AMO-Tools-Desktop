@@ -8,7 +8,7 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-    <div class="my-2">
+    <div class="my-2" *ngIf="helpTextField == 'airflowReductionType'">
         <h6>
             Air Flow Reduction type
             <br>
@@ -20,7 +20,7 @@
         </h6>
     </div>
 
-    <div class="my-2">
+    <div class="my-2" *ngIf="helpTextField == 'airflowReduction'">
         <h6>
             Airflow reduction
             <br>
@@ -31,7 +31,7 @@
         </h6>
     </div>
 
-    <div class="my-2">
+    <div class="my-2" *ngIf="helpTextField == 'airflowReductionVariable'">
         <h6>
             Airflow reduction (for variable)
             <br>
