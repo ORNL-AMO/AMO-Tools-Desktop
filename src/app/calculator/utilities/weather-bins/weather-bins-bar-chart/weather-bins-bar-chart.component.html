@@ -3,3 +3,5 @@
 <div class="p-2 alert-warning" *ngIf="sumTotal == 0">
     Add a data file and a case with parameters to view the number of hours that correspond to the case.
 </div>
+
+<app-weather-bins-table *ngIf="sumTotal != 0" [inputData]="tableData"></app-weather-bins-table>
