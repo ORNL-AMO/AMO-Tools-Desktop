@@ -8,6 +8,7 @@ import { NoLoadCalculationsService } from '../calculations/no-load-calculations.
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: '[app-no-load]',
@@ -18,6 +19,7 @@ export class NoLoadComponent implements OnInit {
   @Input()
   inModification: boolean;
 
+  settings: Settings;
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
@@ -29,12 +31,14 @@ export class NoLoadComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
+  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
     private noLoadCalculationsService: NoLoadCalculationsService, private performancePointCalculationsService: PerformancePointCalculationsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -54,6 +58,7 @@ export class NoLoadComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {

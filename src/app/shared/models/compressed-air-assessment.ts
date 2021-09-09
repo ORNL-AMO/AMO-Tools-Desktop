@@ -2,8 +2,7 @@ import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-
 
 export interface CompressedAirAssessment {
     name?: string;
-    inputs?: CompressedAirInputs;
-    outouts?: CompressedAirOutputs;
+    existingDataUnits?: string;
     modifications: Array<Modification>;
     selected?: boolean;
     systemBasics: CASystemBasics,
@@ -17,21 +16,6 @@ export interface CompressedAirAssessment {
     },
     compressedAirDayTypes: Array<CompressedAirDayType>
 }
-
-export interface CompressedAirInputs {
-   airFlow?: number;
-   airlinePressure?: number;
-   designVelocity?: number;
-   atmosphericPressure?: number;
-  }
-  
-  export interface CompressedAirOutputs{
-     //these are the outputs on the assessment page
-  }
-
-  export interface CompressedAirCalcResults {
-      //these are the same as the compressedairoutput
-  }
 
 export interface Modification {
     name: string,
@@ -54,7 +38,8 @@ export interface FlowReallocation {
 export interface ReduceAirLeaks {
     selected: boolean,
     leakFlow: number,
-    leakReduction: number
+    leakReduction: number,
+    order: number
 }
 
 export interface ImproveEndUseEfficiency {
@@ -69,17 +54,20 @@ export interface ImproveEndUseEfficiency {
             applyReduction: boolean
             reductionAmount: number
         }>
-    }>
+    }>,
+    order: number
 }
 
 export interface ReduceSystemAirPressure {
     selected: boolean,
-    averageSystemPressureReduction: number
+    averageSystemPressureReduction: number,
+    order: number
 }
 
 export interface UseUnloadingControls {
     selected: boolean,
-    adjustedCompressors: Array<AdjustedUnloadingCompressor>
+    adjustedCompressors: Array<AdjustedUnloadingCompressor>,
+    order: number
 }
 
 export interface AdjustedUnloadingCompressor {
@@ -95,18 +83,21 @@ export interface AdjustedUnloadingCompressor {
 
 
 export interface AdjustCascadingSetPoints {
-    selected: boolean
+    selected: boolean,
+    order: number
 }
 
 export interface UseAutomaticSequencer {
     selected: boolean,
     targetPressure: number,
-    variance: number
+    variance: number,
+    order: number
 }
 
 export interface ReduceRuntime {
     selected: boolean,
-    runtimeData: Array<ReduceRuntimeData>
+    runtimeData: Array<ReduceRuntimeData>,
+    order: number
 }
 
 export interface ReduceRuntimeData {
@@ -121,7 +112,8 @@ export interface ReduceRuntimeData {
 
 export interface AddPrimaryReceiverVolume {
     selected: boolean,
-    increasedVolume: number
+    increasedVolume: number,
+    order: number
 }
 
 export interface CASystemBasics {

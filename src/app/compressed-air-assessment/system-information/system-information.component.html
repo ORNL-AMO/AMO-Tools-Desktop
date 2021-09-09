@@ -10,13 +10,17 @@
             <div class="input-group">
                 <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
                     formControlName="systemElevation" (input)="save()" (focus)="focusField('systemElevation')">
-                <span class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.systemElevation.invalid && !form.controls.systemElevation.pristine">
                 <span *ngIf="form.controls.systemElevation.errors.required">Value Required</span>
                 <span *ngIf="form.controls.systemElevation.errors.min">Value can't be less than
-                    {{form.controls.systemElevation.errors.min.min}} ft.</span>
+                    {{form.controls.systemElevation.errors.min.min}} 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>
+                .</span>
                 <span *ngIf="form.controls.systemElevation.errors.max">Value can't
                     be greater than {{form.controls.systemElevation.errors.max.max}} ft.</span>
             </span>
@@ -31,13 +35,16 @@
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
                     formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">L</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup></span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.totalAirStorage.invalid && !form.controls.totalAirStorage.pristine">
                 <span *ngIf="form.controls.totalAirStorage.errors.required">Value Required</span>
                 <span *ngIf="form.controls.totalAirStorage.errors.min">Value can't be less than
-                    {{form.controls.totalAirStorage.errors.min.min}} </span>
+                    {{form.controls.totalAirStorage.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >gal</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" >m<sup>3</sup></span>
+                </span>
             </span>
         </div>
         <!--Is a target pressure sequencer used?-->
@@ -56,13 +63,17 @@
             <div class="input-group">
                 <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
                     formControlName="targetPressure" (input)="save()" (focus)="focusField('targetPressure')">
-                <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
                 <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
-                    {{form.controls.targetPressure.errors.min.min}} psig.</span>
+                    {{form.controls.targetPressure.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
             </span>
         </div>
         <!--Variance (+/-)-->
@@ -72,13 +83,18 @@
             <div class="input-group">
                 <input name="variance" type="number" step="any" class="form-control" id="variance"
                     formControlName="variance" (input)="save()" (focus)="focusField('variance')">
-                <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
                 <span *ngIf="form.controls.variance.errors.required">Value Required</span>
                 <span *ngIf="form.controls.variance.errors.min">Value can't be less than
-                    {{form.controls.variance.errors.min.min}} psig.</span>
+                    {{form.controls.variance.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>.
+                </span>
+
             </span>
         </div>
     </form>

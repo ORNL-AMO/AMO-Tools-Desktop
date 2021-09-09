@@ -1,17 +1,20 @@
 <div class="checkbox">
     <label class="group-label" for="useAutomaticSequencer">
-        <input type="checkbox" id="useAutomaticSequencer" (focus)="focusField('useAutomaticSequencer')"
-            (change)="setUseAutomaticSequencer()" [(ngModel)]="useAutomaticSequencer.selected" />
         Use Automatic Sequencer
+        <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order" class="form-control pull-right" (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
     </label>
 </div>
 
-<form *ngIf="useAutomaticSequencer.selected" class="mb-2 pt-1">
+<form *ngIf="useAutomaticSequencer.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label for="targetPressure">Target Pressure</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.targetPressure"
-                name="targetPressure" id="targetPressure" (input)="save()"  (focus)="helpTextField('targetPressure')">
+                (focus)="helpTextField('targetPressure')"
+                name="targetPressure" id="targetPressure" (input)="save(false)">
             <span class="input-group-addon units">psig</span>
         </div>
     </div>
@@ -19,7 +22,8 @@
         <label for="variance">Variance (+/-)</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="variance"
-                id="variance" (input)="save()"  (focus)="helpTextField('variance')">
+                (focus)="helpTextField('variance')"
+                id="variance" (input)="save(false)">
             <span class="input-group-addon units">psia</span>
         </div>
     </div>

@@ -26,26 +26,26 @@ export class CompressedAirDataManagementService {
     selectedCompressor.nameplateData.motorPower = genericCompressor.HP;
 
     selectedCompressor.nameplateData.totalPackageInputPower = Number(genericCompressor.TotPackageInputPower.toFixed(1));
-    selectedCompressor.designDetails.noLoadPowerFM = genericCompressor.NoLoadPowerFM;
-    selectedCompressor.compressorControls.unloadSumpPressure = genericCompressor.MinULSumpPressure;
+    selectedCompressor.designDetails.noLoadPowerFM = this.overrideGenericDbValueForDisplay(genericCompressor.NoLoadPowerFM);
+    selectedCompressor.compressorControls.unloadSumpPressure = this.overrideGenericDbValueForDisplay(genericCompressor.MinULSumpPressure);
     selectedCompressor.designDetails.noLoadPowerUL = genericCompressor.NoLoadPowerUL;
     selectedCompressor.designDetails.maxFullFlowPressure = genericCompressor.MaxFullFlowPressure;
 
 
     selectedCompressor.compressorControls.unloadPointCapacity = genericCompressor.UnloadPoint;
     selectedCompressor.compressorControls.numberOfUnloadSteps = genericCompressor.UnloadSteps;
-    selectedCompressor.designDetails.blowdownTime = genericCompressor.BlowdownTime;
-    selectedCompressor.designDetails.modulatingPressureRange = genericCompressor.ModulatingPressRange;
+    selectedCompressor.designDetails.blowdownTime = this.overrideGenericDbValueForDisplay(genericCompressor.BlowdownTime);
+    selectedCompressor.designDetails.modulatingPressureRange = this.overrideGenericDbValueForDisplay(genericCompressor.ModulatingPressRange);
     selectedCompressor.inletConditions.temperature = genericCompressor.DesignInTemp;
     selectedCompressor.designDetails.inputPressure = genericCompressor.DesignInPressure;
     selectedCompressor.nameplateData.fullLoadOperatingPressure = genericCompressor.RatedPressure;
     selectedCompressor.nameplateData.fullLoadRatedCapacity = genericCompressor.RatedCapacity;
 
-    selectedCompressor.centrifugalSpecifics.minFullLoadPressure = genericCompressor.MinStonewallPressure;
-    selectedCompressor.centrifugalSpecifics.minFullLoadCapacity = genericCompressor.MinPressStonewallFlow;
-    selectedCompressor.centrifugalSpecifics.surgeAirflow = genericCompressor.DesignSurgeFlow;
-    selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = genericCompressor.MaxSurgePressure;
-    selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = genericCompressor.MaxPressSurgeFlow;
+    selectedCompressor.centrifugalSpecifics.minFullLoadPressure = this.overrideGenericDbValueForDisplay(genericCompressor.MinStonewallPressure);
+    selectedCompressor.centrifugalSpecifics.minFullLoadCapacity = this.overrideGenericDbValueForDisplay(genericCompressor.MinPressStonewallFlow);
+    selectedCompressor.centrifugalSpecifics.surgeAirflow = this.overrideGenericDbValueForDisplay(genericCompressor.DesignSurgeFlow);
+    selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = this.overrideGenericDbValueForDisplay(genericCompressor.MaxSurgePressure);
+    selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = this.overrideGenericDbValueForDisplay(genericCompressor.MaxPressSurgeFlow);
     selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
@@ -65,6 +65,13 @@ export class CompressedAirDataManagementService {
     selectedCompressor.performancePoints.unloadPoint.isDefaultPower = true;
     selectedCompressor.performancePoints.unloadPoint.isDefaultPressure = true;
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true)
+  }
+
+  overrideGenericDbValueForDisplay(databaseVal: number) {
+    if (databaseVal === -9999) {
+      return null;
+    }
+    return databaseVal;
   }
 
   //Updating Compressor Existing Data

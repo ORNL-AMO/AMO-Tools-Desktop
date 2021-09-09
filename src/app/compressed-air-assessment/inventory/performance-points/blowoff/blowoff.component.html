@@ -6,18 +6,22 @@
         <div class="form-group">
             <div class="input-group d-inline-flex px-2">
                 <span class="input-group-addon calc-addon units" *ngIf="showPressureCalc">
-                    <a class="click-link" (click)="setPressure()"><span class="fa fa-calculator"></span></a>
+                    <a class="click-link" (click)="setPressure()"><span class="fa fa-refresh"></span></a>
                 </span>
                 <input name="blowoffDischargePressure" type="number" step="any" class="form-control"
                     id="blowoffDischargePressure" formControlName="dischargePressure" (input)="saveDischargePressure()"
                     (focus)="focusField('blowoffDischargePressure')">
-                <span class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small"
               *ngIf="form.controls.dischargePressure.invalid && !form.controls.dischargePressure.pristine">
               <span *ngIf="form.controls.dischargePressure.errors.required">Value Required</span>
               <span *ngIf="form.controls.dischargePressure.errors.equalTo !== undefined">Value must be equal to Full Load Discharge Pressure
-                ({{form.controls.dischargePressure.errors.equalTo}}) psig.</span>
+                ({{form.controls.dischargePressure.errors.equalTo}}) 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+            </span>
             </span>
         </div>
     </form>
@@ -27,11 +31,12 @@
         <div class="form-group">
             <div class="input-group d-inline-flex px-2">
                 <span class="input-group-addon calc-addon units" *ngIf="showAirflowCalc">
-                    <a class="click-link" (click)="setAirFlow()"><span class="fa fa-calculator"></span></a>
+                    <a class="click-link" (click)="setAirFlow()"><span class="fa fa-refresh"></span></a>
                 </span>
                 <input name="blowoffAirflow" type="number" step="any" class="form-control" id="blowoffAirflow"
                     formControlName="airflow" (input)="saveAirFlow()" (focus)="focusField('blowoffAirflow')">
-                <span class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
             </div>
         </div>
         </form>
@@ -41,7 +46,7 @@
         <div class="form-group">
             <div class="input-group d-inline-flex px-2">
                 <span class="input-group-addon calc-addon units" *ngIf="showPowerCalc">
-                    <a class="click-link" (click)="setPower()"><span class="fa fa-calculator"></span></a>
+                    <a class="click-link" (click)="setPower()"><span class="fa fa-refresh"></span></a>
                 </span>
                 <input name="blowoffPower" type="number" step="any" class="form-control" id="blowoffPower"
                     formControlName="power" (input)="savePower()" (focus)="focusField('blowoffPower')">

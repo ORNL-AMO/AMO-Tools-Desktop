@@ -1,17 +1,21 @@
 <div class="checkbox">
     <label class="group-label" for="reduceAirLeaks">
-        <input type="checkbox" id="reduceAirLeaks" (focus)="focusField('reduceAirLeaks')" (change)="setReduceAirLeaks()"
-            [(ngModel)]="reduceAirLeaks.selected" />
         Reduce Air Leaks
+        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right"
+            (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
     </label>
 </div>
 
-<form *ngIf="reduceAirLeaks.selected" class="mb-2 pt-1">
+<form *ngIf="reduceAirLeaks.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label for="leakFlow">Leak Flow</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"
-                id="leakFlow" (input)="save()" (focus)="helpTextField('leakFlow')">
+                (focus)="helpTextField('leakFlow')"
+                id="leakFlow" (input)="save(false)">
             <span class="input-group-addon units">acfm</span>
         </div>
     </div>
@@ -19,7 +23,8 @@
         <label for="leakReduction">Leak Reduction</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakReduction" name="leakReduction"
-                id="leakReduction" (input)="save()" (focus)="helpTextField('leakReduction')">
+                (focus)="helpTextField('leakReduction')"
+                id="leakReduction" (input)="save(false)">
             <span class="input-group-addon units">%</span>
         </div>
     </div>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ImproveEndUseEfficiency } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, ImproveEndUseEfficiency, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
   selector: 'app-improve-end-use-efficiency',
@@ -14,48 +15,91 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   improveEndUseEfficiency: ImproveEndUseEfficiency;
   isFormChange: boolean = false;
   hourIntervals: Array<number>;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  selectedModificationIndex: number;
+  orderOptions: Array<number>;
+  compressedAirAssessmentSub: Subscription;
+  compressedAirAssessment: CompressedAirAssessment;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
-    this.setHourIntervals();
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
-      if (val && !this.isFormChange) {
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
-        this.improveEndUseEfficiency = compressedAirAssessment.modifications[modificationIndex].improveEndUseEfficiency;
+    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
+      if (compressedAirAssessment && !this.isFormChange) {
+        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.setOrderOptions();
+        this.setData()
       } else {
         this.isFormChange = false;
       }
+    });
+    this.setHourIntervals();
+    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
+      if (val && !this.isFormChange) {
+        this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
+        this.setData()
+      } else {
+        this.isFormChange = false;
+      }
+      this.setOrderOptions();
     });
   }
 
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
+    this.compressedAirAssessmentSub.unsubscribe();
+  }
+
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('improveEndUseEfficiency');
   }
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
-  helpTextField(str: string) {
-    this.compressedAirAssessmentService.helpTextField.next(str);
-    this.compressedAirAssessmentService.focusedField.next('improveEndUseEfficiency');
-  }
-  setImproveEndUseEfficiency() {
-    this.save();
+
+  setData() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.improveEndUseEfficiency = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency));
+    }
   }
 
-  save() {
+  setOrderOptions() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.orderOptions = new Array();
+      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+      let allOrders: Array<number> = [
+        modification.addPrimaryReceiverVolume.order,
+        modification.adjustCascadingSetPoints.order,
+        modification.reduceAirLeaks.order,
+        modification.reduceRuntime.order,
+        modification.reduceSystemAirPressure.order,
+        modification.useAutomaticSequencer.order,
+        modification.useUnloadingControls.order
+      ];
+      allOrders = allOrders.filter(order => { return order != 100 });
+      let numOrdersOn: number = allOrders.length;
+      for (let i = 1; i <= numOrdersOn + 1; i++) {
+        this.orderOptions.push(i);
+      }
+    }
+  }
+
+  save(isOrderChange: boolean) {
     this.isFormChange = true;
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-    compressedAirAssessment.modifications[modificationIndex].improveEndUseEfficiency = this.improveEndUseEfficiency;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency.order));
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency = this.improveEndUseEfficiency;
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.improveEndUseEfficiency.order;
+      this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'improveEndUseEfficiency', previousOrder, newOrder);
+    }
+
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
   setReductionType(str: "Fixed" | "Variable") {
     this.improveEndUseEfficiency.reductionType = str;
-    this.save();
+    this.save(false);
   }
 
   setHourIntervals() {
@@ -72,7 +116,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.improveEndUseEfficiency.reductionData[i].data[dataIndex].applyReduction = toggleValue;
       }
     }
-    this.save();
+    this.save(false);
   }
 
   trackByIdx(index: number, obj: any): any {

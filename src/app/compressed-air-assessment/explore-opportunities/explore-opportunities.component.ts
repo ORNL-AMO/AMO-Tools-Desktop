@@ -30,6 +30,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
   calculating: any;
+  selectedModificationId: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -43,6 +44,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment = val;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
+        this.setModification();
         if (!this.selectedDayType) {
           this.exploreOpportunitiesService.selectedDayType.next(this.compressedAirAssessment.compressedAirDayTypes[0]);
         }
@@ -54,7 +56,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (!val && this.modificationExists) {
         this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
       } else if (val && this.modificationExists) {
-        this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
+        this.selectedModificationId = val;
+        this.setModification();
         if (!this.modification) {
           this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
         } else {
@@ -103,7 +106,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
         this.calculating = undefined;
       }, 750)
+    }
+  }
 
+  setModification() {
+    if (this.selectedModificationId) {
+      this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == this.selectedModificationId });
     }
   }
 }

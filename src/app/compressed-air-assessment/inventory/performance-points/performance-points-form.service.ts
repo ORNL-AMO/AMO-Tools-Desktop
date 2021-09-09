@@ -32,6 +32,11 @@ export class PerformancePointsFormService {
       (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10))) {
       form.controls.airflow.disable();
     }
+    if (pointName == 'noLoad' && compressor.compressorControls.controlType == 5) {
+      form.controls.dischargePressure.patchValue(0);
+      form.controls.dischargePressure.disable();
+    }
+
     if (isModification) {
       form.controls.airflow.disable();
       form.controls.power.disable();

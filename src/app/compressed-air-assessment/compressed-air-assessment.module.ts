@@ -116,6 +116,8 @@ import { UseUnloadingControlsHelpComponent } from './results-panel/help-panel/as
 import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
 import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
 import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
+import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -196,7 +198,8 @@ import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/asses
     UseUnloadingControlsHelpComponent,
     UseAutomaticSequencerHelpComponent,
     ReduceRunTimeHelpComponent,
-    AddReceiverVolumeHelpComponent
+    AddReceiverVolumeHelpComponent,
+    SystemProfileAnnualSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -216,7 +219,8 @@ import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/asses
     ConfirmDeleteModalModule, 
     FullLoadAmpsModule,
     AltitudeCorrectionModule,
-    PercentGraphModule
+    PercentGraphModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     CompressedAirAssessmentService,

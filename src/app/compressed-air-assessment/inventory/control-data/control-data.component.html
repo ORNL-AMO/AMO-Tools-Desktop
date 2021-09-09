@@ -75,7 +75,8 @@
         <div class="input-group">
             <input name="unloadSumpPressure" type="number" step="any" class="form-control" id="unloadSumpPressure"
                 formControlName="unloadSumpPressure" (input)="save()" (focus)="focusField('unloadSumpPressure')">
-            <span class="units input-group-addon">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.unloadSumpPressure.invalid && !form.controls.unloadSumpPressure.pristine">
