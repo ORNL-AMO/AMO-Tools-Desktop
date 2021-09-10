@@ -399,7 +399,7 @@ export class CompressedAirAssessmentResultsService {
 
         let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
         let adjustedSummaryIndex: number = adjustedProfileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
-        console.log(data.compressorId + ' : ' +adjustedSummaryIndex);
+        // console.log(data.compressorId + ' : ' +adjustedSummaryIndex);
         adjustedProfileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
           power: calculateFullLoad.powerCalculated,
           airflow: calculateFullLoad.capacityCalculated,

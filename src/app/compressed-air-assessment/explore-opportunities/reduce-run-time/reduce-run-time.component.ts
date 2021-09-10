@@ -96,10 +96,11 @@ export class ReduceRunTimeComponent implements OnInit {
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order));
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime = this.reduceRuntime;
     if (!isOrderChange) {
+      this.setAdjustedSummary();
       this.setAirflowData();
     }
-    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime = this.reduceRuntime;
     if (isOrderChange) {
       this.isFormChange = false;
       let newOrder: number = this.reduceRuntime.order;
@@ -119,13 +120,12 @@ export class ReduceRunTimeComponent implements OnInit {
         modification.addPrimaryReceiverVolume.order,
         modification.adjustCascadingSetPoints.order,
         modification.improveEndUseEfficiency.order,
-        // modification.reduceRuntime.order,
+        modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
         modification.useAutomaticSequencer.order
       ];
       modificationOrders = modificationOrders.filter(order => { return order != 100 && order <= this.reduceRuntime.order });
-      console.log(modificationOrders);
       this.adjustedProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
     }
   }
@@ -138,7 +138,6 @@ export class ReduceRunTimeComponent implements OnInit {
         this.requiredAirflow.push(0);
         this.availableAirflow.push(0);
       }
-      console.log(this.adjustedProfileSummary);
       this.adjustedProfileSummary.forEach(summary => {
         if (summary.dayTypeId == this.selectedDayTypeId) {
           for (let i = 0; i < 24; i++) {
