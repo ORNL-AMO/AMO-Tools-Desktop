@@ -35,7 +35,7 @@
         [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':gasDensityForm.controls.specificHeatRatio.invalid}">
         <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
         <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
-          formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
+          formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="getResults()"
           (focus)="focusField('specificHeatRatio')" onfocus="this.select();">
         <span class="alert-danger pull-right small"
           *ngIf="gasDensityForm.controls.specificHeatRatio.invalid && !gasDensityForm.controls.specificHeatRatio.pristine">
@@ -163,6 +163,15 @@
               {{gasDensityForm.controls.dewPoint.errors.max.max}} <span
                 [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span></span>
           </span>
+        </div>
+
+        <div class="form-group">
+          <label class="bold">Moisture in Combustion Air</label>
+          <div class="text-center small">
+            <strong *ngIf="moistureInCombustionAir">{{moistureInCombustionAir | number: '1.0-2'}} %
+            </strong>
+            <strong class="pr-1" *ngIf="!moistureInCombustionAir">&mdash; &mdash; </strong>
+          </div>
         </div>
   
       </div>

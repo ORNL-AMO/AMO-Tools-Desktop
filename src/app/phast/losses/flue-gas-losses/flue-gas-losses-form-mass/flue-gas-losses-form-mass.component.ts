@@ -45,7 +45,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   options: Array<SolidLiquidFlueGasMaterial>;
   showModal: boolean = false;
   showMoisture: boolean = false;
-  humidityRatio: number;
   baseGasDensity: BaseGasDensity = {
     barometricPressure: 29.92,
     dewPoint: 0,
@@ -162,6 +161,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       if (input.excessAir < 0) {
         this.calculationFlueGasO2 = 0.0;
       } else {
+        // bandaid
+        if (input.moistureInAirCombustion === undefined) {
+          input.moistureInAirCombustion = null;
+        }
         this.calculationFlueGasO2 = this.phastService.flueGasByMassCalculateO2(input);
       }
       this.flueGasLossForm.patchValue({
@@ -241,9 +244,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.lossesService.modalOpen.next(this.showModal);
   }
 
-  hideMoistureModal(event?: any) {
-    if (event !== -150) {
-      this.humidityRatio = event;
+  hideMoistureModal(moistureInAirComposition?: number) {
+    if (moistureInAirComposition) {
+      moistureInAirComposition = Number(moistureInAirComposition.toFixed(2));
+      this.flueGasLossForm.controls.moistureInAirComposition.patchValue(moistureInAirComposition);
     }
     this.moistureModal.hide();
     this.showMoisture = false;
