@@ -26,7 +26,7 @@
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true"
+      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex" [currentTab]="stepTab" [inSetup]="true"
         [containerHeight]="containerHeight" [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>

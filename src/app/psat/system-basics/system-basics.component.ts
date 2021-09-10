@@ -61,8 +61,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
 
-    let settingsChanged: boolean = this.settings.currency != this.oldSettings.currency ||
-      this.settings.distanceMeasurement != this.oldSettings.distanceMeasurement ||
+    let settingsChanged: boolean = this.settings.distanceMeasurement != this.oldSettings.distanceMeasurement ||
       this.settings.flowMeasurement != this.oldSettings.flowMeasurement ||
       this.settings.language != this.oldSettings.language ||
       this.settings.powerMeasurement != this.oldSettings.powerMeasurement ||

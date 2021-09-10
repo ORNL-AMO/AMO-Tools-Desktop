@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.s
   styleUrls: ['./waste-water-summary.component.css', '../report-summary.component.css']
 })
 export class WasteWaterSummaryComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   savingPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;

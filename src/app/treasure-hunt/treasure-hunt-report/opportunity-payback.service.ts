@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { OpportunitiesPaybackDetails, OpportunitySummary } from '../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class OpportunityPaybackService {
 
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  getOpportunityPaybackDetails(opportunitySummaries: Array<OpportunitySummary>): OpportunitiesPaybackDetails {
+  getOpportunityPaybackDetails(opportunitySummaries: Array<OpportunitySummary>, settings?: Settings): OpportunitiesPaybackDetails {
     let lessThanOneYearOpps: Array<OpportunitySummary> = _.filter(opportunitySummaries, (opp: OpportunitySummary) => { return opp.payback < 1 && opp.selected == true });
     let lessThanOneYear: { numOpportunities: number, totalSavings: number } = {
       numOpportunities: lessThanOneYearOpps.length,
@@ -33,6 +35,14 @@ export class OpportunityPaybackService {
       numOpportunities: lessThanOneYear.numOpportunities + oneToTwoYears.numOpportunities + twoToThreeYears.numOpportunities + moreThanThreeYears.numOpportunities,
       totalSavings: lessThanOneYear.totalSavings + oneToTwoYears.totalSavings + twoToThreeYears.totalSavings + moreThanThreeYears.totalSavings
     };
+
+    if (settings && settings.currency !== '$') {
+      totals.totalSavings = this.convertUnitsService.value(totals.totalSavings).from('$').to(settings.currency);
+      lessThanOneYear = this.convertUnitsService.value(lessThanOneYear).from('$').to(settings.currency);
+      oneToTwoYears = this.convertUnitsService.value(oneToTwoYears).from('$').to(settings.currency);
+      twoToThreeYears = this.convertUnitsService.value(twoToThreeYears).from('$').to(settings.currency);
+      moreThanThreeYears = this.convertUnitsService.value(moreThanThreeYears).from('$').to(settings.currency);
+    }
     return {
       lessThanOneYear: lessThanOneYear,
       oneToTwoYears: oneToTwoYears,
