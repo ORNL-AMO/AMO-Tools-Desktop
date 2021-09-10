@@ -40,7 +40,7 @@
         <p>Data will be copied from your current baseline condition.</p>
     </div>
     <div class="w-50 d-flex flex-column mr-2 ml-2 scroll-item" [ngStyle]="{'height.px': containerHeight}">
-        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+        <div class="d-flex tabs primary mr-2 ml-2 sticky-top">
             <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'results'}">
                 <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
                     <div>Modification Results</div>
@@ -71,6 +71,11 @@
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
+
+        <div class="p-2" *ngIf="modificationExists && tabSelect == 'help'">
+            <app-help-panel></app-help-panel>
+        </div>
+        
         <!-- <div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
             <div class="col-10">
                 <div class="main-content text-center">

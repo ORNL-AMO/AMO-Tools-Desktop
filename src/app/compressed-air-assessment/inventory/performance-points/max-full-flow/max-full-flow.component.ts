@@ -66,7 +66,7 @@ export class MaxFullFlowComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
+    this.compressedAirAssessmentService.focusedField.next(str); 
   }
 
   setMaxFullFlowLabel(controlType: number) {

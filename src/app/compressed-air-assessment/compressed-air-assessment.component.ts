@@ -154,12 +154,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
     let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
     let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
     let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-    if (hasValidCompressors == false && this.setupTab != 'system-basics') {
+    if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
       this.disableNext = true;
-    } else if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
+    } else if (this.setupTab == 'day-types' && !hasValidDayTypes) {
       this.disableNext = true;
-    } 
-    else if (!hasValidDayTypes && this.setupTab == 'day-types') {
+    } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
       this.disableNext = true;
     } else {
       this.disableNext = false;

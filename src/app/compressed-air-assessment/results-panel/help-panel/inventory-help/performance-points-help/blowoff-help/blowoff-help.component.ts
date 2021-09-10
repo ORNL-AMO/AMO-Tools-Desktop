@@ -9,6 +9,9 @@ import { CompressedAirAssessmentService } from '../../../../../compressed-air-as
 })
 export class BlowoffHelpComponent implements OnInit {
 
+  helpTextField: string;
+  helpTextFieldSub: Subscription;
+
   focusedField: string;
   focusedFieldSub: Subscription;
   constructor(private compressedAirService: CompressedAirAssessmentService) { }
@@ -17,10 +20,15 @@ export class BlowoffHelpComponent implements OnInit {
     this.focusedFieldSub = this.compressedAirService.focusedField.subscribe(val => {
       this.focusedField = val;
     });
+
+    this.helpTextFieldSub = this.compressedAirService.helpTextField.subscribe(val => {
+      this.helpTextField = val;
+    });
   }
 
   ngOnDestroy(){
     this.focusedFieldSub.unsubscribe();
+    this.helpTextFieldSub.unsubscribe();
   }
 
 }

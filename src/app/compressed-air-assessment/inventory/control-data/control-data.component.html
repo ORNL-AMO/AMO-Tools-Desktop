@@ -9,7 +9,7 @@
     <!-- controlType -->
     <div class="form-group">
         <label for="controlType">Control Type</label>
-        <select id="controlType" name="controlType" formControlName="controlType" (change)="changeControlType()"
+        <select id="controlType" name="controlType" formControlName="controlType" (change)="changeControlType(true)"
             (focus)="focusField('controlType')" class="form-control">
             <option *ngFor="let controlTypeOption of controlTypeOptions" [ngValue]="controlTypeOption.value">
                 {{controlTypeOption.label}}</option>

@@ -46,9 +46,11 @@ export class ReduceSystemAirPressureComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('reduceAirSystemAirPressure');
   }
+
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.reduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));

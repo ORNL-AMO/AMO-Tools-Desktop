@@ -62,6 +62,7 @@ export class SystemInformationComponent implements OnInit {
   }
   
   changeIsSequencerUsed(){
+    this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;

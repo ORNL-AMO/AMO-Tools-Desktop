@@ -106,6 +106,13 @@ import { CompressedAirAssessmentResultsService } from './compressed-air-assessme
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
+import { AssessmentHelpComponent } from './results-panel/help-panel/assessment-help/assessment-help.component';
+import { ReduceAirLeaksHelpComponent } from './results-panel/help-panel/assessment-help/reduce-air-leaks-help/reduce-air-leaks-help.component';
+import { ImproveEndUseEfficiencyHelpComponent } from './results-panel/help-panel/assessment-help/improve-end-use-efficiency-help/improve-end-use-efficiency-help.component';
+import { ReduceSystemAirPressureHelpComponent } from './results-panel/help-panel/assessment-help/reduce-system-air-pressure-help/reduce-system-air-pressure-help.component';
+import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
+import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
+import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 @NgModule({
@@ -179,6 +186,13 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ModificationListModalComponent,
     AddModificationModalComponent,
     ExploreOpportunitiesProfileTableComponent,
+    AssessmentHelpComponent,
+    ReduceAirLeaksHelpComponent,
+    ImproveEndUseEfficiencyHelpComponent,
+    ReduceSystemAirPressureHelpComponent,
+    UseAutomaticSequencerHelpComponent,
+    ReduceRunTimeHelpComponent,
+    AddReceiverVolumeHelpComponent,
     SystemProfileAnnualSummaryComponent
   ],
   imports: [

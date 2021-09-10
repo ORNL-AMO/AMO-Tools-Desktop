@@ -10,6 +10,8 @@ import { InventoryService } from '../../../../../inventory/inventory.service';
 })
 export class MaxFullFlowHelpComponent implements OnInit {
 
+  helpTextField: string;
+  helpTextFieldSub: Subscription;
   focusedField: string;
   focusedFieldSub: Subscription;
   selectedCompressorSub: Subscription;
@@ -26,12 +28,16 @@ export class MaxFullFlowHelpComponent implements OnInit {
         this.setMaxFullFlowLabel(val.compressorControls.controlType);
       }
     });
+
+    this.helpTextFieldSub = this.compressedAirService.helpTextField.subscribe(val => {
+      this.helpTextField = val;
+    });
   }
 
   ngOnDestroy() {
     this.focusedFieldSub.unsubscribe();
     this.selectedCompressorSub.unsubscribe();
-
+    this.helpTextFieldSub.unsubscribe();
   }
 
   setMaxFullFlowLabel(controlType: number) {

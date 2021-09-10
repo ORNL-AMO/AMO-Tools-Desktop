@@ -49,9 +49,11 @@ export class ReduceAirLeaksComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('reduceAirLeaks');
   }
+
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.reduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
