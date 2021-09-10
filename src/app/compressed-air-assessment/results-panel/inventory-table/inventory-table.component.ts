@@ -64,7 +64,6 @@ export class InventoryTableComponent implements OnInit {
 
     compressedAirAssessment.modifications.forEach(modification => {
       modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
-      modification.useUnloadingControls.adjustedCompressors = modification.useUnloadingControls.adjustedCompressors.filter(compressor => { return compressor.compressorId != this.deleteSelectedId });
     });
 
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {

@@ -20,30 +20,27 @@ export interface CompressedAirAssessment {
 export interface Modification {
     name: string,
     modificationId: string,
-    flowReallocation: FlowReallocation,
+    // flowReallocation: FlowReallocation,
     reduceAirLeaks: ReduceAirLeaks,
     improveEndUseEfficiency: ImproveEndUseEfficiency,
     reduceSystemAirPressure: ReduceSystemAirPressure,
-    useUnloadingControls: UseUnloadingControls,
     adjustCascadingSetPoints: AdjustCascadingSetPoints,
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
     addPrimaryReceiverVolume: AddPrimaryReceiverVolume
 }
 
-export interface FlowReallocation {
-    selected: boolean
-}
+// export interface FlowReallocation {
+//     // selected: boolean
+// }
 
 export interface ReduceAirLeaks {
-    selected: boolean,
     leakFlow: number,
     leakReduction: number,
     order: number
 }
 
 export interface ImproveEndUseEfficiency {
-    selected: boolean,
     reductionType: "Fixed" | "Variable",
     airflowReduction: number,
     reductionData: Array<{
@@ -59,43 +56,21 @@ export interface ImproveEndUseEfficiency {
 }
 
 export interface ReduceSystemAirPressure {
-    selected: boolean,
     averageSystemPressureReduction: number,
     order: number
 }
 
-export interface UseUnloadingControls {
-    selected: boolean,
-    adjustedCompressors: Array<AdjustedUnloadingCompressor>,
-    order: number
-}
-
-export interface AdjustedUnloadingCompressor {
-    selected: boolean,
-    compressorId: string,
-    originalControlType: number,
-    compressorType: number,
-    unloadPointCapacity: number,
-    controlType: number,
-    performancePoints: PerformancePoints,
-    automaticShutdown: boolean
-}
-
-
 export interface AdjustCascadingSetPoints {
-    selected: boolean,
     order: number
 }
 
 export interface UseAutomaticSequencer {
-    selected: boolean,
     targetPressure: number,
     variance: number,
     order: number
 }
 
 export interface ReduceRuntime {
-    selected: boolean,
     runtimeData: Array<ReduceRuntimeData>,
     order: number
 }
@@ -111,7 +86,6 @@ export interface ReduceRuntimeData {
 }
 
 export interface AddPrimaryReceiverVolume {
-    selected: boolean,
     increasedVolume: number,
     order: number
 }

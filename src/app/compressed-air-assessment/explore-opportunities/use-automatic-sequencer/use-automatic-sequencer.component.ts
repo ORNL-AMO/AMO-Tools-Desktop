@@ -53,10 +53,6 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next('useAutomaticSequencer');
   }
 
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
-  }
-
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.useAutomaticSequencer = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer));
@@ -73,8 +69,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
         modification.improveEndUseEfficiency.order,
         modification.reduceRuntime.order,
         modification.reduceSystemAirPressure.order,
-        modification.reduceAirLeaks.order,
-        modification.useUnloadingControls.order
+        modification.reduceAirLeaks.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;

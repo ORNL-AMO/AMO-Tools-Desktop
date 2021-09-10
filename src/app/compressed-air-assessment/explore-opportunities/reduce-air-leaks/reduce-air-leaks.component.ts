@@ -54,9 +54,6 @@ export class ReduceAirLeaksComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next('reduceAirLeaks');
   }
 
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
-  }
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.reduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
@@ -73,8 +70,7 @@ export class ReduceAirLeaksComponent implements OnInit {
         modification.improveEndUseEfficiency.order,
         modification.reduceRuntime.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order
+        modification.useAutomaticSequencer.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;

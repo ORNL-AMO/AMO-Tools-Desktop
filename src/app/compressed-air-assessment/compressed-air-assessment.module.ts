@@ -86,7 +86,6 @@ import { FlowReallocationComponent } from './explore-opportunities/flow-realloca
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
 import { ImproveEndUseEfficiencyComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.component';
 import { ReduceSystemAirPressureComponent } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.component';
-import { UseUnloadingControlsComponent } from './explore-opportunities/use-unloading-controls/use-unloading-controls.component';
 import { AdjustCascadingSetPointsComponent } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.component';
 import { UseAutomaticSequencerComponent } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.component';
 import { ReduceRunTimeComponent } from './explore-opportunities/reduce-run-time/reduce-run-time.component';
@@ -96,7 +95,6 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 import { CompressorNamePipe } from './compressor-name.pipe';
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
-import { AdjustCompressorComponent } from './explore-opportunities/use-unloading-controls/adjust-compressor/adjust-compressor.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { DayTypeService } from './day-types/day-type.service';
@@ -112,7 +110,6 @@ import { AssessmentHelpComponent } from './results-panel/help-panel/assessment-h
 import { ReduceAirLeaksHelpComponent } from './results-panel/help-panel/assessment-help/reduce-air-leaks-help/reduce-air-leaks-help.component';
 import { ImproveEndUseEfficiencyHelpComponent } from './results-panel/help-panel/assessment-help/improve-end-use-efficiency-help/improve-end-use-efficiency-help.component';
 import { ReduceSystemAirPressureHelpComponent } from './results-panel/help-panel/assessment-help/reduce-system-air-pressure-help/reduce-system-air-pressure-help.component';
-import { UseUnloadingControlsHelpComponent } from './results-panel/help-panel/assessment-help/use-unloading-controls-help/use-unloading-controls-help.component';
 import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
 import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
 import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
@@ -179,7 +176,6 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ReduceAirLeaksComponent,
     ImproveEndUseEfficiencyComponent,
     ReduceSystemAirPressureComponent,
-    UseUnloadingControlsComponent,
     AdjustCascadingSetPointsComponent,
     UseAutomaticSequencerComponent,
     ReduceRunTimeComponent,
@@ -187,7 +183,6 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     CompressedAirDiagramComponent,
     CompressorNamePipe,
     ExploreOpportunitiesResultsComponent,
-    AdjustCompressorComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
     ExploreOpportunitiesProfileTableComponent,
@@ -195,7 +190,6 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ReduceAirLeaksHelpComponent,
     ImproveEndUseEfficiencyHelpComponent,
     ReduceSystemAirPressureHelpComponent,
-    UseUnloadingControlsHelpComponent,
     UseAutomaticSequencerHelpComponent,
     ReduceRunTimeHelpComponent,
     AddReceiverVolumeHelpComponent,

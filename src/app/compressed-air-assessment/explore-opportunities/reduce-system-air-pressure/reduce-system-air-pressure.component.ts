@@ -37,6 +37,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
       } else {
         this.isFormChange = false;
       }
+      this.setOrderOptions();
     });
   }
 
@@ -50,9 +51,6 @@ export class ReduceSystemAirPressureComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next('reduceAirSystemAirPressure');
   }
 
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
-  }
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.reduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));
@@ -70,7 +68,6 @@ export class ReduceSystemAirPressureComponent implements OnInit {
         modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;

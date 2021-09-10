@@ -20,12 +20,11 @@
                 <!-- <app-flow-reallocation></app-flow-reallocation> -->
                 <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                 <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order"></app-improve-end-use-efficiency>
-                <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"></app-reduce-system-air-pressure>
-                <app-use-unloading-controls [style.order]="modification.useUnloadingControls.order"></app-use-unloading-controls>
+                <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-system-air-pressure>
                 <!--TODO: NEED MORE INFO FOR CASCADING POINTS-->
                 <!-- <app-adjust-cascading-set-points></app-adjust-cascading-set-points> -->
-                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"></app-use-automatic-sequencer>
-                <app-reduce-run-time [style.order]="modification.reduceRuntime.order"></app-reduce-run-time>
+                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order" *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100"></app-use-automatic-sequencer>
+                <app-reduce-run-time [style.order]="modification.reduceRuntime.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-run-time>
                 <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"></app-add-receiver-volume>
             </div>
 
@@ -65,6 +64,9 @@
         </div>
         <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
         </app-explore-opportunities-results>
+        <span class="w-100 p-2 text-center" *ngIf="calculating">
+            Calculating results...
+        </span>
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>

@@ -52,10 +52,6 @@ export class AddReceiverVolumeComponent implements OnInit {
     this.compressedAirAssessmentService.helpTextField.next(str);
     this.compressedAirAssessmentService.focusedField.next('addPrimaryReceiverVolume');
   }
-
-  focusField(str: string) {
-    this.compressedAirAssessmentService.focusedField.next(str);
-  }
   
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
@@ -73,8 +69,7 @@ export class AddReceiverVolumeComponent implements OnInit {
         modification.improveEndUseEfficiency.order,
         modification.reduceRuntime.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order
+        modification.useAutomaticSequencer.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;
