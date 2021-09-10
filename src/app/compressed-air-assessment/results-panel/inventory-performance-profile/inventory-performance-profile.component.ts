@@ -137,8 +137,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   getAssessmentChartData(): Array<ProfileChartData> {
     let chartData: Array<ProfileChartData> = new Array();
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
+    // let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+    // let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
     this.compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
       let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
       if (isValid) {
@@ -147,16 +147,16 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           compressorName: compressor.name,
           data: compressorData
         });
-        if (modification.useUnloadingControls.order != 100) {
-          let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification.useUnloadingControls, JSON.parse(JSON.stringify(compressor)));
-          // debugger
-          let adjustedCompressorData: Array<CompressorCalcResult> = this.getCompressorData(adjustedCompressor);
-          // console.log(adjustedCompressorData);
-          chartData.push({
-            compressorName: compressor.name + ' (Adjusted)',
-            data: adjustedCompressorData
-          });
-        }
+        // if (modification.useUnloadingControls.order != 100) {
+        //   let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification.useUnloadingControls, JSON.parse(JSON.stringify(compressor)));
+        //   // debugger
+        //   let adjustedCompressorData: Array<CompressorCalcResult> = this.getCompressorData(adjustedCompressor);
+        //   // console.log(adjustedCompressorData);
+        //   chartData.push({
+        //     compressorName: compressor.name + ' (Adjusted)',
+        //     data: adjustedCompressorData
+        //   });
+        // }
       }
     });
     return chartData;

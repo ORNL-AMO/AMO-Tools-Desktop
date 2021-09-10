@@ -208,27 +208,7 @@ export class CompressedAirDataManagementService {
   }
 
   updateModification(selectedCompressor: CompressorInventoryItem, modification: Modification): Modification {
-    modification = this.updateUnloadingControlsModification(selectedCompressor, modification);
     modification = this.updateReduceRuntimeModification(selectedCompressor, modification);
-    return modification;
-  }
-
-  updateUnloadingControlsModification(selectedCompressor: CompressorInventoryItem, modification: Modification): Modification {
-    //adjusted compressors (unloading controls)
-    let adjustedCompressorIndex: number = modification.useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => {
-      return adjustedCompressor.compressorId == selectedCompressor.itemId;
-    });
-    let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(selectedCompressor));
-    modification.useUnloadingControls.adjustedCompressors[adjustedCompressorIndex] = {
-      selected: false,
-      compressorId: compressorCopy.itemId,
-      originalControlType: compressorCopy.compressorControls.controlType,
-      compressorType: compressorCopy.nameplateData.compressorType,
-      unloadPointCapacity: compressorCopy.compressorControls.unloadPointCapacity,
-      controlType: compressorCopy.compressorControls.controlType,
-      performancePoints: compressorCopy.performancePoints,
-      automaticShutdown: compressorCopy.compressorControls.automaticShutdown
-    }
     return modification;
   }
 

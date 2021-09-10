@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, SystemProfile, ImproveEndUseEfficiency, ReduceAirLeaks, UseUnloadingControls } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, SystemProfile, ImproveEndUseEfficiency, ReduceAirLeaks } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
@@ -78,7 +78,6 @@ export class CompressedAirAssessmentResultsService {
       modification.reduceAirLeaks.order,
       modification.reduceSystemAirPressure.order,
       modification.useAutomaticSequencer.order,
-      modification.useUnloadingControls.order,
     ]
     modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
@@ -90,7 +89,6 @@ export class CompressedAirAssessmentResultsService {
       // let reduceRunTimeResults: EemSavingsResults = this.getEmptyEemSavings();
       // let reduceSystemAirPressureResults: EemSavingsResults = this.getEmptyEemSavings();
       // let useAutomaticSequencerResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let useUnloadingControlsResults: EemSavingsResults = this.getEmptyEemSavings();
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateDayTypeProfileSummary(compressedAirAssessment, dayType);
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems));
 
@@ -110,7 +108,6 @@ export class CompressedAirAssessmentResultsService {
         // reduceRunTimeResults: reduceRunTimeResults,
         // reduceSystemAirPressureResults: reduceSystemAirPressureResults,
         // useAutomaticSequencerResults: useAutomaticSequencerResults,
-        // useUnloadingControlsResults: useUnloadingControlsResults,
       });
     });
     return {
@@ -148,9 +145,7 @@ export class CompressedAirAssessmentResultsService {
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0);
       } else if (modification.useAutomaticSequencer.order == order) {
 
-      } else if (modification.useUnloadingControls.order == order) {
-        adjustedCompressors = this.useUnloadingControls(adjustedCompressors, modification.useUnloadingControls);
-      }
+      } 
     }
     return { adjustedCompressors: adjustedCompressors, adjustedProfileSummary: adjustedProfileSummary };
   }
@@ -278,10 +273,6 @@ export class CompressedAirAssessmentResultsService {
   //   compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
   //     let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
   //     if (applyEEEMs) {
-  //       //EEM: Use unloading controls
-  //       if (modification.useUnloadingControls.selected) {
-  //         compressorCopy = this.adjustCompressorControl(modification, compressorCopy);
-  //       }
   //       //EEM: Reduce System Pressure
   //       if (modification.reduceSystemAirPressure.selected) {
   //         let originalPressure: number = compressorCopy.performancePoints.fullLoad.dischargePressure;
@@ -516,26 +507,6 @@ export class CompressedAirAssessmentResultsService {
   }
   //TODO: useAutomaticSequencer
 
-  //useUnloadingControls
-  useUnloadingControls(adjustedCompressors: Array<CompressorInventoryItem>, useUnloadingControls: UseUnloadingControls): Array<CompressorInventoryItem> {
-    adjustedCompressors.forEach(compressor => {
-      compressor = this.adjustCompressorControl(useUnloadingControls, compressor);
-    });
-    return adjustedCompressors;
-  }
-
-  adjustCompressorControl(useUnloadingControls: UseUnloadingControls, compressorCopy: CompressorInventoryItem): CompressorInventoryItem {
-    let adjustedCompressor: AdjustedUnloadingCompressor = useUnloadingControls.adjustedCompressors.find(adjustedCompressor => {
-      return (adjustedCompressor.compressorId == compressorCopy.itemId);
-    });
-    let adjustedCompressorCopy: AdjustedUnloadingCompressor = JSON.parse(JSON.stringify(adjustedCompressor))
-    compressorCopy.compressorControls.controlType = adjustedCompressorCopy.controlType;
-    compressorCopy.performancePoints = adjustedCompressorCopy.performancePoints;
-    compressorCopy.compressorControls.unloadPointCapacity = adjustedCompressorCopy.unloadPointCapacity;
-    compressorCopy.compressorControls.automaticShutdown = adjustedCompressorCopy.automaticShutdown;
-    return compressorCopy;
-  }
-
 
   calculateSavings(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number): EemSavingsResults {
     let baselineResults: { cost: number, power: number, peakDemand: number } = this.calculateEnergyAndCost(profileSummary, dayType, costKwh);
@@ -638,7 +609,6 @@ export interface DayTypeModificationResult {
   // reduceRunTimeResults: EemSavingsResults,
   // reduceSystemAirPressureResults: EemSavingsResults,
   // useAutomaticSequencerResults: EemSavingsResults,
-  // useUnloadingControlsResults: EemSavingsResults,
   dayTypeId: string
 
 }

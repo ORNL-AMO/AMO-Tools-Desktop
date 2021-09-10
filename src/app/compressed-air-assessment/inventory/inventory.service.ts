@@ -496,18 +496,6 @@ export class InventoryService {
         });
       })
     });
-    compressedAirAssessment.modifications.forEach(modification => {
-      modification.useUnloadingControls.adjustedCompressors.push({
-        selected: false,
-        compressorId: newInventoryItem.itemId,
-        originalControlType: newInventoryItem.compressorControls.controlType,
-        compressorType: newInventoryItem.nameplateData.compressorType,
-        unloadPointCapacity: newInventoryItem.compressorControls.unloadPointCapacity,
-        controlType: newInventoryItem.compressorControls.controlType,
-        performancePoints: newInventoryItem.performancePoints,
-        automaticShutdown: newInventoryItem.compressorControls.automaticShutdown
-      })
-    });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     this.selectedCompressor.next(newInventoryItem);
   }

@@ -69,7 +69,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       // reduceRunTimeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       // reduceSystemAirPressureResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       // useAutomaticSequencerResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // useUnloadingControlsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       dayTypeId: undefined
     }
     this.modificationResults.dayTypeModificationResults.forEach(modResult => {
@@ -108,8 +107,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       // dayTypeModificationResult.useAutomaticSequencerResults.savings.cost += modResult.useAutomaticSequencerResults.savings.cost;
       // dayTypeModificationResult.useAutomaticSequencerResults.savings.power += modResult.useAutomaticSequencerResults.savings.power;
 
-      // dayTypeModificationResult.useUnloadingControlsResults.savings.cost += modResult.useUnloadingControlsResults.savings.cost;
-      // dayTypeModificationResult.useUnloadingControlsResults.savings.power += modResult.useUnloadingControlsResults.savings.power;
     });
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
     return dayTypeModificationResult;

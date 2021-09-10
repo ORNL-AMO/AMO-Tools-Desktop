@@ -67,8 +67,7 @@ export class AddReceiverVolumeComponent implements OnInit {
         modification.improveEndUseEfficiency.order,
         modification.reduceRuntime.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order
+        modification.useAutomaticSequencer.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;

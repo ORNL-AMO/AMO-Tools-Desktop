@@ -24,7 +24,6 @@ export interface Modification {
     reduceAirLeaks: ReduceAirLeaks,
     improveEndUseEfficiency: ImproveEndUseEfficiency,
     reduceSystemAirPressure: ReduceSystemAirPressure,
-    useUnloadingControls: UseUnloadingControls,
     adjustCascadingSetPoints: AdjustCascadingSetPoints,
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
@@ -63,24 +62,6 @@ export interface ReduceSystemAirPressure {
     averageSystemPressureReduction: number,
     order: number
 }
-
-export interface UseUnloadingControls {
-    selected: boolean,
-    adjustedCompressors: Array<AdjustedUnloadingCompressor>,
-    order: number
-}
-
-export interface AdjustedUnloadingCompressor {
-    selected: boolean,
-    compressorId: string,
-    originalControlType: number,
-    compressorType: number,
-    unloadPointCapacity: number,
-    controlType: number,
-    performancePoints: PerformancePoints,
-    automaticShutdown: boolean
-}
-
 
 export interface AdjustCascadingSetPoints {
     selected: boolean,

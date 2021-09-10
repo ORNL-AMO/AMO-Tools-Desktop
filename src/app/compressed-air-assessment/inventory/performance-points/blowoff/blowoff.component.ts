@@ -1,13 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
 import { BlowoffCalculationsService } from '../calculations/blowoff-calculations.service';
-import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
@@ -16,8 +15,6 @@ import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessa
   styleUrls: ['./blowoff.component.css']
 })
 export class BlowoffComponent implements OnInit {
-  @Input()
-  inModification: boolean;
 
   settings: Settings;
   selectedCompressorSub: Subscription;
@@ -34,7 +31,6 @@ export class BlowoffComponent implements OnInit {
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
-    private performancePointCalculationsService: PerformancePointCalculationsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -45,7 +41,7 @@ export class BlowoffComponent implements OnInit {
         this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
         if (this.isFormChange == false) {
-          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', this.inModification);
+          this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff');
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.performancePoints.blowoff);
@@ -62,20 +58,8 @@ export class BlowoffComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    if (!this.inModification) {
-      let blowoff: PerformancePoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
-      this.compressedAirDataManagementService.updateBlowoff(blowoff)
-    } else {
-      let blowoff: PerformancePoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
-      this.selectedCompressor.performancePoints.blowoff = blowoff;
-      this.selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(this.selectedCompressor);
-      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-      let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-      let adjustedCompressorIndex: number = compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors.findIndex(adjustedCompressor => { return adjustedCompressor.compressorId == this.selectedCompressor.itemId });
-      compressedAirAssessment.modifications[modificationIndex].useUnloadingControls.adjustedCompressors[adjustedCompressorIndex].performancePoints = this.selectedCompressor.performancePoints;
-      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    }
+    let blowoff: PerformancePoint = this.performancePointsFormService.getPerformancePointObjFromForm(this.form);
+    this.compressedAirDataManagementService.updateBlowoff(blowoff)
   }
 
   focusField(str: string) {

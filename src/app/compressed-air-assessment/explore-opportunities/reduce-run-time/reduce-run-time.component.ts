@@ -83,8 +83,7 @@ export class ReduceRunTimeComponent implements OnInit {
         modification.improveEndUseEfficiency.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order
+        modification.useAutomaticSequencer.order
       ];
       allOrders = allOrders.filter(order => { return order != 100 });
       let numOrdersOn: number = allOrders.length;
@@ -123,8 +122,7 @@ export class ReduceRunTimeComponent implements OnInit {
         // modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order,
+        modification.useAutomaticSequencer.order
       ];
       modificationOrders = modificationOrders.filter(order => { return order != 100 && order <= this.reduceRuntime.order });
       console.log(modificationOrders);
@@ -178,8 +176,7 @@ export class ReduceRunTimeComponent implements OnInit {
   //       // modification.reduceRuntime.order,
   //       modification.reduceAirLeaks.order,
   //       modification.reduceSystemAirPressure.order,
-  //       modification.useAutomaticSequencer.order,
-  //       modification.useUnloadingControls.order,
+  //       modification.useAutomaticSequencer.order
   //     ];
   //     modificationOrders = modificationOrders.filter(order => { return order != 100 || order > this.reduceRuntime.order });
   //     let adjustedProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;

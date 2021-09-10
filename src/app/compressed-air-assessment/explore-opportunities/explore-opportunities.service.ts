@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AdjustedUnloadingCompressor, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
@@ -57,21 +57,6 @@ export class ExploreOpportunitiesService {
 
     });
 
-    let adjustedCompressors: Array<AdjustedUnloadingCompressor> = new Array();
-    compressedAirAssessment.compressorInventoryItems.forEach(item => {
-      let compressorCopy: CompressorInventoryItem = JSON.parse(JSON.stringify(item));
-      adjustedCompressors.push({
-        selected: false,
-        compressorId: compressorCopy.itemId,
-        unloadPointCapacity: compressorCopy.compressorControls.unloadPointCapacity,
-        controlType: compressorCopy.compressorControls.controlType,
-        performancePoints: compressorCopy.performancePoints,
-        originalControlType: compressorCopy.compressorControls.controlType,
-        compressorType: compressorCopy.nameplateData.compressorType,
-        automaticShutdown: compressorCopy.compressorControls.automaticShutdown
-      })
-    })
-
     return {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
@@ -94,11 +79,6 @@ export class ExploreOpportunitiesService {
       reduceSystemAirPressure: {
         selected: false,
         averageSystemPressureReduction: undefined,
-        order: 100
-      },
-      useUnloadingControls: {
-        selected: false,
-        adjustedCompressors: adjustedCompressors,
         order: 100
       },
       adjustCascadingSetPoints: {
@@ -154,8 +134,7 @@ export class ExploreOpportunitiesService {
         modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order,
-        modification.useUnloadingControls.order,
+        modification.useAutomaticSequencer.order
       ]
       let selectedOrder: Array<number> = allOrders.filter(order => {return order == newOrder});
       let hasDuplicate: boolean = selectedOrder.length == 2;
@@ -209,13 +188,6 @@ export class ExploreOpportunitiesService {
           modification.useAutomaticSequencer.order++;
         }
       }
-      if (modification.useUnloadingControls.order != 100 && changedOpportunity != 'useUnloadingControls' && modification.useUnloadingControls.order >= newOrder) {
-        if(hasDuplicate && modification.useUnloadingControls.order == newOrder && previousOrder != 100){
-          modification.useUnloadingControls.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
-          modification.useUnloadingControls.order++;
-        }
-      }
     }else{
       if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order > previousOrder) {
         modification.addPrimaryReceiverVolume.order--;
@@ -237,9 +209,6 @@ export class ExploreOpportunitiesService {
       }
       if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer' && modification.useAutomaticSequencer.order > previousOrder) {
         modification.useAutomaticSequencer.order--;
-      }
-      if (modification.useUnloadingControls.order != 100 && changedOpportunity != 'useUnloadingControls' && modification.useUnloadingControls.order > previousOrder) {
-        modification.useUnloadingControls.order--;
       }
     }
     return modification;
