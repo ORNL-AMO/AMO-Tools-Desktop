@@ -764,6 +764,9 @@ export class CompareService {
   getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
+      if (this.checkFanOperationsDifferent(baseline, modification)) {
+        badges.push({ badge: 'Operations', componentStr: 'fsat-operations' });
+      }
       if (this.checkFluidDifferent(baseline, modification)) {
         badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' });
       }

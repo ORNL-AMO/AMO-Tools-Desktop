@@ -91,6 +91,14 @@ export class UpdateDataService {
         return fsat;
     }
 
+    addFsatOperations(fsat: FSAT): FSAT {
+        if(!fsat.fsatOperations) {
+            fsat.fsatOperations.cost = 0.06;
+            fsat.fsatOperations.operatingHours = 8760;
+        }
+        return fsat;
+    }
+
     updateSpecificHeatRatio(fsat: FSAT): FSAT {
         if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
             fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
