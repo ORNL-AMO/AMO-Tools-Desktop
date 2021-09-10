@@ -20,7 +20,7 @@ export interface CompressedAirAssessment {
 export interface Modification {
     name: string,
     modificationId: string,
-    flowReallocation: FlowReallocation,
+    // flowReallocation: FlowReallocation,
     reduceAirLeaks: ReduceAirLeaks,
     improveEndUseEfficiency: ImproveEndUseEfficiency,
     reduceSystemAirPressure: ReduceSystemAirPressure,
@@ -30,19 +30,17 @@ export interface Modification {
     addPrimaryReceiverVolume: AddPrimaryReceiverVolume
 }
 
-export interface FlowReallocation {
-    selected: boolean
-}
+// export interface FlowReallocation {
+//     // selected: boolean
+// }
 
 export interface ReduceAirLeaks {
-    selected: boolean,
     leakFlow: number,
     leakReduction: number,
     order: number
 }
 
 export interface ImproveEndUseEfficiency {
-    selected: boolean,
     reductionType: "Fixed" | "Variable",
     airflowReduction: number,
     reductionData: Array<{
@@ -58,25 +56,21 @@ export interface ImproveEndUseEfficiency {
 }
 
 export interface ReduceSystemAirPressure {
-    selected: boolean,
     averageSystemPressureReduction: number,
     order: number
 }
 
 export interface AdjustCascadingSetPoints {
-    selected: boolean,
     order: number
 }
 
 export interface UseAutomaticSequencer {
-    selected: boolean,
     targetPressure: number,
     variance: number,
     order: number
 }
 
 export interface ReduceRuntime {
-    selected: boolean,
     runtimeData: Array<ReduceRuntimeData>,
     order: number
 }
@@ -92,7 +86,6 @@ export interface ReduceRuntimeData {
 }
 
 export interface AddPrimaryReceiverVolume {
-    selected: boolean,
     increasedVolume: number,
     order: number
 }

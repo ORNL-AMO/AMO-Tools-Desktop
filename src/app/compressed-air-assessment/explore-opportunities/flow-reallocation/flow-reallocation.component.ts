@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, FlowReallocation, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { SystemProfileService } from '../../system-profile/system-profile.service';
 
@@ -12,7 +12,7 @@ import { SystemProfileService } from '../../system-profile/system-profile.servic
 export class FlowReallocationComponent implements OnInit {
 
   selectedModificationIdSub: Subscription;
-  flowReallocation: FlowReallocation
+  // flowReallocation: FlowReallocation
   isFormChange: boolean = false;
 
   dayTypeResults: Array<{
@@ -60,19 +60,19 @@ export class FlowReallocationComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
-  save() {
-    this.isFormChange = true;
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
-    compressedAirAssessment.modifications[modificationIndex].flowReallocation = this.flowReallocation;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-  }
+  // save() {
+  //   this.isFormChange = true;
+  //   let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+  //   let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+  //   let modificationIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
+  //   compressedAirAssessment.modifications[modificationIndex].flowReallocation = this.flowReallocation;
+  //   this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  // }
 
-  toggleFlowReallocation() {
-    this.focusField('flowReallocation');
-    this.flowReallocation.selected = !this.flowReallocation.selected;
-    this.save();
-  }
+  // toggleFlowReallocation() {
+  //   this.focusField('flowReallocation');
+  //   this.flowReallocation.selected = !this.flowReallocation.selected;
+  //   this.save();
+  // }
 
 }

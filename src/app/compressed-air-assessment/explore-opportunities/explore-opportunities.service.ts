@@ -60,44 +60,37 @@ export class ExploreOpportunitiesService {
     return {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
-      flowReallocation: {
-        selected: false
-      },
+      // flowReallocation: {
+      //   selected: false
+      // },
       reduceAirLeaks: {
-        selected: false,
         leakReduction: undefined,
         leakFlow: undefined,
         order: 100
       },
       improveEndUseEfficiency: {
-        selected: false,
         reductionType: "Fixed",
         airflowReduction: undefined,
         reductionData: reductionData,
         order: 100
       },
       reduceSystemAirPressure: {
-        selected: false,
         averageSystemPressureReduction: undefined,
         order: 100
       },
       adjustCascadingSetPoints: {
-        selected: false,
         order: 100
       },
       useAutomaticSequencer: {
-        selected: false,
         targetPressure: undefined,
         variance: undefined,
         order: 100
       },
       reduceRuntime: {
-        selected: false,
         runtimeData: reduceRuntimeData,
         order: 100
       },
       addPrimaryReceiverVolume: {
-        selected: false,
         increasedVolume: 0,
         order: 100
       }
