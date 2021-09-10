@@ -139,10 +139,8 @@
         <div class="input-group">
             <input name="maxFullFlowPressure" type="number" step="any" class="form-control" id="maxFullFlowPressure"
                 formControlName="maxFullFlowPressure" (input)="save()" (focus)="focusField('maxFullFlowPressure')">
-            <span class="units input-group-addon">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
-            </span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.maxFullFlowPressure.invalid && !form.controls.maxFullFlowPressure.pristine">
