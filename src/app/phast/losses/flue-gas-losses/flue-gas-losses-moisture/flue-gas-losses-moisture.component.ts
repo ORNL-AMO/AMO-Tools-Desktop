@@ -17,8 +17,6 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   baseGasDensity: BaseGasDensity;
   @Input()
   gasDone: boolean;
-  @Output('emitSave')
-  emitSave = new EventEmitter<BaseGasDensity>();
   @Input()
   inSetup: boolean;
   @Input()
@@ -47,6 +45,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     { display: 'Other Gas', value: 'OTHER' }
   ];
 
+  moistureInCombustionAir: number;
   idString: string;
   // warnings: FanFluidWarnings;
   constructor(private compareService: CompareService,
@@ -62,7 +61,6 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
-    this.baseGasDensity = this.flueGasCompareService.baseGasDensity;
     this.init();
     this.getResults();
   }
@@ -88,6 +86,8 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   }
 
   init() {
+    this.baseGasDensity = this.flueGasCompareService.baseGasDensity;
+    this.baseGasDensity.staticPressure = 0;
     this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity, this.settings);
   }
 
@@ -108,7 +108,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
     this.flueGasCompareService.setCurrentDensity(this.baseGasDensity);
     this.updateFormValidators();
-    this.emitSave.emit(this.baseGasDensity);
+    // this.emitSave.emit(this.baseGasDensity);
   }
 
   updateFormValidators(){
@@ -138,7 +138,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     }
   }
 
-  getResults(): PsychrometricResults {
+  getResults() {
     let psychrometricResults: PsychrometricResults;
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
       psychrometricResults = this.calcPsychrometricRelativeHumidity();
@@ -174,7 +174,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     }
     this.save();
     this.flueGasCompareService.setPsychrometricResults(psychrometricResults);
-    return psychrometricResults;
+    this.moistureInCombustionAir = psychrometricResults.humidityRatio * 100;
   }
 
   calcPsychrometricWetBulb(): PsychrometricResults {
@@ -333,10 +333,10 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   
   hideMoistureModal(action: string) {
     if (action !== 'cancel') {
-    this.hideModal.emit(this.getResults().humidityRatio * 100);
+      this.hideModal.emit(this.moistureInCombustionAir);
     }
     else {
-    this.hideModal.emit(-150);
+      this.hideModal.emit(undefined);
     }
   }
 
