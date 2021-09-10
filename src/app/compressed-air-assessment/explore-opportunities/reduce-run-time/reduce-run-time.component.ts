@@ -120,7 +120,6 @@ export class ReduceRunTimeComponent implements OnInit {
         modification.addPrimaryReceiverVolume.order,
         modification.adjustCascadingSetPoints.order,
         modification.improveEndUseEfficiency.order,
-        modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
         modification.useAutomaticSequencer.order
@@ -134,7 +133,6 @@ export class ReduceRunTimeComponent implements OnInit {
     this.availableAirflow = new Array();
     this.requiredAirflow = new Array();
     if (this.selectedDayTypeId && this.compressedAirAssessment && this.adjustedProfileSummary && this.reduceRuntime.order != 100) {
-      console.log('set');
       for (let i = 0; i < 24; i++) {
         this.requiredAirflow.push(0);
         this.availableAirflow.push(0);
@@ -142,10 +140,10 @@ export class ReduceRunTimeComponent implements OnInit {
       this.adjustedProfileSummary.forEach(summary => {
         if (summary.dayTypeId == this.selectedDayTypeId) {
           for (let i = 0; i < 24; i++) {
-            let runTimeData = this.reduceRuntime.runtimeData.find(data => { return data.compressorId == summary.compressorId && data.dayTypeId == this.selectedDayTypeId });
-            if (summary.profileSummaryData[i].order != 0 && runTimeData.intervalData[i].isCompressorOn) {
+            if (summary.profileSummaryData[i].order != 0) {
               this.requiredAirflow[i] = this.requiredAirflow[i] + summary.profileSummaryData[i].airflow;
             }
+            let runTimeData = this.reduceRuntime.runtimeData.find(data => { return data.compressorId == summary.compressorId && data.dayTypeId == this.selectedDayTypeId });
             if (runTimeData.intervalData[i].isCompressorOn) {
               this.availableAirflow[i] = this.availableAirflow[i] + runTimeData.fullLoadCapacity;
             }
