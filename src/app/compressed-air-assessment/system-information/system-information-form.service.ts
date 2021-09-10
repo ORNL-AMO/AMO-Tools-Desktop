@@ -8,22 +8,32 @@ export class SystemInformationFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(obj: SystemInformation): FormGroup {
-    let sequencerValidators: Array<ValidatorFn> = [];
-    if(obj.isSequencerUsed){
-      sequencerValidators = [Validators.required]
-    }
     let form: FormGroup = this.formBuilder.group({
       systemElevation: [obj.systemElevation, [Validators.required, Validators.min(0), Validators.max(29000)]],
       totalAirStorage: [obj.totalAirStorage, [Validators.required, Validators.min(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
-      targetPressure: [obj.targetPressure, sequencerValidators],
-      variance: [obj.variance, sequencerValidators]
+      targetPressure: [obj.targetPressure],
+      variance: [obj.variance]
 
     });
+
+    form = this.setSequencerFieldValidators(form);
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
       }
+    }
+    return form;
+  }
+
+  setSequencerFieldValidators(form: FormGroup) {
+    if (form.controls.isSequencerUsed.value === true) {
+      form.controls.targetPressure.setValidators([Validators.required]);
+      form.controls.targetPressure.markAsDirty();
+      form.controls.targetPressure.updateValueAndValidity();
+      form.controls.variance.setValidators([Validators.required]);
+      form.controls.variance.markAsDirty();
+      form.controls.variance.updateValueAndValidity();
     }
     return form;
   }
