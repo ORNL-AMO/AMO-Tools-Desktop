@@ -61,14 +61,14 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       adjustedProfileSummary: [],
       profileSummaryTotals: [],
       allSavingsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // flowReallocationResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // addReceiverVolumeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // adjustCascadingSetPointsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // improveEndUseEfficiencyResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // reduceAirLeaksResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // reduceRunTimeResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // reduceSystemAirPressureResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
-      // useAutomaticSequencerResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      flowReallocationSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      addReceiverVolumeSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      adjustCascadingSetPointsSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      improveEndUseEfficiencySavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      reduceAirLeaksSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      reduceRunTimeSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      reduceSystemAirPressureSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      useAutomaticSequencerSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       dayTypeId: undefined
     }
     this.modificationResults.dayTypeModificationResults.forEach(modResult => {
@@ -83,29 +83,29 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       dayTypeModificationResult.allSavingsResults.adjustedResults.peakDemand += modResult.allSavingsResults.adjustedResults.peakDemand;
 
 
-      // dayTypeModificationResult.flowReallocationResults.savings.cost += modResult.flowReallocationResults.savings.cost;
-      // dayTypeModificationResult.flowReallocationResults.savings.power += modResult.flowReallocationResults.savings.power;
+      dayTypeModificationResult.flowReallocationSavings.savings.cost += modResult.flowReallocationSavings.savings.cost;
+      dayTypeModificationResult.flowReallocationSavings.savings.power += modResult.flowReallocationSavings.savings.power;
 
-      // dayTypeModificationResult.addReceiverVolumeResults.savings.cost += modResult.addReceiverVolumeResults.savings.cost;
-      // dayTypeModificationResult.addReceiverVolumeResults.savings.power += modResult.addReceiverVolumeResults.savings.power;
+      dayTypeModificationResult.addReceiverVolumeSavings.savings.cost += modResult.addReceiverVolumeSavings.savings.cost;
+      dayTypeModificationResult.addReceiverVolumeSavings.savings.power += modResult.addReceiverVolumeSavings.savings.power;
 
-      // dayTypeModificationResult.adjustCascadingSetPointsResults.savings.cost += modResult.adjustCascadingSetPointsResults.savings.cost;
-      // dayTypeModificationResult.adjustCascadingSetPointsResults.savings.power += modResult.adjustCascadingSetPointsResults.savings.power;
+      dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost += modResult.adjustCascadingSetPointsSavings.savings.cost;
+      dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.power += modResult.adjustCascadingSetPointsSavings.savings.power;
 
-      // dayTypeModificationResult.improveEndUseEfficiencyResults.savings.cost += modResult.improveEndUseEfficiencyResults.savings.cost;
-      // dayTypeModificationResult.improveEndUseEfficiencyResults.savings.power += modResult.improveEndUseEfficiencyResults.savings.power;
+      dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost += modResult.improveEndUseEfficiencySavings.savings.cost;
+      dayTypeModificationResult.improveEndUseEfficiencySavings.savings.power += modResult.improveEndUseEfficiencySavings.savings.power;
 
-      // dayTypeModificationResult.reduceAirLeaksResults.savings.cost += modResult.reduceAirLeaksResults.savings.cost;
-      // dayTypeModificationResult.reduceAirLeaksResults.savings.power += modResult.reduceAirLeaksResults.savings.power;
+      dayTypeModificationResult.reduceAirLeaksSavings.savings.cost += modResult.reduceAirLeaksSavings.savings.cost;
+      dayTypeModificationResult.reduceAirLeaksSavings.savings.power += modResult.reduceAirLeaksSavings.savings.power;
 
-      // dayTypeModificationResult.reduceRunTimeResults.savings.cost += modResult.reduceRunTimeResults.savings.cost;
-      // dayTypeModificationResult.reduceRunTimeResults.savings.power += modResult.reduceRunTimeResults.savings.power;
+      dayTypeModificationResult.reduceRunTimeSavings.savings.cost += modResult.reduceRunTimeSavings.savings.cost;
+      dayTypeModificationResult.reduceRunTimeSavings.savings.power += modResult.reduceRunTimeSavings.savings.power;
 
-      // dayTypeModificationResult.reduceSystemAirPressureResults.savings.cost += modResult.reduceSystemAirPressureResults.savings.cost;
-      // dayTypeModificationResult.reduceSystemAirPressureResults.savings.power += modResult.reduceSystemAirPressureResults.savings.power;
+      dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost += modResult.reduceSystemAirPressureSavings.savings.cost;
+      dayTypeModificationResult.reduceSystemAirPressureSavings.savings.power += modResult.reduceSystemAirPressureSavings.savings.power;
 
-      // dayTypeModificationResult.useAutomaticSequencerResults.savings.cost += modResult.useAutomaticSequencerResults.savings.cost;
-      // dayTypeModificationResult.useAutomaticSequencerResults.savings.power += modResult.useAutomaticSequencerResults.savings.power;
+      dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost += modResult.useAutomaticSequencerSavings.savings.cost;
+      dayTypeModificationResult.useAutomaticSequencerSavings.savings.power += modResult.useAutomaticSequencerSavings.savings.power;
 
     });
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100

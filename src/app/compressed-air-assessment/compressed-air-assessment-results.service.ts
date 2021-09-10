@@ -82,17 +82,10 @@ export class CompressedAirAssessmentResultsService {
     modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      // let addReceiverVolumeResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let adjustCascadingSetPointsResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let improveEndUseEfficiencyResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let reduceAirLeaksResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let reduceRunTimeResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let reduceSystemAirPressureResults: EemSavingsResults = this.getEmptyEemSavings();
-      // let useAutomaticSequencerResults: EemSavingsResults = this.getEmptyEemSavings();
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateDayTypeProfileSummary(compressedAirAssessment, dayType);
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems));
 
-      let adjustedData: { adjustedProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem> } = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders);
+      let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessment.systemBasics.electricityCost);
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
       modificationResults.push({
@@ -100,14 +93,14 @@ export class CompressedAirAssessmentResultsService {
         profileSummaryTotals: totals,
         dayTypeId: dayType.dayTypeId,
         allSavingsResults: allSavingsResults,
-        // flowReallocationResults: flowReallocationResults,
-        // addReceiverVolumeResults: addReceiverVolumeResults,
-        // adjustCascadingSetPointsResults: adjustCascadingSetPointsResults,
-        // improveEndUseEfficiencyResults: improveEndUseEfficiencyResults,
-        // reduceAirLeaksResults: reduceAirLeaksResults,
-        // reduceRunTimeResults: reduceRunTimeResults,
-        // reduceSystemAirPressureResults: reduceSystemAirPressureResults,
-        // useAutomaticSequencerResults: useAutomaticSequencerResults,
+        flowReallocationSavings: adjustedData.flowReallocationSavings,
+        addReceiverVolumeSavings: adjustedData.addReceiverVolumeSavings,
+        adjustCascadingSetPointsSavings: adjustedData.adjustCascadingSetPointsSavings,
+        improveEndUseEfficiencySavings: adjustedData.improveEndUseEfficiencySavings,
+        reduceAirLeaksSavings: adjustedData.reduceAirLeaksSavings,
+        reduceRunTimeSavings: adjustedData.reduceRunTimeSavings,
+        reduceSystemAirPressureSavings: adjustedData.reduceSystemAirPressureSavings,
+        useAutomaticSequencerSavings: adjustedData.useAutomaticSequencerSavings,
       });
     });
     return {
@@ -122,33 +115,72 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
-  adjustProfileSummary(dayType: CompressedAirDayType, baselineProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, modification: Modification, modificationOrders: Array<number>): { adjustedProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem> } {
+  adjustProfileSummary(dayType: CompressedAirDayType, baselineProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, modification: Modification, modificationOrders: Array<number>, electricityCost?: number): AdjustProfileResults {
+    let addReceiverVolumeSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let adjustCascadingSetPointsSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let improveEndUseEfficiencySavings: EemSavingsResults = this.getEmptyEemSavings();
+    let reduceAirLeaksSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let reduceRunTimeSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let reduceSystemAirPressureSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let useAutomaticSequencerSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let flowReallocationSavings: EemSavingsResults = this.getEmptyEemSavings();
+
     //1. start with flow allocation
     let adjustedProfileSummary: Array<ProfileSummary> = this.reallocateFlow(dayType, baselineProfileSummary, adjustedCompressors, 0);
+    if (electricityCost) {
+      flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost)
+    }
     //2. iterate modification orders
     for (let orderIndex = 1; orderIndex <= modificationOrders.length; orderIndex++) {
+      let adjustedProfileCopy: Array<ProfileSummary> = JSON.parse(JSON.stringify(adjustedProfileSummary));
       let reduceRuntime: ReduceRuntime;
-      if(orderIndex > modification.reduceRuntime.order){
+      if (orderIndex > modification.reduceRuntime.order) {
         reduceRuntime = modification.reduceRuntime;
       }
       if (modification.addPrimaryReceiverVolume.order == orderIndex) {
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, modification.addPrimaryReceiverVolume.increasedVolume, reduceRuntime);
+        if (electricityCost) {
+          addReceiverVolumeSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
+        }
       } else if (modification.adjustCascadingSetPoints.order == orderIndex) {
 
       } else if (modification.improveEndUseEfficiency.order == orderIndex) {
         adjustedProfileSummary = this.improveEndUseEfficiency(adjustedProfileSummary, dayType, modification.improveEndUseEfficiency, adjustedCompressors, reduceRuntime);
+        if (electricityCost) {
+          improveEndUseEfficiencySavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
+        }
       } else if (modification.reduceRuntime.order == orderIndex) {
         adjustedProfileSummary = this.reduceRuntime(adjustedProfileSummary, dayType, modification.reduceRuntime, adjustedCompressors);
+        if (electricityCost) {
+          reduceRunTimeSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
+        }
       } else if (modification.reduceAirLeaks.order == orderIndex) {
         adjustedProfileSummary = this.reduceAirLeaks(adjustedProfileSummary, dayType, modification.reduceAirLeaks, adjustedCompressors, reduceRuntime);
+        if (electricityCost) {
+          reduceAirLeaksSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
+        }
       } else if (modification.reduceSystemAirPressure.order == orderIndex) {
         adjustedCompressors = this.reduceSystemAirPressure(adjustedCompressors, modification.reduceSystemAirPressure);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, reduceRuntime);
+        if (electricityCost) {
+          reduceSystemAirPressureSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
+        }
       } else if (modification.useAutomaticSequencer.order == orderIndex) {
 
       }
     }
-    return { adjustedCompressors: adjustedCompressors, adjustedProfileSummary: adjustedProfileSummary };
+    return {
+      adjustedCompressors: adjustedCompressors,
+      adjustedProfileSummary: adjustedProfileSummary,
+      addReceiverVolumeSavings: addReceiverVolumeSavings,
+      adjustCascadingSetPointsSavings: adjustCascadingSetPointsSavings,
+      improveEndUseEfficiencySavings: improveEndUseEfficiencySavings,
+      reduceAirLeaksSavings: reduceAirLeaksSavings,
+      reduceRunTimeSavings: reduceRunTimeSavings,
+      reduceSystemAirPressureSavings: reduceSystemAirPressureSavings,
+      useAutomaticSequencerSavings: useAutomaticSequencerSavings,
+      flowReallocationSavings: flowReallocationSavings
+    };
   }
 
 
@@ -602,14 +634,14 @@ export interface DayTypeModificationResult {
   adjustedProfileSummary: Array<ProfileSummary>,
   profileSummaryTotals: Array<ProfileSummaryTotal>,
   allSavingsResults: EemSavingsResults,
-  // flowReallocationResults: EemSavingsResults,
-  // addReceiverVolumeResults: EemSavingsResults,
-  // adjustCascadingSetPointsResults: EemSavingsResults,
-  // improveEndUseEfficiencyResults: EemSavingsResults,
-  // reduceAirLeaksResults: EemSavingsResults,
-  // reduceRunTimeResults: EemSavingsResults,
-  // reduceSystemAirPressureResults: EemSavingsResults,
-  // useAutomaticSequencerResults: EemSavingsResults,
+  flowReallocationSavings: EemSavingsResults,
+  addReceiverVolumeSavings: EemSavingsResults,
+  adjustCascadingSetPointsSavings: EemSavingsResults,
+  improveEndUseEfficiencySavings: EemSavingsResults,
+  reduceAirLeaksSavings: EemSavingsResults,
+  reduceRunTimeSavings: EemSavingsResults,
+  reduceSystemAirPressureSavings: EemSavingsResults,
+  useAutomaticSequencerSavings: EemSavingsResults,
   dayTypeId: string
 
 }
@@ -640,4 +672,18 @@ export interface BaselineResult {
   totalOperatingHours: number,
   loadFactorPercent: number
 
+}
+
+
+export interface AdjustProfileResults {
+  adjustedProfileSummary: Array<ProfileSummary>,
+  adjustedCompressors: Array<CompressorInventoryItem>,
+  flowReallocationSavings: EemSavingsResults,
+  addReceiverVolumeSavings: EemSavingsResults,
+  adjustCascadingSetPointsSavings: EemSavingsResults,
+  improveEndUseEfficiencySavings: EemSavingsResults,
+  reduceAirLeaksSavings: EemSavingsResults,
+  reduceRunTimeSavings: EemSavingsResults,
+  reduceSystemAirPressureSavings: EemSavingsResults,
+  useAutomaticSequencerSavings: EemSavingsResults,
 }

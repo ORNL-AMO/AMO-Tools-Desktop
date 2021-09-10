@@ -34,7 +34,7 @@
             <tr
                 *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayTypeId; let rDataIndex = index;">
                 <td class="bold text-center">
-                    {{rData.compressorId | compressorName:inventoryItems}} {{rData.compressorId}}
+                    {{rData.compressorId | compressorName:inventoryItems}}
                 </td>
                 <td class="text-center">
                     {{rData.fullLoadCapacity}} acfm
