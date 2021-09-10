@@ -23,7 +23,7 @@
                     Compressor
                 </th>
                 <th>
-                    Aifrlow Capacity
+                    Airflow Capacity
                 </th>
                 <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
                     {{data.timeInterval}}
@@ -34,7 +34,7 @@
             <tr
                 *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayTypeId; let rDataIndex = index;">
                 <td class="bold text-center">
-                    {{rData.compressorId | compressorName:inventoryItems}}
+                    {{rData.compressorId | compressorName:inventoryItems}} {{rData.compressorId}}
                 </td>
                 <td class="text-center">
                     {{rData.fullLoadCapacity}} acfm
