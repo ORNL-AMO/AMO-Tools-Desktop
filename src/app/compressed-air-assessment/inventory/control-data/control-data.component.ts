@@ -63,7 +63,7 @@ export class ControlDataComponent implements OnInit {
     });
     
     if (!controlOptionSelected) {
-      // Has controlType from previously selected compressor, set default for new selectedCompressor
+      // Has controlType from previously selected compressorType, set default for new compressorType
       this.form.controls.controlType.patchValue(this.controlTypeOptions[0].value);
       if (this.compressorType == 6) {
         // changed from non-centrifugal to centrifugal,save with patched valid controlType
