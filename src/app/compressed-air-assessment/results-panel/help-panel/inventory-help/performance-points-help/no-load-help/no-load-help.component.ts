@@ -10,6 +10,9 @@ import { InventoryService } from '../../../../../inventory/inventory.service';
 })
 export class NoLoadHelpComponent implements OnInit {
 
+  helpTextField: string;
+  helpTextFieldSub: Subscription;
+
   focusedField: string;
   focusedFieldSub: Subscription;
 
@@ -23,6 +26,10 @@ export class NoLoadHelpComponent implements OnInit {
       this.focusedField = val;
     });
 
+    this.helpTextFieldSub = this.compressedAirService.helpTextField.subscribe(val => {
+      this.helpTextField = val;
+    });
+
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.setNoLoadLabel(val.compressorControls.controlType);
@@ -33,6 +40,7 @@ export class NoLoadHelpComponent implements OnInit {
 
   ngOnDestroy(){
     this.focusedFieldSub.unsubscribe();
+    this.helpTextFieldSub.unsubscribe();
     this.selectedCompressorSub.unsubscribe();
   }
 

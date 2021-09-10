@@ -48,9 +48,15 @@ export class AddReceiverVolumeComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('addPrimaryReceiverVolume');
+  }
+
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
+  
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.addPrimaryReceiverVolume = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume));

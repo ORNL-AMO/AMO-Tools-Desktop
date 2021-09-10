@@ -1,0 +1,34 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Reduce Air Leaks Help
+        <br>
+        <small class="text-muted">Models the impacts of reducing air leaks
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'leakFlow'">
+        <h6>
+            Leak Flow
+            <br>
+            <small class="text-muted">
+                Total estimated leak load of the system, in acfm [N/m3 in metric]. You can use the "Air Leak Survey" in
+                the calculators tab to get a better estimate.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'leakReduction'">
+        <h6>
+            Leak Reduction
+            <br>
+            <small class="text-muted">
+                Percentage of the leak flow that will be fixed 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+</div>

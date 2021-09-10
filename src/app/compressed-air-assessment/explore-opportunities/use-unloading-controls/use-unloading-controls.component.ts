@@ -54,6 +54,11 @@ export class UseUnloadingControlsComponent implements OnInit {
     this.selectedModificationIdSub.unsubscribe();
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('useUnloadingControls');
+  }
+
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }

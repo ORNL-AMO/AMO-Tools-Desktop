@@ -48,6 +48,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('improveEndUseEfficiency');
+  }
+
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }

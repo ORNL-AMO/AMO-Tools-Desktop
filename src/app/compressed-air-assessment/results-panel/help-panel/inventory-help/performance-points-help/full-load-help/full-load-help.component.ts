@@ -10,6 +10,8 @@ import { InventoryService } from '../../../../../inventory/inventory.service';
 })
 export class FullLoadHelpComponent implements OnInit {
 
+  helpTextField: string;
+  helpTextFieldSub: Subscription;
   focusedField: string;
   focusedFieldSub: Subscription;
   selectedCompressorSub: Subscription;
@@ -19,6 +21,10 @@ export class FullLoadHelpComponent implements OnInit {
   ngOnInit(): void {
     this.focusedFieldSub = this.compressedAirService.focusedField.subscribe(val => {
       this.focusedField = val;
+    });
+
+    this.helpTextFieldSub = this.compressedAirService.helpTextField.subscribe(val => {
+      this.helpTextField = val;
     });
 
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
@@ -31,6 +37,7 @@ export class FullLoadHelpComponent implements OnInit {
 
   ngOnDestroy(){
     this.focusedFieldSub.unsubscribe();
+    this.helpTextFieldSub.unsubscribe();
     this.selectedCompressorSub.unsubscribe();
   }
 

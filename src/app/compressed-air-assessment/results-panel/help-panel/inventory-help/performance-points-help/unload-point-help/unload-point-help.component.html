@@ -1,5 +1,5 @@
 <!-- Unload Point Help  -->
-<div class="my-2" *ngIf="focusedField == 'unloadPointDischargePressure'">
+<div class="my-2" *ngIf="focusedField == 'unloadPointDischargePressure' || helpTextField == 'unloadPointDischargePressure'">
     <h6>
         Discharge Pressure
         <br>
@@ -11,7 +11,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'unloadPointAirflow'">
+<div class="my-2" *ngIf="focusedField == 'unloadPointAirflow' || helpTextField == 'unloadPointAirflow'">
     <h6>
         Air Flow
         <br>
@@ -22,7 +22,7 @@
     </h6>
 </div>
 
-<div class="my-2" *ngIf="focusedField == 'unloadPointPower'">
+<div class="my-2" *ngIf="focusedField == 'unloadPointPower' || helpTextField == 'unloadPointPower'">
     <h6>
         Power
         <br>

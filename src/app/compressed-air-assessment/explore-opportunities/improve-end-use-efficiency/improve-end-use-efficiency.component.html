@@ -11,17 +11,17 @@
 <form *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
     <div class="form-group">
         <label for="reductionType">Airflow Reduction Type</label>
-        <div class="input-group">
+        <div class="input-group" >
             <div class="d-flex flex-column">
                 <div class="d-flex">
                     <label class="w-100" for="Fixed">
-                        <input type="radio" name="reductionType" id="Fixed"
+                        <input type="radio" name="reductionType" id="Fixed" (focus)="helpTextField('airflowReductionType')"
                             [(ngModel)]="improveEndUseEfficiency.reductionType" value="Fixed" (change)="save(false)"
                             class="mr-2">Fixed</label>
                 </div>
                 <div class="d-flex">
                     <label class="w-100" for="Variable">
-                        <input type="radio" name="reductionType" id="Variable"
+                        <input type="radio" name="reductionType" id="Variable" (focus)="helpTextField('airflowReductionType')" 
                             [(ngModel)]="improveEndUseEfficiency.reductionType" value="Variable" (change)="save(false)"
                             class="mr-2">Variable</label>
                 </div>
@@ -32,6 +32,7 @@
         <label for="airflowReduction">Aiflow Reduction</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="improveEndUseEfficiency.airflowReduction"
+                (focus)="helpTextField('airflowReduction')"
                 name="airflowReduction" id="airflowReduction" (input)="save(false)">
             <span class="input-group-addon units">acfm</span>
         </div>
@@ -59,7 +60,7 @@
                             id="{{'applyReduction_'+reductionIndex+dataIndex}}" (change)="save(false)">
                         <input *ngIf="improveEndUseEfficiency.reductionType == 'Variable'"
                             class="form-control w-100 min-width" type="number" [(ngModel)]="d.reductionAmount"
-                            name="{{'reductionAmount_'+reductionIndex+dataIndex}}"
+                            name="{{'reductionAmount_'+reductionIndex+dataIndex}}" (focus)="helpTextField('airflowReductionVariable')"
                             id="{{'reductionAmount_'+reductionIndex+dataIndex}}" (input)="save(false)">
                     </td>
                 </tr>

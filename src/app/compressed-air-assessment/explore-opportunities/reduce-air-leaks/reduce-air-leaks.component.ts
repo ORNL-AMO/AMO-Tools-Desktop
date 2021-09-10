@@ -49,6 +49,11 @@ export class ReduceAirLeaksComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('reduceAirLeaks');
+  }
+
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }

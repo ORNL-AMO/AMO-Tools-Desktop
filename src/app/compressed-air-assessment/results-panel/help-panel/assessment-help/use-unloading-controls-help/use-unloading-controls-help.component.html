@@ -1,0 +1,69 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Use Unloading Controls Help
+        <br>
+        <small class="text-muted">Models the impact of changing your compressor control scheme or type, allowing your
+            compressor to unload or shutdown to save energy at low demand.
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'setSelectedCompressor'">
+        <h6>
+            Select Compressor
+            <br>
+            <small class="text-muted">
+                select the compressor who's unloading controls you which to change. Changing this field does not erase
+                the data you entered for another compressor. The asterisk indicates a compressor that's control type was
+                changed. Restore Baseline resets the data for the compress you have selected back to the baseline data.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'unloadPointCapacity'">
+        <h6>
+            Unload Point, %C
+            <br>
+            <small class="text-muted">
+                The operating pressure point where a compressor unloads. For centrifugal compresors, this is the surge
+                point. This value can range from 0 to 100 percent of capacity
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'automaticShutdown'">
+        <h6>
+            Automatic shutdown timer
+            <br>
+            <small class="text-muted">
+                A device that turns off a compressor after it has operated at no load for a specified length of time.
+                This is different than on-off control, which turns off an air compressor when the full load discharge
+                pressure is reached.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'controlType'">
+        <h6>
+            Proposed Control Type
+            <br>
+            <small class="text-muted">
+                A general description of the air compressor’s unloading controls. Each compressor type can only have
+                specific control types.
+                Control Types options are based on your Baseline control type. The asterisk
+                indicates the Baseline control type.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <app-full-load-help></app-full-load-help>
+    <app-max-full-flow-help></app-max-full-flow-help>
+    <app-no-load-help></app-no-load-help>
+    <app-unload-point-help></app-unload-point-help>
+    <app-blowoff-help></app-blowoff-help>
+
+</div>

@@ -10,7 +10,7 @@
 
 <div *ngIf="reduceRuntime.order != 100" class="w-100 p-2 justify-content-center">
     <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayTypeId"
-        (change)="setAirflowData()">
+        (change)="setAirflowData()" (focus)="helpTextField('dayType')">
         <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
     </select>
 </div>
@@ -42,6 +42,7 @@
                 <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                     <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                         name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
+                        (focus)="helpTextField('checkbox')"
                         (change)="save(false)">
                 </td>
             </tr>

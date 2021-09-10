@@ -53,6 +53,11 @@ export class AdjustCompressorComponent implements OnInit {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('useUnloadingControls');
+  }
+
   save() {
     //update forms
     this.selectedCompressor.compressorControls.controlType = this.adjustedCompressor.controlType;

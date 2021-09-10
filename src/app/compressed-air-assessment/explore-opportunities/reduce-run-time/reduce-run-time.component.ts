@@ -58,6 +58,11 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
   }
 
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('reduceRuntime');
+  }
+
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
