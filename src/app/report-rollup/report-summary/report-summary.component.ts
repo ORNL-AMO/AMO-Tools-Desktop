@@ -71,6 +71,7 @@ export class ReportSummaryComponent implements OnInit {
 
   ngOnDestroy() {
     this.settingsSub.unsubscribe();
+    this.psatAssessmentsSub.unsubscribe();
     this.phastAssessmentsSub.unsubscribe();
     this.fsatAssessmentsSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();

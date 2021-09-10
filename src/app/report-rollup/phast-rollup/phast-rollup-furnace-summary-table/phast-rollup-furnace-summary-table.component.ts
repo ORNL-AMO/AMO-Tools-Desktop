@@ -4,7 +4,6 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
-import { $ } from 'protractor';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',
