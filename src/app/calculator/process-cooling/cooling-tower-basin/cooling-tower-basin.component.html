@@ -57,17 +57,18 @@
 				</a>
 			</div>
 		</div>
-	<div class="mb-3 d-block" *ngIf="hasWeatherBinsData && tabSelect == 'results'">
-    	<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
-      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="toggleWeatherResults(true)"
-        	[ngClass]="{'active': isShowingWeatherResults == true}">See weather binned results</button>
-      		<button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="toggleWeatherResults(false)"
-        	[ngClass]="{'active': isShowingWeatherResults == false}">See calculated results</button>
-    	</div>
-	  </div>
+	
 
 			<div *ngIf="!displayWeatherTab" class="d-flex mr-2 ml-2">
 			<div class="d-flex flex-column w-100">
+				<div class="mb-3 d-block" *ngIf="hasWeatherBinsData && tabSelect == 'results'">
+					<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
+						  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(true)"
+						[ngClass]="{'active': isShowingWeatherResults == true}">See weather binned results</button>
+						  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(false)"
+						[ngClass]="{'active': isShowingWeatherResults == false}">See calculated results</button>
+					</div>
+				  </div>
 				<app-cooling-tower-basin-results class="w-100 p-2" *ngIf="tabSelect == 'results'" [settings]="settings"
 				[modificationExists]="modificationExists"></app-cooling-tower-basin-results>
 			</div>

@@ -119,27 +119,12 @@ div.active{
 .toggle-btn{
     font-size: 12px;
 }
-/* 
+
+
 .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #145A32;
+    background-color: #0275d8;
     transition: all .5s ease-in-out;
 }
-
-.btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #BF3D00;
-    transition: all .5s ease-in-out;
-} */
-
-.btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #ADC8E2;
-    transition: all .5s ease-in-out;
-}
-
-/* .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #FFE400;
-    transition: all .5s ease-in-out;
-    color: black;
-} */
 
 
 .btn-col{
