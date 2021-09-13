@@ -38,9 +38,15 @@
     </div>
 </form>
 
-<div *ngIf="useAutomaticSequencer.order != 100" class="mb-2 pt-1 compressor-profile">
+<div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1 compressor-profile">
     <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
         [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
         [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)">
     </app-adjust-sequencer-profile>
+
+    <div class="d-flex justify-content-end">
+        <div class="pl-2 pr-2 border-right border-left">
+            <a class="click-link small" (click)="resetOrdering()">Reset to Baseline</a>
+        </div>
+    </div>
 </div>

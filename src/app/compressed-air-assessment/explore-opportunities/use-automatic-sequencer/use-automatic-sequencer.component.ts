@@ -99,4 +99,9 @@ export class UseAutomaticSequencerComponent implements OnInit {
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
+
+  resetOrdering() {
+    this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
+    this.save(false);
+  }
 }
