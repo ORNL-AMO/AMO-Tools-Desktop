@@ -22,6 +22,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   dayTypeOptions: Array<CompressedAirDayType>;
   selectedDayTypeId: string;
+  adjustedCompressors: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -65,6 +66,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.selectedDayTypeId && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
         this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
       }
+      this.setAdjustedCompressors();
     }
   }
 
@@ -97,11 +99,17 @@ export class UseAutomaticSequencerComponent implements OnInit {
       let newOrder: number = this.useAutomaticSequencer.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
     }
+    this.setAdjustedCompressors
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
   resetOrdering() {
     this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
     this.save(false);
+  }
+
+  setAdjustedCompressors() {
+    this.adjustedCompressors = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(this.useAutomaticSequencer, JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems)));
+    console.log(this.adjustedCompressors);
   }
 }

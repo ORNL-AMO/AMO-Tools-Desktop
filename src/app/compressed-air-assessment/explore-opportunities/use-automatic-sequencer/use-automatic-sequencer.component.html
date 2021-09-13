@@ -49,4 +49,94 @@
             <a class="click-link small" (click)="resetOrdering()">Reset to Baseline</a>
         </div>
     </div>
+    <div class="pt-2" *ngFor="let compressor of adjustedCompressors">
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                   <td>
+                       {{compressor.name}}
+                   </td> 
+                   <td>
+                       Pressure
+                   </td>
+                   <td>
+                       Airflow
+                   </td>
+                   <td>
+                       Power
+                   </td>
+                </tr>
+                <tr>
+                    <td>
+                        Full Load
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Max Full Flow
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Unload Point
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        No Load
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Blowoff
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.power}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

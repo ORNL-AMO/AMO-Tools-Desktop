@@ -545,7 +545,46 @@ export class CompressedAirAssessmentResultsService {
   }
   //TODO: useAutomaticSequencer
   useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, inventoryItems: Array<CompressorInventoryItem>): Array<CompressorInventoryItem> {
+    inventoryItems.forEach(item => {
+      item.performancePoints.fullLoad.isDefaultPressure = false;
+      item.performancePoints.fullLoad.isDefaultAirFlow = true;
+      item.performancePoints.fullLoad.isDefaultPower = true;
+      item.performancePoints.maxFullFlow.isDefaultAirFlow = true;
+      item.performancePoints.maxFullFlow.isDefaultPressure = true;
+      item.performancePoints.maxFullFlow.isDefaultPower = true;
+      item.performancePoints.noLoad.isDefaultAirFlow = true;
+      item.performancePoints.noLoad.isDefaultPressure = true;
+      item.performancePoints.noLoad.isDefaultPower = true;
+      item.performancePoints.unloadPoint.isDefaultAirFlow = true;
+      item.performancePoints.unloadPoint.isDefaultPressure = true;
+      item.performancePoints.unloadPoint.isDefaultPower = true;
+      item.performancePoints.blowoff.isDefaultAirFlow = true;
+      item.performancePoints.blowoff.isDefaultPressure = true;
+      item.performancePoints.blowoff.isDefaultPower = true;
+      
+      item.performancePoints.fullLoad.dischargePressure = useAutomaticSequencer.targetPressure - useAutomaticSequencer.variance;
 
+      let controlType: number = item.compressorControls.controlType;
+      if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 6) {
+        item.performancePoints.unloadPoint.dischargePressure = useAutomaticSequencer.targetPressure + useAutomaticSequencer.variance;
+        item.performancePoints.unloadPoint.isDefaultPressure = false;
+        if (item.performancePoints.maxFullFlow.dischargePressure > item.performancePoints.fullLoad.dischargePressure) {
+          item.performancePoints.maxFullFlow.dischargePressure = item.performancePoints.fullLoad.dischargePressure;
+          item.performancePoints.maxFullFlow.isDefaultPressure = false;
+        }
+      } else if (controlType == 1) {
+        item.performancePoints.noLoad.dischargePressure = useAutomaticSequencer.targetPressure + useAutomaticSequencer.variance;
+        item.performancePoints.noLoad.isDefaultPressure = false;
+      } else if (controlType == 5 || controlType == 4) {
+        item.performancePoints.maxFullFlow.dischargePressure = useAutomaticSequencer.targetPressure + useAutomaticSequencer.variance;
+        item.performancePoints.maxFullFlow.isDefaultPressure = false;
+      } else if (controlType == 7 || controlType == 9) {
+        item.performancePoints.blowoff.dischargePressure = useAutomaticSequencer.targetPressure + useAutomaticSequencer.variance;
+        item.performancePoints.blowoff.isDefaultPressure = false;
+      }
+      item.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(item);
+
+    })
     return inventoryItems;
   }
 
