@@ -48,7 +48,7 @@ export class WeatherBinsBarChartComponent implements OnInit {
           size: 12,
         },
         yaxis: {
-          hoverformat: '.3r',
+          hoverformat: '.4r',
           title: {
             text: 'Number of Hours',
             font: {
