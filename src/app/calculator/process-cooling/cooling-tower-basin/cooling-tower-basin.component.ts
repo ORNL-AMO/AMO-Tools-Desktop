@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -31,7 +31,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   isShowingWeatherResults : boolean = false;
   
   constructor(private coolingTowerBasinService: CoolingTowerBasinService,
-              private settingsDbService: SettingsDbService) { }
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -72,6 +72,7 @@ export class CoolingTowerBasinComponent implements OnInit {
 
   setWeatherCalculatorActive(displayWeatherTab: boolean) {
     this.displayWeatherTab = displayWeatherTab;
+    this.cd.detectChanges();
   }
 
   calculate() {
