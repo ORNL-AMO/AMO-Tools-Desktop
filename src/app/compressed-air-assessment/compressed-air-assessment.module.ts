@@ -115,6 +115,7 @@ import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessmen
 import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -193,7 +194,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     UseAutomaticSequencerHelpComponent,
     ReduceRunTimeHelpComponent,
     AddReceiverVolumeHelpComponent,
-    SystemProfileAnnualSummaryComponent
+    SystemProfileAnnualSummaryComponent,
+    AdjustSequencerProfileComponent
   ],
   imports: [
     CommonModule,

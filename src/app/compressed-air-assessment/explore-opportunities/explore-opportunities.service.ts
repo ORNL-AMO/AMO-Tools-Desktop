@@ -84,7 +84,8 @@ export class ExploreOpportunitiesService {
       useAutomaticSequencer: {
         targetPressure: undefined,
         variance: undefined,
-        order: 100
+        order: 100,
+        profileSummary: JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary))
       },
       reduceRuntime: {
         runtimeData: reduceRuntimeData,

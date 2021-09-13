@@ -67,7 +67,8 @@ export interface AdjustCascadingSetPoints {
 export interface UseAutomaticSequencer {
     targetPressure: number,
     variance: number,
-    order: number
+    order: number,
+    profileSummary: Array<ProfileSummary>
 }
 
 export interface ReduceRuntime {
