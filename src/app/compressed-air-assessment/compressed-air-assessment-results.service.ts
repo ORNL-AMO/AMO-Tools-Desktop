@@ -561,7 +561,7 @@ export class CompressedAirAssessmentResultsService {
       item.performancePoints.blowoff.isDefaultAirFlow = true;
       item.performancePoints.blowoff.isDefaultPressure = true;
       item.performancePoints.blowoff.isDefaultPower = true;
-      
+
       item.performancePoints.fullLoad.dischargePressure = useAutomaticSequencer.targetPressure - useAutomaticSequencer.variance;
 
       let controlType: number = item.compressorControls.controlType;

@@ -99,7 +99,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       let newOrder: number = this.useAutomaticSequencer.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
     }
-    this.setAdjustedCompressors
+    this.setAdjustedCompressors();
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -110,6 +110,5 @@ export class UseAutomaticSequencerComponent implements OnInit {
 
   setAdjustedCompressors() {
     this.adjustedCompressors = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(this.useAutomaticSequencer, JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems)));
-    console.log(this.adjustedCompressors);
   }
 }

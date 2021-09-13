@@ -25,9 +25,9 @@
                 <th>
                     <!-- Compressor Name -->
                 </th>
-                <th class="text-center">
+                <!-- <th class="text-center">
                     FLP
-                </th>
+                </th> -->
                 <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval}}
                 </th>
@@ -38,9 +38,9 @@
                 <td class="bold text-center">
                     {{summary.compressorId|compressorName:inventoryItems}}
                 </td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                     {{summary.fullLoadPressure}}
-                </td>
+                </td> -->
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
                     <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
