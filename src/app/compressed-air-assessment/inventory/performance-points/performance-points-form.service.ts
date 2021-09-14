@@ -97,7 +97,7 @@ export class PerformancePointsFormService {
           }
           break;
         case 'noLoad':
-          if (compressor.compressorControls.controlType == 1) {
+          if (compressor.compressorControls.controlType == 1 || compressor.compressorControls.controlType == 4) {
             powerValidators.push(Validators.min(0), LessThanValidator.lessThan(compressor.performancePoints.fullLoad.power));
             validationMessages.noLoad.lessThan = `Value must be less than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
           } else if (compressor.compressorControls.controlType == 5) {

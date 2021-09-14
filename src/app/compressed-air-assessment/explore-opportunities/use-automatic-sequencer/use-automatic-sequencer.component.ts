@@ -27,6 +27,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   availableAirflow: Array<number>;
   hasError: boolean;
   adjustedProfileSummary: Array<ProfileSummary>;
+  automaticSequencerProfileSummary: Array<ProfileSummary>;
+  profilePower: Array<number>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -114,7 +116,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   resetOrdering() {
     this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
     this.useAutomaticSequencer.profileSummary.forEach(summary => {
-      let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => {return item.itemId == summary.compressorId});
+      let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
       summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
     });
     this.save(false);
@@ -141,16 +143,20 @@ export class UseAutomaticSequencerComponent implements OnInit {
       ];
       modificationOrders = modificationOrders.filter(order => { return order != 100 && order <= this.useAutomaticSequencer.order });
       this.adjustedProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
+      modificationOrders.push(this.useAutomaticSequencer.order);
+      this.automaticSequencerProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
     }
   }
 
   setAirflowData() {
     this.availableAirflow = new Array();
     this.requiredAirflow = new Array();
+    this.profilePower = new Array();
     if (this.selectedDayTypeId && this.compressedAirAssessment && this.adjustedProfileSummary && this.useAutomaticSequencer.order != 100) {
       for (let i = 0; i < 24; i++) {
         this.requiredAirflow.push(0);
         this.availableAirflow.push(0);
+        this.profilePower.push(0);
       }
       this.adjustedProfileSummary.forEach(summary => {
         if (summary.dayTypeId == this.selectedDayTypeId) {
@@ -158,11 +164,14 @@ export class UseAutomaticSequencerComponent implements OnInit {
             if (summary.profileSummaryData[i].order != 0) {
               this.requiredAirflow[i] = this.requiredAirflow[i] + summary.profileSummaryData[i].airflow;
             }
-            let profileSummary: ProfileSummary = this.useAutomaticSequencer.profileSummary.find(sequencerSummary => {return summary.compressorId == sequencerSummary.compressorId && summary.dayTypeId == sequencerSummary.dayTypeId});
-            let intervalItem: ProfileSummaryData = profileSummary.profileSummaryData.find(data => {return data.timeInterval == i});
+            let profileSummary: ProfileSummary = this.useAutomaticSequencer.profileSummary.find(sequencerSummary => { return summary.compressorId == sequencerSummary.compressorId && summary.dayTypeId == sequencerSummary.dayTypeId });
+            let intervalItem: ProfileSummaryData = profileSummary.profileSummaryData.find(data => { return data.timeInterval == i });
             if (intervalItem.order != 0) {
               this.availableAirflow[i] = this.availableAirflow[i] + this.getFullLoadCapacity(profileSummary.compressorId);
             }
+            let powerProfile: ProfileSummary = this.automaticSequencerProfileSummary.find(profileSummary => { return summary.compressorId == profileSummary.compressorId && summary.dayTypeId == profileSummary.dayTypeId });
+            let powerProfileData: ProfileSummaryData = powerProfile.profileSummaryData.find(data => { return data.timeInterval == i });
+            this.profilePower[i] = this.profilePower[i] + powerProfileData.power;
           }
         }
       });
@@ -175,7 +184,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
     }
   }
 
-  
+
   getFullLoadCapacity(compressorId: string): number {
     let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
     return compressor.performancePoints.fullLoad.airflow;

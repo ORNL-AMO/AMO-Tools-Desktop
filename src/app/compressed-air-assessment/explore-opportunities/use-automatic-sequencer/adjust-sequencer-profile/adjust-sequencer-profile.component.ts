@@ -23,6 +23,8 @@ export class AdjustSequencerProfileComponent implements OnInit {
   availableAirflow: Array<number>;
   @Input()
   hasError: boolean;
+  @Input()
+  profilePower: Array<number>;
 
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;

@@ -42,7 +42,8 @@
     <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
         [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
         [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors"
-        [requiredAirflow]="requiredAirflow" [availableAirflow]="availableAirflow" [hasError]="hasError">
+        [requiredAirflow]="requiredAirflow" [availableAirflow]="availableAirflow" [hasError]="hasError"
+        [profilePower]="profilePower">
     </app-adjust-sequencer-profile>
     <div class="d-flex justify-content-end">
         <div class="pl-2 pr-2 border-right border-left">

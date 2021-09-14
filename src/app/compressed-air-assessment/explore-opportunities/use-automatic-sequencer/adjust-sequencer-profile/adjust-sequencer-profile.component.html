@@ -70,7 +70,7 @@
         <tfoot>
             <tr>
                 <td>
-                    Available Airflow
+                    Available Airflow, acfm
                 </td>
                 <td>
 
@@ -83,7 +83,7 @@
             </tr>
             <tr>
                 <td>
-                    Required Airflow
+                    Required Airflow, acfm
                 </td>
                 <td>
 
@@ -91,6 +91,17 @@
                 <td></td>
                 <td *ngFor="let airflow of requiredAirflow">
                     {{airflow| number:'1.0-0'}}
+                </td>
+            </tr> <tr>
+                <td>
+                    Power, kW
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let power of profilePower">
+                    {{power| number:'1.0-1'}}
                 </td>
             </tr>
         </tfoot>
