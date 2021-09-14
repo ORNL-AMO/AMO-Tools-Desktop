@@ -50,3 +50,11 @@ td, th{
       width: auto;
       letter-spacing: inherit;
   }
+  .cell-error{
+	  background-color: #F5B7B1;
+  }
+
+  thead tr, tfoot tr{
+	  /* background-color: lightgray; */
+	  font-weight: bold;
+  }

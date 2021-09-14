@@ -54,8 +54,14 @@ export class ExploreOpportunitiesService {
           dayTypeId: dayType.dayTypeId
         })
       });
-
     });
+
+    let sequencerProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary));
+    sequencerProfileSummary.forEach(summary => {
+      let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => {return item.itemId == summary.compressorId});
+      summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
+    });
+
 
     return {
       name: 'Modification',
@@ -85,7 +91,7 @@ export class ExploreOpportunitiesService {
         targetPressure: undefined,
         variance: undefined,
         order: 100,
-        profileSummary: JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary))
+        profileSummary: sequencerProfileSummary
       },
       reduceRuntime: {
         runtimeData: reduceRuntimeData,

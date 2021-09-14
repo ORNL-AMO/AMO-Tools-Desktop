@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
   selector: 'app-adjust-sequencer-profile',
@@ -19,6 +17,12 @@ export class AdjustSequencerProfileComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   adjustedCompressors: Array<CompressorInventoryItem>;
+  @Input()
+  requiredAirflow: Array<number>;
+  @Input()
+  availableAirflow: Array<number>;
+  @Input()
+  hasError: boolean;
 
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;
@@ -28,10 +32,6 @@ export class AdjustSequencerProfileComponent implements OnInit {
   ngOnInit(): void {
     this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup);
     this.setOrderingOptions(this.compressedAirAssessment.compressorInventoryItems);
-  }
-
-  ngOnDestroy() {
-
   }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {

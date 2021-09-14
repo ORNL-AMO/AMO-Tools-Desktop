@@ -66,5 +66,36 @@
                 </td>
             </tr>
         </tbody>
+        
+        <tfoot>
+            <tr>
+                <td>
+                    Available Airflow
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let airflow of availableAirflow; let index = index"
+                    [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
+                    {{airflow | number:'1.0-0'}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Required Airflow
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let airflow of requiredAirflow">
+                    {{airflow| number:'1.0-0'}}
+                </td>
+            </tr>
+        </tfoot>
     </table>
+</div>
+<div *ngIf="hasError" class="alert alert-danger p-2 text-center">
+    One of more hours have less available airflow then is required.
 </div>

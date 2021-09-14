@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
@@ -23,6 +23,10 @@ export class UseAutomaticSequencerComponent implements OnInit {
   dayTypeOptions: Array<CompressedAirDayType>;
   selectedDayTypeId: string;
   adjustedCompressors: Array<CompressorInventoryItem>;
+  requiredAirflow: Array<number>;
+  availableAirflow: Array<number>;
+  hasError: boolean;
+  adjustedProfileSummary: Array<ProfileSummary>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -67,6 +71,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
         this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
       }
       this.setAdjustedCompressors();
+      this.setAdjustedSummary();
+      this.setAirflowData();
     }
   }
 
@@ -100,15 +106,78 @@ export class UseAutomaticSequencerComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
     }
     this.setAdjustedCompressors();
+    this.setAdjustedSummary();
+    this.setAirflowData();
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
   resetOrdering() {
     this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
+    this.useAutomaticSequencer.profileSummary.forEach(summary => {
+      let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => {return item.itemId == summary.compressorId});
+      summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
+    });
     this.save(false);
   }
 
   setAdjustedCompressors() {
     this.adjustedCompressors = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(this.useAutomaticSequencer, JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems)), this.useAutomaticSequencer.profileSummary, this.selectedDayTypeId);
+  }
+
+  setAdjustedSummary() {
+    if (this.selectedDayTypeId && this.compressedAirAssessment) {
+      let dayType: CompressedAirDayType = this.dayTypeOptions.find(dayTypeOption => { return dayTypeOption.dayTypeId == this.selectedDayTypeId });
+      let baselineProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, dayType);
+      let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems));
+      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+
+      let modificationOrders: Array<number> = [
+        modification.addPrimaryReceiverVolume.order,
+        modification.adjustCascadingSetPoints.order,
+        modification.improveEndUseEfficiency.order,
+        modification.reduceAirLeaks.order,
+        modification.reduceSystemAirPressure.order,
+        modification.reduceRuntime.order
+      ];
+      modificationOrders = modificationOrders.filter(order => { return order != 100 && order <= this.useAutomaticSequencer.order });
+      this.adjustedProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
+    }
+  }
+
+  setAirflowData() {
+    this.availableAirflow = new Array();
+    this.requiredAirflow = new Array();
+    if (this.selectedDayTypeId && this.compressedAirAssessment && this.adjustedProfileSummary && this.useAutomaticSequencer.order != 100) {
+      for (let i = 0; i < 24; i++) {
+        this.requiredAirflow.push(0);
+        this.availableAirflow.push(0);
+      }
+      this.adjustedProfileSummary.forEach(summary => {
+        if (summary.dayTypeId == this.selectedDayTypeId) {
+          for (let i = 0; i < 24; i++) {
+            if (summary.profileSummaryData[i].order != 0) {
+              this.requiredAirflow[i] = this.requiredAirflow[i] + summary.profileSummaryData[i].airflow;
+            }
+            let profileSummary: ProfileSummary = this.useAutomaticSequencer.profileSummary.find(sequencerSummary => {return summary.compressorId == sequencerSummary.compressorId && summary.dayTypeId == sequencerSummary.dayTypeId});
+            let intervalItem: ProfileSummaryData = profileSummary.profileSummaryData.find(data => {return data.timeInterval == i});
+            if (intervalItem.order != 0) {
+              this.availableAirflow[i] = this.availableAirflow[i] + this.getFullLoadCapacity(profileSummary.compressorId);
+            }
+          }
+        }
+      });
+      this.hasError = false;
+      for (let i = 0; i < this.requiredAirflow.length; i++) {
+        if (this.availableAirflow[i] < this.requiredAirflow[i]) {
+          this.hasError = true;
+        }
+      }
+    }
+  }
+
+  
+  getFullLoadCapacity(compressorId: string): number {
+    let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
+    return compressor.performancePoints.fullLoad.airflow;
   }
 }

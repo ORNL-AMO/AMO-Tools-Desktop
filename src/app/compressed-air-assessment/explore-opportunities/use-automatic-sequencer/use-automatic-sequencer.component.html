@@ -41,30 +41,32 @@
 <div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1 compressor-profile">
     <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
         [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
-        [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors">
+        [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors"
+        [requiredAirflow]="requiredAirflow" [availableAirflow]="availableAirflow" [hasError]="hasError">
     </app-adjust-sequencer-profile>
-
     <div class="d-flex justify-content-end">
         <div class="pl-2 pr-2 border-right border-left">
             <a class="click-link small" (click)="resetOrdering()">Reset to Baseline</a>
         </div>
     </div>
+
+    <!--TODO: REMOVE TABLE PRIOR TO RELEASE, USE FOR TESTING PURPOSES-->
     <div class="pt-2" *ngFor="let compressor of adjustedCompressors">
         <table class="table table-striped">
             <tbody>
                 <tr class="bold">
-                   <td>
-                       {{compressor.name}}
-                   </td> 
-                   <td>
-                       Pressure
-                   </td>
-                   <td>
-                       Airflow
-                   </td>
-                   <td>
-                       Power
-                   </td>
+                    <td>
+                        {{compressor.name}}
+                    </td>
+                    <td>
+                        Pressure
+                    </td>
+                    <td>
+                        Airflow
+                    </td>
+                    <td>
+                        Power
+                    </td>
                 </tr>
                 <tr>
                     <td>
