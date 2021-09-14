@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { InventoryService } from '../../../inventory/inventory.service';
 
 @Component({
   selector: 'app-adjust-sequencer-profile',
@@ -29,7 +30,7 @@ export class AdjustSequencerProfileComponent implements OnInit {
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;
   fillRight: boolean = false;
-  constructor() { }
+  constructor(private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup);
@@ -173,5 +174,11 @@ export class AdjustSequencerProfileComponent implements OnInit {
   getFullLoadCapacity(compressorId: string): number {
     let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
     return compressor.performancePoints.fullLoad.airflow;
+  }
+
+
+  checkShowShutdownTimer(compressorId: string): boolean{
+    let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
+    return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
   }
 }

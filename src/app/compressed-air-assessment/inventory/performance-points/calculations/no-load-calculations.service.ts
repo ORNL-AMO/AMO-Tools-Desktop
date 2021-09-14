@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
-import { GenericCompressor } from '../../../generic-compressor-db.service';
 
 @Injectable()
 export class NoLoadCalculationsService {
@@ -59,7 +58,7 @@ export class NoLoadCalculationsService {
       return selectedCompressor.performancePoints.noLoad.power;
     }
   }
-  
+
   calculateNoLoadPower(NoLoadPowerUL: number, TotPackageInputPower: number, designEfficiency: number): number {
     if (NoLoadPowerUL < 25) {
       let noLoadPower: number = NoLoadPowerUL * TotPackageInputPower / (NoLoadPowerUL / (NoLoadPowerUL - 25 + 2521.834 / designEfficiency) / designEfficiency) / 10000;

@@ -493,6 +493,8 @@ export class InventoryService {
           fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow,
           intervalData: intervalData
         });
+        modification.useAutomaticSequencer.order = 100;
+        modification.useAutomaticSequencer.profileSummary = new Array();
       })
     });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
@@ -547,6 +549,8 @@ export class InventoryService {
         data: this.exploreOpportunitiesService.getDefaultReductionData()
       });
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
+      modification.useAutomaticSequencer.order = 100;
+      modification.useAutomaticSequencer.profileSummary = new Array();
     })
     return compressedAirAssessment;
   }
