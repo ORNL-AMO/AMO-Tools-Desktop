@@ -23,6 +23,7 @@ export class SetupDataComponent implements OnInit {
   importDataFromCsv: CsvImportData;
   previewDataFromCsv: CsvImportData;
   importingData: boolean = false;
+  dataLoading: boolean = false;
   dataExists: boolean = false;
   importSuccesful: boolean = false;
   individualDataFromCsv: Array<IndividualDataFromCsv>;
@@ -86,6 +87,7 @@ export class SetupDataComponent implements OnInit {
   }
 
   setImport($event) {
+    this.dataLoading = true;
     let splitName = $event.target.files[0].name.split(".");
     if (splitName[splitName.length - 1] == "xlsx") {
       this.setExcelImport($event);
@@ -101,6 +103,7 @@ export class SetupDataComponent implements OnInit {
   }
 
   importFile() {
+    this.dataLoading = false;
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference);
     fr.onloadend = (e) => {
@@ -137,6 +140,7 @@ export class SetupDataComponent implements OnInit {
   }
 
   finishImportExcel() {
+    this.dataLoading = false;
     let rowObject  =  XLSX.utils.sheet_to_csv(this.workBook.Sheets[this.selectedSheet], {dateNF: "mm/dd/yyyy hh:mm:ss"});
     this.importData = rowObject;
     this.parsePreviewData();
