@@ -204,6 +204,7 @@ export interface ProfileSummary {
     fullLoadCapacity: number,
     compressorId: string,
     dayTypeId: string,
+    automaticShutdownTimer?: boolean
     profileSummaryData: Array<ProfileSummaryData>,
     logToolFieldId?: string
 }

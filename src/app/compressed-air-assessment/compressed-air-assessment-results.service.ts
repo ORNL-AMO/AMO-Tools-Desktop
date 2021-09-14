@@ -166,7 +166,7 @@ export class CompressedAirAssessmentResultsService {
           reduceSystemAirPressureSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost)
         }
       } else if (modification.useAutomaticSequencer.order == orderIndex) {
-        adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors);
+        adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors, modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId);
         adjustedProfileSummary = this.useAutomaticSequencerMapOrders(modification.useAutomaticSequencer.profileSummary, adjustedProfileSummary);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, reduceRuntime);
         if (electricityCost) {
@@ -544,8 +544,10 @@ export class CompressedAirAssessmentResultsService {
     return adjustedCompressors;
   }
   //TODO: useAutomaticSequencer
-  useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, inventoryItems: Array<CompressorInventoryItem>): Array<CompressorInventoryItem> {
+  useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, inventoryItems: Array<CompressorInventoryItem>, automaticSequencerProfile: Array<ProfileSummary>, dayTypeId: string): Array<CompressorInventoryItem> {
     inventoryItems.forEach(item => {
+      let sequencerProfile: ProfileSummary = automaticSequencerProfile.find(profileItem => {return profileItem.compressorId == item.itemId && profileItem.dayTypeId == dayTypeId});
+      item.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
       item.performancePoints.fullLoad.isDefaultPressure = false;
       item.performancePoints.fullLoad.isDefaultAirFlow = true;
       item.performancePoints.fullLoad.isDefaultPower = true;

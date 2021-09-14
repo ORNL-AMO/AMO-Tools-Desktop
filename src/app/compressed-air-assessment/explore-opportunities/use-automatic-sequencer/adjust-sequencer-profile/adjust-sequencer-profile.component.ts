@@ -17,17 +17,17 @@ export class AdjustSequencerProfileComponent implements OnInit {
   selectedDayTypeId: string;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  adjustedCompressors: Array<CompressorInventoryItem>;
 
   orderingOptions: Array<number>;
-  hourIntervals: Array<number>; 
+  hourIntervals: Array<number>;
   fillRight: boolean = false;
-  inventoryItems: Array<CompressorInventoryItem>;
   constructor() { }
 
   ngOnInit(): void {
     this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup);
     this.setOrderingOptions(this.compressedAirAssessment.compressorInventoryItems);
-    this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
   }
 
   ngOnDestroy() {
@@ -165,5 +165,11 @@ export class AdjustSequencerProfileComponent implements OnInit {
 
   trackByIdx(index: number, obj: any): any {
     return index;
+  }
+
+
+  getFullLoadCapacity(compressorId: string): number {
+    let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
+    return compressor.performancePoints.fullLoad.airflow;
   }
 }

@@ -25,9 +25,13 @@
                 <th>
                     <!-- Compressor Name -->
                 </th>
-                <!-- <th class="text-center">
-                    FLP
-                </th> -->
+                <th class="text-center">
+                    Capacity <br> acfm
+                </th>
+                <th class="text-center">
+                    Shutdown <br>
+                    Timer
+                </th>
                 <th class="text-center" *ngFor="let interval of hourIntervals">
                     {{interval}}
                 </th>
@@ -36,11 +40,14 @@
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorId|compressorName:inventoryItems}}
+                    {{summary.compressorId|compressorName:adjustedCompressors}}
                 </td>
-                <!-- <td class="text-center">
-                    {{summary.fullLoadPressure}}
-                </td> -->
+                <td class="text-center">
+                    {{getFullLoadCapacity(summary.compressorId)}}
+                </td>
+                <td class="text-center">
+                    <input type="checkbox" [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
+                </td>
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
                     <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
