@@ -83,6 +83,7 @@ export class LogToolDbService {
     this.visualizeService.selectedGraphObj.next(logToolDbData.visualizeData.selectedGraphObj);
     this.visualizeService.visualizeData = logToolDbData.visualizeData.visualizeData;
     this.visualizeService.annotateDataPoint.next(logToolDbData.visualizeData.annotateDataPoint);
+    this.visualizeService.annotatedDataPoints.next(logToolDbData.visualizeData.annotatedPoints);
     this.dayTypeAnalysisService.selectedDataField.next(logToolDbData.dayTypeData.selectedDataField);
     this.dayTypeAnalysisService.dayTypes.next(logToolDbData.dayTypeData.dayTypes);
     this.dayTypeAnalysisService.dayTypeSummaries.next(logToolDbData.dayTypeData.dayTypeSummaries);

@@ -48,6 +48,7 @@ export class VisualizeGraphComponent implements OnInit {
             // send data point for annotations
             let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
             this.visualizeService.annotateDataPoint.next(newAnnotation);
+            this.visualizeService.annotatedDataPoints.next([newAnnotation]);
           });
 
           chart.on('plotly_relayout', (data) => {
