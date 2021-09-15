@@ -20,10 +20,14 @@
         <thead>
             <tr>
                 <th>
-                    Compressor
+                    <!-- Compressor -->
                 </th>
-                <th>
-                    Airflow Capacity
+                <th class="text-center">
+                    Capacity <br> acfm
+                </th>
+                <th class="text-center">
+                    Shutdown <br>
+                    Timer
                 </th>
                 <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
                     {{data.timeInterval}}
@@ -38,6 +42,9 @@
                 </td>
                 <td class="text-center">
                     {{rData.fullLoadCapacity}} acfm
+                </td>
+                <td class="text-center">
+                    <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox" [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
                 </td>
                 <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                     <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
@@ -55,6 +62,9 @@
                 <td>
 
                 </td>
+                <td>
+
+                </td>
                 <td *ngFor="let airflow of availableAirflow; let index = index"
                     [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
                     {{airflow | number:'1.0-0'}}
@@ -67,8 +77,25 @@
                 <td>
 
                 </td>
+                <td>
+
+                </td>
                 <td *ngFor="let airflow of requiredAirflow">
                     {{airflow| number:'1.0-0'}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Power, kW
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td *ngFor="let power of profilePower">
+                    {{power| number:'1.0-1'}}
                 </td>
             </tr>
         </tfoot>

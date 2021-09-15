@@ -79,6 +79,7 @@ export interface ReduceRuntime {
 export interface ReduceRuntimeData {
     compressorId: string,
     fullLoadCapacity: number,
+    automaticShutdownTimer: boolean,
     intervalData: Array<{
         isCompressorOn: boolean,
         timeInterval: number,

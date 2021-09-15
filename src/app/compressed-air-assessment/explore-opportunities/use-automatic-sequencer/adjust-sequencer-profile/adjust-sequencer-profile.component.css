@@ -5,6 +5,7 @@ td, th{
     border-left: solid 1px darkgray;
     padding: 3px;
     white-space: nowrap;
+    vertical-align: middle !important;
   }
   
   /* tr > td:first-child {
@@ -57,4 +58,7 @@ td, th{
   thead tr, tfoot tr{
 	  /* background-color: lightgray; */
 	  font-weight: bold;
+  }
+  tfoot{
+    border-top: solid 3px;
   }

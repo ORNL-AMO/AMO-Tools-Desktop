@@ -64,7 +64,7 @@ export class NoLoadCalculationsService {
       let noLoadPower: number = NoLoadPowerUL * TotPackageInputPower / (NoLoadPowerUL / (NoLoadPowerUL - 25 + 2521.834 / designEfficiency) / designEfficiency) / 10000;
       return Number(noLoadPower.toFixed(1));
     } else {
-      let noLoadPower: number = NoLoadPowerUL * TotPackageInputPower / 1 / 10000;
+      let noLoadPower: number = NoLoadPowerUL * TotPackageInputPower / 100;
       return Number(noLoadPower.toFixed(1));
     }
   }

@@ -69,6 +69,14 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       reduceRunTimeSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       reduceSystemAirPressureSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       useAutomaticSequencerSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
+      reduceRunTimeProfileSummary: undefined,
+      flowAllocationProfileSummary: undefined,
+      reduceAirLeaksProfileSummary: undefined,
+      addReceiverVolumeProfileSummary: undefined,
+      useAutomaticSequencerProfileSummary: undefined,
+      improveEndUseEfficiencyProfileSummary: undefined,
+      reduceSystemAirPressureProfileSummary: undefined,
+      adjustCascadingSetPointsProfileSummary: undefined,
       dayTypeId: undefined
     }
     this.modificationResults.dayTypeModificationResults.forEach(modResult => {

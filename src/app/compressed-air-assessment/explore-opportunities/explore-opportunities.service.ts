@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResult } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
@@ -51,14 +51,15 @@ export class ExploreOpportunitiesService {
           compressorId: item.itemId,
           fullLoadCapacity: item.performancePoints.fullLoad.airflow,
           intervalData: intervalData,
-          dayTypeId: dayType.dayTypeId
+          dayTypeId: dayType.dayTypeId,
+          automaticShutdownTimer: item.compressorControls.automaticShutdown
         })
       });
     });
 
     let sequencerProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary));
     sequencerProfileSummary.forEach(summary => {
-      let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => {return item.itemId == summary.compressorId});
+      let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
       summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
     });
 
@@ -136,59 +137,59 @@ export class ExploreOpportunitiesService {
         modification.reduceSystemAirPressure.order,
         modification.useAutomaticSequencer.order
       ]
-      let selectedOrder: Array<number> = allOrders.filter(order => {return order == newOrder});
+      let selectedOrder: Array<number> = allOrders.filter(order => { return order == newOrder });
       let hasDuplicate: boolean = selectedOrder.length == 2;
 
       if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order >= newOrder) {
-        if(hasDuplicate && modification.addPrimaryReceiverVolume.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.addPrimaryReceiverVolume.order == newOrder && previousOrder != 100) {
           modification.addPrimaryReceiverVolume.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.addPrimaryReceiverVolume.order++;
         }
       }
       if (modification.adjustCascadingSetPoints.order != 100 && changedOpportunity != 'adjustCascadingSetPoints' && modification.adjustCascadingSetPoints.order >= newOrder) {
-        if(hasDuplicate && modification.adjustCascadingSetPoints.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.adjustCascadingSetPoints.order == newOrder && previousOrder != 100) {
           modification.adjustCascadingSetPoints.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.adjustCascadingSetPoints.order++;
         }
       }
       if (modification.improveEndUseEfficiency.order != 100 && changedOpportunity != 'improveEndUseEfficiency' && modification.improveEndUseEfficiency.order >= newOrder) {
-        if(hasDuplicate && modification.improveEndUseEfficiency.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.improveEndUseEfficiency.order == newOrder && previousOrder != 100) {
           modification.improveEndUseEfficiency.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.improveEndUseEfficiency.order++;
         }
       }
       if (modification.reduceRuntime.order != 100 && changedOpportunity != 'reduceRuntime' && modification.reduceRuntime.order >= newOrder) {
-        if(hasDuplicate && modification.reduceRuntime.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.reduceRuntime.order == newOrder && previousOrder != 100) {
           modification.reduceRuntime.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.reduceRuntime.order++;
         }
       }
       if (modification.reduceAirLeaks.order != 100 && changedOpportunity != 'reduceAirLeaks' && modification.reduceAirLeaks.order >= newOrder) {
-        if(hasDuplicate && modification.reduceAirLeaks.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.reduceAirLeaks.order == newOrder && previousOrder != 100) {
           modification.reduceAirLeaks.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.reduceAirLeaks.order++;
         }
       }
       if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure' && modification.reduceSystemAirPressure.order >= newOrder) {
-        if(hasDuplicate && modification.reduceSystemAirPressure.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.reduceSystemAirPressure.order == newOrder && previousOrder != 100) {
           modification.reduceSystemAirPressure.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.reduceSystemAirPressure.order++;
         }
       }
       if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer' && modification.useAutomaticSequencer.order >= newOrder) {
-        if(hasDuplicate && modification.useAutomaticSequencer.order == newOrder && previousOrder != 100){
+        if (hasDuplicate && modification.useAutomaticSequencer.order == newOrder && previousOrder != 100) {
           modification.useAutomaticSequencer.order = previousOrder;
-        }else if(!hasDuplicate || previousOrder == 100){
+        } else if (!hasDuplicate || previousOrder == 100) {
           modification.useAutomaticSequencer.order++;
         }
       }
-    }else{
+    } else {
       if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order > previousOrder) {
         modification.addPrimaryReceiverVolume.order--;
       }
@@ -212,5 +213,27 @@ export class ExploreOpportunitiesService {
       }
     }
     return modification;
+  }
+
+
+  getPreviousOrderProfileSummary(order: number, modification: Modification, modificationResults: CompressedAirAssessmentResult, dayTypeId: string): Array<ProfileSummary> {
+    let dayTypeModificationResults: DayTypeModificationResult = modificationResults.dayTypeModificationResults.find(dayTypeResults => { return dayTypeResults.dayTypeId == dayTypeId });
+    if (modification.addPrimaryReceiverVolume.order == order - 1) {
+      return dayTypeModificationResults.addReceiverVolumeProfileSummary;
+    } else if (modification.adjustCascadingSetPoints.order == order - 1) {
+      return dayTypeModificationResults.adjustCascadingSetPointsProfileSummary;
+    } else if (modification.improveEndUseEfficiency.order == order - 1) {
+      return dayTypeModificationResults.improveEndUseEfficiencyProfileSummary;
+    } else if (modification.reduceAirLeaks.order == order - 1) {
+      return dayTypeModificationResults.reduceAirLeaksProfileSummary;
+    } else if (modification.reduceRuntime.order == order - 1) {
+      return dayTypeModificationResults.reduceRunTimeProfileSummary;
+    } else if (modification.reduceSystemAirPressure.order == order - 1) {
+      return dayTypeModificationResults.reduceSystemAirPressureProfileSummary;
+    } else if (modification.useAutomaticSequencer.order == order - 1) {
+      return dayTypeModificationResults.useAutomaticSequencerProfileSummary;
+    } else {
+      return dayTypeModificationResults.flowAllocationProfileSummary;
+    }
   }
 }

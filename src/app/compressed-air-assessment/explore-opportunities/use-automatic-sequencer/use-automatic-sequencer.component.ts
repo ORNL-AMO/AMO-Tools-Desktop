@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
@@ -29,6 +29,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   adjustedProfileSummary: Array<ProfileSummary>;
   automaticSequencerProfileSummary: Array<ProfileSummary>;
   profilePower: Array<number>;
+  modificationResults: CompressedAirAssessmentResult;
+  modificationResultsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -37,7 +39,12 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
-        this.selectedDayTypeId = this.dayTypeOptions[0].dayTypeId;
+        if(!this.selectedDayTypeId){
+          let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => {return dayType.dayTypeId == this.selectedDayTypeId});
+          if(!findDayType){
+            this.selectedDayTypeId = this.dayTypeOptions[0].dayTypeId;
+          }
+        }
         this.setOrderOptions();
         this.setData()
       } else {
@@ -54,11 +61,18 @@ export class UseAutomaticSequencerComponent implements OnInit {
       }
       this.setOrderOptions();
     });
+
+
+    this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
+      this.modificationResults = val;
+      this.setAdjustedSummary();
+    });
   }
 
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
+    this.modificationResultsSub.unsubscribe();
   }
 
   helpTextField(str: string) {
@@ -73,8 +87,6 @@ export class UseAutomaticSequencerComponent implements OnInit {
         this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
       }
       this.setAdjustedCompressors();
-      this.setAdjustedSummary();
-      this.setAirflowData();
     }
   }
 
@@ -108,8 +120,6 @@ export class UseAutomaticSequencerComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
     }
     this.setAdjustedCompressors();
-    this.setAdjustedSummary();
-    this.setAirflowData();
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -127,24 +137,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   setAdjustedSummary() {
-    if (this.selectedDayTypeId && this.compressedAirAssessment) {
-      let dayType: CompressedAirDayType = this.dayTypeOptions.find(dayTypeOption => { return dayTypeOption.dayTypeId == this.selectedDayTypeId });
-      let baselineProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, dayType);
-      let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems));
+    if (this.selectedDayTypeId && this.compressedAirAssessment && this.modificationResults) {
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-
-      let modificationOrders: Array<number> = [
-        modification.addPrimaryReceiverVolume.order,
-        modification.adjustCascadingSetPoints.order,
-        modification.improveEndUseEfficiency.order,
-        modification.reduceAirLeaks.order,
-        modification.reduceSystemAirPressure.order,
-        modification.reduceRuntime.order
-      ];
-      modificationOrders = modificationOrders.filter(order => { return order != 100 && order <= this.useAutomaticSequencer.order });
-      this.adjustedProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
-      modificationOrders.push(this.useAutomaticSequencer.order);
-      this.automaticSequencerProfileSummary = this.compressedAirAssessmentResultsService.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders).adjustedProfileSummary;
+      this.adjustedProfileSummary = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.modificationResults, this.selectedDayTypeId);
+      this.automaticSequencerProfileSummary = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayTypeId }).useAutomaticSequencerProfileSummary;
+      this.setAirflowData();
     }
   }
 
