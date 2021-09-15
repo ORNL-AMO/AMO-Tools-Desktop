@@ -21,6 +21,18 @@
                   <option *ngFor="let workSheet of workSheets">{{workSheet}}</option>
                 </select>
             </div>
+            <div class="d-flex w-100 h-100" *ngIf="dataLoading">
+                <div class="card card-body d-flex flex-column align-items-center pt-4">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                    <span class="large text-center">Loading Data from File<br> This may take a moment
+                        depending on the amount of data you have supplied. <br>
+                    </span>
+                </div>
+            </div>
             <div class="p-2" *ngIf="previewDataFromCsv">
                 <table class="table table-condensed table-striped table-sm">
                     <thead>
