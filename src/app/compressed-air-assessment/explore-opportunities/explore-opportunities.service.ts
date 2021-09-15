@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
+import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
@@ -26,8 +26,10 @@ export class ExploreOpportunitiesService {
     }> = new Array();
 
     let reduceRuntimeData: Array<ReduceRuntimeData> = new Array();
+    let setPointData: Array<CascadingSetPointData> = new Array();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      setPointData = new Array();
       reductionData.push({
         dayTypeId: dayType.dayTypeId,
         dayTypeName: dayType.name,
@@ -53,6 +55,13 @@ export class ExploreOpportunitiesService {
           intervalData: intervalData,
           dayTypeId: dayType.dayTypeId,
           automaticShutdownTimer: item.compressorControls.automaticShutdown
+        });
+        setPointData.push({
+          compressorId: item.itemId,
+          controlType: item.compressorControls.controlType,
+          compressorType: item.nameplateData.compressorType,
+          fullLoadDischargePressure: item.performancePoints.fullLoad.dischargePressure,
+          maxFullFlowDischargePressure: item.performancePoints.maxFullFlow.dischargePressure
         })
       });
     });
@@ -86,7 +95,8 @@ export class ExploreOpportunitiesService {
         order: 100
       },
       adjustCascadingSetPoints: {
-        order: 100
+        order: 100,
+        setPointData: setPointData
       },
       useAutomaticSequencer: {
         targetPressure: undefined,

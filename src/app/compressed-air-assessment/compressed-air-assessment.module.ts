@@ -116,6 +116,7 @@ import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/asses
 import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -216,7 +217,8 @@ import { AdjustSequencerProfileComponent } from './explore-opportunities/use-aut
     FullLoadAmpsModule,
     AltitudeCorrectionModule,
     PercentGraphModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    SharedPipesModule
   ],
   providers: [
     CompressedAirAssessmentService,

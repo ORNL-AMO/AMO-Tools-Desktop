@@ -16,3 +16,25 @@
     background-color: #7030A0;
     color: white;
 }
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: nowrap;
+	vertical-align: middle !important;
+  }
+  
+  table {
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
+  }
+  
+  input.input-group{
+	  width: 100%;
+  }
+
+  thead tr, tfoot tr{
+	  font-weight: bold;
+  }

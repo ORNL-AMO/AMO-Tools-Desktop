@@ -31,6 +31,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   dayTypeOptions: Array<CompressedAirDayType>;
   calculating: any;
   selectedModificationId: string;
+  showCascadingSetPoints: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -42,6 +43,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressedAirAssessment = val;
+        this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
         this.setModification();

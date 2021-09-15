@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AdjustCascadingSetPoints, CompressedAirAssessment, Modification } from '../../../shared/models/compressed-air-assessment';
+import { AdjustCascadingSetPoints, CascadingSetPointData, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
@@ -18,12 +19,15 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,  private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  inventoryItems: Array<CompressorInventoryItem>;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
         this.setOrderOptions();
         this.setData()
       } else {
@@ -44,6 +48,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
+    this.compressedAirAssessmentSub.unsubscribe();
   }
 
   focusField(str: string) {
@@ -86,5 +91,34 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'adjustCascadingSetPoints', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+  }
+
+
+  checkShowMaxFullFlow(compressorType: number, controlType: number): boolean {
+    return this.performancePointsFormService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
+  }
+
+  getFullLoadDischargeDifference(spData: CascadingSetPointData): string {
+    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == spData.compressorId });
+    let difference: number = spData.fullLoadDischargePressure - compressor.performancePoints.fullLoad.dischargePressure;
+    if (difference == 0) {
+      return '&mdash;'
+    } else if (difference > 0) {
+      return '+' + difference;
+    }else{
+      return difference.toString();
+    }
+  }
+
+  getMaxFullFlowDischargeDifference(spData: CascadingSetPointData): string {
+    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == spData.compressorId });
+    let difference: number = spData.maxFullFlowDischargePressure - compressor.performancePoints.maxFullFlow.dischargePressure;
+    if (difference == 0) {
+      return '&mdash;'
+    } else if (difference > 0) {
+      return '+' + difference;
+    }else{
+      return difference.toString();
+    }
   }
 }

@@ -21,8 +21,7 @@
                 <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                 <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order"></app-improve-end-use-efficiency>
                 <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-system-air-pressure>
-                <!--TODO: NEED MORE INFO FOR CASCADING POINTS-->
-                <!-- <app-adjust-cascading-set-points></app-adjust-cascading-set-points> -->
+                <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order" *ngIf="showCascadingSetPoints && modification.useAutomaticSequencer.order == 100"></app-adjust-cascading-set-points>
                 <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order" *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100"></app-use-automatic-sequencer>
                 <app-reduce-run-time [style.order]="modification.reduceRuntime.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-run-time>
                 <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"></app-add-receiver-volume>
