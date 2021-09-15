@@ -67,7 +67,8 @@ export interface AdjustCascadingSetPoints {
 export interface UseAutomaticSequencer {
     targetPressure: number,
     variance: number,
-    order: number
+    order: number,
+    profileSummary: Array<ProfileSummary>
 }
 
 export interface ReduceRuntime {
@@ -78,6 +79,7 @@ export interface ReduceRuntime {
 export interface ReduceRuntimeData {
     compressorId: string,
     fullLoadCapacity: number,
+    automaticShutdownTimer: boolean,
     intervalData: Array<{
         isCompressorOn: boolean,
         timeInterval: number,
@@ -203,6 +205,7 @@ export interface ProfileSummary {
     fullLoadCapacity: number,
     compressorId: string,
     dayTypeId: string,
+    automaticShutdownTimer?: boolean
     profileSummaryData: Array<ProfileSummaryData>,
     logToolFieldId?: string
 }

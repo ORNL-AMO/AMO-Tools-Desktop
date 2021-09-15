@@ -183,7 +183,7 @@ export class PerformancePointsFormService {
           break;
         case 'maxFullFlow': 
           if (compressor.compressorControls.controlType == 2) {
-            airFlowValidators.push(LessThanValidator.lessThan(compressor.performancePoints.fullLoad.airflow), GreaterThanValidator.greaterThan(0));
+            airFlowValidators.push(Validators.max(compressor.performancePoints.fullLoad.airflow), GreaterThanValidator.greaterThan(0));
           } else if (compressor.compressorControls.controlType == 5) {
             airFlowValidators.push(LessThanValidator.lessThan(compressor.performancePoints.fullLoad.airflow));
           } else if (compressor.compressorControls.controlType == 3) {

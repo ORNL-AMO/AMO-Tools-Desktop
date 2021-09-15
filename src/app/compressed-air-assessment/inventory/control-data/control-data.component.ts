@@ -62,7 +62,7 @@ export class ControlDataComponent implements OnInit {
       return option.value == this.form.controls.controlType.value;
     });
     
-    if (!controlOptionSelected) {
+    if (!controlOptionSelected && this.controlTypeOptions.length != 0) {
       // Has controlType from previously selected compressorType, set default for new compressorType
       this.form.controls.controlType.patchValue(this.controlTypeOptions[0].value);
       if (this.compressorType == 6) {

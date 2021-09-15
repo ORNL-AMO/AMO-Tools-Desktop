@@ -1,20 +1,21 @@
 <div class="checkbox">
     <label class="group-label" for="useAutomaticSequencer">
         Use Automatic Sequencer
-        <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order" class="form-control pull-right" (change)="save(true)">
+        <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order"
+            class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
             <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>
 
-<form *ngIf="useAutomaticSequencer.order != 100" class="mb-2 pt-1">
+<form *ngIf="useAutomaticSequencer.order != 100" class="mb-0 pt-1">
     <div class="form-group">
         <label for="targetPressure">Target Pressure</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.targetPressure"
-                (focus)="helpTextField('targetPressure')"
-                name="targetPressure" id="targetPressure" (input)="save(false)">
+                (focus)="helpTextField('targetPressure')" name="targetPressure" id="targetPressure"
+                (input)="save(false)">
             <span class="input-group-addon units">psig</span>
         </div>
     </div>
@@ -22,9 +23,123 @@
         <label for="variance">Variance (+/-)</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="variance"
-                (focus)="helpTextField('variance')"
-                id="variance" (input)="save(false)">
+                (focus)="helpTextField('variance')" id="variance" (input)="save(false)">
             <span class="input-group-addon units">psia</span>
         </div>
     </div>
+    <div class="form-group">
+        <label for="selectedDayTypeId">Sequencer Day Type</label>
+        <div class="input-group">
+            <select class="form-control" id="selectedDayTypeId" name="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
+                (focus)="helpTextField('dayType')">
+                <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
+            </select>
+        </div>
+    </div>
 </form>
+
+<div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1 compressor-profile">
+    <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
+        [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
+        [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors"
+        [requiredAirflow]="requiredAirflow" [availableAirflow]="availableAirflow" [hasError]="hasError"
+        [profilePower]="profilePower">
+    </app-adjust-sequencer-profile>
+    <div class="d-flex justify-content-end">
+        <div class="pl-2 pr-2 border-right border-left">
+            <a class="click-link small" (click)="resetOrdering()">Reset to Baseline</a>
+        </div>
+    </div>
+
+    <!--TODO: REMOVE TABLE PRIOR TO RELEASE, USE FOR TESTING PURPOSES-->
+    <div class="pt-2" *ngFor="let compressor of adjustedCompressors">
+        <table class="table table-striped">
+            <tbody>
+                <tr class="bold">
+                    <td>
+                        {{compressor.name}}
+                    </td>
+                    <td>
+                        Pressure
+                    </td>
+                    <td>
+                        Airflow
+                    </td>
+                    <td>
+                        Power
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Full Load
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.fullLoad.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Max Full Flow
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.maxFullFlow.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Unload Point
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.unloadPoint.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        No Load
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.noLoad.power}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Blowoff
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.dischargePressure}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.airflow}}
+                    </td>
+                    <td>
+                        {{compressor.performancePoints.blowoff.power}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

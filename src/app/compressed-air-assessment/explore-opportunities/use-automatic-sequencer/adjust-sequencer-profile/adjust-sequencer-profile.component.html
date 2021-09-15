@@ -1,0 +1,113 @@
+<div class="d-flex w-100 flex-wrap justify-content-between">
+    <label class="group-label pb-0">
+        Compressor Ordering
+    </label>
+    <div class="d-flex">
+        <div class="pl-2 pr-2 border-left">
+            <label class="small" for="fillRightOrdering">
+                <input type="checkbox" [(ngModel)]="fillRight" name="fillRightOrdering" id="fillRightOrdering">
+                Fill right on change
+            </label>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left">
+            <a class="click-link small" (click)="resetOrdering()">Turn All Off</a>
+        </div>
+        <div class="pl-2 pr-2 border-right">
+            <a class="click-link small" (click)="turnAllOn()">Turn All On</a>
+        </div>
+    </div>
+</div>
+
+<div class="scroll-item">
+    <table class="table bg-white">
+        <thead>
+            <tr>
+                <th>
+                    <!-- Compressor Name -->
+                </th>
+                <th class="text-center">
+                    Capacity <br> acfm
+                </th>
+                <th class="text-center">
+                    Shutdown <br>
+                    Timer
+                </th>
+                <th class="text-center" *ngFor="let interval of hourIntervals">
+                    {{interval}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                <td class="bold text-center">
+                    {{summary.compressorId|compressorName:adjustedCompressors}}
+                </td>
+                <td class="text-center">
+                    {{getFullLoadCapacity(summary.compressorId)}}
+                </td>
+                <td class="text-center">
+                    <input *ngIf="checkShowShutdownTimer(summary.compressorId)" type="checkbox" [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
+                </td>
+                <td class="input-cell"
+                    *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
+                    <select class="form-control" id="{{'order_'+compressorIndex+orderIndex}}"
+                        name="{{'order_'+compressorIndex+orderIndex}}" [(ngModel)]="summaryData.order"
+                        (change)="changeOrderSequencer(compressorIndex, orderIndex)">
+                        <option *ngFor="let orderingOption of orderingOptions; let optionIndex = index;"
+                            [ngValue]="orderingOption" id="{{'order_'+compressorIndex+orderIndex+optionIndex}}">
+                            <span *ngIf="orderingOption != 0">
+                                {{orderingOption}}
+                            </span>
+                            <span *ngIf="orderingOption == 0">
+                                Off
+                            </span>
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        
+        <tfoot>
+            <tr>
+                <td>
+                    Available Airflow, acfm
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let airflow of availableAirflow; let index = index"
+                    [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
+                    {{airflow | number:'1.0-0'}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Required Airflow, acfm
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let airflow of requiredAirflow">
+                    {{airflow| number:'1.0-0'}}
+                </td>
+            </tr> 
+            <tr>
+                <td>
+                    Power, kW
+                </td>
+                <td>
+
+                </td>
+                <td></td>
+                <td *ngFor="let power of profilePower">
+                    {{power| number:'1.0-1'}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div *ngIf="hasError" class="alert alert-danger p-2 text-center">
+    One of more hours have less available airflow then is required.
+</div>

@@ -18,3 +18,29 @@
     background-color: #7030A0;
     color: white;
 }
+
+
+.compressor-profile{
+	padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: nowrap;
+  }
+  
+  /* tr > td:first-child {
+    border-right: none;
+  }
+   */
+  
+  table {
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
+  }

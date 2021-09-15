@@ -53,7 +53,8 @@ export class UnloadPointCalculationsService {
         defaultPower = this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
       } else if (selectedCompressor.compressorControls.controlType == 2) {
         //with unloading
-        defaultPower = this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
+        let unloadPointCapacity: number = (selectedCompressor.performancePoints.unloadPoint.airflow / selectedCompressor.performancePoints.fullLoad.airflow) * 100;
+        defaultPower = this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, unloadPointCapacity, 1, selectedCompressor.performancePoints.maxFullFlow.power);
       } else if (selectedCompressor.compressorControls.controlType == 3) {
         //variable displacement
         defaultPower = this.calculateUnloadPointPower(selectedCompressor.designDetails.noLoadPowerFM, selectedCompressor.compressorControls.unloadPointCapacity, 2, selectedCompressor.performancePoints.maxFullFlow.power);
@@ -76,7 +77,7 @@ export class UnloadPointCalculationsService {
   }
 
   calculateUnloadPointDischargePressure(maxFullFlowPressure: number, modulatingPressureRange: number, fullLoadAirFlow: number, unloadPointAirFlow: number): number {
-    let unloadPointDischargePressure: number = maxFullFlowPressure + (modulatingPressureRange * (1 - (fullLoadAirFlow / unloadPointAirFlow)));
+    let unloadPointDischargePressure: number = maxFullFlowPressure + (modulatingPressureRange * (1 - (unloadPointAirFlow / fullLoadAirFlow)));
     return Number(unloadPointDischargePressure.toFixed(0));
   }
 

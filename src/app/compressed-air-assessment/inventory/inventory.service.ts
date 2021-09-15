@@ -187,7 +187,7 @@ export class InventoryService {
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return (controlType != undefined && controlType != 5 && controlType != 7 && controlType != 9);
+    return (controlType != undefined && controlType != 5 && controlType != 7 && controlType != 9 && controlType != 1);
   }
 
   setCompressorControlValidators(form: FormGroup): FormGroup {
@@ -446,7 +446,6 @@ export class InventoryService {
     let inletConditionsForm: FormGroup = this.getInletConditionsFormFromObj(compressor.inletConditions);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
     let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor);
-    // let performancePointsValid: boolean = true;
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
@@ -492,8 +491,11 @@ export class InventoryService {
           compressorId: newInventoryItem.itemId,
           dayTypeId: dayType.dayTypeId,
           fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow,
-          intervalData: intervalData
+          intervalData: intervalData,
+          automaticShutdownTimer: newInventoryItem.compressorControls.automaticShutdown
         });
+        modification.useAutomaticSequencer.order = 100;
+        modification.useAutomaticSequencer.profileSummary = new Array();
       })
     });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
@@ -538,7 +540,8 @@ export class InventoryService {
         compressorId: item.itemId,
         fullLoadCapacity: item.performancePoints.fullLoad.airflow,
         intervalData: intervalData,
-        dayTypeId: newDayType.dayTypeId
+        dayTypeId: newDayType.dayTypeId,
+        automaticShutdownTimer: item.compressorControls.automaticShutdown
       };
     });
     compressedAirAssessment.modifications.forEach(modification => {
@@ -548,6 +551,8 @@ export class InventoryService {
         data: this.exploreOpportunitiesService.getDefaultReductionData()
       });
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
+      modification.useAutomaticSequencer.order = 100;
+      modification.useAutomaticSequencer.profileSummary = new Array();
     })
     return compressedAirAssessment;
   }
