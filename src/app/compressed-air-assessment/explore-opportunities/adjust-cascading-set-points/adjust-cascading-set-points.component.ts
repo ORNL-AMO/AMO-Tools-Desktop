@@ -123,4 +123,13 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   setDataView(view: "baseline" | "modification") {
     this.setPointView = view;
   }
+
+
+  checkMaxFullFlowDisabled(controlType: number): boolean {
+    if (controlType == 4 || controlType == 5 || controlType == 6) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

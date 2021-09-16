@@ -72,7 +72,7 @@
                         <div class="input-group"
                             *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
                             <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
-                                [(ngModel)]="spData.maxFullFlowDischargePressure" (change)="save()">
+                                [(ngModel)]="spData.maxFullFlowDischargePressure" (change)="save()" [disabled]="checkMaxFullFlowDisabled(spData.controlType)">
                             <span class="input-group-addon units">
                                 psig
                             </span>
