@@ -38,3 +38,8 @@ td, th{
   thead tr, tfoot tr{
 	  font-weight: bold;
   }
+
+
+  .btn-sm{
+    font-size: .7rem;
+  }

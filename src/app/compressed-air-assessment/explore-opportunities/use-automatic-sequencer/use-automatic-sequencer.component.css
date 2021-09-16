@@ -20,12 +20,6 @@
 }
 
 
-.compressor-profile{
-	padding-left: 15px;
-    padding-right: 15px;
-}
-
-
 td, th{
     font-size: small;
     border-right: solid 1px darkgray;
@@ -34,13 +28,8 @@ td, th{
     white-space: nowrap;
   }
   
-  /* tr > td:first-child {
-    border-right: none;
-  }
-   */
-  
+ 
   table {
-    /* box-shadow: 0 4px 8px 0 grey */
     margin-bottom: 0px;
     border-bottom: solid 1px;
   }

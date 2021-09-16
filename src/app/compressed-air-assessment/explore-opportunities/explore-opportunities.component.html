@@ -19,12 +19,20 @@
                 <hr>
                 <!-- <app-flow-reallocation></app-flow-reallocation> -->
                 <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
-                <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order"></app-improve-end-use-efficiency>
-                <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-system-air-pressure>
-                <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order" *ngIf="showCascadingSetPoints && modification.useAutomaticSequencer.order == 100"></app-adjust-cascading-set-points>
-                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order" *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100"></app-use-automatic-sequencer>
-                <app-reduce-run-time [style.order]="modification.reduceRuntime.order" *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-run-time>
-                <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"></app-add-receiver-volume>
+                <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
+                </app-improve-end-use-efficiency>
+                <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"
+                    *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-system-air-pressure>
+                <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order"
+                    *ngIf="showCascadingSetPoints && modification.useAutomaticSequencer.order == 100">
+                </app-adjust-cascading-set-points>
+                <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
+                    *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
+                </app-use-automatic-sequencer>
+                <app-reduce-run-time [style.order]="modification.reduceRuntime.order"
+                    *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-run-time>
+                <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order">
+                </app-add-receiver-volume>
             </div>
 
         </div>
@@ -74,7 +82,7 @@
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'help'">
             <app-help-panel></app-help-panel>
         </div>
-        
+
         <!-- <div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
             <div class="col-10">
                 <div class="main-content text-center">
@@ -103,7 +111,8 @@
     <div class="d-flex" *ngIf="secondaryAssessmentTab == 'graphs'">
         <div class="col-6">
             <!-- <label class="group-label bg-white">Baseline</label> -->
-            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="true" [labelName]="'Baseline'">
+            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="true"
+                [labelName]="'Baseline'">
             </app-system-profile-graphs>
         </div>
         <div class="col-6">

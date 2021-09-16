@@ -9,70 +9,117 @@
     </label>
 </div>
 
+<div class="d-flex flex-column align-items-center" *ngIf="adjustCascadingSetPoints.order != 100">
+    <div class="p-2 btn-group-sm">
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setDataView('baseline')"
+            [ngClass]="{'active': setPointView == 'baseline'}">Baseline
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setDataView('modification')"
+            [ngClass]="{'active': setPointView == 'modification'}">Proposed</button>
+    </div>
+    <div class="scroll-item">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <!-- Compressor -->
+                        Order
+                    </th>
+                    <th class="text-center">
+                        Compressor
+                    </th>
 
-<div class="scroll-item" *ngIf="adjustCascadingSetPoints.order != 100">
-    <table class="table bg-white">
-        <thead>
-            <tr>
-                <th class="text-center">
-                    <!-- Compressor -->
-                    Order
-                </th>
-                <th class="text-center">
-                    Compressor
-                </th>
+                    <th class="text-center">
+                        Control Type
+                    </th>
+                    <th class="text-center">
+                        Full Load or <br>
+                        Cut-in Pressure
+                    </th>
+                    <th class="text-center">
+                        Max Full Flow or <br>
+                        Cut-out Pressure
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="setPointView == 'modification'">
+                <tr
+                    *ngFor="let spData of adjustCascadingSetPoints.setPointData | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
+                    <td class="bold text-center">
+                        <span *ngIf="index == 0">
+                            Lead
+                        </span>
+                        <span *ngIf="index != 0">
+                            {{index + 1}}
+                        </span>
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.compressorId | compressorName:inventoryItems}}
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.controlType | controlType}}
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group">
+                            <input id="{{'fullLoadDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.fullLoadDischargePressure" (change)="save()">
+                            <span class="input-group-addon units">
+                                psig
+                            </span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group"
+                            *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
+                            <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.maxFullFlowDischargePressure" (change)="save()">
+                            <span class="input-group-addon units">
+                                psig
+                            </span>
+                        </div>
+                        <span *ngIf="!checkShowMaxFullFlow(spData.compressorType, spData.controlType)">&mdash;</span>
+                    </td>
+                </tr>
 
-                <th class="text-center">
-                    Control Type
-                </th>
-                <th class="text-center">
-                    Full Load or <br>
-                    Cut-in Pressure<br>
-                    psig
-                </th>
-                <th class="text-center">
-                    Max Full Flow or <br>
-                    Cut-out Pressure<br>
-                    psig
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let spData of adjustCascadingSetPoints.setPointData | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
-                <td class="bold text-center">
-                    <span *ngIf="index == 0">
-                        Lead
-                    </span>
-                    <span *ngIf="index != 0">
-                        {{index + 1}}
-                    </span>
-                </td>
-                <td class="bold text-center">
-                    {{spData.compressorId | compressorName:inventoryItems}}
-                </td>
-                <td class="bold text-center">
-                    {{spData.controlType | controlType}}
-                </td>
-                <td class="text-center">
-                    <div class="input-group">
-                        <input id="{{'fullLoadDischarge'+index}}" class="form-control" type="number" [(ngModel)]="spData.fullLoadDischargePressure"
-                            (change)="save()">
-                        <span class="input-group-addon units">
-                            <span [innerHTML]="getFullLoadDischargeDifference(spData)"></span>
+            <tbody *ngIf="setPointView == 'baseline'">
+                <tr
+                    *ngFor="let spData of baselineSetPoints | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
+                    <td class="bold text-center">
+                        <span *ngIf="index == 0">
+                            Lead
                         </span>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <div class="input-group" *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
-                        <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number" [(ngModel)]="spData.maxFullFlowDischargePressure"
-                            (change)="save()">
-                        <span class="input-group-addon units">
-                            <span [innerHTML]="getMaxFullFlowDischargeDifference(spData)"></span>
+                        <span *ngIf="index != 0">
+                            {{index + 1}}
                         </span>
-                    </div>
-                    <span *ngIf="!checkShowMaxFullFlow(spData.compressorType, spData.controlType)">&mdash;</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.compressorId | compressorName:inventoryItems}}
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.controlType | controlType}}
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group">
+                            <input id="{{'fullLoadDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.fullLoadDischargePressure" [disabled]="true">
+                            <span class="input-group-addon units">
+                                psig
+                            </span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group"
+                            *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
+                            <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.maxFullFlowDischargePressure" [disabled]="true">
+                            <span class="input-group-addon units">
+                                psig
+                            </span>
+                        </div>
+                        <span *ngIf="!checkShowMaxFullFlow(spData.compressorType, spData.controlType)">&mdash;</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

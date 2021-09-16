@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AdjustCascadingSetPoints, CascadingSetPointData, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
+import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressure, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
@@ -20,14 +21,15 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
   inventoryItems: Array<CompressorInventoryItem>;
+  baselineSetPoints: Array<CascadingSetPointData>;
+  setPointView: 'baseline' | 'modification' = 'modification';
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private performancePointsFormService: PerformancePointsFormService) { }
+    private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
         this.setOrderOptions();
         this.setData()
       } else {
@@ -58,6 +60,12 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.adjustCascadingSetPoints = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].adjustCascadingSetPoints));
+      this.inventoryItems = JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems));
+      let reduceSystemAirPressure: ReduceSystemAirPressure = this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure;
+      if (this.adjustCascadingSetPoints.order != 100 && reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
+        this.inventoryItems = this.compressedAirAssessmentResultsService.reduceSystemAirPressureAdjustCompressors(this.inventoryItems, this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure)
+      }
+      this.setBaselineSetPoints();
     }
   }
 
@@ -98,27 +106,21 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     return this.performancePointsFormService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
   }
 
-  getFullLoadDischargeDifference(spData: CascadingSetPointData): string {
-    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == spData.compressorId });
-    let difference: number = spData.fullLoadDischargePressure - compressor.performancePoints.fullLoad.dischargePressure;
-    if (difference == 0) {
-      return '&mdash;'
-    } else if (difference > 0) {
-      return '+' + difference;
-    }else{
-      return difference.toString();
-    }
+
+  setBaselineSetPoints() {
+    this.baselineSetPoints = new Array();
+    this.inventoryItems.forEach(item => {
+      this.baselineSetPoints.push({
+        compressorId: item.itemId,
+        controlType: item.compressorControls.controlType,
+        compressorType: item.nameplateData.compressorType,
+        fullLoadDischargePressure: item.performancePoints.fullLoad.dischargePressure,
+        maxFullFlowDischargePressure: item.performancePoints.maxFullFlow.dischargePressure
+      })
+    })
   }
 
-  getMaxFullFlowDischargeDifference(spData: CascadingSetPointData): string {
-    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == spData.compressorId });
-    let difference: number = spData.maxFullFlowDischargePressure - compressor.performancePoints.maxFullFlow.dischargePressure;
-    if (difference == 0) {
-      return '&mdash;'
-    } else if (difference > 0) {
-      return '+' + difference;
-    }else{
-      return difference.toString();
-    }
+  setDataView(view: "baseline" | "modification") {
+    this.setPointView = view;
   }
 }
