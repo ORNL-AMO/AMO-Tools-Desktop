@@ -393,8 +393,6 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        //this.isOperatingHoursDifferent(baseline, modification) ||
-        //this.isCostDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isInletPressureDifferent(baseline, modification) ||
         this.isOutletPressureDifferent(baseline, modification) ||

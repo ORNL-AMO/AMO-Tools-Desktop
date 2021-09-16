@@ -9,7 +9,6 @@ import { FsatService, InletVelocityPressureInputs } from '../fsat.service';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
 import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
-import { OperatingHours } from '../../shared/models/operations';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -45,12 +44,10 @@ export class FanFieldDataComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    //this.setOpHoursModalWidth();
     this.getBodyHeight();
   }
 
   formWidth: number;
-  //showOperatingHoursModal: boolean = false;
   userDefinedCompressibilityFactor: boolean = false;
 
   bodyHeight: number;
@@ -103,10 +100,6 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      //this.setOpHoursModalWidth();
-    }, 100);
-
     this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
       this.getBodyHeight();
     });
@@ -377,30 +370,6 @@ export class FanFieldDataComponent implements OnInit {
     this.hidePressureModal();
   }
 
-  // closeOperatingHoursModal() {
-  //   this.showOperatingHoursModal = false;
-  //   this.fsatService.modalOpen.next(false);
-  // }
-
-  // openOperatingHoursModal() {
-  //   this.showOperatingHoursModal = true;
-  //   this.fsatService.modalOpen.next(true);
-  // }
-
-  // updateOperatingHours(oppHours: OperatingHours) {
-  //   this.fsat.operatingHours = oppHours;
-  //   this.fieldDataForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
-  //   this.save();
-  //   this.closeOperatingHoursModal();
-  // }
-
-  // setOpHoursModalWidth() {
-  //   if (this.formElement.nativeElement.clientWidth) {
-  //     this.formWidth = this.formElement.nativeElement.clientWidth;
-  //   }
-  // }
-
-
   getBodyHeight() {
     if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
@@ -417,20 +386,6 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  // isOperatingHoursDifferent() {
-  //   if (this.canCompare()) {
-  //     return this.compareService.isOperatingHoursDifferent();
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  // isCostDifferent() {
-  //   if (this.canCompare()) {
-  //     return this.compareService.isCostDifferent();
-  //   } else {
-  //     return false;
-  //   }
-  // }
   isFlowRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isFlowRateDifferent();

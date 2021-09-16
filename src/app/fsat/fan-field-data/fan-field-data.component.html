@@ -6,7 +6,6 @@
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    
 
     <div class="btn-col d-flex flex-column py-2">
       <div class="btn-group small btn-group-sm align-self-center">
@@ -211,11 +210,6 @@
 
   </div>
 </form>
-
-<!-- <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="fsat.operatingHours">
-</app-operating-hours-modal> -->
 
 <div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="pressureModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">

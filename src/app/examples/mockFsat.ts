@@ -9,8 +9,6 @@ export const MockFsat: Assessment = {
     fsat: {
         name: "Baseline",
         fieldData: {
-            //operatingHours: 8760,
-            //cost: 0.06,
             flowRate: 129691,
             inletPressure: -16.36,
             inletVelocityPressure: -2.5,
@@ -108,7 +106,6 @@ export const MockFsat: Assessment = {
                         cost: 0.06,
                     },
                     fieldData: {
-                        //operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         inletVelocityPressure: -1.5,
@@ -116,7 +113,6 @@ export const MockFsat: Assessment = {
                         outletPressure: 1.1,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        //cost: 0.06,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }
@@ -168,7 +164,6 @@ export const MockFsat: Assessment = {
                         cost: 0.06,
                     },
                     fieldData: {
-                        //operatingHours: 8760,
                         flowRate: 86461,
                         inletPressure: -19.19,
                         inletVelocityPressure: -3.5,
@@ -176,7 +171,6 @@ export const MockFsat: Assessment = {
                         outletPressure: 1.29,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        //cost: 0.06,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }

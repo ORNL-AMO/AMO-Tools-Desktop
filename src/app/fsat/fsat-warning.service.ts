@@ -28,7 +28,6 @@ export class FsatWarningService {
     }
     
     let warnings: FanFieldDataWarnings = {
-      //costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
       suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
@@ -354,7 +353,6 @@ export class FsatWarningService {
 
 export interface FanFieldDataWarnings {
   voltageError: string;
-  //costError: string;
   ratedPowerError: string;
   suggestedVoltage: string,
   inletPressureError: string;
