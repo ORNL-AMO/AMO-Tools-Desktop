@@ -11,8 +11,7 @@ import { VisualizeMenuService } from '../visualize-menu.service';
   styleUrls: ['./annotate-graph.component.css']
 })
 export class AnnotateGraphComponent implements OnInit {
-  annotatedPointsSub: Subscription;
-  annotatedPoints: Array<AnnotationData>;//an array of all entered annotations 
+  
   annotateDataPointSub: Subscription;
   annotateDataPoint: AnnotationData;
   selectedGraphObjSub: Subscription;
@@ -30,47 +29,15 @@ export class AnnotateGraphComponent implements OnInit {
       this.cd.detectChanges();
     });
 
-    this.annotatedPointsSub = this.visualizeService.annotatedDataPoints.subscribe(val => {
-      this.annotatedPoints = val;
-    })
-
-    // if(this.selectedGraphObj.layout.annotations.length != 0){  
-    //   console.log('there are annototaions');    
-    //   this.selectedGraphObj.layout.annotations.forEach(point =>{
-    //     this.annotateDataPoint = point;
-    //     this.visualizeService.plotFunctionType = 'update';
-    //     this.selectAnnotation(point);
-    //   });
-    // }
-
-    //trying to loop through all saved annotations and display them in the graph 
-    //not working 
-    if(this.annotatedPoints){  
-      console.log('there are annototaions');    
-      this.annotatedPoints.forEach(point =>{
-        console.log('annotation'); 
-        this.annotateDataPoint = point;
-        this.visualizeService.plotFunctionType = 'update';
-        this.visualizeMenuService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
-        this.selectAnnotation(point);
-        this.setAnnotation();
-      });
-    }
-
     this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
       this.annotateDataPoint = point;      
       this.cd.detectChanges();
     });  
-    this.selectAnnotation(this.annotateDataPoint);
-    
-    this.setAnnotation();
   }
 
   ngOnDestroy() {
-    this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
     this.annotateDataPointSub.unsubscribe();
     this.selectedGraphObjSub.unsubscribe();
-    this.annotatedPointsSub.unsubscribe();
   }
 
   setAnnotation() {

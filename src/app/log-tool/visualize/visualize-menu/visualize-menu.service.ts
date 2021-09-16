@@ -279,7 +279,6 @@ export class VisualizeMenuService {
   setAnnotation(annotateDataPoint: AnnotationData, selectedGraphObj: GraphObj) {
     if (!selectedGraphObj.layout.annotations && annotateDataPoint.text) {
       selectedGraphObj.layout.annotations = [annotateDataPoint];
-      this.visualizeService.annotatedDataPoints.next([annotateDataPoint]);
     } else {
       let testExistIndex: number = selectedGraphObj.layout.annotations.findIndex(annotation => { return annotation.annotationId == annotateDataPoint.annotationId });
       if (testExistIndex != -1) {
@@ -290,8 +289,6 @@ export class VisualizeMenuService {
         }
       } else if (annotateDataPoint.text) {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
-        this.visualizeService.selectedGraphObj.next(selectedGraphObj);
-        this.visualizeService.annotatedDataPoints.next([annotateDataPoint]);
       }
     }
     this.save(selectedGraphObj);
