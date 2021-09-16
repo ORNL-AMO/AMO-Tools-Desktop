@@ -64,6 +64,8 @@ export class InventoryTableComponent implements OnInit {
 
     compressedAirAssessment.modifications.forEach(modification => {
       modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
+      modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
+      modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
     });
 
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
@@ -98,7 +100,7 @@ export class InventoryTableComponent implements OnInit {
   }
 
   getPressureMinMax(compressor: CompressorInventoryItem): string {
-    let minMax: {min: number, max: number} = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+    let minMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
     return minMax.min + ' - ' + minMax.max + ' psig';
   }
 }

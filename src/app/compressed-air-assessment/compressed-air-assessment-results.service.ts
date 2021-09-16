@@ -602,8 +602,12 @@ export class CompressedAirAssessmentResultsService {
   }
 
   calculateReducedAirFlow(c_usage: number, adjustedFullLoadDischargePressure: number, p_alt: number, originalFullLoadDischargePressure: number): number {
-    let p: number = (adjustedFullLoadDischargePressure + p_alt) / (originalFullLoadDischargePressure + 14.7);
-    return (c_usage - (c_usage - (c_usage * p)) * .6)
+    if (adjustedFullLoadDischargePressure == originalFullLoadDischargePressure) {
+      return c_usage;
+    } else {
+      let p: number = (adjustedFullLoadDischargePressure + p_alt) / (originalFullLoadDischargePressure + 14.7);
+      return (c_usage - (c_usage - (c_usage * p)) * .6);
+    }
   }
 
   getEmptyEemSavings(): EemSavingsResults {

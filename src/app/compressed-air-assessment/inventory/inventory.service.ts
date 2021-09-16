@@ -496,6 +496,15 @@ export class InventoryService {
         });
         modification.useAutomaticSequencer.order = 100;
         modification.useAutomaticSequencer.profileSummary = new Array();
+        modification.adjustCascadingSetPoints.setPointData
+        
+        modification.adjustCascadingSetPoints.setPointData.push({
+          compressorId: newInventoryItem.itemId,
+          controlType: newInventoryItem.compressorControls.controlType,
+          compressorType: newInventoryItem.nameplateData.compressorType,
+          fullLoadDischargePressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
+          maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
+        })
       })
     });
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);

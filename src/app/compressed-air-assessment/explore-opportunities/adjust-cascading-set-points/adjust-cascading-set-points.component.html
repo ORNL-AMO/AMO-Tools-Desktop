@@ -72,7 +72,8 @@
                         <div class="input-group"
                             *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
                             <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
-                                [(ngModel)]="spData.maxFullFlowDischargePressure" (change)="save()" [disabled]="checkMaxFullFlowDisabled(spData.controlType)">
+                                [(ngModel)]="spData.maxFullFlowDischargePressure" (change)="save()"
+                                [disabled]="checkMaxFullFlowDisabled(spData.controlType)">
                             <span class="input-group-addon units">
                                 psig
                             </span>
@@ -80,7 +81,7 @@
                         <span *ngIf="!checkShowMaxFullFlow(spData.compressorType, spData.controlType)">&mdash;</span>
                     </td>
                 </tr>
-
+            </tbody>
             <tbody *ngIf="setPointView == 'baseline'">
                 <tr
                     *ngFor="let spData of baselineSetPoints | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
@@ -121,5 +122,10 @@
                 </tr>
             </tbody>
         </table>
+        <div *ngIf="setPointView == 'modification'" class="d-flex justify-content-end">
+            <div class="pl-2 pr-2 border-right border-left">
+                <a class="click-link small" (click)="resetData()">Reset to Baseline</a>
+            </div>
+        </div>
     </div>
 </div>

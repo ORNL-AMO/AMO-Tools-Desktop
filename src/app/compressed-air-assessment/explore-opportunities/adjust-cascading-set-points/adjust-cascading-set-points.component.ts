@@ -65,6 +65,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       if (this.adjustCascadingSetPoints.order != 100 && reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
         this.inventoryItems = this.compressedAirAssessmentResultsService.reduceSystemAirPressureAdjustCompressors(this.inventoryItems, this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure)
       }
+      this.checkAdjustCascadingPoints();
       this.setBaselineSetPoints();
     }
   }
@@ -131,5 +132,33 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+  checkAdjustCascadingPoints() {
+    let updatePoints: boolean = false;
+    this.adjustCascadingSetPoints.setPointData.forEach(pointData => {
+      let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == pointData.compressorId });
+      if (pointData.compressorType != compressor.nameplateData.compressorType || pointData.controlType != compressor.compressorControls.controlType || !pointData.fullLoadDischargePressure) {
+        updatePoints = true;
+        pointData.compressorType = compressor.nameplateData.compressorType;
+        pointData.controlType = compressor.compressorControls.controlType;
+        pointData.fullLoadDischargePressure = compressor.performancePoints.fullLoad.dischargePressure;
+        pointData.maxFullFlowDischargePressure = compressor.performancePoints.maxFullFlow.dischargePressure;
+      }
+    });
+    if (updatePoints) {
+      this.save(false);
+    }
+  }
+
+  resetData() {
+    this.adjustCascadingSetPoints.setPointData.forEach(pointData => {
+      let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == pointData.compressorId });
+      pointData.compressorType = compressor.nameplateData.compressorType;
+      pointData.controlType = compressor.compressorControls.controlType;
+      pointData.fullLoadDischargePressure = compressor.performancePoints.fullLoad.dischargePressure;
+      pointData.maxFullFlowDischargePressure = compressor.performancePoints.maxFullFlow.dischargePressure;
+    });
+    this.save(false);
   }
 }
