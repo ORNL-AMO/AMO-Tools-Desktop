@@ -69,6 +69,15 @@
         <div *ngIf="!modificationExists">
             <p>Explore Opportunities to view results</p>
         </div>
+        <div class="p-2 text-center"
+            *ngIf="modificationExists && (tabSelect == 'results' || tabSelect == 'compressor-profile')">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+                (change)="changeDayType()">
+                <option *ngIf="tabSelect == 'results'" [ngValue]=undefined>All Day Types</option>
+                <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
+            </select>
+        </div>
+
         <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
         </app-explore-opportunities-results>
         <span class="w-100 p-2 text-center" *ngIf="calculating">

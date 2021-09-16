@@ -48,7 +48,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.modificationExists = (val.modifications && val.modifications.length != 0);
         this.setModification();
         if (!this.selectedDayType) {
-          this.exploreOpportunitiesService.selectedDayType.next(this.compressedAirAssessment.compressedAirDayTypes[0]);
+          this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
         this.setCompressedAirAssessmentResults();
       }
@@ -91,6 +91,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    if(this.tabSelect == 'compressor-profile' && this.selectedDayType == undefined){
+      this.selectedDayType = this.dayTypeOptions[0];
+      this.changeDayType();
+    }
   }
 
   changeDayType() {

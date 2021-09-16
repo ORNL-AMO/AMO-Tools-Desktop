@@ -91,6 +91,7 @@ export class CompressedAirAssessmentResultsService {
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost);
       modificationResults.push({
         adjustedProfileSummary: adjustedData.adjustedProfileSummary,
+        adjustedCompressors: adjustedData.adjustedCompressors,
         profileSummaryTotals: totals,
         dayTypeId: dayType.dayTypeId,
         allSavingsResults: allSavingsResults,
@@ -660,6 +661,7 @@ export interface CompressedAirAssessmentResult {
 
 export interface DayTypeModificationResult {
   adjustedProfileSummary: Array<ProfileSummary>,
+  adjustedCompressors: Array<CompressorInventoryItem>,
   profileSummaryTotals: Array<ProfileSummaryTotal>,
   allSavingsResults: EemSavingsResults,
   flowReallocationSavings: EemSavingsResults,
