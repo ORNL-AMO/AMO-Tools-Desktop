@@ -49,9 +49,9 @@ export class ReduceRunTimeComponent implements OnInit {
       if (val && !this.isFormChange) {
         this.dayTypeOptions = this.compressedAirAssessment.compressedAirDayTypes;
         this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
-        if(!this.selectedDayTypeId){
-          let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => {return dayType.dayTypeId == this.selectedDayTypeId});
-          if(!findDayType){
+        if (!this.selectedDayTypeId) {
+          let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => { return dayType.dayTypeId == this.selectedDayTypeId });
+          if (!findDayType) {
             this.selectedDayTypeId = this.dayTypeOptions[0].dayTypeId;
           }
         }
@@ -80,7 +80,7 @@ export class ReduceRunTimeComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
     }
   }
@@ -89,18 +89,20 @@ export class ReduceRunTimeComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.orderOptions = new Array();
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let allOrders: Array<number> = [
-        modification.addPrimaryReceiverVolume.order,
-        modification.adjustCascadingSetPoints.order,
-        modification.improveEndUseEfficiency.order,
-        modification.reduceAirLeaks.order,
-        modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order
-      ];
-      allOrders = allOrders.filter(order => { return order != 100 });
-      let numOrdersOn: number = allOrders.length;
-      for (let i = 1; i <= numOrdersOn + 1; i++) {
-        this.orderOptions.push(i);
+      if (modification) {
+        let allOrders: Array<number> = [
+          modification.addPrimaryReceiverVolume.order,
+          modification.adjustCascadingSetPoints.order,
+          modification.improveEndUseEfficiency.order,
+          modification.reduceAirLeaks.order,
+          modification.reduceSystemAirPressure.order,
+          modification.useAutomaticSequencer.order
+        ];
+        allOrders = allOrders.filter(order => { return order != 100 });
+        let numOrdersOn: number = allOrders.length;
+        for (let i = 1; i <= numOrdersOn + 1; i++) {
+          this.orderOptions.push(i);
+        }
       }
     }
   }
@@ -122,7 +124,7 @@ export class ReduceRunTimeComponent implements OnInit {
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
       this.adjustedProfileSummary = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.modificationResults, this.selectedDayTypeId);
       this.reduceRuntimeProfile = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayTypeId }).reduceRunTimeProfileSummary;
-      this.setAirflowData();  
+      this.setAirflowData();
     }
   }
 
@@ -170,7 +172,7 @@ export class ReduceRunTimeComponent implements OnInit {
     }
   }
 
-  checkShowShutdownTimer(compressorId: string): boolean{
+  checkShowShutdownTimer(compressorId: string): boolean {
     let compressor: CompressorInventoryItem = this.inventoryItems.find(compressor => { return compressor.itemId == compressorId });
     return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
   }

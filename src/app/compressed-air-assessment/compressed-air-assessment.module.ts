@@ -82,7 +82,6 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
 import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
-import { FlowReallocationComponent } from './explore-opportunities/flow-reallocation/flow-reallocation.component';
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
 import { ImproveEndUseEfficiencyComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.component';
 import { ReduceSystemAirPressureComponent } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.component';
@@ -174,7 +173,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     CompressedAirCalculatorsComponent,
     CalculatorTabsComponent,
     ExploreOpportunitiesComponent,
-    FlowReallocationComponent,
     ReduceAirLeaksComponent,
     ImproveEndUseEfficiencyComponent,
     ReduceSystemAirPressureComponent,
