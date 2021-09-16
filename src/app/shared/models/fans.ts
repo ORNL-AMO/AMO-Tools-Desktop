@@ -65,16 +65,14 @@ export interface FieldData {
   //TODO: remove operatingFraction support
   //removed from suite v0.3.2
   operatingFraction?: number;
-  //operatingHours?: number;
-  //cost?: number;
-  flowRate?: number;
-  inletPressure?: number;
-  outletPressure?: number;
-  loadEstimatedMethod?: number;
-  motorPower?: number;
+  flowRate: number;
+  inletPressure: number;
+  outletPressure: number;
+  loadEstimatedMethod: number;
+  motorPower: number;
   // specificHeatRatio: number;
-  compressibilityFactor?: number;
-  measuredVoltage?: number;
+  compressibilityFactor: number;
+  measuredVoltage: number;
   usingStaticPressure?: boolean;
   ductArea?: number,
   inletVelocityPressure?: number;

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FieldData, FSAT, FsatOperations } from '../../shared/models/fans';
+import { FSAT, FsatOperations } from '../../shared/models/fans';
 import { OperatingHours } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
@@ -32,22 +32,17 @@ export class OperationsComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
-
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
-    this.getBodyHeight();
   }
 
   warnings: FanOperationsWarnings;
   
   formWidth: number;
   
-  bodyHeight: number;
   showOperatingHoursModal: boolean = false;
-  userDefinedCompressibilityFactor: boolean = false;
 
   idString: string;
 
@@ -113,9 +108,6 @@ export class OperationsComponent implements OnInit {
   }
 
   focusField(inputName: string) {
-    if (!this.baseline && inputName === 'measuredVoltage') {
-      inputName = 'modMeasuredVoltage';
-    }
     this.helpPanelService.currentField.next(inputName);
   }
 
@@ -165,12 +157,4 @@ export class OperationsComponent implements OnInit {
     }
   }
 
-
-  getBodyHeight() {
-    if (this.modalBody) {
-      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
-    } else {
-      this.bodyHeight = 0;
-    }
-  }
 }
