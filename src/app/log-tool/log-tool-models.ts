@@ -223,7 +223,6 @@ export interface LogToolDbData {
         selectedGraphObj: GraphObj,
         visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
         annotateDataPoint: AnnotationData;
-        annotatedPoints?: Array<AnnotationData>;
     },
     dayTypeData: {
         selectedDataField: LogToolField,
