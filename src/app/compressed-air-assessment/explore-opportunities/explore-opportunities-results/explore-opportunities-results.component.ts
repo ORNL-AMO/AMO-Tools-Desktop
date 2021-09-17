@@ -14,9 +14,11 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   adjustedProfileSummary: Array<ProfileSummary>;
   totals: Array<ProfileSummaryTotal>;
-  selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
+
+  selectedDayTypeSub: Subscription;
+  selectedDayType: CompressedAirDayType;
 
   modification: Modification;
   modificationResults: CompressedAirAssessmentResult;
@@ -40,11 +42,17 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       this.modificationResults = val;
       this.setResults();
     });
+
+    this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
+      this.selectedDayType = val;
+      this.setResults();
+    });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.modificationResultsSub.unsubscribe();
+    this.selectedDayTypeSub.unsubscribe();
   }
 
   setResults() {
@@ -59,6 +67,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   combineDayTypeResults(): DayTypeModificationResult {
     let dayTypeModificationResult: DayTypeModificationResult = {
       adjustedProfileSummary: [],
+      adjustedCompressors: [],
       profileSummaryTotals: [],
       allSavingsResults: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),
       flowReallocationSavings: this.compressedAirAssessmentResultsService.getEmptyEemSavings(),

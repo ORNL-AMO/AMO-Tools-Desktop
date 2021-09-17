@@ -61,7 +61,16 @@ export interface ReduceSystemAirPressure {
 }
 
 export interface AdjustCascadingSetPoints {
-    order: number
+    order: number,
+    setPointData: Array<CascadingSetPointData>
+}
+
+export interface CascadingSetPointData {
+    compressorId: string,
+    controlType: number,
+    compressorType: number,
+    fullLoadDischargePressure: number,
+    maxFullFlowDischargePressure: number
 }
 
 export interface UseAutomaticSequencer {

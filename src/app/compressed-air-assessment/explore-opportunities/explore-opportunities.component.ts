@@ -31,6 +31,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   dayTypeOptions: Array<CompressedAirDayType>;
   calculating: any;
   selectedModificationId: string;
+  showCascadingSetPoints: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -42,11 +43,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressedAirAssessment = val;
+        this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
         this.setModification();
         if (!this.selectedDayType) {
-          this.exploreOpportunitiesService.selectedDayType.next(this.compressedAirAssessment.compressedAirDayTypes[0]);
+          this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
         this.setCompressedAirAssessmentResults();
       }
@@ -89,6 +91,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    if(this.tabSelect == 'compressor-profile' && this.selectedDayType == undefined){
+      this.selectedDayType = this.dayTypeOptions[0];
+      this.changeDayType();
+    }
   }
 
   changeDayType() {

@@ -55,7 +55,7 @@ export class ReduceAirLeaksComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
     }
   }
@@ -64,18 +64,20 @@ export class ReduceAirLeaksComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.orderOptions = new Array();
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let allOrders: Array<number> = [
-        modification.addPrimaryReceiverVolume.order,
-        modification.adjustCascadingSetPoints.order,
-        modification.improveEndUseEfficiency.order,
-        modification.reduceRuntime.order,
-        modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order
-      ];
-      allOrders = allOrders.filter(order => { return order != 100 });
-      let numOrdersOn: number = allOrders.length;
-      for (let i = 1; i <= numOrdersOn + 1; i++) {
-        this.orderOptions.push(i);
+      if (modification) {
+        let allOrders: Array<number> = [
+          modification.addPrimaryReceiverVolume.order,
+          modification.adjustCascadingSetPoints.order,
+          modification.improveEndUseEfficiency.order,
+          modification.reduceRuntime.order,
+          modification.reduceSystemAirPressure.order,
+          modification.useAutomaticSequencer.order
+        ];
+        allOrders = allOrders.filter(order => { return order != 100 });
+        let numOrdersOn: number = allOrders.length;
+        for (let i = 1; i <= numOrdersOn + 1; i++) {
+          this.orderOptions.push(i);
+        }
       }
     }
   }

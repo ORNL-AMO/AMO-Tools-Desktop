@@ -82,7 +82,6 @@ import { PerformancePointsFormService } from './inventory/performance-points/per
 import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
-import { FlowReallocationComponent } from './explore-opportunities/flow-reallocation/flow-reallocation.component';
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
 import { ImproveEndUseEfficiencyComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.component';
 import { ReduceSystemAirPressureComponent } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.component';
@@ -116,6 +115,7 @@ import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/asses
 import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -173,7 +173,6 @@ import { AdjustSequencerProfileComponent } from './explore-opportunities/use-aut
     CompressedAirCalculatorsComponent,
     CalculatorTabsComponent,
     ExploreOpportunitiesComponent,
-    FlowReallocationComponent,
     ReduceAirLeaksComponent,
     ImproveEndUseEfficiencyComponent,
     ReduceSystemAirPressureComponent,
@@ -216,7 +215,8 @@ import { AdjustSequencerProfileComponent } from './explore-opportunities/use-aut
     FullLoadAmpsModule,
     AltitudeCorrectionModule,
     PercentGraphModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    SharedPipesModule
   ],
   providers: [
     CompressedAirAssessmentService,

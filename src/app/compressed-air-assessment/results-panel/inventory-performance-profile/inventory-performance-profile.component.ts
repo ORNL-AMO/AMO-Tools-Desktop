@@ -2,10 +2,11 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventoryService } from '../../inventory/inventory.service';
 import * as Plotly from 'plotly.js';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../../compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
 @Component({
   selector: 'app-inventory-performance-profile',
   templateUrl: './inventory-performance-profile.component.html',
@@ -21,9 +22,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   showAllCompressors: boolean = false;
   compressedAirAssessment: CompressedAirAssessment;
+  adjustedCompressors: Array<CompressorInventoryItem>;
+  modificationResultsSub: Subscription;
+  modificationResults: CompressedAirAssessmentResult;
+  selectedDayType: CompressedAirDayType;
+  selectedDayTypeSub: Subscription;
+
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     if (!this.inAssessment) {
@@ -32,19 +39,37 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         this.drawChart();
       });
     } else {
-      this.dataSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-        this.compressedAirAssessment = val;
-        this.drawChart();
+      this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(selectedDayType => {
+        this.selectedDayType = selectedDayType;
+        this.setCompressorData();
+      });
+
+      this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(modificationResults => {
+        this.modificationResults = modificationResults;
+        this.setCompressorData();
       });
     }
   }
 
   ngOnDestroy() {
-    this.dataSub.unsubscribe();
+    if (this.inAssessment) {
+      this.selectedDayTypeSub.unsubscribe();
+      this.modificationResultsSub.unsubscribe();
+    } else {
+      this.dataSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
     this.drawChart();
+  }
+
+  setCompressorData() {
+    if (this.modificationResults && this.selectedDayType) {
+      this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      this.adjustedCompressors = this.modificationResults.dayTypeModificationResults.find(result => { return result.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;
+      this.drawChart();
+    }
   }
 
   drawChart() {
@@ -137,8 +162,6 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   getAssessmentChartData(): Array<ProfileChartData> {
     let chartData: Array<ProfileChartData> = new Array();
-    // let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-    // let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
     this.compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
       let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
       if (isValid) {
@@ -147,16 +170,16 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           compressorName: compressor.name,
           data: compressorData
         });
-        // if (modification.useUnloadingControls.order != 100) {
-        //   let adjustedCompressor: CompressorInventoryItem = this.compressedAirAssessmentResultsService.adjustCompressorControl(modification.useUnloadingControls, JSON.parse(JSON.stringify(compressor)));
-        //   // debugger
-        //   let adjustedCompressorData: Array<CompressorCalcResult> = this.getCompressorData(adjustedCompressor);
-        //   // console.log(adjustedCompressorData);
-        //   chartData.push({
-        //     compressorName: compressor.name + ' (Adjusted)',
-        //     data: adjustedCompressorData
-        //   });
-        // }
+      }
+    });
+    this.adjustedCompressors.forEach(compressor => {
+      let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
+      if (isValid) {
+        let compressorData: Array<CompressorCalcResult> = this.getCompressorData(compressor);
+        chartData.push({
+          compressorName: compressor.name + ' (Adjusted)',
+          data: compressorData
+        });
       }
     });
     return chartData;
@@ -167,9 +190,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     for (let airFlow = 0; airFlow <= 100;) {
       let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, 0, false);
       compressorData.push(results);
-      if(airFlow < 95){
+      if (airFlow < 95) {
         airFlow = airFlow + 1;
-      }else{
+      } else {
         airFlow = airFlow + .5;
       }
     }

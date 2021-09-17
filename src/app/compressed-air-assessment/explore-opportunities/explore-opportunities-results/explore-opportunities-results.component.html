@@ -1,11 +1,3 @@
-<div class="p-2 text-center">
-    <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-        (change)="setResults()">
-        <option [ngValue]=undefined>All Day Types</option>
-        <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
-    </select>
-</div>
-
 <div class="d-flex flex-column my-table" *ngIf="dayTypeModificationResult">
     <div class="d-flex stripe my-table-bg border-top-0">
         <div class="col-4">

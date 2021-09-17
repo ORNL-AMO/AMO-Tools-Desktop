@@ -39,9 +39,9 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
-        if(!this.selectedDayTypeId){
-          let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => {return dayType.dayTypeId == this.selectedDayTypeId});
-          if(!findDayType){
+        if (!this.selectedDayTypeId) {
+          let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => { return dayType.dayTypeId == this.selectedDayTypeId });
+          if (!findDayType) {
             this.selectedDayTypeId = this.dayTypeOptions[0].dayTypeId;
           }
         }
@@ -81,7 +81,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.useAutomaticSequencer = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer));
       if (this.selectedDayTypeId && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
         this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
@@ -94,18 +94,20 @@ export class UseAutomaticSequencerComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.orderOptions = new Array();
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let allOrders: Array<number> = [
-        modification.addPrimaryReceiverVolume.order,
-        modification.adjustCascadingSetPoints.order,
-        modification.improveEndUseEfficiency.order,
-        modification.reduceRuntime.order,
-        modification.reduceSystemAirPressure.order,
-        modification.reduceAirLeaks.order
-      ];
-      allOrders = allOrders.filter(order => { return order != 100 });
-      let numOrdersOn: number = allOrders.length;
-      for (let i = 1; i <= numOrdersOn + 1; i++) {
-        this.orderOptions.push(i);
+      if (modification) {
+        let allOrders: Array<number> = [
+          modification.addPrimaryReceiverVolume.order,
+          modification.adjustCascadingSetPoints.order,
+          modification.improveEndUseEfficiency.order,
+          modification.reduceRuntime.order,
+          modification.reduceSystemAirPressure.order,
+          modification.reduceAirLeaks.order
+        ];
+        allOrders = allOrders.filter(order => { return order != 100 });
+        let numOrdersOn: number = allOrders.length;
+        for (let i = 1; i <= numOrdersOn + 1; i++) {
+          this.orderOptions.push(i);
+        }
       }
     }
   }
