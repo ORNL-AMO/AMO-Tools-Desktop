@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./setup-data.component.css']
 })
 export class SetupDataComponent implements OnInit {
-
+  dataLoading: boolean = false;
   fileReference: any;
   validFile: boolean;
   importData: any = null;
@@ -86,13 +86,17 @@ export class SetupDataComponent implements OnInit {
   }
 
   setImport($event) {
-    let splitName = $event.target.files[0].name.split(".");
-    if (splitName[splitName.length - 1] == "xlsx") {
-      this.setExcelImport($event);
-    }
-    else {
-      this.setCSVImport($event);
-    }
+    this.dataLoading = true;
+    setTimeout(() => {
+      let splitName = $event.target.files[0].name.split(".");
+      if (splitName[splitName.length - 1] == "xlsx") {
+        this.setExcelImport($event);
+      }
+      else {
+        this.setCSVImport($event);
+      }
+    }, 100);
+
   }
 
   setExcelImport($event) {
@@ -100,12 +104,13 @@ export class SetupDataComponent implements OnInit {
     this.importExcel();
   }
 
-  importFile() {
+  importFile() {   
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference);
     fr.onloadend = (e) => {
       this.importData = JSON.parse(JSON.stringify(fr.result));
       this.parsePreviewData();
+      this.dataLoading = false;
     };
   }
 
@@ -140,6 +145,7 @@ export class SetupDataComponent implements OnInit {
     let rowObject  =  XLSX.utils.sheet_to_csv(this.workBook.Sheets[this.selectedSheet], {dateNF: "mm/dd/yyyy hh:mm:ss"});
     this.importData = rowObject;
     this.parsePreviewData();
+    this.dataLoading = false;
   }
  
 
