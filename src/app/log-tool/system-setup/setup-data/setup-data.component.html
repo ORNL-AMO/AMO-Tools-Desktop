@@ -33,7 +33,7 @@
                     </span>
                 </div>
             </div>
-            <div class="p-2" *ngIf="previewDataFromCsv">
+            <div class="p-2" *ngIf="previewDataFromCsv && !dataLoading">
                 <table class="table table-condensed table-striped table-sm">
                     <thead>
                         <tr>
