@@ -27,7 +27,6 @@ export class FanOperationsSummaryComponent implements OnInit {
 
   operatingHoursDiff: Array<boolean>;
   costDiff: Array<boolean>;
-  // pressureCalcResultTypeDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -36,26 +35,16 @@ export class FanOperationsSummaryComponent implements OnInit {
     this.costDiff = new Array<boolean>();
 
     if (this.fsat.fsatOperations) {
-
       let mods = new Array<FsatOperations>();
-
       if (this.fsat.modifications) {
-
         this.numMods = this.fsat.modifications.length;
-
         for (let i = 0; i < this.fsat.modifications.length; i++) {
-
           if (this.fsat.modifications[i].fsat.fsatOperations) {
-            // fieldData changes
             mods.push(this.fsat.modifications[i].fsat.fsatOperations);
           }
-
           this.operatingHoursDiff.push(false);
           this.costDiff.push(false);
-
-
         }
-
         this.fsatOperations = {
           baseline: this.fsat.fsatOperations,
           modifications: mods

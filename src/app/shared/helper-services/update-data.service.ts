@@ -102,7 +102,11 @@ export class UpdateDataService {
             } else {
                 fsat.fsatOperations.operatingHours = 8760;
             }
-            fsat.fsatOperations.cost = 0.06;
+            if (fsat.fieldData['cost']){
+                fsat.fsatOperations.cost = fsat.fieldData['cost'];
+            } else {
+                fsat.fsatOperations.cost = 0.06;
+            }
         }
         return fsat;
     }
