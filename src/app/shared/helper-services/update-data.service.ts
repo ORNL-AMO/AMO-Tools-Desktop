@@ -75,10 +75,14 @@ export class UpdateDataService {
         }
 
         assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
+        if(!assessment.fsat.fsatOperations){
+            assessment.fsat = this.addFsatOperations(assessment.fsat);
+        }
         if(assessment.fsat.modifications){
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
                 mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
+                mod.fsat = this.addFsatOperations(mod.fsat);
             });
         }
         return assessment;
@@ -87,6 +91,22 @@ export class UpdateDataService {
     addWhatIfScenarioFsat(fsat: FSAT): FSAT {
         if(!fsat.whatIfScenario) {
             fsat.whatIfScenario = true;
+        }
+        return fsat;
+    }
+
+    addFsatOperations(fsat: FSAT): FSAT {
+        if(!fsat.fsatOperations) {
+            if (fsat.fieldData['operatingHours']){
+                fsat.fsatOperations.operatingHours = fsat.fieldData['operatingHours'];
+            } else {
+                fsat.fsatOperations.operatingHours = 8760;
+            }
+            if (fsat.fieldData['cost']){
+                fsat.fsatOperations.cost = fsat.fieldData['cost'];
+            } else {
+                fsat.fsatOperations.cost = 0.06;
+            }
         }
         return fsat;
     }

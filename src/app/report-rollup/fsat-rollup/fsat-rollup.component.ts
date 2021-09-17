@@ -14,7 +14,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
   templateUrl: './fsat-rollup.component.html',
   styleUrls: ['./fsat-rollup.component.css']
 })
-export class FsatRollupComponent implements OnInit {
+export class FsatRollupComponent implements OnInit { 
 
   @Input()
   calculators: Array<Calculator>;
