@@ -38,21 +38,17 @@ export class GraphBasicsComponent implements OnInit {
       
       if (this.selectedGraphObj.layout.xaxis.type == "date") {
         this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+         this.markerType = this.selectedGraphObj.layout.xaxis.type.valueOf();
+          this.isTimeSeries = this.logToolDataService.isTimeSeries;
+      
       }
       else {
-          this.markerTypes = [{label: "Markers", value: "markers"}];
-          this.markerType = "markers";
+        this.markerTypes = [{label: "Markers", value: "markers"}, {label: "Lines", value: "lines"}];
+        this.markerType = "markers";  
+        this.isTimeSeries = this.logToolDataService.isTimeSeries;
       }
-        
+    
     });
-    if (this.selectedGraphObj.layout.xaxis.type == "date") {
-    this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
-    }
-    else {
-      this.markerTypes = [{label: "Markers", value: "markers"}];
-    }
-    this.markerType = "markers";
-    this.isTimeSeries = this.logToolDataService.isTimeSeries;
   }
 
   ngOnDestroy() {
