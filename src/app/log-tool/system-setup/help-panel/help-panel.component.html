@@ -1,4 +1,4 @@
-<div class="mr-2 ml-2 d-flex flex-column help-info">
+<div class="mr-2 ml-2 d-flex flex-column help-info scroll-item">
     <div class="header">
         <h3>
             Data Exploration Help
@@ -19,7 +19,7 @@
     </div>
     <div class="pl-2 pr-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
         <h6>
-            <small>Choose a <b>.csv</b> data file from your file system
+            <small>Choose a <b>.csv</b> or <b>.xlsx</b> data file from your file system
             </small>
             <small>
                 <ul>
@@ -27,6 +27,10 @@
                         Select your data file and the corresponding header row. If there are unused rows in between the
                         header row and the start of the data then you will need to manually remove those rows manually
                         before processing.
+                        <dd>
+                            - If you selected a <b>.xlsx</b> data file, each sheet of the workbook will be treated as a
+                            <b>.csv</b> data file. You can select the worksheet from which the data will be used.
+                        </dd>
                     </li>
                     <li>
                         There is no restrictions on the column names (length/special characters). Columns can be renamed
