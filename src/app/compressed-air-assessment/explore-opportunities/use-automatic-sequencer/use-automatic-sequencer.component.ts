@@ -31,6 +31,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   profilePower: Array<number>;
   modificationResults: CompressedAirAssessmentResult;
   modificationResultsSub: Subscription;
+  baselineHasSequencer: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -38,6 +39,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.baselineHasSequencer = this.compressedAirAssessment.systemInformation.isSequencerUsed;
         this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
         if (!this.selectedDayTypeId) {
           let findDayType: CompressedAirDayType = this.dayTypeOptions.find(dayType => { return dayType.dayTypeId == this.selectedDayTypeId });
@@ -86,6 +88,13 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.selectedDayTypeId && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
         this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
       }
+      if (this.baselineHasSequencer && this.useAutomaticSequencer.targetPressure == undefined) {
+        this.useAutomaticSequencer.targetPressure = this.compressedAirAssessment.systemInformation.targetPressure;
+      }
+      if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
+        this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
+
+      }
       this.setAdjustedCompressors();
     }
   }
@@ -131,6 +140,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
       let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
       summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
     });
+
+    if (this.baselineHasSequencer) {
+      this.useAutomaticSequencer.targetPressure = this.compressedAirAssessment.systemInformation.targetPressure;
+      this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
+    }
     this.save(false);
   }
 

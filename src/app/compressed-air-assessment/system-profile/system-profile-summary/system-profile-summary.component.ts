@@ -26,7 +26,7 @@ export class SystemProfileSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(val, selectedDayType);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(val, selectedDayType);
       this.totals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(val.compressorInventoryItems, selectedDayType, this.profileSummary);
       this.inventoryItems = val.compressorInventoryItems;
     });
