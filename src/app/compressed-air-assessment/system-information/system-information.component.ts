@@ -70,6 +70,13 @@ export class SystemInformationComponent implements OnInit {
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
       })
+    }else if(systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
+      //if sequencer on baseline cannot have these modifications. Turn off
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.reduceSystemAirPressure.order = 100;
+        modification.adjustCascadingSetPoints.order = 100;
+        modification.reduceRuntime.order = 100;
+      });
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }

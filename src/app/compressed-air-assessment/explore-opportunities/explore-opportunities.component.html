@@ -5,7 +5,6 @@
         </div>
         <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
             your system.</p>
-        <!-- <app-explore-opportunities-form></app-explore-opportunities-form> -->
         <div class="d-flex flex-column mr-3 ml-3 mb-4">
             <div class="w-100 justify-content-center p-2 d-flex">
                 <button class="btn btn-primary" (click)="addExploreOpp()">Add New Scenario</button>
@@ -17,20 +16,19 @@
                         [(ngModel)]="modification.name" (input)="save()" />
                 </div>
                 <hr>
-                <!-- <app-flow-reallocation></app-flow-reallocation> -->
                 <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                 <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
                 </app-improve-end-use-efficiency>
                 <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"
-                    *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-system-air-pressure>
+                    *ngIf="!hasSequencer"></app-reduce-system-air-pressure>
                 <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order"
-                    *ngIf="showCascadingSetPoints && modification.useAutomaticSequencer.order == 100">
+                    *ngIf="showCascadingSetPoints && !hasSequencer">
                 </app-adjust-cascading-set-points>
                 <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
                     *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
                 </app-use-automatic-sequencer>
                 <app-reduce-run-time [style.order]="modification.reduceRuntime.order"
-                    *ngIf="modification.useAutomaticSequencer.order == 100"></app-reduce-run-time>
+                    *ngIf="!hasSequencer"></app-reduce-run-time>
                 <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order">
                 </app-add-receiver-volume>
             </div>
@@ -80,30 +78,17 @@
 
         <app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
         </app-explore-opportunities-results>
-        <span class="w-100 p-2 text-center" *ngIf="calculating">
-            Calculating results...
-        </span>
+
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
-
+        <span class="w-100 p-2 text-center" *ngIf="calculating && tabSelect != 'help'">
+            Calculating results...
+        </span>
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'help'">
             <app-help-panel></app-help-panel>
         </div>
-
-        <!-- <div class="row justify-content-center no-gutters mt-4" *ngIf="calculating">
-            <div class="col-10">
-                <div class="main-content text-center">
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                    <h1>Calculating Results...</h1>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>
 

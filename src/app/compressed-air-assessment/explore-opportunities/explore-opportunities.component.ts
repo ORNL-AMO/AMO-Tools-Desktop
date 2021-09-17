@@ -32,6 +32,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   calculating: any;
   selectedModificationId: string;
   showCascadingSetPoints: boolean;
+  hasSequencerOn: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -50,6 +51,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         if (!this.selectedDayType) {
           this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
+        this.setHasSequencer();
         this.setCompressedAirAssessmentResults();
       }
     });
@@ -65,6 +67,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         } else {
           this.setCompressedAirAssessmentResults();
         }
+        this.setHasSequencer();
       }
     });
     this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
@@ -79,6 +82,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.secondaryAssessmentTabSub.unsubscribe();
     this.selectedDayTypeSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
+  }
+
+
+  setHasSequencer(){
+    if(this.compressedAirAssessment){
+      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+      if(!this.hasSequencerOn && this.modification){
+        this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
+      }
+    }
   }
 
   addExploreOpp() {

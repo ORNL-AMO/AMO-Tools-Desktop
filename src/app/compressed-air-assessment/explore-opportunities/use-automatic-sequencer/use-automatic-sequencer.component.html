@@ -1,6 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="useAutomaticSequencer">
-        Use Automatic Sequencer
+        <span *ngIf="!baselineHasSequencer">Use</span>
+        <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
         <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order"
             class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>

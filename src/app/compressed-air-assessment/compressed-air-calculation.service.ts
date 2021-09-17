@@ -103,8 +103,6 @@ export class CompressedAirCalculationService {
     }
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
-    
-
     if (isValid && !isShutdown) {
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);

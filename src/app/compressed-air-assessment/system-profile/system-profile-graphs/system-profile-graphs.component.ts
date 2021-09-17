@@ -65,7 +65,7 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   setProfileData() {
     if (!this.inModification && this.compressedAirAssessment && this.selectedDayType) {
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
     } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
@@ -73,7 +73,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let dayTypeModificationResult: DayTypeModificationResult = compressedAirAssessmentResult.dayTypeModificationResults.find(dayTypeResult => { return dayTypeResult.dayTypeId == this.selectedDayType.dayTypeId });
       this.profileSummary = dayTypeModificationResult.adjustedProfileSummary;
     } else if (this.compressedAirAssessment && this.selectedDayType && this.isBaseline) {
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
     }
   }
 
