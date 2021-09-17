@@ -34,10 +34,18 @@ export class SystemInformationComponent implements OnInit {
     this.settingsSub.unsubscribe();
   }
 
-  save() {
+  save(changeTargetSequencer: boolean) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
+    if(changeTargetSequencer && systemInformation.isSequencerUsed){
+      //if sequencer on baseline cannot have these modifications. Turn off
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.reduceSystemAirPressure.order = 100;
+        modification.adjustCascadingSetPoints.order = 100;
+        modification.reduceRuntime.order = 100;
+      });
+    }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
@@ -58,7 +66,7 @@ export class SystemInformationComponent implements OnInit {
     }
     this.compressedAirAssessmentService.modalOpen.next(false);
     this.showSystemCapacityModal = false;
-    this.save();
+    this.save(false);
   }
   
   changeIsSequencerUsed(){
