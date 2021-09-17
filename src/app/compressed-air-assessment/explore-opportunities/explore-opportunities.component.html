@@ -20,15 +20,15 @@
                 <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
                 </app-improve-end-use-efficiency>
                 <app-reduce-system-air-pressure [style.order]="modification.reduceSystemAirPressure.order"
-                    *ngIf="!hasSequencer"></app-reduce-system-air-pressure>
+                    *ngIf="!hasSequencerOn"></app-reduce-system-air-pressure>
                 <app-adjust-cascading-set-points [style.order]="modification.adjustCascadingSetPoints.order"
-                    *ngIf="showCascadingSetPoints && !hasSequencer">
+                    *ngIf="showCascadingSetPoints && !hasSequencerOn">
                 </app-adjust-cascading-set-points>
                 <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
                     *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
                 </app-use-automatic-sequencer>
                 <app-reduce-run-time [style.order]="modification.reduceRuntime.order"
-                    *ngIf="!hasSequencer"></app-reduce-run-time>
+                    *ngIf="!hasSequencerOn"></app-reduce-run-time>
                 <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order">
                 </app-add-receiver-volume>
             </div>
