@@ -34,18 +34,10 @@ export class SystemInformationComponent implements OnInit {
     this.settingsSub.unsubscribe();
   }
 
-  save(changeTargetSequencer: boolean) {
+  save() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
-    if(changeTargetSequencer && systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
-      //if sequencer on baseline cannot have these modifications. Turn off
-      compressedAirAssessment.modifications.forEach(modification => {
-        modification.reduceSystemAirPressure.order = 100;
-        modification.adjustCascadingSetPoints.order = 100;
-        modification.reduceRuntime.order = 100;
-      });
-    }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
@@ -66,7 +58,7 @@ export class SystemInformationComponent implements OnInit {
     }
     this.compressedAirAssessmentService.modalOpen.next(false);
     this.showSystemCapacityModal = false;
-    this.save(false);
+    this.save();
   }
   
   changeIsSequencerUsed(){
@@ -78,6 +70,13 @@ export class SystemInformationComponent implements OnInit {
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
       })
+    }else if(systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
+      //if sequencer on baseline cannot have these modifications. Turn off
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.reduceSystemAirPressure.order = 100;
+        modification.adjustCascadingSetPoints.order = 100;
+        modification.reduceRuntime.order = 100;
+      });
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
