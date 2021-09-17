@@ -13,9 +13,7 @@ import { ReportRollupService } from '../report-rollup.service';
   templateUrl: './fsat-rollup.component.html',
   styleUrls: ['./fsat-rollup.component.css']
 })
-export class FsatRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
+export class FsatRollupComponent implements OnInit { 
 
   @Input()
   calculators: Array<Calculator>;
@@ -31,7 +29,7 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  //settings: Settings;
+  settings: Settings;
 
   rollupEnergyUnit: string = 'MWh';
   

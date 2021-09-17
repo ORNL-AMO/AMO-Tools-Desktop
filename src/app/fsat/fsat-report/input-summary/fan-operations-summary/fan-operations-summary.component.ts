@@ -17,8 +17,6 @@ export class FanOperationsSummaryComponent implements OnInit {
   @Input()
   printView: boolean;
 
-  //this object will hold all FieldData objects for the assessment
-  //we define the baseline and the array of modifications separately for consistency
   fsatOperations: { baseline: FsatOperations, modifications: Array<FsatOperations> };
 
 
