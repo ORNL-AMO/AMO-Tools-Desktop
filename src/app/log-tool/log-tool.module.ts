@@ -41,6 +41,7 @@ import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type
 import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/selected-data-table/selected-data-table.component';
 import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
 import { LogToolDbService } from './log-tool-db.service';
+import { ExportModalComponent } from './export-modal/export-modal.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { LogToolDbService } from './log-tool-db.service';
     IndividualDaySummaryTableComponent,
     DayTypeSummaryTableComponent,
     SelectedDataTableComponent,
-    BinDataComponent
+    BinDataComponent,
+    ExportModalComponent
   ],
   imports: [
     CommonModule,

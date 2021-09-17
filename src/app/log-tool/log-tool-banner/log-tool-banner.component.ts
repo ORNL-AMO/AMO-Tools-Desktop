@@ -35,4 +35,9 @@ export class LogToolBannerComponent implements OnInit {
     this.noDayTypeAnalysisSub.unsubscribe();
   }
 
+  openExportData(){
+    console.log('Test export button works');
+    this.logToolService.openExportData.next(true);
+  }
+
 }

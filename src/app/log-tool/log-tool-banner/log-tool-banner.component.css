@@ -25,3 +25,12 @@
     background-color: white;
     border-radius: 5px;
 }
+
+button{
+    border: none;
+    background-color: none;
+}
+
+button.active{
+    background-color: #117A65;
+}

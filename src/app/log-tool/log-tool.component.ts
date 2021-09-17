@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { LogToolDbService } from './log-tool-db.service';
+import { LogToolService } from './log-tool.service';
 
 @Component({
   selector: 'app-log-tool',
@@ -16,12 +18,20 @@ export class LogToolComponent implements OnInit {
   onResize(event) {
     this.getContainerHeight();
   }
-  constructor(private activatedRoute: ActivatedRoute, private logToolDbService: LogToolDbService) { }
+
+  openExportDataSub: Subscription;
+  openExportData: boolean;
+
+  constructor(private activatedRoute: ActivatedRoute, private logToolDbService: LogToolDbService, private logToolService: LogToolService) { }
 
   ngOnInit() {
     this.logToolDbService.initLogToolData();
     this.activatedRoute.url.subscribe(url => {
       this.getContainerHeight();
+    });
+
+    this.openExportDataSub = this.logToolService.openExportData.subscribe(val => {
+      this.openExportData = val;
     });
 
   }
@@ -41,4 +51,9 @@ export class LogToolComponent implements OnInit {
       }, 100);
     }
   }
+
+  ngOnDestroy(){
+    this.openExportDataSub.unsubscribe();
+  }
+  
 }

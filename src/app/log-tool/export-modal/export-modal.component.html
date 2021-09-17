@@ -1,0 +1,30 @@
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Export Data</h4>
+                <button class="close" aria-label="Close" (click)="closeExportData()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <div class="export-content scroll-item">
+                    <h3>Would you like to export your data?</h3>
+
+                    <button class="btn btn-secondary" (click)="getExportData()">Yes</button>
+
+                    <button class="btn btn-secondary" (click)="closeExportData()">No</button>
+
+                    <div *ngIf="exportData == true">
+                        stuff here for exporting
+                    </div>                    
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">                
+                <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>               
+            </div>
+        </div>
+    </div>
+</div>
