@@ -38,7 +38,7 @@ export class SystemInformationComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
-    if(changeTargetSequencer && systemInformation.isSequencerUsed){
+    if(changeTargetSequencer && systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
       //if sequencer on baseline cannot have these modifications. Turn off
       compressedAirAssessment.modifications.forEach(modification => {
         modification.reduceSystemAirPressure.order = 100;
