@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump, WallLossesSurface } from '../shared/models/materials';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 @Injectable()
@@ -9,7 +9,7 @@ export class SqlDbApiService {
 
   hasStarted: boolean = false;
   dbInstance: any;
-  constructor(private suiteApiEnumService: SuiteApiEnumService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService, private indexedDbService: IndexedDbService) { }
 
   startup() {
     this.hasStarted = true;
@@ -724,7 +724,7 @@ export class SqlDbApiService {
   }
 
   getSuiteDbMotorFromWASM(suiteDbMotorPointer): SuiteDbMotor {
-    let lineFrequency = this.suiteApiEnumService.getLineFrequencyFromSuiteEnumValue(suiteDbMotorPointer.getLineFrequency().value);
+    let lineFrequency = this.suiteApiHelperService.getLineFrequencyFromSuiteEnumValue(suiteDbMotorPointer.getLineFrequency().value);
     let efficiencyClass = suiteDbMotorPointer.getEfficiencyClass().value;
     
     let suiteDbMotor =  {
@@ -783,8 +783,8 @@ export class SqlDbApiService {
   }
 
   getMotorData(motor: SuiteDbMotor) {
-    let efficiencyClass = this.suiteApiEnumService.getMotorEfficiencyEnum(motor.efficiencyClass);
-    let lineFrequency = this.suiteApiEnumService.getLineFrequencyEnum(motor.lineFrequency);
+    let efficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(motor.efficiencyClass);
+    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(motor.lineFrequency);
     let MotorData = new Module.MotorData(
       motor.hp,
       motor.synchronousSpeed, 

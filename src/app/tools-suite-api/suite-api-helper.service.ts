@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from '../psat/psatConstants';
-import { FanTypes } from '../fsat/fanOptions';
 import * as _ from 'lodash';
 
 //wasm module
 declare var Module: any;
 @Injectable()
-export class SuiteApiEnumService {
+export class SuiteApiHelperService {
 
   constructor() {
     console.log('init');
@@ -279,4 +277,36 @@ export class SuiteApiEnumService {
         return Module.CompressorConfigType.MagneticBearing;
     }
   }
+
+  returnDoubleVector(doublesArray: Array<number>) {
+    let doubleVector = new Module.DoubleVector();
+    doublesArray.forEach(x => {
+      doubleVector.push_back(x);
+    });
+    return doubleVector;
+  }
+
+  convertNullInputsForObjectConstructor(inputObj: Object, inputField?: number | string) {
+    for (var prop in inputObj) {
+      if (inputObj.hasOwnProperty(prop) && inputObj[prop] === null || inputObj[prop] === undefined) {
+        inputObj[prop] = 0;
+      }
+    }
+    return inputObj;
+  }
+
+  convertNullInputValueForObjectConstructor(inputValue: number | string): number {
+    let validInput: number;
+    if (inputValue === null || inputValue === undefined) {
+      validInput = 0;
+    } else if (typeof inputValue === 'string' && inputValue == '') {
+      // There are various number type properties in PHAST that 
+      // get set to '' in places that aren't clear
+      validInput = 0;
+    } else {
+      validInput = Number(inputValue);
+    }
+    return validInput;
+  }
+  
 }
