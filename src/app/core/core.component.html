@@ -1,5 +1,8 @@
 <!-- <div #coreContainer> -->
 <app-update-toast *ngIf="showUpdateModal && info" (emitCloseToast)="hideUpdateToast()" [info]="info"></app-update-toast>
+<app-toast *ngIf="showWebDisclaimerToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
+  (emitDisable)="disableWebDisclaimer()"></app-toast>
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
