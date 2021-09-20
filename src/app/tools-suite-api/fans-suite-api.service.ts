@@ -42,6 +42,8 @@ export class FansSuiteApiService {
     let fanEfficiencyFraction: number = input.fanEfficiency / 100;
 
     let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
+    // No default on new modification
+    input.compressibilityFactor = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
     let fanFieldData = new Module.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
     let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
@@ -123,7 +125,12 @@ export class FansSuiteApiService {
   getVelocityPressureData(inputs: Plane): { pv3: number, percent75Rule: number } {
     let traversePlaneTraverseData = new Module.DoubleVector2D();
     let doubleVector;
-    inputs.traverseData.forEach(dataRow => {
+
+    //  TODO pressure-readings-form.ts save() should change to Number
+    let traverseData: Array<Array<number>> = inputs.traverseData.map(row => {
+      return row.map(columnVal => Number(columnVal));
+    });
+    traverseData.forEach(dataRow => {
       doubleVector = this.returnDoubleVector(dataRow);
       traversePlaneTraverseData.push_back(doubleVector);
     });
@@ -252,6 +259,8 @@ export class FansSuiteApiService {
 
   optimalFanEfficiency(inputs: FanEfficiencyInputs): number {
     let fanType = this.suiteApiEnumService.getFanTypeEnum(inputs.fanType);
+    // No default on new modification
+    inputs.compressibility = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.compressibility);
     let optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, inputs.fanSpeed, inputs.flowRate, inputs.inletPressure, inputs.outletPressure, inputs.compressibility);
     let optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
     optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
@@ -260,6 +269,10 @@ export class FansSuiteApiService {
   }
 
   compressibilityFactor(inputs: CompressibilityFactor): number {
+    // null on new mod
+    inputs.inletPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.inletPressure);
+    inputs.outletPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.outletPressure);
+    inputs.flowRate = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.flowRate);
     let compressibilityFactor = new Module.CompressibilityFactor(inputs.moverShaftPower, inputs.inletPressure, inputs.outletPressure, inputs.barometricPressure, inputs.flowRate, inputs.specificHeatRatio);
     let compressibilityFactorResult = compressibilityFactor.calculate();
     return compressibilityFactorResult;

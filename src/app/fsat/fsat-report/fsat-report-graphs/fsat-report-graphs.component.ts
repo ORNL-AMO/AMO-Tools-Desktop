@@ -52,11 +52,11 @@ export class FsatReportGraphsComponent implements OnInit {
 
   setAllChartData() {
     this.allChartData = new Array();
-    this.addChartData(JSON.parse(JSON.stringify(this.fsat.outputs)), this.fsat.name, this.fsat.valid);
+    this.addChartData(this.fsat.outputs, this.fsat.name, this.fsat.valid);
     this.selectedBaselineData = this.allChartData[0];
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.fsat.modifications.forEach(modification => {
-        this.addChartData(JSON.parse(JSON.stringify(modification.fsat.outputs)), modification.fsat.name, modification.fsat.valid, modification);
+        this.addChartData(modification.fsat.outputs, modification.fsat.name, modification.fsat.valid, modification);
       });
       this.selectedModificationData = this.allChartData[1];
     }
