@@ -3,16 +3,16 @@ import { ReceiverTankGeneral } from '../shared/models/standalone';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from '../shared/models/steam/ssmt';
 import { BoilerInput, DeaeratorInput, FlashTankInput, HeaderInput, HeaderInputObj, HeatLossInput, PrvInput, SaturatedPropertiesInput, SteamPropertiesInput, TurbineInput } from '../shared/models/steam/steam-inputs';
 import { SteamPropertiesOutput, SaturatedPropertiesOutput, BoilerOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, PrvOutput, TurbineOutput, SSMTOutput, SSMTOperationsOutput, ProcessSteamUsage } from '../shared/models/steam/steam-outputs';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 @Injectable()
 export class SteamSuiteApiService {
 
-  constructor(private suiteApiEnumService: SuiteApiEnumService ) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   steamProperties(input: SteamPropertiesInput): SteamPropertiesOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
     let SteamProperties = new Module.SteamProperties(
       input.pressure, 
       thermodynamicQuantityType, 
@@ -47,7 +47,7 @@ export class SteamSuiteApiService {
 
 
   boiler(input: BoilerInput): BoilerOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
     
     let Boiler = new Module.Boiler(
       input.deaeratorPressure, 
@@ -66,8 +66,8 @@ export class SteamSuiteApiService {
   }
 
   deaerator(input: DeaeratorInput): DeaeratorOutput {
-    let waterThermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.waterThermodynamicQuantity)
-    let steamThermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.steamThermodynamicQuantity)
+    let waterThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.waterThermodynamicQuantity)
+    let steamThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.steamThermodynamicQuantity)
    
     
     let Deaerator = new Module.Deaerator(
@@ -88,7 +88,7 @@ export class SteamSuiteApiService {
   }
 
   flashTank(input: FlashTankInput): FlashTankOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
     
     let FlashTank = new Module.FlashTank(
       input.inletWaterPressure, 
@@ -143,7 +143,7 @@ export class SteamSuiteApiService {
   }
 
   heatLoss(input: HeatLossInput): HeatLossOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
 
     let HeatLoss = new Module.HeatLoss(
       input.inletPressure, 
@@ -179,7 +179,7 @@ export class SteamSuiteApiService {
 
   // inletMassFlow - should be set from inputs?
   prvWithoutDesuperheating(input: PrvInput): PrvOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
    
     let prvWithoutDesuperheating = new Module.PrvWithoutDesuperheating(
       input.inletPressure, 
@@ -197,8 +197,8 @@ export class SteamSuiteApiService {
 
   // inletMassFlow - should be set from inputs?
   prvWithDesuperheating(input: PrvInput): PrvOutput {
-    let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.thermodynamicQuantity);
-    let feedwaterThermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.feedwaterThermodynamicQuantity);
+    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity);
+    let feedwaterThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.feedwaterThermodynamicQuantity);
    
     let prvWithDesuperheating = new Module.PrvWithDesuperheating(
       input.inletPressure, 
@@ -219,9 +219,9 @@ export class SteamSuiteApiService {
   }
 
   turbine(input: TurbineInput): TurbineOutput {
-    let solveForMethod = this.suiteApiEnumService.getSolveForMethod(input.solveFor)
-    let inletThermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.inletQuantity);
-    let turbineProperty = this.suiteApiEnumService.getTurbineProperty(input.inletQuantity);
+    let solveForMethod = this.suiteApiHelperService.getSolveForMethod(input.solveFor)
+    let inletThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.inletQuantity);
+    let turbineProperty = this.suiteApiHelperService.getTurbineProperty(input.inletQuantity);
 
     let Turbine;
     if (input.solveFor == 0) {
@@ -237,7 +237,7 @@ export class SteamSuiteApiService {
         input.outletSteamPressure
       );
     } else {
-      let outletThermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(input.inletQuantity);
+      let outletThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.inletQuantity);
       Turbine = new Module.Turbine(
         solveForMethod,
         input.inletPressure,
@@ -295,10 +295,10 @@ export class SteamSuiteApiService {
       inputData.operationsInput.makeUpWaterCosts
     );
 
-    inputData.turbineInput.condensingTurbine.operationType = this.suiteApiEnumService.getCondensingTurbineOperation(inputData.turbineInput.condensingTurbine.operationType);
-    inputData.turbineInput.highToLowTurbine.operationType = this.suiteApiEnumService.getPressureTurbineOperation(inputData.turbineInput.highToLowTurbine.operationType);
-    inputData.turbineInput.highToMediumTurbine.operationType = this.suiteApiEnumService.getPressureTurbineOperation(inputData.turbineInput.highToMediumTurbine.operationType);
-    inputData.turbineInput.mediumToLowTurbine.operationType = this.suiteApiEnumService.getPressureTurbineOperation(inputData.turbineInput.mediumToLowTurbine.operationType);
+    inputData.turbineInput.condensingTurbine.operationType = this.suiteApiHelperService.getCondensingTurbineOperation(inputData.turbineInput.condensingTurbine.operationType);
+    inputData.turbineInput.highToLowTurbine.operationType = this.suiteApiHelperService.getPressureTurbineOperation(inputData.turbineInput.highToLowTurbine.operationType);
+    inputData.turbineInput.highToMediumTurbine.operationType = this.suiteApiHelperService.getPressureTurbineOperation(inputData.turbineInput.highToMediumTurbine.operationType);
+    inputData.turbineInput.mediumToLowTurbine.operationType = this.suiteApiHelperService.getPressureTurbineOperation(inputData.turbineInput.mediumToLowTurbine.operationType);
 
 
   let mediumPressureHeaderObj;
@@ -1022,7 +1022,7 @@ export class SteamSuiteApiService {
   getInletVector(inletsArray: Array<HeaderInputObj>) {
     let inletVector = new Module.InletVector();
     inletsArray.forEach(inlet => {
-      let thermodynamicQuantityType = this.suiteApiEnumService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
+      let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
       let inletPointer = new Module.Inlet(
         inlet.pressure, 
         thermodynamicQuantityType, 

@@ -337,29 +337,6 @@ export class StandaloneService {
     return results;
   }
 
-  compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
-    if(inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0){
-      let input: CompEEM_kWAdjustedInput = {
-        kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
-        P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
-        P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
-        P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
-        P_atm: 14.7
-      }
-      let result: { kW_adjusted: number } = compressorAddon.CompEEM_kWAdjusted(input);
-      let annualEnergyUsage: number = result.kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
-      let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
-      return {
-        energyCost: annualEnergyCost,
-        energyUse: annualEnergyUsage
-      }
-    }
-    return {
-      energyCost: 0,
-      energyUse: 0
-    }
-  }
-
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
     return this.calculatorSuiteApiService.waterReduction(inputObj);
   }
