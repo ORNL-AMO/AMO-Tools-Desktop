@@ -72,6 +72,7 @@ export interface Settings {
 
     disableSurveyMonkey?: boolean,
     disableDisclaimer?: boolean,
+    disableWebDisclaimer?: boolean,
     //costs
     electricityCost?: number,
     fuelCost?: number,

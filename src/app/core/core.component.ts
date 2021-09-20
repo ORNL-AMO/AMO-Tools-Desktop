@@ -51,6 +51,10 @@ export class CoreComponent implements OnInit {
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean;
+  showWebDisclaimerToast: boolean = false;
+
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
@@ -154,6 +158,9 @@ export class CoreComponent implements OnInit {
     this.directoryDbService.setAll().then(() => {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
+          if (!this.electronService.isElectronApp) {
+            this.showWebDisclaimer();
+          }
           this.calculatorDbService.setAll().then(() => {
             this.inventoryDbService.setAll().then(() => {
               if (this.sqlDbApiService.hasStarted == true) {
@@ -166,6 +173,33 @@ export class CoreComponent implements OnInit {
         });
       });
     });
+  }
+
+  showWebDisclaimer() {
+    if (this.settingsDbService.globalSettings.disableWebDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'The web version of MEASUR is still in beta. Please let us know if you have any suggestions for improving the app.';
+      this.showWebDisclaimerToast = true;
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.changeDetectorRef.detectChanges();
+  }
+
+  disableWebDisclaimer() {
+    this.settingsDbService.globalSettings.disableWebDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
   }
 
   closeSurvey() {
