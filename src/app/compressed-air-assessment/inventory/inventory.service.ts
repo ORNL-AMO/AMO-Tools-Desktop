@@ -166,7 +166,7 @@ export class InventoryService {
     // control type: 10 Inlet guide vane modulation with unloading
     let unloadSumpPressureValidators: Array<Validators> = [];
     let showUnloadSumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType);
-    if(showUnloadSumpPressure){
+    if (showUnloadSumpPressure) {
       unloadSumpPressureValidators = [Validators.required];
     }
 
@@ -239,7 +239,7 @@ export class InventoryService {
     });
 
     for (let key in form.controls) {
-        form.controls[key].markAsDirty();
+      form.controls[key].markAsDirty();
     }
     return form;
   }
@@ -317,13 +317,13 @@ export class InventoryService {
 
     let noLoadPowerFMValidators: Array<Validators> = [];
     let displayNoLoadPowerFM: boolean = this.checkDisplayNoLoadPowerFM(compressorType, controlType);
-    if(displayNoLoadPowerFM){
+    if (displayNoLoadPowerFM) {
       noLoadPowerFMValidators = [Validators.required];
     }
 
     let noLoadPowerULValidators: Array<Validators> = [];
     let displayNoLoadPowerUL: boolean = this.checkDisplayNoLoadPowerUL(compressorType, controlType);
-    if(displayNoLoadPowerUL){
+    if (displayNoLoadPowerUL) {
       noLoadPowerULValidators = [Validators.required];
     }
 
@@ -497,7 +497,7 @@ export class InventoryService {
         modification.useAutomaticSequencer.order = 100;
         modification.useAutomaticSequencer.profileSummary = new Array();
         modification.adjustCascadingSetPoints.setPointData
-        
+
         modification.adjustCascadingSetPoints.setPointData.push({
           compressorId: newInventoryItem.itemId,
           controlType: newInventoryItem.compressorControls.controlType,
@@ -554,10 +554,12 @@ export class InventoryService {
       };
     });
     compressedAirAssessment.modifications.forEach(modification => {
-      modification.improveEndUseEfficiency.reductionData.push({
-        dayTypeName: dayTypeName,
-        dayTypeId: dayTypeId,
-        data: this.exploreOpportunitiesService.getDefaultReductionData()
+      modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+        item.reductionData.push({
+          dayTypeName: dayTypeName,
+          dayTypeId: dayTypeId,
+          data: this.exploreOpportunitiesService.getDefaultReductionData()
+        });
       });
       modification.reduceRuntime.runtimeData.push(reduceRuntimeData);
       modification.useAutomaticSequencer.order = 100;

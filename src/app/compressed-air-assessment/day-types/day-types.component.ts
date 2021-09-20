@@ -22,14 +22,14 @@ export class DayTypesComponent implements OnInit {
   totalDownDays: number;
 
   showConfirmDeleteModal: boolean = false;
-  
+
   deleteSelectedIndex: number;
   confirmDeleteDayTypeData: ConfirmDeleteData;
   form: FormGroup;
   isFormChange: boolean = false;
   hasValidDayTypes: boolean;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeService: DayTypeService, private router: Router,
     private inventoryService: InventoryService) { }
 
@@ -40,9 +40,9 @@ export class DayTypesComponent implements OnInit {
       this.hasValidDayTypes = this.dayTypeService.hasValidDayTypes(val.compressedAirDayTypes);
       if (this.isFormChange == false) {
         this.form = this.dayTypeService.getDayTypeForm(this.compressedAirAssessment.compressedAirDayTypes);
-       } else {
-         this.isFormChange = false;
-       }
+      } else {
+        this.isFormChange = false;
+      }
     });
   }
 
@@ -60,7 +60,7 @@ export class DayTypesComponent implements OnInit {
     this.save();
   }
 
-  focusField(currentField: string) {}
+  focusField(currentField: string) { }
 
   save() {
     //update modification day type names on changes
@@ -69,8 +69,10 @@ export class DayTypesComponent implements OnInit {
     this.setTotalDays();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
-        let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
-        this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData[dayTypeIndex].dayTypeName = dayType.name;
+        this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+          let dayTypeIndex: number = item.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayType.dayTypeId });
+          item.reductionData[dayTypeIndex].dayTypeName = dayType.name;
+        });
       }
     })
     this.isFormChange = true;
@@ -92,8 +94,10 @@ export class DayTypesComponent implements OnInit {
     let dayTypeToRemove: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes[this.deleteSelectedIndex];
     this.compressedAirAssessment.systemProfile.profileSummary = this.compressedAirAssessment.systemProfile.profileSummary.filter(summary => { return summary.dayTypeId != dayTypeToRemove.dayTypeId });
     for (let i = 0; i < this.compressedAirAssessment.modifications.length; i++) {
-      let dayTypeIndex: number = this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayTypeToRemove.dayTypeId });
-      this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.reductionData.splice(dayTypeIndex, 1)
+      this.compressedAirAssessment.modifications[i].improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+        let dayTypeIndex: number = item.reductionData.findIndex(reductionData => { return reductionData.dayTypeId == dayTypeToRemove.dayTypeId });
+        item.reductionData.splice(dayTypeIndex, 1)
+      })
     }
     this.compressedAirAssessment.compressedAirDayTypes.splice(this.deleteSelectedIndex, 1);
     if (this.deleteSelectedIndex > 0) {
@@ -116,7 +120,7 @@ export class DayTypesComponent implements OnInit {
 
   onConfirmDeleteClose(deleteDayType: boolean) {
     if (deleteDayType) {
-     this.removeDayType();
+      this.removeDayType();
     }
     this.showConfirmDeleteModal = false;
     this.compressedAirAssessmentService.modalOpen.next(false);

@@ -86,7 +86,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       improveEndUseEfficiencyProfileSummary: undefined,
       reduceSystemAirPressureProfileSummary: undefined,
       adjustCascadingSetPointsProfileSummary: undefined,
-      dayTypeId: undefined
+      dayTypeId: undefined,
+      auxiliaryPowerUsage: {cost: 0, energyUse: 0}
     }
     this.modificationResults.dayTypeModificationResults.forEach(modResult => {
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
@@ -124,6 +125,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost += modResult.useAutomaticSequencerSavings.savings.cost;
       dayTypeModificationResult.useAutomaticSequencerSavings.savings.power += modResult.useAutomaticSequencerSavings.savings.power;
 
+      dayTypeModificationResult.auxiliaryPowerUsage.cost += modResult.auxiliaryPowerUsage.cost;
+      dayTypeModificationResult.auxiliaryPowerUsage.energyUse += modResult.auxiliaryPowerUsage.energyUse;
     });
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
     return dayTypeModificationResult;

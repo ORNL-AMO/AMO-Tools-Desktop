@@ -41,19 +41,31 @@ export interface ReduceAirLeaks {
 }
 
 export interface ImproveEndUseEfficiency {
-    reductionType: "Fixed" | "Variable",
-    airflowReduction: number,
-    reductionData: Array<{
-        dayTypeId: string,
-        dayTypeName: string,
-        data: Array<{
-            hourInterval: number,
-            applyReduction: boolean
-            reductionAmount: number
-        }>
-    }>,
+    endUseEfficiencyItems: Array<EndUseEfficiencyItem>,
     order: number
 }
+
+
+export interface EndUseEfficiencyItem {
+    name: string,
+    reductionType: "Fixed" | "Variable",
+    airflowReduction: number,
+    substituteAuxiliaryEquipment: boolean,
+    equipmentDemand: number,
+    collapsed: boolean,
+    reductionData: Array<EndUseEfficiencyReductionData>,
+}
+
+export interface EndUseEfficiencyReductionData {
+    dayTypeId: string,
+    dayTypeName: string,
+    data: Array<{
+        hourInterval: number,
+        applyReduction: boolean
+        reductionAmount: number
+    }>
+}
+
 
 export interface ReduceSystemAirPressure {
     averageSystemPressureReduction: number,

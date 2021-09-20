@@ -76,18 +76,21 @@ export class ExploreOpportunitiesService {
     return {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
-      // flowReallocation: {
-      //   selected: false
-      // },
       reduceAirLeaks: {
         leakReduction: undefined,
         leakFlow: undefined,
         order: 100
       },
       improveEndUseEfficiency: {
-        reductionType: "Fixed",
-        airflowReduction: undefined,
-        reductionData: reductionData,
+        endUseEfficiencyItems: [{
+          reductionType: "Fixed",
+          airflowReduction: undefined,
+          reductionData: reductionData,
+          name: 'Improve End Use Efficiency #1',
+          substituteAuxiliaryEquipment: false,
+          equipmentDemand: 0,
+          collapsed: false
+        }],
         order: 100
       },
       reduceSystemAirPressure: {
