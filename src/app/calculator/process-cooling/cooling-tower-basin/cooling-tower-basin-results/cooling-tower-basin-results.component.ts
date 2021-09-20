@@ -23,9 +23,11 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
   table2String: any;
 
   outputSubscription: Subscription;
+  isShowingWeatherResultsSub: Subscription;
   output: CoolingTowerBasinOutput;
   selectedWeatherBinResult: WeatherBinnedResult;
   weatherBinnedResults: Array<WeatherBinnedResult> = [];
+  isShowingWeatherResults: boolean;
 
   constructor(private coolingTowerBasinService: CoolingTowerBasinService) { }
 
@@ -34,10 +36,14 @@ export class CoolingTowerBasinResultsComponent implements OnInit {
       this.output = val;
       this.setWeatherBinnedResults(val);
     });
+    this.isShowingWeatherResultsSub = this.coolingTowerBasinService.isShowingWeatherResults.subscribe(value => {
+      this.isShowingWeatherResults = value;
+    });
   }
 
   ngOnDestroy() {
     this.outputSubscription.unsubscribe();
+    this.isShowingWeatherResultsSub.unsubscribe();
   }
 
   setWeatherBinnedResults(output: CoolingTowerBasinOutput) {

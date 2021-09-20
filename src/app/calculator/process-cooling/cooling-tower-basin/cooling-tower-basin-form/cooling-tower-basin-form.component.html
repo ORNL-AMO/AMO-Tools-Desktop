@@ -92,7 +92,21 @@
     </label>
     <form #formElement [formGroup]="form">
 
-      <div class="form-group" *ngIf="!hasWeatherBinsData">
+      <div class="form-group">
+        <label class="small" for="operatingWindSpeed">Windspeed</label>
+        <div class="input-group">
+          <input class="form-control" name="operatingWindSpeed" id="operatingWindSpeed" formControlName="operatingWindSpeed"
+            type="number" (input)="calculate()" (focus)="focusField('operatingWindSpeed')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/h</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingWindSpeed.invalid && !form.controls.operatingWindSpeed.pristine">
+          <span *ngIf="form.controls.operatingWindSpeed.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group" *ngIf="!isShowingWeatherResults">
         <label class="small" for="operatingHours">Operating Hours</label>
         <div class="input-group">
           <span class="input-group-addon op-hour-addon units">
@@ -112,21 +126,7 @@
         </span>
       </div>
 
-      <div class="form-group">
-        <label class="small" for="operatingWindSpeed">Windspeed</label>
-        <div class="input-group">
-          <input class="form-control" name="operatingWindSpeed" id="operatingWindSpeed" formControlName="operatingWindSpeed"
-            type="number" (input)="calculate()" (focus)="focusField('operatingWindSpeed')" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/h</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.operatingWindSpeed.invalid && !form.controls.operatingWindSpeed.pristine">
-          <span *ngIf="form.controls.operatingWindSpeed.errors.required">Value required.</span>
-        </span>
-      </div>
-
-      <div class="form-group" *ngIf="!hasWeatherBinsData">
+      <div class="form-group" *ngIf="!isShowingWeatherResults">
         <label class="small" for="operatingTempDryBulb">Ambient Dry Bulb Temperature</label>
         <div class="input-group">
           <input class="form-control" name="operatingTempDryBulb" id="operatingTempDryBulb" formControlName="operatingTempDryBulb"
@@ -141,7 +141,7 @@
       </div>
     </form>
 
-    <div class="w-100 mx-auto mt-3" *ngIf="hasWeatherBinsData">
+    <div class="w-100 mx-auto mt-3" *ngIf="isShowingWeatherResults">
       <span class="alert-info pull-right small py-2 px-3">
         Operating Hours and Operating Ambient Dry Bulb Temperature are set from Weather Data conditions
       </span>

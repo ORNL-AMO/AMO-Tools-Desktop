@@ -1,8 +1,9 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { CoolingTowerBasinService } from './cooling-tower-basin.service';
+import { WeatherBinsService } from '../../utilities/weather-bins/weather-bins.service';
 
 @Component({
   selector: 'app-cooling-tower-basin',
@@ -21,6 +22,7 @@ export class CoolingTowerBasinComponent implements OnInit {
   }
   
   coolingTowerBasinInputSub: Subscription;
+  weatherBinSub: Subscription;
   
   headerHeight: number;
   tabSelect: string = 'results';
@@ -28,9 +30,10 @@ export class CoolingTowerBasinComponent implements OnInit {
   displayWeatherTab: boolean = false;
   hasWeatherBinsDataSub: Subscription;
   hasWeatherBinsData: boolean = false;
+  isShowingWeatherResults : boolean = false;
   
-  constructor(private coolingTowerBasinService: CoolingTowerBasinService,
-              private settingsDbService: SettingsDbService) { }
+  constructor(private coolingTowerBasinService: CoolingTowerBasinService, private weatherBinService: WeatherBinsService,
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -49,6 +52,7 @@ export class CoolingTowerBasinComponent implements OnInit {
 
   ngOnDestroy() {
     this.coolingTowerBasinInputSub.unsubscribe();
+    this.weatherBinSub.unsubscribe();
     this.hasWeatherBinsDataSub.unsubscribe();
     this.coolingTowerBasinService.resetWeatherIntegratedCalculator();
 
@@ -66,11 +70,23 @@ export class CoolingTowerBasinComponent implements OnInit {
     });
     this.hasWeatherBinsDataSub = this.coolingTowerBasinService.hasWeatherBinsData.subscribe(value => {
       this.hasWeatherBinsData = value;
+      if(!this.hasWeatherBinsData){
+        this.isShowingWeatherResults = false;
+      }
     });
+    this.weatherBinSub = this.weatherBinService.inputData.subscribe(value => {
+      let getCaseLength = this.weatherBinService.inputData.getValue().cases.length;
+      if(getCaseLength < 1){
+        this.isShowingWeatherResults = false;
+        this.coolingTowerBasinService.isShowingWeatherResults.next(false);
+        this.calculate();
+      }
+    })
   }
 
   setWeatherCalculatorActive(displayWeatherTab: boolean) {
     this.displayWeatherTab = displayWeatherTab;
+    this.cd.detectChanges();
   }
 
   calculate() {
@@ -95,6 +111,11 @@ export class CoolingTowerBasinComponent implements OnInit {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
-  }
+  }  
+ toggleWeatherResults(weatherResultsOn: boolean) {
+    this.isShowingWeatherResults = weatherResultsOn;
+    this.coolingTowerBasinService.isShowingWeatherResults.next(weatherResultsOn);
+    this.coolingTowerBasinService.calculate(this.settings);
+ }
 
 }
