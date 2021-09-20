@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
 // import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 
 @Injectable()
 export class ChillersSuiteApiService {
 
-  constructor(private suiteEnumService: SuiteApiEnumService) { }
+  constructor(private suiteEnumService: SuiteApiHelperService) { }
 
   coolingTowerMakeupWater(input: CoolingTowerInput): CoolingTowerOutput {
     input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteEnumService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);

@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 @Injectable()
 export class WasteWaterSuiteApiService {
 
-  constructor(private suiteApiEnumService: SuiteApiEnumService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
   
   wasteWaterTreatment(inputData: WasteWaterTreatmentInputData, hasGivenSRT: boolean = false): WasteWaterResults{
     // null on new assessment?
-    inputData.DefinedSRT = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputData.DefinedSRT);
+    inputData.DefinedSRT = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.DefinedSRT);
     let WasteWaterTreatmentInstance = new Module.WasteWater_Treatment(
       inputData.Temperature,
       inputData.So,

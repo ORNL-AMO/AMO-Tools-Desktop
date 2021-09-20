@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from '../psat/psatConstants';
-import { FanTypes } from '../fsat/fanOptions';
 import * as _ from 'lodash';
 
 //wasm module
 declare var Module: any;
 @Injectable()
-export class SuiteApiEnumService {
+export class SuiteApiHelperService {
 
   constructor() {
     console.log('init');

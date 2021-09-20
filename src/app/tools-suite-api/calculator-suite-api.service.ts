@@ -1,36 +1,36 @@
 import { Injectable } from '@angular/core';
 import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 
 @Injectable()
 export class CalculatorSuiteApiService {
 
-  constructor(private suiteApiEnumService: SuiteApiEnumService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
     let inputs = new Module.ElectricityReductionInputV();
     
     inputObj.electricityReductionInputVec.forEach(electricityReduction => {
       // TODO calc only get results if valid
-      electricityReduction.electricityCost = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.electricityCost);
-      electricityReduction.operatingHours = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.operatingHours);
-      electricityReduction.units = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.units);
+      electricityReduction.electricityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.electricityCost);
+      electricityReduction.operatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.operatingHours);
+      electricityReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.units);
       
-      electricityReduction.multimeterData.averageCurrent = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.averageCurrent);
-      electricityReduction.multimeterData.numberOfPhases = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.numberOfPhases);
-      electricityReduction.multimeterData.powerFactor = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.powerFactor);
-      electricityReduction.multimeterData.supplyVoltage = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.supplyVoltage);
+      electricityReduction.multimeterData.averageCurrent = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.averageCurrent);
+      electricityReduction.multimeterData.numberOfPhases = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.numberOfPhases);
+      electricityReduction.multimeterData.powerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.powerFactor);
+      electricityReduction.multimeterData.supplyVoltage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.multimeterData.supplyVoltage);
 
-      electricityReduction.nameplateData.lineFrequency = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.lineFrequency);
-      electricityReduction.nameplateData.loadFactor = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.loadFactor);
-      electricityReduction.nameplateData.motorAndDriveEfficiency = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.motorAndDriveEfficiency);
-      electricityReduction.nameplateData.operationalFrequency = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.operationalFrequency);
-      electricityReduction.nameplateData.ratedMotorPower = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.ratedMotorPower);
+      electricityReduction.nameplateData.lineFrequency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.lineFrequency);
+      electricityReduction.nameplateData.loadFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.loadFactor);
+      electricityReduction.nameplateData.motorAndDriveEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.motorAndDriveEfficiency);
+      electricityReduction.nameplateData.operationalFrequency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.operationalFrequency);
+      electricityReduction.nameplateData.ratedMotorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.nameplateData.ratedMotorPower);
 
-      electricityReduction.powerMeterData.power = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
-      electricityReduction.otherMethodData.energy = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
+      electricityReduction.powerMeterData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
+      electricityReduction.otherMethodData.energy = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
 
       let MultimeterData = new Module.MultimeterData(
         electricityReduction.multimeterData.numberOfPhases,
@@ -75,24 +75,24 @@ export class CalculatorSuiteApiService {
     
     inputObj.naturalGasReductionInputVec.forEach(naturalGasReduction => {
       // TODO calc only get results if valid
-      naturalGasReduction.operatingHours = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.operatingHours);
-      naturalGasReduction.units = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.units);
-      naturalGasReduction.fuelCost = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.fuelCost);
+      naturalGasReduction.operatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.operatingHours);
+      naturalGasReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.units);
+      naturalGasReduction.fuelCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.fuelCost);
       
-      naturalGasReduction.airMassFlowData.inletTemperature = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.inletTemperature);
-      naturalGasReduction.airMassFlowData.outletTemperature = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.outletTemperature);
-      naturalGasReduction.airMassFlowData.systemEfficiency = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.systemEfficiency);
-      naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity);
-      naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct);
-      naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow);
+      naturalGasReduction.airMassFlowData.inletTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.inletTemperature);
+      naturalGasReduction.airMassFlowData.outletTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.outletTemperature);
+      naturalGasReduction.airMassFlowData.systemEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.systemEfficiency);
+      naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity);
+      naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct);
+      naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow);
 
-      naturalGasReduction.flowMeterMethodData.flowRate = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.flowMeterMethodData.flowRate);
-      naturalGasReduction.otherMethodData.consumption = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.otherMethodData.consumption);
+      naturalGasReduction.flowMeterMethodData.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.flowMeterMethodData.flowRate);
+      naturalGasReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.otherMethodData.consumption);
 
-      naturalGasReduction.waterMassFlowData.inletTemperature = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.inletTemperature);
-      naturalGasReduction.waterMassFlowData.outletTemperature = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.outletTemperature);
-      naturalGasReduction.waterMassFlowData.systemEfficiency = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.systemEfficiency);
-      naturalGasReduction.waterMassFlowData.waterFlow = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.waterFlow);
+      naturalGasReduction.waterMassFlowData.inletTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.inletTemperature);
+      naturalGasReduction.waterMassFlowData.outletTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.outletTemperature);
+      naturalGasReduction.waterMassFlowData.systemEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.systemEfficiency);
+      naturalGasReduction.waterMassFlowData.waterFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.waterFlow);
       
       let FlowMeterMethodData = new Module.FlowMeterMethodData(naturalGasReduction.flowMeterMethodData.flowRate);
       let NaturalGasOtherMethodData = new Module.NaturalGasOtherMethodData(naturalGasReduction.otherMethodData.consumption);
@@ -135,23 +135,23 @@ export class CalculatorSuiteApiService {
     let inputs = new Module.CompressedAirReductionInputV();
     
     inputObj.compressedAirReductionInputVec.forEach(compressedAirReduction => {
-      compressedAirReduction.units = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.units);
-      compressedAirReduction.hoursPerYear = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.hoursPerYear); 
-      compressedAirReduction.utilityCost = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.utilityCost); 
+      compressedAirReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.units);
+      compressedAirReduction.hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.hoursPerYear); 
+      compressedAirReduction.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.utilityCost); 
 
-      compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
+      compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
       
-      compressedAirReduction.bagMethodData.height = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.height);
-      compressedAirReduction.bagMethodData.diameter = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.diameter);
-      compressedAirReduction.bagMethodData.fillTime = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.fillTime);
+      compressedAirReduction.bagMethodData.height = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.height);
+      compressedAirReduction.bagMethodData.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.diameter);
+      compressedAirReduction.bagMethodData.fillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.fillTime);
       
-      compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
-      compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
-      compressedAirReduction.pressureMethodData.supplyPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.supplyPressure);
+      compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
+      compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
+      compressedAirReduction.pressureMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.supplyPressure);
       
-      compressedAirReduction.otherMethodData.consumption = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.otherMethodData.consumption);
-      compressedAirReduction.compressorElectricityData.compressorControlAdjustment = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorControlAdjustment);
-      compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
+      compressedAirReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.otherMethodData.consumption);
+      compressedAirReduction.compressorElectricityData.compressorControlAdjustment = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorControlAdjustment);
+      compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
 
         let CompressedAirFlowMeterMethodData = new Module.CompressedAirFlowMeterMethodData(compressedAirReduction.flowMeterMethodData.meterReading);
         let BagMethodData = new Module.BagMethodData(compressedAirReduction.bagMethodData.height, compressedAirReduction.bagMethodData.diameter, compressedAirReduction.bagMethodData.fillTime);
@@ -186,32 +186,32 @@ export class CalculatorSuiteApiService {
 
   compressedAirLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
     let convertedInput: Array<AirLeakSurveyData> = inputObj.compressedAirLeakSurveyInputVec.map(input => {
-      input.utilityCost = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.utilityCost);
+      input.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.utilityCost);
 
       // TODO all methods should not calculate if missing required props
-      input.bagMethodData.diameter = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.bagMethodData.diameter);
-      input.bagMethodData.fillTime = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.bagMethodData.fillTime);
-      input.bagMethodData.height = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.bagMethodData.height);
+      input.bagMethodData.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.diameter);
+      input.bagMethodData.fillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.fillTime);
+      input.bagMethodData.height = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.height);
       // estimate method
-      input.estimateMethodData.leakRateEstimate = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
+      input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
       // orifice method
-      input.orificeMethodData.atmosphericPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.atmosphericPressure);
-      input.orificeMethodData.compressorAirTemp = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.compressorAirTemp);
-      input.orificeMethodData.dischargeCoefficient = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.dischargeCoefficient);
-      input.orificeMethodData.numberOfOrifices = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.numberOfOrifices);
-      input.orificeMethodData.orificeDiameter = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.orificeDiameter);
-      input.orificeMethodData.supplyPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.orificeMethodData.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.atmosphericPressure);
+      input.orificeMethodData.compressorAirTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.compressorAirTemp);
+      input.orificeMethodData.dischargeCoefficient = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.dischargeCoefficient);
+      input.orificeMethodData.numberOfOrifices = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.numberOfOrifices);
+      input.orificeMethodData.orificeDiameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.orificeDiameter);
+      input.orificeMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
       
-      input.decibelsMethodData.decibelRatingA = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.atmosphericPressure);
-      input.decibelsMethodData.decibelRatingB = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.compressorAirTemp);
-      input.decibelsMethodData.decibels = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.dischargeCoefficient);
-      input.decibelsMethodData.firstFlowA = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.numberOfOrifices);
-      input.decibelsMethodData.firstFlowB = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.orificeDiameter);
-      input.decibelsMethodData.linePressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
-      input.decibelsMethodData.pressureA = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
-      input.decibelsMethodData.pressureB = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
-      input.decibelsMethodData.secondFlowA = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
-      input.decibelsMethodData.secondFlowB = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.decibelsMethodData.decibelRatingA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.atmosphericPressure);
+      input.decibelsMethodData.decibelRatingB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.compressorAirTemp);
+      input.decibelsMethodData.decibels = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.dischargeCoefficient);
+      input.decibelsMethodData.firstFlowA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.numberOfOrifices);
+      input.decibelsMethodData.firstFlowB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.orificeDiameter);
+      input.decibelsMethodData.linePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.decibelsMethodData.pressureA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.decibelsMethodData.pressureB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.decibelsMethodData.secondFlowA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
+      input.decibelsMethodData.secondFlowB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
       return input;
     });
     let inputs = new Module.CompressedAirLeakSurveyInputV();
@@ -264,18 +264,18 @@ export class CalculatorSuiteApiService {
     let inputs = new Module.WaterReductionInputV();
     
     inputObj.waterReductionInputVec.forEach(waterReduction => {
-      waterReduction.waterCost = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.waterCost);
-      waterReduction.hoursPerYear = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.hoursPerYear);
+      waterReduction.waterCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.waterCost);
+      waterReduction.hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.hoursPerYear);
       
-      waterReduction.meteredFlowMethodData.meterReading = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.meteredFlowMethodData.meterReading);
+      waterReduction.meteredFlowMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.meteredFlowMethodData.meterReading);
 
-      waterReduction.volumeMeterMethodData.elapsedTime = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.elapsedTime);
-      waterReduction.volumeMeterMethodData.finalMeterReading = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.finalMeterReading);
-      waterReduction.volumeMeterMethodData.initialMeterReading = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.initialMeterReading);
+      waterReduction.volumeMeterMethodData.elapsedTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.elapsedTime);
+      waterReduction.volumeMeterMethodData.finalMeterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.finalMeterReading);
+      waterReduction.volumeMeterMethodData.initialMeterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.volumeMeterMethodData.initialMeterReading);
 
-      waterReduction.bucketMethodData.bucketFillTime = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketFillTime);
-      waterReduction.bucketMethodData.bucketVolume = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
-      waterReduction.otherMethodData.consumption = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
+      waterReduction.bucketMethodData.bucketFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketFillTime);
+      waterReduction.bucketMethodData.bucketVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
+      waterReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
 
       let MeteredFlowMethodData = new Module.MeteredFlowMethodData(waterReduction.meteredFlowMethodData.meterReading);
       let VolumeMeterMethodData = new Module.VolumeMeterMethodData(waterReduction.volumeMeterMethodData.initialMeterReading,

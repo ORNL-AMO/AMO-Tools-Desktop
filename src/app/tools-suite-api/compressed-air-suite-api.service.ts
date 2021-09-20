@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { CompEEM_kWAdjustedInput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult } from '../shared/models/standalone';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 
 @Injectable()
 export class CompressedAirSuiteApiService {
-  constructor(private suiteApiEnumService: SuiteApiEnumService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
     if(inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0){
-      inputObj.compressedAirPressureReductionInputVec[0].compressorPower = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].compressorPower);
-      inputObj.compressedAirPressureReductionInputVec[0].pressureRated = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressureRated);
-      inputObj.compressedAirPressureReductionInputVec[0].pressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressure);
-      inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure);
+      inputObj.compressedAirPressureReductionInputVec[0].compressorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].compressorPower);
+      inputObj.compressedAirPressureReductionInputVec[0].pressureRated = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressureRated);
+      inputObj.compressedAirPressureReductionInputVec[0].pressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressure);
+      inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure);
 
       let input: CompEEM_kWAdjustedInput = {
         kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,

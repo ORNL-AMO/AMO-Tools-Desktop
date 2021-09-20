@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { BaseGasDensity, CompressibilityFactor, Fan203Inputs, Fan203Results, FsatInput, FsatOutput, Plane, PlaneResults, PsychrometricResults } from '../shared/models/fans';
-import { SuiteApiEnumService } from './suite-api-enum.service';
+import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 @Injectable()
 export class FansSuiteApiService {
 
-  constructor(private suiteApiEnumService: SuiteApiEnumService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 
   //results
   calculateExisting(input: FsatInput): FsatOutput {
     //enums
-    let driveEnum = this.suiteApiEnumService.getDriveEnum(input.drive);
-    let lineFrequencyEnum = this.suiteApiEnumService.getLineFrequencyEnum(input.lineFrequency);
-    let efficiencyClassEnum = this.suiteApiEnumService.getMotorEfficiencyEnum(input.efficiencyClass);
-    let loadEstimationMethodEnum = this.suiteApiEnumService.getLoadEstimationMethod(input.loadEstimationMethod);
+    let driveEnum = this.suiteApiHelperService.getDriveEnum(input.drive);
+    let lineFrequencyEnum = this.suiteApiHelperService.getLineFrequencyEnum(input.lineFrequency);
+    let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(input.efficiencyClass);
+    let loadEstimationMethodEnum = this.suiteApiHelperService.getLoadEstimationMethod(input.loadEstimationMethod);
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
 
@@ -34,16 +34,16 @@ export class FansSuiteApiService {
 
   calculateModified(input: FsatInput): FsatOutput {
     //enums
-    let driveEnum = this.suiteApiEnumService.getDriveEnum(input.drive);
-    let lineFrequencyEnum = this.suiteApiEnumService.getLineFrequencyEnum(input.lineFrequency);
-    let efficiencyClassEnum = this.suiteApiEnumService.getMotorEfficiencyEnum(input.efficiencyClass);
+    let driveEnum = this.suiteApiHelperService.getDriveEnum(input.drive);
+    let lineFrequencyEnum = this.suiteApiHelperService.getLineFrequencyEnum(input.lineFrequency);
+    let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(input.efficiencyClass);
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
     let fanEfficiencyFraction: number = input.fanEfficiency / 100;
 
     let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     // No default on new modification
-    input.compressibilityFactor = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
+    input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
     let fanFieldData = new Module.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
     let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
@@ -68,8 +68,8 @@ export class FansSuiteApiService {
 
   //gas density
   getBaseGasDensityDewPoint(inputs: BaseGasDensity): PsychrometricResults {
-    let gasType = this.suiteApiEnumService.getGasTypeEnum(inputs.gasType);
-    let inputType = this.suiteApiEnumService.getBasGensityInputTypeEnum(inputs.inputType);
+    let gasType = this.suiteApiHelperService.getGasTypeEnum(inputs.gasType);
+    let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.dewPoint != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined) {
       let dewPointInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.dewPoint, gasType, inputType, inputs.specificGravity);
@@ -80,8 +80,8 @@ export class FansSuiteApiService {
   }
 
   getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity): PsychrometricResults {
-    let gasType = this.suiteApiEnumService.getGasTypeEnum(inputs.gasType);
-    let inputType = this.suiteApiEnumService.getBasGensityInputTypeEnum(inputs.inputType);
+    let gasType = this.suiteApiHelperService.getGasTypeEnum(inputs.gasType);
+    let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.relativeHumidity != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined) {
       let relativeHumidityInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.relativeHumidity, gasType, inputType, inputs.specificGravity);
@@ -92,8 +92,8 @@ export class FansSuiteApiService {
   }
 
   getBaseGasDensityWetBulb(inputs: BaseGasDensity): PsychrometricResults {
-    let gasType = this.suiteApiEnumService.getGasTypeEnum(inputs.gasType);
-    let inputType = this.suiteApiEnumService.getBasGensityInputTypeEnum(inputs.inputType);
+    let gasType = this.suiteApiHelperService.getGasTypeEnum(inputs.gasType);
+    let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.wetBulbTemp != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined && inputs.specificHeatGas != undefined) {
       let wetBulbInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.wetBulbTemp, gasType, inputType, inputs.specificGravity, inputs.specificHeatGas);
@@ -149,7 +149,7 @@ export class FansSuiteApiService {
     //plane data
     let planeDataInstance = this.getPlaneDataInstance(input);
     //BaseGasDensity
-    let gasType = this.suiteApiEnumService.getGasTypeEnum(input.BaseGasDensity.gasType);
+    let gasType = this.suiteApiHelperService.getGasTypeEnum(input.BaseGasDensity.gasType);
     let baseGasDensityInstance = new Module.BaseGasDensity(input.BaseGasDensity.dryBulbTemp, input.BaseGasDensity.staticPressure, input.BaseGasDensity.barometricPressure, input.BaseGasDensity.gasDensity, gasType);
     let output: PlaneResults = Module.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
     //release memory
@@ -162,7 +162,7 @@ export class FansSuiteApiService {
     //FanRatedInfo
     let fanRatedInfoInstance = new Module.FanRatedInfo(input.FanRatedInfo.fanSpeed, input.FanRatedInfo.motorSpeed, input.FanRatedInfo.fanSpeedCorrected, input.FanRatedInfo.densityCorrected, input.FanRatedInfo.pressureBarometricCorrected);
     //BaseGasDensity
-    let gasType = this.suiteApiEnumService.getGasTypeEnum(input.BaseGasDensity.gasType);
+    let gasType = this.suiteApiHelperService.getGasTypeEnum(input.BaseGasDensity.gasType);
     let baseGasDensityInstance = new Module.BaseGasDensity(input.BaseGasDensity.dryBulbTemp, input.BaseGasDensity.staticPressure, input.BaseGasDensity.barometricPressure, input.BaseGasDensity.gasDensity, gasType);
     //FanShaftPower
     let fanShaftPowerInstance = new Module.FanShaftPower(input.FanShaftPower.motorShaftPower, input.FanShaftPower.efficiencyMotor, input.FanShaftPower.efficiencyVFD, input.FanShaftPower.efficiencyBelt, input.FanShaftPower.sumSEF);
@@ -258,9 +258,9 @@ export class FansSuiteApiService {
   }
 
   optimalFanEfficiency(inputs: FanEfficiencyInputs): number {
-    let fanType = this.suiteApiEnumService.getFanTypeEnum(inputs.fanType);
+    let fanType = this.suiteApiHelperService.getFanTypeEnum(inputs.fanType);
     // No default on new modification
-    inputs.compressibility = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.compressibility);
+    inputs.compressibility = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.compressibility);
     let optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, inputs.fanSpeed, inputs.flowRate, inputs.inletPressure, inputs.outletPressure, inputs.compressibility);
     let optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
     optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
@@ -270,9 +270,9 @@ export class FansSuiteApiService {
 
   compressibilityFactor(inputs: CompressibilityFactor): number {
     // null on new mod
-    inputs.inletPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.inletPressure);
-    inputs.outletPressure = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.outletPressure);
-    inputs.flowRate = this.suiteApiEnumService.convertNullInputValueForObjectConstructor(inputs.flowRate);
+    inputs.inletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.inletPressure);
+    inputs.outletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.outletPressure);
+    inputs.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.flowRate);
     let compressibilityFactor = new Module.CompressibilityFactor(inputs.moverShaftPower, inputs.inletPressure, inputs.outletPressure, inputs.barometricPressure, inputs.flowRate, inputs.specificHeatRatio);
     let compressibilityFactorResult = compressibilityFactor.calculate();
     return compressibilityFactorResult;
