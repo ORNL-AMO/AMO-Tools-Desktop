@@ -77,6 +77,7 @@ export class CoolingTowerBasinComponent implements OnInit {
     this.weatherBinSub = this.weatherBinService.inputData.subscribe(value => {
       let getCaseLength = this.weatherBinService.inputData.getValue().cases.length;
       if(getCaseLength < 1){
+        this.isShowingWeatherResults = false;
         this.coolingTowerBasinService.isShowingWeatherResults.next(false);
         this.calculate();
       }
