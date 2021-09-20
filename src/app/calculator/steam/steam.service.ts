@@ -5,8 +5,8 @@ import { Settings } from "../../shared/models/settings";
 import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { ConvertSteamService } from './convert-steam.service';
+import { SteamSuiteApiService } from '../../tools-suite-api/steam-suite-api.service';
 
-declare var steamAddon: any;
 
 @Injectable()
 export class SteamService {
@@ -19,10 +19,9 @@ export class SteamService {
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService, private convertSteamService: ConvertSteamService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private steamSuiteApiService: SteamSuiteApiService, private convertSteamService: ConvertSteamService) { }
 
   test() {
-    console.log(steamAddon);
   }
 
   getQuantityRange(settings: Settings, thermodynamicQuantity: number): { min: number, max: number } {
@@ -59,7 +58,7 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     //call suite to calculate results
-    let output: SteamPropertiesOutput = steamAddon.steamProperties(inputCpy);
+    let output: SteamPropertiesOutput = this.steamSuiteApiService.steamProperties(inputCpy);
     //convert results and return
     output = this.convertSteamService.convertSteamPropertiesOutput(output, settings);
     return output;
@@ -73,11 +72,11 @@ export class SteamService {
     //0 = pressure
     if (pressureOrTemperature === 0) {
       inputCpy.saturatedPressure = this.convertSteamService.convertSteamPressureInput(inputCpy.saturatedPressure, settings);
-      output = steamAddon.saturatedPropertiesGivenPressure(inputCpy);
+      output = this.steamSuiteApiService.saturatedPropertiesGivenPressure(inputCpy);
     } else {
       //temperature
       inputCpy.saturatedTemperature = this.convertSteamService.convertSteamTemperatureInput(inputCpy.saturatedTemperature, settings);
-      output = steamAddon.saturatedPropertiesGivenTemperature(inputCpy);
+      output = this.steamSuiteApiService.saturatedPropertiesGivenTemperature(inputCpy);
     }
     //convert results and return
     output = this.convertSteamService.convertSaturatedPropertiesOutput(output, settings);
@@ -100,7 +99,7 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     //call suite calculator
-    let results: BoilerOutput = steamAddon.boiler(inputCpy);
+    let results: BoilerOutput = this.steamSuiteApiService.boiler(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertBoilerOutput(results, settings);
     return results;
@@ -129,7 +128,7 @@ export class SteamService {
       inputCpy.steamQuantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.steamQuantityValue, settings);
     }
     //call suite calculator
-    let results: DeaeratorOutput = steamAddon.deaerator(inputCpy);
+    let results: DeaeratorOutput = this.steamSuiteApiService.deaerator(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertDeaeratorOutput(results, settings);
     return results;
@@ -150,7 +149,7 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     //get results w/ converted inputs
-    let results: FlashTankOutput = steamAddon.flashTank(inputCpy);
+    let results: FlashTankOutput = this.steamSuiteApiService.flashTank(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertFlashTankOutput(results, settings);
     return results;
@@ -173,7 +172,7 @@ export class SteamService {
       }
     });
     //call suite calculator
-    let results: HeaderOutput = steamAddon.header(inputCpy);
+    let results: HeaderOutput = this.steamSuiteApiService.header(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertHeaderOutput(results, settings);
     return results;
@@ -193,7 +192,7 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     //call suite calculator
-    let results: HeatLossOutput = steamAddon.heatLoss(inputCpy);
+    let results: HeatLossOutput = this.steamSuiteApiService.heatLoss(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertHeatLossOutput(results, settings);
     return results;
@@ -214,7 +213,7 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     //call suite calculator
-    let results: PrvOutput = steamAddon.prvWithoutDesuperheating(inputCpy);
+    let results: PrvOutput = this.steamSuiteApiService.prvWithoutDesuperheating(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertPrvOutput(results, settings);
     return results;
@@ -243,7 +242,7 @@ export class SteamService {
       inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.feedwaterQuantityValue, settings);
     }
     //call suite calculator
-    let results: PrvOutput = steamAddon.prvWithDesuperheating(inputCpy);
+    let results: PrvOutput = this.steamSuiteApiService.prvWithDesuperheating(inputCpy);
     //convert results and return
     results = this.convertSteamService.convertPrvOutput(results, settings);
     return results;
@@ -280,10 +279,10 @@ export class SteamService {
       }
     }
 
-    let results: TurbineOutput = steamAddon.turbine(inputCpy);
+    let results: TurbineOutput = this.steamSuiteApiService.turbine(inputCpy);
     if (inputCpy.solveFor == 0) {
       inputCpy.isentropicEfficiency = 100
-      let idealResults: TurbineOutput = steamAddon.turbine(inputCpy);
+      let idealResults: TurbineOutput = this.steamSuiteApiService.turbine(inputCpy);
       results.outletIdealPressure = idealResults.outletPressure;
       results.outletIdealQuality = idealResults.outletQuality;
       results.outletIdealSpecificEnthalpy = idealResults.outletSpecificEnthalpy;
@@ -297,7 +296,7 @@ export class SteamService {
         pressure: inputCpy.outletSteamPressure,
         quantityValue: inletSpecificEntropy
       }
-      let idealOutletResults: SteamPropertiesOutput = steamAddon.steamProperties(idealOutletInput);
+      let idealOutletResults: SteamPropertiesOutput = this.steamSuiteApiService.steamProperties(idealOutletInput);
       results.outletIdealPressure = idealOutletResults.pressure;
       results.outletIdealQuality = results.outletQuality;
       results.outletIdealSpecificEnthalpy = idealOutletResults.specificEnthalpy;
@@ -313,7 +312,7 @@ export class SteamService {
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
-    let outputData: SSMTOutput = steamAddon.steamModeler(convertedInputData);
+    let outputData: SSMTOutput = this.steamSuiteApiService.steamModeler(convertedInputData);
     outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
     return outputData;
   }

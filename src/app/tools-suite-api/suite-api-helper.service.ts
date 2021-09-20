@@ -278,6 +278,62 @@ export class SuiteApiHelperService {
     }
   }
 
+  getThermodynamicQuantityType(thermodynamicQuantity: number) {
+    switch (thermodynamicQuantity) {
+      case 0:
+        return Module.ThermodynamicQuantity.TEMPERATURE;
+      case 1:
+        return Module.ThermodynamicQuantity.ENTHALPY;
+      case 2:
+        return Module.ThermodynamicQuantity.ENTROPY;
+      case 3:
+        return Module.ThermodynamicQuantity.QUALITY;
+    }
+  }
+
+  getCondensingTurbineOperation(option: number) {
+    switch (option) {
+      case 0:
+        return Module.CondensingTurbineOperation.STEAM_FLOW;
+      case 1:
+        return Module.CondensingTurbineOperation.POWER_GENERATION;
+
+    }
+  }
+
+  getPressureTurbineOperation(option: number) {
+    switch (option) {
+      case 0:
+        return Module.PressureTurbineOperation.STEAM_FLOW;
+      case 1:
+        return Module.PressureTurbineOperation.POWER_GENERATION;
+      case 2:
+        return Module.PressureTurbineOperation.BALANCE_HEADER;
+      case 3:
+        return Module.PressureTurbineOperation.POWER_RANGE;
+      case 4:
+      return Module.PressureTurbineOperation.FLOW_RANGE;
+    }
+  }
+
+  getTurbineProperty(turbineProperty: number) {
+    switch (turbineProperty) {
+      case 0:
+        return Module.TurbineProperty.MassFlow;
+      case 1:
+        return Module.TurbineProperty.PowerOut;
+    }
+  }
+
+  getSolveForMethod(solve: number) {
+    switch (solve) {
+      case 0:
+        return Module.Solve.OutletProperties;
+      case 1:
+        return Module.Solve.IsentropicEfficiency;
+    }
+  }
+
   returnDoubleVector(doublesArray: Array<number>) {
     let doubleVector = new Module.DoubleVector();
     doublesArray.forEach(x => {

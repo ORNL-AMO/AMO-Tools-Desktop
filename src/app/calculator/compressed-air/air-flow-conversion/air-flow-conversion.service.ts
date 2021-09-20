@@ -7,8 +7,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { cagiConditionsImperial, cagiConditionsMetric } from '../compressed-air-constants'
 import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
-
-declare var steamAddon: any;
+import { SteamSuiteApiService } from '../../../tools-suite-api/steam-suite-api.service';
 
 @Injectable()
 export class AirFlowConversionService {
@@ -19,6 +18,7 @@ export class AirFlowConversionService {
   generateExample: BehaviorSubject<boolean>;
 
   constructor(private convertUnitsService: ConvertUnitsService,
+              private steamSuiteApiService: SteamSuiteApiService,
               private formBuilder: FormBuilder) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.airFlowConversionInput = new BehaviorSubject<AirFlowConversionInput>(undefined);
@@ -237,7 +237,7 @@ export class AirFlowConversionService {
       saturatedTemperature: temperature
     }
     let output: SaturatedPropertiesOutput;
-    output = steamAddon.saturatedPropertiesGivenTemperature(saturatedPropertiesInput);
+    output = this.steamSuiteApiService.saturatedPropertiesGivenTemperature(saturatedPropertiesInput);
     output.saturatedPressure = this.convertUnitsService.value(output.saturatedPressure).from('MPaa').to('psia');
 
     return output.saturatedPressure;
