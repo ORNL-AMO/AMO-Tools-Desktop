@@ -296,9 +296,9 @@ export class SuiteApiEnumService {
   getCondensingTurbineOperation(option: number) {
     switch (option) {
       case 0:
-        return Module.ThermodynamicQuantity.STEAM_FLOW;
+        return Module.CondensingTurbineOperation.STEAM_FLOW;
       case 1:
-        return Module.ThermodynamicQuantity.POWER_GENERATION;
+        return Module.CondensingTurbineOperation.POWER_GENERATION;
 
     }
   }

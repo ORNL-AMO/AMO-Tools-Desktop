@@ -37,7 +37,7 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   }
 
   setCondensateMassFlow() {
-    if (isNaN(this.condensateFlashTank.outletLiquidMassFlow) == false && this.condensateFlashTank.outletLiquidMassFlow != undefined) {
+    if (this.condensateFlashTank && isNaN(this.condensateFlashTank.outletLiquidMassFlow) == false && this.condensateFlashTank.outletLiquidMassFlow != undefined) {
       this.condensateMassFlow = this.condensateFlashTank.outletLiquidMassFlow;
     } else {
       this.condensateMassFlow = this.returnCondensate.massFlow;

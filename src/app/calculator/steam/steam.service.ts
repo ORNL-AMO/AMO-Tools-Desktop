@@ -297,7 +297,6 @@ export class SteamService {
         quantityValue: inletSpecificEntropy
       }
       let idealOutletResults: SteamPropertiesOutput = this.steamSuiteApiService.steamProperties(idealOutletInput);
-      debugger;
       results.outletIdealPressure = idealOutletResults.pressure;
       results.outletIdealQuality = results.outletQuality;
       results.outletIdealSpecificEnthalpy = idealOutletResults.specificEnthalpy;
@@ -313,9 +312,7 @@ export class SteamService {
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
-    // let outputData: SSMTOutput;
     let outputData: SSMTOutput = this.steamSuiteApiService.steamModeler(convertedInputData);
-    debugger;
     outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
     return outputData;
   }

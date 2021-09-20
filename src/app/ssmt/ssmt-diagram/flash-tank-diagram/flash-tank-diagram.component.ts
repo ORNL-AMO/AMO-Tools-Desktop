@@ -38,15 +38,18 @@ export class FlashTankDiagramComponent implements OnInit {
     this.steamPressureClasses = [this.steamPressure];
     this.outletCondensateClasses = ['condensate'];
     this.inletCondensateClasses = ['condensate'];
-    if (this.flashTank.outletGasMassFlow < 1e-3) {
-      this.steamPressureClasses = ['no-steam-flow']
-    }
-
-    if (this.flashTank.outletLiquidMassFlow < 1e-3) {
-      this.outletCondensateClasses = ['no-steam-flow'];
-    }
-    if (this.flashTank.inletWaterMassFlow < 1e-3) {
-      this.inletCondensateClasses = ['no-steam-flow'];
+    
+    if (this.flashTank) {
+      if (this.flashTank.outletGasMassFlow < 1e-3) {
+        this.steamPressureClasses = ['no-steam-flow']
+      }
+      
+      if (this.flashTank.outletLiquidMassFlow < 1e-3) {
+        this.outletCondensateClasses = ['no-steam-flow'];
+      }
+      if (this.flashTank.inletWaterMassFlow < 1e-3) {
+        this.inletCondensateClasses = ['no-steam-flow'];
+      }
     }
   }
   hoverEquipment(str: string) {

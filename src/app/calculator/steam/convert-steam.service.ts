@@ -371,7 +371,6 @@ export class ConvertSteamService {
 
     ssmtOutput.highPressureToLowPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToLowPressureTurbine, settings);
     ssmtOutput.highPressureToLowPressureTurbineIdeal = this.convertTurbineOutput(ssmtOutput.highPressureToLowPressureTurbineIdeal, settings);
-    debugger;
     // ssmtOutput.highPressureToLowPressureTurbine = this.updateTurbineWithIdealValues(ssmtOutput.highPressureToLowPressureTurbine, ssmtOutput.highPressureToLowPressureTurbineIdeal);
 
     ssmtOutput.highPressureToMediumPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToMediumPressureTurbine, settings);
