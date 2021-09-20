@@ -134,4 +134,46 @@ export class LogToolDbService {
     }
     this.indexedDbService.putLogTool(logToolDbData);
   }
+
+
+  getSavedData(): LogToolDbData {
+    let newLogToolDbData: LogToolDbData = {
+      id: 1,
+      name: 'Latest',
+      modifiedDate: new Date(),
+      origin: 'AMO-TOOLS-DESKTOP',
+      setupData: {
+        logToolDays: this.logToolDataService.logToolDays,
+        individualDataFromCsv: this.logToolService.individualDataFromCsv,
+        fields: this.logToolService.fields,
+        dataCleaned: this.logToolService.dataCleaned.getValue(),
+        dataSubmitted: this.logToolService.dataSubmitted.getValue(),
+        noDayTypeAnalysis: this.logToolService.noDayTypeAnalysis.getValue()
+      },
+      visualizeData: {
+        graphObjects: this.visualizeService.graphObjects.getValue(),
+        selectedGraphObj: this.visualizeService.selectedGraphObj.getValue(),
+        visualizeData: this.visualizeService.visualizeData,
+        annotateDataPoint: this.visualizeService.annotateDataPoint.getValue()
+      },
+      dayTypeData: {
+        selectedDataField: this.dayTypeAnalysisService.selectedDataField.getValue(),
+        dayTypes: this.dayTypeAnalysisService.dayTypes.getValue(),
+        dayTypeSummaries: this.dayTypeAnalysisService.dayTypeSummaries.getValue(),
+        displayDayTypeCalander: this.dayTypeAnalysisService.displayDayTypeCalander.getValue(),
+        calendarStartDate: this.dayTypeAnalysisService.calendarStartDate,
+        dayTypesCalculated: this.dayTypeAnalysisService.dayTypesCalculated,
+        numberOfMonths: this.dayTypeAnalysisService.numberOfMonths,
+        dataView: this.dayTypeAnalysisService.dataView.getValue(),
+        dataDisplayType: this.dayTypeAnalysisService.dataDisplayType.getValue(),
+        selectedGraphType: this.dayTypeGraphService.selectedGraphType.getValue(),
+        dayTypeScatterPlotData: this.dayTypeGraphService.dayTypeScatterPlotData.getValue(),
+        individualDayScatterPlotData: this.dayTypeGraphService.individualDayScatterPlotData.getValue()
+      }
+    }
+    //this.indexedDbService.putLogTool(logToolDbData);
+    return newLogToolDbData;
+  }
+
+
 }

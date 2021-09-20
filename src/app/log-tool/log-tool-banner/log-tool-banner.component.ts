@@ -36,7 +36,6 @@ export class LogToolBannerComponent implements OnInit {
   }
 
   openExportData(){
-    console.log('Test export button works');
     this.logToolService.openExportData.next(true);
   }
 

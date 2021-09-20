@@ -18,12 +18,37 @@
 
                     <div *ngIf="exportData == true">
                         stuff here for exporting
-                    </div>                    
+
+                        <div  *ngIf="dataExists == true">
+                            data can be gotten from log tool db data service
+                        </div>  
+                        <div  *ngIf="dataExists == false">
+                            data can not be gotten  
+                        </div>
+                        <div class="pt-2" *ngIf="dataAvailable">
+                            Load Data from Last Use
+                            ({{dataAvailable | date:'long'}})
+                        </div>
+
+                    </div>    
+                                  
 
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">                
-                <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>               
+            <div class="modal-footer justify-content-between">   
+                <div *ngIf="!dataExists" class="w-100">
+                    <p class="text-center small danger">Broke</p>
+                </div>
+                <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>
+                <div class="d-flex">
+                    <div class="form-group d-flex mr-2">
+                        <label for="exportName"> Name your file:</label>
+                        <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
+                    </div>
+                    <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportJSON()">Export
+                        as .json</button>
+                </div>             
+                              
             </div>
         </div>
     </div>
