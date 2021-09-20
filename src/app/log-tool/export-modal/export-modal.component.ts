@@ -2,13 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-import { DayTypeAnalysisService } from '../day-type-analysis/day-type-analysis.service';
-import { DayTypeGraphService } from '../day-type-analysis/day-type-graph/day-type-graph.service';
-import { LogToolDataService } from '../log-tool-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
 import { LogToolDbData } from '../log-tool-models';
 import { LogToolService } from '../log-tool.service';
-import { VisualizeService } from '../visualize/visualize.service';
 
 @Component({
   selector: 'app-export-modal',
@@ -18,17 +14,13 @@ import { VisualizeService } from '../visualize/visualize.service';
 export class ExportModalComponent implements OnInit {
   
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
-
-
-  exportData: boolean = false;
+  
   dataExists: boolean = false;
   dataAvailableSub: Subscription;
   dataAvailable: Date;
   data: LogToolDbData;
   exportName: string;
-  constructor(private logToolService: LogToolService, private logToolDbService: LogToolDbService, 
-    private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
-    private logToolDataService: LogToolDataService, private windowRefService: WindowRefService) { }
+  constructor(private logToolService: LogToolService, private logToolDbService: LogToolDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit(){
   }
@@ -54,27 +46,15 @@ export class ExportModalComponent implements OnInit {
   }
 
   getExportData(){
-    this.exportData = true;
     this.dataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
       this.dataAvailable = val;
     });
     this.logToolDbService.setLogToolData();
-    //this.dataAvailable = undefined;
-    // if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
-    //   this.dataExists = true;
-    // }
+   
     this.data = this.logToolDbService.getSavedData();
     if(this.data){
       this.dataExists = true;
     }
-    // if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
-    //   this.dataExists = true;
-    // }
-    // if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
-    //   this.dataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
-    //     this.dataAvailable = val;
-    //   });
-    // }
   }
 
   buildExportJSON() {
@@ -83,7 +63,7 @@ export class ExportModalComponent implements OnInit {
   }
 
   downloadData(data: any, name: string) {
-    data.origin = 'AMO-TOOLS-DESKTOP';
+    data.origin = 'AMO-LOG-TOOL-DATA';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");

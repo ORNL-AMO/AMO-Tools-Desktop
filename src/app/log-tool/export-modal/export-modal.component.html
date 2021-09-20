@@ -3,42 +3,27 @@
     <div class="modal-dialog modal-lg export-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Export Data</h4>
+                <h3>Export Data</h3>
                 <button class="close" aria-label="Close" (click)="closeExportData()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body pb-0">
-                <div class="export-content scroll-item">
-                    <h3>Would you like to export your data?</h3>
+                <div class="export-content justify-content-center">
+                    <h5>Would you like to export your data?</h5>
 
                     <button class="btn btn-secondary" (click)="getExportData()">Yes</button>
 
                     <button class="btn btn-secondary" (click)="closeExportData()">No</button>
 
-                    <div *ngIf="exportData == true">
-                        stuff here for exporting
-
-                        <div  *ngIf="dataExists == true">
-                            data can be gotten from log tool db data service
-                        </div>  
-                        <div  *ngIf="dataExists == false">
-                            data can not be gotten  
-                        </div>
-                        <div class="pt-2" *ngIf="dataAvailable">
-                            Load Data from Last Use
-                            ({{dataAvailable | date:'long'}})
-                        </div>
-
-                    </div>    
-                                  
+                    <div class="pt-2" *ngIf="dataAvailable">
+                        Download Data from Last Use
+                        ({{dataAvailable | date:'long'}})
+                    </div>
 
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">   
-                <div *ngIf="!dataExists" class="w-100">
-                    <p class="text-center small danger">Broke</p>
-                </div>
+            <div class="modal-footer justify-content-between">
                 <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>
                 <div class="d-flex">
                     <div class="form-group d-flex mr-2">
@@ -47,8 +32,8 @@
                     </div>
                     <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportJSON()">Export
                         as .json</button>
-                </div>             
-                              
+                </div>
+
             </div>
         </div>
     </div>
