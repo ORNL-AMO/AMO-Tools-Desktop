@@ -1,72 +1,114 @@
 <div class="checkbox">
     <label class="group-label" for="improveEndUseEfficiency">
         Improve End Use Efficiency
-        <select id="improveEndUseEfficiencyOrder" [(ngModel)]="improveEndUseEfficiency.order" class="form-control pull-right" (change)="save(true)">
+        <select id="improveEndUseEfficiencyOrder" [(ngModel)]="improveEndUseEfficiency.order"
+            class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
             <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>
 
-<form *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
-    <div class="form-group">
-        <label for="reductionType">Airflow Reduction Type</label>
-        <div class="input-group" >
-            <div class="d-flex flex-column">
-                <div class="d-flex">
-                    <label class="w-100" for="Fixed">
-                        <input type="radio" name="reductionType" id="Fixed" (focus)="helpTextField('airflowReductionType')"
-                            [(ngModel)]="improveEndUseEfficiency.reductionType" value="Fixed" (change)="save(false)"
-                            class="mr-2">Fixed</label>
-                </div>
-                <div class="d-flex">
-                    <label class="w-100" for="Variable">
-                        <input type="radio" name="reductionType" id="Variable" (focus)="helpTextField('airflowReductionType')" 
-                            [(ngModel)]="improveEndUseEfficiency.reductionType" value="Variable" (change)="save(false)"
-                            class="mr-2">Variable</label>
+<div *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
+    <form *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" class="mb-2 pt-1">
+        <div class="form-group name-input-form">
+            <div class="input-group">
+                <span class="input-group-addon units left" (click)="collapseEfficiency(itemIndex)">
+                    <span *ngIf="item.collapsed" class="fa fa-caret-down"></span>
+                    <span *ngIf="!item.collapsed" class="fa fa-caret-up"></span>
+                </span>
+                <input type="text" class="form-control name-input" [(ngModel)]="item.name"
+                    (focus)="helpTextField('name')" name="name" id="name" (input)="save(false)">
+                <span class="input-group-addon units" *ngIf="improveEndUseEfficiency.endUseEfficiencyItems.length > 1"
+                    (click)="removeEndUseEfficiency(itemIndex)">
+                    <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="!item.collapsed">
+            <label for="{{'substituteAuxiliaryEquipment_'+itemIndex}}">Substitute Auxiliary Equipment?</label>
+            <select name="{{'substituteAuxiliaryEquipment_'+itemIndex}}" [(ngModel)]="item.substituteAuxiliaryEquipment"
+                class="form-control" (change)="save(false)" (focus)="helpTextField('substituteAuxiliaryEquipment')">
+                <option [ngValue]=true>Yes</option>
+                <option [ngValue]=false>No</option>
+            </select>
+        </div>
+        <div class="form-group" *ngIf="item.substituteAuxiliaryEquipment == true && !item.collapsed">
+            <label for="{{'equipmentDemand_'+itemIndex}}">Equipment Demand</label>
+            <div class="input-group">
+                <input type="number" class="form-control" [(ngModel)]="item.equipmentDemand"
+                    (focus)="helpTextField('equipmentDemand')" name="{{'equipmentDemand_'+itemIndex}}"
+                    id="{{'equipmentDemand_'+itemIndex}}" (input)="save(false)">
+                <span class="input-group-addon units">kW</span>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="!item.collapsed">
+            <label for="{{'reductionType_'+itemIndex}}">Airflow Reduction Type</label>
+            <div class="input-group">
+                <div class="d-flex flex-column">
+                    <div class="d-flex">
+                        <label class="w-100" for="Fixed">
+                            <input type="radio" name="{{'reductionType_'+itemIndex}}" id="Fixed"
+                                (focus)="helpTextField('airflowReductionType')" [(ngModel)]="item.reductionType"
+                                value="Fixed" (change)="save(false)" class="mr-2">Fixed</label>
+                    </div>
+                    <div class="d-flex">
+                        <label class="w-100" for="Variable">
+                            <input type="radio" name="{{'reductionType_'+itemIndex}}" id="Variable"
+                                (focus)="helpTextField('airflowReductionType')" [(ngModel)]="item.reductionType"
+                                value="Variable" (change)="save(false)" class="mr-2">Variable</label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="form-group" *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'">
-        <label for="airflowReduction">Aiflow Reduction</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="improveEndUseEfficiency.airflowReduction"
-                (focus)="helpTextField('airflowReduction')"
-                name="airflowReduction" id="airflowReduction" (input)="save(false)">
-            <span class="input-group-addon units">acfm</span>
+        <div class="form-group" *ngIf="item.reductionType == 'Fixed' && !item.collapsed">
+            <label for="{{'airflowReduction_'+itemIndex}}">Aiflow Reduction</label>
+            <div class="input-group">
+                <input type="number" class="form-control" [(ngModel)]="item.airflowReduction"
+                    (focus)="helpTextField('airflowReduction')" name="{{'airflowReduction_'+itemIndex}}"
+                    id="{{'airflowReduction_'+itemIndex}}" (input)="save(false)">
+                <span class="input-group-addon units">acfm</span>
+            </div>
         </div>
+        <div class="scroll-item pt-2" *ngIf="!item.collapsed">
+            <table class="table bg-white">
+                <thead>
+                    <tr>
+                        <th>
+                            Day Type
+                        </th>
+                        <th *ngFor="let hourInterval of hourIntervals">
+                            {{hourInterval}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let dataItem of item.reductionData; let reductionIndex = index;">
+                        <td>
+                            {{dataItem.dayTypeName}}
+                        </td>
+                        <td *ngFor="let d of dataItem.data; let dataIndex = index; trackBy:trackByIdx">
+                            <input *ngIf="item.reductionType == 'Fixed'" type="checkbox" [(ngModel)]="d.applyReduction"
+                                name="{{'applyReduction_'+reductionIndex+dataIndex+itemIndex}}"
+                                id="{{'applyReduction_'+reductionIndex+dataIndex}}" (change)="save(false)">
+                            <input *ngIf="item.reductionType == 'Variable'" class="form-control w-100 min-width"
+                                type="number" [(ngModel)]="d.reductionAmount"
+                                name="{{'reductionAmount_'+reductionIndex+dataIndex}}"
+                                (focus)="helpTextField('airflowReductionVariable')"
+                                id="{{'reductionAmount_'+reductionIndex+dataIndex+itemIndex}}" (input)="save(false)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="w-100 pb-2 text-right" *ngIf="item.reductionType == 'Fixed' && !item.collapsed">
+            <a class="click-link small" (click)="toggleAll(itemIndex)">Toggle All</a>
+        </div>
+
+    </form>
+    <div class="w-100 pb-2 text-right">
+        <a class="click-link" (click)="addEfficiencyImprovement()">+Add Efficiency Improvement</a>
     </div>
-    <div class="scroll-item pt-2">
-        <table class="table bg-white">
-            <thead>
-                <tr>
-                    <th>
-                        Day Type
-                    </th>
-                    <th *ngFor="let hourInterval of hourIntervals">
-                        {{hourInterval}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let dataItem of improveEndUseEfficiency.reductionData; let reductionIndex = index;">
-                    <td>
-                        {{dataItem.dayTypeName}}
-                    </td>
-                    <td *ngFor="let d of dataItem.data; let dataIndex = index; trackBy:trackByIdx">
-                        <input *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'" type="checkbox"
-                            [(ngModel)]="d.applyReduction" name="{{'applyReduction_'+reductionIndex+dataIndex}}"
-                            id="{{'applyReduction_'+reductionIndex+dataIndex}}" (change)="save(false)">
-                        <input *ngIf="improveEndUseEfficiency.reductionType == 'Variable'"
-                            class="form-control w-100 min-width" type="number" [(ngModel)]="d.reductionAmount"
-                            name="{{'reductionAmount_'+reductionIndex+dataIndex}}" (focus)="helpTextField('airflowReductionVariable')"
-                            id="{{'reductionAmount_'+reductionIndex+dataIndex}}" (input)="save(false)">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <a *ngIf="improveEndUseEfficiency.reductionType == 'Fixed'" class="click-link small pull-right"
-        (click)="toggleAll()">Toggle All</a>
-</form>
+</div>

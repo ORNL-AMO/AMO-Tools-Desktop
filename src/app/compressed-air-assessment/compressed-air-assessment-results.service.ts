@@ -439,26 +439,28 @@ export class CompressedAirAssessmentResultsService {
     let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(profileSummary));
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
-      let reductionData: {
-        dayTypeId: string;
-        dayTypeName: string;
-        data: Array<{
-          hourInterval: number;
-          applyReduction: boolean;
-          reductionAmount: number;
-        }>
-      } = improveEndUseEfficiency.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
-      let intervalReductionData = reductionData.data.find(rData => { return rData.hourInterval == total.timeInterval });
-      if (improveEndUseEfficiency.reductionType == 'Fixed') {
-        if (intervalReductionData.applyReduction) {
-          total.airflow = total.airflow - improveEndUseEfficiency.airflowReduction;
+      improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+        let reductionData: {
+          dayTypeId: string;
+          dayTypeName: string;
+          data: Array<{
+            hourInterval: number;
+            applyReduction: boolean;
+            reductionAmount: number;
+          }>
+        } = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
+        let intervalReductionData = reductionData.data.find(rData => { return rData.hourInterval == total.timeInterval });
+        if (item.reductionType == 'Fixed') {
+          if (intervalReductionData.applyReduction) {
+            total.airflow = total.airflow - item.airflowReduction;
+          }
+        } else if (item.reductionType == 'Variable') {
+          if (intervalReductionData.reductionAmount) {
+            total.airflow = total.airflow - intervalReductionData.reductionAmount;
+          }
         }
-      } else if (improveEndUseEfficiency.reductionType == 'Variable') {
-        if (intervalReductionData.reductionAmount) {
-          total.airflow = total.airflow - intervalReductionData.reductionAmount;
-        }
-      }
-      adjustedProfileSummary = this.adjustProfile(total.airflow, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, reduceRuntime);
+        adjustedProfileSummary = this.adjustProfile(total.airflow, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, reduceRuntime);
+      });
     });
     return adjustedProfileSummary;
   }

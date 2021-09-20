@@ -42,3 +42,9 @@ td, th{
   background-color: #7030A0;
   color: white;
 }
+
+form{
+  margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: #bbb dashed 1px;
+}

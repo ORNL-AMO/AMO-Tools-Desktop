@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ImproveEndUseEfficiency, Modification } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
@@ -94,11 +94,6 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
-  setReductionType(str: "Fixed" | "Variable") {
-    this.improveEndUseEfficiency.reductionType = str;
-    this.save(false);
-  }
-
   setHourIntervals() {
     this.hourIntervals = new Array();
     for (let i = 0; i < 24; i++) {
@@ -106,11 +101,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     }
   }
 
-  toggleAll() {
-    let toggleValue: boolean = !this.improveEndUseEfficiency.reductionData[0].data[0].applyReduction;
-    for (let i = 0; i < this.improveEndUseEfficiency.reductionData.length; i++) {
-      for (let dataIndex = 0; dataIndex < this.improveEndUseEfficiency.reductionData[i].data.length; dataIndex++) {
-        this.improveEndUseEfficiency.reductionData[i].data[dataIndex].applyReduction = toggleValue;
+  toggleAll(itemIndex: number) {
+    let toggleValue: boolean = !this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData[0].data[0].applyReduction;
+    for (let i = 0; i < this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData.length; i++) {
+      for (let dataIndex = 0; dataIndex < this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData[i].data.length; dataIndex++) {
+        this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData[i].data[dataIndex].applyReduction = toggleValue;
       }
     }
     this.save(false);
@@ -118,5 +113,33 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
 
   trackByIdx(index: number, obj: any): any {
     return index;
+  }
+
+  addEfficiencyImprovement() {
+    let reductionData: Array<EndUseEfficiencyReductionData> = JSON.parse(JSON.stringify(this.improveEndUseEfficiency.endUseEfficiencyItems[0].reductionData));
+    for (let i = 0; i < reductionData.length; i++) {
+      for (let x = 0; x < reductionData[i].data.length; x++) {
+        reductionData[i].data[x].applyReduction = false;
+      }
+    }
+    this.improveEndUseEfficiency.endUseEfficiencyItems.push({
+      reductionType: "Fixed",
+      airflowReduction: undefined,
+      reductionData: reductionData,
+      name: 'Improve End Use Efficiency #' + (this.improveEndUseEfficiency.endUseEfficiencyItems.length + 1),
+      substituteAuxiliaryEquipment: false,
+      equipmentDemand: 0,
+      collapsed: false
+    })
+  }
+
+  collapseEfficiency(itemIndex: number) {
+    this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].collapsed = !this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].collapsed;
+    this.save(false);
+  }
+
+  removeEndUseEfficiency(itemIndex: number) {
+    this.improveEndUseEfficiency.endUseEfficiencyItems.splice(itemIndex, 1);
+    this.save(false);
   }
 }
