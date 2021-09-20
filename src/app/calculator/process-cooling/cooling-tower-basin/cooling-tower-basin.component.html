@@ -63,7 +63,7 @@
 			<div class="d-flex flex-column w-100">
 				<div class="mb-3 d-block" *ngIf="tabSelect == 'results'">
 					<div class="w-100 justify-content-center btn-group btn-group-sm results pt-1 pb-1">
-						  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(true)"
+						  <button type="button" [disabled]="!hasWeatherBinsData" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(true)"
 						[ngClass]="{'active': isShowingWeatherResults == true}">See weather binned results</button>
 						  <button type="button" class="btn btn-secondary btn-sm" (click)="toggleWeatherResults(false)"
 						[ngClass]="{'active': isShowingWeatherResults == false}">See calculated results</button>
