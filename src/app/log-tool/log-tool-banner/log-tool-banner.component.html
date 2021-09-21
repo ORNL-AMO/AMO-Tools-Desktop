@@ -14,8 +14,8 @@
             <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
         </div>
         <div class="nav-item">
-            <a *ngIf="dataCleaned == true && noDayTypeAnalysis == false" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
-                routerLinkActive="active">Day Type Analysis</a>
+            <a *ngIf="dataCleaned == true && noDayTypeAnalysis == false" class="nav-link"
+                [routerLink]="['/log-tool/day-type-analysis']" routerLinkActive="active">Day Type Analysis</a>
             <a *ngIf="dataCleaned == false || noDayTypeAnalysis == true" class="nav-link disabled">Day Type Analysis</a>
         </div>
         <div class="nav-item">
@@ -25,10 +25,14 @@
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
-        <button class="pl-2 pr-2 border-left download-nav-item" [disabled]="dataCleaned == false" type="button"
+        <div [ngClass]="{'disabled':dataCleaned == false}" class="pl-2 pr-2 border-left download-nav-item home-nav-item"
             (click)="openExportData()">
             <span class="fa fa-download"></span>
-        </button>
+        </div>
+        <!-- <button class="pl-2 pr-2 border-left download-nav-item" [disabled]="dataCleaned == false" type="button"
+            (click)="openExportData()">
+            <span class="fa fa-download"></span>
+        </button> -->
         <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/landing-screen']">
             <span class="fa fa-home"></span>
         </div>

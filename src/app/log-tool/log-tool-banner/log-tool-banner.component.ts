@@ -29,14 +29,16 @@ export class LogToolBannerComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.dataSubmittedSub.unsubscribe();
     this.dataCleanedSub.unsubscribe();
     this.noDayTypeAnalysisSub.unsubscribe();
   }
 
-  openExportData(){
-    this.logToolService.openExportData.next(true);
+  openExportData() {
+    if (this.dataCleaned) {
+      this.logToolService.openExportData.next(true);
+    }
   }
 
 }

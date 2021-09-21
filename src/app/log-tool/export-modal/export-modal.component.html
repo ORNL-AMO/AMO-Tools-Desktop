@@ -9,25 +9,18 @@
                 </button>
             </div>
             <div class="modal-body pb-0">
-                <div class="export-content justify-content-center">
-                    <div class="pt-2" *ngIf="dataExists">
-                        Download Data from Last Use
-                        ({{data.modifiedDate | date:'long'}})
-                    </div>
-
+                <p class="small" *ngIf="dataExists">
+                    Download data from last use ({{data.modifiedDate | date}}) to be imported at a later time.
+                </p>
+                <div class="form-group">
+                    <label for="exportName"> Name your file:</label>
+                    <input type="text" class="form-control w-100" id="exportName" [(ngModel)]="exportName">
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
                 <button class="btn btn-secondary" (click)="closeExportData()">Cancel</button>
-                <div class="d-flex">
-                    <div class="form-group d-flex mr-2">
-                        <label for="exportName"> Name your file:</label>
-                        <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
-                    </div>
-                    <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportJSON()">Export
-                        as .json</button>
-                </div>
-
+                <button class="btn btn-primary ml-2" [disabled]="!dataExists" (click)="buildExportJSON()">Export
+                    as .json</button>
             </div>
         </div>
     </div>
