@@ -3,13 +3,23 @@
         <!-- <input type="checkbox" id="addPrimaryReceiverVolume" (focus)="focusField('addPrimaryReceiverVolume')"
             (change)="setAddPrimaryReceiverVolume()" [(ngModel)]="addPrimaryReceiverVolume.selected" /> -->
         Add Primary Receiver Volume
-        <select id="addPrimaryReceiverVolumeOrder" [(ngModel)]="addPrimaryReceiverVolume.order" class="form-control pull-right" (change)="save(true)">
+        <select id="addPrimaryReceiverVolumeOrder" [(ngModel)]="addPrimaryReceiverVolume.order"
+            class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
             <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
         </select>
     </label>
 </div>
 <form *ngIf="addPrimaryReceiverVolume.order != 100" class="mb-2 pt-1">
+    <div class="form-group">
+        <label for="receiverVolumeImplementationCost">Implementation Cost</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="addPrimaryReceiverVolume.implementationCost"
+                name="receiverVolumeImplementationCost" id="receiverVolumeImplementationCost" (input)="save(false)"
+                (focus)="helpTextField('implementationCost')">
+            <span class="input-group-addon units">$</span>
+        </div>
+    </div>
     <div class="form-group">
         <label>Existing air storage capacity</label>
         <div class="text-center small">
@@ -20,7 +30,7 @@
         <label for="increasedVolume">Increased Volume</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="addPrimaryReceiverVolume.increasedVolume"
-                name="increasedVolume" id="increasedVolume" (input)="save(false)" 
+                name="increasedVolume" id="increasedVolume" (input)="save(false)"
                 (focus)="helpTextField('increasedVolume')">
             <span class="input-group-addon units">gal</span>
         </div>
@@ -31,4 +41,5 @@
             {{existingCapacity + addPrimaryReceiverVolume.increasedVolume | number}} gal
         </div>
     </div>
+
 </form>

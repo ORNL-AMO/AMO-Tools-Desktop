@@ -11,6 +11,15 @@
 
 <form *ngIf="reduceAirLeaks.order != 100" class="mb-2 pt-1">
     <div class="form-group">
+        <label for="reduceAirLeaksImplementationCost">Implementation Cost</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.implementationCost"
+                name="reduceAirLeaksImplementationCost" id="reduceAirLeaksImplementationCost" (input)="save(false)"
+                (focus)="helpTextField('implementationCost')">
+            <span class="input-group-addon units">$</span>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="leakFlow">Leak Flow</label>
         <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"

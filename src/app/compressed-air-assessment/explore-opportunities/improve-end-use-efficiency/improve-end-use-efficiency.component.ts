@@ -129,7 +129,8 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
       name: 'Improve End Use Efficiency #' + (this.improveEndUseEfficiency.endUseEfficiencyItems.length + 1),
       substituteAuxiliaryEquipment: false,
       equipmentDemand: 0,
-      collapsed: false
+      collapsed: false,
+      implementationCost: 0
     })
   }
 

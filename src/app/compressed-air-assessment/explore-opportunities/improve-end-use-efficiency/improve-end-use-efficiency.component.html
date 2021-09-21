@@ -27,6 +27,17 @@
         </div>
 
         <div class="form-group" *ngIf="!item.collapsed">
+            <label for="{{'endUseEfficiencyImplementationCost_'+itemIndex}}">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" [(ngModel)]="item.implementationCost"
+                    name="{{'endUseEfficiencyImplementationCost_'+itemIndex}}"
+                    id="{{'endUseEfficiencyImplementationCost_'+itemIndex}}" (input)="save(false)"
+                    (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="!item.collapsed">
             <label for="{{'substituteAuxiliaryEquipment_'+itemIndex}}">Substitute Auxiliary Equipment?</label>
             <select name="{{'substituteAuxiliaryEquipment_'+itemIndex}}" [(ngModel)]="item.substituteAuxiliaryEquipment"
                 class="form-control" (change)="save(false)" (focus)="helpTextField('substituteAuxiliaryEquipment')">

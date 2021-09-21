@@ -79,6 +79,7 @@ export class ExploreOpportunitiesService {
       reduceAirLeaks: {
         leakReduction: undefined,
         leakFlow: undefined,
+        implementationCost: 0,
         order: 100
       },
       improveEndUseEfficiency: {
@@ -89,30 +90,36 @@ export class ExploreOpportunitiesService {
           name: 'Improve End Use Efficiency #1',
           substituteAuxiliaryEquipment: false,
           equipmentDemand: 0,
-          collapsed: false
+          collapsed: false,
+          implementationCost: 0,
         }],
         order: 100
       },
       reduceSystemAirPressure: {
         averageSystemPressureReduction: undefined,
+        implementationCost: 0,
         order: 100
       },
       adjustCascadingSetPoints: {
         order: 100,
-        setPointData: setPointData
+        setPointData: setPointData,
+        implementationCost: 0,
       },
       useAutomaticSequencer: {
         targetPressure: undefined,
         variance: undefined,
         order: 100,
+        implementationCost: 0,
         profileSummary: sequencerProfileSummary
       },
       reduceRuntime: {
         runtimeData: reduceRuntimeData,
+        implementationCost: 0,
         order: 100
       },
       addPrimaryReceiverVolume: {
         increasedVolume: 0,
+        implementationCost: 0,
         order: 100
       }
     }

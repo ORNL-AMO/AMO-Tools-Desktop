@@ -8,6 +8,17 @@
     </label>
 </div>
 
+<div class="form-group" *ngIf="reduceRuntime.order != 100">
+    <label for="reduceRuntimeImplementationCost">Implementation Cost</label>
+    <div class="input-group">
+        <input type="number" class="form-control" [(ngModel)]="reduceRuntime.implementationCost"
+            name="reduceRuntimeImplementationCost" id="reduceRuntimeImplementationCost" (input)="save(false)"
+            (focus)="helpTextField('implementationCost')">
+        <span class="input-group-addon units">$</span>
+    </div>
+</div>
+
+
 <div *ngIf="reduceRuntime.order != 100" class="w-100 p-2 justify-content-center">
     <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayTypeId"
         (change)="setAirflowData()" (focus)="helpTextField('dayType')">
