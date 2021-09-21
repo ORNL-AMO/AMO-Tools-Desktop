@@ -1,0 +1,15 @@
+
+/* #name-export{
+    position: absolute;
+    right: 150px;
+    font-weight: bold;
+} */
+
+  .btn{
+    padding: 6px;
+}
+
+
+.modal-dialog{
+    top: .75rem;
+}
