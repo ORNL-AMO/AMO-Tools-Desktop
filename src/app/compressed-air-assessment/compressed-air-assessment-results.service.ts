@@ -133,6 +133,76 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
+
+  combineDayTypeResults(modificationResults: CompressedAirAssessmentResult): DayTypeModificationResult {
+    let dayTypeModificationResult: DayTypeModificationResult = {
+      adjustedProfileSummary: [],
+      adjustedCompressors: [],
+      profileSummaryTotals: [],
+      allSavingsResults: this.getEmptyEemSavings(),
+      flowReallocationSavings: this.getEmptyEemSavings(),
+      addReceiverVolumeSavings: this.getEmptyEemSavings(),
+      adjustCascadingSetPointsSavings: this.getEmptyEemSavings(),
+      improveEndUseEfficiencySavings: this.getEmptyEemSavings(),
+      reduceAirLeaksSavings: this.getEmptyEemSavings(),
+      reduceRunTimeSavings: this.getEmptyEemSavings(),
+      reduceSystemAirPressureSavings: this.getEmptyEemSavings(),
+      useAutomaticSequencerSavings: this.getEmptyEemSavings(),
+      reduceRunTimeProfileSummary: undefined,
+      flowAllocationProfileSummary: undefined,
+      reduceAirLeaksProfileSummary: undefined,
+      addReceiverVolumeProfileSummary: undefined,
+      useAutomaticSequencerProfileSummary: undefined,
+      improveEndUseEfficiencyProfileSummary: undefined,
+      reduceSystemAirPressureProfileSummary: undefined,
+      adjustCascadingSetPointsProfileSummary: undefined,
+      dayTypeId: undefined,
+      auxiliaryPowerUsage: {cost: 0, energyUse: 0}
+    }
+    modificationResults.dayTypeModificationResults.forEach(modResult => {
+      dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
+      dayTypeModificationResult.allSavingsResults.savings.power += modResult.allSavingsResults.savings.power;
+      dayTypeModificationResult.allSavingsResults.baselineResults.cost += modResult.allSavingsResults.baselineResults.cost;
+      dayTypeModificationResult.allSavingsResults.baselineResults.power += modResult.allSavingsResults.baselineResults.power;
+      dayTypeModificationResult.allSavingsResults.baselineResults.peakDemand += modResult.allSavingsResults.baselineResults.peakDemand;
+
+      dayTypeModificationResult.allSavingsResults.adjustedResults.cost += modResult.allSavingsResults.adjustedResults.cost;
+      dayTypeModificationResult.allSavingsResults.adjustedResults.power += modResult.allSavingsResults.adjustedResults.power;
+      dayTypeModificationResult.allSavingsResults.adjustedResults.peakDemand += modResult.allSavingsResults.adjustedResults.peakDemand;
+
+
+      dayTypeModificationResult.flowReallocationSavings.savings.cost += modResult.flowReallocationSavings.savings.cost;
+      dayTypeModificationResult.flowReallocationSavings.savings.power += modResult.flowReallocationSavings.savings.power;
+
+      dayTypeModificationResult.addReceiverVolumeSavings.savings.cost += modResult.addReceiverVolumeSavings.savings.cost;
+      dayTypeModificationResult.addReceiverVolumeSavings.savings.power += modResult.addReceiverVolumeSavings.savings.power;
+
+      dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost += modResult.adjustCascadingSetPointsSavings.savings.cost;
+      dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.power += modResult.adjustCascadingSetPointsSavings.savings.power;
+
+      dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost += modResult.improveEndUseEfficiencySavings.savings.cost;
+      dayTypeModificationResult.improveEndUseEfficiencySavings.savings.power += modResult.improveEndUseEfficiencySavings.savings.power;
+
+      dayTypeModificationResult.reduceAirLeaksSavings.savings.cost += modResult.reduceAirLeaksSavings.savings.cost;
+      dayTypeModificationResult.reduceAirLeaksSavings.savings.power += modResult.reduceAirLeaksSavings.savings.power;
+
+      dayTypeModificationResult.reduceRunTimeSavings.savings.cost += modResult.reduceRunTimeSavings.savings.cost;
+      dayTypeModificationResult.reduceRunTimeSavings.savings.power += modResult.reduceRunTimeSavings.savings.power;
+
+      dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost += modResult.reduceSystemAirPressureSavings.savings.cost;
+      dayTypeModificationResult.reduceSystemAirPressureSavings.savings.power += modResult.reduceSystemAirPressureSavings.savings.power;
+
+      dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost += modResult.useAutomaticSequencerSavings.savings.cost;
+      dayTypeModificationResult.useAutomaticSequencerSavings.savings.power += modResult.useAutomaticSequencerSavings.savings.power;
+
+      dayTypeModificationResult.auxiliaryPowerUsage.cost += modResult.auxiliaryPowerUsage.cost;
+      dayTypeModificationResult.auxiliaryPowerUsage.energyUse += modResult.auxiliaryPowerUsage.energyUse;
+    });
+    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
+    return dayTypeModificationResult;
+  }
+
+
   adjustProfileSummary(dayType: CompressedAirDayType, baselineProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, modification: Modification, modificationOrders: Array<number>, electricityCost?: number): AdjustProfileResults {
     let addReceiverVolumeSavings: EemSavingsResults = this.getEmptyEemSavings();
     let adjustCascadingSetPointsSavings: EemSavingsResults = this.getEmptyEemSavings();

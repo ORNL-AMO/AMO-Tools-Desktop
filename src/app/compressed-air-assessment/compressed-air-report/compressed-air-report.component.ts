@@ -3,11 +3,12 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
+import { Modification } from '../../shared/models/compressed-air-assessment';
 import { Directory } from '../../shared/models/directory';
 import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, BaselineResults, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -41,8 +42,11 @@ export class CompressedAirReportComponent implements OnInit {
   showPrintDiv: boolean;
   printOptions: PrintOptions;
 
-
-  constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService) { }
+  baselineResults: BaselineResults;
+  assessmentResults: Array<CompressedAirAssessmentResult>;
+  combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult}>;
+  constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -50,7 +54,20 @@ export class CompressedAirReportComponent implements OnInit {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
+      this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment);
+      this.assessmentResults = new Array();
+      this.combinedDayTypeResults = new Array();
+      this.assessment.compressedAirAssessment.modifications.forEach(modification => {
+          let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification);
+          this.assessmentResults.push(modificationResults);
+          this.combinedDayTypeResults.push({
+            modification: modification,
+            combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults)
+          })
+      })
+      
     }
+
     // if (this.assessment.wasteWater.setupDone) {
     //   // this.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, true);
     //   // this.assessment.wasteWater.modifications.forEach(mod => {
