@@ -26,11 +26,12 @@
     border-radius: 5px;
 }
 
-button{
-    border: none;
-    background-color: none;
+.download-nav-item{
+    border: none !important;
+    background-color: #117A65 !important;
 }
 
-button.active{
-    background-color: #117A65;
+.download-nav-item.active{
+    border: none !important;
+    background-color: #117A65 !important;
 }

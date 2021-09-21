@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Subscription } from 'rxjs';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { LogToolDbService } from '../log-tool-db.service';
 import { LogToolDbData } from '../log-tool-models';
@@ -16,13 +15,12 @@ export class ExportModalComponent implements OnInit {
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
   
   dataExists: boolean = false;
-  dataAvailableSub: Subscription;
-  dataAvailable: Date;
   data: LogToolDbData;
   exportName: string;
   constructor(private logToolService: LogToolService, private logToolDbService: LogToolDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit(){
+    this.getExportData();
   }
 
   ngAfterViewInit() {
@@ -39,16 +37,8 @@ export class ExportModalComponent implements OnInit {
       this.logToolService.openExportData.next(false);
     });
   }
-  ngOnDestroy() {
-    if (this.dataAvailableSub) {
-      this.dataAvailableSub.unsubscribe();
-    }
-  }
-
+  
   getExportData(){
-    this.dataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
-      this.dataAvailable = val;
-    });
     this.logToolDbService.setLogToolData();
    
     this.data = this.logToolDbService.getSavedData();

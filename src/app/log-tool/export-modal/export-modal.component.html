@@ -1,6 +1,6 @@
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg export-modal">
+    <div class="modal-dialog modal-md export-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Export Data</h3>
@@ -10,15 +10,9 @@
             </div>
             <div class="modal-body pb-0">
                 <div class="export-content justify-content-center">
-                    <h5>Would you like to export your data?</h5>
-
-                    <button class="btn btn-secondary" (click)="getExportData()">Yes</button>
-
-                    <button class="btn btn-secondary" (click)="closeExportData()">No</button>
-
-                    <div class="pt-2" *ngIf="dataAvailable">
+                    <div class="pt-2" *ngIf="dataExists">
                         Download Data from Last Use
-                        ({{dataAvailable | date:'long'}})
+                        ({{data.modifiedDate | date:'long'}})
                     </div>
 
                 </div>
