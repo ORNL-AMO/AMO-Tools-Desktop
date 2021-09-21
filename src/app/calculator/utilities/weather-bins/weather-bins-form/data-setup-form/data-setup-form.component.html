@@ -12,7 +12,7 @@
             have a .csv file extension</span>
 
     </div>
-    <div class="pb-2" *ngIf="previousDataAvailable && !inputData.fileName">
+    <div class="pb-2" *ngIf="validFile && !inputData.fileName">
         <a class="click-link small" (click)="usePreviousData()">Load File from Last Use
             ({{previousDataAvailable | date:'long'}})</a>
     </div>
