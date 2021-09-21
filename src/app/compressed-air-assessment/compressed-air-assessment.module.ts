@@ -116,6 +116,12 @@ import { SystemProfileAnnualSummaryComponent } from './system-profile/system-pro
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { CompressedAirReportComponent } from './compressed-air-report/compressed-air-report.component';
+import { ExecutiveSummaryComponent } from './compressed-air-report/executive-summary/executive-summary.component';
+import { SystemProfilesComponent } from './compressed-air-report/system-profiles/system-profiles.component';
+import { ReportGraphsComponent } from './compressed-air-report/report-graphs/report-graphs.component';
+import { InputSummaryComponent } from './compressed-air-report/input-summary/input-summary.component';
+import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -194,7 +200,12 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     ReduceRunTimeHelpComponent,
     AddReceiverVolumeHelpComponent,
     SystemProfileAnnualSummaryComponent,
-    AdjustSequencerProfileComponent
+    AdjustSequencerProfileComponent,
+    CompressedAirReportComponent,
+    ExecutiveSummaryComponent,
+    SystemProfilesComponent,
+    ReportGraphsComponent,
+    InputSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -216,7 +227,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     AltitudeCorrectionModule,
     PercentGraphModule,
     UpdateUnitsModalModule,
-    SharedPipesModule
+    SharedPipesModule,
+    FacilityInfoSummaryModule
   ],
   providers: [
     CompressedAirAssessmentService,
