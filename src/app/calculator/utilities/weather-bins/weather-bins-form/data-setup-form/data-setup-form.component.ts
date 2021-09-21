@@ -83,7 +83,6 @@ export class DataSetupFormComponent implements OnInit {
   }
 
   resetData() {
-    this.previousDataAvailable = null;
     this.weatherBinsService.resetData();
   }
 
