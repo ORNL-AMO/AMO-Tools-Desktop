@@ -116,6 +116,8 @@ import { SystemProfileAnnualSummaryComponent } from './system-profile/system-pro
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { SystemProfileGraphsService } from './system-profile/system-profile-graphs/system-profile-graphs.service';
+
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -238,7 +240,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     DayTypeService,
     CompressedAirDataManagementService,
     CompressedAirAssessmentResultsService,
-    ConvertCompressedAirService
+    ConvertCompressedAirService,
+    SystemProfileGraphsService
   ]
 })
 export class CompressedAirAssessmentModule { }
