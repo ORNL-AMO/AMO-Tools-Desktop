@@ -50,7 +50,7 @@ export class UpdateDataService {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
 
-        if(assessment.psat.modifications){
+        if (assessment.psat.modifications) {
             assessment.psat.modifications.forEach(mod => {
                 mod.psat = this.addWhatIfScenarioPsat(mod.psat);
             })
@@ -60,7 +60,7 @@ export class UpdateDataService {
     }
 
     addWhatIfScenarioPsat(psat: PSAT): PSAT {
-        if(!psat.inputs.whatIfScenario) {
+        if (!psat.inputs.whatIfScenario) {
             psat.inputs.whatIfScenario = true;
         }
         return psat;
@@ -75,10 +75,10 @@ export class UpdateDataService {
         }
 
         assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
-        if(!assessment.fsat.fsatOperations){
+        if (!assessment.fsat.fsatOperations) {
             assessment.fsat = this.addFsatOperations(assessment.fsat);
         }
-        if(assessment.fsat.modifications){
+        if (assessment.fsat.modifications) {
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
                 mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
@@ -89,31 +89,33 @@ export class UpdateDataService {
     }
 
     addWhatIfScenarioFsat(fsat: FSAT): FSAT {
-        if(!fsat.whatIfScenario) {
+        if (!fsat.whatIfScenario) {
             fsat.whatIfScenario = true;
         }
         return fsat;
     }
 
     addFsatOperations(fsat: FSAT): FSAT {
-        if(!fsat.fsatOperations) {
-            if (fsat.fieldData['operatingHours']){
-                fsat.fsatOperations.operatingHours = fsat.fieldData['operatingHours'];
-            } else {
-                fsat.fsatOperations.operatingHours = 8760;
+        if (!fsat.fsatOperations) {
+            let operatingHours: number = 8760;
+            let cost: number = .06;
+            if (fsat.fieldData['operatingHours']) {
+                operatingHours = fsat.fieldData['operatingHours'];
             }
-            if (fsat.fieldData['cost']){
-                fsat.fsatOperations.cost = fsat.fieldData['cost'];
-            } else {
-                fsat.fsatOperations.cost = 0.06;
+            if (fsat.fieldData['cost']) {
+                cost = fsat.fieldData['cost'];
+            }
+            fsat.fsatOperations = {
+                operatingHours: operatingHours,
+                cost: cost
             }
         }
         return fsat;
     }
 
     updateSpecificHeatRatio(fsat: FSAT): FSAT {
-        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
-            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        if (fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio'];
         }
         return fsat;
     }
@@ -264,7 +266,7 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.airLeak;
                 });
             }
-            
+
         }
         return assessment;
     }
