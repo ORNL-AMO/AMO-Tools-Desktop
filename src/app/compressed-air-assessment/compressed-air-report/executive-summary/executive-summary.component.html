@@ -66,7 +66,8 @@
                     <span
                         *ngIf="result.combinedResults.adjustCascadingSetPointsSavings.savings.power">{{result.combinedResults.adjustCascadingSetPointsSavings.savings.power
                         | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.adjustCascadingSetPointsSavings.savings.power">&mdash; &mdash;</span>
+                    <span *ngIf="!result.combinedResults.adjustCascadingSetPointsSavings.savings.power">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayImproveEndUseEfficiency">
@@ -80,7 +81,8 @@
                     <span
                         *ngIf="result.combinedResults.improveEndUseEfficiencySavings.savings.power">{{result.combinedResults.improveEndUseEfficiencySavings.savings.power
                         | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.improveEndUseEfficiencySavings.savings.power">&mdash; &mdash;</span>
+                    <span *ngIf="!result.combinedResults.improveEndUseEfficiencySavings.savings.power">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayReduceAirLeaks">
@@ -122,7 +124,8 @@
                     <span
                         *ngIf="result.combinedResults.reduceSystemAirPressureSavings.savings.power">{{result.combinedResults.reduceSystemAirPressureSavings.savings.power
                         | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.reduceSystemAirPressureSavings.savings.power">&mdash; &mdash;</span>
+                    <span *ngIf="!result.combinedResults.reduceSystemAirPressureSavings.savings.power">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayUseAutomaticSequencer">
@@ -136,7 +139,8 @@
                     <span
                         *ngIf="result.combinedResults.useAutomaticSequencerSavings.savings.power">{{result.combinedResults.useAutomaticSequencerSavings.savings.power
                         | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.useAutomaticSequencerSavings.savings.power">&mdash; &mdash;</span>
+                    <span *ngIf="!result.combinedResults.useAutomaticSequencerSavings.savings.power">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayAuxiliaryPower">
@@ -148,7 +152,8 @@
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
-                        *ngIf="result.combinedResults.auxiliaryPowerUsage.cost">{{result.combinedResults.auxiliaryPowerUsage.cost * -1 
+                        *ngIf="result.combinedResults.auxiliaryPowerUsage.cost">{{result.combinedResults.auxiliaryPowerUsage.cost
+                        * -1
                         | sigFigs:'5'}}</span>
                     <span *ngIf="!result.combinedResults.auxiliaryPowerUsage.cost">&mdash; &mdash;</span>
                 </td>
@@ -223,16 +228,34 @@
                     <span *ngIf="!result.combinedResults.allSavingsResults.savings.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
-            <!-- <tr>
+            <tr>
                 <td>
                     Implementation Costs
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.allSavingsResults.implementationCost">{{result.combinedResults.allSavingsResults.implementationCost
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.implementationCost">&mdash; &mdash;</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                 Simple Payback Period
+                    Simple Payback Period
+                    <span> (months)</span>
                 </td>
-            </tr> -->
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.allSavingsResults.paybackPeriod">{{result.combinedResults.allSavingsResults.paybackPeriod
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.paybackPeriod">&mdash; &mdash;</span>
+                </td>
+            </tr>
             <tr>
                 <td>
                     Demand Side Energy Projects
@@ -242,7 +265,7 @@
                 </td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                   <span [innerHTML]="getDemandEnergyProjects(result.modification)"></span>
+                    <span [innerHTML]="getDemandEnergyProjects(result.modification)"></span>
                 </td>
             </tr>
             <tr>
