@@ -231,6 +231,9 @@ export class SetupDataComponent implements OnInit {
         this.dataExists = true;
       }
       this.dataLoading = false;
+    }else {
+      this.validFile = false;
+      this.dataLoading = false;
     }
   }
 }
