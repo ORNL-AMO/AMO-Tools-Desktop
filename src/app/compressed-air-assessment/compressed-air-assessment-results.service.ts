@@ -580,7 +580,7 @@ export class CompressedAirAssessmentResultsService {
     item.performancePoints.fullLoad.dischargePressure = targetPressure - variance;
 
     let controlType: number = item.compressorControls.controlType;
-    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 6) {
+    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 5) {
       item.performancePoints.unloadPoint.dischargePressure = targetPressure + variance;
       item.performancePoints.unloadPoint.isDefaultPressure = false;
       if (item.performancePoints.maxFullFlow.dischargePressure > item.performancePoints.fullLoad.dischargePressure) {
@@ -590,7 +590,7 @@ export class CompressedAirAssessmentResultsService {
     } else if (controlType == 1) {
       item.performancePoints.noLoad.dischargePressure = targetPressure + variance;
       item.performancePoints.noLoad.isDefaultPressure = false;
-    } else if (controlType == 5 || controlType == 4) {
+    } else if (controlType == 6 || controlType == 4) {
       item.performancePoints.maxFullFlow.dischargePressure = targetPressure + variance;
       item.performancePoints.maxFullFlow.isDefaultPressure = false;
     } else if (controlType == 7 || controlType == 9) {
