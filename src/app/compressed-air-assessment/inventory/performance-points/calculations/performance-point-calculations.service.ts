@@ -34,10 +34,10 @@ export class PerformancePointCalculationsService {
     } else if (selectedCompressor.compressorControls.controlType == 4 && selectedCompressor.nameplateData.compressorType != 6) {
       //load/unload (non-centrifugal)
       selectedCompressor.performancePoints = this.setLubricatedLoadUnloadPerformancePoints(selectedCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 5) {
+    } else if (selectedCompressor.compressorControls.controlType == 6) {
       //start/stop
       selectedCompressor.performancePoints = this.setStartStopPerformancePoints(selectedCompressor);
-    } else if (selectedCompressor.compressorControls.controlType == 6) {
+    } else if (selectedCompressor.compressorControls.controlType == 5) {
       //multi-step unloading
       selectedCompressor.performancePoints = this.setMultiStepUnloading(selectedCompressor);
     } else if (selectedCompressor.compressorControls.controlType == 8) {

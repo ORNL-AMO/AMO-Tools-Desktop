@@ -32,7 +32,7 @@ export class PerformancePointsFormService {
       (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10))) {
       form.controls.airflow.disable();
     }
-    if (pointName == 'noLoad' && compressor.compressorControls.controlType == 5) {
+    if (pointName == 'noLoad' && compressor.compressorControls.controlType == 6) {
       form.controls.dischargePressure.patchValue(0);
       form.controls.dischargePressure.disable();
     }
@@ -100,7 +100,7 @@ export class PerformancePointsFormService {
           if (compressor.compressorControls.controlType == 1) {
             powerValidators.push(Validators.min(0), LessThanValidator.lessThan(compressor.performancePoints.fullLoad.power));
             validationMessages.noLoad.lessThan = `Value must be less than Full Load Power (${compressor.performancePoints.fullLoad.power})`;
-          } else if (compressor.compressorControls.controlType == 5) {
+          } else if (compressor.compressorControls.controlType == 6) {
             powerValidators.push(EqualToValidator.equalTo(0));
           } else if (compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
             powerValidators.push(Validators.min(0), LessThanValidator.lessThan(compressor.performancePoints.unloadPoint.power));
@@ -147,7 +147,7 @@ export class PerformancePointsFormService {
           }
           break;
         case 'noLoad':
-          if (compressor.compressorControls.controlType == 5 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
+          if (compressor.compressorControls.controlType == 6 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
             pressureValidators.push(EqualToValidator.equalTo(0));
           } else if (compressor.compressorControls.controlType == 1) {
             pressureValidators.push(GreaterThanValidator.greaterThan(compressor.performancePoints.fullLoad.dischargePressure));
@@ -184,11 +184,11 @@ export class PerformancePointsFormService {
         case 'maxFullFlow': 
           if (compressor.compressorControls.controlType == 2) {
             airFlowValidators.push(Validators.max(compressor.performancePoints.fullLoad.airflow), GreaterThanValidator.greaterThan(0));
-          } else if (compressor.compressorControls.controlType == 5) {
+          } else if (compressor.compressorControls.controlType == 6) {
             airFlowValidators.push(LessThanValidator.lessThan(compressor.performancePoints.fullLoad.airflow));
           } else if (compressor.compressorControls.controlType == 3) {
             airFlowValidators.push(EqualToValidator.equalTo(compressor.performancePoints.fullLoad.airflow));
-          } else if (compressor.compressorControls.controlType == 4|| compressor.compressorControls.controlType == 6
+          } else if (compressor.compressorControls.controlType == 4|| compressor.compressorControls.controlType == 5
              || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
                airFlowValidators.push(Validators.min(0),Validators.max(compressor.performancePoints.fullLoad.airflow));
           }
@@ -294,11 +294,11 @@ export class PerformancePointsFormService {
   getPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
     let min: number = performancePoints.fullLoad.dischargePressure;
     let max: number = 0;
-    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 6) {
+    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 5) {
       max = performancePoints.unloadPoint.dischargePressure;
     } else if (controlType == 1) {
       max = performancePoints.noLoad.dischargePressure;
-    } else if (controlType == 5 || controlType == 4) {
+    } else if (controlType == 6 || controlType == 4) {
       max = performancePoints.maxFullFlow.dischargePressure;
     } else if (controlType == 7 || controlType == 9) {
       max = performancePoints.blowoff.dischargePressure;

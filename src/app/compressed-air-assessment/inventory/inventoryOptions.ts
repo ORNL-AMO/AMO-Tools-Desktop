@@ -83,13 +83,13 @@ export const ControlTypes: Array<ControlType> = [
         enumValue: 0
     },
     {
-        value: 5,
+        value: 6,
         label: 'Start/Stop',
         compressorTypes: [1, 2, 3, 4, 5],
         enumValue: 4
     },
     {
-        value: 6,
+        value: 5,
         label: 'Multi-step unloading',
         compressorTypes: [4, 5],
         enumValue: 6

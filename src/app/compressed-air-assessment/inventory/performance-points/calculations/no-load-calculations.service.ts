@@ -17,7 +17,7 @@ export class NoLoadCalculationsService {
   getNoLoadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       let defaultPressure: number;
-      if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 5) {
+      if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 6) {
         //centrifugal or start/stop
         defaultPressure = 0
       } else if (selectedCompressor.compressorControls.controlType == 1) {
@@ -47,7 +47,7 @@ export class NoLoadCalculationsService {
       if (selectedCompressor.compressorControls.controlType == 1) {
         //without unloading
         defaultPower = this.calculateNoLoadPowerWithoutUnloading(selectedCompressor);
-      } else if (selectedCompressor.compressorControls.controlType == 5) {
+      } else if (selectedCompressor.compressorControls.controlType == 6) {
         //start stop
         defaultPower = 0
       } else {
