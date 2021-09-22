@@ -43,6 +43,9 @@ export class DataSetupFormComponent implements OnInit {
       if(this.inputData.fileName){
         this.validFile = true;
         this.dataExists = true;
+        this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
+          this.previousDataAvailable = val;
+        });
       } else {
         this.dataExists = false;
       }
@@ -84,6 +87,7 @@ export class DataSetupFormComponent implements OnInit {
 
   resetData() {
     this.weatherBinsService.resetData();
+    this.inputData.fileName;
   }
 
   importFile() {
