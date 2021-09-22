@@ -59,6 +59,9 @@
             <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
                 <a>Executive Summary</a>
             </li>
+            <li (click)="setTab('paybackPeriod')" [ngClass]="{'active': currentTab == 'paybackPeriod'}">
+                <a>Payback Details</a>
+            </li>
             <li (click)="setTab('systemProfiles')" [ngClass]="{'active': currentTab == 'systemProfiles'}">
                 <a>System Profiles</a>
             </li>
@@ -101,6 +104,11 @@
             *ngIf="currentTab == 'systemProfiles' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles></app-system-profiles>
+        </div>
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printResults)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-payback-period [assessmentResults]="assessmentResults"></app-payback-period>
         </div>
     </div>
     <!-- End .report-data -->

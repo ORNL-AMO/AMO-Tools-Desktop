@@ -118,7 +118,8 @@ export class CompressedAirAssessmentResultsService {
         reduceSystemAirPressureProfileSummary: adjustedData.reduceSystemAirPressureProfileSummary,
         useAutomaticSequencerSavings: adjustedData.useAutomaticSequencerSavings,
         useAutomaticSequencerProfileSummary: adjustedData.useAutomaticSequencerProfileSummary,
-        auxiliaryPowerUsage: adjustedData.auxiliaryPowerUsage
+        auxiliaryPowerUsage: adjustedData.auxiliaryPowerUsage,
+        dayTypeName: dayType.name
       });
     });
     // console.timeEnd('calculateModificationResults');
@@ -184,6 +185,7 @@ export class CompressedAirAssessmentResultsService {
       reduceSystemAirPressureProfileSummary: undefined,
       adjustCascadingSetPointsProfileSummary: undefined,
       dayTypeId: undefined,
+      dayTypeName: undefined,
       auxiliaryPowerUsage: {cost: 0, energyUse: 0}
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
@@ -833,8 +835,8 @@ export interface DayTypeModificationResult {
   useAutomaticSequencerSavings: EemSavingsResults,
   useAutomaticSequencerProfileSummary: Array<ProfileSummary>,
   auxiliaryPowerUsage: { cost: number, energyUse: number },
-  dayTypeId: string
-
+  dayTypeId: string,
+  dayTypeName: string
 }
 
 

@@ -32,7 +32,7 @@ export class CompressedAirReportComponent implements OnInit {
 
   createdDate: Date;
   assessmentDirectories: Directory[];
-  currentTab: "executiveSummary" | "systemProfiles" | "reportGraphs" | "inputData" | "facilityInfo" = 'executiveSummary';
+  currentTab: "executiveSummary" | "systemProfiles" | "reportGraphs" | "inputData" | "facilityInfo" | "paybackPeriod" = 'executiveSummary';
   reportContainerHeight: number;
   settings: Settings;
   showPrintMenu: boolean;
@@ -122,7 +122,7 @@ export class CompressedAirReportComponent implements OnInit {
     }
   }
 
-  setTab(str: "executiveSummary" | "systemProfiles" | "reportGraphs" | "inputData" | "facilityInfo") {
+  setTab(str: "executiveSummary" | "systemProfiles" | "reportGraphs" | "inputData" | "facilityInfo" | "paybackPeriod") {
     this.currentTab = str;
   }
 
