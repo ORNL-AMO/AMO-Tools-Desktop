@@ -13,7 +13,7 @@
                 <label>
                     Log File
                 </label>
-                <input type="file" class="form-control" id="importFile" (change)="setImport($event)" accept=".xlsx,.csv">
+                <input type="file" class="form-control" id="importFile" (change)="setImport($event)" accept=".xlsx,.csv,.json">
             </div>
             <div class="form-group">
                 <label *ngIf = "workSheetsAvailable" for = "workSheetInput">Choose Worksheet</label>
