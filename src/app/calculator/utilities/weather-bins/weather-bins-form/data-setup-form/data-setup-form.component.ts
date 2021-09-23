@@ -43,18 +43,15 @@ export class DataSetupFormComponent implements OnInit {
       if(this.inputData.fileName){
         this.validFile = true;
         this.dataExists = true;
-        this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
-          this.previousDataAvailable = val;
-        });
-      } else {
+        } else {
         this.dataExists = false;
       }
     });
-    if (this.dataExists == false && this.weatherBinsService.dataSubmitted.getValue() == false) {
-      this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
+    this.previousDataAvailableSub = this.weatherDbService.previousDataAvailable.subscribe(val => {
+      if (this.dataExists == false && this.weatherBinsService.dataSubmitted.getValue() == false) {
         this.previousDataAvailable = val;
-      });
-    }
+      }
+        });
 
 
     this.dateSelectionData = DateSelectionData;
@@ -86,8 +83,11 @@ export class DataSetupFormComponent implements OnInit {
   }
 
   resetData() {
+    this.dataExists = false;
+    this.weatherBinsService.dataSubmitted.next(false);
+    this.weatherDbService.initWeatherData();
     this.weatherBinsService.resetData();
-    this.inputData.fileName;
+
   }
 
   importFile() {
