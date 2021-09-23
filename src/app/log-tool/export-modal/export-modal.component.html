@@ -9,25 +9,16 @@
                 </button>
             </div>
             <div class="modal-body pb-0">
+                <p id="inputModalTitleHelp" class="mb-0 small text-muted text-help">
+                    Depending on the size of your data set, the exported file may be
+                    quite large and will take a few seconds. <br></br>
+                </p>
                 <p class="small" *ngIf="dataExists">
                     Download data from last use ({{data.modifiedDate | date}}) to be imported at a later time.
                 </p>
                 <div class="form-group">
                     <label for="exportName"> Name your file:</label>
                     <input type="text" class="form-control w-100" id="exportName" [(ngModel)]="exportName">
-                </div>
-                <div class="d-flex w-100 h-100" *ngIf="buildingExport">
-                    <div class="card card-body d-flex flex-column align-items-center pt-4">
-                        <div class="spinner">
-                            <div class="bounce1"></div>
-                            <div class="bounce2"></div>
-                            <div class="bounce3"></div>
-                        </div>
-                        <span class="large text-center">Depending on the size of your data set, the exported file may be
-                            quite large and will take a few seconds. <br>
-                            Thank you for your patience. <br>
-                        </span>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
