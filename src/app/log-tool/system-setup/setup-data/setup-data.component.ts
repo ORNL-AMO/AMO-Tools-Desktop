@@ -80,7 +80,8 @@ export class SetupDataComponent implements OnInit {
           this.validFile = true;
           this.importFile();
         } else {
-          this.setJSONImport($event);
+          this.validFile = false;
+          this.dataLoading = false;
         }
       }
     }
@@ -92,8 +93,9 @@ export class SetupDataComponent implements OnInit {
       let splitName = $event.target.files[0].name.split(".");
       if (splitName[splitName.length - 1] == "xlsx") {
         this.setExcelImport($event);
-      }
-      else {
+      } else if (splitName[splitName.length - 1] == "json" || splitName[splitName.length - 1] == "JSON") {
+        this.setJSONImport($event);
+      } else {
         this.setCSVImport($event);
       }
     }, 100);
@@ -192,19 +194,22 @@ export class SetupDataComponent implements OnInit {
   }
 
   setJSONImport($event) {
-    if ($event.target.files) {
-      if ($event.target.files.length !== 0) {
-        let regex = /.json$/;
-        let regex2 = /.JSON$/;
-        if (regex.test($event.target.files[0].name) || regex2.test($event.target.files[0].name)) {
-          this.fileReference = $event.target.files[0];
-          this.validFile = true;
-          this.importJson();
-        } else {
-          this.validFile = false;
-        }
-      }
-    }
+    this.fileReference = $event.target.files[0];
+    this.validFile = true;
+    this.importJson();
+    // if ($event.target.files) {
+    //   if ($event.target.files.length !== 0) {
+    //     let regex = /.json$/;
+    //     let regex2 = /.JSON$/;
+    //     if (regex.test($event.target.files[0].name) || regex2.test($event.target.files[0].name)) {
+    //       this.fileReference = $event.target.files[0];
+    //       this.validFile = true;
+    //       this.importJson();
+    //     } else {
+    //       this.validFile = false;
+    //     }
+    //   }
+    // }
   }
 
   importJson(){

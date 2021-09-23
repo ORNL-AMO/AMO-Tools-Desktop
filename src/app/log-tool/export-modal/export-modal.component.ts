@@ -14,6 +14,7 @@ export class ExportModalComponent implements OnInit {
   
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
   
+  buildingExport: boolean = false;
   dataExists: boolean = false;
   data: LogToolDbData;
   exportName: string;
@@ -47,12 +48,14 @@ export class ExportModalComponent implements OnInit {
     }
   }
 
-  buildExportJSON() {
-    this.downloadData(this.data, this.exportName);
-    this.closeExportData();
+  buildExportJSON() {    
+    this.buildingExport = true;
+    //this.closeExportData();
+    this.downloadData(this.data, this.exportName);    
   }
 
   downloadData(data: any, name: string) {
+    //this.buildingExport = true;
     data.origin = 'AMO-LOG-TOOL-DATA';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
@@ -66,6 +69,8 @@ export class ExportModalComponent implements OnInit {
     }
     dlLink.setAttribute('download', name + '.json');
     dlLink.click();
+    this.buildingExport = false;
+    this.closeExportData();
   }
 
 }
