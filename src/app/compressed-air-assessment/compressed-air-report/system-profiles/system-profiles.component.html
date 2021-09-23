@@ -1,1 +1,27 @@
-<p>system-profiles works!</p>
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-center">
+        <div class="pr-1">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType"
+                [(ngModel)]="selectedModification" (change)="setSelectedProfileSummary()">
+                <option [ngValue]=undefined>Baseline</option>
+                <option *ngFor="let modification of compressedAirAssessment.modifications" [ngValue]="modification">
+                    {{modification.name}}</option>
+            </select>
+        </div>
+
+
+        <div class="pl-1">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+                (change)="setSelectedProfileSummary()">
+                <!-- <option [ngValue]=undefined>All Day Types</option> -->
+                <option *ngFor="let dayType of compressedAirAssessment.compressedAirDayTypes" [ngValue]="dayType">
+                    {{dayType.name}}</option>
+            </select>
+        </div>
+    </div>
+
+    <app-profile-summary-table [profileSummary]="selectedProfileSummary"
+        [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals">
+    </app-profile-summary-table>
+
+</div>

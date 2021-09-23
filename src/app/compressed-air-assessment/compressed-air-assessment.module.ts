@@ -123,6 +123,7 @@ import { ReportGraphsComponent } from './compressed-air-report/report-graphs/rep
 import { InputSummaryComponent } from './compressed-air-report/input-summary/input-summary.component';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 import { PaybackPeriodComponent } from './compressed-air-report/payback-period/payback-period.component';
+import { ProfileSummaryTableComponent } from './profile-summary-table/profile-summary-table.component';
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -207,7 +208,8 @@ import { PaybackPeriodComponent } from './compressed-air-report/payback-period/p
     SystemProfilesComponent,
     ReportGraphsComponent,
     InputSummaryComponent,
-    PaybackPeriodComponent
+    PaybackPeriodComponent,
+    ProfileSummaryTableComponent
   ],
   imports: [
     CommonModule,

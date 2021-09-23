@@ -93,7 +93,8 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"></app-executive-summary>
+            <app-executive-summary [baselineResults]="baselineResults"
+                [combinedDayTypeResults]="combinedDayTypeResults"></app-executive-summary>
         </div>
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
@@ -103,7 +104,9 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'systemProfiles' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-system-profiles></app-system-profiles>
+            <app-system-profiles [compressedAirAssessment]="assessment.compressedAirAssessment"
+                [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults">
+            </app-system-profiles>
         </div>
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printResults)"

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
-import { Modification } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Directory } from '../../shared/models/directory';
 import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
@@ -45,6 +45,7 @@ export class CompressedAirReportComponent implements OnInit {
   baselineResults: BaselineResults;
   assessmentResults: Array<CompressedAirAssessmentResult>;
   combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult}>;
+  baselineProfileSummaries: Array<{profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType}>;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -57,6 +58,15 @@ export class CompressedAirReportComponent implements OnInit {
       this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment);
       this.assessmentResults = new Array();
       this.combinedDayTypeResults = new Array();
+      this.baselineProfileSummaries = new Array();
+      this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType);
+        this.baselineProfileSummaries.push({
+          dayType: dayType,
+          profileSummary: profileSummary
+        })
+      });      
+      
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
           let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification);
           this.assessmentResults.push(modificationResults);
