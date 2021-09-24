@@ -22,6 +22,8 @@ export class CalculateInletPressureComponent implements OnInit {
   usingStaticPressure: boolean;
   @Input()
   inletVelocityPressureInputs: InletVelocityPressureInputs;
+  @Output('emitInvalid')
+  emitInvalid = new EventEmitter<boolean>();
 
   calcInletVelocityPressureError: string = null;
   currentField: string = 'inletLoss';
@@ -58,6 +60,7 @@ export class CalculateInletPressureComponent implements OnInit {
       let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
       this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure; 
       this.calcInletVelocityPressureError = this.fsatWarningService.checkCalcInletVelocityPressureError(this.inletVelocityPressureInputs.flowRate);
+      this.emitInvalid.emit(true);
     } else {
       this.calcInletVelocityPressureError = null;
     }
@@ -72,8 +75,13 @@ export class CalculateInletPressureComponent implements OnInit {
           && key.valueOf() !== 'userDefinedVelocityPressure') {
         sum = sum + this.inletPressureData[key];
       }
-    });
-    this.inletPressureData.calculatedInletPressure = (sum * -1);
+    });    
+    this.inletPressureData.calculatedInletPressure = (sum * -1);  
+    if(this.inletPressureData.calculatedInletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
+    }
     this.emitSave.emit(this.inletPressureData);
   }
 
