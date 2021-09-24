@@ -217,10 +217,12 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
-      let yAxisRange: Array<number> = [
-        yAxisRanges.systemCapacityGraph.min, 
-        yAxisRanges.systemCapacityGraph.max + (yAxisRanges.systemCapacityGraph.max * this.axisRangeAdjustment)
-      ];
+      let yAxisRange: Array<number> = [yAxisRanges.systemCapacityGraph.min];
+      if (this.totalFullLoadCapacity > yAxisRanges.systemCapacityGraph.max) {
+        yAxisRange.push(this.totalFullLoadCapacity);
+      } else {
+        yAxisRange.push(yAxisRanges.systemCapacityGraph.max + (yAxisRanges.systemCapacityGraph.max * this.axisRangeAdjustment));
+      }
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 23 : 1;
       var layout = this.getLayout("System Capacity (acfm)", [0, xRangeMax], yAxisRange, this.totalFullLoadCapacity, undefined);
       var config = {
@@ -300,11 +302,14 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
-      let yAxisRange: Array<number> = [
-        yAxisRanges.systemPowerGraph.min, 
-        yAxisRanges.systemPowerGraph.max + (yAxisRanges.systemPowerGraph.max * this.axisRangeAdjustment)
-      ];
-      var layout = this.getLayout("Power (kW)", undefined, yAxisRange, undefined, undefined);
+      let yAxisRange: Array<number> = [yAxisRanges.systemPowerGraph.min];
+      if (this.totalFullLoadPower > yAxisRanges.systemPowerGraph.max) {
+        yAxisRange.push(this.totalFullLoadPower);
+      } else {
+        yAxisRange.push(yAxisRanges.systemPowerGraph.max + (yAxisRanges.systemPowerGraph.max * this.axisRangeAdjustment));
+      }
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 23 : 1;
+      var layout = this.getLayout("Power (kW)", [0, xRangeMax], yAxisRange, this.totalFullLoadPower, undefined);
       var config = {
         responsive: true,
         displaylogo: false
@@ -329,7 +334,7 @@ export class SystemProfileGraphsComponent implements OnInit {
               return 0;
             }
           }),
-          type: 'bar',
+          mode: 'lines+markers',
           hovertemplate: `%{y:.3r}`,
           name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
