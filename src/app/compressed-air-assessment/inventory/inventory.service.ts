@@ -152,18 +152,7 @@ export class InventoryService {
 
   //CompressorControls
   getCompressorControlsFormFromObj(compressorControls: CompressorControls, compressorType: number): FormGroup {
-    // control type: 1 Inlet modulation without unloading
-    // control type: 2 Inlet modulation with unloading
-    // control type: 3 Variable displacement with unloading
-    // control type: 4 Load/unload
-    // control type: 5 Start/Stop
-    // control type: 6 Multi-step unloading
-
-    // Centrifugal
-    // control type: 7 Inlet Butterfly modulation with blowoff
-    // control type: 8 Inlet Butterfly modulation with unloading
-    // control type: 9 Inlet guide vane modulatio with blowoff
-    // control type: 10 Inlet guide vane modulation with unloading
+    // Master control type list in inventoryOptions.ts 
     let unloadSumpPressureValidators: Array<Validators> = [];
     let showUnloadSumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType);
     if (showUnloadSumpPressure) {
