@@ -64,7 +64,7 @@ export class CompressedAirReportComponent implements OnInit {
         this.baselineProfileSummaries.push({
           dayType: dayType,
           profileSummary: profileSummary
-        })
+        });
       });      
       
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
@@ -73,18 +73,10 @@ export class CompressedAirReportComponent implements OnInit {
           this.combinedDayTypeResults.push({
             modification: modification,
             combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults)
-          })
-      })
-      
+          });
+      });  
     }
 
-    // if (this.assessment.wasteWater.setupDone) {
-    //   // this.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, true);
-    //   // this.assessment.wasteWater.modifications.forEach(mod => {
-    //   //   mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, true, this.assessment.wasteWater.baselineData.outputs);
-    //   // });
-    //   // this.wasteWaterAnalysisService.setResults(this.assessment.wasteWater, this.settings);
-    // }
     if (!this.inRollup) {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
         this.showPrintMenu = val;
