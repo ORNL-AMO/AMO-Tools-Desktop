@@ -126,6 +126,8 @@ import { PaybackPeriodComponent } from './compressed-air-report/payback-period/p
 import { ProfileSummaryTableComponent } from './profile-summary-table/profile-summary-table.component';
 import { SystemInfoSummaryComponent } from './compressed-air-report/input-summary/system-info-summary/system-info-summary.component';
 import { CompressorItemSummaryComponent } from './compressed-air-report/input-summary/compressor-item-summary/compressor-item-summary.component';
+import { SystemProfileGraphsService } from './system-profile/system-profile-graphs/system-profile-graphs.service';
+
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -258,7 +260,8 @@ import { CompressorItemSummaryComponent } from './compressed-air-report/input-su
     DayTypeService,
     CompressedAirDataManagementService,
     CompressedAirAssessmentResultsService,
-    ConvertCompressedAirService
+    ConvertCompressedAirService,
+    SystemProfileGraphsService
   ]
 })
 export class CompressedAirAssessmentModule { }

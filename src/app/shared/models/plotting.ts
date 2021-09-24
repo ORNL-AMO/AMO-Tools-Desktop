@@ -129,7 +129,7 @@ export interface TraceData {
         sizemode?: string,
     },
     line?: {
-        shape: string,
+        shape?: string,
         color?: string,
         dash?: string,
         smoothing?: number
