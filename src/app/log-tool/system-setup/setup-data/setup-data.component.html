@@ -1,7 +1,7 @@
 <form class="p-0">
     <div class="d-flex flex-column scroll-item">
         <div class="header mr-2 ml-2">
-            <h3>Import Logger Data from .csv, .xlsx , or .json file</h3>
+            <h3>Import Logger Data</h3>
             <a class="click-link pull-right" (click)="resetData()" *ngIf="individualDataFromCsv.length != 0">Start
                 Over</a>
         </div>
@@ -13,12 +13,17 @@
                 <label>
                     Log File
                 </label>
-                <input type="file" class="form-control" id="importFile" (change)="setImport($event)" accept=".xlsx,.csv,.json">
+                <input type="file" class="form-control" id="importFile" (change)="setImport($event)"
+                    accept=".xlsx,.csv,.json">
             </div>
-            <div class="form-group">
-                <label *ngIf = "workSheetsAvailable" for = "workSheetInput">Choose Worksheet</label>
-                <select *ngIf = "workSheetsAvailable" class="form-control" (change)="finishImportExcel()" name = "workSheetInput" [(ngModel)]="selectedSheet">
-                  <option *ngFor="let workSheet of workSheets">{{workSheet}}</option>
+            <p *ngIf="dataExists == false" class="small mb-0 text-muted text-right">
+                Choose .csv, .xlsx or a MEASUR exported .json file
+            </p>
+            <div class="form-group" *ngIf="workSheetsAvailable">
+                <label for="workSheetInput">Choose Worksheet</label>
+                <select class="form-control" (change)="finishImportExcel()" name="workSheetInput"
+                    [(ngModel)]="selectedSheet">
+                    <option *ngFor="let workSheet of workSheets">{{workSheet}}</option>
                 </select>
             </div>
             <div class="d-flex w-100 h-100" *ngIf="dataLoading">

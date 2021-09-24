@@ -9,10 +9,11 @@
                 </button>
             </div>
             <div class="modal-body pb-0">
-                <p id="inputModalTitleHelp" class="mb-0 small text-muted text-help">
+                <p id="inputModalTitleHelp" class="small">
                     Depending on the size of your data set, the exported file may be
-                    quite large and will take a few seconds. <br></br>
+                    quite large and will take a few seconds to download while the screen locks. <br>
                 </p>
+                <hr>
                 <p class="small" *ngIf="dataExists">
                     Download data from last use ({{data.modifiedDate | date}}) to be imported at a later time.
                 </p>

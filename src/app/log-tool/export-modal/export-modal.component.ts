@@ -22,7 +22,7 @@ export class ExportModalComponent implements OnInit {
   ngOnInit(){
     const date = new Date();
     const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    this.exportName = 'ExportedData_' + dateStr;    
+    this.exportName = 'ExplorerData_' + dateStr;    
     this.getExportData();
   }
 
@@ -65,7 +65,7 @@ export class ExportModalComponent implements OnInit {
     if (!name) {
       const date = new Date();
       const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-      name = 'ExportedData_' + dateStr;
+      name = 'ExplorerData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.json');
     dlLink.click();
