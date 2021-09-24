@@ -1,0 +1,169 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+        <h5>Compressor Inventory Data
+            <span class="pull-right fa hide-print"
+                [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+        </h5>
+    </div>
+
+    <div *ngIf="!collapse || printView">
+        <div class="card-body">
+            <div class="output-summary">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th class="bold" *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.name}}
+                            </th>
+                        </tr>
+                        <!--NAMEPLATE DATA-->
+                        <tr>
+                            <th class="section-header">Nameplate Data</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- compressorType -->
+                        <tr>
+                            <td>
+                                Compressor Type
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.compressorType | compressorType}}
+                            </td>
+                        </tr>
+                        <!-- motorPower -->
+                        <tr>
+                            <td>
+                                Motor Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.motorPower}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                            </td>
+                        </tr>
+                        <!-- fullLoadOperatingPressure -->
+                        <tr>
+                            <td>
+                                Full Load Operating Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadOperatingPressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </td>
+                        </tr>
+                        <!-- fullLoadRatedCapacity -->
+                        <tr>
+                            <td>
+                                Full Load Rated Capacity
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadRatedCapacity}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                            </td>
+                        </tr>
+                        <!-- fullLoadAmps -->
+                        <tr>
+                            <td>
+                                Full Load Amps
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadAmps}} amps
+                            </td>
+                        </tr>
+                        <!-- totalPackageInputPower -->
+                        <tr>
+                            <td>
+                                Total Package Input Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.totalPackageInputPower}} amps
+                            </td>
+                        </tr>
+                        <!--CONTROLS-->
+                        <tr>
+                            <th class="section-header">Controls</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- controlType -->
+                        <tr>
+                            <td>
+                                Control Type
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.compressorControls.controlType | controlType}}
+                            </td>
+                        </tr>
+                        <!-- unloadPointCapacity -->
+                        <tr>
+                            <td>
+                                Unload Point Capacity
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    {{compressor.compressorControls.unloadPointCapacity}} %
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- numberOfUnloadSteps -->
+                        <tr>
+                            <td>
+                                Number of Unload Steps
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    {{compressor.compressorControls.numberOfUnloadSteps}}
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- automaticShutdown -->
+                        <tr>
+                            <td>
+                                Automatic Shutdown Timer
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayAutomaticShutdown(compressor.compressorControls.controlType)">
+                                    <span *ngIf="compressor.compressorControls.automaticShutdown">Yes</span>
+                                    <span *ngIf="!compressor.compressorControls.automaticShutdown">No</span>
+                                </span>
+                                <span *ngIf="!checkDisplayAutomaticShutdown(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- unloadSumpPressure -->
+                        <tr>
+                            <td>
+                                Unload Sump Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType)">
+                                    {{compressor.compressorControls.unloadSumpPressure }}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

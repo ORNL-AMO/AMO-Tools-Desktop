@@ -1,1 +1,21 @@
-<p>input-summary works!</p>
+<div class="row show-print break-before">
+    <div class="col-12">
+        <h4 class="show-print">Assessment Input Summary</h4>
+    </div>
+</div>
+
+<!--system info-->
+<div class="row avoid-break">
+    <div class="col-12">
+        <app-system-info-summary [printView]="printView" [systemInformation]="compressedAirAssessment.systemInformation"
+            [settings]="settings"></app-system-info-summary>
+    </div>
+</div>
+
+<!--compressors-->
+<div class="row avoid-break">
+    <div class="col-12">
+        <app-compressor-item-summary [compressorInventoryItems]="compressedAirAssessment.compressorInventoryItems" [settings]="settings" [printView]="printView">
+        </app-compressor-item-summary>
+    </div>
+</div>
