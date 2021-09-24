@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import * as Plotly from 'plotly.js';
 import { CompressedAirAssessment, CompressedAirDayType } from '../../../shared/models/compressed-air-assessment';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-report-graphs',
@@ -36,25 +37,33 @@ export class ReportGraphsComponent implements OnInit {
 
   drawModificationGraph() {
     if (this.assessmentResults && this.modificationGraph) {
+      
       let x: Array<string> = this.assessmentResults.map(result => { return result.modification.name });
       x.unshift('Baseline');
-      let traceData = [{
+      let yValue = this.getAnnualCost();
+      let traceData = new Array();
+      let currencyPipe = new CurrencyPipe('en-US')
+      traceData.push({
         x: x,
-        y: this.getAnnualCost(),
+        y: yValue,
+        text: yValue.map(value => { return currencyPipe.transform(value, undefined, undefined, '1.0-0')}),
+        textposition: 'auto',
         type: 'bar',
         name: 'Adjusted Annual Cost',
+        hoverinfo: "name+y",
         marker: {
           line: {
             width: 3
           }
         },
-      }];
+      })
       // let traceData = new Array();
       let trace = {
         x: x,
         y: this.getFlowReallocationTrace(),
         type: 'bar',
         name: 'Flow Reallocation',
+        hoverinfo: "name+y",
         marker: {
           line: {
             width: 3
@@ -68,6 +77,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getReduceAirLeaksTrace(),
           type: 'bar',
           name: 'Reduce Air Leaks',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -82,6 +92,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getImproveEfficiencyTrace(),
           type: 'bar',
           name: 'Improve End Use Efficiency',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -96,6 +107,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getReduceAirSystemPressureTrace(),
           type: 'bar',
           name: 'Reduce System Air Pressure',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -110,6 +122,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getAdjustCascadePointTrace(),
           type: 'bar',
           name: 'Adjust Cascading Set Points',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -124,6 +137,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getAutomaticSequencerTrace(),
           type: 'bar',
           name: 'Use Automatic Sequencer',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -138,6 +152,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getReduceRuntimeTrace(),
           type: 'bar',
           name: 'Reduce Runtime',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -152,6 +167,7 @@ export class ReportGraphsComponent implements OnInit {
           y: this.getReceiverVolumeTrace(),
           type: 'bar',
           name: 'Add Primary Receiver Volume',
+          hoverinfo: "name+y",
           marker: {
             line: {
               width: 3
@@ -162,7 +178,7 @@ export class ReportGraphsComponent implements OnInit {
       }
 
 
-      var layout = this.getLayout("Modification Project Savings", undefined, undefined);
+      var layout = this.getLayout("Modification Project Savings");
       var config = {
         responsive: true,
         displaylogo: false
@@ -182,7 +198,7 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   getImproveEfficiencyTrace(): Array<number> {
-    let y: Array<number> =[0];
+    let y: Array<number> = [0];
     this.assessmentResults.forEach(result => {
       let dayTypeModificationResult: DayTypeModificationResult = result.dayTypeModificationResults.find(dResult => { return dResult.dayTypeId == this.selectedDayType.dayTypeId });
       y.push(dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost);
@@ -248,38 +264,32 @@ export class ReportGraphsComponent implements OnInit {
     return y;
   }
 
-  getLayout(yAxisTitle: string, yAxisRange: Array<number>, yAxisTickSuffix: string) {
+  getLayout(yAxisTitle: string) {
     return {
       showlegend: true,
       barmode: 'stack',
       xaxis: {
         autotick: false,
-        title: {
-          text: 'Hour',
-          font: {
-            size: 16
-          },
-        },
         automargin: true
       },
+      title: yAxisTitle,
       yaxis: {
-        range: yAxisRange,
-        ticksuffix: yAxisTickSuffix,
-        title: {
-          text: yAxisTitle,
-          font: {
-            size: 16
-          },
-        },
-        hoverformat: ",.2f",
+        tickprefix: '$',
+        // title: {
+        //   text: yAxisTitle,
+        //   font: {
+        //     size: 16
+        //   },
+        // },
+        hoverformat: ",.0f",
       },
       margin: {
-        t: 20,
-        r: 20
+        // t: 20,
+        // r: 20
       },
       legend: {
-        orientation: "h",
-        y: 1.5
+        // orientation: "h",
+        // y: 1.5
       }
     };
   }
