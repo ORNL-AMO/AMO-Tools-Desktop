@@ -20,6 +20,9 @@ export class ExportModalComponent implements OnInit {
   constructor(private logToolService: LogToolService, private logToolDbService: LogToolDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit(){
+    const date = new Date();
+    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+    this.exportName = 'ExplorerData_' + dateStr;    
     this.getExportData();
   }
 
@@ -47,7 +50,7 @@ export class ExportModalComponent implements OnInit {
     }
   }
 
-  buildExportJSON() {
+  buildExportJSON() {    
     this.downloadData(this.data, this.exportName);
     this.closeExportData();
   }
@@ -62,7 +65,7 @@ export class ExportModalComponent implements OnInit {
     if (!name) {
       const date = new Date();
       const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-      name = 'ExportedData_' + dateStr;
+      name = 'ExplorerData_' + dateStr;
     }
     dlLink.setAttribute('download', name + '.json');
     dlLink.click();

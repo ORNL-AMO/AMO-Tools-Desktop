@@ -5,7 +5,7 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
-import { IndividualDataFromCsv } from '../../log-tool-models';
+import { IndividualDataFromCsv, LogToolDbData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 import { Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
@@ -32,6 +32,7 @@ export class SetupDataComponent implements OnInit {
   workSheetsAvailable: boolean = false;
   selectedSheet: string;
   workBook: XLSX.WorkBook;
+  importJsonData: LogToolDbData;
   headerRowOptions: Array<{ value: number, display: number }> = [
     { value: 0, display: 1 },
     { value: 1, display: 2 },
@@ -80,6 +81,7 @@ export class SetupDataComponent implements OnInit {
           this.importFile();
         } else {
           this.validFile = false;
+          this.dataLoading = false;
         }
       }
     }
@@ -91,8 +93,9 @@ export class SetupDataComponent implements OnInit {
       let splitName = $event.target.files[0].name.split(".");
       if (splitName[splitName.length - 1] == "xlsx") {
         this.setExcelImport($event);
-      }
-      else {
+      } else if (splitName[splitName.length - 1] == "json" || splitName[splitName.length - 1] == "JSON") {
+        this.setJSONImport($event);
+      } else {
         this.setCSVImport($event);
       }
     }, 100);
@@ -187,6 +190,55 @@ export class SetupDataComponent implements OnInit {
     this.previousDataAvailable = undefined;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
+    }
+  }
+
+  setJSONImport($event) {
+    this.fileReference = $event.target.files[0];
+    this.validFile = true;
+    this.importJson();
+    // if ($event.target.files) {
+    //   if ($event.target.files.length !== 0) {
+    //     let regex = /.json$/;
+    //     let regex2 = /.JSON$/;
+    //     if (regex.test($event.target.files[0].name) || regex2.test($event.target.files[0].name)) {
+    //       this.fileReference = $event.target.files[0];
+    //       this.validFile = true;
+    //       this.importJson();
+    //     } else {
+    //       this.validFile = false;
+    //     }
+    //   }
+    // }
+  }
+
+  importJson(){
+    let fr: FileReader = new FileReader();
+    fr.readAsText(this.fileReference);
+    fr.onloadend = (e) => {
+      this.importData = JSON.parse(JSON.stringify(fr.result));
+      //this.parsePreviewData();      
+      this.runImport(this.importData);
+      
+    };
+    
+  }
+
+  runImport(data: string) {
+    let jsonImportdata: LogToolDbData = JSON.parse(data);
+    if (jsonImportdata.origin === "AMO-LOG-TOOL-DATA") {
+      this.logToolDbService.logToolDbData = [jsonImportdata];
+      this.logToolDbService.saveData()
+      this.cd.detectChanges();
+      this.logToolDbService.setLogToolData();
+      this.previousDataAvailable = undefined;
+      if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
+        this.dataExists = true;
+      }
+      this.dataLoading = false;
+    }else {
+      this.validFile = false;
+      this.dataLoading = false;
     }
   }
 }
