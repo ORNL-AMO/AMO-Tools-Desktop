@@ -19,8 +19,10 @@ export class WeatherDbService {
           this.addWeatherDataToDb();
         } else {
           this.weatherDataDbData = weatherDataDbData;
-          this.previousDataAvailable.next(weatherDataDbData[0].modifiedDate);
-        }
+          if(this.weatherDataDbData[0].filename !== undefined){
+            this.previousDataAvailable.next(weatherDataDbData[0].modifiedDate);      
+          }
+      } 
       })
   }
 
