@@ -47,6 +47,7 @@ export class PressureReadingsFormComponent implements OnInit {
         this.updateData();
       }
     });
+    this.updateData();
     this.save();
   }
 
