@@ -82,7 +82,7 @@
       [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-liquid-charge-material-form>
     <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)"
       [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
-      [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"
+      [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"
       [inSetup]="inSetup"></app-gas-charge-material-form>
   </div>
   <div class="d-flex flex-column loss-results" [ngClass]="{'input-error': showError == true}">
