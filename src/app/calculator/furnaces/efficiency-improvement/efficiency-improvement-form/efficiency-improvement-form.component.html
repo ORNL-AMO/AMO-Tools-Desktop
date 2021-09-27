@@ -150,7 +150,7 @@
             <span class="alert-danger pull-right small"
               *ngIf="form.controls.currentCombustionAirTemp.invalid && !form.controls.currentCombustionAirTemp.pristine">
               <span *ngIf="form.controls.currentCombustionAirTemp.errors.required">Value required.</span>
-              <span *ngIf="form.controls.currentCombustionAirTemp.errors.lessThan">Combustion air temperature must be
+              <span *ngIf="form.controls.currentCombustionAirTemp.errors.lessThan ||form.controls.currentFlueGasTemp.errors.required">Combustion air temperature must be
                 less than flue gas temperature.</span>
             </span>
           </div>
@@ -172,7 +172,7 @@
             <span class="alert-danger pull-right small"
               *ngIf="form.controls.newCombustionAirTemp.invalid && !form.controls.newCombustionAirTemp.pristine">
               <span *ngIf="form.controls.newCombustionAirTemp.errors.required">Value required.</span>
-              <span *ngIf="form.controls.newCombustionAirTemp.errors.lessThan">Combustion air temperature must be less
+              <span *ngIf="form.controls.newCombustionAirTemp.errors.lessThan ||form.controls.newFlueGasTemp.errors.required">Combustion air temperature must be less
                 than flue gas temperature.</span>
             </span>
           </div>
