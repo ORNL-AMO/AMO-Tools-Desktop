@@ -47,6 +47,11 @@ export class CalculateInletPressureComponent implements OnInit {
         fanInletArea: undefined
       };
     } 
+    if(this.inletPressureData.calculatedInletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
+    }
   }
 
   toggleUserDefinedVelocityPressure() {
@@ -60,7 +65,6 @@ export class CalculateInletPressureComponent implements OnInit {
       let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
       this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure; 
       this.calcInletVelocityPressureError = this.fsatWarningService.checkCalcInletVelocityPressureError(this.inletVelocityPressureInputs.flowRate);
-      this.emitInvalid.emit(true);
     } else {
       this.calcInletVelocityPressureError = null;
     }
