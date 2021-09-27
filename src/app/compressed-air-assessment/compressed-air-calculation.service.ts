@@ -227,6 +227,7 @@ export class CompressedAirCalculationService {
       capacityAtMaxFullFlow: compressor.performancePoints.maxFullFlow.airflow,
 
       powerAtUnload: compressor.performancePoints.unloadPoint.power,
+      pressureAtUnload: compressor.performancePoints.unloadPoint.dischargePressure,
 
       capacityAtUnload: compressor.performancePoints.unloadPoint.airflow,
 
@@ -387,7 +388,8 @@ export interface CompressorsCalcInput {
   unloadPointCapacity: number,
   blowdownTime: number,
   unloadSumpPressure: number,
-  noLoadPowerFM: number
+  noLoadPowerFM: number,
+  pressureAtUnload: number,
 }
 
 
