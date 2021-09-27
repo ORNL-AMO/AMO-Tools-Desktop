@@ -42,7 +42,7 @@ export class ExportModalComponent implements OnInit {
   }
   
   getExportData(){
-    this.logToolDbService.setLogToolData();
+    this.logToolDbService.saveData();
    
     this.data = this.logToolDbService.getSavedData();
     if(this.data){
