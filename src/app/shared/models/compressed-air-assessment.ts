@@ -37,6 +37,7 @@ export interface Modification {
 export interface ReduceAirLeaks {
     leakFlow: number,
     leakReduction: number,
+    implementationCost: number,
     order: number
 }
 
@@ -48,6 +49,7 @@ export interface ImproveEndUseEfficiency {
 
 export interface EndUseEfficiencyItem {
     name: string,
+    implementationCost: number,
     reductionType: "Fixed" | "Variable",
     airflowReduction: number,
     substituteAuxiliaryEquipment: boolean,
@@ -69,12 +71,14 @@ export interface EndUseEfficiencyReductionData {
 
 export interface ReduceSystemAirPressure {
     averageSystemPressureReduction: number,
+    implementationCost: number,
     order: number
 }
 
 export interface AdjustCascadingSetPoints {
     order: number,
     setPointData: Array<CascadingSetPointData>
+    implementationCost: number,
 }
 
 export interface CascadingSetPointData {
@@ -89,11 +93,13 @@ export interface UseAutomaticSequencer {
     targetPressure: number,
     variance: number,
     order: number,
-    profileSummary: Array<ProfileSummary>
+    profileSummary: Array<ProfileSummary>,
+    implementationCost: number,
 }
 
 export interface ReduceRuntime {
     runtimeData: Array<ReduceRuntimeData>,
+    implementationCost: number,
     order: number
 }
 
@@ -110,6 +116,7 @@ export interface ReduceRuntimeData {
 
 export interface AddPrimaryReceiverVolume {
     increasedVolume: number,
+    implementationCost: number,
     order: number
 }
 

@@ -1,0 +1,152 @@
+<div class="output-summary">
+    <h4 class="show-print print-section-header">Payback Period Details</h4>
+    <div class="d-flex flex-column">
+        <div class="p-2" *ngFor="let assessmentResult of assessmentResults">
+            <label class="group-label">{{assessmentResult.modification.name}}</label>
+            <table class="table table-hover table-striped"
+                *ngFor="let dayTypeResult of assessmentResult.dayTypeModificationResults">
+                <tbody>
+                    <tr>
+                        <td class="w-25 bold">
+                            {{dayTypeResult.dayTypeName}}
+                        </td>
+                        <td class="w-25 bold">
+                            Cost Savings <br> ($)
+                        </td>
+                        <td class="w-25 bold">
+                            Implementation Cost <br> ($)
+                        </td>
+                        <td class="w-25 bold">
+                            Payback <br> (months)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold">
+                            Flow Reallocation
+                        </td>
+                        <td>
+                            {{dayTypeResult.flowReallocationSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.addReceiverVolumeSavings.savings.cost">
+                        <td class="bold">
+                            Add Receiver Volume
+                        </td>
+                        <td>
+                            {{dayTypeResult.addReceiverVolumeSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.addReceiverVolumeSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.addReceiverVolumeSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.adjustCascadingSetPointsSavings.savings.cost">
+                        <td class="bold">
+                            Adjust Cascading Points
+                        </td>
+                        <td>
+                            {{dayTypeResult.adjustCascadingSetPointsSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.adjustCascadingSetPointsSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.adjustCascadingSetPointsSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.improveEndUseEfficiencySavings.savings.cost">
+                        <td class="bold">
+                            Improve End Use Efficiency
+                        </td>
+                        <td>
+                            {{dayTypeResult.improveEndUseEfficiencySavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.improveEndUseEfficiencySavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.improveEndUseEfficiencySavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.reduceAirLeaksSavings.savings.cost">
+                        <td class="bold">
+                            Reduce Air Leaks
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceAirLeaksSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceAirLeaksSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceAirLeaksSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.reduceRunTimeSavings.savings.cost">
+                        <td class="bold">
+                            Reduce Runtime
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceRunTimeSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceRunTimeSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceRunTimeSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.reduceSystemAirPressureSavings.savings.cost">
+                        <td class="bold">
+                            Reduce System Air Pressure
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceSystemAirPressureSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceSystemAirPressureSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.reduceSystemAirPressureSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="dayTypeResult.useAutomaticSequencerSavings.savings.cost">
+                        <td class="bold">
+                            Use Automatic Sequencer
+                        </td>
+                        <td>
+                            {{dayTypeResult.useAutomaticSequencerSavings.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.useAutomaticSequencerSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr class="total">
+                        <td class="bold">
+                            Total
+                        </td>
+                        <td>
+                            {{dayTypeResult.allSavingsResults.savings.cost | number:'1.0-2'}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.allSavingsResults.implementationCost}}
+                        </td>
+                        <td>
+                            {{dayTypeResult.allSavingsResults.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

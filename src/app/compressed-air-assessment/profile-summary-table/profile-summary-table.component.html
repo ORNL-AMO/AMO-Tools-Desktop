@@ -1,0 +1,122 @@
+<div class="pl-2 pt-3 pr-2 scroll-item">
+    <table class="table table-hover bg-white">
+        <thead>
+            <tr>
+                <th>
+                    <!-- Compressor Name -->
+
+                </th>
+                <th *ngFor="let data of profileSummary[0].profileSummaryData">
+                    {{data.timeInterval}}
+                </th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let summary of profileSummary">
+            <tr class="compressor-name-row">
+                <td colspan="100" class="bold">{{summary.compressorId | compressorName:inventoryItems}}</td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    Calc Power, kW
+                </td>
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    <span *ngIf="data.order != 0">
+                        {{data.power | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    Calc Airflow, acfm
+                </td>
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    <span *ngIf="data.order != 0">
+                        {{data.airflow | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    % Capacity
+                </td>
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    <span *ngIf="data.order != 0">
+                        {{data.percentCapacity | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    % Power
+                </td>
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    <span *ngIf="data.order != 0">
+                        {{data.percentPower | number:'1.0-2'}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    Order
+                </td>
+                <td *ngFor="let data of summary.profileSummaryData;">
+                    <span *ngIf="data.order != 0">
+                        {{data.order}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr class="compressor-name-row">
+                <td class="bold" colspan="100">Totals</td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    Calc Power, kW
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.power | number:'1.0-2'}}
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    Calc Airflow, acfm
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.airflow | number:'1.0-2'}}
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    % Capacity
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.percentCapacity | number:'1.0-2'}}
+                </td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    % Power
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.percentPower | number:'1.0-2'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

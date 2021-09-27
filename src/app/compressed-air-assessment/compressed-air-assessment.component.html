@@ -38,29 +38,23 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
     class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <!-- <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
-    </app-modify-conditions> -->
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
       (exploreOppsToast)="hideToast($event)">
     </app-explore-opportunities>
   </div>
-
-  <!--Analysis-->
-  <!-- <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
-      <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
-    </div> -->
-  
-    <div class="tab-content" *ngIf="mainTab == 'diagram'">
-      <app-compressed-air-diagram></app-compressed-air-diagram>
-    </div>
+  <!--diagram-->
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-compressed-air-diagram></app-compressed-air-diagram>
+  </div>
 
   <!--Report-->
-  <!-- <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-      <div class="col-11 report-column">
-        <app-waste-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
-        </app-waste-water-report>
-      </div>
-    </div> -->
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-11 report-column">
+      <app-compressed-air-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
+        </app-compressed-air-report>
+    </div>
+  </div>
+  <!--calculators-->
   <app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
     [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
 
@@ -86,6 +80,7 @@
     (emitDisable)="disableDisclaimer()"></app-toast>
   -->
 
-  
-  <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'compressed-air'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+  [assessmentType]="'compressed-air'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
+</app-update-units-modal>

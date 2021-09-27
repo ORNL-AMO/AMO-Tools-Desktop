@@ -10,6 +10,15 @@
 </div>
 
 <div class="d-flex flex-column align-items-center" *ngIf="adjustCascadingSetPoints.order != 100">
+    <div class="form-group">
+        <label for="cascadingPointsImplementationCost">Implementation Cost</label>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="adjustCascadingSetPoints.implementationCost"
+                name="cascadingPointsImplementationCost" id="cascadingPointsImplementationCost" (input)="save(false)"
+                (focus)="helpTextField('implementationCost')">
+            <span class="input-group-addon units">$</span>
+        </div>
+    </div>
     <div class="p-2 btn-group-sm">
         <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setDataView('baseline')"
             [ngClass]="{'active': setPointView == 'baseline'}">Baseline
