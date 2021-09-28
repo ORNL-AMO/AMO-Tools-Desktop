@@ -153,7 +153,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   setAdjustedSummary() {
-    if (this.selectedDayTypeId && this.compressedAirAssessment && this.modificationResults) {
+    if (this.selectedDayTypeId && this.compressedAirAssessment && this.modificationResults && this.useAutomaticSequencer.order != 100) {
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
       this.adjustedProfileSummary = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.modificationResults, this.selectedDayTypeId);
       this.automaticSequencerProfileSummary = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayTypeId }).useAutomaticSequencerProfileSummary;
