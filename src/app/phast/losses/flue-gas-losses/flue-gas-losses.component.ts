@@ -68,6 +68,7 @@ export class FlueGasLossesComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
     }
+    this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -237,6 +238,7 @@ export class FlueGasLossesComponent implements OnInit {
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+    this.cd.detectChanges();
   }
   focusOut() {
     this.fieldChange.emit('default');
