@@ -56,6 +56,10 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
+  helpTextField(str: string) {
+    this.compressedAirAssessmentService.helpTextField.next(str);
+    this.compressedAirAssessmentService.focusedField.next('adjustCascadingSetPoints');
+  }
 
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {

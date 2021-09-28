@@ -7,6 +7,17 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
     <div class="my-2" *ngIf="helpTextField == 'targetPressure'">
         <h6>
             Target Pressure
@@ -25,6 +36,17 @@
             <small class="text-muted">
                 The defined pressure range for the target pressure that the compressors will operate around when
                 sequenced.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'dayType'">
+        <h6>
+            Sequencer Day Type
+            <br>
+            <small class="text-muted">
+                Select your day type to modify
                 <hr>
             </small>
         </h6>
