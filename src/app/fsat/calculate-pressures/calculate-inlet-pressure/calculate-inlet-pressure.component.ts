@@ -22,6 +22,8 @@ export class CalculateInletPressureComponent implements OnInit {
   usingStaticPressure: boolean;
   @Input()
   inletVelocityPressureInputs: InletVelocityPressureInputs;
+  @Output('emitInvalid')
+  emitInvalid = new EventEmitter<boolean>();
 
   calcInletVelocityPressureError: string = null;
   currentField: string = 'inletLoss';
@@ -45,6 +47,11 @@ export class CalculateInletPressureComponent implements OnInit {
         fanInletArea: undefined
       };
     } 
+    if(this.inletPressureData.calculatedInletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
+    }
   }
 
   toggleUserDefinedVelocityPressure() {
@@ -72,8 +79,13 @@ export class CalculateInletPressureComponent implements OnInit {
           && key.valueOf() !== 'userDefinedVelocityPressure') {
         sum = sum + this.inletPressureData[key];
       }
-    });
-    this.inletPressureData.calculatedInletPressure = (sum * -1);
+    });    
+    this.inletPressureData.calculatedInletPressure = (sum * -1);  
+    if(this.inletPressureData.calculatedInletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
+    }
     this.emitSave.emit(this.inletPressureData);
   }
 
