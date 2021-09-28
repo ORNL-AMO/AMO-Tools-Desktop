@@ -5,6 +5,7 @@ import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
+import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -33,6 +34,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   selectedModificationId: string;
   showCascadingSetPoints: boolean;
   hasSequencerOn: boolean;
+  displayAddStorage: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -53,6 +55,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         }
         this.setHasSequencer();
         this.setCompressedAirAssessmentResults();
+        this.setDisplayAddStorage();
       }
     });
 
@@ -132,5 +135,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (this.selectedModificationId) {
       this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == this.selectedModificationId });
     }
+  }
+
+  setDisplayAddStorage(){
+    let displayAddStorage: boolean = false;
+    this.compressedAirAssessment.compressorInventoryItems.forEach(item => {
+      let compressorTypeOption: CompressorTypeOption = CompressorTypeOptions.find(option => {return option.value == item.nameplateData.compressorType});
+      if(compressorTypeOption.lubricantTypeEnumValue == 0){
+        displayAddStorage = true;
+      }
+    });
+    this.displayAddStorage = displayAddStorage;
   }
 }

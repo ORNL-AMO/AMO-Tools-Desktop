@@ -137,25 +137,25 @@ export class CompressedAirAssessmentResultsService {
 
   getTotalImplementationCost(modification: Modification): number {
     let implementationCost: number = 0;
-    if(modification.addPrimaryReceiverVolume.order != 100){
+    if (modification.addPrimaryReceiverVolume.order != 100) {
       implementationCost += modification.addPrimaryReceiverVolume.implementationCost;
     }
-    if(modification.adjustCascadingSetPoints.order != 100){
+    if (modification.adjustCascadingSetPoints.order != 100) {
       implementationCost += modification.adjustCascadingSetPoints.implementationCost;
     }
-    if(modification.improveEndUseEfficiency.order != 100){
-      modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => { implementationCost += item.implementationCost});
+    if (modification.improveEndUseEfficiency.order != 100) {
+      modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => { implementationCost += item.implementationCost });
     }
-    if(modification.reduceAirLeaks.order != 100){
+    if (modification.reduceAirLeaks.order != 100) {
       implementationCost += modification.reduceAirLeaks.implementationCost;
     }
-    if(modification.reduceRuntime.order != 100){
+    if (modification.reduceRuntime.order != 100) {
       implementationCost += modification.reduceRuntime.implementationCost;
     }
-    if(modification.reduceSystemAirPressure.order != 100){
+    if (modification.reduceSystemAirPressure.order != 100) {
       implementationCost += modification.reduceSystemAirPressure.implementationCost;
     }
-    if(modification.useAutomaticSequencer.order != 100){
+    if (modification.useAutomaticSequencer.order != 100) {
       implementationCost += modification.useAutomaticSequencer.implementationCost;
     }
     return implementationCost;
@@ -186,7 +186,7 @@ export class CompressedAirAssessmentResultsService {
       adjustCascadingSetPointsProfileSummary: undefined,
       dayTypeId: undefined,
       dayTypeName: undefined,
-      auxiliaryPowerUsage: {cost: 0, energyUse: 0}
+      auxiliaryPowerUsage: { cost: 0, energyUse: 0 }
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
@@ -280,7 +280,7 @@ export class CompressedAirAssessmentResultsService {
         //adjust compressors
         adjustedCompressors = this.adjustCascadingSetPointsAdjustCompressors(adjustedCompressors, modification.adjustCascadingSetPoints);
         //adjusted air flow based on compressor pressure changes
-        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary)
+        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary, dayType)
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, totals, reduceRuntime);
         adjustCascadingSetPointsProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
@@ -295,7 +295,7 @@ export class CompressedAirAssessmentResultsService {
         if (electricityCost) {
           auxiliaryPowerUsage = this.calculateEfficiencyImprovementAuxiliaryPower(modification.improveEndUseEfficiency, electricityCost, dayType);
           let implementationCost: number = 0;
-          modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => { implementationCost = implementationCost + item.implementationCost});
+          modification.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => { implementationCost = implementationCost + item.implementationCost });
           improveEndUseEfficiencySavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, implementationCost)
         }
       } else if (modification.reduceRuntime.order == orderIndex) {
@@ -547,7 +547,7 @@ export class CompressedAirAssessmentResultsService {
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
       improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
-        let reductionData:  EndUseEfficiencyReductionData = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
+        let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
         let intervalReductionData = reductionData.data.find(rData => { return rData.hourInterval == total.timeInterval });
         if (item.reductionType == 'Fixed') {
           if (intervalReductionData.applyReduction) {
@@ -577,7 +577,7 @@ export class CompressedAirAssessmentResultsService {
           });
 
         } else if (item.reductionType == 'Variable') {
-          let reductionData:  EndUseEfficiencyReductionData = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
+          let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
           reductionData.data.forEach(d => {
             if (d.reductionAmount) {
               energyUse = energyUse + item.equipmentDemand;
@@ -641,7 +641,8 @@ export class CompressedAirAssessmentResultsService {
     return adjustedCompressors;
   }
 
-  systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItem>, adjustedCompressors: Array<CompressorInventoryItem>, adjustedProfileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
+  systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItem>, adjustedCompressors: Array<CompressorInventoryItem>, adjustedProfileSummary: Array<ProfileSummary>, dayType?: CompressedAirDayType): Array<ProfileSummary> {
+    //reduce airflow
     adjustedProfileSummary.forEach(profile => {
       let ogCompressors: CompressorInventoryItem = originalCompressors.find(ogCompressor => { return ogCompressor.itemId == profile.compressorId });
       let adjustedCompressor: CompressorInventoryItem = adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.itemId == profile.compressorId });
@@ -649,7 +650,27 @@ export class CompressedAirAssessmentResultsService {
         summaryData.airflow = this.calculateReducedAirFlow(summaryData.airflow, adjustedCompressor.performancePoints.fullLoad.dischargePressure, adjustedCompressor.inletConditions.atmosphericPressure, ogCompressors.performancePoints.fullLoad.dischargePressure);
       });
     });
-
+    if (dayType) {
+      //order compressors
+      let orderedCompressors: Array<CompressorInventoryItem> = _.sortBy(adjustedCompressors, (compressor) => {
+        return compressor.performancePoints.fullLoad.dischargePressure
+      }).reverse();
+      //get each day type summary
+      let dayTypeSummaries: Array<ProfileSummary> = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
+      //iterate hour intervals. TODO: HANDLE 1 day interval
+      for (let i = 0; i < 24; i++) {
+        let newOrder: number = 1;
+        //iterate new ordered compressors and update corresponding summary order
+        orderedCompressors.forEach(compressor => {
+          let dayTypeSummary = dayTypeSummaries.find(summary => { return summary.compressorId == compressor.itemId });
+          let intervalData = dayTypeSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == i });
+          if (intervalData.order != 0) {
+            intervalData.order = newOrder;
+            newOrder++;
+          }
+        });
+      };
+    }
     return adjustedProfileSummary;
   }
   //useAutomaticSequencer
@@ -712,6 +733,7 @@ export class CompressedAirAssessmentResultsService {
         profileSummaryDataItem.order = sequencerProfileDataItem.order;
       });
     });
+    console.log(adjustedProfile);
     return adjustedProfile;
   }
 

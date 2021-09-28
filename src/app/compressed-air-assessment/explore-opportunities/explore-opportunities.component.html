@@ -27,9 +27,10 @@
                 <app-use-automatic-sequencer [style.order]="modification.useAutomaticSequencer.order"
                     *ngIf="modification.reduceRuntime.order == 100 && modification.reduceSystemAirPressure.order == 100 && modification.adjustCascadingSetPoints.order == 100">
                 </app-use-automatic-sequencer>
-                <app-reduce-run-time [style.order]="modification.reduceRuntime.order"
-                    *ngIf="!hasSequencerOn"></app-reduce-run-time>
-                <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order">
+                <app-reduce-run-time [style.order]="modification.reduceRuntime.order" *ngIf="!hasSequencerOn">
+                </app-reduce-run-time>
+                <app-add-receiver-volume [style.order]="modification.addPrimaryReceiverVolume.order"
+                    *ngIf="displayAddStorage">
                 </app-add-receiver-volume>
             </div>
 
