@@ -33,12 +33,85 @@
                         </app-percent-graph>
                     </div>
                     <div class="show-print text-center"
-                        *ngIf="result.combinedResults.allSavingsResults.savings.percentSavings">
+                        *ngIf="result.combinedResults.allSavingsResults.adjustedResults.percentSavings">
                         {{result.combinedResults.allSavingsResults.savings.percentSavings | number:'1.0'}} %
                     </div>
                     <div *ngIf="!result.combinedResults.allSavingsResults.savings.percentSavings">
                         &mdash; &mdash;
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Peak Demand
+                    <span> (kW)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.peakDemand | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.peakDemand">{{result.combinedResults.peakDemand
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Peak Demand Savings
+                    <span> (kW)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemand">{{baselineResults.total.peakDemand
+                        - result.combinedResults.peakDemand
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Peak Demand Cost
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.demandCost | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemandCost">{{result.combinedResults.peakDemandCost
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Peak Demand Cost Savings
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemandCost">{{baselineResults.demandCost
+                        - result.combinedResults.peakDemandCost
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Flow Reallocation Savings
+                    <span> ($/yr)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.flowReallocationSavings.savings.power">{{result.combinedResults.flowReallocationSavings.savings.power
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.flowReallocationSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayAddReceiverVolume">
@@ -51,7 +124,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.power">{{result.combinedResults.addReceiverVolumeSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.addReceiverVolumeSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -65,7 +138,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.adjustCascadingSetPointsSavings.savings.power">{{result.combinedResults.adjustCascadingSetPointsSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.adjustCascadingSetPointsSavings.savings.power">&mdash;
                         &mdash;</span>
                 </td>
@@ -80,7 +153,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.improveEndUseEfficiencySavings.savings.power">{{result.combinedResults.improveEndUseEfficiencySavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.improveEndUseEfficiencySavings.savings.power">&mdash;
                         &mdash;</span>
                 </td>
@@ -95,7 +168,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.reduceAirLeaksSavings.savings.power">{{result.combinedResults.reduceAirLeaksSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.reduceAirLeaksSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -109,7 +182,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.reduceRunTimeSavings.savings.power">{{result.combinedResults.reduceRunTimeSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.reduceRunTimeSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -123,7 +196,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.reduceSystemAirPressureSavings.savings.power">{{result.combinedResults.reduceSystemAirPressureSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.reduceSystemAirPressureSavings.savings.power">&mdash;
                         &mdash;</span>
                 </td>
@@ -138,7 +211,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.useAutomaticSequencerSavings.savings.power">{{result.combinedResults.useAutomaticSequencerSavings.savings.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.useAutomaticSequencerSavings.savings.power">&mdash;
                         &mdash;</span>
                 </td>
@@ -154,7 +227,7 @@
                     <span
                         *ngIf="result.combinedResults.auxiliaryPowerUsage.cost">{{result.combinedResults.auxiliaryPowerUsage.cost
                         * -1
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.auxiliaryPowerUsage.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -177,12 +250,12 @@
                     <span> (kWh/yr)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.total.energyUse | sigFigs:'5'}}</td>
+                    {{baselineResults.total.energyUse | number:'1.0-0'}}</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.allSavingsResults.adjustedResults.power">{{result.combinedResults.allSavingsResults.adjustedResults.power
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.allSavingsResults.adjustedResults.power">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -205,12 +278,12 @@
                     <span> ($/yr)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.total.cost | sigFigs:'5'}}</td>
+                    {{baselineResults.total.cost | number:'1.0-0'}}</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.allSavingsResults.adjustedResults.cost">{{result.combinedResults.allSavingsResults.adjustedResults.cost
-                        | sigFigs:'5'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.allSavingsResults.adjustedResults.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -223,8 +296,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.allSavingsResults.savings.cost">{{result.combinedResults.allSavingsResults.savings.cost
-                        |
-                        sigFigs:'5'}}</span>
+                        |number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.allSavingsResults.savings.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
@@ -238,7 +310,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
                         *ngIf="result.combinedResults.allSavingsResults.implementationCost">{{result.combinedResults.allSavingsResults.implementationCost
-                        | number:'1.0-2'}}</span>
+                        | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.allSavingsResults.implementationCost">&mdash; &mdash;</span>
                 </td>
             </tr>

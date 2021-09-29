@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult, EemSavingsResults } from '../../compressed-air-assessment-results.service';
+import { BaselineResults, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-executive-summary',
