@@ -39,14 +39,20 @@ export class GraphBasicsComponent implements OnInit {
       if (this.selectedGraphObj.layout.xaxis.type == "date") {
         this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
          this.markerType = this.selectedGraphObj.layout.xaxis.type.valueOf();
-          this.isTimeSeries = this.logToolDataService.isTimeSeries;
+          // this.isTimeSeries = this.logToolDataService.isTimeSeries;
       
+      }else if(this.selectedGraphObj.layout.xaxis.type == "linear") {
+        if(this.markerType = "lines"){
+          this.markerType = "markers";
+        }
+        debugger;
       }
       else {
-        this.markerTypes = [{label: "Markers", value: "markers"}, {label: "Lines", value: "lines"}];
+         this.markerTypes = [{label: "Markers", value: "markers"}];
         this.markerType = "markers";  
-        this.isTimeSeries = this.logToolDataService.isTimeSeries;
       }
+      this.isTimeSeries = this.logToolDataService.isTimeSeries;
+      debugger;
     
     });
   }

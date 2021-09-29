@@ -129,6 +129,7 @@ export class VisualizeMenuService {
       });
       this.setYAxisDataOptions(selectedGraphObj);
       this.setYAxisData(selectedGraphObj);
+      this.logToolDataService.isTimeSeries = false;
     }
   }
 
