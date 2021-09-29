@@ -43,8 +43,16 @@ export class EfficiencyImprovementService {
   }
 
   updateFormValidators(form: FormGroup, inputObj: EfficiencyImprovementInputs): void {
-    form.controls.currentCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]);
-    form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
+    if (inputObj.newFlueGasTemp != undefined) {
+      form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
+    } else {
+      form.controls.newCombustionAirTemp.setValidators([Validators.required]);
+    }
+    if (inputObj.currentFlueGasTemp != undefined) {
+      form.controls.currentCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]);
+    } else {
+      form.controls.currentCombustionAirTemp.setValidators([Validators.required]);
+    }
   }
 
   generateExample(settings: Settings): EfficiencyImprovementInputs {
