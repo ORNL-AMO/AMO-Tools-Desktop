@@ -7,6 +7,17 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
     <div class="my-2" *ngIf="helpTextField == 'leakFlow'">
         <h6>
             Leak Flow
