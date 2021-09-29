@@ -57,7 +57,7 @@ export class FullLoadCalculationsService {
         //centrifugal
         defaultPower = selectedCompressor.nameplateData.totalPackageInputPower;
       } else {
-        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.compressorControls.controlType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.inletConditions.atmosphericPressure);
+        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.inletConditions.atmosphericPressure);
       }
       return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
