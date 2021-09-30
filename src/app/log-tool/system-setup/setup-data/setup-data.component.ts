@@ -57,11 +57,11 @@ export class SetupDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
+    this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
     if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
-      this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
         this.previousDataAvailable = val;
+      }
       });
-    }
   }
 
   ngOnDestroy() {
