@@ -346,7 +346,7 @@ export class AssessmentService {
       systemBasics: {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
-        demandCost: .066,
+        demandCost: 5.00,
         notes: undefined
       },
       systemInformation: {

@@ -61,7 +61,7 @@ export class AltitudeCorrectionService {
     let exponentOp: number = Math.pow(parensOp, 5.2559);
     let barometricPressure: number = 101.325 * exponentOp;
     if (settings.unitsOfMeasure != 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('inHg');
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('psia');
     }
     this.altitudeCorrectionOutputs.next(barometricPressure);
   }
