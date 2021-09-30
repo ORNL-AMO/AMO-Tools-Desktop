@@ -28,7 +28,6 @@ export class LogToolDbService {
         } else {
           //get latest entry
           this.logToolDbData = logToolDbData;
-          debugger;
           if(this.logToolDbData[0].setupData.dataSubmitted === true) {
           this.previousDataAvailable.next(logToolDbData[0].modifiedDate);
           }

@@ -58,7 +58,6 @@ export class SetupDataComponent implements OnInit {
       this.dataExists = true;
     }
     this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
-      debugger;
     if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
         this.previousDataAvailable = val;
       }
