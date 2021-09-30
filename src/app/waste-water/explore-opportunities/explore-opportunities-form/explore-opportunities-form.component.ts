@@ -23,7 +23,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       } else {
         this.modificationExists = false;
       }
-      //this.modification = this.wasteWaterService.getModificationFromId();
+      
     });
 
     if(!this.modification.name){
