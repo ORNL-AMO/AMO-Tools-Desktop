@@ -143,7 +143,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       o2: this.flueGasLossForm.controls.o2.value,
       moisture: this.flueGasLossForm.controls.moisture.value,
       nitrogen: this.flueGasLossForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
       excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
@@ -199,11 +199,11 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
 
-    // backend method needs moistureInAirComposition to be ''
-    // moistureInAirComposition is "" before saveEmit and undefined after
+    // backend method needs moistureInAirCombustion to be ''
+    // moistureInAirCombustion is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
-    if (this.flueGasLossForm.controls.moistureInAirComposition === undefined) {
-      this.flueGasLossForm.patchValue({moistureInAirComposition: ''});
+    if (this.flueGasLossForm.controls.moistureInAirCombustion === undefined) {
+      this.flueGasLossForm.patchValue({moistureInAirCombustion: ''});
     }
     // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
@@ -244,10 +244,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.lossesService.modalOpen.next(this.showModal);
   }
 
-  hideMoistureModal(moistureInAirComposition?: number) {
-    if (moistureInAirComposition) {
-      moistureInAirComposition = Number(moistureInAirComposition.toFixed(2));
-      this.flueGasLossForm.controls.moistureInAirComposition.patchValue(moistureInAirComposition);
+  hideMoistureModal(moistureInAirCombustion?: number) {
+    if (moistureInAirCombustion) {
+      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
+      this.flueGasLossForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
     }
     this.moistureModal.hide();
     this.showMoisture = false;
@@ -309,9 +309,9 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return false;
     }
   }
-  compareMassMoistureInAirComposition() {
+  compareMassMoistureInAirCombustion() {
     if (this.canCompare()) {
-      return this.flueGasCompareService.compareMassMoistureInAirComposition(this.lossIndex);
+      return this.flueGasCompareService.compareMassMoistureInAirCombustion(this.lossIndex);
     } else {
       return false;
     }

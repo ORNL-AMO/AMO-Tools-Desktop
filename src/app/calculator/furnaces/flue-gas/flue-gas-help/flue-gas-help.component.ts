@@ -11,7 +11,6 @@ import { FlueGasService } from '../flue-gas.service';
 export class FlueGasHelpComponent implements OnInit {
   @Input()
   settings: Settings;
-  displaySuggestions: boolean = false;
   currentFieldSub: Subscription;
   currentField: string;
 
@@ -25,9 +24,5 @@ export class FlueGasHelpComponent implements OnInit {
   
   ngOnDestroy(): void {
     this.currentFieldSub.unsubscribe();
-  }
-
-  toggleSuggestions() {
-    this.displaySuggestions = !this.displaySuggestions;
   }
 }
