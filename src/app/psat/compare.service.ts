@@ -133,9 +133,6 @@ export class CompareService {
     }
     if (baseline && baseline.setupDone) {
       baseline.outputs = this.psatService.resultsExisting(baseline.inputs, settings);
-      if (settings.currency != this.currCurrency && baseline.outputs.annual_cost) {
-        baseline.outputs.annual_cost = this.convertUnitsService.convertValue(baseline.outputs.annual_cost, this.currCurrency, settings.currency);
-      }
     }
     if (!modification) {
       modification = this.modifiedPSAT;

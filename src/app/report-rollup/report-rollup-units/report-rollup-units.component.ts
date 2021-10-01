@@ -26,7 +26,7 @@ export class ReportRollupUnitsComponent implements OnInit {
   ];
   currencies: Array<string> = [
     '$',
-    '$k'
+    // '$k'
   ];
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
