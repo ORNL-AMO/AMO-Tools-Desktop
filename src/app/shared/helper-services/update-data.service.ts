@@ -8,6 +8,7 @@ import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
+import { PHAST } from '../models/phast/phast';
 declare const packageJson;
 
 @Injectable()
@@ -139,8 +140,27 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
+
+        assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateMoistureInAirCombustion(assessment.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
+    }
+
+    updateMoistureInAirCombustion(phast: PHAST): PHAST {
+        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+            phast.losses.flueGasLosses.forEach(fg => {
+                if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
+                    fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
