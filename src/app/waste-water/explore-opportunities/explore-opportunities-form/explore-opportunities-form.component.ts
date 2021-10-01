@@ -10,7 +10,6 @@ import { WasteWaterService } from '../../waste-water.service';
 })
 export class ExploreOpportunitiesFormComponent implements OnInit {
 
-  modificationExists: boolean;
   modification: WasteWaterData;
   selectedModificationIdSub: Subscription;
   constructor(private wasteWaterService: WasteWaterService) { }
@@ -18,18 +17,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   ngOnInit(): void {
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
       if(val){
-        this.modificationExists = true;
         this.modification = this.wasteWaterService.getModificationFromId();
-      } else {
-        this.modificationExists = false;
-      }
-      
+      }       
     });
-
-    if(!this.modification.name){
-      this.modification.name = "Scenario 1"
-    }
-
   }
 
   ngOnDestroy() {
