@@ -13,7 +13,7 @@ export class DragBarComponent implements OnInit {
 
   @HostListener('drag', ['$event'])
   onDrag(event: DragEvent) {
-    if (event.pageX > 150 && event.pageX < 500) {
+    if (event.pageX > 500 && event.pageX < 1000) {
       this.chillerStagingService.sidebarX.next(event.pageX);
     }
   }

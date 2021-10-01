@@ -27,9 +27,9 @@ export class ChillerStagingComponent implements OnInit {
   
   chillerPerformanceInputSub: Subscription;
 
-  sidebarWidth: number;
-  sidebarWidthSub: Subscription;
-  contentWidth: number;
+  calcFormWidth: number;
+  calcFormWidthSub: Subscription;
+  reslutsHelpWidth: number;
   
   headerHeight: number;
   tabSelect: string = 'results';
@@ -42,10 +42,10 @@ export class ChillerStagingComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.sidebarWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
-      this.sidebarWidth = val;
-      if (this.contentContainer && this.sidebarWidth) {
-        this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+    this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
+      this.calcFormWidth = val;
+      if (this.contentContainer && this.calcFormWidth) {
+        this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
       }
     });
     let existingInputs = this.chillerStagingService.chillerStagingInput.getValue();
@@ -53,8 +53,8 @@ export class ChillerStagingComponent implements OnInit {
       this.chillerStagingService.initDefaultEmptyInputs();
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
-    if (this.contentContainer && this.sidebarWidth) {
-      this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+    if (this.contentContainer && this.calcFormWidth) {
+      this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
       this.cd.detectChanges();
     }
 
@@ -64,15 +64,15 @@ export class ChillerStagingComponent implements OnInit {
 
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
-    this.sidebarWidthSub.unsubscribe();
+    this.calcFormWidthSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-    if (this.contentContainer && this.sidebarWidth) {
-      this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+    if (this.contentContainer && this.calcFormWidth) {
+      this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
       this.cd.detectChanges();
     }
   }
