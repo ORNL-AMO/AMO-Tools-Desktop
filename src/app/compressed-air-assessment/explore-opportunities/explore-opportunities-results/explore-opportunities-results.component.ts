@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
@@ -24,12 +24,18 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   modificationResults: CompressedAirAssessmentResult;
   modificationResultsSub: Subscription;
   dayTypeModificationResult: DayTypeModificationResult;
+  baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
+        if(!this.baselineResults){
+          this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val);
+        }
+
         this.compressedAirAssessment = val;
         this.dayTypeOptions = this.compressedAirAssessment.compressedAirDayTypes;
         let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
