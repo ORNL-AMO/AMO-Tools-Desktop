@@ -1,5 +1,5 @@
-<div class="d-flex h-100 process-cooling modify-conditions standalone-calculator" #contentContainer>
-	<div class="d-flex flex-column w-66 mh-100 bg-white scroll-item">
+<div class="d-flex h-100 w-100 process-cooling modify-conditions standalone-calculator dashboard-content" #contentContainer>
+	<div class="flex-fill flex-column mh-100 bg-white scroll-item sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
 		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
 			<div class="d-flex pl-2 align-items-center">
 				<div class="col-md-auto">
@@ -27,7 +27,9 @@
 		</div>
 	</div>
 
-	<div class="d-flex flex-column w-33 scroll-item">
+	<app-drag-bar></app-drag-bar>
+
+	<div class="flex-fill scroll-item dashboard-scroll" [ngStyle]="{'width.px': contentWidth}">
 		<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
 			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
 				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"

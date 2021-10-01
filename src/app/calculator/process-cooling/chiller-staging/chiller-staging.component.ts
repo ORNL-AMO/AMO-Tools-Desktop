@@ -1,7 +1,8 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { CalculatorService } from '../../calculator.service';
 import { ChillerStagingService } from './chiller-staging.service';
 
 @Component({
@@ -12,6 +13,10 @@ import { ChillerStagingService } from './chiller-staging.service';
 export class ChillerStagingComponent implements OnInit {
   @Input()
   settings: Settings;
+
+  
+  @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
+
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   
@@ -21,33 +26,55 @@ export class ChillerStagingComponent implements OnInit {
   }
   
   chillerPerformanceInputSub: Subscription;
+
+  sidebarWidth: number;
+  sidebarWidthSub: Subscription;
+  contentWidth: number;
   
   headerHeight: number;
   tabSelect: string = 'results';
   
   constructor(private chillerStagingService: ChillerStagingService,
-              private settingsDbService: SettingsDbService) { }
+              private settingsDbService: SettingsDbService, 
+              private cd: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.sidebarWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
+      this.sidebarWidth = val;
+      if (this.contentContainer && this.sidebarWidth) {
+        this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+      }
+    });
     let existingInputs = this.chillerStagingService.chillerStagingInput.getValue();
     if(!existingInputs) {
       this.chillerStagingService.initDefaultEmptyInputs();
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
+    if (this.contentContainer && this.sidebarWidth) {
+      this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+      this.cd.detectChanges();
+    }
+
+    
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
+    this.sidebarWidthSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+    if (this.contentContainer && this.sidebarWidth) {
+      this.contentWidth = this.contentContainer.nativeElement.clientWidth - this.sidebarWidth;
+      this.cd.detectChanges();
+    }
   }
 
   initSubscriptions() {
