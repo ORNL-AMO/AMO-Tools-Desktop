@@ -49,9 +49,6 @@ export class HelpPanelComponent implements OnInit {
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
-
-
-
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       if (val) {
         this.getResults();
@@ -85,6 +82,11 @@ export class HelpPanelComponent implements OnInit {
     if (changes.containerHeight) {
       if (!changes.containerHeight.firstChange) {
         this.getContainerHeight();
+      }
+    }
+    if (changes.settings) {
+      if (!changes.settings.firstChange) {
+        this.getResults();
       }
     }
   }
