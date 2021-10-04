@@ -175,7 +175,6 @@ export interface CompressorControls {
 }
 
 export interface InletConditions {
-    atmosphericPressure: number,
     temperature: number
 }
 

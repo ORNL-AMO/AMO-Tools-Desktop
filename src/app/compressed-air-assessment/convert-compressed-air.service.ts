@@ -24,20 +24,23 @@ export class ConvertCompressedAirService {
     compressedAirData.systemProfile = this.convertSystemProfile(compressedAirData.systemProfile, oldSettings, newSettings);
     return compressedAirData;
   }
-  
+
   convertSystemInformation(systemInformation: SystemInformation, oldSettings: Settings, newSettings: Settings): SystemInformation {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       systemInformation.systemElevation = this.convertUnitsService.value(systemInformation.systemElevation).from('m').to('ft');
+      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('barg').to('psig');
       // dbl check
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('m3').to('gal');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('barg').to('psig');
       systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('barg').to('psig');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('psig').to('barg');
       systemInformation.systemElevation = this.convertUnitsService.value(systemInformation.systemElevation).from('ft').to('m');
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('gal').to('m3');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('psig').to('barg');
       systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('psig').to('barg');
     }
+    systemInformation.atmosphericPressure = this.convertUnitsService.roundVal(systemInformation.atmosphericPressure, 2);
     systemInformation.systemElevation = this.convertUnitsService.roundVal(systemInformation.systemElevation, 2);
     systemInformation.totalAirStorage = this.convertUnitsService.roundVal(systemInformation.totalAirStorage, 2);
     systemInformation.targetPressure = this.convertUnitsService.roundVal(systemInformation.targetPressure, 2);
@@ -86,13 +89,10 @@ export class ConvertCompressedAirService {
 
   convertInletConditions(inletConditions: InletConditions, oldSettings: Settings, newSettings: Settings): InletConditions {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      inletConditions.atmosphericPressure = this.convertUnitsService.value(inletConditions.atmosphericPressure).from('barg').to('psig');
       inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('C').to('F');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      inletConditions.atmosphericPressure = this.convertUnitsService.value(inletConditions.atmosphericPressure).from('psig').to('barg');
       inletConditions.temperature = this.convertUnitsService.value(inletConditions.temperature).from('F').to('C');
     }
-    inletConditions.atmosphericPressure = this.convertUnitsService.roundVal(inletConditions.atmosphericPressure, 2);
     inletConditions.temperature = this.convertUnitsService.roundVal(inletConditions.temperature, 2);
     return inletConditions;
   }
@@ -102,7 +102,7 @@ export class ConvertCompressedAirService {
       designDetails.modulatingPressureRange = this.convertUnitsService.value(designDetails.modulatingPressureRange).from('barg').to('psig');
       designDetails.maxFullFlowPressure = this.convertUnitsService.value(designDetails.maxFullFlowPressure).from('barg').to('psig');
       designDetails.inputPressure = this.convertUnitsService.value(designDetails.inputPressure).from('bara').to('psia');
-      
+
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       designDetails.modulatingPressureRange = this.convertUnitsService.value(designDetails.modulatingPressureRange).from('psig').to('barg');
       designDetails.maxFullFlowPressure = this.convertUnitsService.value(designDetails.maxFullFlowPressure).from('psig').to('barg');
@@ -129,7 +129,7 @@ export class ConvertCompressedAirService {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       performancePoint.dischargePressure = this.convertUnitsService.value(performancePoint.dischargePressure).from('barg').to('psig');
       performancePoint.airflow = this.convertUnitsService.value(performancePoint.airflow).from('m3/min').to('ft3/min');
-          
+
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       performancePoint.dischargePressure = this.convertUnitsService.value(performancePoint.dischargePressure).from('psig').to('barg');
       performancePoint.airflow = this.convertUnitsService.value(performancePoint.airflow).from('ft3/min').to('m3/min');
@@ -153,8 +153,8 @@ export class ConvertCompressedAirService {
       summary.fullLoadPressure = this.convertUnitsService.roundVal(summary.fullLoadPressure, 2);
       summary.fullLoadCapacity = this.convertUnitsService.roundVal(summary.fullLoadCapacity, 2);
 
-    summary.profileSummaryData = this.convertSystemProfileSummaryData(summary.profileSummaryData, oldSettings, newSettings);
-  });
+      summary.profileSummaryData = this.convertSystemProfileSummaryData(summary.profileSummaryData, oldSettings, newSettings);
+    });
     return systemProfile;
   }
 
@@ -168,52 +168,7 @@ export class ConvertCompressedAirService {
       data.airflow = this.convertUnitsService.roundVal(data.airflow, 2);
     });
     return profileSummaryData
-}
-
-  // convertResultsToMetric(wasteWaterResults: WasteWaterResults): WasteWaterResults {
-  //   // TotalAverageDailyFlowRate: metric = m3/day, imperial = mgd 
-  //   wasteWaterResults.TotalAverageDailyFlowRate = this.convertUnitsService.value(wasteWaterResults.TotalAverageDailyFlowRate).from('Mgal').to('m3');
-  //   // VolumeInService: metric = m3, imperial = Mgal
-  //   wasteWaterResults.VolumeInService = this.convertUnitsService.value(wasteWaterResults.VolumeInService).from('Mgal').to('m3');
-  //   // InfluentBOD5MassLoading: metric = kg, imperial = lb
-  //   wasteWaterResults.InfluentBOD5MassLoading = this.convertUnitsService.value(wasteWaterResults.InfluentBOD5MassLoading).from('lb').to('kg');
-  //   // SecWWOxidNLoad: metric = kg, imperial = lb
-  //   wasteWaterResults.SecWWOxidNLoad = this.convertUnitsService.value(wasteWaterResults.SecWWOxidNLoad).from('lb').to('kg');
-  //   // SecWWTSSLoad: metric = kg, imperial = lb
-  //   wasteWaterResults.SecWWTSSLoad = this.convertUnitsService.value(wasteWaterResults.SecWWTSSLoad).from('lb').to('kg');
-  //   // TSSSludgeProduction: metric = kg, imperial = lb
-  //   wasteWaterResults.TSSSludgeProduction = this.convertUnitsService.value(wasteWaterResults.TSSSludgeProduction).from('lb').to('kg');
-  //   // TSSInActivatedSludgeEffluent: metric = kg, imperial = lb
-  //   wasteWaterResults.TSSInActivatedSludgeEffluent = this.convertUnitsService.value(wasteWaterResults.TSSInActivatedSludgeEffluent).from('lb').to('kg');
-  //   // TotalOxygenRequirements: metric = kg, imperial = lb
-  //   wasteWaterResults.TotalOxygenRequirements = this.convertUnitsService.value(wasteWaterResults.TotalOxygenRequirements).from('lb').to('kg');
-  //   // TotalOxygenReqWDenit: metric = kg, imperial = lb
-  //   wasteWaterResults.TotalOxygenReqWDenit = this.convertUnitsService.value(wasteWaterResults.TotalOxygenReqWDenit).from('lb').to('kg');
-  //   // TotalOxygenSupplied: metric = kg, imperial = lb
-  //   wasteWaterResults.TotalOxygenSupplied = this.convertUnitsService.value(wasteWaterResults.TotalOxygenSupplied).from('lb').to('kg');
-
-  //   // MixingIntensityInReactor: metric = kW/m3, imperial = hp/Mgal
-  //   wasteWaterResults.MixingIntensityInReactor = this.convertUnitsService.value(wasteWaterResults.MixingIntensityInReactor).from('hpMgal').to('kWm3');
-
-  //   // RASFlowRate: metric = m3/day, imperial = mgd 
-  //   wasteWaterResults.RASFlowRate = this.convertUnitsService.value(wasteWaterResults.RASFlowRate).from('Mgal').to('m3');
-  //   // WASFlowRate: metric = m3/day, imperial = mgd 
-  //   wasteWaterResults.WASFlowRate = this.convertUnitsService.value(wasteWaterResults.WASFlowRate).from('Mgal').to('m3');
-  //   // TotalSludgeProduction: metric = kg, imperial = lb
-  //   wasteWaterResults.TotalSludgeProduction = this.convertUnitsService.value(wasteWaterResults.TotalSludgeProduction).from('lb').to('kg');
-
-  //   // VOLR: metric = kg/m3, imperial = lb/kft3
-  //   wasteWaterResults.VOLR = this.convertUnitsService.value(wasteWaterResults.VOLR).from('lbkft3').to('kgNm3');
-  //   return wasteWaterResults;
-  // }
-
-  // convertResultsCosts(wasteWaterResults: WasteWaterResults, settings: Settings): WasteWaterResults {
-  //   if (settings.currency !== "$") {
-  //     wasteWaterResults.AeCost = this.convertUnitsService.value(wasteWaterResults.AeCost).from("$").to(settings.currency);
-  //     wasteWaterResults.costSavings = this.convertUnitsService.value(wasteWaterResults.costSavings).from("$").to(settings.currency);
-  //   }
-  //   return wasteWaterResults
-  // }
+  }
 
   roundPressureForPresentation(dischargePressure: number) {
     dischargePressure = this.roundVal(dischargePressure, 1);

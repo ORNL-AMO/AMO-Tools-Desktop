@@ -14,7 +14,7 @@ export class SystemInformationFormService {
       isSequencerUsed: [obj.isSequencerUsed],
       targetPressure: [obj.targetPressure],
       variance: [obj.variance],
-      atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0)]],
+      atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
       atmosphericPressureKnown: [obj.atmosphericPressureKnown]
 
     });

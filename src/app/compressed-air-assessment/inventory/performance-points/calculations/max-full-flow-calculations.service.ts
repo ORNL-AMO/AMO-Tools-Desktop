@@ -31,7 +31,7 @@ export class MaxFullFlowCalculationsService {
       let defaultAirflow: number;
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.inletConditions.atmosphericPressure);
+        defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure);
       } else {
         //centrifugal
         defaultAirflow = selectedCompressor.performancePoints.fullLoad.airflow;
@@ -47,7 +47,7 @@ export class MaxFullFlowCalculationsService {
       let defaultPower: number;
       if (selectedCompressor.nameplateData.compressorType != 6) {
         //non centrifugal
-        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.performancePoints.fullLoad.power, selectedCompressor.inletConditions.atmosphericPressure);
+        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.performancePoints.fullLoad.power);
       } else {
         //centrifugal
         defaultPower = selectedCompressor.performancePoints.fullLoad.power;

@@ -46,17 +46,20 @@
                 <span class="pl-2" *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
                 <span class="pl-2" *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
             </div>
-            <!-- <span class="alert-danger pull-right small"
+            <span class="alert-danger pull-right small"
                 *ngIf="form.controls.atmosphericPressure.invalid && !form.controls.atmosphericPressure.pristine">
                 <span *ngIf="form.controls.atmosphericPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
                     {{form.controls.atmosphericPressure.errors.min.min}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>
-                    .</span>
-                <span *ngIf="form.controls.atmosphericPressure.errors.max">Value can't
-                    be greater than {{form.controls.atmosphericPressure.errors.max.max}} ft.</span>
-            </span> -->
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
+                <span *ngIf="form.controls.atmosphericPressure.errors.max">Value can't be greater than
+                    {{form.controls.atmosphericPressure.errors.max.max}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
+            </span>
         </div>
         <!--Total Air Storage-->
         <div class="form-group">

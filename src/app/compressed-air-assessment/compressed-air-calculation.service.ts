@@ -96,7 +96,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
     let isShutdown: boolean = false;
     if (canShutdown && compressor.compressorControls.automaticShutdown == true && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
       isShutdown = true;
@@ -111,7 +111,7 @@ export class CompressedAirCalculationService {
         results.percentageCapacity = results.percentageCapacity * 100;
         return results;
       } else {
-        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, additionalRecieverVolume);
+        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, additionalRecieverVolume);
         let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
@@ -179,7 +179,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, additionalRecieverVolume?: number): CompressorsCalcInput {
+  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, additionalRecieverVolume?: number): CompressorsCalcInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
@@ -243,7 +243,7 @@ export class CompressedAirCalculationService {
 
 
       //TODO: Sort out correct pressure mapping 
-      atmosphericPsi: compressor.inletConditions.atmosphericPressure,
+      atmosphericPsi: atmosphericPressure,
 
       //design details inlet pressure
 
