@@ -394,25 +394,34 @@ export class CompressedAirAssessmentResultsService {
       let compressor: CompressorInventoryItem = inventoryItems.find(item => { return item.itemId == summary.compressorId });
       if (summary.dayTypeId == dayType.dayTypeId) {
         summary.profileSummaryData.forEach(summaryData => {
-          let computeFrom: 1 | 2 | 3;
-          let computeFromVal: number;
-          if (dayType.profileDataType == 'power') {
-            computeFrom = 2;
-            computeFromVal = summaryData.power;
-          } else if (dayType.profileDataType == 'percentCapacity') {
-            computeFrom = 1;
-            computeFromVal = summaryData.percentCapacity;
-          } else if (dayType.profileDataType == 'airflow') {
-            computeFrom = 3;
-            computeFromVal = summaryData.airflow;
+          if (summaryData.order != 0) {
+            let computeFrom: 1 | 2 | 3;
+            let computeFromVal: number;
+            if (dayType.profileDataType == 'power') {
+              computeFrom = 2;
+              computeFromVal = summaryData.power;
+            } else if (dayType.profileDataType == 'percentCapacity') {
+              computeFrom = 1;
+              computeFromVal = summaryData.percentCapacity;
+            } else if (dayType.profileDataType == 'airflow') {
+              computeFrom = 3;
+              computeFromVal = summaryData.airflow;
+            }
+            let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal, compressedAirAssessment.systemInformation.atmosphericPressure, 0, true);
+            summaryData.airflow = calcResult.capacityCalculated;
+            summaryData.power = calcResult.powerCalculated;
+            summaryData.percentCapacity = calcResult.percentageCapacity;
+            summaryData.percentPower = calcResult.percentagePower;
+            summaryData.percentSystemCapacity = (calcResult.capacityCalculated / totalFullLoadCapacity) * 100;
+            summaryData.percentSystemPower = (calcResult.powerCalculated / totalFullLoadPower) * 100;
+          }else{
+            summaryData.airflow = 0;
+            summaryData.power = 0;
+            summaryData.percentCapacity = 0;
+            summaryData.percentPower = 0;
+            summaryData.percentSystemCapacity = 0;
+            summaryData.percentSystemPower = 0;
           }
-          let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal, compressedAirAssessment.systemInformation.atmosphericPressure, 0, true);
-          summaryData.airflow = calcResult.capacityCalculated;
-          summaryData.power = calcResult.powerCalculated;
-          summaryData.percentCapacity = calcResult.percentageCapacity;
-          summaryData.percentPower = calcResult.percentagePower;
-          summaryData.percentSystemCapacity = (calcResult.capacityCalculated / totalFullLoadCapacity) * 100;
-          summaryData.percentSystemPower = (calcResult.powerCalculated / totalFullLoadPower) * 100
         });
         selectedDayTypeSummary.push(summary);
       }
@@ -482,7 +491,7 @@ export class CompressedAirAssessmentResultsService {
         isTurnedOn = intervalData.isCompressorOn;
         reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
       }
-      if ((data.summaryData.order != 0 && isTurnedOn) && Math.abs(neededAirFlow) > 0.01) {
+      if ((data.summaryData.order != 0 && isTurnedOn)) {
         let compressor: CompressorInventoryItem = adjustedCompressors.find(item => { return item.itemId == data.compressorId });
         if (reduceRuntime) {
           compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;

@@ -11,6 +11,7 @@ import { CompressedAirAssessmentService } from './compressed-air-assessment.serv
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { DayTypeService } from './day-types/day-type.service';
+import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
@@ -55,7 +56,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
     private dayTypeService: DayTypeService,
-    private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService) { }
+    private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.genericCompressorDbService.getAllCompressors();
@@ -128,6 +130,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
+    this.exploreOpportunitiesService.modificationResults.next(undefined);
+    this.exploreOpportunitiesService.selectedDayType.next(undefined);
   }
 
   ngAfterViewInit() {
