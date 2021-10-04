@@ -228,6 +228,16 @@ export class OpportunitySummaryService {
       treasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getTreasureHuntOpportunityResults(waterHeatingOpportunity, settings);
     
     }
+
+    if (!treasureHuntOpportunityResults) {
+      treasureHuntOpportunityResults = {
+        costSavings: undefined,
+        energySavings: undefined,
+        baselineCost: undefined,
+        modificationCost: undefined,
+        utilityType: '',
+      }; 
+    }
     
     return treasureHuntOpportunityResults;
   }

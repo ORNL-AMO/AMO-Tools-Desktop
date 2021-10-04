@@ -10,6 +10,7 @@ import { FanSetupService } from '../fan-setup/fan-setup.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
 import { FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -23,11 +24,13 @@ export class FsatTabsComponent implements OnInit {
   fsat: FSAT;
 
 
+  operationsTabStatus: Array<string> = [];
   settingsClassStatus: Array<string> = [];
   fanClassStatus: Array<string> = [];
   fluidClassStatus: Array<string> = [];
   motorClassStatus: Array<string> = [];
   fieldDataClassStatus: Array<string> = [];
+  operationsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   fluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -54,7 +57,8 @@ export class FsatTabsComponent implements OnInit {
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
     private modifyConditionsService: ModifyConditionsService,
-    private fsatWarningService: FsatWarningService) { }
+    private fsatWarningService: FsatWarningService,
+    private fanOperationsService: OperationsService) { }
 
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -63,6 +67,7 @@ export class FsatTabsComponent implements OnInit {
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
+      this.checkOperationsStatus(this.settings);
       this.checkFanStatus(this.settings);
       this.checkFluidStatus(this.settings);
       this.checkMotorStatus(this.settings);
@@ -80,6 +85,7 @@ export class FsatTabsComponent implements OnInit {
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.checkSettingsStatus();
+      this.checkOperationsStatus(this.settings);
       this.checkFanStatus(this.settings);
       this.checkFluidStatus(this.settings);
       this.checkMotorStatus(this.settings);
@@ -105,17 +111,20 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
+    let fanOperationsValid: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.fsatOperations);
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, this.settings);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     if (str === 'fan-motor') {
-      if (fluidValid && fanValid) {
+      if (fluidValid && fanValid && fanOperationsValid) {
         this.fsatService.stepTab.next(str);
       }
     } else if (str === 'fan-field-data') {
-      if (fluidValid && fanValid && motorValid) {
+      if (fluidValid && fanValid && motorValid && fanOperationsValid) {
         this.fsatService.stepTab.next(str);
       }
+    } else if (str == 'operations') {      
+      this.fsatService.stepTab.next(str);      
     } else {
       this.fsatService.stepTab.next(str);
     }
@@ -137,6 +146,19 @@ export class FsatTabsComponent implements OnInit {
       this.settingsClassStatus = ['success'];
     }
   }
+
+  checkOperationsStatus(settings: Settings) {
+    let operationsValid: boolean = this.fanOperationsService.isOperationsDataValid(this.fsat.fsatOperations);
+    if (!operationsValid) {
+      this.operationsTabStatus = ['missing-data'];
+    } else {
+      this.operationsTabStatus = ['success'];
+    }
+    if (this.stepTab === 'operations') {
+      this.operationsTabStatus.push('active');
+    }
+  }
+
 
   checkFluidStatus(settings: Settings) {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, settings);

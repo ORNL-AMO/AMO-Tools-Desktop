@@ -16,7 +16,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
-      this.modification = this.wasteWaterService.getModificationFromId();
+      if(val){
+        this.modification = this.wasteWaterService.getModificationFromId();
+      }       
     });
   }
 

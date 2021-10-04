@@ -49,6 +49,9 @@ a:not([href]):not([tabindex]){
 
 .calc-card-item{
     width: 300px;
+    height: 350px;
+    padding: 5px;
+    
 }
 
 .opp-sheet-icon-sm{

@@ -21,32 +21,6 @@
             </tr>
           </thead>
           <tbody>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
-                Operating Hours
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
-                {{fieldData.baseline.operatingHours}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.operatingHours, mod.operatingHours, 'operatingHoursDiff', 0)}">
-                {{mod.operatingHours}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-                Cost 
-                ($/kWh)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-                {{fieldData.baseline.cost | currency: 'USD': 'symbol' : '1.0-0'}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.cost, 'costDiff', 0)}">
-                {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
-              </td>
-            </tr>
-
             <tr>
               <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
                 Flow Rate

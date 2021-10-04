@@ -8,6 +8,7 @@ import { OpportunityCardData, OpportunityCardsService } from '../../treasure-hun
 import { TreasureHuntReportService } from '../../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
 import { OpportunityPaybackService } from '../../treasure-hunt/treasure-hunt-report/opportunity-payback.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-treasure-hunt-rollup',
@@ -25,13 +26,14 @@ export class TreasureHuntRollupComponent implements OnInit {
   settings: Settings;
   allTeamsData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   constructor(private treasureHuntReportRollupService: TreasureHuntReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService, private reportRollupService: ReportRollupService) { }
+    private opportunityPaybackService: OpportunityPaybackService, private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();
     let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.treasureHuntReportRollupService.allTreasureHuntResults.getValue();
     this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
-    this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries);
+    this.convertCurrencyForDisplay();
+    this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries, this.settings);
     let treasureHuntAssessments: Array<ReportItem> = this.treasureHuntReportRollupService.treasureHuntAssessments.getValue();
     this.setAllOpporutnityCardsData(treasureHuntAssessments);
   }
@@ -43,6 +45,58 @@ export class TreasureHuntRollupComponent implements OnInit {
       this.allOpportunityCardsData = this.allOpportunityCardsData.concat(assessmentOppCardData);
     });
     this.allTeamsData = this.treasureHuntReportService.getTeamData(this.allOpportunityCardsData);
+    if (this.settings.currency !== '$') {
+      this.allTeamsData.forEach(data => {
+       data.costSavings = this.convertUnitsService.value(data.costSavings).from('$').to(this.settings.currency);
+       data.implementationCost = this.convertUnitsService.value(data.implementationCost).from('$').to(this.settings.currency);
+      });
+    }
+  }
+
+  convertCurrencyForDisplay() {
+    if (this.settings.currency !== '$') {
+      this.combinedTreasureHuntResults.totalBaselineCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.totalBaselineCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.totalModificationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.totalModificationCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.totalAdditionalSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.totalAdditionalSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.totalSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.totalSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.totalImplementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.totalImplementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.water.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.water.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.water.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.water.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.water.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.water.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.water.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.water.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.electricity.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.electricity.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.electricity.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.electricity.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.electricity.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.electricity.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.electricity.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.electricity.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.other.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.other.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.other.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.other.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.other.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.other.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.other.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.other.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.steam.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.steam.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.steam.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.steam.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.steam.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.steam.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.steam.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.steam.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.wasteWater.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.wasteWater.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.wasteWater.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.wasteWater.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.wasteWater.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.wasteWater.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.wasteWater.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.wasteWater.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.compressedAir.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.compressedAir.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.compressedAir.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.compressedAir.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.compressedAir.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.compressedAir.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.compressedAir.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.compressedAir.implementationCost).from('$').to(this.settings.currency);
+      
+      this.combinedTreasureHuntResults.naturalGas.costSavings = this.convertUnitsService.value(this.combinedTreasureHuntResults.naturalGas.costSavings).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.naturalGas.baselineEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.naturalGas.baselineEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.naturalGas.modifiedEnergyCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.naturalGas.modifiedEnergyCost).from('$').to(this.settings.currency);
+      this.combinedTreasureHuntResults.naturalGas.implementationCost = this.convertUnitsService.value(this.combinedTreasureHuntResults.naturalGas.implementationCost).from('$').to(this.settings.currency); 
+
+    }
   }
 
   getCombinedTreasureHuntResults(resultsData: Array<TreasureHuntResultsData>): TreasureHuntResults {

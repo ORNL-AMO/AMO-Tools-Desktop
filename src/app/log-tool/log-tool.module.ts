@@ -42,6 +42,7 @@ import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/s
 import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
 import { LogToolDbService } from './log-tool-db.service';
 import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
+import { ExportModalComponent } from './export-modal/export-modal.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-men
     DayTypeSummaryTableComponent,
     SelectedDataTableComponent,
     BinDataComponent,
-    SelectAssessmentModalComponent
+    SelectAssessmentModalComponent,
+    ExportModalComponent
   ],
   imports: [
     CommonModule,

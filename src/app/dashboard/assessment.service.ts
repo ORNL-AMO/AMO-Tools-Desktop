@@ -169,7 +169,7 @@ export class AssessmentService {
   getNewFsat(): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        operatingHours: 8760,
+        
         flowRate: null,
         inletPressure: null,
         inletVelocityPressure: null,
@@ -177,9 +177,13 @@ export class AssessmentService {
         usingStaticPressure: true,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: null,
+       
         compressibilityFactor: 0.988,
         measuredVoltage: 460
+      },
+      fsatOperations: {
+        operatingHours: 8760,
+        cost: null,
       },
       fanMotor: {
         lineFrequency: 60,

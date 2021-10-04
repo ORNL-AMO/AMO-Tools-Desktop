@@ -114,20 +114,20 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'moistureInAirComposition'+idString}}">Moisture in Combustion Air</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareMassMoistureInAirComposition(), 'error': warnings.moistureInAirCompositionWarning !== null, 'invalid': flueGasLossForm.controls.moistureInAirComposition.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" 
-          min="0" max="100" class="form-control" formControlName="moistureInAirComposition" id="{{'moistureInAirComposition'+idString}}"
-          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" [ngModel] = "humidityRatio | number:'1.0-2' | removeCommas" (ngModelChange) = "humidityRatio=$event">
+      <label class="small" for="{{'moistureInAirCombustion'+idString}}">Moisture in Combustion Air</label>
+      <div class="input-group" [ngClass]="{'indicate-different': compareMassMoistureInAirCombustion(), 'error': warnings.moistureInAirCombustionWarning !== null, 'invalid': flueGasLossForm.controls.moistureInAirCombustion.invalid}">
+        <input [readonly]="!baselineSelected" name="{{'moistureInAirCombustion_'+lossIndex}}" type="number" step="any" 
+          min="0" max="100" class="form-control" formControlName="moistureInAirCombustion" id="{{'moistureInAirCombustion'+idString}}"
+          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirCombustion')">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small"
-      *ngIf="flueGasLossForm.controls.moistureInAirComposition.invalid && !flueGasLossForm.controls.moistureInAirComposition.pristine">
-      <span *ngIf="flueGasLossForm.controls.moistureInAirComposition.errors.required">Value Required</span>
-      <span *ngIf="flueGasLossForm.controls.moistureInAirComposition.errors.max">Value can't be greater than
-        {{flueGasLossForm.controls.moistureInAirComposition.errors.max.max}} %.</span>
-      <span *ngIf="flueGasLossForm.controls.moistureInAirComposition.errors.min">Value can't be less than
-        {{flueGasLossForm.controls.moistureInAirComposition.errors.min.min}} %.</span>
+      *ngIf="flueGasLossForm.controls.moistureInAirCombustion.invalid && !flueGasLossForm.controls.moistureInAirCombustion.pristine">
+      <span *ngIf="flueGasLossForm.controls.moistureInAirCombustion.errors.required">Value Required</span>
+      <span *ngIf="flueGasLossForm.controls.moistureInAirCombustion.errors.max">Value can't be greater than
+        {{flueGasLossForm.controls.moistureInAirCombustion.errors.max.max}} %.</span>
+      <span *ngIf="flueGasLossForm.controls.moistureInAirCombustion.errors.min">Value can't be less than
+        {{flueGasLossForm.controls.moistureInAirCombustion.errors.min.min}} %.</span>
     </span>
       <a id="moistureCalc" class="form-text small click-link" (click)="showMoistureModal()" [ngClass]="{'disabled-link': !baselineSelected}">Calculate</a>
     </div>

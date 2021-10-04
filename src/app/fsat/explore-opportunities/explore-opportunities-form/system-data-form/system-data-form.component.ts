@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
-import { FanFieldDataWarnings } from '../../../fsat-warning.service';
+import { FanFieldDataWarnings, FanOperationsWarnings } from '../../../fsat-warning.service';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 
@@ -22,6 +22,10 @@ export class SystemDataFormComponent implements OnInit {
     @Output('emitCalculate')
     emitCalculate = new EventEmitter<boolean>();
     @Input()
+    baselineOperationsForm: FormGroup;
+    @Input()
+    modificationOperationsForm: FormGroup;
+    @Input()
     baselineForm: FormGroup;
     @Input()
     modificationForm: FormGroup;
@@ -29,6 +33,10 @@ export class SystemDataFormComponent implements OnInit {
     modificationWarnings: FanFieldDataWarnings;
     @Input()
     baselineWarnings: FanFieldDataWarnings;
+    @Input()
+    modificationOperationsWarnings: FanOperationsWarnings;
+    @Input()
+    baselineOperationsWarnings: FanOperationsWarnings;
     @Output('showPressureModal')
     showPressureModal = new EventEmitter<string>();
     @Input()
@@ -83,7 +91,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initCost() {
-        if (this.baselineForm.controls.cost.value !== this.modificationForm.controls.cost.value) {
+        if (this.baselineOperationsForm.controls.cost.value !== this.modificationOperationsForm.controls.cost.value) {
             this.showCost = true;
         } else {
             this.showCost = false;
@@ -108,7 +116,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initOperatingHours() {
-        if (this.baselineForm.controls.operatingHours.value !== this.modificationForm.controls.operatingHours.value) {
+        if (this.baselineOperationsForm.controls.operatingHours.value !== this.modificationOperationsForm.controls.operatingHours.value) {
             this.showOperatingHours = true;
         } else {
             this.showOperatingHours = false;
@@ -134,7 +142,7 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleCost() {
         if (this.showCost === false) {
-            this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost.value);
+            this.modificationOperationsForm.controls.cost.patchValue(this.baselineOperationsForm.controls.cost.value);
             this.calculate();
         }
     }
@@ -149,7 +157,7 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleOperatingHours() {
         if (this.showOperatingHours === false) {
-            this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
+            this.modificationOperationsForm.controls.operatingHours.patchValue(this.baselineOperationsForm.controls.operatingHours.value);
             this.calculate();
         }
     }
@@ -188,7 +196,7 @@ export class SystemDataFormComponent implements OnInit {
 
     updateOperatingHours(oppHours: OperatingHours) {
         this.fsat.modifications[this.exploreModIndex].fsat.operatingHours = oppHours;
-        this.modificationForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+        this.modificationOperationsForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
         this.calculate();
         this.closeOperatingHoursModal();
     }

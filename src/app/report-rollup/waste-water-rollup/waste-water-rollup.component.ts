@@ -6,6 +6,8 @@ import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-t
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import * as _ from 'lodash';
 import { EffluentEnergyResults, NutrientRemovalResults } from '../report-rollup-models';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-waste-water-rollup',
@@ -15,6 +17,8 @@ import { EffluentEnergyResults, NutrientRemovalResults } from '../report-rollup-
 export class WasteWaterRollupComponent implements OnInit {
   @Input()
   printView: boolean;
+  @Input()
+  settings: Settings;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;
@@ -27,8 +31,8 @@ export class WasteWaterRollupComponent implements OnInit {
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   rollupEffluentEnergyTable: Array<EffluentEnergyResults>;
   rollupNutrientTable: Array<NutrientRemovalResults>;
-  // settings: Settings;
-  constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+  constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
     this.setTableData();
@@ -48,7 +52,7 @@ export class WasteWaterRollupComponent implements OnInit {
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
-      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.yAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$'? '$k' : '$'}/yr)`;
       this.tickFormat = '$.2s';
       this.barChartData = this.costBarChartData;
     }
@@ -60,7 +64,7 @@ export class WasteWaterRollupComponent implements OnInit {
   }
 
   getDataObject(dataOption: string): Array<BarChartDataItem> {
-    let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
+    let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$'? 'k': ''}`;
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> MWh';
@@ -100,8 +104,14 @@ export class WasteWaterRollupComponent implements OnInit {
     if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.AeCost - result.modificationResults.AeCost);
-        projectedCosts.push(result.modificationResults.AeCost);
+        let savings: number = result.baselineResults.AeCost - result.modificationResults.AeCost;
+        let modCost: number = result.modificationResults.AeCost;
+        if (this.settings.currency !== '$') {
+          savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+          modCost = this.convertUnitsService.value(modCost).from('$').to(this.settings.currency);  
+        }
+        costSavings.push(savings);
+        projectedCosts.push(modCost);
       })
     } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
@@ -124,15 +134,24 @@ export class WasteWaterRollupComponent implements OnInit {
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
     this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
+      let annualCost: number = result.baselineResults.AeCost;
+      let costSavings: number = result.baselineResults.AeCost - result.modificationResults.AeCost;
+      let total: number = totalCost;
+      if (this.settings.currency !== '$') {
+        annualCost = this.convertUnitsService.value(annualCost).from('$').to(this.settings.currency);
+        costSavings = this.convertUnitsService.value(costSavings).from('$').to(this.settings.currency);
+        total = this.convertUnitsService.value(total).from('$').to(this.settings.currency);
+      }
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.AeEnergyAnnual,
-        annualCost: result.baselineResults.AeCost,
+        annualCost: annualCost,
         energySavings: result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual,
-        costSavings: result.baselineResults.AeCost - result.modificationResults.AeCost,
-        percentCost: result.baselineResults.AeCost / totalCost * 100,
+        costSavings: costSavings,
+        percentCost: annualCost / total * 100,
         percentEnergy: result.baselineResults.AeEnergyAnnual / totalEnergyUse * 100,
-        color: graphColors[colorIndex]
+        color: graphColors[colorIndex],
+        currencyUnit: this.settings.currency
       });
       colorIndex++;
     });
@@ -141,15 +160,25 @@ export class WasteWaterRollupComponent implements OnInit {
   setTableData() {
     this.rollupSummaryTableData = new Array();
     this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(dataItem => {
+      let baselineCost: number = dataItem.baselineResults.AeCost;
+      let modificationCost: number = dataItem.modificationResults.AeCost;
+      let savings: number = dataItem.baselineResults.AeCost - dataItem.modificationResults.AeCost;
+      let currencyUnit = this.settings.currency;
+      if (this.settings.currency !== '$') {
+        modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
+        baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
+        savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+      }
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.AeEnergyAnnual,
-        modificationCost: dataItem.modificationResults.AeCost,
+        modificationCost: modificationCost,
         modificationEnergyUse: dataItem.baselineResults.AeEnergyAnnual,
-        baselineCost: dataItem.baselineResults.AeCost,
-        costSavings: dataItem.baselineResults.AeCost - dataItem.modificationResults.AeCost,
+        baselineCost: baselineCost,
+        costSavings:  savings,
         implementationCosts: 0,
+        currencyUnit: currencyUnit,
         payBackPeriod: this.getPayback(dataItem.modificationResults.AeCost, dataItem.baselineResults.AeCost, 0)
       })
     });

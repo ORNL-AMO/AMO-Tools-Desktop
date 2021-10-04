@@ -9,6 +9,7 @@ import { MotorDriveTypePipe } from './motor-drive-type.pipe';
 import { WasteWaterOptionsDisplayPipe } from './waste-water-options-display.pipe';
 import { RemoveCommasPipe } from './remove-commas.pipe';
 import { SortByPipe } from './sort-by.pipe';
+import { CurrencyThousandsPipe } from './currency-thousands.pipe';
 
 
 
@@ -22,7 +23,8 @@ import { SortByPipe } from './sort-by.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
-    SortByPipe
+    SortByPipe,
+    CurrencyThousandsPipe,
   ],
   imports: [
     CommonModule
@@ -36,7 +38,8 @@ import { SortByPipe } from './sort-by.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
-    SortByPipe
+    SortByPipe,
+    CurrencyThousandsPipe
   ]
 })
 export class SharedPipesModule { }

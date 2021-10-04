@@ -19,6 +19,8 @@ export class CalculateOutletPressureComponent implements OnInit {
   @Input()
   bodyHeight: number;
   currentField: string = 'inletLoss';
+  @Output('emitInvalid')
+  emitInvalid = new EventEmitter<boolean>();
   
   @Input()
   usingStaticPressure: boolean;
@@ -43,6 +45,11 @@ export class CalculateOutletPressureComponent implements OnInit {
         userDefinedVelocityPressure: undefined,
         fanOutletArea: undefined
       };
+    }
+    if(this.outletPressureData.calculatedOutletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
     }
   }
 
@@ -73,6 +80,11 @@ export class CalculateOutletPressureComponent implements OnInit {
       }
     });
     this.outletPressureData.calculatedOutletPressure = sum;
+    if(this.outletPressureData.calculatedOutletPressure){
+      this.emitInvalid.emit(false);
+    } else{
+      this.emitInvalid.emit(true);
+    }
     this.emitSave.emit(this.outletPressureData);
   }
 

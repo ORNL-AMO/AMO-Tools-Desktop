@@ -9,7 +9,6 @@ export interface PrintOptions {
     printResults: boolean;
     printInputData: boolean;
     printExecutiveSummary: boolean;
-    printEnergyUsed: boolean;
     printEnergySummary: boolean;
     printLossesSummary: boolean;
     printReportOpportunityPayback: boolean;
@@ -17,5 +16,6 @@ export interface PrintOptions {
     printSsmtRollup: boolean;
     printWasteWaterRollup: boolean;
     printDetailedResults: boolean;
+    printReportDiagram: boolean;
     selectAll: boolean;
   }

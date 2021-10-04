@@ -114,7 +114,7 @@ export class VisualizeMenuService {
 
 
   setXAxisDataOption(selectedGraphObj: GraphObj) {
-    selectedGraphObj.layout.annotations = [];
+    // selectedGraphObj.layout.annotations = [];
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);
