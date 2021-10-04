@@ -51,13 +51,13 @@
                 <span *ngIf="form.controls.atmosphericPressure.errors.required">Value Required</span>
                 <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
                     {{form.controls.atmosphericPressure.errors.min.min}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
                 </span>
                 <span *ngIf="form.controls.atmosphericPressure.errors.max">Value can't be greater than
                     {{form.controls.atmosphericPressure.errors.max.max}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
                 </span>
             </span>
         </div>

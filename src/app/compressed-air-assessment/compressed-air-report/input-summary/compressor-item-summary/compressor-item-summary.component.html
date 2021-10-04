@@ -168,17 +168,6 @@
 
                             </th>
                         </tr>
-                        <!-- atmosphericPressure -->
-                        <tr>
-                            <td>
-                                Atmospheric Pressure
-                            </td>
-                            <td *ngFor="let compressor of compressorInventoryItems">
-                                {{compressor.inletConditions.atmosphericPressure}}
-                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
-                            </td>
-                        </tr>
                         <!-- temperature -->
                         <tr>
                             <td>
