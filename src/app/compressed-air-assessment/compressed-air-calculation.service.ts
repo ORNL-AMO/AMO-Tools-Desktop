@@ -98,44 +98,67 @@ export class CompressedAirCalculationService {
 
   compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
     let isShutdown: boolean = false;
-    if (canShutdown && compressor.compressorControls.automaticShutdown == true && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
-      isShutdown = true;
+    let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
+    if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
+      if (hasShutdownTimer) {
+        isShutdown = true;
+      }
     }
     //TODO: conversions
     let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
     if (isValid && !isShutdown) {
+      let results: CompressorCalcResult;
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
-        let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        results = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        return results;
+        if (results.capacityCalculated < 0) {
+          results.capacityCalculated = 0;
+          results.percentageCapacity = 0;
+        }
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, additionalRecieverVolume);
-        let results: CompressorCalcResult = compressorAddon.CompressorsCalc(inputData);
+        results = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        return results;
+        if (results.capacityCalculated < 0) {
+          results.capacityCalculated = 0;
+          results.percentageCapacity = 0;
+        }
       }
+      if (canShutdown && (computeFrom == 1 || computeFrom == 3) && results.capacityCalculated == 0) {
+        if (hasShutdownTimer) {
+          console.log('SHUTDOWN');
+          return this.getEmptyCalcResults();
+        }
+      }
+
+      return results;
     } else {
-      return {
-        powerCalculated: 0,
-        capacityCalculated: 0,
-        percentagePower: 0,
-        percentageCapacity: 0,
-        //Load/Unload, Modulation w/o unload, Start/stop
-        reRatedFlow: 0,
-        reRatedPower: 0,
-        reRatedFlowMax: 0,
-        reRatedPowerMax: 0,
-        //centrifugal
-        capacityAtFullLoadAdjusted: 0,
-        capacityAtMaxFullFlowAdjusted: 0,
-        percentageBlowOff: 0,
-        surgeFlow: 0
-      }
+      return this.getEmptyCalcResults();
     }
   }
+
+  getEmptyCalcResults(): CompressorCalcResult {
+    return {
+      powerCalculated: 0,
+      capacityCalculated: 0,
+      percentagePower: 0,
+      percentageCapacity: 0,
+      //Load/Unload, Modulation w/o unload, Start/stop
+      reRatedFlow: 0,
+      reRatedPower: 0,
+      reRatedFlowMax: 0,
+      reRatedPowerMax: 0,
+      //centrifugal
+      capacityAtFullLoadAdjusted: 0,
+      capacityAtMaxFullFlowAdjusted: 0,
+      percentageBlowOff: 0,
+      surgeFlow: 0
+    }
+  }
+
   getCentrifugalInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
