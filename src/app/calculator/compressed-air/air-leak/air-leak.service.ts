@@ -80,9 +80,17 @@ export class AirLeakService {
     this.generateExample.next(false);
   }
 
-  deleteLeak(index: number) {
-    this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
-    this.airLeakOutput.value.leakResults.splice(index, 1);
+  deleteLeak(index: number, settings?: Settings) {
+    if(this.airLeakInput.value.compressedAirLeakSurveyInputVec.length == 1 && index == 0){
+      this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
+      this.airLeakOutput.value.leakResults.splice(index, 1);
+      this.initDefaultEmptyInputs(settings);
+      this.currentLeakIndex.next(0);
+      this.resetData.next(true);
+    }else {
+      this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
+      this.airLeakOutput.value.leakResults.splice(index, 1);
+    }
   }
 
   copyLeak(index: number) {
