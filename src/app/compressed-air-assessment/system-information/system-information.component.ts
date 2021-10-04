@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -22,7 +23,8 @@ export class SystemInformationComponent implements OnInit {
   form: FormGroup;
   settingsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private systemInformationFormService: SystemInformationFormService, private systemProfileService: SystemProfileService) { }
+    private systemInformationFormService: SystemInformationFormService, private systemProfileService: SystemProfileService,
+    private altitudeCorrectionService: AltitudeCorrectionService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -79,5 +81,17 @@ export class SystemInformationComponent implements OnInit {
       });
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+  }
+
+
+  toggleAtmosphericPressureKnown(){
+    this.form.controls.atmosphericPressureKnown.patchValue(!this.form.controls.atmosphericPressureKnown.value);
+    this.save();
+  }
+
+  setAtmosphericPressure(){
+    let atmosphericPressure: number = this.altitudeCorrectionService.calculatePressureGivenAltitude(this.form.controls.systemElevation.value, this.settings);
+    this.form.controls.atmosphericPressure.patchValue(atmosphericPressure);
+    this.save();
   }
 }

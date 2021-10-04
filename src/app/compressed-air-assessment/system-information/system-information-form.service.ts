@@ -9,11 +9,13 @@ export class SystemInformationFormService {
 
   getFormFromObj(obj: SystemInformation): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      systemElevation: [obj.systemElevation, [Validators.required, Validators.min(0), Validators.max(29000)]],
+      systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
       totalAirStorage: [obj.totalAirStorage, [Validators.required, Validators.min(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
       targetPressure: [obj.targetPressure],
-      variance: [obj.variance]
+      variance: [obj.variance],
+      atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0)]],
+      atmosphericPressureKnown: [obj.atmosphericPressureKnown]
 
     });
 
@@ -44,7 +46,9 @@ export class SystemInformationFormService {
       totalAirStorage: form.controls.totalAirStorage.value,
       isSequencerUsed: form.controls.isSequencerUsed.value,
       targetPressure: form.controls.targetPressure.value,
-      variance: form.controls.variance.value
+      variance: form.controls.variance.value,
+      atmosphericPressure: form.controls.atmosphericPressure.value,
+      atmosphericPressureKnown: form.controls.atmosphericPressureKnown.value
     }
   }
 }

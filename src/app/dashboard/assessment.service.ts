@@ -354,7 +354,9 @@ export class AssessmentService {
         totalAirStorage: undefined,
         isSequencerUsed: false,
         targetPressure: undefined,
-        variance: undefined
+        variance: undefined,
+        atmosphericPressure: 14.7,
+        atmosphericPressureKnown: true
       },
       compressorInventoryItems: new Array(),
       systemProfile: {

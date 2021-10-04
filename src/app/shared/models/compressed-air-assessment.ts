@@ -129,6 +129,8 @@ export interface CASystemBasics {
 
 export interface SystemInformation {
     systemElevation: number,
+    atmosphericPressure: number,
+    atmosphericPressureKnown: boolean,
     totalAirStorage: number,
     isSequencerUsed: boolean,
     targetPressure: number,

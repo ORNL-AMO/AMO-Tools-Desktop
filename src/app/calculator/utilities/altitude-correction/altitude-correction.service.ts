@@ -54,6 +54,11 @@ export class AltitudeCorrectionService {
 
   calculateBarometricPressure(settings: Settings) {
     let altitude: number = this.altitudeCorrectionInputs.getValue();
+    let barometricPressure: number = this.calculatePressureGivenAltitude(altitude, settings);
+    this.altitudeCorrectionOutputs.next(barometricPressure);
+  }
+
+  calculatePressureGivenAltitude(altitude: number, settings: Settings): number{
     if (settings.unitsOfMeasure != 'Metric') {
       altitude = this.convertUnitsService.value(altitude).from('ft').to('m');
     }
@@ -63,7 +68,7 @@ export class AltitudeCorrectionService {
     if (settings.unitsOfMeasure != 'Metric') {
       barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('psia');
     }
-    this.altitudeCorrectionOutputs.next(barometricPressure);
+    return barometricPressure;
   }
 
 }
