@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../pump-fluid/pump-fluid.service';
 import { MotorService } from '../motor/motor.service';
 import { FieldDataService } from '../field-data/field-data.service';
+//and Pump Operations Service 
 @Component({
   selector: 'app-psat-tabs',
   templateUrl: './psat-tabs.component.html',
@@ -21,10 +22,12 @@ export class PsatTabsComponent implements OnInit {
   @Input()
   psat: PSAT;
 
+  operationsTabStatus: Array<string> = [];
   settingsClassStatus: Array<string> = [];
   pumpFluidClassStatus: Array<string> = [];
   motorClassStatus: Array<string> = [];
   fieldDataClassStatus: Array<string> = [];
+  operationsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   pumpFluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
@@ -41,6 +44,7 @@ export class PsatTabsComponent implements OnInit {
   getResultsSub: Subscription;
   stepTabSub: Subscription;
 
+  //add pumpOperationsService
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService) { }
 
@@ -61,6 +65,7 @@ export class PsatTabsComponent implements OnInit {
 
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       this.checkSettingsStatus();
+      //add checkOperationsStatus()
       this.checkPumpFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
@@ -68,6 +73,7 @@ export class PsatTabsComponent implements OnInit {
     this.stepTabSub = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
+      //add checkOperationsStatus()
       this.checkPumpFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
@@ -108,7 +114,10 @@ export class PsatTabsComponent implements OnInit {
     return tmpForm.invalid;
   }
 
+  //TODO: add checkOperationsInvalid()
+
   changeSubTab(str: string) {
+    //TODO add if for operations 
     if (str == 'motor') {
       let tmpBool = this.checkPumpFluidInvalid();
       if (!tmpBool == true) {
@@ -132,7 +141,10 @@ export class PsatTabsComponent implements OnInit {
     }
   }
 
+  //TODO add checkOperationsStatus()
+
   checkPumpFluidStatus() {
+    //and check for operations
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
     let pumpFluidWarnings: PumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(pumpFluidWarnings);
@@ -149,6 +161,7 @@ export class PsatTabsComponent implements OnInit {
   }
 
   checkMotorStatus() {
+    //add check for operations
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
     let motorInvalid: boolean = this.checkMotorInvalid();
     let isMod: boolean;
@@ -175,6 +188,7 @@ export class PsatTabsComponent implements OnInit {
   }
 
   checkFieldDataSatus() {
+    //add check for operations
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
     let motorInvalid: boolean = this.checkMotorInvalid();
     let fieldDataInvalid: boolean = this.checkFieldDataInvalid();

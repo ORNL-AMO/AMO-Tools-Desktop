@@ -14,7 +14,8 @@ export class PsatTabService {
     'system-basics',
     'pump-fluid',
     'motor',
-    'field-data'
+    'field-data',
+    'operations'
   ];
 
   constructor() {

@@ -4,21 +4,27 @@
       <a (click)="changeSubTab('system-basics')">
         <span class="step-number">1</span> Assessment Settings</a>
     </div>
+    <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
+      <a (click)="changeSubTab('operations')">
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operations)" class="step-number">2</span>
+        Operations</a>
+      <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
+    </div>
     <div class="fixed-tab-size" [ngClass]="pumpFluidClassStatus">
       <a (click)="changeSubTab('pump-fluid')">
-        <span (mouseenter)="showTooltip(pumpFluidBadge)" (mouseleave)="hideTooltip(pumpFluidBadge)" class="step-number">2</span>
+        <span (mouseenter)="showTooltip(pumpFluidBadge)" (mouseleave)="hideTooltip(pumpFluidBadge)" class="step-number">3</span>
         Pump &amp; Fluid</a>
       <app-tabs-tooltip [badgeClass]="pumpFluidClassStatus[0]" [reveal]="pumpFluidBadge.display" [display]="pumpFluidBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="motorClassStatus">
       <a (click)="changeSubTab('motor')">
-        <span (mouseenter)="showTooltip(motorBadge)" (mouseleave)="hideTooltip(motorBadge)" class="step-number">3</span>
+        <span (mouseenter)="showTooltip(motorBadge)" (mouseleave)="hideTooltip(motorBadge)" class="step-number">4</span>
         Motor</a>
       <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="fieldDataClassStatus">
       <a (click)="changeSubTab('field-data')">
-        <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">4</span>
+        <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">5</span>
         Field Data</a>
       <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display" [display]="fieldDataBadge.hover"></app-tabs-tooltip>
     </div>

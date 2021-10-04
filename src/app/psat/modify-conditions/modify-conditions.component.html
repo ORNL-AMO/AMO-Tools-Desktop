@@ -9,6 +9,7 @@
       </div>
       <div class="psat-losses-container">
         <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
+        <app-pump-operations></app-pump-operations>
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
           [settings]="settings" [baseline]="true"></app-pump-fluid>
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()"
@@ -30,6 +31,7 @@
 
       <!-- Forms -->
       <div class="psat-losses-container">
+        <app-pump-operations></app-pump-operations>
         <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected"
           [baseline]="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false"
           [(psat)]="psat.modifications[modificationIndex].psat" (saved)="save()" [settings]="settings"
