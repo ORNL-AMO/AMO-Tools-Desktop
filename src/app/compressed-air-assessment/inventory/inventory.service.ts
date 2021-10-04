@@ -47,7 +47,6 @@ export class InventoryService {
         unloadSumpPressure: 15
       },
       inletConditions: {
-        atmosphericPressure: 14.7,
         temperature: undefined
       },
       designDetails: {
@@ -412,9 +411,7 @@ export class InventoryService {
   }
 
   getInletConditionsFormFromObj(inletConditions: InletConditions): FormGroup {
-    //todo validators
     let form: FormGroup = this.formBuilder.group({
-      atmosphericPressure: [inletConditions.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(16)]],
       temperature: [inletConditions.temperature, [Validators.required, Validators.min(0), Validators.max(1000)]],
     });
     this.markFormDirtyToDisplayValidation(form);
@@ -423,7 +420,6 @@ export class InventoryService {
 
   getInletConditionsObjFromForm(form: FormGroup): InletConditions {
     return {
-      atmosphericPressure: form.controls.atmosphericPressure.value,
       temperature: form.controls.temperature.value
     }
   }

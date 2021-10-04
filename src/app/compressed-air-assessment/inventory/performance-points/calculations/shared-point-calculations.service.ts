@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
+import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Injectable()
 export class SharedPointCalculationsService {
 
-  constructor() { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
-  calculateAirFlow(capacity: number, pointPressure: number, potentialPressure: number, atmosphericPressure: number): number {
+  calculateAirFlow(capacity: number, pointPressure: number, potentialPressure: number): number {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let atmosphericPressure: number = compressedAirAssessment.systemInformation.atmosphericPressure;
     let maxFullFlowAirFlow: number = (0.000258 * Math.pow(atmosphericPressure, 3) - 0.0116 * Math.pow(atmosphericPressure, 2) + .176 * atmosphericPressure + 0.09992) * capacity * (1 - 0.00075 * (pointPressure - potentialPressure));
     return Number(maxFullFlowAirFlow.toFixed(0));
   }
 
-  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number, atmosphericPressure: number): number {
+  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number): number {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let atmosphericPressure: number = compressedAirAssessment.systemInformation.atmosphericPressure;
     let polytropicExponent: number = (1.4 - 1) / 1.4;
     let p1: number;
     let p2: number;

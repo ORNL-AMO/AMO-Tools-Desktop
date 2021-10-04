@@ -21,6 +21,17 @@
                                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>
                             </td>
                         </tr>
+                        <!-- atmosphericPressure -->
+                        <tr>
+                            <td>
+                                Atmospheric Pressure
+                            </td>
+                            <td>
+                                {{systemInformation.atmosphericPressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 Total Air Storage

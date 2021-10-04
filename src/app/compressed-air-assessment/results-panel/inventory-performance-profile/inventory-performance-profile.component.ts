@@ -52,6 +52,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     if (!this.inAssessment) {
       this.dataSub = this.inventoryService.selectedCompressor.subscribe(val => {
         this.selectedCompressor = val;
+        this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
         this.drawChart();
       });
     } else {
@@ -183,7 +184,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   drawChart() {
     let unloadingLines = [];
-    if (this.performanceProfileChart && (this.selectedCompressor || this.compressedAirAssessment)) {
+    if (this.performanceProfileChart && this.selectedCompressor && this.compressedAirAssessment) {
       let chartData: Array<ProfileChartData>;
       if (!this.inAssessment) {
         chartData = this.getInventoryChartData();
@@ -371,7 +372,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   getCompressorData(compressor: CompressorInventoryItem): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
     for (let airFlow = 0; airFlow <= 100;) {
-      let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, 0, false);
+      let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, 0, false);
       compressorData.push(results);
       if (airFlow < 95) {
         airFlow = airFlow + 1;

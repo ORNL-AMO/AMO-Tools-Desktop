@@ -22,8 +22,8 @@
                     {{barometricPressure | number:'1.2-2'}}
                 </span>
                 <span class="mr-2" *ngIf="!barometricPressure">&mdash; &mdash;</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kpaa</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
             </div>
         </div>
     </div>
