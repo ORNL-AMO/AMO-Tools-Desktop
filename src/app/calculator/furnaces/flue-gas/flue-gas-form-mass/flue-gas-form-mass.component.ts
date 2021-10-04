@@ -129,7 +129,7 @@ export class FlueGasFormMassComponent implements OnInit {
       o2: this.byMassForm.controls.o2.value,
       moisture: this.byMassForm.controls.moisture.value,
       nitrogen: this.byMassForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.byMassForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.byMassForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.byMassForm.controls.o2InFlueGas.value,
       excessAir: this.byMassForm.controls.excessAirPercentage.value
     };

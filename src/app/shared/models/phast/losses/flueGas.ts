@@ -19,7 +19,7 @@ export interface FlueGasByMass {
     combustionAirTemperature?: number;
     fuelTemperature?: number;
     ashDischargeTemperature?: number;
-    moistureInAirComposition?: number;
+    moistureInAirCombustion?: number;
     unburnedCarbonInAsh?: number;
     carbon?: number;
     hydrogen?: number;
@@ -104,7 +104,7 @@ export interface FlueGasResult {
   
 
   export interface FlueGasWarnings {
-    moistureInAirCompositionWarning?: string;
+    moistureInAirCombustionWarning?: string;
     unburnedCarbonInAshWarning?: string;
     combustionAirTempWarning?: string;
     excessAirWarning?: string;

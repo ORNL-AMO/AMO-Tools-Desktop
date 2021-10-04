@@ -58,7 +58,7 @@ export class FlueGasFormService {
       'o2InFlueGas': ['', Validators.required],
       'combustionAirTemperature': ['', [Validators.required]],
       'fuelTemperature': ['', Validators.required],
-      'moistureInAirComposition': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': ['', Validators.required],
       'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': ['', Validators.required],
@@ -119,7 +119,7 @@ export class FlueGasFormService {
       'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, Validators.required],
       'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, [Validators.required, Validators.min(0)]],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature, Validators.required],
-      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [loss.flueGasByMass.moistureInAirCombustion, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': [loss.flueGasByMass.ashDischargeTemperature, Validators.required],
       'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': [loss.flueGasByMass.carbon, Validators.required],
@@ -184,7 +184,7 @@ export class FlueGasFormService {
         combustionAirTemperature: form.controls.combustionAirTemperature.value,
         fuelTemperature: form.controls.fuelTemperature.value,
         ashDischargeTemperature: form.controls.ashDischargeTemperature.value,
-        moistureInAirComposition: form.controls.moistureInAirComposition.value,
+        moistureInAirCombustion: form.controls.moistureInAirCombustion.value,
         unburnedCarbonInAsh: form.controls.unburnedCarbonInAsh.value,
         carbon: form.controls.carbon.value,
         hydrogen: form.controls.hydrogen.value,
@@ -247,7 +247,7 @@ export class FlueGasFormService {
 
   checkFlueGasByMassWarnings(flueGas: FlueGasByMass, settings: Settings): FlueGasWarnings {
     return {
-      moistureInAirCompositionWarning: this.checkMoistureInAir(flueGas),
+      moistureInAirCombustionWarning: this.checkMoistureInAir(flueGas),
       unburnedCarbonInAshWarning: this.checkUnburnedCarbon(flueGas),
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
@@ -306,9 +306,9 @@ export class FlueGasFormService {
   }
 
    checkMoistureInAir(flueGas: FlueGasByMass): string {
-    if (flueGas.moistureInAirComposition < 0) {
+    if (flueGas.moistureInAirCombustion < 0) {
       return 'Moisture in Combustion Air must be equal or greater than 0%';
-    } else if (flueGas.moistureInAirComposition > 100) {
+    } else if (flueGas.moistureInAirCombustion > 100) {
       return 'Moisture in Combustion Air must be less than or equal to 100%';
     } else {
       return null;

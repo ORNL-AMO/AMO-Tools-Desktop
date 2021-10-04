@@ -2,45 +2,35 @@
     <h5>
       Flue Gas Help
       <br>
-      <small class="text-muted">
-        This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system such as boiler or furnace. 
-        Heat is lost by radiation and convection from an outside surface of a boiler or a furnace.  
-        Heat loss depends primarily on the wall surface temperature but it is also affected by wall surface emissivity, orientation of the surface, 
-        wind velocity over the surface etc. Outside wall temperature depends on the type and thickness of insulation used for the walls.  
-        Improvements in the insulation and changes in other conditions such as protection from the wind could result 
-        in reduction of wall outside temperature and correspondingly reduction in heat loss from the heating system.  
-        Actual energy savings or reduction in fuel heat input due to reduction in wall loss depends on combustion efficiency or available heat of the heating system.  
-      </small>
-    </h5>
-    <label class="p-1" (click)="toggleSuggestions()">
-      <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
-      <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
-      <span class="h6 pl-1">
-        Savings Suggestions
-      </span>
-    </label>
-    <div class="my-2" *ngIf="displaySuggestions">
-        <h6>
-          <small class="text-muted">
-            <ul>
-  
-              <li>Maintain appropriate level of oxygen in flue gases by controlling air-fuel ratio for the burners</li>
-              <li> Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide and hydrogen in flue gases</li>
+      <div class="my-1">
+      
+        <label class="p-1">
+          <span class="h6 pl-1">
+            Savings Suggestions
+          </span>
+        </label>
+        <small class="text-muted">
+          <ul>
+      
+            <li>Maintain appropriate level of oxygen in flue gases by controlling air-fuel ratio for the burners</li>
+            <li> Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon
+              monoxide and hydrogen in flue gases</li>
             <li> Eliminate or reduce air leakage in the furnace. See "Opening Losses" section </li>
-            <li> Consider use of heat recovery from flue gases. 
+            <li> Consider use of heat recovery from flue gases.
               Consider use of various methods of heat recovery to reduce flue gas temperature leaving the heating system </li>
             <li> Use preheated combustion air through use of recuperators or regenerators </li>
             <li> Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of flue gases </li>
-            <li> Review process temperature settings and lower it where possible during part-load operations. This can reduce flue gas temperature leaving the heating system</li>
+            <li> Review process temperature settings and lower it where possible during part-load operations. This can reduce
+              flue gas temperature leaving the heating system</li>
           </ul>
-            <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
-            operating conditions.
-            There may additional measures when considering specific situations and the user is encouraged to review and
-            apply
-            the appropriate measures
-          </small>
-        </h6>
+          <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+          operating conditions.
+          There may additional measures when considering specific situations and the user is encouraged to review and
+          apply
+          the appropriate measures
+        </small>
       </div>
+      </h5>
     <hr class="my-1 hr-spacer">
   
     <div class="my-2" *ngIf="currentField == 'operationHours'">
@@ -257,7 +247,7 @@
   
   
     <!--Solid/Liquid-->
-    <div class="my-2" *ngIf="currentField == 'moistureInAirComposition'">
+    <div class="my-2" *ngIf="currentField == 'moistureInAirCombustion'">
       <h6>
         Moisture in Air
         <br>
