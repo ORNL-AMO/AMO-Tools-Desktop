@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
@@ -31,12 +32,17 @@ export class ReportSummaryComponent implements OnInit {
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssessmentsSub: Subscription;
   wasteWaterAssessmentsSub: Subscription;
+  settings: Settings;
+  settingsSub: Subscription;
   constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService,
     private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit() {
+    this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
+      this.settings = settings;
+    });
     this.psatAssessmentsSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
       this.showPsatSummary = val.length != 0;
     });
@@ -64,11 +70,13 @@ export class ReportSummaryComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.settingsSub.unsubscribe();
     this.psatAssessmentsSub.unsubscribe();
     this.phastAssessmentsSub.unsubscribe();
     this.fsatAssessmentsSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
     this.treasureHuntAssessmentsSub.unsubscribe();
+    this.wasteWaterAssessmentsSub.unsubscribe();
     this.wasteWaterAssessmentsSub.unsubscribe();
   }
 

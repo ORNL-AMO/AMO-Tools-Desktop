@@ -64,7 +64,7 @@
 
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
-                <a>Energy Used</a>
+                <a>Energy Summary</a>
             </li>
             <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
                 <a>Executive Summary</a>
@@ -105,7 +105,7 @@
         </div>
 
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
-            *ngIf="currentTab == 'energy-used' || (printOptions.printEnergyUsed && showPrintView)">
+            *ngIf="currentTab == 'energy-used' || (printOptions.printEnergySummary && showPrintView)">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-break-before print-height"

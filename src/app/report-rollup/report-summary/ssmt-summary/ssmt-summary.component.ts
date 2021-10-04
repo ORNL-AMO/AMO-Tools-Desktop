@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SsmtResultsData } from '../../report-rollup-models';
 import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';

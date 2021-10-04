@@ -12,6 +12,8 @@ export class RollupSummaryTableComponent implements OnInit {
   equipmentType: string;
   @Input()
   energyUnit: string;
+  
+  currencyUnit: string;
 
 
   totalBaselineEnergyUse: number = 0;
@@ -24,6 +26,7 @@ export class RollupSummaryTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.currencyUnit = this.tableData[0].currencyUnit;
     this.tableData.forEach(dataItem => {
       this.totalBaselineEnergyUse += dataItem.baselineEnergyUse;
       this.totalBaselineCost += dataItem.baselineCost;
@@ -54,5 +57,6 @@ export interface RollupSummaryTableData {
   modificationCost: number,
   costSavings: number,
   implementationCosts: number,
-  payBackPeriod: number
+  payBackPeriod: number,
+  currencyUnit?: string
 }

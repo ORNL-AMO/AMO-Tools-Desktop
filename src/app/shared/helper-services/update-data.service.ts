@@ -8,6 +8,7 @@ import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
+import { PHAST } from '../models/phast/phast';
 declare const packageJson;
 
 @Injectable()
@@ -50,7 +51,7 @@ export class UpdateDataService {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
 
-        if(assessment.psat.modifications){
+        if (assessment.psat.modifications) {
             assessment.psat.modifications.forEach(mod => {
                 mod.psat = this.addWhatIfScenarioPsat(mod.psat);
             })
@@ -60,7 +61,7 @@ export class UpdateDataService {
     }
 
     addWhatIfScenarioPsat(psat: PSAT): PSAT {
-        if(!psat.inputs.whatIfScenario) {
+        if (!psat.inputs.whatIfScenario) {
             psat.inputs.whatIfScenario = true;
         }
         return psat;
@@ -75,25 +76,47 @@ export class UpdateDataService {
         }
 
         assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
-        if(assessment.fsat.modifications){
+        if (!assessment.fsat.fsatOperations) {
+            assessment.fsat = this.addFsatOperations(assessment.fsat);
+        }
+        if (assessment.fsat.modifications) {
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
                 mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
+                mod.fsat = this.addFsatOperations(mod.fsat);
             });
         }
         return assessment;
     }
 
     addWhatIfScenarioFsat(fsat: FSAT): FSAT {
-        if(!fsat.whatIfScenario) {
+        if (!fsat.whatIfScenario) {
             fsat.whatIfScenario = true;
         }
         return fsat;
     }
 
+    addFsatOperations(fsat: FSAT): FSAT {
+        if (!fsat.fsatOperations) {
+            let operatingHours: number = 8760;
+            let cost: number = .06;
+            if (fsat.fieldData['operatingHours']) {
+                operatingHours = fsat.fieldData['operatingHours'];
+            }
+            if (fsat.fieldData['cost']) {
+                cost = fsat.fieldData['cost'];
+            }
+            fsat.fsatOperations = {
+                operatingHours: operatingHours,
+                cost: cost
+            }
+        }
+        return fsat;
+    }
+
     updateSpecificHeatRatio(fsat: FSAT): FSAT {
-        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
-            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        if (fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio'];
         }
         return fsat;
     }
@@ -117,8 +140,27 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
+
+        assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateMoistureInAirCombustion(assessment.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
+    }
+
+    updateMoistureInAirCombustion(phast: PHAST): PHAST {
+        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+            phast.losses.flueGasLosses.forEach(fg => {
+                if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
+                    fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
@@ -244,7 +286,7 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.airLeak;
                 });
             }
-            
+
         }
         return assessment;
     }

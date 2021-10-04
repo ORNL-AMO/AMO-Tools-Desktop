@@ -8,6 +8,7 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-psat-rollup',
@@ -34,7 +35,9 @@ export class PsatRollupComponent implements OnInit {
 
   rollupEnergyUnit: string = 'MWh';
 
-  constructor(private psatReportRollupService: PsatReportRollupService, private reportRollupSettings: ReportRollupService) { }
+  constructor(private psatReportRollupService: PsatReportRollupService, 
+    private convertUnitsService: ConvertUnitsService,
+    private reportRollupSettings: ReportRollupService) { }
 
 
 
@@ -57,7 +60,7 @@ export class PsatRollupComponent implements OnInit {
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
-      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.yAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$'? '$k' : '$'}/yr)`;
       this.tickFormat = '$.2s';
       this.barChartData = this.costBarChartData;
     }
@@ -69,7 +72,7 @@ export class PsatRollupComponent implements OnInit {
   }
 
   getDataObject(dataOption: string): Array<BarChartDataItem> {
-    let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
+    let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$'? 'k': ''}`;
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
@@ -110,8 +113,15 @@ export class PsatRollupComponent implements OnInit {
     if (dataOption == 'cost' || dataOption == 'costSavings') {
       this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.annual_cost - result.modificationResults.annual_cost);
-        projectedCosts.push(result.modificationResults.annual_cost);
+        let savings: number = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
+        let modCost: number = result.modificationResults.annual_cost;
+        if (this.settings.currency !== '$') {
+          savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+          modCost = this.convertUnitsService.value(modCost).from('$').to(this.settings.currency);
+          
+        }
+        costSavings.push(savings);
+        projectedCosts.push(modCost);
       })
     } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.psatReportRollupService.selectedPsatResults.forEach(result => {
@@ -134,15 +144,25 @@ export class PsatRollupComponent implements OnInit {
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
     this.psatReportRollupService.selectedPsatResults.forEach(result => {
+      let annualCost: number = result.baselineResults.annual_cost;
+      let costSavings: number = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
+      let total: number = totalCost;
+      if (this.settings.currency !== '$') {
+        annualCost = this.convertUnitsService.value(annualCost).from('$').to(this.settings.currency);
+        costSavings = this.convertUnitsService.value(costSavings).from('$').to(this.settings.currency);
+        total = this.convertUnitsService.value(total).from('$').to(this.settings.currency);
+      }
+
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.annual_energy,
-        annualCost: result.baselineResults.annual_cost,
+        annualCost: annualCost,
         energySavings: result.baselineResults.annual_energy - result.modificationResults.annual_energy,
-        costSavings: result.baselineResults.annual_cost - result.modificationResults.annual_cost,
-        percentCost: result.baselineResults.annual_cost / totalCost * 100,
+        costSavings: costSavings,
+        percentCost: annualCost / total * 100,
         percentEnergy: result.baselineResults.annual_energy / totalEnergyUse * 100,
-        color: graphColors[colorIndex]
+        color: graphColors[colorIndex],
+        currencyUnit:  this.settings.currency
       });
       colorIndex++;
     });
@@ -151,15 +171,27 @@ export class PsatRollupComponent implements OnInit {
   setTableData() {
     this.rollupSummaryTableData = new Array();
     this.psatReportRollupService.selectedPsatResults.forEach(dataItem => {
+      let baselineCost: number = dataItem.baselineResults.annual_cost;
+      let modificationCost: number = dataItem.modificationResults.annual_cost;
+      let savings: number = dataItem.baselineResults.annual_cost - dataItem.modificationResults.annual_cost;
+      let implementationCosts: number = dataItem.modification.inputs.implementationCosts;
+      let currencyUnit = this.settings.currency;
+      if (this.settings.currency !== '$') {
+        modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
+        baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
+        savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+        implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
+      }
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annual_energy,
-        modificationCost: dataItem.modificationResults.annual_cost,
+        modificationCost: modificationCost,
         modificationEnergyUse: dataItem.modificationResults.annual_energy,
-        baselineCost: dataItem.baselineResults.annual_cost,
-        costSavings: dataItem.baselineResults.annual_cost - dataItem.modificationResults.annual_cost,
-        implementationCosts: dataItem.modification.inputs.implementationCosts,
+        baselineCost: baselineCost,
+        costSavings: savings,
+        currencyUnit: currencyUnit,
+        implementationCosts: implementationCosts,
         payBackPeriod: this.getPayback(dataItem.modificationResults.annual_cost, dataItem.baselineResults.annual_cost, dataItem.modification.inputs.implementationCosts)
       })
     })

@@ -115,7 +115,8 @@
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item report-diagrams hide-print" *ngIf="currentTab == 'diagram' && dataCalculated"
+    <div class="results scroll-item report-diagrams hide-print" 
+      *ngIf="(currentTab == 'diagram' || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
@@ -130,7 +131,7 @@
       </app-report-graphs>
     </div>
     <div class="results scroll-item print-height" 
-      *ngIf="((currentTab == 'reportSankey') || (showPrintView && printOptions.printSankey)) && dataCalculated"
+      *ngIf="((currentTab == 'reportSankey') || (showPrintView && printOptions.printReportSankey)) && dataCalculated"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
             [modificationOutputs]="modificationOutputs">

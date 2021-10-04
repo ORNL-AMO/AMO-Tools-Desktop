@@ -1,0 +1,59 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+      Fan Operations Help
+      <br>
+      <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+      </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+      <h6>
+        Operating Hours
+        <br>
+        <small class="text-muted">
+          Annual operating hours of the fan.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">0 hrs/yr</td>
+              <td class="w-50 text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="my-2" *ngIf="currentField == 'cost'">
+      <h6>
+        Cost
+        <br>
+        <small class="text-muted">
+          Per unit cost of electricity in ($/kWh).
+          <hr>The simplest approach is to simply divide the monthly (or annual) electric energy cost by the corresponding period's
+          energy consumption, both of which are normally included in electric bills. It is recommended to include demand charges,
+          power factor-related penalties, and other issues because they can have a significant impact on the the average per
+          unit energy cost.
+          <hr>
+        </small>
+      </h6>
+    </div>  
+  
+    <div class="my-2" *ngIf="currentField == 'implementationCosts'">
+      <h6>
+        Implementation Costs
+        <br>
+        <small class="text-muted">
+          Estimated cost to implement modifications.
+        </small>
+      </h6>
+    </div>
+  </div>
+  

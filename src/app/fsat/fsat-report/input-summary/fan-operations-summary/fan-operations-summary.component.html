@@ -1,0 +1,56 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+      <h5>Fan Operations
+        <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      </h5>
+    </div>
+  
+    <div *ngIf="!collapse || printView">
+      <div class="card-body">
+        <div class="output-summary">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                  Baseline
+                </th>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
+                  {{mod.fsat.name}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+  
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
+                  Operating Hours
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
+                  {{fsatOperations.baseline.operatingHours}}
+                </td>
+                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.operatingHours, mod.operatingHours, 'operatingHoursDiff', 0)}">
+                  {{mod.operatingHours}}
+                </td>
+              </tr>
+  
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+                  Cost 
+                  ($/kWh)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+                  {{fsatOperations.baseline.cost | currency: 'USD': 'symbol' : '1.0-0'}}
+                </td>
+                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cost, mod.cost, 'costDiff', 0)}">
+                  {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
+                </td>
+              </tr>  
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
+  </div>

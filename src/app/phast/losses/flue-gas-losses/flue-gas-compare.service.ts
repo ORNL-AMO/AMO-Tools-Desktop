@@ -80,7 +80,7 @@ export class FlueGasCompareService {
       this.compareMassCombustionAirTemperature(index) ||
       this.compareMassFuelTemperature(index) ||
       this.compareMassAshDischargeTemperature(index) ||
-      this.compareMassMoistureInAirComposition(index) ||
+      this.compareMassMoistureInAirCombustion(index) ||
       this.compareMassUnburnedCarbonInAsh(index));
   }
   compareMassGasTypeId(index: number) {
@@ -101,8 +101,8 @@ export class FlueGasCompareService {
   compareMassAshDischargeTemperature(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.ashDischargeTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.ashDischargeTemperature);
   }
-  compareMassMoistureInAirComposition(index: number) {
-    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.moistureInAirComposition, this.modifiedFlueGasLoss[index].flueGasByMass.moistureInAirComposition);
+  compareMassMoistureInAirCombustion(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.moistureInAirCombustion, this.modifiedFlueGasLoss[index].flueGasByMass.moistureInAirCombustion);
   }
   compareMassUnburnedCarbonInAsh(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh, this.modifiedFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh);
@@ -175,7 +175,7 @@ export class FlueGasCompareService {
           this.compare(baseline.flueGasByMass.combustionAirTemperature, modification.flueGasByMass.combustionAirTemperature) ||
           this.compare(baseline.flueGasByMass.fuelTemperature, modification.flueGasByMass.fuelTemperature) ||
           this.compare(baseline.flueGasByMass.ashDischargeTemperature, modification.flueGasByMass.ashDischargeTemperature) ||
-          this.compare(baseline.flueGasByMass.moistureInAirComposition, modification.flueGasByMass.moistureInAirComposition) ||
+          this.compare(baseline.flueGasByMass.moistureInAirCombustion, modification.flueGasByMass.moistureInAirCombustion) ||
           this.compare(baseline.flueGasByMass.unburnedCarbonInAsh, modification.flueGasByMass.unburnedCarbonInAsh) ||
           this.compare(baseline.flueGasByMass.oxygenCalculationMethod, modification.flueGasByMass.oxygenCalculationMethod)) {
           isDiff = true;

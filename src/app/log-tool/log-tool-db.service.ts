@@ -28,7 +28,9 @@ export class LogToolDbService {
         } else {
           //get latest entry
           this.logToolDbData = logToolDbData;
+          if(this.logToolDbData[0].setupData.dataSubmitted === true) {
           this.previousDataAvailable.next(logToolDbData[0].modifiedDate);
+          }
         }
       })
     }
@@ -99,10 +101,22 @@ export class LogToolDbService {
   }
 
   saveData() {
-    let logToolDbData: LogToolDbData = {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
+    this.indexedDbService.putLogTool(logToolDbData);
+  }
+
+
+  getSavedData(): LogToolDbData {
+    let logToolDbData: LogToolDbData = this.getLogToolDbDataObj();
+    return logToolDbData;
+  }
+
+  getLogToolDbDataObj(): LogToolDbData{
+    let newLogToolDbData: LogToolDbData = {
       id: 1,
       name: 'Latest',
       modifiedDate: new Date(),
+      origin: 'AMO-LOG-TOOL-DATA',
       setupData: {
         logToolDays: this.logToolDataService.logToolDays,
         individualDataFromCsv: this.logToolService.individualDataFromCsv,
@@ -132,6 +146,8 @@ export class LogToolDbService {
         individualDayScatterPlotData: this.dayTypeGraphService.individualDayScatterPlotData.getValue()
       }
     }
-    this.indexedDbService.putLogTool(logToolDbData);
+    return newLogToolDbData;
   }
+
+
 }

@@ -11,6 +11,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { FormGroup } from '@angular/forms';
+import { OperationsService } from './operations/operations.service';
 
 
 declare var fanAddon: any;
@@ -27,7 +28,7 @@ export class FsatService {
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
   calculatorTab: BehaviorSubject<string>;
-  constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
+  constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
   }
 
@@ -161,8 +162,8 @@ export class FsatService {
       velocityPressure: fsat.fieldData.inletVelocityPressure,
       outletPressure: fsat.fieldData.outletPressure,
       compressibilityFactor: fsat.fieldData.compressibilityFactor,
-      operatingHours: fsat.fieldData.operatingHours,
-      unitCost: fsat.fieldData.cost,
+      operatingHours: fsat.fsatOperations.operatingHours,
+      unitCost: fsat.fsatOperations.cost,
       airDensity: fsat.baseGasDensity.gasDensity
     };
 
@@ -174,8 +175,8 @@ export class FsatService {
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
-      if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
-        fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
+      if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
+        fsat.fsatOperations.operatingHours = fsat.fsatOperations.operatingFraction * 8760;
       }
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
@@ -198,8 +199,8 @@ export class FsatService {
         velocityPressure: fsat.fieldData.inletVelocityPressure,
         outletPressure: fsat.fieldData.outletPressure,
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
-        operatingHours: fsat.fieldData.operatingHours,
-        unitCost: fsat.fieldData.cost,
+        operatingHours: fsat.fsatOperations.operatingHours,
+        unitCost: fsat.fsatOperations.cost,
         airDensity: fsat.baseGasDensity.gasDensity,
         sizeMargin: 1
       };
@@ -258,16 +259,18 @@ export class FsatService {
   }
 
   checkValid(fsat: FSAT, isBaseline: boolean, settings): FsatValid {
+    let fsatOperationsValid: boolean = this.fanOperationsService.isOperationsDataValid(fsat.fsatOperations);
     let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);
     let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
     let fanSetupValid: boolean = this.fanSetupService.isFanSetupValid(fsat.fanSetup, !isBaseline);
     let fanMotorValid: boolean = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
     return {
-      isValid: fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid,
+      isValid: fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid && fsatOperationsValid,
       fluidValid: fsatFluidValid,
       fanValid: fanSetupValid,
       motorValid: fanMotorValid,
-      fieldDataValid: fieldDataValid
+      fieldDataValid: fieldDataValid,
+      fsatOperationsValid:fsatOperationsValid 
 
     };
   }
@@ -356,6 +359,7 @@ export class FsatService {
     tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
     tmpModification.fsat.whatIfScenario = true;
+    tmpModification.fsat.fsatOperations = fsatCopy.fsatOperations;
     return tmpModification;
   }
 }

@@ -4,7 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -20,12 +20,9 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  currCurrency: string = "$";
-  
-
   notes: Array<SummaryNote>;
 
-  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
@@ -41,21 +38,6 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
-    if (this.currCurrency != this.settings.currency) {
-      this.convertCurrency();
-    }
-  }
-
-  convertCurrency() {
-    this.psat.modifications.forEach((modification) => {
-      modification.psat.outputs.annual_cost = this.convertUnitsService.convertValue(modification.psat.outputs.annual_cost, this.currCurrency, this.settings.currency);
-      modification.psat.inputs.implementationCosts = this.convertUnitsService.convertValue(modification.psat.inputs.implementationCosts, this.currCurrency, this.settings.currency);
-    });
-
-    if(this.psat.modifications){
-      this.notes = this.buildSummaryNotes(this.psat);
-    }
-
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
@@ -66,8 +48,6 @@ export class OutputSummaryComponent implements OnInit {
     if(isPumpAndFluidDifferent == true){
       modificationsMadeList.push('Pump and Fluid');
     }
-
-    
 
     let isMotorDifferent: boolean = this.compareService.checkMotorDifferent(this.psat, modifiedPsat);
     if(isMotorDifferent == true){

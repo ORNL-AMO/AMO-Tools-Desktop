@@ -32,7 +32,7 @@ export class ApplicationSettingsComponent implements OnInit {
 
   currencies: Array<string> = [
     '$',
-    '$k'
+    // '$k'
   ];
 
   energyOptions: Array<string> = [

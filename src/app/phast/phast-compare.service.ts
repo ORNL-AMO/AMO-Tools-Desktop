@@ -51,7 +51,6 @@ export class PhastCompareService {
   setCompareVals(phast: PHAST, selectedModIndex: number, inSetup: boolean) {
     if (phast.losses) {
       this.setBaseline(phast.losses);
-
     }
     if (phast.modifications && !inSetup) {
       if (phast.modifications.length !== 0) {

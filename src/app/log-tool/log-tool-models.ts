@@ -212,6 +212,7 @@ export interface LogToolDbData {
     id?: number,
     name: string,
     modifiedDate: Date,
+    origin?: string,
     setupData: {
         logToolDays: Array<LogToolDay>,
         individualDataFromCsv: Array<IndividualDataFromCsv>,
