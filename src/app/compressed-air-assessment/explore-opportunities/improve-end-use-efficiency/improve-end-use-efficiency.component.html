@@ -87,7 +87,7 @@
             <table class="table bg-white">
                 <thead>
                     <tr>
-                        <th>
+                        <th [ngClass]="{'w-50': hourIntervals.length == 1}">
                             Day Type
                         </th>
                         <th *ngFor="let hourInterval of hourIntervals">

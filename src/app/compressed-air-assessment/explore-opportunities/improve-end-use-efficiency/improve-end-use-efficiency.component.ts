@@ -27,11 +27,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.setOrderOptions();
         this.setData()
+        this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       } else {
         this.isFormChange = false;
       }
     });
-    this.setHourIntervals();
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
         this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
@@ -94,10 +94,12 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
-  setHourIntervals() {
-    this.hourIntervals = new Array();
-    for (let i = 0; i < 24; i++) {
-      this.hourIntervals.push(i);
+  setHourIntervals(numberOfHours: number) {
+    if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != numberOfHours)) {
+      this.hourIntervals = new Array();
+      for (let i = 0; i < numberOfHours; i++) {
+        this.hourIntervals.push(i);
+      }
     }
   }
 

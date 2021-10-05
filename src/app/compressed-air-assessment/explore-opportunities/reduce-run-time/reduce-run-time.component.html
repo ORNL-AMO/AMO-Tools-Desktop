@@ -30,13 +30,13 @@
     <table class="table bg-white" *ngIf="selectedDayTypeId">
         <thead>
             <tr>
-                <th>
+                <th [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
                     <!-- Compressor -->
                 </th>
-                <th class="text-center">
+                <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
                     Capacity <br> acfm
                 </th>
-                <th class="text-center">
+                <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
                     Shutdown <br>
                     Timer
                 </th>
