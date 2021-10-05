@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { DesignDetails } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, DesignDetails } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
@@ -46,6 +46,7 @@ export class DesignDetailsComponent implements OnInit {
         } else {
           this.isFormChange = false;
         }
+        this.setCalculatedModulatingPressureRange(compressor);
       }
     });
   }
@@ -88,5 +89,13 @@ export class DesignDetailsComponent implements OnInit {
 
   toggleCollapse() {
     this.contentCollapsed = !this.contentCollapsed;
+  }
+
+  setCalculatedModulatingPressureRange(selectedCompressor: CompressorInventoryItem) {
+    if (this.displayModulation) {
+      let pressureRange: number = (selectedCompressor.performancePoints.unloadPoint.dischargePressure - selectedCompressor.performancePoints.maxFullFlow.dischargePressure) / (1 - (selectedCompressor.compressorControls.unloadPointCapacity / 100));
+      pressureRange = Number(pressureRange.toFixed(3));
+      this.form.controls.modulatingPressureRange.patchValue(pressureRange);
+    }
   }
 }
