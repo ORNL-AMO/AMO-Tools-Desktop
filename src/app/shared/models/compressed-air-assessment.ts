@@ -216,7 +216,7 @@ export interface SystemProfile {
 export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
-    dataInterval: 2 | 1 | .5 | .25,
+    dataInterval: 1 | 24,
     profileDataType: "power" | "percentCapacity" | "airflow"
 }
 

@@ -8,7 +8,7 @@
     </span>
 </label>
 <div class="w-100 d-flex justify-content-start mb-1 mt-1">
-    <div class="pl-2 pr-2 border-left">
+    <div class="pl-2 pr-2 border-left" *ngIf="hourIntervals.length != 1">
         <label class="small" for="fillRightOrdering">
             <input type="checkbox" [(ngModel)]="fillRight" name="fillRightOrdering" id="fillRightOrdering">
             Fill right on change
@@ -23,7 +23,7 @@
 </div>
 
 <div class="scroll-item">
-    <table class="table bg-white">
+    <table class="table bg-white" [ngClass]="{'single-entry': hourIntervals.length == 1}">
         <thead>
             <tr>
                 <th>

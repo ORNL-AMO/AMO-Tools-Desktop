@@ -33,7 +33,7 @@ export class ExploreOpportunitiesService {
       reductionData.push({
         dayTypeId: dayType.dayTypeId,
         dayTypeName: dayType.name,
-        data: this.getDefaultReductionData()
+        data: this.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval)
       });
       compressedAirAssessment.compressorInventoryItems.forEach(item => {
         let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
@@ -133,9 +133,9 @@ export class ExploreOpportunitiesService {
   }
 
 
-  getDefaultReductionData(): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
+  getDefaultReductionData(numberOfEntries: number): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
     let reductionData: Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> = new Array();
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < numberOfEntries; i++) {
       reductionData.push({
         hourInterval: i,
         applyReduction: false,

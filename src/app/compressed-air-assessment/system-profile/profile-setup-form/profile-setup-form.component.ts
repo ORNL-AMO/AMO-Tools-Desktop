@@ -76,6 +76,10 @@ export class ProfileSetupFormComponent implements OnInit {
       this.form.controls.profileDataType.enable();
       this.form.controls.dataInterval.enable();
     }
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if(compressedAirAssessment.modifications.length != 0){
+      this.form.controls.dataInterval.disable();
+    }    
   }
 
   changeDayType() {

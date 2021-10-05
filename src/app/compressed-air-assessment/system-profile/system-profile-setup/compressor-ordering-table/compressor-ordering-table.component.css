@@ -44,3 +44,7 @@ td, th{
   .btn.btn-sm:hover{
     background-color: #566573;
   }
+
+  table.table.single-entry{
+    width: inherit;
+  }

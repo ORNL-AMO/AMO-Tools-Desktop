@@ -27,3 +27,6 @@ td, th{
   .input-cell{
     width: 60px;
   }
+  table.table.single-entry{
+    width: inherit;
+  }

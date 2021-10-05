@@ -132,15 +132,17 @@ export class ReduceRunTimeComponent implements OnInit {
     this.availableAirflow = new Array();
     this.requiredAirflow = new Array();
     this.profilePower = new Array();
+    let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+
     if (this.selectedDayTypeId && this.compressedAirAssessment && this.adjustedProfileSummary && this.reduceRuntime.order != 100) {
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < numberOfSummaryIntervals; i++) {
         this.requiredAirflow.push(0);
         this.availableAirflow.push(0);
         this.profilePower.push(0);
       }
       this.adjustedProfileSummary.forEach(summary => {
         if (summary.dayTypeId == this.selectedDayTypeId) {
-          for (let i = 0; i < 24; i++) {
+          for (let i = 0; i < numberOfSummaryIntervals; i++) {
             if (summary.profileSummaryData[i].order != 0) {
               this.requiredAirflow[i] = this.requiredAirflow[i] + summary.profileSummaryData[i].airflow;
             }

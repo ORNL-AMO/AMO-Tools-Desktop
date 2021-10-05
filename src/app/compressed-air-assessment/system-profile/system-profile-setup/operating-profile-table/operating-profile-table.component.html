@@ -1,8 +1,8 @@
 <label class="group-label w-100">
     Profile Data
 </label>
-<div class="w-100 d-flex justify-content-start mb-1 mt-1">
-    <div class="pl-2 pr-2 border-left">
+<div class="w-100 d-flex justify-content-start mb-1 mt-1" *ngIf="hourIntervals.length != 1 || displayLogToolLink">
+    <div class="pl-2 pr-2 border-left" *ngIf="hourIntervals.length != 1">
         <label class="small" for="fillRightProfile">
             <input type="checkbox" [(ngModel)]="fillRight" name="fillRightProfile" id="fillRightProfile">
             Fill right on change
@@ -25,7 +25,7 @@
     <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
         Profile Data values must be at least 0 
     </div>
-    <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId">
+    <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId" [ngClass]="{'single-entry': hourIntervals.length == 1}">
         <thead>
             <tr>
                 <th>
