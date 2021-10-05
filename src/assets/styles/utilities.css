@@ -59,6 +59,16 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.phast .btn-primary{
+    background-color: #bf3d00;
+    border-color: #bf3d00;
+}
+
+.inRollup .btn-primary{
+    background-color: #156739;
+    border-color: #156739;
+}
+
 .treasure-hunt .btn-primary{
     background-color: #2E4053;
     border-color: #2E4053;
