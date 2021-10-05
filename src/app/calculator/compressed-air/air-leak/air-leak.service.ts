@@ -17,6 +17,7 @@ export class AirLeakService {
   currentLeakIndex: BehaviorSubject<number>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  settings: Settings;
 
   constructor(private convertAirleakService: ConvertAirLeakService,
     private airLeakFormService: AirLeakFormService,
@@ -80,13 +81,10 @@ export class AirLeakService {
     this.generateExample.next(false);
   }
 
-  deleteLeak(index: number, settings?: Settings) {
+  deleteLeak(index: number) {
     if(this.airLeakInput.value.compressedAirLeakSurveyInputVec.length == 1 && index == 0){
-      this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
-      this.airLeakOutput.value.leakResults.splice(index, 1);
-      this.initDefaultEmptyInputs(settings);
+      this.initDefaultEmptyInputs(this.settings);
       this.currentLeakIndex.next(0);
-      this.resetData.next(true);
     }else {
       this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
       this.airLeakOutput.value.leakResults.splice(index, 1);

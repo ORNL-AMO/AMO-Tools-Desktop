@@ -38,7 +38,7 @@ export class AirLeakResultsTableComponent implements OnInit {
   }
 
   deleteLeak(index: number) {
-    this.airLeakService.deleteLeak(index, this.settings);
+    this.airLeakService.deleteLeak(index);
   }
 
   toggleSelected(index: number, selected: boolean) {
