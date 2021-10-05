@@ -94,7 +94,7 @@ export class PhastResultsService {
       results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(phast.losses.extendedSurfaces, settings);
     }
     if (this.checkLoss(phast.losses.chargeMaterials)) {
-      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
+      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings, undefined);
     }
     if (resultCats.showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
       results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses);

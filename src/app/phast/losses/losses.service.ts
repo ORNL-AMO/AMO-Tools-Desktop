@@ -195,7 +195,7 @@ export class LossesService {
   checkChargeMaterials(phast: PHAST, settings: Settings) {
     if (phast.losses.chargeMaterials) {
       if (phast.losses.chargeMaterials.length !== 0) {
-        let sumChargeLosses = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
+        let sumChargeLosses = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings, true);
         if (sumChargeLosses !== 0) {
           this.chargeDone = true;
         } else {

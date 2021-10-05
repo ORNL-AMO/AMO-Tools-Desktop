@@ -611,7 +611,7 @@ export class PhastService {
       grossHeatRequired += this.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses);
     }
     if (losses.chargeMaterials) {
-      grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials, settings);
+      grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials, settings, undefined);
     }
     if (losses.coolingLosses) {
       grossHeatRequired += this.sumCoolingLosses(losses.coolingLosses, settings);
@@ -670,22 +670,28 @@ export class PhastService {
     return sum;
   }
 
-  sumChargeMaterials(losses: ChargeMaterial[], settings: Settings): number {
+  sumChargeMaterials(losses: ChargeMaterial[], settings: Settings, isCheckingSetup: boolean): number {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.chargeMaterialType === 'Gas') {
         let tmpForm = this.gasMaterialFormService.getGasChargeMaterialForm(loss);
-        if (tmpForm.status === 'VALID') {
+        if ( isCheckingSetup && tmpForm.status === 'VALID') {
+          sum += 1;
+        } else if (tmpForm.status === 'VALID') {
           sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType === 'Solid') {
         let tmpForm = this.solidMaterialFormService.getSolidChargeMaterialForm(loss);
-        if (tmpForm.status === 'VALID') {
+        if (isCheckingSetup && tmpForm.status === 'VALID') {
+          sum += 1;
+        } else if (tmpForm.status === 'VALID') {
           sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType === 'Liquid') {
         let tmpForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss);
-        if (tmpForm.status === 'VALID') {
+        if (isCheckingSetup && tmpForm.status === 'VALID') {
+          sum += 1;
+        } else if (tmpForm.status === 'VALID') {
           sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings).bindingResult;
         }
       }
