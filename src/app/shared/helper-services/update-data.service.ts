@@ -144,7 +144,7 @@ export class UpdateDataService {
         assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
             assessment.phast.modifications.forEach(mod => {
-                mod.phast = this.updateMoistureInAirCombustion(assessment.phast);
+                mod.phast = this.updateMoistureInAirCombustion(mod.phast);
             });
         }
 
