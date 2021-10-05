@@ -1,0 +1,25 @@
+
+.modal-dialog{
+    top: 0;
+    max-width: none;
+    margin: 15px;
+}
+
+.modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #ececec;
+    height: 75vh;
+}
+
+.modal-header{
+    background-color: #2980b9;
+}
+
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
