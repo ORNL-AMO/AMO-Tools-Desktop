@@ -20,7 +20,8 @@ export class DayTypeGraphComponent implements OnInit {
       xaxis: {
         title: {
           text: 'x axis'
-        }
+        },
+        range: [1, 24]
       },
       yaxis: {
         title: {
@@ -69,7 +70,7 @@ export class DayTypeGraphComponent implements OnInit {
     this.graph.data = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     let labelStr: string = selectedDataField.alias;
-    if(selectedDataField.unit){
+    if (selectedDataField.unit) {
       let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
       labelStr = labelStr + ' ' + displayUnit;
     }
