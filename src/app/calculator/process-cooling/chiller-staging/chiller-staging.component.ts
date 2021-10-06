@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
-import { CalculatorService } from '../../calculator.service';
 import { ChillerStagingService } from './chiller-staging.service';
 
 @Component({
@@ -14,51 +13,35 @@ export class ChillerStagingComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  
-  @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
 
-  
+  @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-  
+
   chillerPerformanceInputSub: Subscription;
 
   calcFormWidth: number;
   calcFormWidthSub: Subscription;
   reslutsHelpWidth: number;
-  
+
   headerHeight: number;
   tabSelect: string = 'results';
-  
+
   constructor(private chillerStagingService: ChillerStagingService,
-              private settingsDbService: SettingsDbService, 
-              private cd: ChangeDetectorRef) { }
+    private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
-      this.calcFormWidth = val;
-      if (this.contentContainer && this.calcFormWidth) {
-        this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
-      }
-    });
     let existingInputs = this.chillerStagingService.chillerStagingInput.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.chillerStagingService.initDefaultEmptyInputs();
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
-    if (this.contentContainer && this.calcFormWidth) {
-      this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
-      this.cd.detectChanges();
-    }
-
-    
     this.initSubscriptions();
   }
 
@@ -71,15 +54,18 @@ export class ChillerStagingComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-    if (this.contentContainer && this.calcFormWidth) {
-      this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
-      this.cd.detectChanges();
-    }
   }
 
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
       this.calculate();
+    });
+
+    this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
+      this.calcFormWidth = val;
+      if (this.contentContainer && this.calcFormWidth) {
+        this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
+      }
     });
   }
 

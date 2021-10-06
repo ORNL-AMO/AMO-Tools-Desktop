@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { CalculatorService } from '../../../calculator.service';
+import { DashboardService } from '../../../../dashboard/dashboard.service';
 import { ChillerStagingService } from '../chiller-staging.service';
 
 @Component({
@@ -13,20 +13,20 @@ export class DragBarComponent implements OnInit {
 
   @HostListener('drag', ['$event'])
   onDrag(event: DragEvent) {
-    if (event.pageX > 500 && event.pageX < 1000) {
-      this.chillerStagingService.sidebarX.next(event.pageX);
-    }
+    this.setSidebarX(event.pageX);
   }
 
-  constructor(private chillerStagingService: ChillerStagingService) { }
+  constructor(private chillerStagingService: ChillerStagingService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    let sidebarXValue: number = this.chillerStagingService.sidebarX.getValue();
-    if (sidebarXValue == undefined && this.dragBar != undefined) {
-      this.chillerStagingService.sidebarX.next(this.dragBar.nativeElement.offsetLeft);
+  setSidebarX(pageX: number){
+    let dashboardSidebarX: number = this.dashboardService.sidebarX.getValue();
+    let offsetPageX: number = pageX - dashboardSidebarX;
+    //adjust these values to make more sense with a calculator form
+    if (offsetPageX > 500 && offsetPageX < 1000) {
+      this.chillerStagingService.sidebarX.next(offsetPageX);
     }
   }
 
