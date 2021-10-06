@@ -56,45 +56,14 @@
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
-    <!-- <div class="d-flex tabs subtabs waste-water mr-auto">
-        <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
-            <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-                <br>
-                <span class="help-text">Novice View</span>
-            </a>
-        </div>
-        <!-- <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-                <br>
-                <span class="help-text">Expert View</span>
-            </a>
-        </div> --
-    </div> -->
-
-    <!-- <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
-        <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}"
-                (click)="changeSecondaryAssessmentTab('modifications')">Modify System</a>
-        </div>
-        <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': secondaryAssessmentTab == 'table'}"
-                (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
-        </div>
-        <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': secondaryAssessmentTab == 'graphs'}"
-                (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
-        </div>
-    </div> -->
-
-
     <ul class="h-100 tabs subtabs progress-tabs compressed-air">
         <li [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}">
             <a (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
         </li>
-        <li [ngClass]="{'active': secondaryAssessmentTab == 'table'}">
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}">
             <a (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
         </li>
-        <li [ngClass]="{'active': secondaryAssessmentTab == 'graphs'}">
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'graphs', 'disabled': !selectedModification}">
             <a (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
         </li>
     </ul>

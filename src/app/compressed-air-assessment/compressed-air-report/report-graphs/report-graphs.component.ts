@@ -36,7 +36,7 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   drawModificationGraph() {
-    if (this.assessmentResults && this.modificationGraph) {
+    if (this.assessmentResults && this.assessmentResults.length != 0 && this.modificationGraph) {
       
       let x: Array<string> = this.assessmentResults.map(result => { return result.modification.name });
       x.unshift('Baseline');

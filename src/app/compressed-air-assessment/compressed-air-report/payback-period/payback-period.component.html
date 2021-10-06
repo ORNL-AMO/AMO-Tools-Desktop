@@ -1,6 +1,6 @@
 <div class="output-summary">
     <h4 class="show-print print-section-header">Payback Period Details</h4>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column" *ngIf="assessmentResults.length != 0">
         <div class="p-2" *ngFor="let assessmentResult of assessmentResults">
             <label class="group-label">{{assessmentResult.modification.name}}</label>
             <table class="table table-hover table-striped"
@@ -150,3 +150,7 @@
             </table>
         </div>
     </div>
+</div>
+<div class="alert alert-warning p-2" *ngIf="assessmentResults && assessmentResults.length == 0">
+    No modifications found. Create a modification to see payback details.
+</div>

@@ -88,10 +88,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
 
-  setHasSequencer(){
-    if(this.compressedAirAssessment){
+  setHasSequencer() {
+    if (this.compressedAirAssessment) {
       this.hasSequencerOn = this.compressedAirAssessment.systemInformation.isSequencerUsed;
-      if(!this.hasSequencerOn && this.modification){
+      if (!this.hasSequencerOn && this.modification) {
         this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
       }
     }
@@ -107,7 +107,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
-    if(this.tabSelect == 'compressor-profile' && this.selectedDayType == undefined){
+    if (this.tabSelect == 'compressor-profile' && this.selectedDayType == undefined) {
       this.selectedDayType = this.dayTypeOptions[0];
       this.changeDayType();
     }
@@ -128,6 +128,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
         this.calculating = undefined;
       }, 750)
+    } else {
+      this.exploreOpportunitiesService.modificationResults.next(undefined);
     }
   }
 
@@ -137,11 +139,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  setDisplayAddStorage(){
+  setDisplayAddStorage() {
     let displayAddStorage: boolean = false;
     this.compressedAirAssessment.compressorInventoryItems.forEach(item => {
-      let compressorTypeOption: CompressorTypeOption = CompressorTypeOptions.find(option => {return option.value == item.nameplateData.compressorType});
-      if(compressorTypeOption.lubricantTypeEnumValue == 0){
+      let compressorTypeOption: CompressorTypeOption = CompressorTypeOptions.find(option => { return option.value == item.nameplateData.compressorType });
+      if (compressorTypeOption.lubricantTypeEnumValue == 0) {
         displayAddStorage = true;
       }
     });
