@@ -69,8 +69,9 @@ export class SystemInformationComponent implements OnInit {
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
     if(!systemInformation.isSequencerUsed){
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
     }else if(systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
       //if sequencer on baseline cannot have these modifications. Turn off

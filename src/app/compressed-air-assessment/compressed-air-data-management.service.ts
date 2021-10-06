@@ -158,7 +158,7 @@ export class CompressedAirDataManagementService {
   }
 
   //name and description
-  updateNameAndDescription(name: string, description: string){
+  updateNameAndDescription(name: string, description: string) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.name = name;
@@ -190,8 +190,9 @@ export class CompressedAirDataManagementService {
       }
     });
     if (recalculateOrdering && !compressedAirAssessment.systemInformation.isSequencerUsed) {
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType);
+        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
     };
     //update assessment
