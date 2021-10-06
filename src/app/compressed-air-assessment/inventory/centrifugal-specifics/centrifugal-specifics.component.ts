@@ -16,11 +16,13 @@ export class CentrifugalSpecificsComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: FormGroup;
   isFormChange: boolean = false;
+  contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
+    this.contentCollapsed = this.inventoryService.collapseCentrifugal;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         if (this.isFormChange == false) {
@@ -34,6 +36,8 @@ export class CentrifugalSpecificsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    
+    this.inventoryService.collapseCentrifugal = this.contentCollapsed;
   }
 
   save() {
@@ -44,5 +48,8 @@ export class CentrifugalSpecificsComponent implements OnInit {
 
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
+  }
+  toggleCollapse(){
+    this.contentCollapsed = !this.contentCollapsed;
   }
 }
