@@ -19,10 +19,7 @@ export class CompressedAirAssessmentResultsService {
 
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType);
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment.compressorInventoryItems, dayType, baselineProfileSummary);
-      console.log('Calc baseline...')
       let baselineResults: SavingsItem = this.calculateEnergyAndCost(baselineProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
-      console.log(baselineResults);
-      console.log('=====');
       let hoursOn: number = 0;
       totals.forEach(total => {
         if (total.power != 0) {
