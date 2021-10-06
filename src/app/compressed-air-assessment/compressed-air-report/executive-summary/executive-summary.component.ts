@@ -12,9 +12,14 @@ export class ExecutiveSummaryComponent implements OnInit {
   baselineResults: BaselineResults;
   @Input()
   combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
+  @Input()
+  modifications: Array<Modification>;
 
 
-
+  notes: Array<{
+    modificationName: string,
+    note: string
+  }>;
   displayAddReceiverVolume: boolean;
   displayAdjustCascadingSetPoints: boolean;
   displayImproveEndUseEfficiency: boolean;
@@ -57,6 +62,7 @@ export class ExecutiveSummaryComponent implements OnInit {
         this.displayUseAutomaticSequencer = modResult.modification.useAutomaticSequencer.order != 100;
       }
     });
+    this.setNotes();
   }
 
   getDemandEnergyProjects(modification: Modification): string {
@@ -105,5 +111,15 @@ export class ExecutiveSummaryComponent implements OnInit {
     return supplyProjects;
   }
 
+
+  setNotes(){
+    this.notes = new Array();
+    this.modifications.forEach(modification => {
+      this.notes.push({
+        modificationName: modification.name,
+        note: modification.notes
+      })
+    })
+  }
 
 }

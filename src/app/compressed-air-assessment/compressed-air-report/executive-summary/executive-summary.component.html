@@ -49,8 +49,7 @@
                     {{baselineResults.total.peakDemand | number:'1.0-2'}}</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span
-                        *ngIf="result.combinedResults.peakDemand">{{result.combinedResults.peakDemand
+                    <span *ngIf="result.combinedResults.peakDemand">{{result.combinedResults.peakDemand
                         | number:'1.0-2'}}</span>
                     <span *ngIf="!result.combinedResults.peakDemand">&mdash;
                         &mdash;</span>
@@ -354,4 +353,17 @@
             </tr>
         </tbody>
     </table>
+    <div class="row" *ngIf="notes.length != 0">
+        <div class="col">
+            <h5>Modification Notes</h5>
+            <p>
+                <small>
+                    <span *ngFor="let note of notes">
+                        <b>{{note.modificationName}}:</b> {{note.note}}
+                        <br>
+                    </span>
+                </small>
+            </p>
+        </div>
+    </div>
 </div>

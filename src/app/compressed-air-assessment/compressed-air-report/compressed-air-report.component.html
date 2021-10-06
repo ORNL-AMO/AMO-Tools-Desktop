@@ -93,8 +93,8 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-executive-summary [baselineResults]="baselineResults"
-                [combinedDayTypeResults]="combinedDayTypeResults"></app-executive-summary>
+            <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"
+                [modifications]="assessment.compressedAirAssessment.modifications"></app-executive-summary>
         </div>
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
