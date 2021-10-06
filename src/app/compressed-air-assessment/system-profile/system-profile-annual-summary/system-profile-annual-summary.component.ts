@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -12,6 +12,10 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
 
 
 
+  @ViewChild('dayTypeTable', { static: false }) dayTypeTable: ElementRef;
+  @ViewChild('totalsTable', { static: false }) totalsTable: ElementRef;
+  allTablesString: string;
+
   compressedAirAssessment: CompressedAirAssessment;
   baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
@@ -19,6 +23,12 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment);
+  }
+
+  updateTableString() {
+    this.allTablesString = 
+    this.dayTypeTable.nativeElement.innerText + '\n' +
+    this.totalsTable.nativeElement.innerText + '\n';
   }
 
 }

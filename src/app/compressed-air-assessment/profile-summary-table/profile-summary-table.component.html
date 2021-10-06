@@ -1,5 +1,5 @@
 <div class="pl-2 pt-3 pr-2 scroll-item">
-    <table class="table table-hover bg-white">
+    <table #profileTable class="table table-hover bg-white">
         <thead>
             <tr>
                 <th [ngClass]="{'w-50': profileSummary[0].profileSummaryData.length == 1}">
@@ -119,4 +119,11 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+
+
+<div class="w-100 justify-content-end d-flex">
+    <app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
+    </app-exportable-results-table>
 </div>

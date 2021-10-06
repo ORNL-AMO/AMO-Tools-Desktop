@@ -1,5 +1,5 @@
 <div class="p-3">
-    <table class="table table-hover bg-white">
+    <table #dayTypeTable class="table table-hover bg-white">
         <thead>
             <tr>
                 <th>
@@ -98,7 +98,7 @@
 
 <div class="d-flex w-100 justify-content-center">
     <div class="p-2">
-        <table class="table table-hover bg-white totals">
+        <table #totalsTable class="table table-hover bg-white totals">
             <tbody>
                 <tr>
                     <td class="w-50 bold">
@@ -127,4 +127,9 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="w-100 justify-content-end d-flex">
+    <app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
+    </app-exportable-results-table>
 </div>
