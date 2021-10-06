@@ -43,7 +43,7 @@
     "@angular/router": "11.2.3",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "ajv": "6.12.5",
-    "amo-tools-suite": "0.9.2",
+    "amo-tools-suite": "../AMO-Tools-Suite/",
     "bootstrap": "4.3.1",
     "c3": "^0.4.18",
     "core-js": "3.6.5",
