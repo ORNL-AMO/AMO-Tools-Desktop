@@ -133,6 +133,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
         this.calculating = undefined;
       }, 750)
+    } else {
+      this.exploreOpportunitiesService.modificationResults.next(undefined);
     }
   }
 
