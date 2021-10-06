@@ -3,12 +3,13 @@ import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { PsatWarningService, FieldDataWarnings, MotorWarnings } from '../../psat-warning.service';
+import { PsatWarningService, FieldDataWarnings, MotorWarnings, OperationsWarnings } from '../../psat-warning.service';
 import { Settings } from '../../../shared/models/settings';
 import { PsatTabService } from '../../psat-tab.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
 import { MotorService } from '../../motor/motor.service';
 import { FieldDataService } from '../../field-data/field-data.service';
+import { PumpOperationsService } from '../../pump-operations/pump-operations.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -25,7 +26,10 @@ export class ModifyConditionsTabsComponent implements OnInit {
   motorBadgeHover: boolean;
   displayFieldDataTooltip: boolean;
   fieldDataBadgeHover: boolean;
+  displayOperationsTooltip: boolean;
+  operationsBadgeHover: boolean;
 
+  operationsBadgeClass: string;
   pumpFluidBadgeClass: string;
   motorBadgeClass: string;
   fieldDataBadgeClass: string;
@@ -33,7 +37,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   modTabSub: Subscription;
   modifyTab: string;
   constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService,
-    private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService) { }
+    private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService, private pumpOperationsService: PumpOperationsService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
@@ -50,6 +54,8 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.motorBadgeHover = false;
     this.displayFieldDataTooltip = false;
     this.fieldDataBadgeHover = false;
+    this.displayOperationsTooltip = false;
+    this.operationsBadgeHover = false;
   }
 
   ngOnDestroy() {
@@ -61,6 +67,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.fieldDataBadgeClass = this.setFieldDataBadgeClass();
     this.pumpFluidBadgeClass = this.setPumpFluidBadgeClass();
     this.motorBadgeClass = this.setMotorBadgeClass();
+    this.operationsBadgeClass = this.setoperationsBadgeClass();
   }
 
   setFieldDataBadgeClass() {
@@ -186,6 +193,48 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return hasWarning;
   }
 
+  setoperationsBadgeClass() {
+    let badgeStr: string = 'success';
+    let tmpBaselineOperationsForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
+    let validBaselineTest = tmpBaselineOperationsForm.valid;
+    let validModTest = true;
+    let isDifferent = false;
+    if (this.compareService.modifiedPSAT) {
+      let tmpModificationOperationsForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
+      validModTest = tmpModificationOperationsForm.valid;
+      isDifferent = this.compareService.checkOperationsDifferent();
+    }
+    let inputError = this.checkOperationsInputError();
+    if (!validBaselineTest || !validModTest) {
+      badgeStr = 'missing-data';
+    } else if (inputError) {
+      badgeStr = 'input-error';
+    } else if (isDifferent) {
+      badgeStr = 'loss-different';
+    }
+    return badgeStr;
+
+  }
+
+  checkOperationsInputError(){
+    let hasWarning: boolean = false;
+    let baselineOperationsWarnings: OperationsWarnings = this.psatWarningService.checkPumpOperations(this.compareService.baselinePSAT, this.settings, true);
+    for (var key in baselineOperationsWarnings) {
+      if (baselineOperationsWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedPSAT && !hasWarning) {
+      let modifiedOperationsWarnings: OperationsWarnings = this.psatWarningService.checkPumpOperations(this.compareService.modifiedPSAT, this.settings);
+      for (var key in modifiedOperationsWarnings) {
+        if (modifiedOperationsWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
   tabChange(str: string) {
     this.psatTabService.modifyConditionsTab.next(str);
   }
@@ -199,6 +248,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     else if (badge === 'fieldData') {
       this.fieldDataBadgeHover = true;
+    }
+    else if (badge === 'operations') {
+      this.operationsBadgeHover = true;
     }
 
     setTimeout(() => {
@@ -218,6 +270,10 @@ export class ModifyConditionsTabsComponent implements OnInit {
     else if (badge === 'fieldData') {
       this.fieldDataBadgeHover = false;
       this.displayFieldDataTooltip = false;
+    }
+    else if (badge === 'operations') {
+      this.operationsBadgeHover = false;
+      this.displayOperationsTooltip = false;
     }
   }
 
@@ -239,6 +295,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     else {
       this.displayFieldDataTooltip = false;
+    }
+    if (this.operationsBadgeHover) {
+      this.displayOperationsTooltip = true;
+    }
+    else {
+      this.displayOperationsTooltip = false;
     }
   }
 }

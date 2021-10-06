@@ -12,10 +12,10 @@ export class PsatTabService {
   //system setup tabs
   stepTabs: Array<string> = [
     'system-basics',
+    'operations',
     'pump-fluid',
     'motor',
-    'field-data',
-    'operations'
+    'field-data'
   ];
 
   constructor() {

@@ -4,7 +4,6 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { fluidProperties } from './psatConstants';
-import { FSAT } from '../shared/models/fans';
 import { CompareService } from './compare.service';
 
 
@@ -378,8 +377,24 @@ export class PsatWarningService {
     }
   }
 
+  checkPumpOperations(psat: PSAT, settings: Settings, isBaseline?: boolean): OperationsWarnings {
+    let warnings: OperationsWarnings = {
+      cost: this.checkCost(psat),
+    };
+
+    return warnings;
+  }
+
+  checkCost(psat: PSAT) {
+    if (psat.inputs.cost_kw_hour > 1) {
+      return "Shouldn't be greater then 1";
+    } else {
+      return null;
+    }
+  }
+
   //Iterates warnings objects to see if any warnings are not null
-  checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings): boolean {
+  checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings | OperationsWarnings): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
       if (warnings[key] !== null) {
@@ -408,4 +423,8 @@ export interface MotorWarnings {
 export interface PumpFluidWarnings {
   rpmError: string;
   temperatureError: string;
+}
+
+export interface OperationsWarnings {
+  cost: string;
 }

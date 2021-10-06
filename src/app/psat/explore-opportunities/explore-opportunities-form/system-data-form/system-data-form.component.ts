@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FieldDataWarnings } from '../../../psat-warning.service';
+import { FieldDataWarnings, OperationsWarnings } from '../../../psat-warning.service';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { PSAT, Modification } from '../../../../shared/models/psat';
@@ -28,6 +28,14 @@ export class SystemDataFormComponent implements OnInit {
     baselineForm: FormGroup;
     @Input()
     modificationForm: FormGroup;
+    @Input()
+    baselineOperationsForm: FormGroup;
+    @Input()
+    modificationOperationsForm: FormGroup;
+    @Input()
+    baselineOperationsWarnings: OperationsWarnings;
+    @Input()
+    modificationOperationsWarnings: OperationsWarnings;
     @Output('openHeadToolModal')
     openHeadToolModal = new EventEmitter<boolean>();
     @Input()
@@ -93,8 +101,8 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initSystemData() {
-        if (this.baselineForm.controls.costKwHr.value != this.modificationForm.controls.costKwHr.value
-            || this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
+        if (this.baselineOperationsForm.controls.costKwHr.value != this.modificationOperationsForm.controls.costKwHr.value
+            || this.baselineOperationsForm.controls.operatingHours.value != this.modificationOperationsForm.controls.operatingHours.value) {
             this.currentModification.exploreOppsShowSystemData = { hasOpportunity: true, display: 'Adjust Operational Data' }; 
         } else {
             this.currentModification.exploreOppsShowSystemData = { hasOpportunity: false, display: 'Adjust Operational Data' }; 
@@ -145,7 +153,7 @@ export class SystemDataFormComponent implements OnInit {
 
     updateOperatingHours(oppHours: OperatingHours) {
         this.modificationPsat.operatingHours = oppHours;
-        this.modificationForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+        this.modificationOperationsForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
         this.calculate();
         this.closeOperatingHoursModal();
     }
