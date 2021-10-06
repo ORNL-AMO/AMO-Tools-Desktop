@@ -128,6 +128,7 @@ import { SystemInfoSummaryComponent } from './compressed-air-report/input-summar
 import { CompressorItemSummaryComponent } from './compressed-air-report/input-summary/compressor-item-summary/compressor-item-summary.component';
 import { SystemProfileGraphsService } from './system-profile/system-profile-graphs/system-profile-graphs.service';
 import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
+import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
 
 @NgModule({
   declarations: [
@@ -217,7 +218,8 @@ import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-pane
     ProfileSummaryTableComponent,
     SystemInfoSummaryComponent,
     CompressorItemSummaryComponent,
-    AdjustCascadingSetPointsHelpComponent
+    AdjustCascadingSetPointsHelpComponent,
+    AssessmentNotesComponent
   ],
   imports: [
     CommonModule,
