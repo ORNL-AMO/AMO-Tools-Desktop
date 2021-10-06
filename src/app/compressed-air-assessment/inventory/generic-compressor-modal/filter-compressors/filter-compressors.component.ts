@@ -27,11 +27,11 @@ export class FilterCompressorsComponent implements OnInit {
     this.horsePowerOptions = _.map(uniqHpCompressors, (compressor) => { return compressor.HP });
 
     this.compressorTypeOptions = CompressorTypeOptions;
-    this.controlTypes = ControlTypes;
     this.filterCompressorOptions = this.inventoryService.filterCompressorOptions.getValue();
     if (this.filterCompressorOptions == undefined) {
       this.initFilterCompressorOptions(genericCompressors);
     }
+    this.setControlTypes();
   }
 
 
@@ -52,6 +52,28 @@ export class FilterCompressorsComponent implements OnInit {
 
   save() {
     this.inventoryService.filterCompressorOptions.next(this.filterCompressorOptions);
+  }
+
+
+  setControlTypes(save?: boolean) {
+    //no start/stop in DB
+    if (this.filterCompressorOptions.IDCompType != undefined) {
+      this.controlTypes = ControlTypes.filter(type => { return type.compressorTypes.includes(this.filterCompressorOptions.IDCompType) && type.value != 6 });
+      if (this.filterCompressorOptions.IDControlType != undefined) {
+        let controlOptionSelected: { value: number, label: string, compressorTypes: Array<number> } = this.controlTypes.find(option => {
+          return option.value == this.filterCompressorOptions.IDControlType;
+        });
+        if (!controlOptionSelected) {
+          this.filterCompressorOptions.IDControlType = undefined;
+        }
+      }
+    } else {
+      this.controlTypes = ControlTypes.filter(type => { return type.value != 6 });
+    }
+
+    if (save) {
+      this.save();
+    }
   }
 
 }

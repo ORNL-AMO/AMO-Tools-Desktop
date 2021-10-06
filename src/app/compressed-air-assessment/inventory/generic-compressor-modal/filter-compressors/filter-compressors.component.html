@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="compressorTypeOption">Compressor Type</label>
                 <select [(ngModel)]="filterCompressorOptions.IDCompType" name="compressorTypeOption"
-                    id="compressorTypeOption" class="form-control" (change)="save()">
+                    id="compressorTypeOption" class="form-control" (change)="setControlTypes(true)">
                     <option [ngValue]="undefined">All</option>
                     <option *ngFor="let option of compressorTypeOptions" [ngValue]="option.value">
                         {{option.label}}
