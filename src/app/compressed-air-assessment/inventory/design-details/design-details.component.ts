@@ -94,7 +94,7 @@ export class DesignDetailsComponent implements OnInit {
   setCalculatedModulatingPressureRange(selectedCompressor: CompressorInventoryItem) {
     if (this.displayModulation) {
       let pressureRange: number = (selectedCompressor.performancePoints.unloadPoint.dischargePressure - selectedCompressor.performancePoints.maxFullFlow.dischargePressure) / (1 - (selectedCompressor.compressorControls.unloadPointCapacity / 100));
-      pressureRange = Number(pressureRange.toFixed(3));
+      pressureRange = Number(pressureRange.toFixed(1));
       this.form.controls.modulatingPressureRange.patchValue(pressureRange);
     }
   }

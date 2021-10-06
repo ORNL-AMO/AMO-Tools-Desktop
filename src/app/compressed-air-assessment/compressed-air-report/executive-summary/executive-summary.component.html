@@ -41,65 +41,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>Peak Demand
-                    <span> (kW)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.total.peakDemand | number:'1.0-2'}}</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span
-                        *ngIf="result.combinedResults.peakDemand">{{result.combinedResults.peakDemand
-                        | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
-                        &mdash;</span>
-                </td>
-            </tr>
-            <tr>
-                <td>Peak Demand Savings
-                    <span> (kW)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    &mdash;</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="result.combinedResults.peakDemand">{{baselineResults.total.peakDemand
-                        - result.combinedResults.peakDemand
-                        | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
-                        &mdash;</span>
-                </td>
-            </tr>
-            <tr>
-                <td>Peak Demand Cost
-                    <span> ($)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.demandCost | number:'1.0-2'}}</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="result.combinedResults.peakDemandCost">{{result.combinedResults.peakDemandCost
-                        | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
-                        &mdash;</span>
-                </td>
-            </tr>
-            <tr>
-                <td>Peak Demand Cost Savings
-                    <span> ($)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    &mdash;</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="result.combinedResults.peakDemandCost">{{baselineResults.demandCost
-                        - result.combinedResults.peakDemandCost
-                        | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
-                        &mdash;</span>
-                </td>
-            </tr>
+
             <tr>
                 <td>Flow Reallocation Savings
                     <span> ($/yr)</span>
@@ -245,6 +187,66 @@
                     <span *ngIf="!result.combinedResults.auxiliaryPowerUsage.energyUse">&mdash; &mdash;</span>
                 </td>
             </tr>
+            <tr class="bold-row">
+                <td>Peak Demand
+                    <span> (kW)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.peakDemand | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemand">{{result.combinedResults.peakDemand
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
+                <td>Peak Demand Savings
+                    <span> (kW)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemand">{{baselineResults.total.peakDemand
+                        - result.combinedResults.peakDemand
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemand">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
+                <td>Peak Demand Cost
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.demandCost | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemandCost">{{result.combinedResults.peakDemandCost
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
+                <td>Peak Demand Cost Savings
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.peakDemandCost">{{baselineResults.demandCost
+                        - result.combinedResults.peakDemandCost
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+
+
             <tr class="bold-row">
                 <td>Annual Energy Used
                     <span> (kWh/yr)</span>
