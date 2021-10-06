@@ -91,6 +91,7 @@ export class SystemInformationComponent implements OnInit {
 
   setAtmosphericPressure(){
     let atmosphericPressure: number = this.altitudeCorrectionService.calculatePressureGivenAltitude(this.form.controls.systemElevation.value, this.settings);
+    atmosphericPressure = Number(atmosphericPressure.toFixed(2));
     this.form.controls.atmosphericPressure.patchValue(atmosphericPressure);
     this.save();
   }
