@@ -41,7 +41,6 @@
                     </div>
                 </td>
             </tr>
-
             <tr>
                 <td>Flow Reallocation Savings
                     <span> ($/yr)</span>
@@ -356,4 +355,17 @@
             </tr>
         </tbody>
     </table>
+    <div class="row" *ngIf="notes.length != 0">
+        <div class="col">
+            <h5>Modification Notes</h5>
+            <p>
+                <small>
+                    <span *ngFor="let note of notes">
+                        <b>{{note.modificationName}}:</b> {{note.note}}
+                        <br>
+                    </span>
+                </small>
+            </p>
+        </div>
+    </div>
 </div>
