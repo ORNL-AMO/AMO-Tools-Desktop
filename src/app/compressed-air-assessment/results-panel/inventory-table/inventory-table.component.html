@@ -13,6 +13,7 @@
                     <th>Control Type</th>
                     <th>Pressure Range</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +37,10 @@
                     </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
+                        
+                    </td>
+                    <td>
+                        <a class="fa fa-copy" (click)="createCopy(compressorInventoryItem)"></a>
                     </td>
                 </tr>
             </tbody>

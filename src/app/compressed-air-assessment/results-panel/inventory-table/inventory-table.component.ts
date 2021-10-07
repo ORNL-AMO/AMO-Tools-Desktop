@@ -105,4 +105,13 @@ export class InventoryTableComponent implements OnInit {
     let minMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
     return minMax.min + ' - ' + minMax.max + ' psig';
   }
+
+  createCopy(compressor: CompressorInventoryItem){
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+    let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
+    compressorCpy.itemId = Math.random().toString(36).substr(2, 9);
+    compressorCpy.name = compressorCpy.name + ' (copy)';
+    this.inventoryService.addNewCompressor(numberOfHourIntervals, compressorCpy);
+  }
 }

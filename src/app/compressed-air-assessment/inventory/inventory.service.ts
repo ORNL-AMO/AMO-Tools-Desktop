@@ -453,13 +453,16 @@ export class InventoryService {
     return true;
   }
 
-  addNewCompressor(numberOfEntries: number) {
-    let newInventoryItem: CompressorInventoryItem = this.getNewInventoryItem();
+  addNewCompressor(numberOfEntries: number, newInventoryItem?: CompressorInventoryItem) {
+    if (!newInventoryItem) {
+      newInventoryItem = this.getNewInventoryItem();
+    }
+
     newInventoryItem.modifiedDate = new Date();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
     let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < numberOfEntries; i++) {
       intervalData.push({
         isCompressorOn: false,
         timeInterval: i
