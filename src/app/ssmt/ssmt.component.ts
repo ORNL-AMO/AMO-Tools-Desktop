@@ -97,7 +97,7 @@ export class SsmtComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
-      if (!this.assessment || (this.assessment && this.assessment.type !== 'Steam')) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else {
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));

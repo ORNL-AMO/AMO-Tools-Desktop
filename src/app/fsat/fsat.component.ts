@@ -104,7 +104,7 @@ export class FsatComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
-      if (!this.assessment || (this.assessment && this.assessment.type !== 'Fan')) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'FSAT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));

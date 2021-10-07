@@ -17,7 +17,7 @@ const routerOptions: ExtraOptions = {
   anchorScrolling: 'enabled',
   onSameUrlNavigation: 'reload',
   scrollPositionRestoration: 'enabled',
-  enableTracing: true,
+  // enableTracing: true,
   useHash: true
   // paramsInheritanceStrategy: 'always'
 };
