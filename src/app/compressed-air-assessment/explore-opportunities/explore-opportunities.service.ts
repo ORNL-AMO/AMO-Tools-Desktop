@@ -76,6 +76,7 @@ export class ExploreOpportunitiesService {
     return {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
+      notes: undefined,
       reduceAirLeaks: {
         leakReduction: undefined,
         leakFlow: undefined,

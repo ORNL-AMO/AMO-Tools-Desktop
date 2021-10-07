@@ -139,7 +139,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   setModification() {
-    if (this.selectedModificationId) {
+    if (this.selectedModificationId != undefined) {
       this.modification = this.compressedAirAssessment.modifications.find(modification => { return modification.modificationId == this.selectedModificationId });
     }
   }

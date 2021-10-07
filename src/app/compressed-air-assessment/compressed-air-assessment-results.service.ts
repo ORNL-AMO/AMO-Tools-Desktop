@@ -27,8 +27,14 @@ export class CompressedAirAssessmentResultsService {
         }
       });
       let totalOperatingHours: number = dayType.numberOfDays * hoursOn;
-      let averageAirFlow: number = _.meanBy(totals, (total) => { return total.airflow });
-      let averagePower: number = _.meanBy(totals, (total) => { return total.power });
+      let averageAirFlow: number = _.sumBy(totals, (total) => { return total.airflow }) / hoursOn;
+      if(isNaN(averageAirFlow)){
+        averageAirFlow = 0;
+      }
+      let averagePower: number = _.sumBy(totals, (total) => { return total.power }) / hoursOn;
+      if(isNaN(averagePower)){
+        averagePower = 0;
+      }
       let peakDemand: number = _.maxBy(totals, (total) => { return total.power }).power;
       dayTypeResults.push({
         cost: baselineResults.cost,

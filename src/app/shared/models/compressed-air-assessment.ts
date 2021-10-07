@@ -27,7 +27,8 @@ export interface Modification {
     adjustCascadingSetPoints: AdjustCascadingSetPoints,
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
-    addPrimaryReceiverVolume: AddPrimaryReceiverVolume
+    addPrimaryReceiverVolume: AddPrimaryReceiverVolume,
+    notes: string
 }
 
 // export interface FlowReallocation {
