@@ -20,7 +20,6 @@ export class CompressedAirAssessmentResultsService {
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType);
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment.compressorInventoryItems, dayType, baselineProfileSummary);
       let baselineResults: SavingsItem = this.calculateEnergyAndCost(baselineProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
-
       let hoursOn: number = 0;
       totals.forEach(total => {
         if (total.power != 0) {
@@ -97,7 +96,7 @@ export class CompressedAirAssessmentResultsService {
       });
     }
 
-    let numberOfSummaryIntervals: number = compressedAirAssessmentCopy.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessmentCopy.systemProfile.systemProfileSetup.dataInterval;
+    let numberOfSummaryIntervals: number = compressedAirAssessmentCopy.systemProfile.systemProfileSetup.dataInterval;
 
     compressedAirAssessmentCopy.compressedAirDayTypes.forEach(dayType => {
       let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);
@@ -789,7 +788,6 @@ export class CompressedAirAssessmentResultsService {
     let flatSummaryData: Array<ProfileSummaryData> = _.flatMap(filteredSummary, (summary) => { return summary.profileSummaryData });
     flatSummaryData = flatSummaryData.filter(data => { return isNaN(data.power) == false })
     let sumPower: number = _.sumBy(flatSummaryData, 'power');
-    //todo: divide sumPower by hourInterval amount
     sumPower = sumPower * summaryDataInterval * dayType.numberOfDays;
     if (auxiliaryPowerUsage) {
       sumPower = sumPower + auxiliaryPowerUsage.energyUse;

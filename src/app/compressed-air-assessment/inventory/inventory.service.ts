@@ -17,6 +17,7 @@ export class InventoryService {
   collapseDesignDetails: boolean = true;
   collapseInletConditions: boolean = true;
   collapsePerformancePoints: boolean = true;
+  collapseCentrifugal: boolean = true;
   constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
@@ -377,8 +378,8 @@ export class InventoryService {
   }
 
   checkDisplayModulation(controlType: number): boolean {
-    //any control type with "modulation" or variable displacement
-    if (controlType == 1 || controlType == 2 || controlType == 7 || controlType == 8 || controlType == 9 || controlType == 10 || controlType == 3) {
+    //any control type with "modulation" (non-centrifugal) or variable displacement
+    if (controlType == 1 || controlType == 2 || controlType == 3) {
       return true;
     }
     return false;

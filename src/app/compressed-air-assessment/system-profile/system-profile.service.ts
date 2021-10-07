@@ -35,10 +35,10 @@ export class SystemProfileService {
 
 
   //no sequencer
-  updateCompressorOrderingNoSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType): Array<ProfileSummary> {
+  updateCompressorOrderingNoSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, numberOfHourIntervals: number): Array<ProfileSummary> {
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
-      for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
+      for (let orderIndex = 0; orderIndex < numberOfHourIntervals; orderIndex++) {
         let order: number = 1;
         for (let compressorOrderIndex = 0; compressorOrderIndex < dayTypeSummaries.length; compressorOrderIndex++) {
           if (compressorOrderIndex != compressorIndex && dayTypeSummaries[compressorOrderIndex].profileSummaryData[orderIndex].order != 0) {
@@ -58,10 +58,10 @@ export class SystemProfileService {
     return profileSummary;
   }
 
-  updateCompressorOrderingSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, removedSummary: ProfileSummary): Array<ProfileSummary> {
+  updateCompressorOrderingSequencer(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, removedSummary: ProfileSummary, numberOfHourIntervals: number): Array<ProfileSummary> {
     let dayTypeSummaries: Array<ProfileSummary> = profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     for (let compressorIndex = 0; compressorIndex < dayTypeSummaries.length; compressorIndex++) {
-      for (let orderIndex = 0; orderIndex < 24; orderIndex++) {
+      for (let orderIndex = 0; orderIndex < numberOfHourIntervals; orderIndex++) {
         if (dayTypeSummaries[compressorIndex].profileSummaryData[orderIndex].order > removedSummary.profileSummaryData[orderIndex].order) {
           let summaryIndex: number = profileSummary.findIndex(summary => { return summary.compressorId == dayTypeSummaries[compressorIndex].compressorId && summary.dayTypeId == dayTypeSummaries[compressorIndex].dayTypeId })
           profileSummary[summaryIndex].profileSummaryData[orderIndex].order--;
