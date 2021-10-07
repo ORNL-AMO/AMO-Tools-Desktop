@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
 
 @Component({
@@ -14,9 +14,16 @@ export class ProfileSummaryTableComponent implements OnInit {
   @Input()
   totals: Array<ProfileSummaryTotal>;
 
+
+
+  @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
+  allTablesString: string;
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  updateTableString() {
+    this.allTablesString = this.profileTable.nativeElement.innerText;
+  }
 }
