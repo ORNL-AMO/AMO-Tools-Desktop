@@ -164,7 +164,8 @@
             <span class="bold table-text">&mdash; &mdash;</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
-            <span class="bold table-text">{{baselineResults.total.peakDemand - dayTypeModificationResult.peakDemand | number:'1.0-2'}} kW</span>
+            <span class="bold table-text">{{baselineResults.total.peakDemand - dayTypeModificationResult.peakDemand |
+                number:'1.0-2'}} kW</span>
         </div>
     </div>
     <div class="d-flex my-table-bg my-table-item">
@@ -186,7 +187,8 @@
             <span class="bold table-text">&mdash; &mdash;</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
-            <span class="bold table-text">{{baselineResults.demandCost - dayTypeModificationResult.peakDemandCost | currency}}</span>
+            <span class="bold table-text">{{baselineResults.demandCost - dayTypeModificationResult.peakDemandCost |
+                currency}}</span>
         </div>
     </div>
 
@@ -202,8 +204,7 @@
                 number:'1.0-0'}}</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
-            <span class="bold table-text"
-                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.power
+            <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.adjustedResults.power
                 | number:'1.0-0'}}</span>
         </div>
     </div>
@@ -216,30 +217,57 @@
             <span class="bold table-text">&mdash;</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
-            <span class="bold table-text"
-                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.savings.power
+            <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.savings.power
                 | number:'1.0-0'}}</span>
         </div>
     </div>
 
     <div class="d-flex my-table-bg my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
-            <span class="bold table-text">Annual Cost</span>
+            <span class="bold table-text">Annual Energy Cost</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
             <span class="bold table-text"> {{dayTypeModificationResult.allSavingsResults.baselineResults.cost |
                 currency}}</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
-            <span class="bold table-text"
-                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.adjustedResults.cost
+            <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.adjustedResults.cost
                 | currency}}</span>
         </div>
     </div>
 
     <div class="d-flex stripe my-table-bg my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
-            <span class="bold table-text">Annual Savings</span>
+            <span class="bold table-text">Annual Energy Cost Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text">
+                {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}</span>
+        </div>
+    </div>
+
+
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{baselineResults.totalAnnualOperatingCost |
+                currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.totalAnnualOperatingCost
+                | currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex stripe my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost Savings</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
             <span class="bold table-text">&mdash;</span>
@@ -247,7 +275,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
             <span class="bold table-text"
                 [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">
-                {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}</span>
+                {{baselineResults.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost |
+                currency}}</span>
         </div>
     </div>
+
 </div>

@@ -105,7 +105,8 @@ export class CompressedAirAssessmentResultsService {
     let numberOfSummaryIntervals: number = compressedAirAssessmentCopy.systemProfile.systemProfileSetup.dataInterval;
 
     compressedAirAssessmentCopy.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);
+      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);   
+      
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
 
       let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemBasics.electricityCost);
@@ -115,7 +116,7 @@ export class CompressedAirAssessmentResultsService {
 
       let peakDemand: number = _.maxBy(totals, (result) => { return result.power }).power;
       let peakDemandCost: number = peakDemand * 12 * compressedAirAssessmentCopy.systemBasics.demandCost;
-
+      let totalModifiedAnnualOperatingCost: number = peakDemandCost + allSavingsResults.adjustedResults.cost;
       modificationResults.push({
         adjustedProfileSummary: adjustedData.adjustedProfileSummary,
         adjustedCompressors: adjustedData.adjustedCompressors,
@@ -141,7 +142,8 @@ export class CompressedAirAssessmentResultsService {
         auxiliaryPowerUsage: adjustedData.auxiliaryPowerUsage,
         dayTypeName: dayType.name,
         peakDemand: peakDemand,
-        peakDemandCost: peakDemandCost
+        peakDemandCost: peakDemandCost,
+        totalAnnualOperatingCost: totalModifiedAnnualOperatingCost
       });
     });
     // console.timeEnd('calculateModificationResults');
@@ -210,11 +212,14 @@ export class CompressedAirAssessmentResultsService {
       dayTypeName: undefined,
       auxiliaryPowerUsage: { cost: 0, energyUse: 0 },
       peakDemand: 0,
-      peakDemandCost: 0
+      peakDemandCost: 0,
+      totalAnnualOperatingCost: 0
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
       dayTypeModificationResult.peakDemand += modResult.peakDemand;
       dayTypeModificationResult.peakDemandCost += modResult.peakDemandCost;
+      dayTypeModificationResult.totalAnnualOperatingCost += modResult.totalAnnualOperatingCost;
+
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
       dayTypeModificationResult.allSavingsResults.savings.power += modResult.allSavingsResults.savings.power;
 
@@ -886,7 +891,8 @@ export interface DayTypeModificationResult {
   dayTypeId: string,
   dayTypeName: string,
   peakDemand: number,
-  peakDemandCost: number
+  peakDemandCost: number,
+  totalAnnualOperatingCost: number
 }
 
 
