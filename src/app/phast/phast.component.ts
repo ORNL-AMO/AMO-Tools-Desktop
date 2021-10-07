@@ -3,7 +3,7 @@ import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { PhastService } from './phast.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
@@ -81,6 +81,7 @@ export class PhastComponent implements OnInit {
     private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
@@ -98,8 +99,11 @@ export class PhastComponent implements OnInit {
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      //use copy of phast object of as modal provided to forms
-      this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'Furnace')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        //use copy of phast object of as modal provided to forms
+        this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
           this._phast.modifications.forEach(modification => {
@@ -115,6 +119,7 @@ export class PhastComponent implements OnInit {
       }
       this.getSettings();
       this.initSankeyList();
+    } 
     });
     //check to see if we need to start on a specified tab
     let tmpTab = this.assessmentService.getTab();

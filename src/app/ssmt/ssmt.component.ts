@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
@@ -82,6 +82,7 @@ export class SsmtComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private indexedDbService: IndexedDbService,
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
@@ -96,8 +97,11 @@ export class SsmtComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
-      this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
-      if (this._ssmt.modifications) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'Steam')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else {
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this._ssmt.modifications) {
         if (this._ssmt.modifications.length !== 0) {
           this.modificationExists = true;
           this.modificationIndex = 0;
@@ -117,6 +121,7 @@ export class SsmtComponent implements OnInit {
       if (tmpTab) {
         this.ssmtService.mainTab.next(tmpTab);
       }
+    }
     });
     this.subscribeTabs();
 

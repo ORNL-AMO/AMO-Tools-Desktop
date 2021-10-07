@@ -5,7 +5,7 @@ import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/ps
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { JsonToCsvService } from '../shared/helper-services/json-to-csv.service';
 import { CompareService } from './compare.service';
@@ -77,6 +77,7 @@ export class PsatComponent implements OnInit {
   showToast: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
+    private router: Router,
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -96,20 +97,24 @@ export class PsatComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this.getSettings();
-      this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
-      if (this._psat.modifications) {
-        if (this._psat.modifications.length != 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'Pump')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        if (this._psat.modifications) {
+          if (this._psat.modifications.length != 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+          }
+          if (this._psat.setupDone) {
+            this.compareService.setCompareVals(this._psat, 0);
+          }
+        } else {
+          this._psat.modifications = new Array();
+          this.modificationExists = false;
         }
-        if (this._psat.setupDone) {
-          this.compareService.setCompareVals(this._psat, 0);
-        }
-      } else {
-        this._psat.modifications = new Array();
-        this.modificationExists = false;
+        this.initSankeyList();
       }
-      this.initSankeyList();
     })
     let tmpTab = this.assessmentService.getTab();
     if (tmpTab) {

@@ -14,7 +14,7 @@ export class SqlDbApiService {
   startup() {
     this.hasStarted = true;
     if (Module) {
-      this.dbInstance = new Module.SQLite(":memory:", true);
+        this.dbInstance = new Module.SQLite(":memory:", true);
     } else {
       console.log("NO MODULE FOUND")
     }

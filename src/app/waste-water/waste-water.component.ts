@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -59,6 +59,7 @@ export class WasteWaterComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
+    private router: Router,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
@@ -67,17 +68,21 @@ export class WasteWaterComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      if (!settings) {
-        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
-      } else {
-        this.settings = settings;
-        this.wasteWaterService.settings.next(settings);
-      }
-      if (this.assessmentService.tab) {
-        this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'WasteWater')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else {  
+        this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
+        let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        if (!settings) {
+          settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+          this.addSettings(settings);
+        } else {
+          this.settings = settings;
+          this.wasteWaterService.settings.next(settings);
+        }
+        if (this.assessmentService.tab) {
+          this.wasteWaterService.mainTab.next(this.assessmentService.tab);
+        }
       }
     });
 

@@ -12,7 +12,6 @@ import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
-import { LiquidLoadChargeMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 declare var google: any;
 @Component({
   selector: 'app-core',
@@ -91,6 +90,7 @@ export class CoreComponent implements OnInit {
 
     //TODO: has started flag move to api service
     if (this.sqlDbApiService.hasStarted === false) {
+      if (this.sqlDbApiService.dbInstance === undefined)
       this.sqlDbApiService.startup();
     }
     if (this.indexedDbService.db === undefined) {
@@ -98,7 +98,7 @@ export class CoreComponent implements OnInit {
     }
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
-      if (val == true) {
+      if (val == true && this.electronService.isElectronApp) {
         this.showUpdateModal = true;
         this.changeDetectorRef.detectChanges();
       }

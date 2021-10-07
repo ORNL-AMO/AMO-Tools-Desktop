@@ -36,11 +36,13 @@ import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module'
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { ToolsSuiteApiModule } from '../tools-suite-api/tools-suite-api.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     CoreComponent,
-    UpdateToastComponent
+    UpdateToastComponent,
+    NotFoundComponent,
   ],
   imports: [
     CommonModule,

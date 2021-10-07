@@ -99,6 +99,8 @@ import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/he
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+
 
 export const coreRoutes: Routes = [
   {
@@ -147,7 +149,6 @@ export const coreRoutes: Routes = [
         path: 'calculators',
         children: [
           {
-
             path: 'calculators-list',
             component: CalculatorsListComponent
           },
@@ -499,7 +500,7 @@ export const coreRoutes: Routes = [
       {
         path: '',
         component: AssessmentReportsComponent
-      }
+      },
     ]
   },
   {
@@ -515,5 +516,10 @@ export const coreRoutes: Routes = [
   {
     component: WasteWaterComponent,
     path: 'waste-water/:id',
-  }
+  },
+  { 
+    path: '**', 
+    component: NotFoundComponent 
+  },  
+
 ];

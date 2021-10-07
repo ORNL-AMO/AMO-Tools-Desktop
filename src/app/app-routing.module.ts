@@ -1,22 +1,34 @@
-import { Routes, RouterModule, ExtraOptions } from '@angular/router';
-import { ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { CoreComponent } from './core/core.component';
 import { coreRoutes } from './core/core.routing';
+
 
 const appRoutes: Routes = [
   {
     path: '',
     component: CoreComponent,
     children: coreRoutes
-  }
+  },
 ];
 
-export const appRoutingProviders: any[] = [
-];
 const routerOptions: ExtraOptions = {
   anchorScrolling: 'enabled',
   onSameUrlNavigation: 'reload',
   scrollPositionRestoration: 'enabled',
+  enableTracing: true,
+  useHash: true
   // paramsInheritanceStrategy: 'always'
 };
-export const routing: ModuleWithProviders<RouterModule> = RouterModule.forRoot(appRoutes, routerOptions);
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(appRoutes, routerOptions)
+  ],
+  exports: [RouterModule],
+  providers: []
+})
+export class AppRoutingModule { }
+
