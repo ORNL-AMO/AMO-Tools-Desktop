@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CalculatorDragBarService } from '../../../shared/calculator-drag-bar/calculator-drag-bar.service';
 import { Settings } from '../../../shared/models/settings';
 import { ChillerStagingService } from './chiller-staging.service';
 
@@ -31,7 +32,8 @@ export class ChillerStagingComponent implements OnInit {
   tabSelect: string = 'results';
 
   constructor(private chillerStagingService: ChillerStagingService,
-    private settingsDbService: SettingsDbService) { }
+    private settingsDbService: SettingsDbService,
+    private calculatorDragBarService: CalculatorDragBarService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -61,7 +63,13 @@ export class ChillerStagingComponent implements OnInit {
       this.calculate();
     });
 
-    this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
+    // this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
+    //   this.calcFormWidth = val;
+    //   if (this.contentContainer && this.calcFormWidth) {
+    //     this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
+    //   }
+    // });
+    this.calcFormWidthSub = this.calculatorDragBarService.sidebarX.subscribe(val => {
       this.calcFormWidth = val;
       if (this.contentContainer && this.calcFormWidth) {
         this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
