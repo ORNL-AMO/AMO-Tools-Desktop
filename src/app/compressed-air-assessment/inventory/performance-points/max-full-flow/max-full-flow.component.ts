@@ -45,6 +45,7 @@ export class MaxFullFlowComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setMaxFullFlowLabel(compressor.compressorControls.controlType);
           this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow');
+          console.log(this.form);
           this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(this.selectedCompressor.performancePoints.maxFullFlow);

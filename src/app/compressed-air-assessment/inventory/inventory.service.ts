@@ -235,7 +235,7 @@ export class InventoryService {
 
   markFormDirtyToDisplayValidation(form: FormGroup) {
     for (let key in form.controls) {
-      if (form.controls[key]) {
+      if (form.controls[key] && form.controls[key].value != undefined) {
         form.controls[key].markAsDirty();
       }
     }

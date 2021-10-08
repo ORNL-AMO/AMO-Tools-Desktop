@@ -38,7 +38,8 @@ export class PerformancePointsFormService {
     }
 
     for (let key in form.controls) {
-      if (form.controls[key].value !== null) {
+      if (form.controls[key].value != undefined) {
+        console.log(form.controls[key].value);
         form.controls[key].markAsDirty();
       }
     }
