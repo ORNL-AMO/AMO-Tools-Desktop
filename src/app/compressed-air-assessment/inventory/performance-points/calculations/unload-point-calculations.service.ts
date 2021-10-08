@@ -8,8 +8,14 @@ export class UnloadPointCalculationsService {
   constructor(private convertCompressedAirService: ConvertCompressedAirService) { }
 
   setUnload(selectedCompressor: CompressorInventoryItem): PerformancePoint {
-    selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow);
-    selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
+    if (selectedCompressor.nameplateData.compressorType == 6) {
+      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
+      selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow);
+    } else {
+      //non centrifugal calcs need airflow calc first, discharge pressure uses value
+      selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow);
+      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
+    }
     selectedCompressor.performancePoints.unloadPoint.power = this.getUnloadPower(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPower);
     return selectedCompressor.performancePoints.unloadPoint;
   }
