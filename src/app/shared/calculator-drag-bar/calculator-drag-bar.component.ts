@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { DashboardService } from '../../dashboard/dashboard.service';
 import { CalculatorDragBarService } from './calculator-drag-bar.service';
 
 @Component({
@@ -12,22 +13,17 @@ export class CalculatorDragBarComponent implements OnInit {
 
   @HostListener('drag', ['$event'])
   onDrag(event: DragEvent) {
-    if (event.pageX > 50 && event.pageX < 1000) {
-      this.calculatorDragBarService.sidebarX.next(event.pageX);
-    }
-    //this.setSidebarX(event.pageX);
-    this.dragAction = event.pageX;
+    this.setSidebarX(event.pageX);
   }
 
-  dragAction: number;
-
-  constructor(private calculatorDragBarService: CalculatorDragBarService) { }
+  constructor(private calculatorDragBarService: CalculatorDragBarService,
+     private dashboardService: DashboardService) { }
 
   ngOnInit() {
   }
 
   setSidebarX(pageX: number){
-    let dashboardSidebarX: number = this.calculatorDragBarService.sidebarX.getValue();
+    let dashboardSidebarX: number = this.dashboardService.sidebarX.getValue();
     let offsetPageX: number = pageX - dashboardSidebarX;
     //adjust these values to make more sense with a calculator form
     if (offsetPageX > 50 && offsetPageX < 2000) {
@@ -35,17 +31,5 @@ export class CalculatorDragBarComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    // let sidebarXValue: number = this.calculatorDragBarService.sidebarX.getValue();
-    // if (sidebarXValue == undefined && this.dragBar != undefined) {
-    //   this.calculatorDragBarService.sidebarX.next(this.dragBar.nativeElement.offsetLeft);
-    // }
-    let dashboardSidebarX: number = this.calculatorDragBarService.sidebarX.getValue();
-    let offsetPageX: number = this.dragAction - dashboardSidebarX;
-    //adjust these values to make more sense with a calculator form
-    if (offsetPageX > 500 && offsetPageX < 1000) {
-      this.calculatorDragBarService.sidebarX.next(this.dragBar.nativeElement);
-    }
-  }
 
 }
