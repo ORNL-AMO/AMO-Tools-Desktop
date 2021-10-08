@@ -65,8 +65,8 @@
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
       class="card calc-card-item m-2" (click)="openCalculator('waste-heat')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/waste-heat-icon.png" class="calc-img ph-calc-img">
         </div>
         <a class="pt-2">Waste Heat</a>
         <p class="mb-0 text-center help-text">
@@ -242,8 +242,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('water-heating')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img">
+        <div class="steam-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img steam-calc-img">
         </div>
         <a class="pt-2">Vent Steam to Heat Water</a>
         <p class="mb-0 text-center help-text">
@@ -258,8 +258,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('flue-gas')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img ph-calc-img">
         </div>
         <a class="pt-2">Flue Gas</a>
         <p class="mb-0 text-center help-text">
@@ -273,8 +273,8 @@
           && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('air-heating')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img ph-calc-img">
         </div>
         <a class="pt-2">Air Heating using Flue Gas</a>
         <p class="mb-0 text-center help-text">
@@ -290,8 +290,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('opening-loss')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img">      
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img ph-calc-img-w">
         </div>
         <a class="pt-2">Opening Loss</a>
         <p class="mb-0 text-center help-text">
@@ -305,8 +305,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('heat-cascading')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/heat-cascading.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/heat-cascading.png" class="calc-img ph-calc-img">
         </div>
         <a class="pt-2">Heat Cascading</a>
         <p class="mb-0 text-center help-text">
@@ -322,8 +322,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('wall-loss')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img ph-calc-img-w">
         </div>
         <a class="pt-2">Wall Loss</a>
         <p class="mb-0 text-center help-text">
@@ -337,8 +337,8 @@
       && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="openCalculator('leakage-loss')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
-        <div class="calc-icon d-flex justify-content-center align-items-center">
-          <img src="assets/images/calculator-icons/furnace-icons/leakage.png" class="calc-img">
+        <div class="ph-calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/furnace-icons/leakage.png" class="calc-img ph-calc-img">
         </div>
         <a class="pt-2">Leakage Loss</a>
         <p class="mb-0 text-center help-text">
