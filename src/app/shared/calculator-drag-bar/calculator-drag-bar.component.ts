@@ -25,8 +25,7 @@ export class CalculatorDragBarComponent implements OnInit {
   setSidebarX(pageX: number){
     let dashboardSidebarX: number = this.dashboardService.sidebarX.getValue();
     let offsetPageX: number = pageX - dashboardSidebarX;
-    //adjust these values to make more sense with a calculator form
-    if (offsetPageX > 50 && offsetPageX < 2000) {
+    if (offsetPageX > 500 && offsetPageX < 1000) {
       this.calculatorDragBarService.sidebarX.next(offsetPageX);
     }
   }

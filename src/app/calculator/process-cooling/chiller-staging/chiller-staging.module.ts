@@ -12,7 +12,6 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
-import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CalculatorDragBarModule } from '../../../shared/calculator-drag-bar/calculator-drag-bar.module';
 
 
@@ -22,8 +21,7 @@ import { CalculatorDragBarModule } from '../../../shared/calculator-drag-bar/cal
     ChillerStagingComponent,
     ChillerStagingFormComponent,
     ChillerStagingResultsComponent,
-    ChillerStagingHelpComponent,
-    DragBarComponent
+    ChillerStagingHelpComponent
   ],
   imports: [
     CommonModule,

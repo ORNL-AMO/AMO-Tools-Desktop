@@ -5,10 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 export class CalculatorDragBarService {
 
   sidebarX: BehaviorSubject<number>;
-  sidebarY: BehaviorSubject<number>;
 
   constructor() {
     this.sidebarX = new BehaviorSubject<number>(undefined);
-    this.sidebarY = new BehaviorSubject<number>(undefined);
    }
 }

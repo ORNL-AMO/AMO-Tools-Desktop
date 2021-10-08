@@ -63,12 +63,6 @@ export class ChillerStagingComponent implements OnInit {
       this.calculate();
     });
 
-    // this.calcFormWidthSub = this.chillerStagingService.sidebarX.subscribe(val => {
-    //   this.calcFormWidth = val;
-    //   if (this.contentContainer && this.calcFormWidth) {
-    //     this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
-    //   }
-    // });
     this.calcFormWidthSub = this.calculatorDragBarService.sidebarX.subscribe(val => {
       this.calcFormWidth = val;
       if (this.contentContainer && this.calcFormWidth) {
