@@ -20,7 +20,7 @@
 }
 
 .stripe{
-    border-bottom: groove 1px;
+    border-bottom: solid;
 }
 
 .my-table-bg{
@@ -38,4 +38,8 @@
 
 .my-table-item:hover{
     background-color: white;
+}
+
+.energy-savings.stripe{
+    margin-bottom: 15px;
 }
