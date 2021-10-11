@@ -46,11 +46,11 @@ export class CalculateOutletPressureComponent implements OnInit {
         fanOutletArea: undefined
       };
     }
-    if(this.outletPressureData.calculatedOutletPressure){
-      this.emitInvalid.emit(false);
-    } else{
-      this.emitInvalid.emit(true);
-    }
+    // if(this.outletPressureData.calculatedOutletPressure){
+    //   this.emitInvalid.emit(false);
+    // } else{
+    //   this.emitInvalid.emit(true);
+    // }
   }
 
   toggleUserDefinedVelocityPressure() {
@@ -80,11 +80,11 @@ export class CalculateOutletPressureComponent implements OnInit {
       }
     });
     this.outletPressureData.calculatedOutletPressure = sum;
-    if(this.outletPressureData.calculatedOutletPressure){
-      this.emitInvalid.emit(false);
-    } else{
-      this.emitInvalid.emit(true);
-    }
+    // if(this.outletPressureData.calculatedOutletPressure){
+    //   this.emitInvalid.emit(false);
+    // } else{
+    //   this.emitInvalid.emit(true);
+    // }
     this.emitSave.emit(this.outletPressureData);
   }
 

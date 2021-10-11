@@ -221,13 +221,31 @@
         </button>
       </div>
       <div #modalBody class="modal-body p-0">
-        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
-          [inletPressureData]="inletPressureCopy" [usingStaticPressure]="fieldDataForm.controls.usingStaticPressure.value" (emitSave)="saveInletPressureCopy($event)" [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)">
+
+        <app-calculate-inlet-pressure 
+          *ngIf="pressureCalcType == 'inlet' && bodyHeight" 
+          [settings]="settings" 
+          [inletPressureData]="inletPressureCopy" 
+          (emitSave)="saveInletPressureCopy($event)" 
+          [inletVelocityPressureInputs]="inletVelocityPressureInputs"          
+          [usingStaticPressure]="fieldDataForm.controls.usingStaticPressure.value"           
+          [bodyHeight]="bodyHeight" 
+          (emitInvalid)="setCalcInvalid($event)">
         </app-calculate-inlet-pressure>
-        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
-          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)"
-          [usingStaticPressure]="fieldDataForm.controls.usingStaticPressure.value" [inletVelocityPressureInputs]="inletVelocityPressureInputs"
-          [bodyHeight]="bodyHeight" (emitInvalid)="setCalcInvalid($event)"></app-calculate-outlet-pressure>
+
+        <app-calculate-outlet-pressure 
+          *ngIf="pressureCalcType == 'outlet' && bodyHeight" 
+          [settings]="settings"
+          [outletPressureData]="outletPressureCopy" 
+          (emitSave)="saveOutletPressureCopy($event)"          
+          [inletVelocityPressureInputs]="inletVelocityPressureInputs"
+          [usingStaticPressure]="fieldDataForm.controls.usingStaticPressure.value" 
+          [bodyHeight]="bodyHeight" 
+          (emitInvalid)="setCalcInvalid($event)">
+        </app-calculate-outlet-pressure>
+
+
+
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
           [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
           (emitInvalid)="setCalcInvalid($event)" (updateFieldData)="updateFsatWithModalData($event)">

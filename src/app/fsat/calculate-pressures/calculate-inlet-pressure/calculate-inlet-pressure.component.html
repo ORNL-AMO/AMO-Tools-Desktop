@@ -8,8 +8,9 @@
         <div class="form-group">
           <label for="inletLoss">Inlet Loss</label>
           <div class="input-group">
-            <input name="inletLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.inletLoss" id="inletLoss"
-              (input)="calculate()" onfocus="this.select();" (focus)="changeField('inletLoss')">
+            <input name="inletLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.inletLoss" id="inletLoss" (input)="calculate()" onfocus="this.select();"
+              (focus)="changeField('inletLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
@@ -17,110 +18,122 @@
         <div class="form-group">
           <label for="inletDuctworkLoss">Inlet Ductwork Loss</label>
           <div class="input-group">
-            <input name="inletDuctworkLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.inletDuctworkLoss"
-              id="inletDuctworkLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('inletDuctworkLoss')">
+            <input name="inletDuctworkLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.inletDuctworkLoss" id="inletDuctworkLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('inletDuctworkLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="systemDamperLoss">System Damper Loss</label>
           <div class="input-group">
-            <input name="systemDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.systemDamperLoss"
-              id="systemDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('systemDamperLoss')">
+            <input name="systemDamperLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.systemDamperLoss" id="systemDamperLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('systemDamperLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="airTreatmentLoss">Air Treatment Loss</label>
           <div class="input-group">
-            <input name="airTreatmentLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.airTreatmentLoss"
-              id="airTreatmentLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('airTreatmentLoss')">
+            <input name="airTreatmentLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.airTreatmentLoss" id="airTreatmentLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('airTreatmentLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="flowMeasurementLoss">Flow Measurement Loss</label>
           <div class="input-group">
-            <input name="flowMeasurementLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.flowMeasurementLoss"
-              id="flowMeasurementLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('flowMeasurementLoss')">
+            <input name="flowMeasurementLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.flowMeasurementLoss" id="flowMeasurementLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('flowMeasurementLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="inletDamperLoss">Inlet Damper Loss</label>
           <div class="input-group">
-            <input name="inletDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.inletDamperLoss"
-              id="inletDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('inletDamperLoss')">
+            <input name="inletDamperLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.inletDamperLoss" id="inletDamperLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('inletDamperLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="processRequirementsFixed">Process Requirements (Suction Side - Fixed)</label>
           <div class="input-group">
-            <input name="processRequirementsFixed" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.processRequirementsFixed"
-              id="processRequirementsFixed" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirementsFixed')">
+            <input name="processRequirementsFixed" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.processRequirementsFixed" id="processRequirementsFixed"
+              (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirementsFixed')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="processRequirements">Process Requirements (Suction Side - Variable)</label>
           <div class="input-group">
-            <input name="processRequirements" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.processRequirements"
-              id="processRequirements" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirements')">
+            <input name="processRequirements" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.processRequirements" id="processRequirements" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('processRequirements')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="inletSystemEffectLoss">Inlet System Effect Loss</label>
           <div class="input-group">
-            <input name="inletSystemEffectLoss" class="form-control" type="number" step="any" [(ngModel)]="inletPressureData.inletSystemEffectLoss"
-              id="inletSystemEffectLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('inletSystemEffectLoss')">
+            <input name="inletSystemEffectLoss" class="form-control" type="number" step="any"
+              [(ngModel)]="inletPressureData.inletSystemEffectLoss" id="inletSystemEffectLoss" (input)="calculate()"
+              onfocus="this.select();" (focus)="changeField('inletSystemEffectLoss')">
             <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
           </div>
         </div>
 
         <div class="mt-2" *ngIf="usingStaticPressure == false">
           <div *ngIf="!inletPressureData.userDefinedVelocityPressure" class="form-group">
-          <label for="{{'duct'+idString}}">
-            Fan Inlet Area
-          </label>
-          <div class="input-group">
-            <input name="fanInletArea" type="number" max="0" step="any" class="form-control"
-            [(ngModel)]="inletPressureData.fanInletArea" id="{{'fanInletArea'+idString}}" (input)="calculate()"
-              (focus)="changeField('fanInletArea')" onfocus="this.select();">
-            <span class="input-group-addon units">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+            <label for="{{'duct'+idString}}">
+              Fan Inlet Area
+            </label>
+            <div class="input-group">
+              <input name="fanInletArea" type="number" max="0" step="any" class="form-control"
+                [(ngModel)]="inletPressureData.fanInletArea" id="{{'fanInletArea'+idString}}" (input)="calculate()"
+                (focus)="changeField('fanInletArea')" onfocus="this.select();">
+              <span class="input-group-addon units">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="{{'inletVelocityPressure_'+idString}}">Inlet Velocity Pressure
+              <a class="form-text small click-link" *ngIf="inletPressureData.userDefinedVelocityPressure"
+                (click)="toggleUserDefinedVelocityPressure()">
+                Estimate Inlet Velocity Pressure</a>
+              <a class="form-text small click-link" *ngIf="!inletPressureData.userDefinedVelocityPressure"
+                (click)="toggleUserDefinedVelocityPressure()">
+                Define Inlet Velocity Pressure</a>
+            </label>
+            <div *ngIf="inletPressureData.userDefinedVelocityPressure" class="input-group">
+              <input name="inletVelocityPressure" type="number" max="0" step="any" class="form-control"
+                [(ngModel)]="inletPressureData.inletVelocityPressure" id="{{'inletVelocityPressure'+idString}}"
+                (input)="calculate()" (focus)="changeField('inletVelocityPressure')" onfocus="this.select();">
+              <span class="input-group-addon units"
+                [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            </div>
+            <div *ngIf="!inletPressureData.userDefinedVelocityPressure"
+              class="input-group d-flex justify-content-center small bold">
+              <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure !== undefined">
+                {{inletPressureData.inletVelocityPressure | number:'1.0-5'}}
+                <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+              </span>
+              <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure === undefined">&mdash; &mdash;</span>
+            </div>
+            <span class="alert-warning pull-right small"
+              *ngIf="calcInletVelocityPressureError != null || !inletPressureData.inletVelocityPressure">
+              'Flow rate is required to calculate Inlet Velocity Pressure'
             </span>
           </div>
-        </div>
-    
-        <div class="form-group">
-          <label for="{{'inletVelocityPressure_'+idString}}">Inlet Velocity Pressure
-            <a class="form-text small click-link" *ngIf="inletPressureData.userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()" >
-              Estimate Inlet Velocity Pressure</a>
-            <a class="form-text small click-link" *ngIf="!inletPressureData.userDefinedVelocityPressure" (click)="toggleUserDefinedVelocityPressure()">
-              Define Inlet Velocity Pressure</a>
-          </label>
-          <div *ngIf="inletPressureData.userDefinedVelocityPressure" class="input-group">
-            <input name="inletVelocityPressure" type="number" max="0" step="any" class="form-control"
-            [(ngModel)]="inletPressureData.inletVelocityPressure" id="{{'inletVelocityPressure'+idString}}" (input)="calculate()"
-            (focus)="changeField('inletVelocityPressure')" onfocus="this.select();">
-            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-          </div>
-          <div *ngIf="!inletPressureData.userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
-            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure !== undefined">
-              {{inletPressureData.inletVelocityPressure | number:'1.0-5'}}
-            <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-            </span>
-            <span class="mr-2" *ngIf="inletPressureData.inletVelocityPressure === undefined">&mdash; &mdash;</span>
-          </div>
-          <span class="alert-warning pull-right small"
-            *ngIf="calcInletVelocityPressureError !== null && !inletPressureData.userDefinedVelocityPressure">
-            {{ calcInletVelocityPressureError }}
-          </span>
-        </div>
-    
+
         </div>
 
       </div>
@@ -129,7 +142,8 @@
         <label class="bold" for="inletPressure">
           Inlet Pressure
         </label>
-        <div class="small text-center">{{inletPressureData.calculatedInletPressure | number:'1.1-1'}} <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></div>
+        <div class="small text-center">{{inletPressureData.calculatedInletPressure}} <span
+            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></div>
       </div>
     </form>
   </div>
@@ -140,3 +154,4 @@
     <app-calculate-inlet-pressure-help [currentField]="currentField"></app-calculate-inlet-pressure-help>
   </div>
 </div>
+<!-- {{inletPressureData.calculatedInletPressure | number:'1.1-1'}} -->

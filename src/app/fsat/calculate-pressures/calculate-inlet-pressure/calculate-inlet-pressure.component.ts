@@ -47,11 +47,11 @@ export class CalculateInletPressureComponent implements OnInit {
         fanInletArea: undefined
       };
     } 
-    if(this.inletPressureData.calculatedInletPressure){
-      this.emitInvalid.emit(false);
-    } else{
-      this.emitInvalid.emit(true);
-    }
+    // if(this.inletPressureData.calculatedInletPressure){
+    //   this.emitInvalid.emit(false);
+    // } else{
+    //   this.emitInvalid.emit(true);
+    // }
   }
 
   toggleUserDefinedVelocityPressure() {
@@ -70,8 +70,8 @@ export class CalculateInletPressureComponent implements OnInit {
     }
   }
 
-  calculate() {
-    this.setInletVelocityPressure();
+  calculate() {    
+    this.setInletVelocityPressure();    
     let sum: number = 0;
     Object.keys(this.inletPressureData).map((key, index) => {
       if (key.valueOf() !== 'calculatedInletPressure' 
@@ -81,11 +81,11 @@ export class CalculateInletPressureComponent implements OnInit {
       }
     });    
     this.inletPressureData.calculatedInletPressure = (sum * -1);  
-    if(this.inletPressureData.calculatedInletPressure){
-      this.emitInvalid.emit(false);
-    } else{
-      this.emitInvalid.emit(true);
-    }
+    // if(this.inletPressureData.calculatedInletPressure){
+    //   this.emitInvalid.emit(false);
+    // } else{
+    //   this.emitInvalid.emit(true);
+    // }
     this.emitSave.emit(this.inletPressureData);
   }
 
