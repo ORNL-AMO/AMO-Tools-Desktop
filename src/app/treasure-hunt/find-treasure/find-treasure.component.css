@@ -75,7 +75,7 @@ a:not([href]):not([tabindex]){
     width: 81px;
 }
 
-.ph-calc-img{
+.th-calc-img{
     height: 52px;
     width: auto;
     display: block;
@@ -83,7 +83,7 @@ a:not([href]):not([tabindex]){
     margin-right: auto;
 }
 
-.ph-calc-img-w{
+.th-calc-img-w{
     height: auto;
     width: 52px;
     display: block;
@@ -98,12 +98,11 @@ a:not([href]):not([tabindex]){
     width: 81px;
 }
 
-.steam-calc-img{
-    height: 52px;
-    width: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.ca-calc-icon{
+    background-image: linear-gradient(to bottom right, #ffffff, rgba(147, 112, 219, 1));
+    border-radius: 50%;
+    height: 81px;
+    width: 81px;
 }
 
 .calc-icon-div{
