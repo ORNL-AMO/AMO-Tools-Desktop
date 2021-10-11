@@ -33,7 +33,6 @@ export class ExecutiveSummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.combinedDayTypeResults);
     this.combinedDayTypeResults.forEach(modResult => {
       if (!this.displayAddReceiverVolume) {
         this.displayAddReceiverVolume = modResult.modification.addPrimaryReceiverVolume.order != 100;

@@ -184,7 +184,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   drawChart() {
     let unloadingLines = [];
-    if (this.performanceProfileChart && this.selectedCompressor && this.compressedAirAssessment) {
+    if (this.performanceProfileChart && (this.inAssessment || this.selectedCompressor) && this.compressedAirAssessment) {
       let chartData: Array<ProfileChartData>;
       if (!this.inAssessment) {
         chartData = this.getInventoryChartData();
