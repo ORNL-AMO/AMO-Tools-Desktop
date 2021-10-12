@@ -9,7 +9,7 @@
 <form [formGroup]="form" *ngIf="!contentCollapsed">
 
     <!-- surgeAirflow -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.surgeAirflow.invalid}">
         <label for="surgeAirflow">Surge airflow at design conditions</label>
         <div class="input-group">
             <input name="surgeAirflow" type="number" step="any" class="form-control" id="surgeAirflow"
@@ -27,7 +27,7 @@
     </div>
 
     <!-- maxFullLoadPressure -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.maxFullLoadPressure.invalid}">
         <label for="maxFullLoadPressure">Max. full load (surge) pressure</label>
         <div class="input-group">
             <input name="maxFullLoadPressure" type="number" step="any" class="form-control" id="maxFullLoadPressure"
@@ -43,7 +43,7 @@
     </div>
 
     <!-- maxFullLoadCapacity -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.maxFullLoadCapacity.invalid}">
         <label for="maxFullLoadCapacity">Capacity at max full load pressure</label>
         <div class="input-group">
             <input name="maxFullLoadCapacity" type="number" step="any" class="form-control" id="maxFullLoadCapacity"
@@ -62,7 +62,7 @@
     </div>
 
     <!-- minFullLoadPressure -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.minFullLoadPressure.invalid}">
         <label for="minFullLoadPressure">Min. full load (stonewall) pressure</label>
         <div class="input-group">
             <input name="minFullLoadPressure" type="number" step="any" class="form-control" id="minFullLoadPressure"
@@ -80,7 +80,7 @@
     </div>
 
     <!-- minFullLoadCapacity -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.minFullLoadCapacity.invalid}">
         <label for="minFullLoadCapacity">Capacity at min. full load pressure</label>
         <div class="input-group">
             <input name="minFullLoadCapacity" type="number" step="any" class="form-control" id="minFullLoadCapacity"

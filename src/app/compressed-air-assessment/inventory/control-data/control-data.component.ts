@@ -61,20 +61,15 @@ export class ControlDataComponent implements OnInit {
     let controlOptionSelected: { value: number, label: string, compressorTypes: Array<number> } = this.controlTypeOptions.find(option => {
       return option.value == this.form.controls.controlType.value;
     });
-    
+
     if (!controlOptionSelected && this.controlTypeOptions.length != 0) {
       // Has controlType from previously selected compressorType, set default for new compressorType
       this.form.controls.controlType.patchValue(this.controlTypeOptions[0].value);
-      if (this.compressorType == 6) {
-        // changed from non-centrifugal to centrifugal,save with patched valid controlType
-        this.save()
-      }
+      this.changeControlType();
     }
-    this.changeControlType(false);
-
   }
 
-  changeControlType(isUserFormChange: boolean) {
+  changeControlType() {
     this.form = this.inventoryService.setCompressorControlValidators(this.form);
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
       || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 5) {
@@ -85,9 +80,7 @@ export class ControlDataComponent implements OnInit {
     }
     this.toggleDisableControls();
     this.setDisplayValues();
-    if (isUserFormChange) {
-      this.save();
-    }
+    this.save();
   }
 
   toggleDisableControls() {
@@ -108,7 +101,7 @@ export class ControlDataComponent implements OnInit {
   setDisplayValues() {
     this.displayUnload = this.inventoryService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
     this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
-    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType)
+    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType, this.form.controls.controlType.value)
   }
 
   save() {

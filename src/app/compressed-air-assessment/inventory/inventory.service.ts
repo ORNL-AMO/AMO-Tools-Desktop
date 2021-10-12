@@ -154,7 +154,7 @@ export class InventoryService {
   getCompressorControlsFormFromObj(compressorControls: CompressorControls, compressorType: number): FormGroup {
     // Master control type list in inventoryOptions.ts 
     let unloadSumpPressureValidators: Array<Validators> = [];
-    let showUnloadSumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType);
+    let showUnloadSumpPressure: boolean = this.checkDisplayUnloadSlumpPressure(compressorType, compressorControls.controlType);
     if (showUnloadSumpPressure) {
       unloadSumpPressureValidators = [Validators.required];
     }
@@ -172,7 +172,7 @@ export class InventoryService {
   }
 
   checkDisplayUnloadCapacity(controlType: number): boolean {
-    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 5 || controlType == 6);
+    return (controlType == 2 || controlType == 3 || controlType == 4 || controlType == 5);
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
@@ -235,7 +235,7 @@ export class InventoryService {
 
   markFormDirtyToDisplayValidation(form: FormGroup) {
     for (let key in form.controls) {
-      if (form.controls[key]) {
+      if (form.controls[key] && form.controls[key].value != undefined) {
         form.controls[key].markAsDirty();
       }
     }
@@ -368,10 +368,10 @@ export class InventoryService {
     return false;
   }
 
-  checkDisplayUnloadSlumpPressure(compressorType: number): boolean {
+  checkDisplayUnloadSlumpPressure(compressorType: number, controlType: number): boolean {
     //"lubricant-injected rotary screws"
     //controlType "load/unload"
-    if (compressorType == 1 || compressorType == 2) {
+    if ((compressorType == 1 || compressorType == 2) && controlType != 6) {
       return true;
     }
     return false;

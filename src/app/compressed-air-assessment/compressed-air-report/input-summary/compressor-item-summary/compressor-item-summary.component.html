@@ -151,12 +151,12 @@
                                 Unload Sump Pressure
                             </td>
                             <td *ngFor="let compressor of compressorInventoryItems">
-                                <span *ngIf="checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType)">
+                                <span *ngIf="checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
                                     {{compressor.compressorControls.unloadSumpPressure }}
                                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
                                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
                                 </span>
-                                <span *ngIf="!checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType)">
+                                <span *ngIf="!checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
                                     &mdash;
                                 </span>
                             </td>

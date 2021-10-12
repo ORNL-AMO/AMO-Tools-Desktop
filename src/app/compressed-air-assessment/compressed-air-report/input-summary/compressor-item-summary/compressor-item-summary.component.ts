@@ -72,8 +72,8 @@ export class CompressorItemSummaryComponent implements OnInit {
     return this.inventoryService.checkDisplayAutomaticShutdown(controlType);
   }
 
-  checkDisplayUnloadSumpPressure(compressorType: number): boolean {
-    return this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType);
+  checkDisplayUnloadSumpPressure(compressorType: number, controlType: number): boolean {
+    return this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
   }
 
   checkDisplayBlowdownTime(compressorType: number, controlType: number): boolean {

@@ -20,6 +20,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     modificationName: string,
     note: string
   }>;
+  displayFlowReallocation: boolean;
   displayAddReceiverVolume: boolean;
   displayAdjustCascadingSetPoints: boolean;
   displayImproveEndUseEfficiency: boolean;
@@ -60,6 +61,9 @@ export class ExecutiveSummaryComponent implements OnInit {
       }
       if (!this.displayUseAutomaticSequencer) {
         this.displayUseAutomaticSequencer = modResult.modification.useAutomaticSequencer.order != 100;
+      }
+      if(!this.displayFlowReallocation){
+        this.displayFlowReallocation = modResult.combinedResults.flowReallocationSavings.savings.power != 0;
       }
     });
     this.setNotes();
@@ -112,13 +116,15 @@ export class ExecutiveSummaryComponent implements OnInit {
   }
 
 
-  setNotes(){
+  setNotes() {
     this.notes = new Array();
     this.modifications.forEach(modification => {
-      this.notes.push({
-        modificationName: modification.name,
-        note: modification.notes
-      })
+      if (modification.notes) {
+        this.notes.push({
+          modificationName: modification.name,
+          note: modification.notes
+        })
+      }
     })
   }
 

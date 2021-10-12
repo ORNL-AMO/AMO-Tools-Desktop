@@ -5,7 +5,8 @@
     </div>
     <form class="pl-3 pr-3" [formGroup]="form">
         <!--System Elevation-->
-        <div class="form-group" *ngIf="form.controls.atmosphericPressureKnown.value == false">
+        <div class="form-group" *ngIf="form.controls.atmosphericPressureKnown.value == false"
+            [ngClass]="{'invalid': form.controls.systemElevation.invalid}">
             <label for="systemElevation">System Elevation</label>
             <div class="input-group">
                 <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
@@ -27,7 +28,7 @@
             </span>
         </div>
         <!--atmospheric Pressure-->
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.atmosphericPressure.invalid}">
             <label for="atmosphericPressure">Atmospheric Pressure
                 <a *ngIf="form.controls.atmosphericPressureKnown.value == false" class="form-text small click-link"
                     (click)="toggleAtmosphericPressureKnown()">Pressure Known</a>
@@ -62,7 +63,7 @@
             </span>
         </div>
         <!--Total Air Storage-->
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.totalAirStorage.invalid}">
             <label for="totalAirStorage">Total Air Storage
                 <a class="form-text small click-link" (click)="openSystemCapacityModal()">Calculate Air Storage
                     Capacity</a>
@@ -93,7 +94,8 @@
             </select>
         </div>
         <!--Target Pressure-->
-        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
+            [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
             <label for="targetPressure">Target Pressure
             </label>
             <div class="input-group">
@@ -113,7 +115,8 @@
             </span>
         </div>
         <!--Variance (+/-)-->
-        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true">
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
+            [ngClass]="{'invalid': form.controls.variance.invalid}">
             <label for="variance">Variance (+/-)
             </label>
             <div class="input-group">

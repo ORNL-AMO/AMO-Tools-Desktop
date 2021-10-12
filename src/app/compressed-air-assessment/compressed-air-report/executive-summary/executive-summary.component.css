@@ -67,3 +67,11 @@ tr > th:not(:first-child){
 .bold-row{
     font-weight: bold;
 }
+
+.bg-row{
+    background-color: #D6DBDF;
+}
+
+.row-stripe{
+    border-bottom: solid;
+}

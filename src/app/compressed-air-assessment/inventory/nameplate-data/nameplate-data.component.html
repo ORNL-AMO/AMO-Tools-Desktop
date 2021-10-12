@@ -1,7 +1,11 @@
-<label class="group-label">Nameplate Data</label>
+<label class="group-label">Nameplate Data
+    <span *ngIf="!form.valid" class="pull-right">
+        <span class="fa fa-exclamation-circle"></span>
+    </span>
+</label>
 <form [formGroup]="form">
     <!-- compressorType -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.compressorType.invalid}">
         <label for="compressorType">Compressor Type</label>
         <select id="compressorType" name="compressorType" formControlName="compressorType" (change)="save()"
             (focus)="focusField('compressorType')" class="form-control">
@@ -10,46 +14,47 @@
         </select>
     </div>
     <!-- motorPower -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.motorPower.invalid}">
         <label for="motorPower">Motor Power</label>
         <div class="input-group">
             <input name="motorPower" type="number" step="any" class="form-control" id="motorPower"
                 formControlName="motorPower" (input)="save()" (focus)="focusField('motorPower')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">hp</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
-          <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
-            {{form.controls.motorPower.errors.min.min}} 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+            *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+            <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+                {{form.controls.motorPower.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
             </span>
         </span>
     </div>
 
     <!-- fullLoadOperatingPressure -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadOperatingPressure.invalid}">
         <label for="fullLoadOperatingPressure">Full Load Operating Pressure</label>
         <div class="input-group">
-            <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control" id="fullLoadOperatingPressure"
-                formControlName="fullLoadOperatingPressure" (input)="save()" (focus)="focusField('fullLoadOperatingPressure')">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            <input name="fullLoadOperatingPressure" type="number" step="any" class="form-control"
+                id="fullLoadOperatingPressure" formControlName="fullLoadOperatingPressure" (input)="save()"
+                (focus)="focusField('fullLoadOperatingPressure')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.fullLoadOperatingPressure.invalid && !form.controls.fullLoadOperatingPressure.pristine">
-          <span *ngIf="form.controls.fullLoadOperatingPressure.errors.required">Value Required</span>
-          <span *ngIf="form.controls.fullLoadOperatingPressure.errors.min">Value can't be less than
-            {{form.controls.fullLoadOperatingPressure.errors.min.min}} 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >psig</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >barg</span>
-        </span>
+            *ngIf="form.controls.fullLoadOperatingPressure.invalid && !form.controls.fullLoadOperatingPressure.pristine">
+            <span *ngIf="form.controls.fullLoadOperatingPressure.errors.required">Value Required</span>
+            <span *ngIf="form.controls.fullLoadOperatingPressure.errors.min">Value can't be less than
+                {{form.controls.fullLoadOperatingPressure.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+            </span>
         </span>
     </div>
 
     <!-- fullLoadRatedCapacity -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadRatedCapacity.invalid}">
         <label for="fullLoadRatedCapacity">Rated Capacity at Full Load Pressure</label>
         <div class="input-group">
             <input name="fullLoadRatedCapacity" type="number" step="any" class="form-control" id="fullLoadRatedCapacity"
@@ -58,17 +63,17 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.fullLoadRatedCapacity.invalid && !form.controls.fullLoadRatedCapacity.pristine">
-          <span *ngIf="form.controls.fullLoadRatedCapacity.errors.required">Value Required</span>
-          <span *ngIf="form.controls.fullLoadRatedCapacity.errors.min">Value can't be less than
-            {{form.controls.fullLoadRatedCapacity.errors.min.min}} 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
+            *ngIf="form.controls.fullLoadRatedCapacity.invalid && !form.controls.fullLoadRatedCapacity.pristine">
+            <span *ngIf="form.controls.fullLoadRatedCapacity.errors.required">Value Required</span>
+            <span *ngIf="form.controls.fullLoadRatedCapacity.errors.min">Value can't be less than
+                {{form.controls.fullLoadRatedCapacity.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
         </span>
     </div>
 
     <!-- fullLoadAmps -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.fullLoadAmps.invalid}">
         <label for="fullLoadAmps">Full Load Amps</label>
         <div class="input-group">
             <input name="fullLoadAmps" type="number" step="any" class="form-control" id="fullLoadAmps"
@@ -76,24 +81,25 @@
             <span class="units input-group-addon">amps</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.fullLoadAmps.invalid && !form.controls.fullLoadAmps.pristine">
-          <span *ngIf="form.controls.fullLoadAmps.errors.min">Value can't be less than
-            {{form.controls.fullLoadAmps.errors.min.min}} amps</span>
+            *ngIf="form.controls.fullLoadAmps.invalid && !form.controls.fullLoadAmps.pristine">
+            <span *ngIf="form.controls.fullLoadAmps.errors.min">Value can't be less than
+                {{form.controls.fullLoadAmps.errors.min.min}} amps</span>
         </span>
     </div>
     <!-- totalPackageInputPower -->
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.totalPackageInputPower.invalid}">
         <label for="totalPackageInputPower">Total Package Input Power</label>
         <div class="input-group">
-            <input name="totalPackageInputPower" type="number" step="any" class="form-control" id="totalPackageInputPower"
-                formControlName="totalPackageInputPower" (input)="save()" (focus)="focusField('totalPackageInputPower')">
+            <input name="totalPackageInputPower" type="number" step="any" class="form-control"
+                id="totalPackageInputPower" formControlName="totalPackageInputPower" (input)="save()"
+                (focus)="focusField('totalPackageInputPower')">
             <span class="units input-group-addon">kW</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.totalPackageInputPower.invalid && !form.controls.totalPackageInputPower.pristine">
-          <span *ngIf="form.controls.totalPackageInputPower.errors.required">Value Required</span>
-          <span *ngIf="form.controls.totalPackageInputPower.errors.min">Value can't be less than
-            {{form.controls.totalPackageInputPower.errors.min.min}} amps</span>
+            *ngIf="form.controls.totalPackageInputPower.invalid && !form.controls.totalPackageInputPower.pristine">
+            <span *ngIf="form.controls.totalPackageInputPower.errors.required">Value Required</span>
+            <span *ngIf="form.controls.totalPackageInputPower.errors.min">Value can't be less than
+                {{form.controls.totalPackageInputPower.errors.min.min}} amps</span>
         </span>
     </div>
 
