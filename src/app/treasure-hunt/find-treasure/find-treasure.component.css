@@ -92,14 +92,14 @@ a:not([href]):not([tabindex]){
 }
 
 .steam-calc-icon{
-    background-image: linear-gradient(to bottom right, #ffffff, #F39C12);
+    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
     border-radius: 50%;
     height: 81px;
     width: 81px;
 }
 
 .ca-calc-icon{
-    background-image: linear-gradient(to bottom right, #ffffff, rgba(147, 112, 219, 1));
+    background-image: linear-gradient(to bottom right, #ffffff, #6f42c1);
     border-radius: 50%;
     height: 81px;
     width: 81px;
