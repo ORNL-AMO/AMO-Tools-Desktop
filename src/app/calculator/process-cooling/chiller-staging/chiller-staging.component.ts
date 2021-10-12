@@ -26,7 +26,7 @@ export class ChillerStagingComponent implements OnInit {
 
   calcFormWidth: number;
   calcFormWidthSub: Subscription;
-  reslutsHelpWidth: number;
+  resultsHelpWidth: number;
 
   headerHeight: number;
   tabSelect: string = 'results';
@@ -66,7 +66,7 @@ export class ChillerStagingComponent implements OnInit {
     this.calcFormWidthSub = this.calculatorDragBarService.sidebarX.subscribe(val => {
       this.calcFormWidth = val;
       if (this.contentContainer && this.calcFormWidth) {
-        this.reslutsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
+        this.resultsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
       }
     });
   }

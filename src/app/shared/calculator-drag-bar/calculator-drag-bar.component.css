@@ -3,8 +3,6 @@
     width: 3px;
     height: 100%;
     opacity: 0;
-    /* background-color: black; */
-    /* color: white; */
     z-index: +4;
     cursor: ew-resize;
 }
