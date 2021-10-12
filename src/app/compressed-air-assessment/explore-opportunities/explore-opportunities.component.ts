@@ -50,9 +50,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
         this.setModification();
-        if (!this.selectedDayType) {
-          this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
-        }
         this.setHasSequencer();
         this.setCompressedAirAssessmentResults();
         this.setDisplayAddStorage();

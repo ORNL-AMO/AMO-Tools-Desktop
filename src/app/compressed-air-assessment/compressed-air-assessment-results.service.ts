@@ -28,14 +28,15 @@ export class CompressedAirAssessmentResultsService {
       });
       let totalOperatingHours: number = dayType.numberOfDays * hoursOn;
       let averageAirFlow: number = _.sumBy(totals, (total) => { return total.airflow }) / hoursOn;
-      if(isNaN(averageAirFlow)){
+      if (isNaN(averageAirFlow)) {
         averageAirFlow = 0;
       }
       let averagePower: number = _.sumBy(totals, (total) => { return total.power }) / hoursOn;
-      if(isNaN(averagePower)){
+      if (isNaN(averagePower)) {
         averagePower = 0;
       }
       let peakDemand: number = _.maxBy(totals, (total) => { return total.power }).power;
+      let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
       dayTypeResults.push({
         cost: baselineResults.cost,
         energyUse: baselineResults.power,
@@ -45,7 +46,10 @@ export class CompressedAirAssessmentResultsService {
         averageAirFlowPercentCapacity: averageAirFlow / totalFullLoadCapacity * 100,
         operatingDays: dayType.numberOfDays,
         totalOperatingHours: totalOperatingHours,
-        loadFactorPercent: averagePower / totalFullLoadPower * 100
+        loadFactorPercent: averagePower / totalFullLoadPower * 100,
+        dayTypeId: dayType.dayTypeId,
+        demandCost: demandCost,
+        totalAnnualOperatingCost: demandCost + baselineResults.cost
       });
     });
 
@@ -75,10 +79,10 @@ export class CompressedAirAssessmentResultsService {
         averageAirFlowPercentCapacity: sumAveragePercent / totalDays,
         operatingDays: totalDays,
         totalOperatingHours: _.sumBy(dayTypeResults, (result) => { return result.totalOperatingHours }),
-        loadFactorPercent: sumAverageLoadFactor / totalDays
-      },
-      demandCost: demandCost,
-      totalAnnualOperatingCost: demandCost + annualEnergyCost
+        loadFactorPercent: sumAverageLoadFactor / totalDays,
+        demandCost: demandCost,
+        totalAnnualOperatingCost: demandCost + annualEnergyCost
+      }
     }
   }
 
@@ -105,8 +109,8 @@ export class CompressedAirAssessmentResultsService {
     let numberOfSummaryIntervals: number = compressedAirAssessmentCopy.systemProfile.systemProfileSetup.dataInterval;
 
     compressedAirAssessmentCopy.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);   
-      
+      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);
+
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
 
       let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemBasics.electricityCost);
@@ -216,8 +220,6 @@ export class CompressedAirAssessmentResultsService {
       totalAnnualOperatingCost: 0
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
-      dayTypeModificationResult.peakDemand += modResult.peakDemand;
-      dayTypeModificationResult.peakDemandCost += modResult.peakDemandCost;
       dayTypeModificationResult.totalAnnualOperatingCost += modResult.totalAnnualOperatingCost;
 
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
@@ -258,6 +260,10 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.auxiliaryPowerUsage.cost += modResult.auxiliaryPowerUsage.cost;
       dayTypeModificationResult.auxiliaryPowerUsage.energyUse += modResult.auxiliaryPowerUsage.energyUse;
     });
+
+    dayTypeModificationResult.peakDemand = _.maxBy(modificationResults.dayTypeModificationResults, (result) => {return result.peakDemand}).peakDemand;
+    dayTypeModificationResult.peakDemandCost = _.maxBy(modificationResults.dayTypeModificationResults, (result) => {return result.peakDemandCost}).peakDemandCost;
+
     dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / dayTypeModificationResult.allSavingsResults.savings.cost) * 12
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
     return dayTypeModificationResult;
@@ -913,22 +919,22 @@ export interface SavingsItem {
 
 export interface BaselineResults {
   total: BaselineResult,
-  dayTypeResults: Array<BaselineResult>,
-  demandCost: number,
-  totalAnnualOperatingCost: number
+  dayTypeResults: Array<BaselineResult>
 }
 
 export interface BaselineResult {
   cost: number,
   energyUse: number,
   peakDemand: number,
+  demandCost: number,
   name: string,
   averageAirFlow: number,
   averageAirFlowPercentCapacity: number,
   operatingDays: number,
   totalOperatingHours: number,
-  loadFactorPercent: number
-
+  loadFactorPercent: number,
+  dayTypeId?: string,
+  totalAnnualOperatingCost: number
 }
 
 
