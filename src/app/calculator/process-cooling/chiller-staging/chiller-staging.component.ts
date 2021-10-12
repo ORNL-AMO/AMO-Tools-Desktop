@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CalculatorDragBarService } from '../../../shared/calculator-drag-bar/calculator-drag-bar.service';
 import { Settings } from '../../../shared/models/settings';
 import { ChillerStagingService } from './chiller-staging.service';
 
@@ -12,28 +13,34 @@ import { ChillerStagingService } from './chiller-staging.service';
 export class ChillerStagingComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
+
+  @ViewChild('contentContainer', { static: false }) public contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-  
+
   chillerPerformanceInputSub: Subscription;
-  
+
+  calcFormWidth: number;
+  calcFormWidthSub: Subscription;
+  resultsHelpWidth: number;
+
   headerHeight: number;
   tabSelect: string = 'results';
-  
-  constructor(private chillerStagingService: ChillerStagingService,
-              private settingsDbService: SettingsDbService) { }
 
-  ngOnInit(): void {
+  constructor(private chillerStagingService: ChillerStagingService,
+    private settingsDbService: SettingsDbService,
+    private calculatorDragBarService: CalculatorDragBarService) { }
+
+  ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.chillerStagingService.chillerStagingInput.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.chillerStagingService.initDefaultEmptyInputs();
       this.chillerStagingService.initDefaultEmptyOutputs();
     }
@@ -42,6 +49,7 @@ export class ChillerStagingComponent implements OnInit {
 
   ngOnDestroy() {
     this.chillerPerformanceInputSub.unsubscribe();
+    this.calcFormWidthSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -53,6 +61,13 @@ export class ChillerStagingComponent implements OnInit {
   initSubscriptions() {
     this.chillerPerformanceInputSub = this.chillerStagingService.chillerStagingInput.subscribe(value => {
       this.calculate();
+    });
+
+    this.calcFormWidthSub = this.calculatorDragBarService.sidebarX.subscribe(val => {
+      this.calcFormWidth = val;
+      if (this.contentContainer && this.calcFormWidth) {
+        this.resultsHelpWidth = this.contentContainer.nativeElement.clientWidth - this.calcFormWidth;
+      }
     });
   }
 

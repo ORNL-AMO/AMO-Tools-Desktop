@@ -13,7 +13,7 @@ export class ChillerStagingService {
   chillerStagingOutput: BehaviorSubject<ChillerStagingOutput>;
   
   resetData: BehaviorSubject<boolean>;
-  generateExample: BehaviorSubject<boolean>;s
+  generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private chillerStagingFormService: ChillerStagingFormService) { 
@@ -21,7 +21,7 @@ export class ChillerStagingService {
     this.chillerStagingInput = new BehaviorSubject<ChillerStagingInput>(undefined);
     this.chillerStagingOutput = new BehaviorSubject<ChillerStagingOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-    this.currentField = new BehaviorSubject<string>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);   
   }
 
   initDefaultEmptyInputs() {

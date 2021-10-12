@@ -12,6 +12,7 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { CalculatorDragBarModule } from '../../../shared/calculator-drag-bar/calculator-drag-bar.module';
 
 
 
@@ -30,7 +31,8 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
     OperatingHoursModalModule,
     ExportableResultsTableModule,
     ReactiveFormsModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    CalculatorDragBarModule
   ],
   exports: [
     ChillerStagingComponent
