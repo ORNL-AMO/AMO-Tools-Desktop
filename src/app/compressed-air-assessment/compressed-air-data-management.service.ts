@@ -46,7 +46,7 @@ export class CompressedAirDataManagementService {
     selectedCompressor.centrifugalSpecifics.surgeAirflow = this.overrideGenericDbValueForDisplay(genericCompressor.DesignSurgeFlow);
     selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = this.overrideGenericDbValueForDisplay(genericCompressor.MaxSurgePressure);
     selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = this.overrideGenericDbValueForDisplay(genericCompressor.MaxPressSurgeFlow);
-    selectedCompressor.designDetails.designEfficiency = genericCompressor.EffFL;
+    selectedCompressor.designDetails.designEfficiency = this.roundVal(genericCompressor.EffFL, 1);
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
     selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow = true;
@@ -221,5 +221,8 @@ export class CompressedAirDataManagementService {
       }
     });
     return modification;
+  }
+  roundVal(val: number, digits: number) {
+    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 }
