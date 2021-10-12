@@ -85,7 +85,7 @@ export class ExecutiveSummaryComponent implements OnInit {
       hasProjects = true;
     }
     if (!hasProjects) {
-      return '&mdash;';
+      return '&mdash; &mdash;';
     }
     return demandProjects;
   }
@@ -110,7 +110,7 @@ export class ExecutiveSummaryComponent implements OnInit {
       hasProjects = true;
     }
     if (!hasProjects) {
-      return '&mdash;';
+      return '&mdash; &mdash;';
     }
     return supplyProjects;
   }

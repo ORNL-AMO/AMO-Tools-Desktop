@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { BaselineResult, BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
@@ -25,6 +25,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   modificationResultsSub: Subscription;
   dayTypeModificationResult: DayTypeModificationResult;
   baselineResults: BaselineResults;
+  dayTypeBaselineResult: BaselineResult;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -51,6 +52,11 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
       this.selectedDayType = val;
+      if(this.baselineResults && val){
+        this.dayTypeBaselineResult = this.baselineResults.dayTypeResults.find(result => {return result.dayTypeId == val.dayTypeId})
+      }else{
+        this.dayTypeBaselineResult = this.baselineResults.total;
+      }
       this.setResults();
     });
   }
