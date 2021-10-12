@@ -113,7 +113,7 @@ export class CompressedAirCalculationService {
         results = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        if (results.capacityCalculated < 0) {
+        if (results.capacityCalculated < 0.001) {
           results.capacityCalculated = 0;
           results.percentageCapacity = 0;
         }
@@ -122,14 +122,13 @@ export class CompressedAirCalculationService {
         results = compressorAddon.CompressorsCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
-        if (results.capacityCalculated < 0) {
+        if (results.capacityCalculated < 0.001) {
           results.capacityCalculated = 0;
           results.percentageCapacity = 0;
         }
       }
       if (canShutdown && (computeFrom == 1 || computeFrom == 3) && results.capacityCalculated == 0) {
         if (hasShutdownTimer) {
-          console.log('SHUTDOWN');
           return this.getEmptyCalcResults();
         }
       }
