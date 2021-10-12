@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
+import { pairwise } from 'rxjs/operators';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
@@ -23,6 +24,8 @@ export class ProfileSetupFormComponent implements OnInit {
   pressureMin: number;
   pressureMax: number;
   settingsSub: Subscription;
+  hourIntervalData: Array<ProfileSummary>;
+  dayIntervalData: Array<ProfileSummary>;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService) { }
 
@@ -50,16 +53,18 @@ export class ProfileSetupFormComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
     this.profileTabSub.unsubscribe();
     this.settingsSub.unsubscribe();
-
   }
 
 
-  save() {
+  save(dataIntervalProfile?: Array<ProfileSummary>) {
     this.isFormChange = true;
     let systemProfileSetup: SystemProfileSetup = this.systemProfileService.getProfileSetupFromForm(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let dayTypeIndex: number = compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
     compressedAirAssessment.compressedAirDayTypes[dayTypeIndex].profileDataType = systemProfileSetup.profileDataType;
+    if (dataIntervalProfile) {
+      compressedAirAssessment.systemProfile.profileSummary = dataIntervalProfile;
+    }
     compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
@@ -77,9 +82,9 @@ export class ProfileSetupFormComponent implements OnInit {
       this.form.controls.dataInterval.enable();
     }
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if(compressedAirAssessment.modifications.length != 0){
+    if (compressedAirAssessment.modifications.length != 0) {
       this.form.controls.dataInterval.disable();
-    }    
+    }
   }
 
   changeDayType() {
@@ -89,20 +94,42 @@ export class ProfileSetupFormComponent implements OnInit {
     this.save();
   }
 
-  setPressureMinAndMax(inventoryItems: Array<CompressorInventoryItem>){
+  setPressureMinAndMax(inventoryItems: Array<CompressorInventoryItem>) {
     let min: number;
     let max: number;
-    inventoryItems.forEach(compressor => {    
-      let minMax: {min: number, max: number} = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-      if(min == undefined || minMax.min < min){
+    inventoryItems.forEach(compressor => {
+      let minMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+      if (min == undefined || minMax.min < min) {
         min = minMax.min;
       }
-      if(max == undefined || minMax.max > max){
+      if (max == undefined || minMax.max > max) {
         max = minMax.max;
       }
     });
     this.pressureMin = min;
     this.pressureMax = max;
+  }
+
+  changeDataInterval() {
+    //when interval changes, hold previous interval summary data in case they change back
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval != this.form.controls.dataInterval.value) {
+      if (this.form.controls.dataInterval.value == 1 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
+        this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.hourIntervalData) {
+          this.save(this.hourIntervalData);
+        } else {
+          this.save();
+        }
+      } else if (this.form.controls.dataInterval.value == 24 && compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
+        this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+        if (this.dayIntervalData) {
+          this.save(this.dayIntervalData);
+        } else {
+          this.save();
+        }
+      }
+    }
   }
 
 }

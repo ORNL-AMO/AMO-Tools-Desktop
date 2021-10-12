@@ -30,13 +30,16 @@
                     <div class="form-group">
                         <label for="dataInterval">Data Interval</label>
                         <select class="form-control" id="dataInterval" formControlName="dataInterval"
-                            (focus)="focusField('dataInterval')" (change)="save()">
+                            (focus)="focusField('dataInterval')" (change)="changeDataInterval($event)">
                             <option [ngValue]="1">1 hr</option>
                             <!-- <option [ngValue]="2">2 hr</option>
                             <option [ngValue]=".5">30 min</option>
                             <option [ngValue]=".25">15 min</option> -->
                             <option [ngValue]="24">24 hr</option>
                         </select>
+                    </div>
+                    <div class="alert alert-warning small" *ngIf="form.controls.dataInterval.disabled">
+                        Data interval cannot be changed when modifications exist
                     </div>
                     <div class="form-group">
                         <label>Pressure Control Range</label>

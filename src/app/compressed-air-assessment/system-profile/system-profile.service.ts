@@ -5,7 +5,6 @@ import { CompressedAirDayType, ProfileSummary, SystemProfileSetup } from '../../
 @Injectable()
 export class SystemProfileService {
 
-
   constructor(private formBuilder: FormBuilder) {
   }
 
