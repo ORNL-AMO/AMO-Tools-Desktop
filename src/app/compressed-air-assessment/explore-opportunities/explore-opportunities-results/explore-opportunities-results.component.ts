@@ -54,7 +54,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       this.selectedDayType = val;
       if(this.baselineResults && val){
         this.dayTypeBaselineResult = this.baselineResults.dayTypeResults.find(result => {return result.dayTypeId == val.dayTypeId})
-      }else{
+      }else if(this.baselineResults){
         this.dayTypeBaselineResult = this.baselineResults.total;
       }
       this.setResults();
