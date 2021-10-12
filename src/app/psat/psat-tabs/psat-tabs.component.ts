@@ -5,11 +5,13 @@ import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { Settings } from '../../shared/models/settings';
 import { PsatTabService } from '../psat-tab.service';
-import { PsatWarningService, PumpFluidWarnings, MotorWarnings, FieldDataWarnings } from '../psat-warning.service';
+import { PsatWarningService, PumpFluidWarnings, MotorWarnings, FieldDataWarnings, OperationsWarnings } from '../psat-warning.service';
 import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../pump-fluid/pump-fluid.service';
 import { MotorService } from '../motor/motor.service';
 import { FieldDataService } from '../field-data/field-data.service';
+import { PumpOperationsService } from '../pump-operations/pump-operations.service';
+
 @Component({
   selector: 'app-psat-tabs',
   templateUrl: './psat-tabs.component.html',
@@ -21,10 +23,12 @@ export class PsatTabsComponent implements OnInit {
   @Input()
   psat: PSAT;
 
+  operationsTabStatus: Array<string> = [];
   settingsClassStatus: Array<string> = [];
   pumpFluidClassStatus: Array<string> = [];
   motorClassStatus: Array<string> = [];
   fieldDataClassStatus: Array<string> = [];
+  operationsBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   pumpFluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
@@ -42,7 +46,7 @@ export class PsatTabsComponent implements OnInit {
   stepTabSub: Subscription;
 
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef,
-    private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService) { }
+    private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService, private pumpOperationsService: PumpOperationsService) { }
 
   ngOnInit() {
     this.secondarySub = this.psatTabService.secondaryTab.subscribe(val => {
@@ -61,6 +65,7 @@ export class PsatTabsComponent implements OnInit {
 
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       this.checkSettingsStatus();
+      this.checkOperationsStatus()
       this.checkPumpFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
@@ -68,6 +73,7 @@ export class PsatTabsComponent implements OnInit {
     this.stepTabSub = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
+      this.checkOperationsStatus()
       this.checkPumpFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
@@ -107,8 +113,13 @@ export class PsatTabsComponent implements OnInit {
     let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
     return tmpForm.invalid;
   }
+ 
+  checkOperationsInvalid(): boolean {
+    let tmpForm: FormGroup = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
+    return tmpForm.invalid;
+  }
 
-  changeSubTab(str: string) {
+  changeSubTab(str: string) { 
     if (str == 'motor') {
       let tmpBool = this.checkPumpFluidInvalid();
       if (!tmpBool == true) {
@@ -129,6 +140,23 @@ export class PsatTabsComponent implements OnInit {
       this.settingsClassStatus = ['active', 'success'];
     } else {
       this.settingsClassStatus = ['success'];
+    }
+  }
+
+  
+  checkOperationsStatus() {
+    let operationsInvalid: boolean = this.checkOperationsInvalid();
+    let operationsWarnings: OperationsWarnings = this.psatWarningService.checkPumpOperations(this.psat, this.settings, true);
+    let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(operationsWarnings);
+    if (operationsInvalid) {
+      this.operationsTabStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.operationsTabStatus = ['input-error'];
+    } else {
+      this.operationsTabStatus = ['success'];
+    }
+    if (this.stepTab == 'operations') {
+      this.operationsTabStatus.push('active');
     }
   }
 

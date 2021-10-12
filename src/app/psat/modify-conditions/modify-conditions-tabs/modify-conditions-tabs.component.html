@@ -1,4 +1,11 @@
 <div class="d-flex tabs subtabs progress-tabs psat flex-wrap">
+  <div class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'operations'}">
+    <a class="nav-link small" (click)="tabChange('operations')"> Operations
+      <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="operationsBadgeClass">
+      </span>
+    </a>
+    <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
+  </div>
   <div class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'pump-fluid'}">
     <a class="nav-link small" (click)="tabChange('pump-fluid')">Pump Fluid
       <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
