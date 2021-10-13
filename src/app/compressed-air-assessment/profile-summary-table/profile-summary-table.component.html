@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Calc Power, kW
+                    Power, kW
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
                     <span *ngIf="data.order != 0">
@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Calc Airflow, acfm
+                    Airflow, acfm
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
                     <span *ngIf="data.order != 0">
@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Calc Power, kW
+                    Power, kW
                 </td>
                 <td *ngFor="let total of totals;">
                     {{total.power | number:'1.0-2'}}
@@ -95,7 +95,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Calc Airflow, acfm
+                    Airflow, acfm
                 </td>
                 <td *ngFor="let total of totals;">
                     {{total.airflow | number:'1.0-2'}}

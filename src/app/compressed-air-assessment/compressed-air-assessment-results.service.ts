@@ -190,7 +190,7 @@ export class CompressedAirAssessmentResultsService {
   }
 
 
-  combineDayTypeResults(modificationResults: CompressedAirAssessmentResult): DayTypeModificationResult {
+  combineDayTypeResults(modificationResults: CompressedAirAssessmentResult, baselineResults: BaselineResults): DayTypeModificationResult {
     let dayTypeModificationResult: DayTypeModificationResult = {
       adjustedProfileSummary: [],
       adjustedCompressors: [],
@@ -220,7 +220,6 @@ export class CompressedAirAssessmentResultsService {
       totalAnnualOperatingCost: 0
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
-      dayTypeModificationResult.totalAnnualOperatingCost += modResult.totalAnnualOperatingCost;
 
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
       dayTypeModificationResult.allSavingsResults.savings.power += modResult.allSavingsResults.savings.power;
@@ -261,11 +260,16 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.auxiliaryPowerUsage.energyUse += modResult.auxiliaryPowerUsage.energyUse;
     });
 
-    dayTypeModificationResult.peakDemand = _.maxBy(modificationResults.dayTypeModificationResults, (result) => {return result.peakDemand}).peakDemand;
-    dayTypeModificationResult.peakDemandCost = _.maxBy(modificationResults.dayTypeModificationResults, (result) => {return result.peakDemandCost}).peakDemandCost;
+    dayTypeModificationResult.peakDemand = _.maxBy(modificationResults.dayTypeModificationResults, (result) => { return result.peakDemand }).peakDemand;
+    dayTypeModificationResult.peakDemandCost = _.maxBy(modificationResults.dayTypeModificationResults, (result) => { return result.peakDemandCost }).peakDemandCost;
 
-    dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / dayTypeModificationResult.allSavingsResults.savings.cost) * 12
-    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
+
+
+    dayTypeModificationResult.totalAnnualOperatingCost = dayTypeModificationResult.peakDemandCost + dayTypeModificationResult.allSavingsResults.adjustedResults.cost;
+
+    dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / dayTypeModificationResult.totalAnnualOperatingCost) * 12
+    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / dayTypeModificationResult.totalAnnualOperatingCost) * 100
+
     return dayTypeModificationResult;
   }
 
