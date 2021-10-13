@@ -97,7 +97,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   setHourIntervals(numberOfHours: number) {
     if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != numberOfHours)) {
       this.hourIntervals = new Array();
-      for (let i = 0; i < numberOfHours; i++) {
+      for (let i = 1; i < numberOfHours + 1; i++) {
         this.hourIntervals.push(i);
       }
     }
