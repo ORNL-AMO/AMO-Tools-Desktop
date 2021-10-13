@@ -72,7 +72,7 @@ export class CompressedAirReportComponent implements OnInit {
           this.assessmentResults.push(modificationResults);
           this.combinedDayTypeResults.push({
             modification: modification,
-            combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults)
+            combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults)
           });
       });  
     }

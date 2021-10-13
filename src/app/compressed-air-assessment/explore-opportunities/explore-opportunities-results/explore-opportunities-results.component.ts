@@ -71,7 +71,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     if (this.modificationResults && this.selectedDayType) {
       this.dayTypeModificationResult = this.modificationResults.dayTypeModificationResults.find(modResult => { return modResult.dayTypeId == this.selectedDayType.dayTypeId });
     } else if (this.modificationResults && !this.selectedDayType) {
-      this.dayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(this.modificationResults);
+      this.dayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(this.modificationResults, this.baselineResults);
     }
   }
 
