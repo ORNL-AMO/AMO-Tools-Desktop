@@ -29,7 +29,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayReduceSystemPressure: boolean;
   displayUseAutomaticSequencer: boolean;
   displayAuxiliaryPower: boolean;
-
+  selectedModificationIndex: number;
   constructor() { }
 
   ngOnInit(): void {

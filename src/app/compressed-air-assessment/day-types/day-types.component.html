@@ -18,39 +18,41 @@
                     </th>
                 </tr>
             </thead>
-            <tbody [formGroup]="form">
-                    <tr formArrayName="dayTypeList" class="form-group form-array"
-                        *ngFor="let dayType of form.controls.dayTypeList.controls; let i = index">
-                        <ng-container [formGroup]="dayType">
-                            <td class="w-45">
-                                <input class="form-control w-100" name="{{'name'+i}}" id="{{'name'+i}}" formControlName="name" type="text"
-                                    (input)="save()" (focus)="focusField('name')" onfocus="this.select();">
-                                <span class="alert-danger pull-right"
-                                    *ngIf="dayType.controls.name.invalid && !dayType.controls.name.pristine">
-                                    <span *ngIf="dayType.controls.name.errors.required">Value required.</span>
-                                </span>
-                            </td>
-                            <td class="w-45">
-                                <input class="form-control w-100" name="{{'numberOfDays'+i}}" id="{{'numberOfDays'+i}}" formControlName="numberOfDays"
-                                    type="number" (input)="save()" (focus)="focusField('numberOfDays')" onfocus="this.select();">
-                                    <span class="alert-danger pull-right"
-                                    *ngIf="dayType.controls.numberOfDays.invalid && !dayType.controls.numberOfDays.pristine">
-                                    <span *ngIf="dayType.controls.numberOfDays.errors.required">Value required.</span>
-                                    <span *ngIf="dayType.controls.numberOfDays.errors.min">Value can't be less than
-                                        {{dayType.controls.numberOfDays.errors.min.min}}.</span>
-                                    <span *ngIf="dayType.controls.numberOfDays.errors.max">Value can't be greater than
-                                        {{dayType.controls.numberOfDays.errors.max.max}}.</span>
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <span *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
-                                    <button class="btn btn-sm btn-danger" (click)="openConfirmDeleteModal(i)">
-                                        <span class="fa fa-trash"></span>
-                                    </button>
-                                </span>
-                            </td>
-                        </ng-container>
-                    </tr>
+            <tbody>
+                <tr class="form-group form-array" *ngFor="let dayTypeForm of dayTypesFormArray; let i = index">
+                    <ng-container [formGroup]="dayTypeForm">
+                        <td class="w-45">
+                            <input class="form-control w-100" name="{{'name'+i}}" id="{{'name'+i}}"
+                                formControlName="name" type="text" (input)="save()" (focus)="focusField('name')"
+                                onfocus="this.select();">
+                            <span class="alert-danger pull-right"
+                                *ngIf="dayTypeForm.controls.name.invalid && !dayTypeForm.controls.name.pristine">
+                                <span *ngIf="dayTypeForm.controls.name.errors.required">Value required.</span>
+                            </span>
+                        </td>
+                        <td class="w-45">
+                            <input class="form-control w-100" name="{{'numberOfDays'+i}}" id="{{'numberOfDays'+i}}"
+                                formControlName="numberOfDays" type="number" (input)="save()"
+                                (focus)="focusField('numberOfDays')" onfocus="this.select();">
+                            <span class="alert-danger pull-right"
+                                *ngIf="dayTypeForm.controls.numberOfDays.invalid && !dayTypeForm.controls.numberOfDays.pristine">
+                                <span *ngIf="dayTypeForm.controls.numberOfDays.errors.required">Value required.</span>
+                                <span *ngIf="dayTypeForm.controls.numberOfDays.errors.min">Value can't be less than
+                                    {{dayTypeForm.controls.numberOfDays.errors.min.min}}.</span>
+                                <span *ngIf="dayType.controls.numberOfDays.errors.max">Value can't be greater than
+                                    {{dayTypeForm.controls.numberOfDays.errors.max.max}}.</span>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="dayTypesFormArray.length > 1">
+                                <button class="btn btn-sm btn-danger"
+                                    (click)="openConfirmDeleteModal(dayTypeForm.controls.dayTypeId.value)">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </span>
+                        </td>
+                    </ng-container>
+                </tr>
             </tbody>
             <tfoot>
                 <tr class="bold">

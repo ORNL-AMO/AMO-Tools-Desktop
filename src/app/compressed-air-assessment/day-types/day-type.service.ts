@@ -7,52 +7,45 @@ export class DayTypeService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getDayTypeForm(inputList: Array<CompressedAirDayType>): FormGroup {
+  getDayTypeFormArray(inputList: Array<CompressedAirDayType>): Array<FormGroup> {
     let formGroupList: Array<FormGroup> = inputList.map(dayType => {
-      return new FormGroup({
-        dayTypeId: new FormControl(dayType.dayTypeId),
-        name: new FormControl(dayType.name, [Validators.required]),
-        numberOfDays: new FormControl(dayType.numberOfDays, [Validators.required]),
-        profileDataType: new FormControl(dayType.profileDataType),
+      return this.getDayTypeForm(dayType);
+    });
+    return formGroupList;
+  }
+
+  getDayTypeForm(dayType: CompressedAirDayType): FormGroup{
+    return this.formBuilder.group({
+      dayTypeId: [dayType.dayTypeId],
+      name: [dayType.name, [Validators.required]],
+      numberOfDays: [dayType.numberOfDays, [Validators.required, Validators.min(0), Validators.max(365)]],
+      profileDataType: [dayType.profileDataType],
+    });
+  }
+
+
+  getDayTypesFromForm(dayTypesFormArray: Array<FormGroup>): Array<CompressedAirDayType> {
+    let dayTypes: Array<CompressedAirDayType> = new Array();
+    dayTypesFormArray.forEach(form => {
+      dayTypes.push({
+        dayTypeId: form.controls.dayTypeId.value,
+        name: form.controls.name.value,
+        numberOfDays: form.controls.numberOfDays.value,
+        profileDataType: form.controls.profileDataType.value,
       })
     })
-    let form: FormGroup = this.formBuilder.group({
-      dayTypeList: this.formBuilder.array(formGroupList)
-    });
-    this.setDayTypeValidators(form);
-    return form;
-  }
-
-  getDayTypesFromForm(form: FormGroup): Array<CompressedAirDayType> {
-    return form.controls.dayTypeList.value;
-  }
-
-  getFormArray(dayTypeListControl: AbstractControl): FormArray {
-    return dayTypeListControl as FormArray;
-  }
-
-  setDayTypeValidators(form: FormGroup) {
-    let dayTypeList: FormArray = this.getFormArray(form.controls.dayTypeList);
-    dayTypeList.controls.forEach(control => {
-      let groupControl = control as FormGroup;
-      
-      groupControl.controls.name.setValidators(Validators.required);
-      groupControl.controls.name.updateValueAndValidity();
-      groupControl.controls.name.markAsDirty();
-      
-      groupControl.controls.numberOfDays.setValidators([Validators.required, Validators.min(0), Validators.max(365)]);
-      groupControl.controls.numberOfDays.updateValueAndValidity();
-      groupControl.controls.numberOfDays.markAsDirty();
-    });
-    
+    return dayTypes;
   }
 
   hasValidDayTypes(compressedAirDayTypes: Array<CompressedAirDayType>): boolean {
     let hasValidDayTypes: boolean = false;
     if (compressedAirDayTypes.length > 0) {
-      let isDayTypeFormValid = this.getDayTypeForm(compressedAirDayTypes).valid;
+      let isDayTypeFormValid = true;
       let summedTotalDays: number = 0;
       compressedAirDayTypes.forEach(dayType => {
+        if(isDayTypeFormValid){
+          isDayTypeFormValid = this.getDayTypeForm(dayType).valid;
+        }
         if (dayType.numberOfDays > 0) {
           summedTotalDays += dayType.numberOfDays;
         } else {
@@ -63,11 +56,4 @@ export class DayTypeService {
     }
     return hasValidDayTypes;
   }
-
-  removeDayTypeInput(form: FormGroup, index: number): FormGroup {
-    let dayTypeList: FormArray = this.getFormArray(form.controls.dayTypeList);
-    dayTypeList.removeAt(index);
-    return form;
-  }
-
 }
