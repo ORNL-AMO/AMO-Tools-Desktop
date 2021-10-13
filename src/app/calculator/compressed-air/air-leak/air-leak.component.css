@@ -12,7 +12,20 @@
 }
 
 .compressed-air-icon {
+    height: auto;
+    width: 45px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.icon-background{
     height: 55px;
+    width: 55px;
+    background: linear-gradient(#ffffff, #6f42c1);
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+
 }
 
 .leak-form-width {
@@ -47,3 +60,6 @@
     padding: 1em;
   }
   
+.inTreasureHunt-icon{
+    border-radius: 50%;
+}
