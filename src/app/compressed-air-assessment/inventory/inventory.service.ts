@@ -402,7 +402,7 @@ export class InventoryService {
   checkDisplayNoLoadPowerUL(compressorType: number, controlType: number): boolean {
     let showNoLoad: boolean = this.performancePointsFormService.checkShowNoLoadPerformancePoint(compressorType, controlType)
     if (showNoLoad) {
-      if (controlType != 1 && controlType != 5) {
+      if (controlType != 1 && controlType != 6) {
         return true;
       } else {
         return false;
