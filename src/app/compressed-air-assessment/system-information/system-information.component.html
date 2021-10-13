@@ -77,10 +77,10 @@
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.totalAirStorage.invalid && !form.controls.totalAirStorage.pristine">
                 <span *ngIf="form.controls.totalAirStorage.errors.required">Value Required</span>
-                <span *ngIf="form.controls.totalAirStorage.errors.min">Value can't be less than
-                    {{form.controls.totalAirStorage.errors.min.min}}
+                <span *ngIf="form.controls.totalAirStorage.errors.greaterThan !== undefined">Value must be greater than
+                    0
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>.
                 </span>
             </span>
         </div>
