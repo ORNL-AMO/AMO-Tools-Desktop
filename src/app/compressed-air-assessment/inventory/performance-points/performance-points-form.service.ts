@@ -156,9 +156,9 @@ export class PerformancePointsFormService {
           }
           break;
         case 'unloadPoint':
-          if (compressor.compressorControls.controlType == 2 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
+          if (compressor.compressorControls.controlType == 2) {
             pressureValidators.push(GreaterThanValidator.greaterThan(compressor.performancePoints.maxFullFlow.dischargePressure));
-          } else if (compressor.compressorControls.controlType == 3) {
+          } else if (compressor.compressorControls.controlType == 3 || compressor.compressorControls.controlType == 8 || compressor.compressorControls.controlType == 10) {
             pressureValidators.push(Validators.min(compressor.performancePoints.maxFullFlow.dischargePressure));
           }
           break;
