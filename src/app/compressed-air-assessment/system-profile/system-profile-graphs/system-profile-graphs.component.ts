@@ -6,7 +6,7 @@ import * as Plotly from 'plotly.js';
 import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
-import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
+import { AxisRanges, HoverPositionData, LayoutData, SystemProfileGraphsService } from './system-profile-graphs.service';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -33,9 +33,12 @@ export class SystemProfileGraphsComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
   xAxisHoverSub: Subscription;
+  graphLayoutSub: Subscription;
   axisRangeAdjustment: number = .25;
   totalFullLoadPower: number;
   totalFullLoadCapacity: number;
+  showingCapacityMax: boolean = true;
+  showingPowerMax: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -65,12 +68,18 @@ export class SystemProfileGraphsComponent implements OnInit {
         this.setHover(val);
       }
     });
+    this.graphLayoutSub = this.systemProfileGraphService.graphLayout.subscribe(val => {
+      if (val) {
+        this.setLayout(val);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     if (this.inModification) {
       this.xAxisHoverSub.unsubscribe();
+      this.graphLayoutSub.unsubscribe();
       this.selectedDayTypeSub.unsubscribe();
     }
   }
@@ -114,6 +123,26 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.totalFullLoadPower = _.sumBy(baselineCompressors, (inventoryItem) => {
         return inventoryItem.performancePoints.fullLoad.power;
       });
+    }
+  }
+
+  getMaxLineTrace(xAxisRange: Array<number>, yMaxvalue: number, name: string) {
+    if (yMaxvalue) {
+      let maxLineTrace = {
+        x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
+        y: [yMaxvalue, yMaxvalue],
+        type: 'scatter',
+        showlegend: true,
+        mode: 'lines',
+        name: name,
+        line: {
+          dash: 'dot',
+          width: 6,
+          color: '#7030A0',
+        },
+      };
+
+      return maxLineTrace;
     }
   }
   
@@ -174,6 +203,16 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
+  setLayout(graphLayout: LayoutData) {
+    if (graphLayout.systemCapacityGraph && this.systemCapacityGraph.nativeElement) {
+      this.data
+      Plotly.react(this.systemCapacityGraph.nativeElement, graphLayout.systemCapacityGraph);
+    }
+    if (graphLayout.systemPowerGraph && this.systemPowerGraph.nativeElement) {
+      Plotly.relayout(this.systemPowerGraph.nativeElement, graphLayout.systemPowerGraph);
+    }
+  }
+
   updateHoverPositionData(chart: any, chartName: string) {
     chart.on('plotly_hover', (data) => {
       let hoverPositionData: HoverPositionData = {
@@ -186,6 +225,36 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.systemProfileGraphService.xAxisHover.next(undefined);
     });
   }
+
+  updateLayout(chart: any, xRange: Array<number>, chartRef: ElementRef) {
+    chart.on('plotly_legendclick', (data) => {
+      if (data.curveNumber == 2) {
+        let maxValue: number;
+        let yAxisRange: Array<number>;
+        let chartName: string = "System Capacity (acfm)";
+        let graphLayout = this.systemProfileGraphService.graphLayout.getValue();
+        if (chartRef.nativeElement.id == 'systemCapacityGraph'){
+          this.showingCapacityMax = !this.showingCapacityMax;
+          maxValue = this.totalFullLoadCapacity;
+          yAxisRange = this.getYAxisRange(true, maxValue);
+          graphLayout.systemCapacityGraph.layout = this.getLayout(chartName, xRange, yAxisRange, undefined);
+          graphLayout.systemCapacityGraph.traceShowLegend = this.showingCapacityMax;
+          Plotly.relayout(chartRef.nativeElement, graphLayout.systemCapacityGraph);
+        } else {
+          this.showingPowerMax = !this.showingPowerMax;
+          maxValue = this.totalFullLoadPower;
+          yAxisRange = this.getYAxisRange(false, maxValue);
+          chartName = "Power (kW)";
+          graphLayout.systemPowerGraph.layout = this.getLayout(chartName, xRange, yAxisRange, undefined);
+          graphLayout.systemPowerGraph.traceShowLegend = this.showingPowerMax;
+          Plotly.relayout(chartRef.nativeElement, graphLayout.systemPowerGraph);
+        } 
+        this.systemProfileGraphService.graphLayout.next(graphLayout);
+      }
+    });
+  }
+
+
 
   drawSystemCapacityChart() {
     if (this.profileSummary && this.systemCapacityGraph) {
@@ -216,25 +285,45 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
-      let yAxisRange: Array<number> = [yAxisRanges.systemCapacityGraph.min];
-      if (this.totalFullLoadCapacity > yAxisRanges.systemCapacityGraph.max) {
-        yAxisRange.push(this.totalFullLoadCapacity);
-      } else {
-        yAxisRange.push(yAxisRanges.systemCapacityGraph.max + (yAxisRanges.systemCapacityGraph.max * this.axisRangeAdjustment));
-      }
+      // pull out config and layout logic into function
+      let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
-      var layout = this.getLayout("System Capacity (acfm)", [1, xRangeMax], yAxisRange, this.totalFullLoadCapacity, undefined);
+      let xRange: Array<number> = [1, xRangeMax];
+      var layout = this.getLayout("System Capacity (acfm)", xRange, yAxisRange, undefined);
       var config = {
         responsive: true,
         displaylogo: false
       };
+      let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
+      traceData.push(maxLineTrace);
       Plotly.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
+        this.updateLayout(chart, xRange, this.systemCapacityGraph);
       });
     }
+  }
 
-
+  getYAxisRange(isCapacityGraph: boolean, maxValue: number): Array<number> {
+    let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
+    let graphDataMin: number;  
+    let graphDataMax: number;
+    let showingMax: boolean;
+    if (isCapacityGraph) {
+      showingMax = this.showingCapacityMax;
+      graphDataMin = yAxisRanges.systemCapacityGraph.min;  
+      graphDataMax = yAxisRanges.systemCapacityGraph.max;
+    } else {
+      showingMax = this.showingPowerMax;
+      graphDataMin = yAxisRanges.systemPowerGraph.min;  
+      graphDataMax = yAxisRanges.systemPowerGraph.max;
+    }
+    let yAxisRange: Array<number> = [graphDataMin];
+    if (showingMax && maxValue > graphDataMax) {
+      yAxisRange.push(maxValue);
+    } else {
+      yAxisRange.push(graphDataMax + (graphDataMax * this.axisRangeAdjustment));
+    }
+    return yAxisRange;
   }
 
   drawCompressorPercentCapacityChart() {
@@ -262,7 +351,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
-      var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], undefined, '%');
+      var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
       var config = {
         responsive: true,
         displaylogo: false
@@ -301,21 +390,19 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
-      let yAxisRange: Array<number> = [yAxisRanges.systemPowerGraph.min];
-      if (this.totalFullLoadPower > yAxisRanges.systemPowerGraph.max) {
-        yAxisRange.push(this.totalFullLoadPower);
-      } else {
-        yAxisRange.push(yAxisRanges.systemPowerGraph.max + (yAxisRanges.systemPowerGraph.max * this.axisRangeAdjustment));
-      }
+      let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
-      var layout = this.getLayout("Power (kW)", [1, xRangeMax], yAxisRange, this.totalFullLoadPower, undefined);
+      let xRange: Array<number> = [1, xRangeMax];
+      var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {
         responsive: true,
         displaylogo: false
       };
+      let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadPower, 'Max Full Load Power');
+      traceData.push(maxLineTrace);
       Plotly.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemPowerGraph');
+        this.updateLayout(chart, xRange, this.systemPowerGraph);
       });
     }
   }
@@ -345,7 +432,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      var layout = this.getLayout("Compressor Power %", undefined, [0, 100], undefined, '%');
+      var layout = this.getLayout("Compressor Power %", undefined, [0, 100], '%');
       var config = {
         responsive: true,
         displaylogo: false
@@ -366,22 +453,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
-  getLayout(yAxisTitle: string, xAxisRange: Array<number>, yAxisRange: Array<number>, yMaxValue: number, yAxisTickSuffix: string) {
-    let lineShapes = [];
-    if (xAxisRange && yMaxValue) {
-      lineShapes.push({
-          type: 'line',
-          x0: xAxisRange[0] - 1,
-          y0: yMaxValue,
-          x1: xAxisRange[1] + 1,
-          y1: yMaxValue,
-          line: {
-            color: '#7030A0',
-            width: 4,
-            dash: 'dot'
-          }
-        });
-    }
+  getLayout(yAxisTitle: string, xAxisRange: Array<number>, yAxisRange: Array<number>, yAxisTickSuffix: string) {
     return {
       showlegend: true,
       barmode: 'stack',
@@ -407,7 +479,6 @@ export class SystemProfileGraphsComponent implements OnInit {
         },
         hoverformat: ",.2f",
       },
-      shapes: lineShapes,
       margin: {
         t: 20,
         r: 20
