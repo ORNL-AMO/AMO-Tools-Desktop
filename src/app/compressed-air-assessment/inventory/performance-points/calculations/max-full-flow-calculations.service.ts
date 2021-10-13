@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
-
+import * as regression from 'regression';
 @Injectable()
 export class MaxFullFlowCalculationsService {
 
   constructor(private sharedPointCalculationsService: SharedPointCalculationsService,
     private convertCompressedAirService: ConvertCompressedAirService
-    ) { }
+  ) { }
 
   setMaxFullFlow(selectedCompressor: CompressorInventoryItem): PerformancePoint {
     selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure);
@@ -34,7 +34,8 @@ export class MaxFullFlowCalculationsService {
         defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.performancePoints.fullLoad.dischargePressure);
       } else {
         //centrifugal
-        defaultAirflow = selectedCompressor.performancePoints.fullLoad.airflow;
+        defaultAirflow = this.calculateCentrifugalAirflow(selectedCompressor);
+        // defaultAirflow = selectedCompressor.performancePoints.fullLoad.airflow;
       }
       return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow);
     } else {
@@ -56,5 +57,20 @@ export class MaxFullFlowCalculationsService {
     } else {
       return selectedCompressor.performancePoints.maxFullFlow.power;
     }
+  }
+
+
+  calculateCentrifugalAirflow(selectedCompressor: CompressorInventoryItem): number {
+    //y: MaxSurgePressure, x: MaxPressureSurgeFlow
+    let maxSurgePoints: Array<number> = [selectedCompressor.centrifugalSpecifics.maxFullLoadPressure, selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity];
+    //y: RatedPressure, x: RatedCapacity
+    let ratedPoints: Array<number> = [selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.fullLoadRatedCapacity];
+    //y: MinStonewallPressure, x: MinPressureStonewallFlow
+    let minSurgePoints: Array<number> = [selectedCompressor.centrifugalSpecifics.minFullLoadPressure, selectedCompressor.centrifugalSpecifics.minFullLoadCapacity];
+    let regressionData: Array<Array<number>> = [maxSurgePoints, ratedPoints, minSurgePoints];
+    let result = regression.polynomial(regressionData, { precision: 5 });
+    let prediction = result.predict(selectedCompressor.performancePoints.maxFullFlow.dischargePressure);
+    //prediction = [x (dischargePressure), y(airflow)];
+    return prediction[1];
   }
 }
