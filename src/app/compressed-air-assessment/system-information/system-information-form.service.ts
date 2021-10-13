@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { SystemInformation } from '../../shared/models/compressed-air-assessment';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 
 @Injectable()
 export class SystemInformationFormService {
@@ -10,7 +11,7 @@ export class SystemInformationFormService {
   getFormFromObj(obj: SystemInformation): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
-      totalAirStorage: [obj.totalAirStorage, [Validators.required, Validators.min(0)]],
+      totalAirStorage: [obj.totalAirStorage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       isSequencerUsed: [obj.isSequencerUsed],
       targetPressure: [obj.targetPressure],
       variance: [obj.variance],
