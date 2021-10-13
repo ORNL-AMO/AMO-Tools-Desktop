@@ -142,7 +142,7 @@
         <label class="bold" for="inletPressure">
           Inlet Pressure
         </label>
-        <div class="small text-center">{{inletPressureData.calculatedInletPressure}} <span
+        <div class="small text-center">{{inletPressureData.calculatedInletPressure | number:'1.1-1'}}<span
             [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></div>
       </div>
     </form>
@@ -154,4 +154,3 @@
     <app-calculate-inlet-pressure-help [currentField]="currentField"></app-calculate-inlet-pressure-help>
   </div>
 </div>
-<!-- {{inletPressureData.calculatedInletPressure | number:'1.1-1'}} -->

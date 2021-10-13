@@ -32,26 +32,21 @@ export class CalculateInletPressureComponent implements OnInit {
   ngOnInit() {
     if (!this.inletPressureData) {
       this.inletPressureData = {
-        inletLoss: undefined,
-        inletDuctworkLoss: undefined,
-        systemDamperLoss: undefined,
-        airTreatmentLoss: undefined,
-        flowMeasurementLoss: undefined,
-        inletDamperLoss: undefined,
-        processRequirementsFixed: undefined,
-        processRequirements: undefined,
-        inletSystemEffectLoss: undefined,
-        calculatedInletPressure: undefined,
-        inletVelocityPressure: undefined,
-        userDefinedVelocityPressure: undefined,
-        fanInletArea: undefined
+        inletLoss: 0,
+        inletDuctworkLoss: 0,
+        systemDamperLoss: 0,
+        airTreatmentLoss: 0,
+        flowMeasurementLoss: 0,
+        inletDamperLoss: 0,
+        processRequirementsFixed: 0,
+        processRequirements: 0,
+        inletSystemEffectLoss: 0,
+        calculatedInletPressure: 0,
+        inletVelocityPressure: 0,
+        userDefinedVelocityPressure: false,
+        fanInletArea: 0
       };
-    } 
-    // if(this.inletPressureData.calculatedInletPressure){
-    //   this.emitInvalid.emit(false);
-    // } else{
-    //   this.emitInvalid.emit(true);
-    // }
+    }
   }
 
   toggleUserDefinedVelocityPressure() {
@@ -60,32 +55,45 @@ export class CalculateInletPressureComponent implements OnInit {
   }
 
   setInletVelocityPressure() {
-    if (!this.inletPressureData.userDefinedVelocityPressure) {
+    if (!this.inletPressureData.userDefinedVelocityPressure && !this.usingStaticPressure) {
       this.inletVelocityPressureInputs.ductArea = this.inletPressureData.fanInletArea;
       let calculatedInletVelocityPressure: number = this.fsatService.calculateInletVelocityPressure(this.inletVelocityPressureInputs);
-      this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure; 
+      this.inletPressureData.inletVelocityPressure = calculatedInletVelocityPressure;
       this.calcInletVelocityPressureError = this.fsatWarningService.checkCalcInletVelocityPressureError(this.inletVelocityPressureInputs.flowRate);
     } else {
+      this.inletPressureData.fanInletArea = 0;
       this.calcInletVelocityPressureError = null;
     }
   }
 
-  calculate() {    
-    this.setInletVelocityPressure();    
+  calculate() {
+    this.setInletVelocityPressure();
     let sum: number = 0;
     Object.keys(this.inletPressureData).map((key, index) => {
-      if (key.valueOf() !== 'calculatedInletPressure' 
-          && key.valueOf() !== 'fanInletArea'
-          && key.valueOf() !== 'userDefinedVelocityPressure') {
+      if (key.valueOf() !== 'calculatedInletPressure'
+        && key.valueOf() !== 'fanInletArea'
+        && key.valueOf() !== 'userDefinedVelocityPressure') {
         sum = sum + this.inletPressureData[key];
       }
-    });    
-    this.inletPressureData.calculatedInletPressure = (sum * -1);  
-    // if(this.inletPressureData.calculatedInletPressure){
-    //   this.emitInvalid.emit(false);
-    // } else{
-    //   this.emitInvalid.emit(true);
-    // }
+    });
+    this.inletPressureData.calculatedInletPressure = (sum * -1);
+    if (!this.usingStaticPressure) {
+      if (!this.inletPressureData.userDefinedVelocityPressure) {
+        if (this.inletPressureData.fanInletArea !== 0) {
+          this.emitInvalid.emit(false);
+        } else {
+          this.emitInvalid.emit(true);
+        }
+      } else {
+        if (this.inletPressureData.inletVelocityPressure !== 0) {
+          this.emitInvalid.emit(false);
+        } else {
+          this.emitInvalid.emit(true);
+        }
+      }
+    } else {
+      this.emitInvalid.emit(false);
+    }
     this.emitSave.emit(this.inletPressureData);
   }
 
