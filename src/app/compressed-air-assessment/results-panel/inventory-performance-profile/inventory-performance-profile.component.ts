@@ -29,7 +29,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
   // From Plotly source
-  plotlyTraceColors: Array<string> = [   
+  plotlyTraceColors: Array<string> = [
     '#1f77b4',  // muted blue
     '#ff7f0e',  // safety orange
     '#2ca02c',  // cooked asparagus green
@@ -40,8 +40,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     '#7f7f7f',  // middle gray
     '#bcbd22',  // curry yellow-green
     '#17becf'   // blue-teal
-    ];
-  unloadingControlTypes: Array<number> = [2,3,4,5,8,10];
+  ];
+  unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
 
 
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
@@ -94,8 +94,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     if (dataItem.controlType == 4 || dataItem.controlType == 5) {
       // Trace is dotted
       let unloadingDottedTrace = {
-        x: dataItem.data.map(cData => { 
-          return cData.percentageCapacity }),
+        x: dataItem.data.map(cData => {
+          return cData.percentageCapacity
+        }),
         y: dataItem.data.map(cData => { return cData.percentagePower }),
         type: 'scatter',
         name: dataItem.compressorName,
@@ -111,14 +112,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     } else {
       // Trace is dotted from unload intersection to noload point
       // Trace is solid the rest of the way
-      
+
       // starting point for solid line is intersection of noLoad power and airflow
-      let lineData: {solid: Array<CompressorCalcResult>, dotted: Array<CompressorCalcResult>} = this.getUnloadingLineData(dataItem.data, dataItem.unloadingData);
-      
-      let color: string = traceColor? traceColor : this.plotlyTraceColors[0];
+      let lineData: { solid: Array<CompressorCalcResult>, dotted: Array<CompressorCalcResult> } = this.getUnloadingLineData(dataItem.data, dataItem.unloadingData);
+
+      let color: string = traceColor ? traceColor : this.plotlyTraceColors[0];
       let unloadingDottedTrace = {
-        x: lineData.dotted.map(cData => { 
-          return cData.percentageCapacity }),
+        x: lineData.dotted.map(cData => {
+          return cData.percentageCapacity
+        }),
         y: lineData.dotted.map(cData => { return cData.percentagePower }),
         type: 'scatter',
         name: dataItem.compressorName + '(Unloading)',
@@ -131,8 +133,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         }
       }
       let unloadingSolidTrace = {
-        x: lineData.solid.map(cData => { 
-          return cData.percentageCapacity }),
+        x: lineData.solid.map(cData => {
+          return cData.percentageCapacity
+        }),
         y: lineData.solid.map(cData => { return cData.percentagePower }),
         type: 'scatter',
         name: dataItem.compressorName,
@@ -151,18 +154,18 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     return unloadingTraces;
   }
 
-  getUnloadingLineData(chartData: Array<CompressorCalcResult>, unloadingData: UnloadingData): {solid: Array<CompressorCalcResult>, dotted: Array<CompressorCalcResult>} {
-    let unloadPercentagePoints: {power: number, airflow: number} = unloadingData.unload;
+  getUnloadingLineData(chartData: Array<CompressorCalcResult>, unloadingData: UnloadingData): { solid: Array<CompressorCalcResult>, dotted: Array<CompressorCalcResult> } {
+    let unloadPercentagePoints: { power: number, airflow: number } = unloadingData.unload;
     let smallestDistanceBetweenPoints = Infinity;
     let intersectionIndex: number;
 
     chartData.forEach((chartDataPoint, index) => {
-        //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
-        let distanceBetweenCurrentPoint = Math.pow((chartDataPoint.percentageCapacity - unloadPercentagePoints.airflow), 2) + Math.pow((chartDataPoint.percentagePower - unloadPercentagePoints.power), 2)
-        if (smallestDistanceBetweenPoints > distanceBetweenCurrentPoint) {
-          smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
-          intersectionIndex = index;
-        }
+      //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
+      let distanceBetweenCurrentPoint = Math.pow((chartDataPoint.percentageCapacity - unloadPercentagePoints.airflow), 2) + Math.pow((chartDataPoint.percentagePower - unloadPercentagePoints.power), 2)
+      if (smallestDistanceBetweenPoints > distanceBetweenCurrentPoint) {
+        smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
+        intersectionIndex = index;
+      }
     });
 
     //New line starting from unload intersection index
@@ -179,7 +182,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       }
     });
 
-    return {solid: solidLineData, dotted: dottedLineData};
+    return { solid: solidLineData, dotted: dottedLineData };
   }
 
   drawChart() {
@@ -196,20 +199,20 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       // Overrride Plotly color handling - deal with doubled unloading traces
       let currentColorIndex: number = 0;
       chartData.forEach(dataItem => {
-        let currentTraceColor: string; 
+        let currentTraceColor: string;
         if (this.showAllCompressors) {
-          currentTraceColor = this.plotlyTraceColors[currentColorIndex]; 
+          currentTraceColor = this.plotlyTraceColors[currentColorIndex];
           if (currentColorIndex == 9) {
             currentColorIndex = 0;
           } else {
             currentColorIndex++;
           }
         }
-        let unloadingControlTypes: Array<number> = [2,3,4,5,8,10];  
+        let unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
         if (unloadingControlTypes.includes(dataItem.controlType)) {
           let unloadingTraces: Array<TraceData> = [];
           unloadingTraces = this.getUnloadingTraces(dataItem, currentTraceColor);
-          traceData = traceData.length > 0? traceData.concat(unloadingTraces) : unloadingTraces; 
+          traceData = traceData.length > 0 ? traceData.concat(unloadingTraces) : unloadingTraces;
         } else {
           let trace: TraceData = {
             x: dataItem.data.map(cData => {
@@ -310,9 +313,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       let unloadAirflow = this.getUnloadingPercentage(compressorItem.performancePoints.unloadPoint.airflow, compressorItem.performancePoints.fullLoad.airflow);
       let noLoadPower = this.getUnloadingPercentage(compressorItem.performancePoints.noLoad.power, compressorItem.performancePoints.fullLoad.power);
       let noLoadAirflow = this.getUnloadingPercentage(compressorItem.performancePoints.noLoad.airflow, compressorItem.performancePoints.fullLoad.airflow);
-      
+
       if (unloadPower === undefined || unloadAirflow === undefined || noLoadPower === undefined || noLoadAirflow === undefined) {
-          return unloadingData;
+        return unloadingData;
       }
 
       unloadingData = {
@@ -348,10 +351,12 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
       if (isValid) {
         let compressorData: Array<CompressorCalcResult> = this.getCompressorData(compressor);
+        let unloadingData: UnloadingData = this.getUnloadingData(compressor);
         chartData.push({
           compressorName: compressor.name,
           data: compressorData,
-          controlType: compressor.compressorControls.controlType
+          controlType: compressor.compressorControls.controlType,
+          unloadingData: unloadingData
         });
       }
     });
@@ -359,10 +364,12 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       let isValid: boolean = this.inventoryService.isCompressorValid(compressor)
       if (isValid) {
         let compressorData: Array<CompressorCalcResult> = this.getCompressorData(compressor);
+        let unloadingData: UnloadingData = this.getUnloadingData(compressor);
         chartData.push({
           compressorName: compressor.name + ' (Adjusted)',
           data: compressorData,
-          controlType: compressor.compressorControls.controlType
+          controlType: compressor.compressorControls.controlType,
+          unloadingData: unloadingData
         });
       }
     });
@@ -394,6 +401,6 @@ export interface ProfileChartData {
 }
 
 export interface UnloadingData {
-  unload: {power: number, airflow: number},
-  noLoad: {power: number, airflow: number},
+  unload: { power: number, airflow: number },
+  noLoad: { power: number, airflow: number },
 }
