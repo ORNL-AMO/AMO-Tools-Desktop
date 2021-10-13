@@ -220,7 +220,6 @@ export class CompressedAirAssessmentResultsService {
       totalAnnualOperatingCost: 0
     }
     modificationResults.dayTypeModificationResults.forEach(modResult => {
-      dayTypeModificationResult.totalAnnualOperatingCost += modResult.totalAnnualOperatingCost;
 
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
       dayTypeModificationResult.allSavingsResults.savings.power += modResult.allSavingsResults.savings.power;
@@ -266,6 +265,10 @@ export class CompressedAirAssessmentResultsService {
 
     dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / dayTypeModificationResult.allSavingsResults.savings.cost) * 12
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((dayTypeModificationResult.allSavingsResults.baselineResults.cost - dayTypeModificationResult.allSavingsResults.adjustedResults.cost) / dayTypeModificationResult.allSavingsResults.baselineResults.cost) * 100
+
+    
+    dayTypeModificationResult.totalAnnualOperatingCost = dayTypeModificationResult.peakDemandCost + dayTypeModificationResult.allSavingsResults.adjustedResults.cost;
+
     return dayTypeModificationResult;
   }
 
