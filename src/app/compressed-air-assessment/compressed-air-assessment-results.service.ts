@@ -513,17 +513,20 @@ export class CompressedAirAssessmentResultsService {
         isTurnedOn = intervalData.isCompressorOn;
         reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
       }
-      if ((data.summaryData.order != 0 && isTurnedOn)) {
+      if (data.summaryData.order != 0 && isTurnedOn) {
         let compressor: CompressorInventoryItem = adjustedCompressors.find(item => { return item.itemId == data.compressorId });
         if (reduceRuntime) {
           compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
         }
         let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
+        if(Math.abs(neededAirFlow) < 0.01){
+          fullLoadAirFlow = 0;
+        }
         //calc with full load
         let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow, atmosphericPressure, additionalRecieverVolume, true);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
         //if excess air added then reduce amount and calc again
-        if (tmpNeededAirFlow < 0 && Math.abs(fullLoadAirFlow + tmpNeededAirFlow) > 0.001) {
+        if (tmpNeededAirFlow < 0 && (fullLoadAirFlow + tmpNeededAirFlow) > 0) {
           calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow, atmosphericPressure, additionalRecieverVolume, true);
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
         }
@@ -699,9 +702,9 @@ export class CompressedAirAssessmentResultsService {
     });
     if (dayType) {
       //order compressors
-      let orderedCompressors: Array<CompressorInventoryItem> = _.sortBy(adjustedCompressors, (compressor) => {
+      let orderedCompressors: Array<CompressorInventoryItem> = _.orderBy(adjustedCompressors, (compressor) => {
         return compressor.performancePoints.fullLoad.dischargePressure
-      }).reverse();
+      }, 'desc');
       //get each day type summary
       let dayTypeSummaries: Array<ProfileSummary> = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
       //iterate hour intervals. TODO: HANDLE 1 day interval
