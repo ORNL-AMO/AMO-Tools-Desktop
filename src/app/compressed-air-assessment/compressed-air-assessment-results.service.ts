@@ -117,7 +117,6 @@ export class CompressedAirAssessmentResultsService {
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessmentCopy.systemBasics.electricityCost, totalImplementationCost, numberOfSummaryIntervals, adjustedData.auxiliaryPowerUsage);
-
       let peakDemand: number = _.maxBy(totals, (result) => { return result.power }).power;
       let peakDemandCost: number = peakDemand * 12 * compressedAirAssessmentCopy.systemBasics.demandCost;
       let totalModifiedAnnualOperatingCost: number = peakDemandCost + allSavingsResults.adjustedResults.cost;
@@ -524,12 +523,11 @@ export class CompressedAirAssessmentResultsService {
         let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow, atmosphericPressure, additionalRecieverVolume, true);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
         //if excess air added then reduce amount and calc again
-        if (tmpNeededAirFlow < 0) {
+        if (tmpNeededAirFlow < 0 && Math.abs(fullLoadAirFlow + tmpNeededAirFlow) > 0.001) {
           calculateFullLoad = this.compressedAirCalculationService.compressorsCalc(compressor, 3, fullLoadAirFlow + tmpNeededAirFlow, atmosphericPressure, additionalRecieverVolume, true);
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
         }
         neededAirFlow = tmpNeededAirFlow;
-
 
         let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
         let adjustedSummaryIndex: number = adjustedProfileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
