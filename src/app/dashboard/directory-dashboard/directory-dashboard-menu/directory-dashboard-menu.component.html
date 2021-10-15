@@ -29,6 +29,8 @@
                 <button class="btn btn-secondary action-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
+                <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
+                    (click)="moveToFolder()">Move</button>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
@@ -42,6 +44,42 @@
                 <input type="checkbox" [(ngModel)]="isAllSelected" (change)="toggleSelectAll()" />
                 <a>Select all folder content</a>
             </label>
+        </div>
+    </div>
+</div>
+
+<!--move modal-->
+<div bsModal #moveModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" *ngIf="moveForm">
+            <div class="modal-header">
+                Selected Assessment(s) to Move
+                <button class="close" (click)="hideMoveModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let assessment of directory.assessments">
+                    <span *ngIf="assessment.selected">
+                        {{assessment.name}} <br>
+                    </span>            
+                </div>
+                <form [formGroup]="moveForm">
+                    <div class="form-group" *ngIf="allDirectories">
+                        <label>Move Assessment(s) to Different Folder</label>
+                        <select  class="form-control w-100" formControlName="directoryId">
+                            <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                <span class="bold">{{dir.name}}/</span>
+                            </option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" (click)="save()">Save</button>
+            </div>
         </div>
     </div>
 </div>
