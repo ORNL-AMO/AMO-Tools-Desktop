@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ImportExportService } from '../../dashboard/import-export/import-export.service';
 
 @Component({
   selector: 'app-not-found',
@@ -10,6 +11,7 @@ export class NotFoundComponent implements OnInit {
   measurItemType: 'page' | 'assessment' | 'motor inventory' = 'page';
   constructor(
     private activatedRoute: ActivatedRoute,
+    private importExportService: ImportExportService,
     // private indexedDbService: IndexedDbService, 
     // private settingsDbService: SettingsDbService
     ) { }
@@ -32,6 +34,10 @@ export class NotFoundComponent implements OnInit {
     // this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
     //   this.settingsDbService.setAll();
     // });
+  }
+
+  sendMail() {
+    this.importExportService.openMailTo();
   }
 
 }
