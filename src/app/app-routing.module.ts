@@ -17,9 +17,6 @@ const routerOptions: ExtraOptions = {
   anchorScrolling: 'enabled',
   onSameUrlNavigation: 'reload',
   scrollPositionRestoration: 'enabled',
-  enableTracing: true,
-  useHash: true
-  // paramsInheritanceStrategy: 'always'
 };
 
 @NgModule({

@@ -97,7 +97,7 @@ export class PsatComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this.getSettings();
-      if (!this.assessment || (this.assessment && this.assessment.type !== 'Pump')) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PSAT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));

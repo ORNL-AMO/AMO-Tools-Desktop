@@ -99,7 +99,7 @@ export class PhastComponent implements OnInit {
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      if (!this.assessment || (this.assessment && this.assessment.type !== 'Furnace')) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PHAST')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         //use copy of phast object of as modal provided to forms
