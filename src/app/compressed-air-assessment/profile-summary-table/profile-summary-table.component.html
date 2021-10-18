@@ -85,12 +85,28 @@
             <tr class="compressor-name-row">
                 <td class="bold" colspan="100">Totals</td>
             </tr>
+            <tr *ngIf="checkShowAuxiliary()">
+                <td class="pl-2">
+                    Auxiliary Power, kW
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.auxiliaryPower | number:'1.0-2'}}
+                </td>
+            </tr>
             <tr>
                 <td class="pl-2">
-                    Power, kW
+                    Compressor Power, kW
                 </td>
                 <td *ngFor="let total of totals;">
                     {{total.power | number:'1.0-2'}}
+                </td>
+            </tr>
+            <tr *ngIf="checkShowAuxiliary()">
+                <td class="pl-2">
+                    Total Power, kW
+                </td>
+                <td *ngFor="let total of totals;">
+                    {{total.totalPower | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>

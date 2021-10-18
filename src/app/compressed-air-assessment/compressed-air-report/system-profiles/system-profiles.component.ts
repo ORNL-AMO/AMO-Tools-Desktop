@@ -40,7 +40,7 @@ export class SystemProfilesComponent implements OnInit {
       let assessmentResult: CompressedAirAssessmentResult = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
       let dayTypeModificationResult: DayTypeModificationResult = assessmentResult.dayTypeModificationResults.find(modificationResult => { return modificationResult.dayTypeId == this.selectedDayType.dayTypeId });
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary);
+      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary, this.selectedModification.improveEndUseEfficiency);
     } 
     // else if (!this.selectedDayType && this.selectedModification) {
     //   //no day type (combined) and modification
