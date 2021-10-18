@@ -9,7 +9,6 @@ export class OpeningFormService {
   }
 
   initForm(lossNum?: number): FormGroup {
-    debugger;
     let formGroup =  this.formBuilder.group({
       'numberOfOpenings': [1, [Validators.required, Validators.min(0)]],
       'openingType': ['Round', Validators.required],
@@ -61,7 +60,6 @@ export class OpeningFormService {
   }
 
   getLossFromForm(form: FormGroup): OpeningLoss {
-    debugger;
     let openingLoss: OpeningLoss = {
       numberOfOpenings: form.controls.numberOfOpenings.value,
       emissivity: form.controls.emissivity.value,

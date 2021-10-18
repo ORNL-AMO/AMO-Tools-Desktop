@@ -10,7 +10,6 @@ export class FlueGasFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   initEmptyVolumeForm(loss?: number): FormGroup {
-    debugger;
     let lossNumber = loss? loss : 0;
 
     let formGroup = this.formBuilder.group({
