@@ -10,7 +10,13 @@
 </div>
 
 <div *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
-    <form *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" class="mb-2 pt-1">
+    <div *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;">
+        <app-improve-end-use-efficiency-item [item]="item" [itemIndex]="itemIndex"
+            [numberOfItems]="improveEndUseEfficiency.endUseEfficiencyItems.length" (emitSave)="saveItemChange($event)"
+            (emitRemoveItem)="emitRemoveItem($event)" [hourIntervals]="hourIntervals">
+        </app-improve-end-use-efficiency-item>
+    </div>
+    <!-- <form *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" class="mb-2 pt-1">
         <div class="form-group name-input-form">
             <div class="input-group">
                 <span class="input-group-addon units left" (click)="collapseEfficiency(itemIndex)">
@@ -118,7 +124,7 @@
             <a class="click-link small" (click)="toggleAll(itemIndex)">Toggle All</a>
         </div>
 
-    </form>
+    </form> -->
     <div class="w-100 pb-2 text-right">
         <a class="click-link" (click)="addEfficiencyImprovement()">+Add Efficiency Improvement</a>
     </div>

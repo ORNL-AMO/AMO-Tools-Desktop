@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
@@ -19,9 +20,14 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummary: Array<ProfileSummary> }>;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
+
+
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
@@ -94,6 +100,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
+  saveItemChange(saveData: { itemIndex: number, item: EndUseEfficiencyItem }) {
+    this.improveEndUseEfficiency.endUseEfficiencyItems[saveData.itemIndex] = saveData.item;
+    this.save(false);
+  }
+
   setHourIntervals(numberOfHours: number) {
     if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != numberOfHours)) {
       this.hourIntervals = new Array();
@@ -144,5 +155,16 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   removeEndUseEfficiency(itemIndex: number) {
     this.improveEndUseEfficiency.endUseEfficiencyItems.splice(itemIndex, 1);
     this.save(false);
+  }
+
+  setBaselineProfileSummarries() {
+    this.baselineProfileSummaries = new Array();
+    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType);
+      this.baselineProfileSummaries.push({
+        dayType: dayType,
+        profileSummary: profileSummary
+      });
+    });
   }
 }

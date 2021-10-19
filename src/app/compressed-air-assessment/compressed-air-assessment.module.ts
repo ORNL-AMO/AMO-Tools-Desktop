@@ -133,6 +133,8 @@ import { AssessmentNotesComponent } from './explore-opportunities/assessment-not
 import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
 import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.service';
 import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.service';
+import { ImproveEndUseEfficiencyItemComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-efficiency-item.component';
+import { ImproveEndUseEfficiencyService } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.service';
 
 @NgModule({
   declarations: [
@@ -223,7 +225,8 @@ import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-s
     SystemInfoSummaryComponent,
     CompressorItemSummaryComponent,
     AdjustCascadingSetPointsHelpComponent,
-    AssessmentNotesComponent
+    AssessmentNotesComponent,
+    ImproveEndUseEfficiencyItemComponent
   ],
   imports: [
     CommonModule,
@@ -273,7 +276,8 @@ import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-s
     SystemProfileGraphsService,
     AddReceiverVolumeService,
     ReduceAirLeaksService,
-    ReduceSystemAirPressureService
+    ReduceSystemAirPressureService,
+    ImproveEndUseEfficiencyService
   ]
 })
 export class CompressedAirAssessmentModule { }

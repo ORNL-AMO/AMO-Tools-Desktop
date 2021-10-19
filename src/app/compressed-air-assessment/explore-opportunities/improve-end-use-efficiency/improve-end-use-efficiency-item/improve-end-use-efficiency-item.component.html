@@ -1,0 +1,113 @@
+<form [formGroup]="form" class="m-0 pl-0 pr-0 pt-1">
+    <div class="form-group name-input-form">
+        <div class="input-group">
+            <span class="input-group-addon units left" (click)="collapseEfficiency()">
+                <span *ngIf="form.controls.collapsed.value" class="fa fa-caret-down"></span>
+                <span *ngIf="!form.controls.collapsed.value" class="fa fa-caret-up"></span>
+            </span>
+            <input type="text" class="form-control name-input" formControlName="name" (focus)="helpTextField('name')"
+                name="name" id="name" (input)="save()">
+            <span class="input-group-addon units" *ngIf="numberOfItems > 1" (click)="removeEndUseEfficiency()">
+                <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="!form.controls.collapsed.value">
+        <label for="{{'endUseEfficiencyImplementationCost_'+itemIndex}}">Implementation Cost</label>
+        <div class="input-group">
+            <input type="number" class="form-control" formControlName="implementationCost"
+                id="{{'endUseEfficiencyImplementationCost_'+itemIndex}}" (input)="save()"
+                (focus)="helpTextField('implementationCost')">
+            <span class="input-group-addon units">$</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="!form.controls.collapsed.value">
+        <label for="{{'substituteAuxiliaryEquipment_'+itemIndex}}">Substitute Auxiliary Equipment?</label>
+        <select formControName="substituteAuxiliaryEquipment" class="form-control" (change)="save()"
+            (focus)="helpTextField('substituteAuxiliaryEquipment')">
+            <option [ngValue]=true>Yes</option>
+            <option [ngValue]=false>No</option>
+        </select>
+    </div>
+    <div class="form-group" *ngIf="item.substituteAuxiliaryEquipment == true && !form.controls.collapsed.value">
+        <label for="{{'equipmentDemand_'+itemIndex}}">Equipment Demand</label>
+        <div class="input-group">
+            <input type="number" class="form-control" formControlName="equipmentDemand"
+                (focus)="helpTextField('equipmentDemand')" id="{{'equipmentDemand_'+itemIndex}}" (input)="save()">
+            <span class="input-group-addon units">kW</span>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="!form.controls.collapsed.value">
+        <label for="{{'reductionType_'+itemIndex}}">Airflow Reduction Type</label>
+        <div class="input-group">
+            <div class="d-flex flex-column">
+                <div class="d-flex">
+                    <label class="w-100" for="Fixed">
+                        <input type="radio" id="Fixed" (focus)="helpTextField('airflowReductionType')"
+                            formControlName="reductionType" value="Fixed" (change)="changeReductionType()"
+                            class="mr-2">Fixed</label>
+                </div>
+                <div class="d-flex">
+                    <label class="w-100" for="Variable">
+                        <input type="radio" id="Variable" (focus)="helpTextField('airflowReductionType')"
+                            formControlName="reductionType" value="Variable" (change)="changeReductionType()"
+                            class="mr-2">Variable</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" *ngIf="form.controls.reductionType.value == 'Fixed' && !form.controls.collapsed.value">
+        <label for="{{'airflowReduction_'+itemIndex}}">Airflow Reduction</label>
+        <div class="input-group">
+            <input type="number" class="form-control" formControlName="airflowReduction"
+                (focus)="helpTextField('airflowReduction')" id="{{'airflowReduction_'+itemIndex}}" (input)="save()">
+            <span class="input-group-addon units">acfm</span>
+        </div>
+    </div>
+</form>
+<!--reduction data table..-->
+<div class="scroll-item pt-2" *ngIf="!form.controls.collapsed.value">
+    <table class="table bg-white">
+        <thead>
+            <tr>
+                <th [ngClass]="{'w-50': hourIntervals.length == 1}">
+                    Day Type
+                </th>
+                <th *ngFor="let hourInterval of hourIntervals">
+                    {{hourInterval}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let dataForm of dataForms; let reductionIndex = index;" [formGroup]="dataForm.form">
+                <td>
+                    {{dataForm.dayTypeName}}
+                </td>
+                <td *ngFor="let item of dataForm.form.controls | keyvalue; let dataIndex = index;">
+                    <!--FIXED-->
+                    <input *ngIf="form.controls.reductionType.value == 'Fixed'" type="checkbox"
+                        formControlName={{item.key}}>
+
+                    <!--VARIABLE-->
+                    <input class="form-control w-100 min-width" type="number" formControlName={{item.key}}
+                        (focus)="helpTextField('airflowReductionVariable')"
+                        *ngIf="form.controls.reductionType.value == 'Variable'">
+                    <div class="alert-danger m-0 p-0 bold" *ngIf="item.value.errors">
+                        <span *ngIf="item.value.errors.min">
+                            &#60; 0
+                        </span>
+                        <span *ngIf="item.value.errors.max">
+                            &#62; {{item.value.errors.max.max}}
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- <div class="w-100 pb-2 text-right" *ngIf="item.reductionType == 'Fixed' && !form.controls.collapsed.value">
+    <a class="click-link small" (click)="toggleAll(itemIndex)">Toggle All</a>
+</div> -->
