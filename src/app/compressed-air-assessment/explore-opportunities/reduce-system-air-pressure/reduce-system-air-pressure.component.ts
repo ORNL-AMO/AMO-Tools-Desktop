@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification, ReduceSystemAirPressure } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { ReduceSystemAirPressureService } from './reduce-system-air-pressure.service';
 
 @Component({
   selector: 'app-reduce-system-air-pressure',
@@ -12,13 +14,14 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 export class ReduceSystemAirPressureComponent implements OnInit {
 
   selectedModificationIdSub: Subscription;
-  reduceSystemAirPressure: ReduceSystemAirPressure;
   isFormChange: boolean = false;
   selectedModificationIndex: number;
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  form: FormGroup;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private reduceSystemAirPressureService: ReduceSystemAirPressureService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -53,7 +56,8 @@ export class ReduceSystemAirPressureComponent implements OnInit {
 
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
-      this.reduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));
+      let reduceSystemAirPressure: ReduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));
+      this.form = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, this.compressedAirAssessment.compressorInventoryItems);
     }
   }
 
@@ -82,10 +86,10 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure.order));
-    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure = this.reduceSystemAirPressure;
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure = this.reduceSystemAirPressureService.getObjFromForm(this.form);
     if (isOrderChange) {
       this.isFormChange = false;
-      let newOrder: number = this.reduceSystemAirPressure.order;
+      let newOrder: number = this.form.controls.order.value;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceSystemAirPressure', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);

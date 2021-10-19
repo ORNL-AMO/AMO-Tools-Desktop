@@ -132,6 +132,7 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
 import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
 import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.service';
+import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.service';
 
 @NgModule({
   declarations: [
@@ -271,7 +272,8 @@ import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/
     ConvertCompressedAirService,
     SystemProfileGraphsService,
     AddReceiverVolumeService,
-    ReduceAirLeaksService
+    ReduceAirLeaksService,
+    ReduceSystemAirPressureService
   ]
 })
 export class CompressedAirAssessmentModule { }

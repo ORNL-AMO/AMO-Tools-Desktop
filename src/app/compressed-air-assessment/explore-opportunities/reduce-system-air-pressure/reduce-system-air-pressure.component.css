@@ -19,3 +19,10 @@
     background-color: #7030A0;
     color: white;
 }
+
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}

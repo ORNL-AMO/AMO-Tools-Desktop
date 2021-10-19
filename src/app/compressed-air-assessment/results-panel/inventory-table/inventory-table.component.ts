@@ -102,7 +102,7 @@ export class InventoryTableComponent implements OnInit {
   }
 
   getPressureMinMax(compressor: CompressorInventoryItem): string {
-    let minMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+    let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
     return minMax.min + ' - ' + minMax.max + ' psig';
   }
 
