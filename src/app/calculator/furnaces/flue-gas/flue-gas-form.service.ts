@@ -14,23 +14,23 @@ export class FlueGasFormService {
 
     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
+      'flueGasTemperature': [0, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', [Validators.required]],
-      'fuelTemperature': ['', Validators.required],
-      'CH4': ['', Validators.required],
-      'C2H6': ['', Validators.required],
-      'N2': ['', Validators.required],
-      'H2': ['', Validators.required],
-      'C3H8': ['', Validators.required],
-      'C4H10_CnH2n': ['', Validators.required],
-      'H2O': ['', Validators.required],
-      'CO': ['', Validators.required],
-      'CO2': ['', Validators.required],
-      'SO2': ['', Validators.required], 
-      'O2': ['', Validators.required],
+      'excessAirPercentage': [0, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'o2InFlueGas': [0, Validators.required],
+      'combustionAirTemperature': [0, [Validators.required]],
+      'fuelTemperature': [0, Validators.required],
+      'CH4': [0, Validators.required],
+      'C2H6': [0, Validators.required],
+      'N2': [0, Validators.required],
+      'H2': [0, Validators.required],
+      'C3H8': [0, Validators.required],
+      'C4H10_CnH2n': [0, Validators.required],
+      'H2O': [0, Validators.required],
+      'CO': [0, Validators.required],
+      'CO2': [0, Validators.required],
+      'SO2': [0, Validators.required], 
+      'O2': [0, Validators.required],
       'name': ['Loss #' + lossNumber]
     });
 
@@ -46,33 +46,33 @@ export class FlueGasFormService {
     let defaultMoistureInAirComp: any = .0077;
     let lossNumber: number = 0;
     if (loss) {
-      defaultMoistureInAirComp = '';
+      defaultMoistureInAirComp = 0;
       lossNumber = loss;
     } 
 
      let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
+      'flueGasTemperature': [0, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', [Validators.required]],
-      'fuelTemperature': ['', Validators.required],
+      'excessAirPercentage': [0, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'o2InFlueGas': [0, Validators.required],
+      'combustionAirTemperature': [0, [Validators.required]],
+      'fuelTemperature': [0, Validators.required],
       'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'ashDischargeTemperature': ['', Validators.required],
-      'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      'carbon': ['', Validators.required],
-      'hydrogen': ['', Validators.required],
-      'sulphur': ['', Validators.required],
-      'inertAsh': ['', Validators.required],
-      'o2': ['', Validators.required],
-      'moisture': ['', Validators.required],
-      'nitrogen': ['', Validators.required],
+      'ashDischargeTemperature': [0, Validators.required],
+      'unburnedCarbonInAsh': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'carbon': [0, Validators.required],
+      'hydrogen': [0, Validators.required],
+      'sulphur': [0, Validators.required],
+      'inertAsh': [0, Validators.required],
+      'o2': [0, Validators.required],
+      'moisture': [0, Validators.required],
+      'nitrogen': [0, Validators.required],
       'name': ['Loss #' + lossNumber]
     });
 
     if (!loss) {
-      formGroup.addControl('heatInput', new FormControl('', [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new FormControl(0, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
