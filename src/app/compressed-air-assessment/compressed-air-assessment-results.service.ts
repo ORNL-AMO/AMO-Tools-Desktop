@@ -37,6 +37,7 @@ export class CompressedAirAssessmentResultsService {
       }
       let peakDemand: number = _.maxBy(totals, (total) => { return total.power }).power;
       let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
+      let maxAirFlow: number = _.maxBy(totals, (total) => {return total.airflow}).airflow;
       dayTypeResults.push({
         cost: baselineResults.cost,
         energyUse: baselineResults.power,
@@ -49,7 +50,8 @@ export class CompressedAirAssessmentResultsService {
         loadFactorPercent: averagePower / totalFullLoadPower * 100,
         dayTypeId: dayType.dayTypeId,
         demandCost: demandCost,
-        totalAnnualOperatingCost: demandCost + baselineResults.cost
+        totalAnnualOperatingCost: demandCost + baselineResults.cost,
+        maxAirFlow: maxAirFlow
       });
     });
 
@@ -67,7 +69,7 @@ export class CompressedAirAssessmentResultsService {
     let annualEnergyCost: number = _.sumBy(dayTypeResults, (result) => { return result.cost });
     let peakDemand: number = _.maxBy(dayTypeResults, (result) => { return result.peakDemand }).peakDemand;
     let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
-
+    let maxAirflow: number = _.maxBy(dayTypeResults, (result) => { return result.maxAirFlow}).maxAirFlow;
     return {
       dayTypeResults: dayTypeResults,
       total: {
@@ -81,7 +83,8 @@ export class CompressedAirAssessmentResultsService {
         totalOperatingHours: _.sumBy(dayTypeResults, (result) => { return result.totalOperatingHours }),
         loadFactorPercent: sumAverageLoadFactor / totalDays,
         demandCost: demandCost,
-        totalAnnualOperatingCost: demandCost + annualEnergyCost
+        totalAnnualOperatingCost: demandCost + annualEnergyCost,
+        maxAirFlow: maxAirflow
       }
     }
   }
@@ -683,6 +686,9 @@ export class CompressedAirAssessmentResultsService {
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
       total.airflow = total.airflow - (reduceAirLeaks.leakReduction / 100 * reduceAirLeaks.leakFlow);
+      if(total.airflow < 0){
+        total.airflow = 0;
+      }
       adjustedProfileSummary = this.adjustProfile(total.airflow, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, atmosphericPressure, reduceRuntime);
     });
     return adjustedProfileSummary;
@@ -958,6 +964,7 @@ export interface BaselineResult {
   peakDemand: number,
   demandCost: number,
   name: string,
+  maxAirFlow: number,
   averageAirFlow: number,
   averageAirFlowPercentCapacity: number,
   operatingDays: number,

@@ -4,6 +4,9 @@ import { CompressedAirAssessment, Modification, ReduceAirLeaks } from '../../../
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { FormGroup } from '@angular/forms';
+import { ReduceAirLeaksService } from './reduce-air-leaks.service';
+import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-reduce-air-leaks',
@@ -13,15 +16,21 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 export class ReduceAirLeaksComponent implements OnInit {
 
   selectedModificationIdSub: Subscription;
-  reduceAirLeaks: ReduceAirLeaks;
+  // reduceAirLeaks: ReduceAirLeaks;
   isFormChange: boolean = false;
   selectedModificationIndex: number;
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  form: FormGroup;
+  baselineResults: BaselineResults;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private reduceAirLeaksService: ReduceAirLeaksService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(compressedAirAssessment);
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
@@ -56,7 +65,8 @@ export class ReduceAirLeaksComponent implements OnInit {
 
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
-      this.reduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
+      let reduceAirLeaks: ReduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
+      this.form = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, this.baselineResults);
     }
   }
 
@@ -85,10 +95,11 @@ export class ReduceAirLeaksComponent implements OnInit {
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks.order));
-    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks = this.reduceAirLeaks;
+    let reduceAirLeaks: ReduceAirLeaks = this.reduceAirLeaksService.getObjFromForm(this.form);
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks = reduceAirLeaks;
     if (isOrderChange) {
       this.isFormChange = false;
-      let newOrder: number = this.reduceAirLeaks.order;
+      let newOrder: number = this.form.controls.order.value;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceAirLeaks', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);

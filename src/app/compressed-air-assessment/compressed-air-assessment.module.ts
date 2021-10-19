@@ -131,6 +131,7 @@ import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-pane
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
 import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
+import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.service';
 
 @NgModule({
   declarations: [
@@ -269,7 +270,8 @@ import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-v
     CompressedAirAssessmentResultsService,
     ConvertCompressedAirService,
     SystemProfileGraphsService,
-    AddReceiverVolumeService
+    AddReceiverVolumeService,
+    ReduceAirLeaksService
   ]
 })
 export class CompressedAirAssessmentModule { }

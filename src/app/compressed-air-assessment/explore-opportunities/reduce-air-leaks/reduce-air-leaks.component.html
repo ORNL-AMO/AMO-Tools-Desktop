@@ -1,40 +1,66 @@
-<div class="checkbox">
-    <label class="group-label" for="reduceAirLeaks">
-        Reduce Air Leaks
-        <select id="reduceAirLeaksOrder" [(ngModel)]="reduceAirLeaks.order" class="form-control pull-right"
-            (change)="save(true)">
-            <option [ngValue]=100>Off</option>
-            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
-        </select>
-    </label>
-</div>
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="reduceAirLeaks">
+            Reduce Air Leaks
+            <span *ngIf="form.invalid">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="reduceAirLeaksOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
 
-<form *ngIf="reduceAirLeaks.order != 100" class="mb-2 pt-1">
-    <div class="form-group">
-        <label for="reduceAirLeaksImplementationCost">Implementation Cost</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.implementationCost"
-                name="reduceAirLeaksImplementationCost" id="reduceAirLeaksImplementationCost" (input)="save(false)"
-                (focus)="helpTextField('implementationCost')">
-            <span class="input-group-addon units">$</span>
+    <div *ngIf="form.controls.order.value != 100" class="mb-2 pt-1">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="reduceAirLeaksImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="reduceAirLeaksImplementationCost" id="reduceAirLeaksImplementationCost" (input)="save(false)"
+                    (focus)="helpTextField('implementationCost')" min="0">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="leakFlow">Leak Flow</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakFlow" name="leakFlow"
-                (focus)="helpTextField('leakFlow')"
-                id="leakFlow" (input)="save(false)">
-            <span class="input-group-addon units">acfm</span>
+        <div class="form-group" [ngClass]="{'invalid': form.controls.leakFlow.invalid}">
+            <label for="leakFlow">Leak Flow</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="leakFlow" name="leakFlow"
+                    (focus)="helpTextField('leakFlow')" id="leakFlow" (input)="save(false)" min="0">
+                <span class="input-group-addon units">acfm</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.leakFlow.invalid && !form.controls.leakFlow.pristine">
+                <span *ngIf="form.controls.leakFlow.errors.required">Value Required</span>
+                <span *ngIf="form.controls.leakFlow.errors.min">Value can't be negative.
+                </span>
+                <span *ngIf="form.controls.leakFlow.errors.max">
+                    Value can't be greater than the max airflow in the system ({{form.controls.leakFlow.errors.max.max | number: '1.0-1'}}
+                    acfm).
+                </span>
+            </span>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="leakReduction">Leak Reduction</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="reduceAirLeaks.leakReduction" name="leakReduction"
-                (focus)="helpTextField('leakReduction')"
-                id="leakReduction" (input)="save(false)">
-            <span class="input-group-addon units">%</span>
+        <div class="form-group" [ngClass]="{'invalid': form.controls.leakReduction.invalid}">
+            <label for="leakReduction">Leak Reduction</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="leakReduction" name="leakReduction"
+                    (focus)="helpTextField('leakReduction')" id="leakReduction" (input)="save(false)" min="0" max="100">
+                <span class="input-group-addon units">%</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.leakReduction.invalid && !form.controls.leakReduction.pristine">
+                <span *ngIf="form.controls.leakReduction.errors.required">Value Required</span>
+                <span *ngIf="form.controls.leakReduction.errors.min">Value can't be negative.
+                </span>
+                <span *ngIf="form.controls.leakReduction.errors.max">Value can't be greater than 100%.
+                </span>
+            </span>
         </div>
     </div>
 </form>
