@@ -31,6 +31,13 @@
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <!-- 
+          /// [(ngModel)]="ssmt1"  should set the default ssmt diagram 
+          /// [ngValue]="mod.outputData" - this is the value that's being selected. outputData not very helpful. 
+          1. let's try doing [ngValue]="index" and then in setSSMT1() we'll iterate over  modificationOutputs and 
+          modificationInputData. Could also match using name property.
+          2. match the index and set 'selected____' data (line 48,49 below) from the matching object in the array. 
+      -->
         <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect" (change)="setSsmt1()"
           [(ngModel)]="ssmt1">
           <option [ngValue]="assessment">Baseline</option>
@@ -39,7 +46,11 @@
         </select>
       </div>
       <div class="w-75 m-3">
-        <app-ssmt-diagram [assessment]="assessment" [settings]="settings"
+        <!-- Create two selected data properties of whatever type app-ssmt-diagram requires.. (look at @Input() decorated properties) -->
+        <app-ssmt-diagram [assessment]="assessment" 
+        [inputData]='selectedInputData' 
+        [outputData]='selectedOutputData' 
+        [settings]="settings"
           [isBaseline]="ssmt1Baseline"></app-ssmt-diagram>
       </div>
     </div>

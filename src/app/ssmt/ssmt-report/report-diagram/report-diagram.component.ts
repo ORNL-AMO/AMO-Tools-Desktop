@@ -32,15 +32,18 @@ export class ReportDiagramComponent implements OnInit {
 
   ngOnInit() {
     // debugger;
-    this.ssmt1 = this.assessment.ssmt;   
+    this.ssmt1 = this.assessment.ssmt;
+    // don't need to call this, already set above   
     this.setSsmt1();
     if (this.assessment.ssmt.modifications.length != 0) {
       this.ssmt2 = this.assessment.ssmt.modifications[0].ssmt;
+      // Don't need to call
       this.setSsmt2();
     }
   }
 
   setSsmt1() {
+    // Keep since the diagram will need to know if we're in baseline
     this.ssmt1Baseline = this.assessment.ssmt.name == this.ssmt1.name? true : false;
   }
 
