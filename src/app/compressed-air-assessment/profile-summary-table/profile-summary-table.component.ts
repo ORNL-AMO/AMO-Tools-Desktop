@@ -26,4 +26,10 @@ export class ProfileSummaryTableComponent implements OnInit {
   updateTableString() {
     this.allTablesString = this.profileTable.nativeElement.innerText;
   }
+
+
+  checkShowAuxiliary(){
+    let auxTotal: ProfileSummaryTotal =  this.totals.find(totalData => {return totalData.auxiliaryPower != 0});
+    return auxTotal != undefined;
+  }
 }

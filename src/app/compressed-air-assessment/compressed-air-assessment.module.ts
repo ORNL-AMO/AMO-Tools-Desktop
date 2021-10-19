@@ -130,6 +130,7 @@ import { SystemProfileGraphsService } from './system-profile/system-profile-grap
 import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
+import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
 
 @NgModule({
   declarations: [
@@ -267,7 +268,8 @@ import { AssessmentNotesComponent } from './explore-opportunities/assessment-not
     CompressedAirDataManagementService,
     CompressedAirAssessmentResultsService,
     ConvertCompressedAirService,
-    SystemProfileGraphsService
+    SystemProfileGraphsService,
+    AddReceiverVolumeService
   ]
 })
 export class CompressedAirAssessmentModule { }

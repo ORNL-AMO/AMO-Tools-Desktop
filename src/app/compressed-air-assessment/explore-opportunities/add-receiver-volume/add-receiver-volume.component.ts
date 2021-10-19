@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddPrimaryReceiverVolume, CompressedAirAssessment, Modification } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { AddReceiverVolumeService } from './add-receiver-volume.service';
 
 @Component({
   selector: 'app-add-receiver-volume',
@@ -12,16 +15,24 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 export class AddReceiverVolumeComponent implements OnInit {
 
   selectedModificationIdSub: Subscription;
-  addPrimaryReceiverVolume: AddPrimaryReceiverVolume;
+  // addPrimaryReceiverVolume: AddPrimaryReceiverVolume;
   isFormChange: boolean = false;
   existingCapacity: number;
   selectedModificationIndex: number;
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  settingsSub: Subscription;
+  settings: Settings;
+  increasedVolumeError: string;
+
+  form: FormGroup
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private addReceiverVolumeService: AddReceiverVolumeService) { }
 
   ngOnInit(): void {
+
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
@@ -40,12 +51,14 @@ export class AddReceiverVolumeComponent implements OnInit {
       } else {
         this.isFormChange = false;
       }
+      this.setOrderOptions();
     });
   }
 
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   helpTextField(str: string) {
@@ -55,7 +68,8 @@ export class AddReceiverVolumeComponent implements OnInit {
 
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
-      this.addPrimaryReceiverVolume = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume));
+      let addPrimaryReceiverVolume: AddPrimaryReceiverVolume = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume));
+      this.form = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
     }
   }
 
@@ -80,13 +94,15 @@ export class AddReceiverVolumeComponent implements OnInit {
       }
     }
   }
+
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume.order));
-    this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume = this.addPrimaryReceiverVolume;
+
+    this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume = this.addReceiverVolumeService.getObjFromForm(this.form);
     if (isOrderChange) {
       this.isFormChange = false;
-      let newOrder: number = this.addPrimaryReceiverVolume.order;
+      let newOrder: number = this.form.controls.order.value;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);

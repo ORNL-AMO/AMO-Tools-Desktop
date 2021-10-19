@@ -114,10 +114,10 @@ export class CompressedAirAssessmentResultsService {
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
 
       let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemBasics.electricityCost);
-      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary);
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, modification.improveEndUseEfficiency);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessmentCopy.systemBasics.electricityCost, totalImplementationCost, numberOfSummaryIntervals, adjustedData.auxiliaryPowerUsage);
-      let peakDemand: number = _.maxBy(totals, (result) => { return result.power }).power;
+      let peakDemand: number = _.maxBy(totals, (result) => { return result.totalPower }).totalPower;
       let peakDemandCost: number = peakDemand * 12 * compressedAirAssessmentCopy.systemBasics.demandCost;
       let totalModifiedAnnualOperatingCost: number = peakDemandCost + allSavingsResults.adjustedResults.cost;
       modificationResults.push({
@@ -451,7 +451,7 @@ export class CompressedAirAssessmentResultsService {
     return selectedDayTypeSummary;
   }
 
-  calculateProfileSummaryTotals(compressorInventoryItems: Array<CompressorInventoryItem>, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>): Array<ProfileSummaryTotal> {
+  calculateProfileSummaryTotals(compressorInventoryItems: Array<CompressorInventoryItem>, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>, improveEndUseEfficiency?: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
     let totalSystemCapacity: number = this.getTotalCapacity(compressorInventoryItems);
     let totalFullLoadPower: number = this.getTotalPower(compressorInventoryItems);
 
@@ -467,16 +467,41 @@ export class CompressedAirAssessmentResultsService {
     intervals.forEach(interval => {
       let filteredData: Array<ProfileSummaryData> = allData.filter(data => { return data.timeInterval == interval && data.order != 0 });
       let totalAirFlow: number = _.sumBy(filteredData, 'airflow');
-      let totalPower: number = _.sumBy(filteredData, 'power');
+      let compressorPower: number = _.sumBy(filteredData, 'power');
+      let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
       totals.push({
+        auxiliaryPower: auxiliaryPower,
         airflow: totalAirFlow,
-        power: totalPower,
+        power: compressorPower,
+        totalPower: compressorPower + auxiliaryPower,
         percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
-        percentPower: (totalPower / totalFullLoadPower) * 100,
+        percentPower: (compressorPower / totalFullLoadPower) * 100,
         timeInterval: interval
       });
     });
     return totals;
+  }
+
+  getTotalAuxiliaryPower(selectedDayType: CompressedAirDayType, interval: number, improveEndUseEfficiency?: ImproveEndUseEfficiency): number {
+    if (!improveEndUseEfficiency || improveEndUseEfficiency.order == 100) {
+      return 0;
+    } else {
+      let auxiliaryPower: number = 0;
+      improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+        if (item.substituteAuxiliaryEquipment) {
+          let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(data => {
+            return data.dayTypeId == selectedDayType.dayTypeId;
+          });
+          let data: { hourInterval: number, applyReduction: boolean, reductionAmount: number } = reductionData.data.find(d => {return d.hourInterval == interval});
+          if(item.reductionType == 'Fixed' && data.applyReduction){
+            auxiliaryPower += item.equipmentDemand;
+          }else if(item.reductionType == 'Variable' && data.reductionAmount){
+            auxiliaryPower += item.equipmentDemand;
+          }
+        }
+      });
+      return auxiliaryPower;
+    }
   }
 
   reallocateFlow(dayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, additionalReceiverVolume: number, totals: Array<ProfileSummaryTotal>, atmosphericPressure: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
@@ -519,7 +544,7 @@ export class CompressedAirAssessmentResultsService {
           compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
         }
         let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
-        if(Math.abs(neededAirFlow) < 0.01){
+        if (Math.abs(neededAirFlow) < 0.01) {
           fullLoadAirFlow = 0;
         }
         //calc with full load

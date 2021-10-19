@@ -252,8 +252,10 @@ export interface ProfileSummaryData {
 }
 
 export interface ProfileSummaryTotal {
+    auxiliaryPower: number,
     airflow: number,
     power: number,
+    totalPower: number,
     percentCapacity: number,
     percentPower: number,
     timeInterval: number
