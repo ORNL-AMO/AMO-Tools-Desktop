@@ -6,7 +6,7 @@ import * as Plotly from 'plotly.js';
 import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
-import { AxisRanges, HoverPositionData, LayoutData, SystemProfileGraphsService } from './system-profile-graphs.service';
+import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -33,12 +33,11 @@ export class SystemProfileGraphsComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
   xAxisHoverSub: Subscription;
-  graphLayoutSub: Subscription;
   axisRangeAdjustment: number = .25;
   totalFullLoadPower: number;
   totalFullLoadCapacity: number;
-  showingCapacityMax: boolean = true;
-  showingPowerMax: boolean = true;
+  showingCapacityMaxSub: Subscription;
+  showingPowerMaxSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
@@ -52,6 +51,18 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.setProfileData();
       this.drawCharts();
     });
+    this.showingCapacityMaxSub = this.systemProfileGraphService.showingCapacityMax.subscribe(val => {
+      if (this.isBaseline === false) {
+        this.drawSystemCapacityChart();
+      }
+    });
+
+    this.showingPowerMaxSub = this.systemProfileGraphService.showingPowerMax.subscribe(val => {
+      if (this.isBaseline === false) {
+        this.drawSystemPowerChart();
+      }
+    });
+
     if (this.inModification) {
      this.initModificationSubs();
     }
@@ -68,18 +79,14 @@ export class SystemProfileGraphsComponent implements OnInit {
         this.setHover(val);
       }
     });
-    this.graphLayoutSub = this.systemProfileGraphService.graphLayout.subscribe(val => {
-      if (val) {
-        this.setLayout(val);
-      }
-    });
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+    this.showingPowerMaxSub.unsubscribe();
+    this.showingCapacityMaxSub.unsubscribe();
     if (this.inModification) {
       this.xAxisHoverSub.unsubscribe();
-      this.graphLayoutSub.unsubscribe();
       this.selectedDayTypeSub.unsubscribe();
     }
   }
@@ -132,7 +139,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [yMaxvalue, yMaxvalue],
         type: 'scatter',
-        showlegend: true,
+        showlegend: this.isBaseline === false? false : true,
         mode: 'lines',
         name: name,
         line: {
@@ -203,16 +210,6 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
-  setLayout(graphLayout: LayoutData) {
-    if (graphLayout.systemCapacityGraph && this.systemCapacityGraph.nativeElement) {
-      this.data
-      Plotly.react(this.systemCapacityGraph.nativeElement, graphLayout.systemCapacityGraph);
-    }
-    if (graphLayout.systemPowerGraph && this.systemPowerGraph.nativeElement) {
-      Plotly.relayout(this.systemPowerGraph.nativeElement, graphLayout.systemPowerGraph);
-    }
-  }
-
   updateHoverPositionData(chart: any, chartName: string) {
     chart.on('plotly_hover', (data) => {
       let hoverPositionData: HoverPositionData = {
@@ -226,35 +223,19 @@ export class SystemProfileGraphsComponent implements OnInit {
     });
   }
 
-  updateLayout(chart: any, xRange: Array<number>, chartRef: ElementRef) {
+  updateLayout(chart: any, chartRef: ElementRef) {
     chart.on('plotly_legendclick', (data) => {
       if (data.curveNumber == 2) {
-        let maxValue: number;
-        let yAxisRange: Array<number>;
-        let chartName: string = "System Capacity (acfm)";
-        let graphLayout = this.systemProfileGraphService.graphLayout.getValue();
         if (chartRef.nativeElement.id == 'systemCapacityGraph'){
-          this.showingCapacityMax = !this.showingCapacityMax;
-          maxValue = this.totalFullLoadCapacity;
-          yAxisRange = this.getYAxisRange(true, maxValue);
-          graphLayout.systemCapacityGraph.layout = this.getLayout(chartName, xRange, yAxisRange, undefined);
-          graphLayout.systemCapacityGraph.traceShowLegend = this.showingCapacityMax;
-          Plotly.relayout(chartRef.nativeElement, graphLayout.systemCapacityGraph);
+          this.systemProfileGraphService.showingCapacityMax.next(!this.systemProfileGraphService.showingCapacityMax.getValue());
+          this.drawSystemCapacityChart();
         } else {
-          this.showingPowerMax = !this.showingPowerMax;
-          maxValue = this.totalFullLoadPower;
-          yAxisRange = this.getYAxisRange(false, maxValue);
-          chartName = "Power (kW)";
-          graphLayout.systemPowerGraph.layout = this.getLayout(chartName, xRange, yAxisRange, undefined);
-          graphLayout.systemPowerGraph.traceShowLegend = this.showingPowerMax;
-          Plotly.relayout(chartRef.nativeElement, graphLayout.systemPowerGraph);
+          this.systemProfileGraphService.showingPowerMax.next(!this.systemProfileGraphService.showingPowerMax.getValue());
+          this.drawSystemPowerChart();
         } 
-        this.systemProfileGraphService.graphLayout.next(graphLayout);
       }
     });
   }
-
-
 
   drawSystemCapacityChart() {
     if (this.profileSummary && this.systemCapacityGraph) {
@@ -285,7 +266,6 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      // pull out config and layout logic into function
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
       let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
       let xRange: Array<number> = [1, xRangeMax];
@@ -294,11 +274,15 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
-      traceData.push(maxLineTrace);
+      
+      if (this.isBaseline !== false || (this.isBaseline === false && this.systemProfileGraphService.showingCapacityMax.getValue() === true)) {
+        let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
+        traceData.push(maxLineTrace);
+      }
+
       Plotly.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
-        this.updateLayout(chart, xRange, this.systemCapacityGraph);
+        this.updateLayout(chart, this.systemCapacityGraph);
       });
     }
   }
@@ -309,11 +293,11 @@ export class SystemProfileGraphsComponent implements OnInit {
     let graphDataMax: number;
     let showingMax: boolean;
     if (isCapacityGraph) {
-      showingMax = this.showingCapacityMax;
+      showingMax = this.systemProfileGraphService.showingCapacityMax.getValue();
       graphDataMin = yAxisRanges.systemCapacityGraph.min;  
       graphDataMax = yAxisRanges.systemCapacityGraph.max;
     } else {
-      showingMax = this.showingPowerMax;
+      showingMax = this.systemProfileGraphService.showingPowerMax.getValue();
       graphDataMin = yAxisRanges.systemPowerGraph.min;  
       graphDataMax = yAxisRanges.systemPowerGraph.max;
     }
@@ -398,11 +382,15 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadPower, 'Max Full Load Power');
-      traceData.push(maxLineTrace);
+
+      if (this.isBaseline !== false || (this.isBaseline === false && this.systemProfileGraphService.showingPowerMax.getValue() === true)) {
+        let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadPower, 'Max Full Load Power');
+        traceData.push(maxLineTrace);
+      }
+
       Plotly.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemPowerGraph');
-        this.updateLayout(chart, xRange, this.systemPowerGraph);
+        this.updateLayout(chart, this.systemPowerGraph);
       });
     }
   }
