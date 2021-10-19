@@ -1,4 +1,4 @@
-<div class="d-flex flex-column report-diagram-container align-items-center">
+<!-- <div class="d-flex flex-column report-diagram-container align-items-center">
   <div class="d-flex">
     <h5>Baseline</h5>
   </div>
@@ -7,9 +7,9 @@
   <div *ngIf="!baselineOutput.boilerOutput" class="p-2 w-100 alert-danger text-center">
     <span class="p-2">Invalid Baseline</span>
   </div>
-</div>
+</div> -->
 
-<div class="d-flex flex-column report-diagram-container align-items-center" *ngFor="let mod of modificationOutputs; let index = index;">
+<!-- <div class="d-flex flex-column report-diagram-container align-items-center" *ngFor="let mod of modificationOutputs; let index = index;">
   <hr class="my-4">
   <div class="d-flex">
     <h5>{{mod.name}}</h5>
@@ -23,4 +23,67 @@
     <span *ngIf="!mod.valid.turbineValid">Errors found in Turbine<br></span>
     <span *ngIf="!mod.valid.operationsValid">Errors found in Operations<br></span>
   </div>
+</div> -->
+
+
+
+<div class="output-summary">
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect" (change)="setSsmt1()"
+          [(ngModel)]="ssmt1">
+          <option [ngValue]="assessment">Baseline</option>
+          <option *ngFor="let mod of modificationOutputs; let index = index;" [ngValue]="mod.outputData">
+            {{mod.name}}</option>
+        </select>
+      </div>
+      <div class="w-75 m-3">
+        <app-ssmt-diagram [assessment]="assessment" [settings]="settings"
+          [isBaseline]="ssmt1Baseline"></app-ssmt-diagram>
+      </div>
+    </div>
+    <hr>
+  
+  </div>
 </div>
+
+
+
+
+<!-- 
+<div class="output-summary">
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect" (change)="setSsmt1()"
+          [(ngModel)]="ssmt1">
+          <option [ngValue]="assessment.ssmt">Baseline</option>
+          <option *ngFor="let modification of modificationOutputs" [ngValue]= "assessment.modification">
+            {{modification.ssmt.name}}</option>
+        </select>
+      <div class="w-75 m-3">
+        <app-ssmt-diagram [settings]="settings"
+        [inputData]="modificationInputData[index].inputData" [outputData]="modification.outputData"></app-ssmt-diagram>
+      </div>
+    </div> -->
+    <!-- <hr>
+    <div class="d-flex" *ngIf="ssmt2">
+      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect2" (change)="setSsmt2()"
+          [(ngModel)]="ssmt2">
+          <option [ngValue]="assessment.ssmt">Baseline</option>
+          <option *ngFor="let modification of assessment.ssmt.modifications" [ngValue]="modification.ssmt">
+            {{modification.ssmt.name}}</option>
+        </select>
+        <div class="p-2" [ngClass]="{
+          'negative-savings': ssmt2CostSavings < 0,
+          'positive-savings': ssmt2CostSavings > 0
+        }">Cost Savings: {{ ssmt2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
+      </div>
+      <div class="w-75 m-3">
+        <app-ssmt-sankey [ssmt]="ssmt2" [assessment]="assessment" [settings]="settings" [isBaseline]="ssmt2Baseline"></app-ssmt-sankey>
+      </div> -->
+    <!-- </div>
+  </div>
+</div> -->

@@ -119,7 +119,7 @@
       *ngIf="(currentTab == 'diagram' || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
-        [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
+        [modificationOutputs]="modificationOutputs" [assessment]="assessment" [modificationInputData]="modificationInputData">
       </app-report-diagram>
     </div>
     <div class="results scroll-item print-height"
