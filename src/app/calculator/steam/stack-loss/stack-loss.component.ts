@@ -91,16 +91,16 @@ export class StackLossComponent implements OnInit {
         }
       } else {
         if (this.method === 1) {
-          this.stackLossForm = this.stackLossService.initFormVolume();
+          this.stackLossForm = this.stackLossService.initFormVolume(this.settings);
         } else if (this.method === 0) {
-          this.stackLossForm = this.stackLossService.initFormMass();
+          this.stackLossForm = this.stackLossService.initFormMass(this.settings);
         }
       }
     } else {
       if (this.method === 1) {
-        this.stackLossForm = this.stackLossService.initFormVolume();
+        this.stackLossForm = this.stackLossService.initFormVolume(this.settings);
       } else if (this.method === 0) {
-        this.stackLossForm = this.stackLossService.initFormMass();
+        this.stackLossForm = this.stackLossService.initFormMass(this.settings);
       }
     }
   }
@@ -110,13 +110,13 @@ export class StackLossComponent implements OnInit {
       if (this.stackLossService.stackLossInput.flueGasByVolume) {
         this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
       } else {
-        this.stackLossForm = this.stackLossService.initFormVolume();
+        this.stackLossForm = this.stackLossService.initFormVolume(this.settings);
       }
     } else if (this.method === 0) {
       if (this.stackLossService.stackLossInput.flueGasByMass) {
         this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
       } else {
-        this.stackLossForm = this.stackLossService.initFormMass();
+        this.stackLossForm = this.stackLossService.initFormMass(this.settings);
       }
     }
   }

@@ -35,6 +35,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
@@ -51,6 +52,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationFlueGasO2 = 0.0;
   showModal: boolean = false;
   idString: string;
+  showMoisture: boolean = false;
+
   constructor(private suiteDbService: SuiteDbService,
     private flueGasCompareService: FlueGasCompareService,
     private flueGasFormService: FlueGasFormService,
@@ -219,6 +222,23 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.save();
   }
 
+  
+  showMoistureModal() {
+    this.showMoisture = true;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.moistureModal.show();
+  }
+
+  hideMoistureModal(moistureInAirCombustion?: number) {
+    if (moistureInAirCombustion) {
+      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
+      this.flueGasLossForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.save();
+  }
 
   canCompare() {
     if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
@@ -245,6 +265,23 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       return false;
     }
   }
+
+  compareVolumeAmbientAirTemp() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeAmbientAirTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+  compareVolumeMoistureInAirCombustion() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeMoistureInAirCombustion(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
   compareVolumeExcessAirPercentage() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareVolumeExcessAirPercentage(this.lossIndex);

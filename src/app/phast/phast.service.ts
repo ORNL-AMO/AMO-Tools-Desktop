@@ -358,31 +358,35 @@ export class PhastService {
   }
 
   flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
-    let inputs = this.createInputCopy(input);
+    let inputCopy = this.createInputCopy(input);
     let results = 0;
+    inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
-      inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
-      inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
-      results = phastAddon.flueGasLossesByVolume(inputs);
+      inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');
+      inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');
+      inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
+      inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
+      results = phastAddon.flueGasLossesByVolume(inputCopy);
     } else {
-      results = phastAddon.flueGasLossesByVolume(inputs);
+      results = phastAddon.flueGasLossesByVolume(inputCopy);
     }
 
     return results;
   }
 
   flueGasByMass(input: FlueGasByMass, settings: Settings) {
-    let inputs = this.createInputCopy(input);
+    let inputCopy = this.createInputCopy(input);
     let results = 0;
+    inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
-      inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
-      inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from('C').to('F');
-      inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
-      results = phastAddon.flueGasLossesByMass(inputs);
+      inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');
+      inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');
+      inputCopy.ashDischargeTemperature = this.convertUnitsService.value(inputCopy.ashDischargeTemperature).from('C').to('F');
+      inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
+      inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
+      results = phastAddon.flueGasLossesByMass(inputCopy);
     } else {
-      results = phastAddon.flueGasLossesByMass(inputs);
+      results = phastAddon.flueGasLossesByMass(inputCopy);
     }
     return results;
   }

@@ -148,6 +148,13 @@ export class UpdateDataService {
             });
         }
 
+        // assessment.phast = this.updateFlueGas(assessment.phast);
+        // if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+        //     assessment.phast.modifications.forEach(mod => {
+        //         mod.phast = this.updateFlueGas(mod.phast);
+        //     });
+        // }
+
         assessment.appVersion = packageJson.version;
         return assessment;
     }
@@ -162,6 +169,21 @@ export class UpdateDataService {
         }
         return phast;
     }
+
+    // updateFlueGas(phast: PHAST): PHAST {
+    //     if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+    //         phast.losses.flueGasLosses.forEach(fg => {
+    //             // TODO test, may not be needed
+    //             if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
+    //                 fg.flueGasByMass.ambientAirTemp = 60;
+    //             }
+    //             if (fg.flueGasByVolume && fg.flueGasByVolume['ambientAirTemp'] === undefined) {
+    //                 fg.flueGasByVolume.ambientAirTemp = 60;
+    //             }
+    //         });
+    //     }
+    //     return phast;
+    // }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
         if (settings.appVersion !== packageJson.version) {

@@ -281,6 +281,15 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return false;
     }
   }
+
+  compareMassAmbientAirTemp() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareMassAmbientAirTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  
   compareMassExcessAirPercentage() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareMassExcessAirPercentage(this.lossIndex);

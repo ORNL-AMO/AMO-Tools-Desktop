@@ -119,6 +119,17 @@
       </table>
     </div>
   </div>
+
+  <div class="my-2" *ngIf="currentField == 'ambientAirTemp'">
+    <h6>
+      Ambient Air Temperature
+      <br>
+      <small class="text-muted">
+        Temperature around your process heating unit (building temperature). Used as a reference temperature for calculations.
+      </small>
+    </h6>
+  </div>
+  
   <div class="my-1" *ngIf="currentField == 'oxygenCalculationMethod'">
     <h6>
       O<sub>2</sub> in Flue Gas / Excess Air Dropdown

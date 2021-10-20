@@ -16,6 +16,8 @@ export interface FlueGasByMass {
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
+    ambientAirTemp?: number;
+    ambientAirTempF?: number;
     combustionAirTemperature?: number;
     fuelTemperature?: number;
     ashDischargeTemperature?: number;
@@ -35,10 +37,13 @@ export interface FlueGasByVolume {
     gasTypeId?: number;
     utilityType?: string;
     flueGasTemperature?: number;
+    ambientAirTemp?: number;
+    ambientAirTempF?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
     combustionAirTemperature?: number;
+    moistureInAirCombustion?: number;
     fuelTemperature?: number;
     CH4?: number;
     C2H6?: number;
