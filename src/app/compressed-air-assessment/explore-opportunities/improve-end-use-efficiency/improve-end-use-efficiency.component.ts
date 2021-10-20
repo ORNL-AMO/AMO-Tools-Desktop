@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
 
 @Component({
   selector: 'app-improve-end-use-efficiency',
@@ -20,14 +22,13 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummary: Array<ProfileSummary> }>;
+  baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>;
+  hasInvalidForm: boolean;
+  baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService) { }
 
   ngOnInit(): void {
-
-
-
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
@@ -38,6 +39,8 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.isFormChange = false;
       }
     });
+    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment);
+    this.setBaselineProfileSummaries();
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
         this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == val });
@@ -62,6 +65,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.improveEndUseEfficiency = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency));
+      this.setHasInvalidForm();
     }
   }
 
@@ -95,8 +99,9 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
       this.isFormChange = false;
       let newOrder: number = this.improveEndUseEfficiency.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'improveEndUseEfficiency', previousOrder, newOrder);
+    } else {
+      this.setHasInvalidForm();
     }
-
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
   }
 
@@ -157,14 +162,34 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.save(false);
   }
 
-  setBaselineProfileSummarries() {
+  setBaselineProfileSummaries() {
     this.baselineProfileSummaries = new Array();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType);
+      let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary);
       this.baselineProfileSummaries.push({
         dayType: dayType,
-        profileSummary: profileSummary
+        profileSummaryTotals: profileSummaryTotals
       });
     });
+  }
+
+  setHasInvalidForm() {
+    this.hasInvalidForm = false;
+    this.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+      if (!this.hasInvalidForm) {
+        let form: FormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, this.baselineResults);
+        if (form.invalid) {
+          this.hasInvalidForm = true;
+        } else {
+          let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, this.baselineProfileSummaries);
+          dataForms.forEach(dataForm => {
+            if (dataForm.form.invalid) {
+              this.hasInvalidForm = true;
+            }
+          })
+        }
+      }
+    })
   }
 }

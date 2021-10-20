@@ -21,14 +21,19 @@
                 (focus)="helpTextField('implementationCost')">
             <span class="input-group-addon units">$</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+            <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+            </span>
+        </span>
     </div>
 
     <div class="form-group" *ngIf="!form.controls.collapsed.value">
         <label for="{{'substituteAuxiliaryEquipment_'+itemIndex}}">Substitute Auxiliary Equipment?</label>
-        <select formControName="substituteAuxiliaryEquipment" class="form-control" (change)="save()"
-            (focus)="helpTextField('substituteAuxiliaryEquipment')">
-            <option [ngValue]=true>Yes</option>
-            <option [ngValue]=false>No</option>
+        <select formControlName="substituteAuxiliaryEquipment" class="form-control" (change)="changeAuxiliaryEquipment()"
+            (focus)="helpTextField('substituteAuxiliaryEquipment')" id="{{'substituteAuxiliaryEquipment_'+itemIndex}}">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
         </select>
     </div>
     <div class="form-group" *ngIf="item.substituteAuxiliaryEquipment == true && !form.controls.collapsed.value">
@@ -38,6 +43,13 @@
                 (focus)="helpTextField('equipmentDemand')" id="{{'equipmentDemand_'+itemIndex}}" (input)="save()">
             <span class="input-group-addon units">kW</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.equipmentDemand.invalid && !form.controls.equipmentDemand.pristine">
+            <span *ngIf="form.controls.equipmentDemand.errors.min">Value can't be negative.
+            </span>
+            <span *ngIf="form.controls.equipmentDemand.errors.required">Value required.
+            </span>
+        </span>
     </div>
 
     <div class="form-group" *ngIf="!form.controls.collapsed.value">
@@ -66,6 +78,17 @@
                 (focus)="helpTextField('airflowReduction')" id="{{'airflowReduction_'+itemIndex}}" (input)="save()">
             <span class="input-group-addon units">acfm</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.airflowReduction.invalid && !form.controls.airflowReduction.pristine">
+            <span *ngIf="form.controls.airflowReduction.errors.required">Value Required</span>
+            <span *ngIf="form.controls.airflowReduction.errors.min">Value can't be negative.
+            </span>
+            <span *ngIf="form.controls.airflowReduction.errors.max">
+                Value can't be greater than the max airflow in the system
+                ({{form.controls.airflowReduction.errors.max.max | number: '1.0-1'}}
+                acfm).
+            </span>
+        </span>
     </div>
 </form>
 <!--reduction data table..-->
@@ -89,25 +112,33 @@
                 <td *ngFor="let item of dataForm.form.controls | keyvalue; let dataIndex = index;">
                     <!--FIXED-->
                     <input *ngIf="form.controls.reductionType.value == 'Fixed'" type="checkbox"
-                        formControlName={{item.key}}>
+                        formControlName={{item.key}} (change)="saveDataForm()">
 
                     <!--VARIABLE-->
                     <input class="form-control w-100 min-width" type="number" formControlName={{item.key}}
                         (focus)="helpTextField('airflowReductionVariable')"
-                        *ngIf="form.controls.reductionType.value == 'Variable'">
+                        *ngIf="form.controls.reductionType.value == 'Variable'" (input)="saveDataForm()">
                     <div class="alert-danger m-0 p-0 bold" *ngIf="item.value.errors">
                         <span *ngIf="item.value.errors.min">
                             &#60; 0
                         </span>
                         <span *ngIf="item.value.errors.max">
-                            &#62; {{item.value.errors.max.max}}
+                            &#62; {{item.value.errors.max.max | number:'1.0-0'}}
                         </span>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
+    <div class="alert alert-danger" *ngIf="hasInvalidForm">
+        One of the table cells has an invalid entry. Data must be equal to or greater then zero and less than the
+        airflow in the system at that hour.
+    </div>
 </div>
 <!-- <div class="w-100 pb-2 text-right" *ngIf="item.reductionType == 'Fixed' && !form.controls.collapsed.value">
     <a class="click-link small" (click)="toggleAll(itemIndex)">Toggle All</a>
 </div> -->
+
+<div class="alert alert-danger" *ngIf="(hasInvalidForm || form.invalid) && form.controls.collapsed.value">
+    This End Use Efficiency has invalid data!
+</div>

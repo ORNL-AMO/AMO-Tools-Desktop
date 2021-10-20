@@ -37,7 +37,7 @@ export class CompressedAirAssessmentResultsService {
       }
       let peakDemand: number = _.maxBy(totals, (total) => { return total.power }).power;
       let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
-      let maxAirFlow: number = _.maxBy(totals, (total) => {return total.airflow}).airflow;
+      let maxAirFlow: number = _.maxBy(totals, (total) => { return total.airflow }).airflow;
       dayTypeResults.push({
         cost: baselineResults.cost,
         energyUse: baselineResults.power,
@@ -69,7 +69,7 @@ export class CompressedAirAssessmentResultsService {
     let annualEnergyCost: number = _.sumBy(dayTypeResults, (result) => { return result.cost });
     let peakDemand: number = _.maxBy(dayTypeResults, (result) => { return result.peakDemand }).peakDemand;
     let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
-    let maxAirflow: number = _.maxBy(dayTypeResults, (result) => { return result.maxAirFlow}).maxAirFlow;
+    let maxAirflow: number = _.maxBy(dayTypeResults, (result) => { return result.maxAirFlow }).maxAirFlow;
     return {
       dayTypeResults: dayTypeResults,
       total: {
@@ -495,10 +495,10 @@ export class CompressedAirAssessmentResultsService {
           let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(data => {
             return data.dayTypeId == selectedDayType.dayTypeId;
           });
-          let data: { hourInterval: number, applyReduction: boolean, reductionAmount: number } = reductionData.data.find(d => {return d.hourInterval == interval});
-          if(item.reductionType == 'Fixed' && data.applyReduction){
+          let data: { hourInterval: number, applyReduction: boolean, reductionAmount: number } = reductionData.data.find(d => { return d.hourInterval == interval });
+          if (item.reductionType == 'Fixed' && data.applyReduction) {
             auxiliaryPower += item.equipmentDemand;
-          }else if(item.reductionType == 'Variable' && data.reductionAmount){
+          } else if (item.reductionType == 'Variable' && data.reductionAmount) {
             auxiliaryPower += item.equipmentDemand;
           }
         }
@@ -636,6 +636,9 @@ export class CompressedAirAssessmentResultsService {
             total.airflow = total.airflow - intervalReductionData.reductionAmount;
           }
         }
+        if (total.airflow < 0) {
+          total.airflow = 0;
+        }
         adjustedProfileSummary = this.adjustProfile(total.airflow, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, atmosphericPressure, reduceRuntime);
       });
     });
@@ -686,7 +689,7 @@ export class CompressedAirAssessmentResultsService {
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
       total.airflow = total.airflow - (reduceAirLeaks.leakReduction / 100 * reduceAirLeaks.leakFlow);
-      if(total.airflow < 0){
+      if (total.airflow < 0) {
         total.airflow = 0;
       }
       adjustedProfileSummary = this.adjustProfile(total.airflow, total.timeInterval, adjustedCompressors, adjustedProfileSummary, dayType, 0, atmosphericPressure, reduceRuntime);

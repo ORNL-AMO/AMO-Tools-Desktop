@@ -1,6 +1,9 @@
 <div class="checkbox">
     <label class="group-label" for="improveEndUseEfficiency">
         Improve End Use Efficiency
+        <span *ngIf="hasInvalidForm">
+            <span class="fa fa-exclamation-circle"></span>
+        </span>
         <select id="improveEndUseEfficiencyOrder" [(ngModel)]="improveEndUseEfficiency.order"
             class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
@@ -13,7 +16,8 @@
     <div *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;">
         <app-improve-end-use-efficiency-item [item]="item" [itemIndex]="itemIndex"
             [numberOfItems]="improveEndUseEfficiency.endUseEfficiencyItems.length" (emitSave)="saveItemChange($event)"
-            (emitRemoveItem)="emitRemoveItem($event)" [hourIntervals]="hourIntervals">
+            (emitRemoveItem)="removeEndUseEfficiency($event)" [hourIntervals]="hourIntervals" [baselineProfileSummaries]="baselineProfileSummaries"
+            [baselineResults]="baselineResults">
         </app-improve-end-use-efficiency-item>
     </div>
     <!-- <form *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" class="mb-2 pt-1">
