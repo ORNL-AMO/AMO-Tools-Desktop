@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 
 @Component({
   selector: 'app-use-automatic-sequencer',
@@ -32,8 +34,9 @@ export class UseAutomaticSequencerComponent implements OnInit {
   modificationResults: CompressedAirAssessmentResult;
   modificationResultsSub: Subscription;
   baselineHasSequencer: boolean;
+  form: FormGroup;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private useAutomaticSequencerService: UseAutomaticSequencerService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -93,9 +96,9 @@ export class UseAutomaticSequencerComponent implements OnInit {
       }
       if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
         this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
-
       }
       this.setAdjustedCompressors();
+      this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
     }
   }
 
@@ -124,6 +127,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer.order));
+    this.useAutomaticSequencer = this.useAutomaticSequencerService.updateObjFromForm(this.form, this.useAutomaticSequencer);
     this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer = this.useAutomaticSequencer;
     if (isOrderChange) {
       this.isFormChange = false;
@@ -202,5 +206,14 @@ export class UseAutomaticSequencerComponent implements OnInit {
   getFullLoadCapacity(compressorId: string): number {
     let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
     return compressor.performancePoints.fullLoad.airflow;
+  }
+
+  changeTargetPressure(){
+    if(this.form.controls.targetPressure.value){
+      let maxVariance: number = this.form.controls.targetPressure.value * .5;
+      this.form.controls.variance.setValidators([Validators.required, Validators.min(0), Validators.max(maxVariance)]);
+      this.form.controls.variance.updateValueAndValidity();
+    }
+    this.save(false);
   }
 }

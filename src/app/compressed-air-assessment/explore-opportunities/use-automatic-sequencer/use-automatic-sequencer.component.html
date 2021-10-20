@@ -1,55 +1,80 @@
-<div class="checkbox">
-    <label class="group-label" for="useAutomaticSequencer">
-        <span *ngIf="!baselineHasSequencer">Use</span>
-        <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
-        <select id="useAutomaticSequencerOrder" [(ngModel)]="useAutomaticSequencer.order"
-            class="form-control pull-right" (change)="save(true)">
-            <option [ngValue]=100>Off</option>
-            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
-        </select>
-    </label>
-</div>
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="useAutomaticSequencer">
+            <span *ngIf="!baselineHasSequencer">Use</span>
+            <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
+            <span *ngIf="form.invalid || hasError">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="useAutomaticSequencerOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
 
-<form *ngIf="useAutomaticSequencer.order != 100" class="mb-0 pt-1 pl-0 pr-0">
+    <div *ngIf="useAutomaticSequencer.order != 100" class="mb-0 pt-1 pl-0 pr-0">
+        <div class="form-group">
+            <label for="automaticSequencerImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="automaticSequencerImplementationCost" id="automaticSequencerImplementationCost"
+                    (input)="save(false)" (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="targetPressure">Target Pressure</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="targetPressure"
+                    (focus)="helpTextField('targetPressure')" name="targetPressure" id="targetPressure"
+                    (input)="changeTargetPressure()">
+                <span class="input-group-addon units">psig</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
+                <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.targetPressure.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="variance">Variance (+/-)</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="variance" name="variance"
+                    (focus)="helpTextField('variance')" id="variance" (input)="save(false)">
+                <span class="input-group-addon units">psia</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
+                <span *ngIf="form.controls.variance.errors.required">Value Required</span>
+                <span *ngIf="form.controls.variance.errors.min">Value can't be negative.
+                </span>
+                <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
+                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}}).
+                </span>
+            </span>
+        </div>
 
-    <div class="form-group">
-        <label for="automaticSequencerImplementationCost">Implementation Cost</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.implementationCost"
-                name="automaticSequencerImplementationCost" id="automaticSequencerImplementationCost"
-                (input)="save(false)" (focus)="helpTextField('implementationCost')">
-            <span class="input-group-addon units">$</span>
-        </div>
     </div>
-    <div class="form-group">
-        <label for="targetPressure">Target Pressure</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.targetPressure"
-                (focus)="helpTextField('targetPressure')" name="targetPressure" id="targetPressure"
-                (input)="save(false)">
-            <span class="input-group-addon units">psig</span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="variance">Variance (+/-)</label>
-        <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="useAutomaticSequencer.variance" name="variance"
-                (focus)="helpTextField('variance')" id="variance" (input)="save(false)">
-            <span class="input-group-addon units">psia</span>
-        </div>
-    </div>
+</form>
+<div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1">
     <div class="form-group">
         <label for="selectedDayTypeId">Sequencer Day Type</label>
         <div class="input-group">
             <select class="form-control" id="selectedDayTypeId" name="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
                 (focus)="helpTextField('dayType')">
-                <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
+                <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}
+                </option>
             </select>
         </div>
     </div>
-</form>
-
-<div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1">
     <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
         [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
         [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors"
@@ -61,96 +86,4 @@
             <a class="click-link small" (click)="resetOrdering()">Reset to Baseline</a>
         </div>
     </div>
-
-    <!--TODO: REMOVE TABLE PRIOR TO RELEASE, USE FOR TESTING PURPOSES-->
-    <!-- <div class="pt-2" *ngFor="let compressor of adjustedCompressors">
-        <table class="table table-striped">
-            <tbody>
-                <tr class="bold">
-                    <td>
-                        {{compressor.name}}
-                    </td>
-                    <td>
-                        Pressure
-                    </td>
-                    <td>
-                        Airflow
-                    </td>
-                    <td>
-                        Power
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Full Load
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.fullLoad.dischargePressure}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.fullLoad.airflow}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.fullLoad.power}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Max Full Flow
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.maxFullFlow.dischargePressure}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.maxFullFlow.airflow}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.maxFullFlow.power}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Unload Point
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.unloadPoint.dischargePressure}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.unloadPoint.airflow}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.unloadPoint.power}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        No Load
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.noLoad.dischargePressure}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.noLoad.airflow}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.noLoad.power}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Blowoff
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.blowoff.dischargePressure}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.blowoff.airflow}}
-                    </td>
-                    <td>
-                        {{compressor.performancePoints.blowoff.power}}
-                    </td>
-                </tr>
-            </tbody>
-        </table> 
-    </div>-->
 </div>
