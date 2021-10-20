@@ -3,7 +3,7 @@
         <label class="group-label" for="useAutomaticSequencer">
             <span *ngIf="!baselineHasSequencer">Use</span>
             <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
-            <span *ngIf="form.invalid || hasError">
+            <span *ngIf="(form.invalid || hasError) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>
             <select id="useAutomaticSequencerOrder" formControlName="order" class="form-control pull-right"
@@ -14,8 +14,8 @@
         </label>
     </div>
 
-    <div *ngIf="useAutomaticSequencer.order != 100" class="mb-0 pt-1 pl-0 pr-0">
-        <div class="form-group">
+    <div *ngIf="form.controls.order.value != 100" class="mb-0 pt-1 pl-0 pr-0">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
             <label for="automaticSequencerImplementationCost">Implementation Cost</label>
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="implementationCost"
@@ -29,7 +29,7 @@
                 </span>
             </span>
         </div>
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
             <label for="targetPressure">Target Pressure</label>
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="targetPressure"
@@ -44,7 +44,7 @@
                 </span>
             </span>
         </div>
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.variance.invalid}">
             <label for="variance">Variance (+/-)</label>
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="variance" name="variance"

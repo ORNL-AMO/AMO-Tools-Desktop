@@ -2,7 +2,7 @@
     <div class="checkbox">
         <label class="group-label" for="reduceAirLeaks">
             Reduce Air Leaks
-            <span *ngIf="form.invalid">
+            <span *ngIf="form.invalid && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>
             <select id="reduceAirLeaksOrder" formControlName="order" class="form-control pull-right"

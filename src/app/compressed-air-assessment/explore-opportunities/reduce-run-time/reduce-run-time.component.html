@@ -1,6 +1,9 @@
 <div class="checkbox">
     <label class="group-label" for="reduceRuntime">
         Reduce Run Time
+        <span *ngIf="hasError && reduceRuntime.order != 100">
+            <span class="fa fa-exclamation-circle"></span>
+        </span>
         <select id="reduceRuntimeOrder" [(ngModel)]="reduceRuntime.order" class="form-control pull-right" (change)="save(true)">
             <option [ngValue]=100>Off</option>
             <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
