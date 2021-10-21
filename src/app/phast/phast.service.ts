@@ -361,6 +361,7 @@ export class PhastService {
     let inputCopy = this.createInputCopy(input);
     let results = 0;
     inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
+    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion;
     if (settings.unitsOfMeasure === 'Metric') {
       inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');
       inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');
@@ -378,6 +379,7 @@ export class PhastService {
     let inputCopy = this.createInputCopy(input);
     let results = 0;
     inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
+    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion;
     if (settings.unitsOfMeasure === 'Metric') {
       inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');
       inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');

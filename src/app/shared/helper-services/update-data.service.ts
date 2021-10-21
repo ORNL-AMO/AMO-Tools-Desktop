@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
@@ -283,6 +283,12 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.compressedAirPressure;
                 });
             }
+            if (assessment.treasureHunt.heatCascadingOpportunities) {
+                assessment.treasureHunt.heatCascadingOpportunities.forEach(opportunity => {
+                    opportunity = this.updateHeatCascadingTreasureHunt(opportunity);
+                    opportunity.opportunityType = Treasure.heatCascading;
+                });
+            }
             if (assessment.treasureHunt.waterReductions) {
                 assessment.treasureHunt.waterReductions.forEach(opportunity => {
                     opportunity.opportunityType = Treasure.waterReduction;
@@ -364,5 +370,17 @@ export class UpdateDataService {
             compressedAirPressureReduction.powerType = 'Measured';
         }
         return compressedAirPressureReduction;
+    }
+
+    updateHeatCascadingTreasureHunt(heatCascadingTH: HeatCascadingTreasureHunt): HeatCascadingTreasureHunt {
+        if (heatCascadingTH) {
+            if (heatCascadingTH.inputData && heatCascadingTH.inputData['priFuelHV']) {
+                heatCascadingTH.inputData.fuelHV = heatCascadingTH.inputData['priFuelHV'];
+            }
+            if (heatCascadingTH.inputData && heatCascadingTH.inputData['secFuelCost']) {
+                heatCascadingTH.inputData.fuelCost = heatCascadingTH.inputData['secFuelCost'];
+            }
+        }
+        return heatCascadingTH;
     }
 }

@@ -182,6 +182,7 @@ export class StackLossService {
   flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
     inputs.ambientAirTempF = inputs.ambientAirTemp;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
@@ -193,6 +194,7 @@ export class StackLossService {
   flueGasByMass(input: FlueGasByMass, settings: Settings) {
     let inputs: FlueGasByMass = JSON.parse(JSON.stringify(input));
     inputs.ambientAirTempF = inputs.ambientAirTemp;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');

@@ -17,11 +17,14 @@ export interface FlueGasByMass {
     excessAirPercentage?: number;
     o2InFlueGas?: number;
     ambientAirTemp?: number;
+    //ambientAirTempF suite name for ambientAirTemp
     ambientAirTempF?: number;
     combustionAirTemperature?: number;
     fuelTemperature?: number;
     ashDischargeTemperature?: number;
     moistureInAirCombustion?: number;
+    //combAirMoisturePerc suite name for moistureInAirCombustion
+    combAirMoisturePerc?: number;
     unburnedCarbonInAsh?: number;
     carbon?: number;
     hydrogen?: number;
@@ -38,12 +41,15 @@ export interface FlueGasByVolume {
     utilityType?: string;
     flueGasTemperature?: number;
     ambientAirTemp?: number;
+    //ambientAirTempF suite name for ambientAirTemp
     ambientAirTempF?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
     combustionAirTemperature?: number;
     moistureInAirCombustion?: number;
+    //combAirMoisturePerc suite name for moistureInAirCombustion
+    combAirMoisturePerc?: number;
     fuelTemperature?: number;
     CH4?: number;
     C2H6?: number;

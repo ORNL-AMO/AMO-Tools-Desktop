@@ -86,7 +86,6 @@ export class FlueGasService {
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
       let formGroup = this.flueGasFormService.initByMassFormFromLoss(flueGasData, false);
-      debugger;
       let validData: boolean = formGroup.valid;
       if (inModal) {
         validData = this.flueGasFormService.setValidators(formGroup, inModal).valid;
