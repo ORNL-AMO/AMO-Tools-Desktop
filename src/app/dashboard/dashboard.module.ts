@@ -19,6 +19,7 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
 import { InventoryService } from './inventory.service';
+import { MoveItemsComponent } from './move-items/move-items.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { InventoryService } from './inventory.service';
     ContactPageComponent,
     DragBarComponent,
     CreateInventoryComponent,
+    MoveItemsComponent,
   ],
   imports: [
     CommonModule,

@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
-import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -11,27 +10,21 @@ import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
-import { ModalDirective } from 'ngx-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
+
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
   styleUrls: ['./directory-dashboard-menu.component.css']
 })
-export class DirectoryDashboardMenuComponent implements OnInit {
-  @ViewChild('moveModal', { static: false }) public moveModal: ModalDirective;
-  moveForm: FormGroup;
-  updateDashboardDataSub: Subscription;
-  allDirectories: Array<Directory>;
+export class DirectoryDashboardMenuComponent implements OnInit { 
+  
   breadCrumbs: Array<Directory>;
   directory: Directory;
   view: string = 'grid';
   isAllSelected: boolean;
+  
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router,
-    private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService) { }
+    private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -128,49 +121,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   moveToFolder() {
-    this.showMoveModal();
-
+    this.dashboardService.moveItems.next(true);
   }
-
-  showMoveModal() {
-    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.allDirectories = this.directoryDbService.getAll();
-    });
-    this.moveForm = this.formBuilder.group({      
-      'directoryId': [this.directory.id, Validators.required]
-    });
-    this.moveModal.show();
-  }
-
-  hideMoveModal() {
-    this.updateDashboardDataSub.unsubscribe();    
-    this.moveModal.hide();
-  }
-
-  getParentDirStr(id: number) {
-    let parentDir = _.find(this.allDirectories, (dir) => { return dir.id === id; });
-    let str = parentDir.name + '/';
-    while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.allDirectories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
-      str = parentDir.name + '/' + str;
-    }
-    return str;
-  }
-
-  save() {
-    this.directory.assessments.forEach(assessment => {
-      if (assessment.selected) {
-        assessment.directoryId = this.moveForm.controls.directoryId.value;
-        this.indexedDbService.putAssessment(assessment).then(val => {
-          this.assessmentDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-          });
-        });
-      }
-      this.hideMoveModal();
-
-    });
-
-  }
-
 }
