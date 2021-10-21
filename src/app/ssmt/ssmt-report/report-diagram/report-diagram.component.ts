@@ -3,6 +3,7 @@ import { SSMT, SSMTInputs, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
+import { SsmtService } from '../../ssmt.service';
 
 @Component({
   selector: 'app-report-diagram',
@@ -28,24 +29,68 @@ export class ReportDiagramComponent implements OnInit {
   ssmt2: SSMT;
   ssmt1Baseline: boolean = true;
   ssmt2Baseline: boolean = false;
-  constructor() { }
+  
+ 
+  modificationDiagramData: Array<DiagramData> = [];
+  selectedDiagram1: DiagramData;
+  selectedDiagram2: DiagramData;
+  ssmtBaselineDiagram1: DiagramData;
+  ssmtBaselineDiagram2: DiagramData;
+
+
+  constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    // debugger;
-    this.ssmt1 = this.assessment.ssmt;   
-    this.setSsmt1();
+    this.ssmtBaselineDiagram1 = {       
+      name: this.assessment.ssmt.name,
+      inputData: this.inputData,
+      outputData: this.baselineOutput,
+      valid: this.ssmtService.checkValid(this.assessment.ssmt, this.settings)
+
+    };
+    this.ssmtBaselineDiagram2 = {       
+      name: this.assessment.ssmt.name,
+      inputData: this.inputData,
+      outputData: this.baselineOutput,
+      valid: this.ssmtService.checkValid(this.assessment.ssmt, this.settings)
+
+    };
+  
+    this.selectedDiagram1 = this.ssmtBaselineDiagram1;
+    this.selectedDiagram2 = this.ssmtBaselineDiagram2;
+    this.modificationInputData.forEach((input, index) => {
+      let diagramData: DiagramData  = {
+        name: input.name,
+        inputData: input.inputData,
+        outputData: this.modificationOutputs[index].outputData,
+        valid: this.ssmtService.checkValid(this.assessment.ssmt, this.settings)
+      };
+      this.modificationDiagramData.push(diagramData);
+    });
+    this.ssmt1 = this.assessment.ssmt;
     if (this.assessment.ssmt.modifications.length != 0) {
       this.ssmt2 = this.assessment.ssmt.modifications[0].ssmt;
-      this.setSsmt2();
     }
   }
 
-  setSsmt1() {
-    this.ssmt1Baseline = this.assessment.ssmt.name == this.ssmt1.name? true : false;
+  
+  setSsmt1(selectedIndex: number) {
+    if(this.selectedDiagram1.name === this.ssmtBaselineDiagram1.name){
+      this.ssmt1Baseline = true;
+    }
   }
-
-  setSsmt2() {
-    this.ssmt2Baseline = this.assessment.ssmt.name == this.ssmt2.name? true : false
+  
+  setSsmt2(selectedIndex: number) {
+    if(this.selectedDiagram2.name === this.ssmtBaselineDiagram2.name){
+      this.ssmt2Baseline = true;
+    }
   }
-
 }
+
+export interface DiagramData
+{
+  name: string,
+  inputData: SSMTInputs,
+  outputData: SSMTOutput,
+  valid: SsmtValid
+};
