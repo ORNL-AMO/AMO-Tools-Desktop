@@ -1,7 +1,7 @@
 <div class="checkbox">
     <label class="group-label" for="improveEndUseEfficiency">
         Improve End Use Efficiency
-        <span *ngIf="hasInvalidForm && form.controls.order.value != 100">
+        <span *ngIf="hasInvalidForm && improveEndUseEfficiency.order != 100">
             <span class="fa fa-exclamation-circle"></span>
         </span>
         <select id="improveEndUseEfficiencyOrder" [(ngModel)]="improveEndUseEfficiency.order"

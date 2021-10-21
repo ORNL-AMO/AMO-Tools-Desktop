@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressure, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
 
 @Component({
   selector: 'app-adjust-cascading-set-points',
@@ -23,10 +26,18 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   inventoryItems: Array<CompressorInventoryItem>;
   baselineSetPoints: Array<CascadingSetPointData>;
   setPointView: 'baseline' | 'modification' = 'modification';
+  compressorForms: Array<CompressorForm>;
+  settingsSub: Subscription;
+  settings: Settings;
+  implementationCostForm: FormGroup;
+  hasInvalidForm: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private adjustCascadingSetPointsService: AdjustCascadingSetPointsService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
@@ -51,6 +62,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   focusField(str: string) {
@@ -70,6 +82,9 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
         this.inventoryItems = this.compressedAirAssessmentResultsService.reduceSystemAirPressureAdjustCompressors(this.inventoryItems, this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure)
       }
       this.checkAdjustCascadingPoints();
+      this.compressorForms = this.adjustCascadingSetPointsService.getFormFromObj(this.adjustCascadingSetPoints.setPointData);
+      this.setHasInvalidForm()
+      this.implementationCostForm = this.adjustCascadingSetPointsService.getImplementationCostForm(this.adjustCascadingSetPoints);
       this.setBaselineSetPoints();
     }
   }
@@ -131,7 +146,6 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     this.setPointView = view;
   }
 
-
   checkMaxFullFlowDisabled(controlType: number): boolean {
     if (controlType == 4 || controlType == 5 || controlType == 6) {
       return false;
@@ -165,6 +179,38 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       pointData.fullLoadDischargePressure = compressor.performancePoints.fullLoad.dischargePressure;
       pointData.maxFullFlowDischargePressure = compressor.performancePoints.maxFullFlow.dischargePressure;
     });
+    this.compressorForms = this.adjustCascadingSetPointsService.getFormFromObj(this.adjustCascadingSetPoints.setPointData);
     this.save(false);
+  }
+
+  saveFormChange(compressorForm: CompressorForm) {
+    compressorForm.fullLoadDischargePressure = compressorForm.form.controls.fullLoadDischargePressure.value;
+    compressorForm.maxFullFlowDischargePressure = compressorForm.form.controls.maxFullFlowDischargePressure.value;
+    let maxFullFlowValidators: Array<ValidatorFn> = this.adjustCascadingSetPointsService.getMaxFullFlowValidators({
+      compressorId: compressorForm.compressorId,
+      controlType: compressorForm.controlType,
+      compressorType: compressorForm.compressorType,
+      fullLoadDischargePressure: compressorForm.fullLoadDischargePressure,
+      maxFullFlowDischargePressure: compressorForm.maxFullFlowDischargePressure
+    });
+    compressorForm.form.controls.maxFullFlowDischargePressure.setValidators(maxFullFlowValidators);
+    compressorForm.form.controls.maxFullFlowDischargePressure.updateValueAndValidity();
+    this.adjustCascadingSetPoints.setPointData = this.adjustCascadingSetPointsService.updateObjFromForm(this.adjustCascadingSetPoints.setPointData, this.compressorForms);
+    this.setHasInvalidForm()
+    this.save(false);
+  }
+
+  saveImplementationCost() {
+    this.adjustCascadingSetPoints = this.adjustCascadingSetPointsService.updateObjImplmentationCost(this.implementationCostForm, this.adjustCascadingSetPoints);
+    this.save(false);
+  }
+
+  setHasInvalidForm(){
+    this.hasInvalidForm = false;
+    this.compressorForms.forEach(compressorForm => {
+      if(compressorForm.form.invalid){
+        this.hasInvalidForm = true;
+      }
+    })
   }
 }

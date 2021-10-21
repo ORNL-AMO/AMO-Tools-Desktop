@@ -136,6 +136,7 @@ import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-s
 import { ImproveEndUseEfficiencyItemComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-efficiency-item.component';
 import { ImproveEndUseEfficiencyService } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.service';
 import { UseAutomaticSequencerService } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.service';
+import { AdjustCascadingSetPointsService } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.service';
 
 @NgModule({
   declarations: [
@@ -279,7 +280,8 @@ import { UseAutomaticSequencerService } from './explore-opportunities/use-automa
     ReduceAirLeaksService,
     ReduceSystemAirPressureService,
     ImproveEndUseEfficiencyService,
-    UseAutomaticSequencerService
+    UseAutomaticSequencerService,
+    AdjustCascadingSetPointsService
   ]
 })
 export class CompressedAirAssessmentModule { }

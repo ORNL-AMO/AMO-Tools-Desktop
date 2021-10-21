@@ -43,3 +43,18 @@ td, th{
   .btn-sm{
     font-size: .7rem;
   }
+
+  span.alert-danger{
+    white-space: pre-wrap;
+  }
+
+  
+.fa-exclamation-circle {
+  color: red !important;
+  font-size: .75rem;
+  padding-right: .5rem;
+}
+
+input.form-control.ng-invalid{
+  border: red solid 2px;
+}

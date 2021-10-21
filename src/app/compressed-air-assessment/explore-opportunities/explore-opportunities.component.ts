@@ -129,7 +129,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification);
         this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
         this.calculating = undefined;
-      }, 750)
+      }, 1200)
     } else {
       this.exploreOpportunitiesService.modificationResults.next(undefined);
     }
