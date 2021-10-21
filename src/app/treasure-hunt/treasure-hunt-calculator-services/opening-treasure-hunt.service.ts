@@ -96,7 +96,9 @@ export class OpeningTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: openingLoss.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/opening.png',
-      teamName: openingLoss.opportunitySheet? openingLoss.opportunitySheet.owner : undefined
+      teamName: openingLoss.opportunitySheet? openingLoss.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
   }

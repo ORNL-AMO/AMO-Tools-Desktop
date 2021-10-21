@@ -84,7 +84,9 @@ export class HeatCascadingTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: heatCascadingOpportunity.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/heat-cascading.png',
-      teamName: heatCascadingOpportunity.opportunitySheet? heatCascadingOpportunity.opportunitySheet.owner : undefined
+      teamName: heatCascadingOpportunity.opportunitySheet? heatCascadingOpportunity.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
 }

@@ -98,8 +98,10 @@ export class TankInsulationTreasureHuntService {
       tankInsulationReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/tank-insulation-reduction-icon.png',
-      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined
+      iconString: 'assets/images/calculator-icons/utilities-icons/tank-ins.png',
+      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined,
+      iconCalcType: 'steam',
+      needBackground: true
     }
     return cardData;
   }

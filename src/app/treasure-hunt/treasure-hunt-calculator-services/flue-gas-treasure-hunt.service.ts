@@ -93,7 +93,9 @@ export class FlueGasTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: flueGas.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/fluegas.png',
-      teamName: flueGas.opportunitySheet? flueGas.opportunitySheet.owner : undefined
+      teamName: flueGas.opportunitySheet? flueGas.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
   }
