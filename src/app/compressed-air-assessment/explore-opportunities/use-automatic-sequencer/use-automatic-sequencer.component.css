@@ -38,3 +38,8 @@ td, th{
       font-size: .75rem;
       padding-right: .5rem;
   }
+
+
+  option.invalid{
+      color: red;
+  }

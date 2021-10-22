@@ -40,7 +40,7 @@
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorId|compressorName:adjustedCompressors}}
+                    {{summary.compressorId|compressorName:adjustedCompressors}} {{summary.compressorId}} {{selectedDayTypeId}}
                 </td>
                 <td class="text-center">
                     {{getFullLoadCapacity(summary.compressorId)}}

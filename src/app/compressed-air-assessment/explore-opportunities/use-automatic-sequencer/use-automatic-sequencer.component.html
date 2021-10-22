@@ -1,9 +1,9 @@
-<form [formGroup]="form" class="p-0">
+<form *ngIf="form" [formGroup]="form" class="p-0">
     <div class="checkbox">
         <label class="group-label" for="useAutomaticSequencer">
             <span *ngIf="!baselineHasSequencer">Use</span>
             <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
-            <span *ngIf="(form.invalid || hasError) && form.controls.order.value != 100">
+            <span *ngIf="(form.invalid || hasInvalidDayType) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>
             <select id="useAutomaticSequencerOrder" formControlName="order" class="form-control pull-right"
@@ -64,22 +64,24 @@
 
     </div>
 </form>
-<div *ngIf="useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1">
-    <div class="form-group">
-        <label for="selectedDayTypeId">Sequencer Day Type</label>
+<div *ngIf="selectedDayType && useAutomaticSequencer && useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1">
+    <div class="form-group" [ngClass]="{'invalid': hasInvalidDayType}">
+        <label for="selectedDayType">Sequencer Day Type</label>
         <div class="input-group">
-            <select class="form-control" id="selectedDayTypeId" name="selectedDayTypeId" [(ngModel)]="selectedDayTypeId"
+            <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
                 (focus)="helpTextField('dayType')">
-                <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}
+                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption" [ngClass]="{'alert-danger': !dayTypeOption.isValid}">
+                    {{dayTypeOption.dayType.name}}
                 </option>
             </select>
         </div>
     </div>
-    <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary"
+    <app-adjust-sequencer-profile *ngIf="useAutomaticSequencer.profileSummary && selectedDayType"
         [profileSummary]="useAutomaticSequencer.profileSummary" [compressedAirAssessment]="compressedAirAssessment"
-        [selectedDayTypeId]="selectedDayTypeId" (emitSave)="save(false)" [adjustedCompressors]="adjustedCompressors"
-        [requiredAirflow]="requiredAirflow" [availableAirflow]="availableAirflow" [hasError]="hasError"
-        [profilePower]="profilePower">
+        [selectedDayTypeId]="selectedDayType.dayType.dayTypeId" (emitSave)="save(false)"
+        [adjustedCompressors]="selectedDayType.adjustedCompressors" [requiredAirflow]="selectedDayType.requiredAirflow"
+        [availableAirflow]="selectedDayType.availableAirflow" [hasError]="!selectedDayType.isValid"
+        [profilePower]="selectedDayType.profilePower">
     </app-adjust-sequencer-profile>
     <div class="d-flex justify-content-end">
         <div class="pl-2 pr-2 border-right border-left">
