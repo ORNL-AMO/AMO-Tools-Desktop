@@ -83,9 +83,6 @@ export class PumpOperationsComponent implements OnInit {
   }
 
   init() {
-    if (!this.psat.inputs.cost_kw_hour) {
-      this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
-    }
     this.psatForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs, this.baseline, this.psat.inputs.whatIfScenario);
     this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
