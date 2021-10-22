@@ -47,6 +47,12 @@ export class CalculateOutletPressureComponent implements OnInit {
       };
     }
   }
+  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.calculate();
+    });
+  }
 
   toggleUserDefinedVelocityPressure() {
     this.outletPressureData.userDefinedVelocityPressure = !this.outletPressureData.userDefinedVelocityPressure;

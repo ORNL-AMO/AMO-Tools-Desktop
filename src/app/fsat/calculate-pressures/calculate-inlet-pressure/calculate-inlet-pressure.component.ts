@@ -49,6 +49,12 @@ export class CalculateInletPressureComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.calculate();
+    });
+  }
+
   toggleUserDefinedVelocityPressure() {
     this.inletPressureData.userDefinedVelocityPressure = !this.inletPressureData.userDefinedVelocityPressure
     this.calculate();
