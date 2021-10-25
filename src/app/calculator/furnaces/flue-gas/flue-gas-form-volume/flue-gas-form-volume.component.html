@@ -31,6 +31,20 @@
     </div>
 
     <div class="form-group">
+      <label class="small" for="ambientAirTemp">Ambient Air Temperature</label>
+      <div class="input-group">
+        <input name="ambientAirTemp" type="number" step="10" class="form-control" formControlName="ambientAirTemp" id="ambientAirTemp"
+          onfocus="this.select();" (input)="calculate()" (focus)="focusField('ambientAirTemp')" >
+        <span class="input-group-addon units"><span
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="byVolumeForm.controls.ambientAirTemp.invalid && !byVolumeForm.controls.ambientAirTemp.pristine">
+        <span *ngIf="byVolumeForm.controls.ambientAirTemp.errors.required">Value Required</span>
+      </span>
+    </div>
+
+    <div class="form-group">
       <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
       <select name="oxygenCalculationMethod" class="form-control" (change)="changeMethod()"
         formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
@@ -116,6 +130,24 @@
       <span class="alert-danger pull-right small"
         *ngIf="byVolumeForm.controls.fuelTemperature.invalid && !byVolumeForm.controls.fuelTemperature.pristine">
         <span *ngIf="byVolumeForm.controls.fuelTemperature.errors.required">Value Required</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="moistureInAirCombustion">Moisture in Combustion Air</label>
+      <div class="input-group">
+        <input name="moistureInAirCombustion" type="number" step="any" min="0" max="100" class="form-control"
+          formControlName="moistureInAirCombustion" id="moistureInAirCombustion" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('moistureInAirCombustion')" >
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="byVolumeForm.controls.moistureInAirCombustion.invalid && !byVolumeForm.controls.moistureInAirCombustion.pristine">
+        <span *ngIf="byVolumeForm.controls.moistureInAirCombustion.errors.required">Value Required</span>
+        <span *ngIf="byVolumeForm.controls.moistureInAirCombustion.errors.max">Value can't be greater than
+          {{byVolumeForm.controls.moistureInAirCombustion.errors.max.max}} %.</span>
+        <span *ngIf="byVolumeForm.controls.moistureInAirCombustion.errors.min">Value can't be less than
+          {{byVolumeForm.controls.moistureInAirCombustion.errors.min.min}} %.</span>
       </span>
     </div>
     

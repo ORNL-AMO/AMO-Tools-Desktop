@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { WasteHeatInput, WasteHeatWarnings } from '../../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../../shared/models/settings';
 import { WasteHeatFormService } from '../waste-heat-form.service';
@@ -108,11 +109,11 @@ export class WasteHeatFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.wasteHeatService.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.wasteHeatService.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.form.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
     }
     this.calculate();
@@ -120,6 +121,5 @@ export class WasteHeatFormComponent implements OnInit {
     this.showFlueGasModal = false;
     this.wasteHeatService.modalOpen.next(this.showFlueGasModal);
   }
-
 
 }

@@ -94,14 +94,14 @@ export class FlueGasLossesComponent implements OnInit {
           tmpLoss = {
             measurementType: 'By Volume',
             formByVolume: this.flueGasFormService.initByVolumeFormFromLoss(loss),
-            formByMass: this.flueGasFormService.initEmptyMassForm(lossIndex),
+            formByMass: this.flueGasFormService.initEmptyMassForm(this.settings, lossIndex),
             heatLoss: 0.0,
             collapse: false
           };
         } else if (loss.flueGasType === "By Mass") {
           tmpLoss = {
             measurementType: 'By Mass',
-            formByVolume: this.flueGasFormService.initEmptyVolumeForm(lossIndex),
+            formByVolume: this.flueGasFormService.initEmptyVolumeForm(this.settings, lossIndex),
             formByMass: this.flueGasFormService.initByMassFormFromLoss(loss),
             availableHeat: 0.0,
             grossHeat: 0.0,
@@ -129,8 +129,8 @@ export class FlueGasLossesComponent implements OnInit {
   addLoss() {
     this._flueGasLosses.push({
       measurementType: 'By Volume',
-      formByVolume: this.flueGasFormService.initEmptyVolumeForm(this._flueGasLosses.length + 1),
-      formByMass: this.flueGasFormService.initEmptyMassForm(this._flueGasLosses.length + 1),
+      formByVolume: this.flueGasFormService.initEmptyVolumeForm(this.settings, this._flueGasLosses.length + 1),
+      formByMass: this.flueGasFormService.initEmptyMassForm(this.settings, this._flueGasLosses.length + 1),
       availableHeat: 0.0,
       grossHeat: 0.0,
       systemLosses: 0.0,

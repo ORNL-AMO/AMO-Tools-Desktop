@@ -101,7 +101,7 @@ export class FlueGasFormMassComponent implements OnInit {
     if (updatedFlueGasData && updatedFlueGasData.flueGasByMass) {
       this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byMassForm = this.flueGasFormService.initEmptyMassForm();
+      this.byMassForm = this.flueGasFormService.initEmptyMassForm(this.settings);
     }
 
     this.initFormSetup();

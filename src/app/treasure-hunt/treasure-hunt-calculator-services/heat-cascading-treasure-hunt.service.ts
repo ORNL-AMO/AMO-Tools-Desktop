@@ -46,7 +46,7 @@ export class HeatCascadingTreasureHuntService {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavings,
       energySavings: output.energySavings,
-      baselineCost: heatCascadingTreasureHunt.inputData.secFuelCost,
+      baselineCost: heatCascadingTreasureHunt.inputData.fuelCost,
       modificationCost: 0,
       utilityType: heatCascadingTreasureHunt.inputData.utilityType,
     }
@@ -100,9 +100,9 @@ export class HeatCascadingTreasureHuntService {
 
   convertHeatCascadingOpportunity(heatCascadingOpportunity: HeatCascadingInput, oldSettings: Settings, newSettings: Settings): HeatCascadingInput {
     if (oldSettings.unitsOfMeasure == 'Metric'){
-      heatCascadingOpportunity.priFuelHV = this.convertUnitsService.value(heatCascadingOpportunity.priFuelHV).from('MJNm3').to('btuSCF');
+      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('MJNm3').to('btuSCF');
     } else if (oldSettings.unitsOfMeasure == 'Imperial') {
-      heatCascadingOpportunity.priFuelHV = this.convertUnitsService.value(heatCascadingOpportunity.priFuelHV).from('btuSCF').to('MJNm3');
+      heatCascadingOpportunity.fuelHV = this.convertUnitsService.value(heatCascadingOpportunity.fuelHV).from('btuSCF').to('MJNm3');
     }
     heatCascadingOpportunity.priExhaustTemperature = this.convertUnitsService.convertTemperatureValue(heatCascadingOpportunity.priExhaustTemperature, oldSettings, newSettings);
     heatCascadingOpportunity.priCombAirTemperature = this.convertUnitsService.convertTemperatureValue(heatCascadingOpportunity.priCombAirTemperature, oldSettings, newSettings);

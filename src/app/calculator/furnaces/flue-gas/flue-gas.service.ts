@@ -188,10 +188,17 @@ export class FlueGasService {
     let exampleModFlueGasTemp: number = 250;
     let exampleFuelTemp: number = 80;
     let exampleHeatInput: number = 15;
-
+    let exampleMoistureInAirCombustion: number = .0077;
+    let exampleAmbientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+    }
+    
     if(settings.unitsOfMeasure != 'Imperial'){
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
       exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
+      
+      exampleAmbientAirTemp = this.convertUnitsService.value(exampleAmbientAirTemp).from('F').to('C')
+      exampleAmbientAirTemp = Number(exampleAmbientAirTemp.toFixed(2));
 
       exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
       exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
@@ -221,6 +228,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 15,
         flueGasTemperature: exampleFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
@@ -248,6 +257,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 10,
         flueGasTemperature: exampleModFlueGasTemp,
         fuelTemperature: exampleFuelTemp,

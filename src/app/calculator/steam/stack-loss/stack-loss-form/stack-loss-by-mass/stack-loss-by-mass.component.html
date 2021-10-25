@@ -35,6 +35,20 @@
     </div>
 
     <div class="form-group">
+      <label class="small" for="ambientAirTemp">Ambient Air Temperature</label>
+      <div class="input-group">
+        <input name="ambientAirTemp" type="number" step="10" class="form-control" formControlName="ambientAirTemp" id="ambientAirTemp"
+          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('ambientAirTemp')" >
+        <span class="input-group-addon units"><span
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="stackLossForm.controls.ambientAirTemp.invalid && !stackLossForm.controls.ambientAirTemp.pristine">
+        <span *ngIf="stackLossForm.controls.ambientAirTemp.errors.required">Value Required</span>
+      </span>
+    </div>
+
+    <div class="form-group">
       <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
       <select name="oxygenCalculationMethod" class="form-control" (change)="changeMethod()"
         formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
