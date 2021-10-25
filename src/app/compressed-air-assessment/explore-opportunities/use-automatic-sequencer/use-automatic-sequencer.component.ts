@@ -69,13 +69,13 @@ export class UseAutomaticSequencerComponent implements OnInit {
 
     this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
       this.modificationResults = val;
-      if(!this.isFormChange){
+      if (!this.isFormChange) {
         this.setData();
-      }else{
+      } else {
         this.isFormChange = false;
-        if(!this.dayTypeOptions){
+        if (!this.dayTypeOptions) {
           this.setData();
-        }else{
+        } else {
           this.setAirflowData();
         }
       }
@@ -105,9 +105,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
         this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
       }
-      this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
-      this.setReduceRuntimeValid();
+      if (this.useAutomaticSequencer.order != 100) {
+        this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
+        this.setReduceRuntimeValid();
+      }
     }
   }
 
@@ -196,7 +198,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
         let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.modificationResults, dayType.dayTypeId);
         let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         let eemSequencerProfileSummary: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
-        let dataArrays: ValidationDataArrays =  this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, adjustedCompressors, true);
+        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, adjustedCompressors, true);
         this.dayTypeOptions.push({
           dayType: dayType,
           isValid: dataArrays.isValid,

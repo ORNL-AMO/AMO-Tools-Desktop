@@ -67,7 +67,9 @@ export class ReduceAirLeaksComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let reduceAirLeaks: ReduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
       this.form = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, this.baselineResults);
-      this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
+      if (reduceAirLeaks.order != 100) {
+        this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
+      }
     }
   }
 

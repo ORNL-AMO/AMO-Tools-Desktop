@@ -58,8 +58,10 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let reduceSystemAirPressure: ReduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));
-      this.form = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, this.compressedAirAssessment.compressorInventoryItems);
-      this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.next(this.form.valid);
+        this.form = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, this.compressedAirAssessment.compressorInventoryItems);
+        if (reduceSystemAirPressure.order != 100) {
+        this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.next(this.form.valid);
+      }
     }
   }
 

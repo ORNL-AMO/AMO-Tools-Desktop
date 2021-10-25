@@ -68,6 +68,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
       this.modificationResults = val;
       this.setResults();
+      this.setHasInvalidData();
     });
 
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
@@ -105,37 +106,29 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   setValidationSubs() {
     this.addReceiverVolumeValidSub = this.exploreOpportunitiesValidationService.addReceiverVolumeValid.subscribe(val => {
       this.addReceiverVolumeValid = val;
-      this.setHasInvalidData();
     });
     this.adjustCascadingSetPointsValidSub = this.exploreOpportunitiesValidationService.adjustCascadingSetPointsValid.subscribe(val => {
       this.adjustCascadingSetPointsValid = val;
-      this.setHasInvalidData();
     });
     this.improveEndUseEfficiencyValidSub = this.exploreOpportunitiesValidationService.improveEndUseEfficiencyValid.subscribe(val => {
       this.improveEndUseEfficiencyValid = val;
-      this.setHasInvalidData();
     });
     this.reduceAirLeaksValidSub = this.exploreOpportunitiesValidationService.reduceAirLeaksValid.subscribe(val => {
       this.reduceAirLeaksValid = val;
-      this.setHasInvalidData();
     });
     this.reduceRuntimeValidSub = this.exploreOpportunitiesValidationService.reduceRuntimeValid.subscribe(val => {
       this.reduceRuntimeValid = val;
-      this.setHasInvalidData();
     });
     this.reduceSystemAirPressureValidSub = this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.subscribe(val => {
       this.reduceSystemAirPressureValid = val;
-      this.setHasInvalidData();
     });
     this.useAutomaticSequencerValidSub = this.exploreOpportunitiesValidationService.useAutomaticSequencerValid.subscribe(val => {
       this.useAutomaticSequencerValid = val;
-      this.setHasInvalidData();
     });
   }
 
   setHasInvalidData() {
     if (this.modification) {
-      // console.log('set');
       if (this.modification.addPrimaryReceiverVolume.order != 100 && this.addReceiverVolumeValid == false) {
         this.hasInvalidData = true;
       } else if (this.modification.adjustCascadingSetPoints.order != 100 && this.adjustCascadingSetPointsValid == false) {

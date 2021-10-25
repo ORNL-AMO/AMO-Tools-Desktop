@@ -70,7 +70,9 @@ export class AddReceiverVolumeComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let addPrimaryReceiverVolume: AddPrimaryReceiverVolume = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume));
       this.form = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
-      this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+      if (addPrimaryReceiverVolume.order != 100) {
+        this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+      }
     }
   }
 
@@ -107,6 +109,6 @@ export class AddReceiverVolumeComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
-    this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);    
+    this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
   }
 }

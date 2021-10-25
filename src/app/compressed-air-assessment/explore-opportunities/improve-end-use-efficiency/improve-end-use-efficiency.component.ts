@@ -67,7 +67,9 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.improveEndUseEfficiency = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency));
-      this.setHasInvalidForm();
+      if (this.improveEndUseEfficiency.order != 100) {
+        this.setHasInvalidForm();
+      }
     }
   }
 
