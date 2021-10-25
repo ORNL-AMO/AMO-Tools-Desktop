@@ -77,7 +77,9 @@ export class WasteHeatTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: wasteHeat.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/waste-heat-icon.png',
-      teamName: wasteHeat.opportunitySheet? wasteHeat.opportunitySheet.owner : undefined
+      teamName: wasteHeat.opportunitySheet? wasteHeat.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
   }

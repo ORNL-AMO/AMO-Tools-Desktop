@@ -97,7 +97,9 @@ export class LeakageTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: leakageLoss.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/leakage.png',
-      teamName: leakageLoss.opportunitySheet? leakageLoss.opportunitySheet.owner : undefined
+      teamName: leakageLoss.opportunitySheet? leakageLoss.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
   }
