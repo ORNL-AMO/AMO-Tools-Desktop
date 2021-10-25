@@ -29,6 +29,9 @@ export class DashboardComponent implements OnInit {
   createFolder: boolean;
   createFolderSub: Subscription;
 
+  moveItems: boolean;
+  moveItemsSub: Subscription;
+
   showImportModalSub: Subscription;
   showImportModal: boolean;
 
@@ -48,6 +51,10 @@ export class DashboardComponent implements OnInit {
     });
     this.createAssessmentSub = this.dashboardService.createAssessment.subscribe(val => {
       this.createAssessment = val;
+    });
+
+    this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {
+      this.moveItems = val;
     });
 
     this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
@@ -78,6 +85,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.moveItemsSub.unsubscribe();
     this.createAssessmentSub.unsubscribe();
     this.dashboardToastMessageSub.unsubscribe();
     this.createFolderSub.unsubscribe();
