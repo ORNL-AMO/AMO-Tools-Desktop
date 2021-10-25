@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesValidationService, ValidationDataArrays } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
-import { SequencerDataArrays, UseAutomaticSequencerService } from './use-automatic-sequencer.service';
+import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 
 @Component({
   selector: 'app-use-automatic-sequencer',
@@ -44,7 +45,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   form: FormGroup;
   hasInvalidDayType: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private useAutomaticSequencerService: UseAutomaticSequencerService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private useAutomaticSequencerService: UseAutomaticSequencerService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -163,9 +165,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
       let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.modificationResults, this.selectedDayType.dayType.dayTypeId);
       let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       let adjustedCompressors: Array<CompressorInventoryItem> = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(this.useAutomaticSequencer, JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems)), this.useAutomaticSequencer.profileSummary, this.selectedDayType.dayType.dayTypeId);
-      let dataArrays: SequencerDataArrays = this.useAutomaticSequencerService.getDataArrays(
-        this.selectedDayType.dayType.dayTypeId, adjustedProfileSummary, numberOfSummaryIntervals, this.useAutomaticSequencer, this.modificationResults.dayTypeModificationResults, adjustedCompressors, true
-      );
+      let eemSequencerProfileSummary: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayType.dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
+      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, adjustedCompressors, true);
       let dayTypeIndex: number = this.dayTypeOptions.findIndex(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       this.dayTypeOptions[dayTypeIndex].availableAirflow = dataArrays.availableAirflow;
       this.dayTypeOptions[dayTypeIndex].requiredAirflow = dataArrays.requiredAirflow;
@@ -190,11 +191,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
       this.dayTypeOptions = new Array();
       compressedAirDayTypes.forEach(dayType => {
         let adjustedCompressors: Array<CompressorInventoryItem> = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(this.useAutomaticSequencer, JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems)), this.useAutomaticSequencer.profileSummary, dayType.dayTypeId);
-
         let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
         let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.modificationResults, dayType.dayTypeId);
         let numberOfSummaryIntervals: number = this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-        let dataArrays: SequencerDataArrays = this.useAutomaticSequencerService.getDataArrays(dayType.dayTypeId, adjustedProfileSummary, numberOfSummaryIntervals, this.useAutomaticSequencer, this.modificationResults.dayTypeModificationResults, adjustedCompressors, true);
+        let eemSequencerProfileSummary: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
+        let dataArrays: ValidationDataArrays =  this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, adjustedCompressors, true);
         this.dayTypeOptions.push({
           dayType: dayType,
           isValid: dataArrays.isValid,

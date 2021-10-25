@@ -539,6 +539,9 @@ export class CompressedAirAssessmentResultsService {
         });
         let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
         isTurnedOn = intervalData.isCompressorOn;
+        if(!isTurnedOn){
+          data.summaryData.order = 0;
+        }
         reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
       }
       if (data.summaryData.order != 0 && isTurnedOn) {

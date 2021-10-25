@@ -1,120 +1,138 @@
-<div class="checkbox">
-    <label class="group-label" for="reduceRuntime">
-        Reduce Run Time
-        <span *ngIf="hasError && reduceRuntime.order != 100">
-            <span class="fa fa-exclamation-circle"></span>
-        </span>
-        <select id="reduceRuntimeOrder" [(ngModel)]="reduceRuntime.order" class="form-control pull-right" (change)="save(true)">
-            <option [ngValue]=100>Off</option>
-            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
-        </select>
-    </label>
-</div>
-
-<div class="form-group" *ngIf="reduceRuntime.order != 100">
-    <label for="reduceRuntimeImplementationCost">Implementation Cost</label>
-    <div class="input-group">
-        <input type="number" class="form-control" [(ngModel)]="reduceRuntime.implementationCost"
-            name="reduceRuntimeImplementationCost" id="reduceRuntimeImplementationCost" (input)="save(false)"
-            (focus)="helpTextField('implementationCost')">
-        <span class="input-group-addon units">$</span>
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="reduceRuntime">
+            Reduce Run Time
+            <span *ngIf="(hasInvalidDayType || form.invalid) && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="reduceRuntimeOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
     </div>
-</div>
 
+    <div *ngIf="form.controls.order.value != 100" class="mb-0 pt-1 pl-0 pr-0">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="reduceRuntimeImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="reduceRuntimeImplementationCost" id="reduceRuntimeImplementationCost"
+                    (input)="save(false)" (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+    </div>
+</form>
 
-<div *ngIf="reduceRuntime.order != 100" class="w-100 p-2 justify-content-center">
-    <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayTypeId"
-        (change)="setAirflowData()" (focus)="helpTextField('dayType')">
-        <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType.dayTypeId">{{dayType.name}}</option>
-    </select>
-</div>
+<div *ngIf="selectedDayType && reduceRuntime && reduceRuntime.order != 100"
+    class="d-flex flex-column mb-2 pt-1">
+    <div class="form-group" [ngClass]="{'invalid': hasInvalidDayType}">
+        <label for="selectedDayType">Day Type</label>
+        <div class="input-group">
+            <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+                (focus)="helpTextField('dayType')">
+                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption"
+                    [ngClass]="{'alert-danger': !dayTypeOption.isValid}">
+                    {{dayTypeOption.dayType.name}}
+                </option>
+            </select>
+        </div>
+    </div>
 
-<div class="scroll-item" *ngIf="reduceRuntime.order != 100">
-    <table class="table bg-white" *ngIf="selectedDayTypeId">
-        <thead>
-            <tr>
-                <th [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
-                    <!-- Compressor -->
-                </th>
-                <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
-                    Capacity <br> acfm
-                </th>
-                <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
-                    Shutdown <br>
-                    Timer
-                </th>
-                <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
-                    {{data.timeInterval + 1}}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayTypeId; let rDataIndex = index;">
-                <td class="bold text-center">
-                    {{rData.compressorId | compressorName:inventoryItems}}
-                </td>
-                <td class="text-center">
-                    {{rData.fullLoadCapacity}} acfm
-                </td>
-                <td class="text-center">
-                    <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox" [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
-                </td>
-                <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
-                    <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
-                        name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                        (focus)="helpTextField('checkbox')"
-                        (change)="save(false)">
-                </td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>
-                    Available Airflow
-                </td>
-                <td>
+    <div class="scroll-item">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
+                        <!-- Compressor -->
+                    </th>
+                    <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
+                        Capacity <br> acfm
+                    </th>
+                    <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
+                        Shutdown <br>
+                        Timer
+                    </th>
+                    <th class="text-center" *ngFor="let data of reduceRuntime.runtimeData[0].intervalData">
+                        {{data.timeInterval + 1}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayType.dayType.dayTypeId; let rDataIndex = index;">
+                    <td class="bold text-center">
+                        {{rData.compressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
+                    </td>
+                    <td class="text-center">
+                        {{rData.fullLoadCapacity}} acfm
+                    </td>
+                    <td class="text-center">
+                        <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox"
+                            [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
+                    </td>
+                    <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
+                        <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
+                            name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
+                            (focus)="helpTextField('checkbox')" (change)="save(false)">
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        Available Airflow
+                    </td>
+                    <td>
 
-                </td>
-                <td>
+                    </td>
+                    <td>
 
-                </td>
-                <td *ngFor="let airflow of availableAirflow; let index = index"
-                    [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
-                    {{airflow | number:'1.0-0'}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Required Airflow
-                </td>
-                <td>
+                    </td>
+                    <td *ngFor="let airflow of selectedDayType.availableAirflow; let index = index"
+                        [ngClass]="{'cell-error': (airflow - selectedDayType.requiredAirflow[index]) < 0}">
+                        {{airflow | number:'1.0-0'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Required Airflow
+                    </td>
+                    <td>
 
-                </td>
-                <td>
+                    </td>
+                    <td>
 
-                </td>
-                <td *ngFor="let airflow of requiredAirflow">
-                    {{airflow| number:'1.0-0'}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Power, kW
-                </td>
-                <td>
+                    </td>
+                    <td *ngFor="let airflow of selectedDayType.requiredAirflow">
+                        {{airflow| number:'1.0-0'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Power, kW
+                    </td>
+                    <td>
 
-                </td>
-                <td>
+                    </td>
+                    <td>
 
-                </td>
-                <td *ngFor="let power of profilePower">
-                    {{power| number:'1.0-1'}}
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-<div *ngIf="hasError && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
-    One of more hours have less available airflow then is required.
+                    </td>
+                    <td *ngFor="let power of selectedDayType.profilePower">
+                        {{power| number:'1.0-1'}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div *ngIf="!selectedDayType.isValid && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
+        One of more hours have less available airflow then is required.
+    </div>
 </div>
