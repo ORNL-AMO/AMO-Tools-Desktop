@@ -9,12 +9,14 @@ import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
+import { ConvertUnitsService } from '../convert-units/convert-units.service';
+import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 declare const packageJson;
 
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private settingsService: SettingsService) { }
+    constructor(private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
     checkAssessment(assessment: Assessment): Assessment {
         if (this.checkAssessmentVersionDifferent(assessment) === false) {
@@ -148,12 +150,12 @@ export class UpdateDataService {
             });
         }
 
-        // assessment.phast = this.updateFlueGas(assessment.phast);
-        // if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
-        //     assessment.phast.modifications.forEach(mod => {
-        //         mod.phast = this.updateFlueGas(mod.phast);
-        //     });
-        // }
+        assessment.phast = this.updateFlueGas(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateFlueGas(mod.phast);
+            });
+        }
 
         assessment.appVersion = packageJson.version;
         return assessment;
@@ -170,20 +172,30 @@ export class UpdateDataService {
         return phast;
     }
 
-    // updateFlueGas(phast: PHAST): PHAST {
-    //     if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
-    //         phast.losses.flueGasLosses.forEach(fg => {
-    //             // TODO test, may not be needed
-    //             if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
-    //                 fg.flueGasByMass.ambientAirTemp = 60;
-    //             }
-    //             if (fg.flueGasByVolume && fg.flueGasByVolume['ambientAirTemp'] === undefined) {
-    //                 fg.flueGasByVolume.ambientAirTemp = 60;
-    //             }
-    //         });
-    //     }
-    //     return phast;
-    // }
+    updateFlueGas(phast: PHAST): PHAST {
+        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+            phast.losses.flueGasLosses.forEach(fg => {
+                if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
+                    fg.flueGasByMass = this.setAmbientAirTemp(phast, fg.flueGasByMass);
+                }
+                if (fg.flueGasByVolume && fg.flueGasByVolume['ambientAirTemp'] === undefined) {
+                    fg.flueGasByVolume = this.setAmbientAirTemp(phast, fg.flueGasByVolume);
+                }
+            });
+        }
+        return phast;
+    }
+
+    setAmbientAirTemp(phast: PHAST, fg: FlueGasByMass | FlueGasByVolume) {
+        let unitsOfMeasure: string = phast.lossDataUnits;
+        let ambientAirTemp: number = 60;
+        if (unitsOfMeasure == 'Metric') {
+            ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
+            ambientAirTemp = Number(ambientAirTemp.toFixed(2));
+        } 
+        fg.ambientAirTemp = ambientAirTemp;
+        return fg;
+    }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
         if (settings.appVersion !== packageJson.version) {
