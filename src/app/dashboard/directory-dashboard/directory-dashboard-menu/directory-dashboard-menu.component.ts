@@ -86,6 +86,18 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
   }
 
+  checkIfCopyItem(){
+    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (inventorySelectedTest != undefined);
+    let calculatorSelectedTest: Calculator
+    if (this.directory.calculators) {
+      calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
+    }
+    return (checkAssessmentDirectorySelected || (calculatorSelectedTest != undefined)) && directorySelectedTest == undefined;
+  }
+
   showCreateAssessment() {
     this.dashboardService.createAssessment.next(true);
   }
@@ -121,7 +133,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   showCopyItems(){
-    
+    this.dashboardService.copyItems.next(true);
   }
 
   moveToFolder() {
