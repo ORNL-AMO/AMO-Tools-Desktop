@@ -112,6 +112,7 @@ export class MoveItemsComponent implements OnInit {
             this.dashboardService.updateDashboardData.next(true);
           });
         });
+        calculator.selected = false;
       }
     });
     this.directory.subDirectory.forEach(subDir => {
@@ -127,6 +128,7 @@ export class MoveItemsComponent implements OnInit {
           subDir.parentDirectoryId = subDir.parentDirectoryId;
           this.hideMoveModal();
         }
+        subDir.selected = false;
       }
     });
     this.directory.inventories.forEach(inventory => {
@@ -137,6 +139,7 @@ export class MoveItemsComponent implements OnInit {
             this.dashboardService.updateDashboardData.next(true);
           });
         });
+        inventory.selected = false;
       }
     });
     this.hideMoveModal();
@@ -162,7 +165,8 @@ export class MoveItemsComponent implements OnInit {
   createFolder() {
     let tmpFolder: Directory = {
       name: this.newFolderForm.controls.folderName.value,
-      parentDirectoryId: this.newFolderForm.controls.directoryId.value
+      parentDirectoryId: this.newFolderForm.controls.directoryId.value,
+      selected: false
     };
     let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
     delete tmpSettings.facilityInfo;
