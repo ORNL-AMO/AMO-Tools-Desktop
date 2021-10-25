@@ -107,6 +107,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       }
       this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
+      this.setReduceRuntimeValid();
     }
   }
 
@@ -220,5 +221,12 @@ export class UseAutomaticSequencerComponent implements OnInit {
         this.hasInvalidDayType = true;
       }
     });
+    this.setReduceRuntimeValid();
+  }
+
+  setReduceRuntimeValid() {
+    if (this.form) {
+      this.exploreOpportunitiesValidationService.reduceRuntimeValid.next((!this.hasInvalidDayType && this.form.valid));
+    }
   }
 }

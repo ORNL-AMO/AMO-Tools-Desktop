@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification, ReduceSystemAirPressure } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReduceSystemAirPressureService } from './reduce-system-air-pressure.service';
 
@@ -21,7 +22,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   form: FormGroup;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceSystemAirPressureService: ReduceSystemAirPressureService) { }
+    private reduceSystemAirPressureService: ReduceSystemAirPressureService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -58,6 +59,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let reduceSystemAirPressure: ReduceSystemAirPressure = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure));
       this.form = this.reduceSystemAirPressureService.getFormFromObj(reduceSystemAirPressure, this.compressedAirAssessment.compressorInventoryItems);
+      this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.next(this.form.valid);
     }
   }
 
@@ -93,5 +95,6 @@ export class ReduceSystemAirPressureComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceSystemAirPressure', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.next(this.form.valid);
   }
 }

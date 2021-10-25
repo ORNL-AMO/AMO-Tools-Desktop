@@ -7,6 +7,7 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { FormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-reduce-air-leaks',
@@ -25,7 +26,8 @@ export class ReduceAirLeaksComponent implements OnInit {
   form: FormGroup;
   baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceAirLeaksService: ReduceAirLeaksService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private reduceAirLeaksService: ReduceAirLeaksService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
 
@@ -65,6 +67,7 @@ export class ReduceAirLeaksComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let reduceAirLeaks: ReduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
       this.form = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, this.baselineResults);
+      this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
     }
   }
 
@@ -101,5 +104,6 @@ export class ReduceAirLeaksComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceAirLeaks', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
   }
 }

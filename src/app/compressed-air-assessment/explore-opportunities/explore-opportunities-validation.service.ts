@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { AddReceiverVolumeService } from './add-receiver-volume/add-receiver-volume.service';
@@ -14,15 +15,32 @@ import { UseAutomaticSequencerService } from './use-automatic-sequencer/use-auto
 @Injectable()
 export class ExploreOpportunitiesValidationService {
 
+  addReceiverVolumeValid: BehaviorSubject<boolean>;
+  adjustCascadingSetPointsValid: BehaviorSubject<boolean>;
+  improveEndUseEfficiencyValid: BehaviorSubject<boolean>;
+  reduceAirLeaksValid: BehaviorSubject<boolean>;
+  reduceRuntimeValid: BehaviorSubject<boolean>;
+  reduceSystemAirPressureValid: BehaviorSubject<boolean>;
+  useAutomaticSequencerValid: BehaviorSubject<boolean>;
   constructor(private addReceiverVolumeService: AddReceiverVolumeService, private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
     private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService, private reduceAirLeaksService: ReduceAirLeaksService,
     private reduceSystemAirPressureService: ReduceSystemAirPressureService, private useAutomaticSequencerService: UseAutomaticSequencerService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceRunTimeService: ReduceRunTimeService) { }
+    private reduceRunTimeService: ReduceRunTimeService) {
+    this.addReceiverVolumeValid = new BehaviorSubject<boolean>(true);
+    this.adjustCascadingSetPointsValid = new BehaviorSubject<boolean>(true);
+    this.improveEndUseEfficiencyValid = new BehaviorSubject<boolean>(true);
+    this.reduceAirLeaksValid = new BehaviorSubject<boolean>(true);
+    this.reduceRuntimeValid = new BehaviorSubject<boolean>(true);
+    this.reduceSystemAirPressureValid = new BehaviorSubject<boolean>(true);
+    this.useAutomaticSequencerValid = new BehaviorSubject<boolean>(true);
+  }
 
   checkModificationValid(modification: Modification, baselineResults: BaselineResults, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,
-    compressedAirAssessment: CompressedAirAssessment): CompressedAirModificationValid {
-    let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(compressedAirAssessment, modification);
+    compressedAirAssessment: CompressedAirAssessment, compressedAirAssessmentResult?: CompressedAirAssessmentResult): CompressedAirModificationValid {
+    if (!compressedAirAssessmentResult) {
+      compressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(compressedAirAssessment, modification);
+    }
 
     let addReceiverVolume: boolean = this.checkAddReceiverVolumeValid(modification.addPrimaryReceiverVolume);
     let adjustCascadingSetPoints: boolean = this.checkAdjustCascadingPointsValid(modification.adjustCascadingSetPoints);

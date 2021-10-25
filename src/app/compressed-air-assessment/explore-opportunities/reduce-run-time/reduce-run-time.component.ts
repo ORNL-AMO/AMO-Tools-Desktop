@@ -91,6 +91,7 @@ export class ReduceRunTimeComponent implements OnInit {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
       this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
       this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
+      this.setReduceRuntimeValid();
     }
   }
 
@@ -141,6 +142,7 @@ export class ReduceRunTimeComponent implements OnInit {
       this.dayTypeOptions[dayTypeIndex].requiredAirflow = dataArrays.requiredAirflow;
       this.dayTypeOptions[dayTypeIndex].profilePower = dataArrays.profilePower;
       this.dayTypeOptions[dayTypeIndex].isValid = dataArrays.isValid;
+      console.log("SET AIRFLOW");
       this.setHasInvalidDayType();
     }
   }
@@ -166,6 +168,7 @@ export class ReduceRunTimeComponent implements OnInit {
       if (!this.selectedDayType) {
         this.selectedDayType = this.dayTypeOptions[0];
       }
+      console.log("SET DAY TYPES");
       this.setHasInvalidDayType();
     }
   }
@@ -177,6 +180,8 @@ export class ReduceRunTimeComponent implements OnInit {
         this.hasInvalidDayType = true;
       }
     });
+    console.log("SET HAS INVALID");
+    this.setReduceRuntimeValid();
   }
 
   checkShowShutdownTimer(compressorId: string): boolean {
@@ -184,4 +189,10 @@ export class ReduceRunTimeComponent implements OnInit {
     return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
   }
 
+  setReduceRuntimeValid() {
+    if (this.form) {
+      console.log('SET REDUCE');
+      this.exploreOpportunitiesValidationService.reduceRuntimeValid.next((!this.hasInvalidDayType && this.form.valid));
+    }
+  }
 }

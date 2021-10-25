@@ -6,6 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
+import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
 
@@ -33,7 +34,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   hasInvalidForm: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private adjustCascadingSetPointsService: AdjustCascadingSetPointsService) { }
+    private adjustCascadingSetPointsService: AdjustCascadingSetPointsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -211,6 +212,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       if(compressorForm.form.invalid){
         this.hasInvalidForm = true;
       }
-    })
+    });
+    this.exploreOpportunitiesValidationService.adjustCascadingSetPointsValid.next(!this.hasInvalidForm);
   }
 }

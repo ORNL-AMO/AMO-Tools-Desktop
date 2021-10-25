@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
 
@@ -26,7 +27,8 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   hasInvalidForm: boolean;
   baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -190,6 +192,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
           })
         }
       }
-    })
+    });
+    this.exploreOpportunitiesValidationService.improveEndUseEfficiencyValid.next(!this.hasInvalidForm);
   }
 }

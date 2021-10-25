@@ -6,6 +6,7 @@ import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } 
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
+import { ExploreOpportunitiesValidationService } from './explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -36,7 +37,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   hasSequencerOn: boolean;
   displayAddStorage: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private exploreOpportunititesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
