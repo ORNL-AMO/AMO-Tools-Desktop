@@ -120,6 +120,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.router.navigateByUrl('/report-rollup');
   }
 
+  showCopyItems(){
+    
+  }
+
   moveToFolder() {
     this.dashboardService.moveItems.next(true);
   }
