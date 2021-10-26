@@ -36,6 +36,20 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/air-leak']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/air-leak']">Compressed Air - Leak Survey</a>
+                <p>
+                    Used to quantify the energy savings associated with reducing compressed air leaks.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/scfm-acfm-icon.png"
                         class="calc-img" [routerLink]="['/calculators/air-flow-conversion']">
                 </div>
@@ -161,20 +175,6 @@
                 <a class="click-item" [routerLink]="['/calculators/operating-cost']">Operation Costs</a>
                 <p>
                     Estimate the cost of operation of the compressor in both fully and partially loaded instances
-                </p>
-            </div>
-        </div>
-        <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png" class="calc-img"
-                        [routerLink]="['/calculators/air-leak']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/air-leak']">Compressed Air - Leak Survey</a>
-                <p>
-                    Used to quantify the energy savings associated with reducing compressed air leaks.
                 </p>
             </div>
         </div>
