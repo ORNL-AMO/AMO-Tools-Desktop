@@ -42,6 +42,7 @@ export class EnergySummaryComponent implements OnInit {
       });
     }
     this.numberOfHeaders = this.assessment.ssmt.headerInput.numberOfHeaders;
+    console.log(this.modificationOutputs)
   }
 
   useModification() {

@@ -35,6 +35,7 @@ export class ReportGraphsComponent implements OnInit {
       this.selectedSsmt2 = this.ssmt.modifications[0].ssmt;
     }
     this.setWaterfallXAxis();
+    console.log(this.selectedSsmt1)
   }
 
   setWaterfallXAxis(){

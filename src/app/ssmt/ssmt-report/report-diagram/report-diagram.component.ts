@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMT, SSMTInputs, SsmtValid } from '../../../shared/models/steam/ssmt';
+import { SSMT, SSMTInputs, SsmtValid, DiagramData } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
@@ -13,6 +13,8 @@ import { SsmtService } from '../../ssmt.service';
 export class ReportDiagramComponent implements OnInit {
   @Input()
   inputData: SSMTInputs;
+  @Input()
+  diagramData: DiagramData;
   @Input()
   settings: Settings;
   @Input()
@@ -29,6 +31,7 @@ export class ReportDiagramComponent implements OnInit {
   ssmt2: SSMT;
   ssmt1Baseline: boolean = true;
   ssmt2Baseline: boolean = false;
+  
   
  
   modificationDiagramData: Array<DiagramData> = [];
@@ -55,7 +58,7 @@ export class ReportDiagramComponent implements OnInit {
       valid: this.ssmtService.checkValid(this.assessment.ssmt, this.settings)
 
     };
-  
+
     this.selectedDiagram1 = this.ssmtBaselineDiagram1;
     this.selectedDiagram2 = this.ssmtBaselineDiagram2;
     this.modificationInputData.forEach((input, index) => {
@@ -75,22 +78,21 @@ export class ReportDiagramComponent implements OnInit {
 
   
   setSsmt1(selectedIndex: number) {
+    console.log(this.selectedDiagram1)
+    console.log(this.selectedDiagram1.valid.isValid)
+    console.log(this.ssmt1.valid)
+    console.log(this.modificationDiagramData)
     if(this.selectedDiagram1.name === this.ssmtBaselineDiagram1.name){
       this.ssmt1Baseline = true;
     }
   }
   
   setSsmt2(selectedIndex: number) {
+    console.log(this.selectedDiagram2)
     if(this.selectedDiagram2.name === this.ssmtBaselineDiagram2.name){
       this.ssmt2Baseline = true;
     }
   }
 }
 
-export interface DiagramData
-{
-  name: string,
-  inputData: SSMTInputs,
-  outputData: SSMTOutput,
-  valid: SsmtValid
-};
+
