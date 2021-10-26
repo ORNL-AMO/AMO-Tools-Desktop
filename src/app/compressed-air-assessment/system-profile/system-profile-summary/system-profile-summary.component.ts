@@ -27,7 +27,7 @@ export class SystemProfileSummaryComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
       this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(val, selectedDayType);
-      this.totals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(val.compressorInventoryItems, selectedDayType, this.profileSummary);
+      this.totals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(val.compressorInventoryItems, selectedDayType, this.profileSummary, val.systemProfile.systemProfileSetup.dataInterval);
       this.inventoryItems = val.compressorInventoryItems;
     });
   }

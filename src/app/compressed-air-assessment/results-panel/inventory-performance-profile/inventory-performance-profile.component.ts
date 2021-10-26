@@ -378,9 +378,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   getCompressorData(compressor: CompressorInventoryItem): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
+    let isCompressorValid: boolean = this.inventoryService.isCompressorValid(compressor)
     for (let airFlow = 0; airFlow <= 100;) {
-      let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, 0, false);
-      compressorData.push(results);
+      if (isCompressorValid) {
+        let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, 0, false);
+        compressorData.push(results);
+      } else {
+        let results: CompressorCalcResult = this.compressedAirCalculationService.getEmptyCalcResults();
+        compressorData.push(results);
+      }
       if (airFlow < 95) {
         airFlow = airFlow + 1;
       } else {

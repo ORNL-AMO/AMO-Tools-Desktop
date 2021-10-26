@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { Settings } from '../../shared/models/settings';
+import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
-import { ExploreOpportunitiesValidationService } from './explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
@@ -31,16 +31,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
   selectedDayTypeSub: Subscription;
   selectedDayType: CompressedAirDayType;
   dayTypeOptions: Array<CompressedAirDayType>;
-  calculating: any;
   selectedModificationId: string;
   showCascadingSetPoints: boolean;
   hasSequencerOn: boolean;
   displayAddStorage: boolean;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private exploreOpportunititesValidationService: ExploreOpportunitiesValidationService) { }
+    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
       this.selectedDayType = val;
     });
@@ -48,6 +48,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
         this.compressedAirAssessment = val;
+        this.setBaselineResults();
         this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
         this.dayTypeOptions = val.compressedAirDayTypes;
         this.modificationExists = (val.modifications && val.modifications.length != 0);
@@ -89,8 +90,36 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.secondaryAssessmentTabSub.unsubscribe();
     this.selectedDayTypeSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
+    this.exploreOpportunitiesService.baselineResults = undefined;
+    this.exploreOpportunitiesService.baselineDayTypeProfileSummarries = undefined;
+    this.compressedAirAssessmentResultsService.flowReallocationSummaries = undefined;
   }
 
+  setBaselineResults() {
+    //data used in calculations stays constant in this context
+    if (!this.exploreOpportunitiesService.baselineResults) {
+      //set day type profile summarries
+      this.exploreOpportunitiesService.baselineDayTypeProfileSummarries = new Array();
+      this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        let baselineProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType);
+        this.exploreOpportunitiesService.baselineDayTypeProfileSummarries.push({
+          dayTypeId: dayType.dayTypeId,
+          profileSummary: baselineProfileSummary
+        });
+      });
+      //set baseline results
+      this.exploreOpportunitiesService.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      //set flow reallocation data      
+      this.compressedAirAssessmentResultsService.setFlowReallocationSummaries(
+        this.compressedAirAssessment.compressedAirDayTypes,
+        this.exploreOpportunitiesService.baselineDayTypeProfileSummarries,
+        this.compressedAirAssessment.compressorInventoryItems,
+        this.compressedAirAssessment.systemInformation.atmosphericPressure,
+        this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
+        this.settings.electricityCost
+      );
+    }
+  }
 
   setHasSequencer() {
     if (this.compressedAirAssessment) {
@@ -122,16 +151,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   setCompressedAirAssessmentResults() {
-    if (this.modification) {
-      if (this.calculating) {
-        clearTimeout(this.calculating);
-      }
-
-      this.calculating = setTimeout(() => {
-        let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification);
-        this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
-        this.calculating = undefined;
-      }, 600)
+    if (this.modification && this.compressedAirAssessmentResultsService.flowReallocationSummaries) {
+      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
     } else {
       this.exploreOpportunitiesService.modificationResults.next(undefined);
     }

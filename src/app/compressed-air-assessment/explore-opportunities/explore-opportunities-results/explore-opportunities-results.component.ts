@@ -54,9 +54,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     this.setValidationSubs();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
-        if (!this.baselineResults) {
-          this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val);
-        }
+        this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = val;
         this.dayTypeOptions = this.compressedAirAssessment.compressedAirDayTypes;
         let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();

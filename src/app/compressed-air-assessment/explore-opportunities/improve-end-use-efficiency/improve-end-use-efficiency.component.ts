@@ -33,6 +33,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
+        this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.setOrderOptions();
         this.setData()
@@ -41,7 +42,6 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.isFormChange = false;
       }
     });
-    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment);
     this.setBaselineProfileSummaries();
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
@@ -170,7 +170,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     this.baselineProfileSummaries = new Array();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType);
-      let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary);
+      let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       this.baselineProfileSummaries.push({
         dayType: dayType,
         profileSummaryTotals: profileSummaryTotals

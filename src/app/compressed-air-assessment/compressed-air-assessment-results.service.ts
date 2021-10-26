@@ -7,18 +7,26 @@ import { PerformancePointCalculationsService } from './inventory/performance-poi
 @Injectable()
 export class CompressedAirAssessmentResultsService {
 
-  constructor(private compressedAirCalculationService: CompressedAirCalculationService, private performancePointCalculationsService: PerformancePointCalculationsService) { }
+  flowReallocationSummaries: Array<FlowReallocationSummary>;
+  constructor(private compressedAirCalculationService: CompressedAirCalculationService,
+    private performancePointCalculationsService: PerformancePointCalculationsService) { }
 
 
-  calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment): BaselineResults {
+  calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment, baselineProfileSummaries?: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>): BaselineResults {
     let dayTypeResults: Array<BaselineResult> = new Array();
 
     let totalFullLoadCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
     let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
 
-      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType);
-      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment.compressorInventoryItems, dayType, baselineProfileSummary);
+      let baselineProfileSummary: Array<ProfileSummary>
+      if (baselineProfileSummaries) {
+        baselineProfileSummary = baselineProfileSummaries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
+      } else {
+        baselineProfileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType);
+      }
+
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressedAirAssessment.compressorInventoryItems, dayType, baselineProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       let baselineResults: SavingsItem = this.calculateEnergyAndCost(baselineProfileSummary, dayType, compressedAirAssessment.systemBasics.electricityCost, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
       let hoursOn: number = 0;
       totals.forEach(total => {
@@ -89,8 +97,40 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
-  calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification): CompressedAirAssessmentResult {
-    // console.time('calculateModificationResults')
+  setFlowReallocationSummaries(dayTypes: Array<CompressedAirDayType>, baselineDayTypeProfileSummarries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>, compressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, electricityCost?: number) {
+    let flowReallocationSummaries: Array<FlowReallocationSummary> = new Array();
+    dayTypes.forEach(dayType => {
+      let baselineProfileSummary: Array<ProfileSummary> = baselineDayTypeProfileSummarries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
+      this.flowReallocationSummaries = new Array();
+      let flowReallocationSavings: EemSavingsResults = this.getEmptyEemSavings();
+      let flowAllocationProfileSummary: Array<ProfileSummary>;
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressors, dayType, baselineProfileSummary, numberOfSummaryIntervals);
+      let adjustedProfileSummary: Array<ProfileSummary> = this.reallocateFlow(dayType, baselineProfileSummary, compressors, 0, totals, atmosphericPressure);
+      flowAllocationProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
+      if (electricityCost) {
+        flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost, 0, numberOfSummaryIntervals);
+      }
+      flowReallocationSummaries.push({
+        dayTypeId: dayType.dayTypeId,
+        profileSummary: flowAllocationProfileSummary,
+        dayTypeBaselineTotals: totals,
+        flowReallocationSavings: flowReallocationSavings
+      });
+    });
+    this.flowReallocationSummaries = flowReallocationSummaries;
+  }
+
+  getFlowReallocationSummary(dayTypeId: string): FlowReallocationSummary {
+    if (this.flowReallocationSummaries) {
+      return this.flowReallocationSummaries.find(summary => { return summary.dayTypeId == dayTypeId });
+    } else {
+      return undefined;
+    }
+  }
+
+
+
+  calculateModificationResults(compressedAirAssessment: CompressedAirAssessment, modification: Modification, baselineProfileSummaries?: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>): CompressedAirAssessmentResult {
     let modificationOrders: Array<number> = [
       modification.addPrimaryReceiverVolume.order,
       modification.adjustCascadingSetPoints.order,
@@ -112,12 +152,16 @@ export class CompressedAirAssessmentResultsService {
     let numberOfSummaryIntervals: number = compressedAirAssessmentCopy.systemProfile.systemProfileSetup.dataInterval;
 
     compressedAirAssessmentCopy.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessmentCopy, dayType);
+      let baselineProfileSummary: Array<ProfileSummary>
+      if (baselineProfileSummaries) {
+        baselineProfileSummary = baselineProfileSummaries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
+      } else {
+        baselineProfileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType);
+      }
 
       let adjustedCompressors: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(compressedAirAssessmentCopy.compressorInventoryItems));
-
       let adjustedData: AdjustProfileResults = this.adjustProfileSummary(dayType, baselineProfileSummary, adjustedCompressors, modification, modificationOrders, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, numberOfSummaryIntervals, compressedAirAssessmentCopy.systemBasics.electricityCost);
-      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, modification.improveEndUseEfficiency);
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, numberOfSummaryIntervals, modification.improveEndUseEfficiency);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessmentCopy.systemBasics.electricityCost, totalImplementationCost, numberOfSummaryIntervals, adjustedData.auxiliaryPowerUsage);
       let peakDemand: number = _.maxBy(totals, (result) => { return result.totalPower }).totalPower;
@@ -152,7 +196,6 @@ export class CompressedAirAssessmentResultsService {
         totalAnnualOperatingCost: totalModifiedAnnualOperatingCost
       });
     });
-    // console.timeEnd('calculateModificationResults');
     return {
       dayTypeModificationResults: modificationResults,
       totalBaselineCost: _.sumBy(modificationResults, (result) => { return result.allSavingsResults.baselineResults.cost }),
@@ -295,11 +338,19 @@ export class CompressedAirAssessmentResultsService {
     let useAutomaticSequencerProfileSummary: Array<ProfileSummary>;
     let auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
     //1. start with flow allocation
-    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, baselineProfileSummary);
-    let adjustedProfileSummary: Array<ProfileSummary> = this.reallocateFlow(dayType, baselineProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure);
-    flowAllocationProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
-    if (electricityCost) {
-      flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost, 0, numberOfSummaryIntervals);
+    let adjustedProfileSummary: Array<ProfileSummary>;
+    let flowReallocationSummary: FlowReallocationSummary = this.getFlowReallocationSummary(dayType.dayTypeId);
+    if (flowReallocationSummary) {
+      flowReallocationSavings = flowReallocationSummary.flowReallocationSavings;
+      flowAllocationProfileSummary = flowReallocationSummary.profileSummary;
+      adjustedProfileSummary = JSON.parse(JSON.stringify(flowReallocationSummary.profileSummary));
+    } else {
+      let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, baselineProfileSummary, numberOfSummaryIntervals);
+      adjustedProfileSummary = this.reallocateFlow(dayType, baselineProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure);
+      flowAllocationProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
+      if (electricityCost) {
+        flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost, 0, numberOfSummaryIntervals);
+      }
     }
     //2. iterate modification orders
     for (let orderIndex = 1; orderIndex <= modificationOrders.length; orderIndex++) {
@@ -310,7 +361,7 @@ export class CompressedAirAssessmentResultsService {
       }
       if (modification.addPrimaryReceiverVolume.order == orderIndex) {
         //ADD PRIMARY RECEIVER VOLUME
-        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary);
+        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, modification.addPrimaryReceiverVolume.increasedVolume, totals, atmosphericPressure, reduceRuntime);
         addReceiverVolumeProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
@@ -323,7 +374,7 @@ export class CompressedAirAssessmentResultsService {
         adjustedCompressors = this.adjustCascadingSetPointsAdjustCompressors(adjustedCompressors, modification.adjustCascadingSetPoints);
         //adjusted air flow based on compressor pressure changes
         adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary, atmosphericPressure, dayType)
-        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary);
+        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, reduceRuntime);
         adjustCascadingSetPointsProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
@@ -332,7 +383,7 @@ export class CompressedAirAssessmentResultsService {
 
       } else if (modification.improveEndUseEfficiency.order == orderIndex) {
         //IMPROVE END USE EFFICIENCY
-        adjustedProfileSummary = this.improveEndUseEfficiency(adjustedProfileSummary, dayType, modification.improveEndUseEfficiency, adjustedCompressors, atmosphericPressure, reduceRuntime);
+        adjustedProfileSummary = this.improveEndUseEfficiency(adjustedProfileSummary, dayType, modification.improveEndUseEfficiency, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals, reduceRuntime);
         improveEndUseEfficiencyProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
           auxiliaryPowerUsage = this.calculateEfficiencyImprovementAuxiliaryPower(modification.improveEndUseEfficiency, electricityCost, dayType);
@@ -342,14 +393,14 @@ export class CompressedAirAssessmentResultsService {
         }
       } else if (modification.reduceRuntime.order == orderIndex) {
         //REDUCE RUNTIME
-        adjustedProfileSummary = this.reduceRuntime(adjustedProfileSummary, dayType, modification.reduceRuntime, adjustedCompressors, atmosphericPressure);
+        adjustedProfileSummary = this.reduceRuntime(adjustedProfileSummary, dayType, modification.reduceRuntime, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals);
         reduceRunTimeProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
           reduceRunTimeSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, modification.reduceRuntime.implementationCost, numberOfSummaryIntervals)
         }
       } else if (modification.reduceAirLeaks.order == orderIndex) {
         //REDUCE AIR LEAKS
-        adjustedProfileSummary = this.reduceAirLeaks(adjustedProfileSummary, dayType, modification.reduceAirLeaks, adjustedCompressors, atmosphericPressure, reduceRuntime);
+        adjustedProfileSummary = this.reduceAirLeaks(adjustedProfileSummary, dayType, modification.reduceAirLeaks, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals, reduceRuntime);
         reduceAirLeaksProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
           reduceAirLeaksSavings = this.calculateSavings(adjustedProfileCopy, adjustedProfileSummary, dayType, electricityCost, modification.reduceAirLeaks.implementationCost, numberOfSummaryIntervals)
@@ -361,7 +412,7 @@ export class CompressedAirAssessmentResultsService {
         adjustedCompressors = this.reduceSystemAirPressureAdjustCompressors(adjustedCompressors, modification.reduceSystemAirPressure);
         //adjusted air flow based on compressor reduction
         adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary, atmosphericPressure)
-        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary);
+        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, reduceRuntime);
         reduceSystemAirPressureProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {
@@ -370,7 +421,7 @@ export class CompressedAirAssessmentResultsService {
       } else if (modification.useAutomaticSequencer.order == orderIndex) {
         //USE AUTOMATIC SEQUENCER
         adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors, modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId);
-        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary);
+        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.useAutomaticSequencerMapOrders(modification.useAutomaticSequencer.profileSummary, adjustedProfileSummary);
         adjustedProfileSummary = this.reallocateFlow(dayType, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, reduceRuntime);
         useAutomaticSequencerProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
@@ -454,10 +505,9 @@ export class CompressedAirAssessmentResultsService {
     return selectedDayTypeSummary;
   }
 
-  calculateProfileSummaryTotals(compressorInventoryItems: Array<CompressorInventoryItem>, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>, improveEndUseEfficiency?: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
+  calculateProfileSummaryTotals(compressorInventoryItems: Array<CompressorInventoryItem>, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>, numberOfSummaryIntervals: number, improveEndUseEfficiency?: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
     let totalSystemCapacity: number = this.getTotalCapacity(compressorInventoryItems);
     let totalFullLoadPower: number = this.getTotalPower(compressorInventoryItems);
-
     let allData: Array<ProfileSummaryData> = new Array();
     profileSummary.forEach(summary => {
       if (summary.dayTypeId == selectedDayType.dayTypeId) {
@@ -465,12 +515,16 @@ export class CompressedAirAssessmentResultsService {
       }
     });
     let totals: Array<ProfileSummaryTotal> = new Array();
-    let intervals: Array<number> = allData.map(data => { return data.timeInterval });
-    intervals = _.uniq(intervals);
-    intervals.forEach(interval => {
-      let filteredData: Array<ProfileSummaryData> = allData.filter(data => { return data.timeInterval == interval && data.order != 0 });
-      let totalAirFlow: number = _.sumBy(filteredData, 'airflow');
-      let compressorPower: number = _.sumBy(filteredData, 'power');
+    let numIntervals: number = 24 / numberOfSummaryIntervals;
+    for (let interval = 0; interval < numIntervals; interval++) {
+      let totalAirFlow: number = 0;
+      let compressorPower: number = 0;
+      allData.forEach(dataItem => {
+        if (dataItem.timeInterval == interval && dataItem.order != 0) {
+          totalAirFlow += dataItem.airflow;
+          compressorPower += dataItem.power;
+        }
+      })
       let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
       totals.push({
         auxiliaryPower: auxiliaryPower,
@@ -481,7 +535,7 @@ export class CompressedAirAssessmentResultsService {
         percentPower: (compressorPower / totalFullLoadPower) * 100,
         timeInterval: interval
       });
-    });
+    }
     return totals;
   }
 
@@ -539,7 +593,7 @@ export class CompressedAirAssessmentResultsService {
         });
         let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
         isTurnedOn = intervalData.isCompressorOn;
-        if(!isTurnedOn){
+        if (!isTurnedOn) {
           data.summaryData.order = 0;
         }
         reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
@@ -562,7 +616,6 @@ export class CompressedAirAssessmentResultsService {
           tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
         }
         neededAirFlow = tmpNeededAirFlow;
-
         let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
         let adjustedSummaryIndex: number = adjustedProfileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
         adjustedProfileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
@@ -622,8 +675,8 @@ export class CompressedAirAssessmentResultsService {
 
 
   //improveEndUseEfficiency
-  improveEndUseEfficiency(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
-    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary);
+  improveEndUseEfficiency(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
+    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary, numberOfSummaryIntervals);
     let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(profileSummary));
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
@@ -676,8 +729,8 @@ export class CompressedAirAssessmentResultsService {
 
 
   //reduceRuntime
-  reduceRuntime(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, reduceRuntime: ReduceRuntime, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number): Array<ProfileSummary> {
-    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary);
+  reduceRuntime(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, reduceRuntime: ReduceRuntime, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number): Array<ProfileSummary> {
+    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary, numberOfSummaryIntervals);
     let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(profileSummary));
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
@@ -686,8 +739,8 @@ export class CompressedAirAssessmentResultsService {
     return adjustedProfileSummary;
   }
   //reduceAirLeaks
-  reduceAirLeaks(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, reduceAirLeaks: ReduceAirLeaks, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
-    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary);
+  reduceAirLeaks(profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, reduceAirLeaks: ReduceAirLeaks, adjustedCompressors: Array<CompressorInventoryItem>, atmosphericPressure: number, numberOfSummaryIntervals: number, reduceRuntime?: ReduceRuntime): Array<ProfileSummary> {
+    let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, profileSummary, numberOfSummaryIntervals);
     let adjustedProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(profileSummary));
     adjustedProfileSummary = adjustedProfileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
     totals.forEach(total => {
@@ -1001,4 +1054,11 @@ export interface AdjustProfileResults {
   useAutomaticSequencerSavings: EemSavingsResults,
   useAutomaticSequencerProfileSummary: Array<ProfileSummary>,
   auxiliaryPowerUsage: { cost: number, energyUse: number },
+}
+
+export interface FlowReallocationSummary {
+  dayTypeId: string,
+  profileSummary: Array<ProfileSummary>,
+  dayTypeBaselineTotals: Array<ProfileSummaryTotal>,
+  flowReallocationSavings: EemSavingsResults
 }

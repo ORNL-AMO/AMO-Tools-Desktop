@@ -26,13 +26,14 @@ export class ReduceAirLeaksComponent implements OnInit {
   form: FormGroup;
   baselineResults: BaselineResults;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceAirLeaksService: ReduceAirLeaksService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private reduceAirLeaksService: ReduceAirLeaksService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
+        this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.setOrderOptions();
         this.setData()
@@ -40,7 +41,6 @@ export class ReduceAirLeaksComponent implements OnInit {
         this.isFormChange = false;
       }
     });
-    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment);
 
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
       if (val && !this.isFormChange) {
