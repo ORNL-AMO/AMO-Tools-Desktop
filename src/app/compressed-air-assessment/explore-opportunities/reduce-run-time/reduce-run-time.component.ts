@@ -49,6 +49,7 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.setFormOrder();
         this.setOrderOptions();
       }
     });
@@ -93,6 +94,14 @@ export class ReduceRunTimeComponent implements OnInit {
       if (this.reduceRuntime.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
         this.setReduceRuntimeValid();
+      }
+    }
+  }
+
+  setFormOrder() {
+    if (this.form && this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      if (this.form.controls.order.value != this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order) {
+        this.form.controls.order.patchValue(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order)
       }
     }
   }

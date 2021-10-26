@@ -53,6 +53,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (compressedAirAssessment) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.baselineHasSequencer = this.compressedAirAssessment.systemInformation.isSequencerUsed;
+        this.setFormOrder();
         this.setOrderOptions();
       }
     });
@@ -109,6 +110,14 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.useAutomaticSequencer.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
         this.setReduceRuntimeValid();
+      }
+    }
+  }
+
+  setFormOrder() {
+    if (this.form && this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      if (this.form.controls.order.value != this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order) {
+        this.form.controls.order.patchValue(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order)
       }
     }
   }
