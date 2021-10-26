@@ -45,8 +45,6 @@ export class ExecutiveSummaryComponent implements OnInit {
         }
       });
     }
-    console.log(this.ssmt.valid.operationsValid)
-    console.log(this.modificationOutputs)
   }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {

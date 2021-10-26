@@ -18,14 +18,14 @@
         [isBaseline]="ssmt1Baseline"
          ></app-ssmt-diagram>
 
-         <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram1.valid.isValid || (!selectedDiagram1.outputData && baselineOutput.boilerOutput)">
-          Invalid Modification<br>
-          <span *ngIf="!selectedDiagram1.valid.boilerValid">Errors found in Boiler<br></span>
-          <span *ngIf="!selectedDiagram1.valid.headerValid">Errors found in Header<br></span>
-          <span *ngIf="!selectedDiagram1.valid.turbineValid">Errors found in Turbine<br></span>
-          <span *ngIf="!selectedDiagram1.valid.operationsValid">Errors found in Operations<br></span>
-      </div>
-      </div>
+        </div>
+        <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram1.valid.isValid || (!selectedDiagram1.outputData && baselineOutput.boilerOutput)">
+         Invalid Modification<br>
+         <span *ngIf="!selectedDiagram1.valid.boilerValid">Errors found in Boiler<br></span>
+         <span *ngIf="!selectedDiagram1.valid.headerValid">Errors found in Header<br></span>
+         <span *ngIf="!selectedDiagram1.valid.turbineValid">Errors found in Turbine<br></span>
+         <span *ngIf="!selectedDiagram1.valid.operationsValid">Errors found in Operations<br></span>
+     </div>
     <hr>
     <div class="d-flex">
       <div class="d-flex flex-column w-50 align-items-center justify-content-center">
@@ -44,14 +44,14 @@
         [settings]="settings"
         [isBaseline]="ssmt2Baseline"
          ></app-ssmt-diagram>
-         <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram2.valid.isValid || (!selectedDiagram2.outputData && baselineOutput.boilerOutput)">
-          Invalid Modification<br>
-          <span *ngIf="!selectedDiagram2.valid.boilerValid">Errors found in Boiler<br></span>
-          <span *ngIf="!selectedDiagram2.valid.headerValid">Errors found in Header<br></span>
-          <span *ngIf="!selectedDiagram2.valid.turbineValid">Errors found in Turbine<br></span>
-          <span *ngIf="!selectedDiagram2.valid.operationsValid">Errors found in Operations<br></span>
-      </div>
-      </div>
+        </div>
+        <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram2.valid.isValid || (!selectedDiagram2.outputData && baselineOutput.boilerOutput)">
+         Invalid Modification<br>
+         <span *ngIf="!selectedDiagram2.valid.boilerValid">Errors found in Boiler<br></span>
+         <span *ngIf="!selectedDiagram2.valid.headerValid">Errors found in Header<br></span>
+         <span *ngIf="!selectedDiagram2.valid.turbineValid">Errors found in Turbine<br></span>
+         <span *ngIf="!selectedDiagram2.valid.operationsValid">Errors found in Operations<br></span>
+     </div>
 
   </div>
 </div>

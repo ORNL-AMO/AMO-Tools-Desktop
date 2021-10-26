@@ -61,12 +61,12 @@ export class ReportDiagramComponent implements OnInit {
 
     this.selectedDiagram1 = this.ssmtBaselineDiagram1;
     this.selectedDiagram2 = this.ssmtBaselineDiagram2;
-    this.modificationInputData.forEach((input, index) => {
+     this.assessment.ssmt.modifications.forEach((modification, index) => {
       let diagramData: DiagramData  = {
-        name: input.name,
-        inputData: input.inputData,
+        name: modification.ssmt.name,
+        inputData: this.modificationInputData[index].inputData,
         outputData: this.modificationOutputs[index].outputData,
-        valid: this.ssmtService.checkValid(this.assessment.ssmt, this.settings)
+        valid: this.ssmtService.checkValid(modification.ssmt, this.settings)
       };
       this.modificationDiagramData.push(diagramData);
     });
@@ -77,18 +77,13 @@ export class ReportDiagramComponent implements OnInit {
   }
 
   
-  setSsmt1(selectedIndex: number) {
-    console.log(this.selectedDiagram1)
-    console.log(this.selectedDiagram1.valid.isValid)
-    console.log(this.ssmt1.valid)
-    console.log(this.modificationDiagramData)
+  setSsmt1() {
     if(this.selectedDiagram1.name === this.ssmtBaselineDiagram1.name){
       this.ssmt1Baseline = true;
     }
   }
   
-  setSsmt2(selectedIndex: number) {
-    console.log(this.selectedDiagram2)
+  setSsmt2() {
     if(this.selectedDiagram2.name === this.ssmtBaselineDiagram2.name){
       this.ssmt2Baseline = true;
     }
