@@ -3,12 +3,13 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
-import { CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
 import { Directory } from '../../shared/models/directory';
 import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, BaselineResults, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
+import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -44,10 +45,10 @@ export class CompressedAirReportComponent implements OnInit {
 
   baselineResults: BaselineResults;
   assessmentResults: Array<CompressedAirAssessmentResult>;
-  combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult}>;
-  baselineProfileSummaries: Array<{profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType}>;
+  combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
+  baselineProfileSummaries: Array<{profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal>}>;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -61,18 +62,24 @@ export class CompressedAirReportComponent implements OnInit {
       this.baselineProfileSummaries = new Array();
       this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType);
+        let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(
+          this.assessment.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.assessment.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
+        )
         this.baselineProfileSummaries.push({
           dayType: dayType,
-          profileSummary: profileSummary
+          profileSummary: profileSummary,
+          profileSummaryTotals: profileSummaryTotals
         });
       });      
       
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
           let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification);
           this.assessmentResults.push(modificationResults);
+          let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, modificationResults)
           this.combinedDayTypeResults.push({
             modification: modification,
-            combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults)
+            combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults),
+            validation: validation
           });
       });  
     }

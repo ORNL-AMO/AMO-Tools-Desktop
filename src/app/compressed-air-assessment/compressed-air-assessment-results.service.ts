@@ -400,6 +400,7 @@ export class CompressedAirAssessmentResultsService {
         }
       } else if (modification.reduceAirLeaks.order == orderIndex) {
         //REDUCE AIR LEAKS
+        debugger
         adjustedProfileSummary = this.reduceAirLeaks(adjustedProfileSummary, dayType, modification.reduceAirLeaks, adjustedCompressors, atmosphericPressure, numberOfSummaryIntervals, reduceRuntime);
         reduceAirLeaksProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
         if (electricityCost) {

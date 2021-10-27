@@ -9,7 +9,6 @@
                 <th *ngFor="let mod of combinedDayTypeResults; let index = index;"
                     [ngStyle]="{'width.%': 100 /(numMods+2)}"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <!-- <app-invalid-phast *ngIf="!mod.phast.valid.isValid" [phastValid]="mod.phast.valid"></app-invalid-phast> -->
                 </th>
             </tr>
             <tr>
@@ -28,16 +27,34 @@
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <div class="hide-print" *ngIf="result.combinedResults.allSavingsResults.savings.percentSavings">
+                    <div class="hide-print"
+                        *ngIf="result.combinedResults.allSavingsResults.savings.percentSavings && result.validation.isValid">
                         <app-percent-graph [value]="result.combinedResults.allSavingsResults.savings.percentSavings">
                         </app-percent-graph>
                     </div>
                     <div class="show-print text-center"
-                        *ngIf="result.combinedResults.allSavingsResults.adjustedResults.percentSavings">
+                        *ngIf="result.combinedResults.allSavingsResults.adjustedResults.percentSavings && result.validation.isValid">
                         {{result.combinedResults.allSavingsResults.savings.percentSavings | number:'1.0'}} %
                     </div>
-                    <div *ngIf="!result.combinedResults.allSavingsResults.savings.percentSavings">
+                    <div
+                        *ngIf="!result.combinedResults.allSavingsResults.savings.percentSavings && result.validation.isValid">
                         &mdash; &mdash;
+                    </div>
+                    <div class="alert-danger" *ngIf="!result.validation.isValid">
+                        Invalid System Setup:<br>
+                        <span *ngIf="!result.validation.addReceiverVolume">Errors found in Add Receiver
+                            Volume<br></span>
+                        <span *ngIf="!result.validation.adjustCascadingSetPoints">Errors found in Adjust Cascading Set
+                            Points<br></span>
+                        <span *ngIf="!result.validation.improveEndUseEfficiency">Errors found in Improve End Use
+                            Efficiency<br></span>
+                        <span *ngIf="!result.validation.reduceAirLeaks">Errors found in Reduce Air Leaks<br></span>
+                        <span *ngIf="!result.validation.reduceRuntime">Errors found in Reduce Runtime<br></span>
+                        <span *ngIf="!result.validation.reduceSystemPressure">Errors found in Reduce System
+                            Pressure<br></span>
+                        <span *ngIf="!result.validation.useAutomaticSequencer">Errors found in Use Automatic
+                            Sequencer<br></span>
+
                     </div>
                 </td>
             </tr>

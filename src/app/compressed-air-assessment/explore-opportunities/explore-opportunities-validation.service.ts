@@ -127,7 +127,7 @@ export class ExploreOpportunitiesValidationService {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
           if (isValid) {
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.reduceRuntime.order, modification, modificationResults, dayType.dayTypeId);
-            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceAirLeaksProfileSummary;
+            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
             let numberOfSummaryIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
             let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, numberOfSummaryIntervals, eemSequencerProfileSummary, compressedAirAssessment.compressorInventoryItems, false);
             isValid = dataArrays.isValid;

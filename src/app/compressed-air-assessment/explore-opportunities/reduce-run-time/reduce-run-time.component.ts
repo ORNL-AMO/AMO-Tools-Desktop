@@ -91,7 +91,6 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
-      console.log(this.reduceRuntime);
       this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
       if (this.reduceRuntime.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
