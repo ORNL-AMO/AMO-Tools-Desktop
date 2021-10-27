@@ -88,8 +88,10 @@ export class ReduceRunTimeComponent implements OnInit {
   }
 
   setData() {
+    this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
+      console.log(this.reduceRuntime);
       this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
       if (this.reduceRuntime.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
@@ -177,6 +179,8 @@ export class ReduceRunTimeComponent implements OnInit {
       });
       if (!this.selectedDayType) {
         this.selectedDayType = this.dayTypeOptions[0];
+      } else {
+        this.selectedDayType = this.dayTypeOptions.find(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       }
       this.setHasInvalidDayType();
     }

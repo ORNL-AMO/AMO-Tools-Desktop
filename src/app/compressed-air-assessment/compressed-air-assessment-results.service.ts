@@ -585,6 +585,7 @@ export class CompressedAirAssessmentResultsService {
     let totalFullLoadPower: number = this.getTotalPower(adjustedCompressors);
     let reduceRuntimeShutdownTimer: boolean;
     intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
+    let orderCount: number = 1;
     intervalData.forEach(data => {
       let isTurnedOn: boolean = data.summaryData.order != 0;
       if (reduceRuntime) {
@@ -595,6 +596,8 @@ export class CompressedAirAssessmentResultsService {
         isTurnedOn = intervalData.isCompressorOn;
         if (!isTurnedOn) {
           data.summaryData.order = 0;
+        }else if(isTurnedOn && data.summaryData.order == 0){
+          data.summaryData.order = orderCount;
         }
         reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
       }
@@ -626,8 +629,9 @@ export class CompressedAirAssessmentResultsService {
           percentPower: calculateFullLoad.percentagePower,
           percentSystemCapacity: (calculateFullLoad.capacityCalculated / totalFullLoadCapacity) * 100,
           percentSystemPower: (calculateFullLoad.powerCalculated / totalFullLoadPower) * 100,
-          order: data.summaryData.order,
+          order: orderCount,
         };
+        orderCount++;
       } else {
         let adjustedIndex: number = adjustedProfileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
         let adjustedSummaryIndex: number = adjustedProfileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
@@ -639,7 +643,7 @@ export class CompressedAirAssessmentResultsService {
           percentPower: 0,
           percentSystemCapacity: 0,
           percentSystemPower: 0,
-          order: data.summaryData.order,
+          order: 0,
         };
       }
     });

@@ -95,6 +95,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   setData() {
+    this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.useAutomaticSequencer = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer));
       if (this.selectedDayType && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
@@ -220,6 +221,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
       })
       if (!this.selectedDayType) {
         this.selectedDayType = this.dayTypeOptions[0];
+      } else {
+        this.selectedDayType = this.dayTypeOptions.find(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       }
       this.setHasInvalidDayType();
     }
