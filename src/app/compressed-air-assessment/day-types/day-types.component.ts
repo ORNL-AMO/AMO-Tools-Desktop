@@ -75,7 +75,7 @@ export class DayTypesComponent implements OnInit {
       }
     })
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
   }
 
   setTotalDays() {

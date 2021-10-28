@@ -55,7 +55,10 @@ export class InventoryTableComponent implements OnInit {
 
   addNewCompressor() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.inventoryService.addNewCompressor(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+    let numberOfEntries: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(numberOfEntries, compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
+    this.inventoryService.selectedCompressor.next(result.newInventoryItem);
   }
 
   deleteItem() {
@@ -79,7 +82,7 @@ export class InventoryTableComponent implements OnInit {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       }
     });
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
   }
 
@@ -112,6 +115,6 @@ export class InventoryTableComponent implements OnInit {
     let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
     compressorCpy.itemId = Math.random().toString(36).substr(2, 9);
     compressorCpy.name = compressorCpy.name + ' (copy)';
-    this.inventoryService.addNewCompressor(numberOfHourIntervals, compressorCpy);
+    this.inventoryService.addNewCompressor(numberOfHourIntervals, compressedAirAssessment, compressorCpy);
   }
 }

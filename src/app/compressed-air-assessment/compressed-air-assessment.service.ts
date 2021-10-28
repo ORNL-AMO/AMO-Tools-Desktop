@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
+import { DayTypeService } from './day-types/day-type.service';
+import { InventoryService } from './inventory/inventory.service';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +26,8 @@ export class CompressedAirAssessmentService {
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
 
-  constructor() {
+  constructor(private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService,
+    private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
@@ -41,12 +45,15 @@ export class CompressedAirAssessmentService {
 
   }
 
-  updateCompressedAir(compressedAirAssessment: CompressedAirAssessment) {
-    // wasteWater.baselineData.valid = this.checkWasteWaterValid(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics);
-    // wasteWater.setupDone = wasteWater.baselineData.valid.isValid;
-    // wasteWater.modifications.forEach(mod => {
-    //   mod.valid = this.checkWasteWaterValid(mod.activatedSludgeData, mod.aeratorPerformanceData, wasteWater.systemBasics);
-    // });
+  updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
+    if (isBaselineChange) {
+      let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+      let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
+      let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
+      let hasValidSystemProfile = this.hasValidProfileSummaryData(compressedAirAssessment);
+      compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && hasValidSystemProfile);
+    }
+    //TODO? set modifications valid?
     this.compressedAirAssessment.next(compressedAirAssessment);
   }
 
@@ -66,9 +73,9 @@ export class CompressedAirAssessmentService {
           if (data.order != 0) {
             if (profileDataType == 'percentCapacity' && (data.percentCapacity < 0 || data.percentCapacity === null)) {
               return true
-            } else if (profileDataType == 'power' && (data.power < 0  || data.power === null)) {
+            } else if (profileDataType == 'power' && (data.power < 0 || data.power === null)) {
               return true;
-            } else if (profileDataType == 'airflow' && (data.airflow < 0  || data.airflow === null)) {
+            } else if (profileDataType == 'airflow' && (data.airflow < 0 || data.airflow === null)) {
               return true;
             }
           }
@@ -79,6 +86,6 @@ export class CompressedAirAssessmentService {
     return !isInvalidProfileSummaryData;
   }
 
-  
+
 
 }

@@ -37,10 +37,10 @@ export class AddModificationModalComponent implements OnInit {
 
   addModification() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let modification: Modification = this.exploreOpportunitiesServce.getNewModification();
+    let modification: Modification = this.exploreOpportunitiesServce.getNewModification(compressedAirAssessment);
     modification.name = this.newModificationName? this.newModificationName : modification.name;
     compressedAirAssessment.modifications.push(modification);
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, false);
     this.compressedAirAssessmentService.selectedModificationId.next(modification.modificationId);
     this.closeAddNewModal();
   }

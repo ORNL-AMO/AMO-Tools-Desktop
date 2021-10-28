@@ -65,7 +65,7 @@ export class ProfileSetupFormComponent implements OnInit {
       compressedAirAssessment.systemProfile.profileSummary = dataIntervalProfile;
     }
     compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   focusField(str: string) {

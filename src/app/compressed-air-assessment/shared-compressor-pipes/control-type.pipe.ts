@@ -1,15 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GenericCompressorDbService } from './generic-compressor-db.service';
+import { GenericCompressorDbService } from '../generic-compressor-db.service';
 
 @Pipe({
-  name: 'compressorType'
+  name: 'controlType'
 })
-export class CompressorTypePipe implements PipeTransform {
-
+export class ControlTypePipe implements PipeTransform {
+  
   constructor(private genericCompressorDbService: GenericCompressorDbService) { }
 
   transform(value: number): string {
-    let label: string = this.genericCompressorDbService.getCompressorTypeLabel(value);
+    let label: string = this.genericCompressorDbService.getControlTypeLabel(value);
     if (label) {
       return label;
     } else {

@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
@@ -18,7 +17,7 @@ export class InventoryService {
   collapseInletConditions: boolean = true;
   collapsePerformancePoints: boolean = true;
   collapseCentrifugal: boolean = true;
-  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private formBuilder: FormBuilder, private performancePointsFormService: PerformancePointsFormService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
@@ -436,10 +435,10 @@ export class InventoryService {
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && inletConditionsForm.valid && performancePointsValid;
   }
 
-  hasValidCompressors() {
-    let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+  hasValidCompressors(compressedAirAssessment: CompressedAirAssessment) {
+    // let compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = false;
-    if (compressedAirAssessment.compressorInventoryItems.length > 0) {
+    if (compressedAirAssessment.compressorInventoryItems && compressedAirAssessment.compressorInventoryItems.length > 0) {
       hasValidCompressors = compressedAirAssessment.compressorInventoryItems.every(compressorInventoryItem => this.isCompressorValid(compressorInventoryItem));
     }
     return hasValidCompressors;
@@ -453,13 +452,13 @@ export class InventoryService {
     return true;
   }
 
-  addNewCompressor(numberOfEntries: number, newInventoryItem?: CompressorInventoryItem) {
+  addNewCompressor(numberOfEntries: number, compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): {newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment} {
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
     }
 
     newInventoryItem.modifiedDate = new Date();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    // let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
     let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
     for (let i = 0; i < numberOfEntries; i++) {
@@ -498,8 +497,12 @@ export class InventoryService {
         maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
       })
     });
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    this.selectedCompressor.next(newInventoryItem);
+    return {
+      newInventoryItem: newInventoryItem,
+      compressedAirAssessment: compressedAirAssessment
+    }
+    // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    // this.selectedCompressor.next(newInventoryItem);
   }
 
   addNewDayType(compressedAirAssessment: CompressedAirAssessment, dayTypeName: string, dayTypeId?: string): CompressedAirAssessment {

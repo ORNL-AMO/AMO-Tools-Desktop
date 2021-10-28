@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -30,7 +31,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   onResize(event) {
     this.setContainerHeight();
   }
-  
+
   assessment: Assessment;
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
@@ -51,20 +52,20 @@ export class CompressedAirAssessmentComponent implements OnInit {
   modalOpenSub: Subscription;
   assessmentTab: string;
   assessmentTabSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, 
+  constructor(private activatedRoute: ActivatedRoute,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private indexedDbService: IndexedDbService, private compressedAirCalculationService: CompressedAirCalculationService,
     private dayTypeService: DayTypeService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
     this.genericCompressorDbService.getAllCompressors();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment);
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -73,14 +74,18 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.settings = settings;
         this.compressedAirAssessmentService.settings.next(settings);
       }
-      });
-      
-      this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-        if (val && this.assessment) {
+    });
+
+    this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      if (val && this.assessment) {
         this.save(val);
         this.setDisableNext();
       }
     })
+    let tmpTab: string = this.assessmentService.getTab();
+    if (tmpTab) {
+      this.compressedAirAssessmentService.mainTab.next(tmpTab);
+    }
 
     this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -132,6 +137,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.inventoryService.selectedCompressor.next(undefined);
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
+    this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
   }
 
   ngAfterViewInit() {
@@ -155,7 +161,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   setDisableNext() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
+    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
     let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
     let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
@@ -234,9 +240,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
-    } 
+    }
     this.closeUpdateUnitsModal(shouldUpdateData);
   }
 

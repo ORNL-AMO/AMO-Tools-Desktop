@@ -106,7 +106,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     } else {
       this.setHasInvalidForm();
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
   saveItemChange(saveData: { itemIndex: number, item: EndUseEfficiencyItem }) {

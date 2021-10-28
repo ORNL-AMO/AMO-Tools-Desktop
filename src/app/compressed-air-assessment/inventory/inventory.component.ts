@@ -32,7 +32,8 @@ export class InventoryComponent implements OnInit {
       if (val) {
         this.selectedCompressor = val;
         this.hasInventoryItems = true;
-        this.hasValidCompressors = this.inventoryService.hasValidCompressors();
+        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+        this.hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
@@ -56,7 +57,7 @@ export class InventoryComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
     if (this.hasInventoryItems) {
-      this.hasValidCompressors = this.inventoryService.hasValidCompressors();
+      this.hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
       if (selectedCompressor) {
         let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
@@ -73,7 +74,10 @@ export class InventoryComponent implements OnInit {
 
   addInventoryItem() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.inventoryService.addNewCompressor(compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+    let numberOfEntries: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(numberOfEntries, compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
+    this.inventoryService.selectedCompressor.next(result.newInventoryItem);
     this.hasInventoryItems = true;
   }
 

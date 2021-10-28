@@ -40,8 +40,6 @@ import { GenericCompressorModalComponent } from './inventory/generic-compressor-
 import { ModalModule } from 'ngx-bootstrap';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
-import { CompressorTypePipe } from './compressor-type.pipe';
-import { ControlTypePipe } from './control-type.pipe';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
 import { InventoryPerformanceProfileComponent } from './results-panel/inventory-performance-profile/inventory-performance-profile.component';
@@ -92,7 +90,6 @@ import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
-import { CompressorNamePipe } from './compressor-name.pipe';
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
@@ -116,16 +113,7 @@ import { SystemProfileAnnualSummaryComponent } from './system-profile/system-pro
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
-import { CompressedAirReportComponent } from './compressed-air-report/compressed-air-report.component';
-import { ExecutiveSummaryComponent } from './compressed-air-report/executive-summary/executive-summary.component';
-import { SystemProfilesComponent } from './compressed-air-report/system-profiles/system-profiles.component';
-import { ReportGraphsComponent } from './compressed-air-report/report-graphs/report-graphs.component';
-import { InputSummaryComponent } from './compressed-air-report/input-summary/input-summary.component';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
-import { PaybackPeriodComponent } from './compressed-air-report/payback-period/payback-period.component';
-import { ProfileSummaryTableComponent } from './profile-summary-table/profile-summary-table.component';
-import { SystemInfoSummaryComponent } from './compressed-air-report/input-summary/system-info-summary/system-info-summary.component';
-import { CompressorItemSummaryComponent } from './compressed-air-report/input-summary/compressor-item-summary/compressor-item-summary.component';
 import { SystemProfileGraphsService } from './system-profile/system-profile-graphs/system-profile-graphs.service';
 import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
@@ -139,6 +127,9 @@ import { UseAutomaticSequencerService } from './explore-opportunities/use-automa
 import { AdjustCascadingSetPointsService } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.service';
 import { ReduceRunTimeService } from './explore-opportunities/reduce-run-time/reduce-run-time.service';
 import { ExploreOpportunitiesValidationService } from './explore-opportunities/explore-opportunities-validation.service';
+import { CompressedAirReportModule } from './compressed-air-report/compressed-air-report.module';
+import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
+import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 
 @NgModule({
   declarations: [
@@ -171,8 +162,6 @@ import { ExploreOpportunitiesValidationService } from './explore-opportunities/e
     GenericCompressorModalComponent,
     CompressorOptionsTableComponent,
     FilterCompressorsComponent,
-    CompressorTypePipe,
-    ControlTypePipe,
     FilterCompressorsPipe,
     InletConditionsComponent,
     InventoryPerformanceProfileComponent,
@@ -205,7 +194,6 @@ import { ExploreOpportunitiesValidationService } from './explore-opportunities/e
     ReduceRunTimeComponent,
     AddReceiverVolumeComponent,
     CompressedAirDiagramComponent,
-    CompressorNamePipe,
     ExploreOpportunitiesResultsComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
@@ -219,15 +207,6 @@ import { ExploreOpportunitiesValidationService } from './explore-opportunities/e
     AddReceiverVolumeHelpComponent,
     SystemProfileAnnualSummaryComponent,
     AdjustSequencerProfileComponent,
-    CompressedAirReportComponent,
-    ExecutiveSummaryComponent,
-    SystemProfilesComponent,
-    ReportGraphsComponent,
-    InputSummaryComponent,
-    PaybackPeriodComponent,
-    ProfileSummaryTableComponent,
-    SystemInfoSummaryComponent,
-    CompressorItemSummaryComponent,
     AdjustCascadingSetPointsHelpComponent,
     AssessmentNotesComponent,
     ImproveEndUseEfficiencyItemComponent
@@ -254,7 +233,10 @@ import { ExploreOpportunitiesValidationService } from './explore-opportunities/e
     UpdateUnitsModalModule,
     SharedPipesModule,
     FacilityInfoSummaryModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    CompressedAirReportModule,
+    ProfileSummaryTableModule,
+    SharedCompressorPipesModule
   ],
   providers: [
     CompressedAirAssessmentService,

@@ -14,7 +14,8 @@ export interface CompressedAirAssessment {
         dayTypeSummaries: Array<DayTypeSummary>,
         logToolFields: Array<LogToolField>
     },
-    compressedAirDayTypes: Array<CompressedAirDayType>
+    compressedAirDayTypes: Array<CompressedAirDayType>,
+    setupDone: boolean
 }
 
 export interface Modification {

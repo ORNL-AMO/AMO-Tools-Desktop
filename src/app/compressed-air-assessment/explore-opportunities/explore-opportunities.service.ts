@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Injectable()
 export class ExploreOpportunitiesService {
@@ -11,12 +10,12 @@ export class ExploreOpportunitiesService {
   modificationResults: BehaviorSubject<CompressedAirAssessmentResult>;
   baselineResults: BaselineResults;
   baselineDayTypeProfileSummarries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) {
+  constructor() {
     this.selectedDayType = new BehaviorSubject<CompressedAirDayType>(undefined);
     this.modificationResults = new BehaviorSubject<CompressedAirAssessmentResult>(undefined);
   }
 
-  getNewModification(): Modification {
+  getNewModification(compressedAirAssessment: CompressedAirAssessment): Modification {
     let reductionData: Array<{
       dayTypeId: string,
       dayTypeName: string,
@@ -29,7 +28,6 @@ export class ExploreOpportunitiesService {
 
     let reduceRuntimeData: Array<ReduceRuntimeData> = new Array();
     let setPointData: Array<CascadingSetPointData> = new Array();
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       setPointData = new Array();
       reductionData.push({
@@ -126,13 +124,6 @@ export class ExploreOpportunitiesService {
         order: 100
       }
     }
-  }
-
-  saveModification(modification: Modification) {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId = modification.modificationId });
-    compressedAirAssessment.modifications[modIndex] = modification;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
 

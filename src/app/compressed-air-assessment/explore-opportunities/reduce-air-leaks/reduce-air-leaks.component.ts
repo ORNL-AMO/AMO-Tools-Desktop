@@ -105,7 +105,7 @@ export class ReduceAirLeaksComponent implements OnInit {
       let newOrder: number = this.form.controls.order.value;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceAirLeaks', previousOrder, newOrder);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
   }
 }

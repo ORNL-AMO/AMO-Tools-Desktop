@@ -42,7 +42,7 @@ export class AssessmentNotesComponent implements OnInit {
 
   save(){
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
 }

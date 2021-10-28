@@ -68,6 +68,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
     } else if (assessment.type == "CompressedAir") {
+      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
@@ -347,6 +350,7 @@ export class AssessmentService {
     return {
       name: 'Baseline',
       modifications: new Array(),
+      setupDone: false,
       systemBasics: {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,

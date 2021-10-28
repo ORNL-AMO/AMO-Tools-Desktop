@@ -96,7 +96,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
     let isShutdown: boolean = false;
     let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
@@ -119,7 +119,7 @@ export class CompressedAirCalculationService {
           results.percentageCapacity = 0;
         }
       } else {
-        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, additionalRecieverVolume);
+        let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
         results = this.suiteCompressorCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
@@ -221,7 +221,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, additionalRecieverVolume?: number): CompressorsCalcInput {
+  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number): CompressorsCalcInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
@@ -231,8 +231,8 @@ export class CompressedAirCalculationService {
       computeFromVal = computeFromVal / 100;
     }
 
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let receiverVolume: number = compressedAirAssessment.systemInformation.totalAirStorage;
+    // let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let receiverVolume: number = totalAirStorage;
     if (additionalRecieverVolume) {
       receiverVolume = receiverVolume + additionalRecieverVolume;
     }

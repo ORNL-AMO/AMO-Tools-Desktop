@@ -69,7 +69,7 @@ export class OperatingProfileTableComponent implements OnInit {
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
     this.validProfileSummaryData = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
     this.isFormChange = true;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   
@@ -126,7 +126,7 @@ export class OperatingProfileTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   checkProfileSummary(inventoryItem: CompressorInventoryItem, dayTypeId: string, allProfileSummaries: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup): ProfileSummary {
