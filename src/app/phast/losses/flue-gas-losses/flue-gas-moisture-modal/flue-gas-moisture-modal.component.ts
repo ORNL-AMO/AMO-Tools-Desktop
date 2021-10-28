@@ -37,9 +37,9 @@ import { Settings } from '../../../../shared/models/settings';
     }
 
     resizeTabs() {
-      if (this.contentContainer) {
-        this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
-      }
+      // if (this.contentContainer) {
+      //   this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
+      // }
     }
 
   }
