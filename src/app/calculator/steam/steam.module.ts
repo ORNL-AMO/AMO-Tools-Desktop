@@ -21,6 +21,7 @@ import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-
 import { SaturatedPropertiesConversionService } from './saturated-properties-conversion.service';
 import { SaturatedPropertiesService } from './saturated-properties.service';
 import { WaterHeatingModule } from './water-heating/water-heating.module';
+import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-economizer.module';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { WaterHeatingModule } from './water-heating/water-heating.module';
     BoilerModule,
     FlashTankModule,
     PrvModule,
+    FeedwaterEconomizerModule,
     DeaeratorModule,
     HeaderModule,
     TurbineModule,

@@ -5,6 +5,20 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/feedwater-economizer']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/feedwater-economizer']">Feed Water Economizer</a>
+                <p>
+                    This calculator is used to calculate energy and related energy cost saving when stack waste heat is recovered using non-condensing heat exchanger to heat boiler feed water. 
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img"
                         [routerLink]="['/calculators/water-heating']">
                 </div>
             </div>
