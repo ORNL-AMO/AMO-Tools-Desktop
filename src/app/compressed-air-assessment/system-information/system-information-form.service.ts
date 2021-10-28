@@ -31,11 +31,19 @@ export class SystemInformationFormService {
 
   setSequencerFieldValidators(form: FormGroup) {
     if (form.controls.isSequencerUsed.value === true) {
-      form.controls.targetPressure.setValidators([Validators.required]);
-      form.controls.targetPressure.markAsDirty();
+      form.controls.targetPressure.setValidators([Validators.required, Validators.min(0)]);
       form.controls.targetPressure.updateValueAndValidity();
-      form.controls.variance.setValidators([Validators.required]);
-      form.controls.variance.markAsDirty();
+      let varianceValidators: Array<ValidatorFn> = [Validators.required, Validators.min(0)];
+      if (form.controls.targetPressure.value) {
+        let maxVariance: number = form.controls.targetPressure.value * .5;
+        varianceValidators.push(Validators.max(maxVariance))
+      }
+      form.controls.variance.setValidators(varianceValidators);
+      form.controls.variance.updateValueAndValidity();
+    } else {
+      form.controls.targetPressure.setValidators([]);
+      form.controls.targetPressure.updateValueAndValidity();
+      form.controls.variance.setValidators([]);
       form.controls.variance.updateValueAndValidity();
     }
     return form;

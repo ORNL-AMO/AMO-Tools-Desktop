@@ -43,3 +43,7 @@
 .energy-savings.stripe{
     margin-bottom: 15px;
 }
+
+.invalid {
+    color: red;
+}

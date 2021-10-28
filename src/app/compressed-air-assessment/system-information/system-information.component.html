@@ -11,7 +11,7 @@
             <div class="input-group">
                 <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
                     formControlName="systemElevation" (input)="setAtmosphericPressure()"
-                    (focus)="focusField('systemElevation')">
+                    (focus)="focusField('systemElevation')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m</span>
             </div>
@@ -37,7 +37,8 @@
             </label>
             <div class="input-group" *ngIf="form.controls.atmosphericPressureKnown.value == true">
                 <input name="atmosphericPressure" type="number" step="any" class="form-control" id="atmosphericPressure"
-                    formControlName="atmosphericPressure" (input)="save()" (focus)="focusField('atmosphericPressure')">
+                    formControlName="atmosphericPressure" (input)="save()" (focus)="focusField('atmosphericPressure')"
+                    min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kpaa</span>
             </div>
@@ -70,7 +71,7 @@
             </label>
             <div class="input-group">
                 <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
-                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')">
+                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup></span>
             </div>
@@ -100,7 +101,8 @@
             </label>
             <div class="input-group">
                 <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
-                    formControlName="targetPressure" (input)="save()" (focus)="focusField('targetPressure')">
+                    formControlName="targetPressure" (input)="changeTargetPressure()"
+                    (focus)="focusField('targetPressure')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
@@ -121,7 +123,7 @@
             </label>
             <div class="input-group">
                 <input name="variance" type="number" step="any" class="form-control" id="variance"
-                    formControlName="variance" (input)="save()" (focus)="focusField('variance')">
+                    formControlName="variance" (input)="save()" (focus)="focusField('variance')" min="0">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
@@ -133,7 +135,11 @@
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>.
                 </span>
-
+                <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
+                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>).
+                </span>
             </span>
         </div>
     </form>

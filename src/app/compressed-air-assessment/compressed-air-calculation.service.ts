@@ -105,12 +105,13 @@ export class CompressedAirCalculationService {
       }
     }
     //TODO: conversions
-    let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
-    if (isValid && !isShutdown) {
+    //Removed validation for compressors when calling here. Tooo slow
+    // let isValid: boolean = this.inventoryService.isCompressorValid(compressor);
+    if (!isShutdown) {
       let results: CompressorCalcResult;
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
-        results = compressorAddon.CompressorsCalc(inputData);
+        results = this.suiteCompressorCalcCentrifugal(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         if (results.capacityCalculated < 0.001) {
@@ -119,7 +120,7 @@ export class CompressedAirCalculationService {
         }
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, additionalRecieverVolume);
-        results = compressorAddon.CompressorsCalc(inputData);
+        results = this.suiteCompressorCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         if (results.capacityCalculated < 0.001) {
@@ -135,6 +136,25 @@ export class CompressedAirCalculationService {
 
       return results;
     } else {
+      return this.getEmptyCalcResults();
+    }
+  }
+
+
+  suiteCompressorCalcCentrifugal(inputData: CentrifugalInput): CompressorCalcResult {
+    try {
+      return compressorAddon.CompressorsCalc(inputData);
+    } catch (err) {
+      console.log(err);
+      return this.getEmptyCalcResults();
+    }
+  }
+
+  suiteCompressorCalc(inputData: CompressorsCalcInput): CompressorCalcResult {
+    try {
+      return compressorAddon.CompressorsCalc(inputData);
+    } catch (err) {
+      console.log(err);
       return this.getEmptyCalcResults();
     }
   }

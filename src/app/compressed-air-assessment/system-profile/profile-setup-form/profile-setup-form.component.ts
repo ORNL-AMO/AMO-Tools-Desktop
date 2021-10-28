@@ -94,19 +94,9 @@ export class ProfileSetupFormComponent implements OnInit {
   }
 
   setPressureMinAndMax(inventoryItems: Array<CompressorInventoryItem>) {
-    let min: number;
-    let max: number;
-    inventoryItems.forEach(compressor => {
-      let minMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-      if (min == undefined || minMax.min < min) {
-        min = minMax.min;
-      }
-      if (max == undefined || minMax.max > max) {
-        max = minMax.max;
-      }
-    });
-    this.pressureMin = min;
-    this.pressureMax = max;
+    let compressorMinMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(inventoryItems);
+    this.pressureMin = compressorMinMax.min;
+    this.pressureMax = compressorMinMax.max;
   }
 
   changeDataInterval() {

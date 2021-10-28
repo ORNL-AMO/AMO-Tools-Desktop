@@ -291,7 +291,7 @@ export class PerformancePointsFormService {
     return false;
   }
 
-  getPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
+  getCompressorPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
     let min: number = performancePoints.fullLoad.dischargePressure;
     let max: number = 0;
     if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 5) {
@@ -304,6 +304,24 @@ export class PerformancePointsFormService {
       max = performancePoints.blowoff.dischargePressure;
     }
     return { min: min, max: max };
+  }
+
+  getPressureMinMax(inventoryItems: Array<CompressorInventoryItem>): { min: number, max: number } {
+    let min: number;
+    let max: number;
+    inventoryItems.forEach(compressor => {
+      let minMax: { min: number, max: number } = this.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+      if (min == undefined || minMax.min < min) {
+        min = minMax.min;
+      }
+      if (max == undefined || minMax.max > max) {
+        max = minMax.max;
+      }
+    });
+    return {
+      min: min,
+      max: max
+    }
   }
 
 

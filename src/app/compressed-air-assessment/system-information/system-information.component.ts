@@ -54,26 +54,26 @@ export class SystemInformationComponent implements OnInit {
 
   closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
     if (totalCapacityOfCompressedAirSystem) {
-        this.form.patchValue({
-          totalAirStorage: totalCapacityOfCompressedAirSystem
-        });
+      this.form.patchValue({
+        totalAirStorage: totalCapacityOfCompressedAirSystem
+      });
     }
     this.compressedAirAssessmentService.modalOpen.next(false);
     this.showSystemCapacityModal = false;
     this.save();
   }
-  
-  changeIsSequencerUsed(){
+
+  changeIsSequencerUsed() {
     this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
-    if(!systemInformation.isSequencerUsed){
+    if (!systemInformation.isSequencerUsed) {
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
       compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingNoSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
       })
-    }else if(systemInformation.isSequencerUsed && compressedAirAssessment.modifications){
+    } else if (systemInformation.isSequencerUsed && compressedAirAssessment.modifications) {
       //if sequencer on baseline cannot have these modifications. Turn off
       compressedAirAssessment.modifications.forEach(modification => {
         modification.reduceSystemAirPressure.order = 100;
@@ -84,13 +84,18 @@ export class SystemInformationComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
   }
 
+  changeTargetPressure() {
+    this.form = this.systemInformationFormService.setSequencerFieldValidators(this.form);
+    this.save()
+  }
 
-  toggleAtmosphericPressureKnown(){
+
+  toggleAtmosphericPressureKnown() {
     this.form.controls.atmosphericPressureKnown.patchValue(!this.form.controls.atmosphericPressureKnown.value);
     this.save();
   }
 
-  setAtmosphericPressure(){
+  setAtmosphericPressure() {
     let atmosphericPressure: number = this.altitudeCorrectionService.calculatePressureGivenAltitude(this.form.controls.systemElevation.value, this.settings);
     atmosphericPressure = Number(atmosphericPressure.toFixed(2));
     this.form.controls.atmosphericPressure.patchValue(atmosphericPressure);

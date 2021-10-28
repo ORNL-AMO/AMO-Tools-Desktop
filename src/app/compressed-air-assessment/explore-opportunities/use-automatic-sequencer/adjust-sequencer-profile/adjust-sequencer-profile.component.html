@@ -40,7 +40,7 @@
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorId|compressorName:adjustedCompressors}}
+                    {{summary.compressorId|compressorName:adjustedCompressors}} {{summary.compressorId}} {{selectedDayTypeId}}
                 </td>
                 <td class="text-center">
                     {{getFullLoadCapacity(summary.compressorId)}}
@@ -109,5 +109,5 @@
     </table>
 </div>
 <div *ngIf="hasError" class="alert alert-danger p-2 text-center">
-    One of more hours have less available airflow then is required.
+    One or more hours have less available airflow then is required.
 </div>

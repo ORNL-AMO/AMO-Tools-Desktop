@@ -89,9 +89,6 @@
             <app-inventory-performance-profile [inAssessment]="true">
             </app-inventory-performance-profile>
         </div>
-        <span class="w-100 p-2 text-center" *ngIf="calculating && tabSelect != 'help' && tabSelect != 'notes'">
-            Calculating results...
-        </span>
         <div class="p-2" *ngIf="modificationExists && tabSelect == 'help'">
             <app-help-panel></app-help-panel>
         </div>

@@ -2,6 +2,9 @@
     <div class="checkbox">
         <label class="group-label" for="addPrimaryReceiverVolume">
             Add Primary Receiver Volume
+            <span *ngIf="form.invalid && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
             <select id="addPrimaryReceiverVolumeOrder" formControlName="order" class="form-control pull-right"
                 (change)="save(true)">
                 <option [ngValue]=100>Off</option>
@@ -10,7 +13,7 @@
         </label>
     </div>
     <div *ngIf="form.controls.order.value != 100" class="mb-2 pt-1">
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
             <label for="receiverVolumeImplementationCost">Implementation Cost</label>
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="implementationCost"
@@ -18,6 +21,11 @@
                     (focus)="helpTextField('implementationCost')" min="0">
                 <span class="input-group-addon units">$</span>
             </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
         </div>
         <div class="form-group">
             <label>Existing air storage capacity</label>

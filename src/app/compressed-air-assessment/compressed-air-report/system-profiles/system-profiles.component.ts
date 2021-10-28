@@ -34,13 +34,13 @@ export class SystemProfilesComponent implements OnInit {
     if (this.selectedDayType && !this.selectedModification) {
       //Day type and baseline
       this.selectedProfileSummary = this.baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId }).profileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, this.selectedDayType, this.selectedProfileSummary);
+      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
     } else if (this.selectedDayType && this.selectedModification) {
       //day type and modification
       let assessmentResult: CompressedAirAssessmentResult = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
       let dayTypeModificationResult: DayTypeModificationResult = assessmentResult.dayTypeModificationResults.find(modificationResult => { return modificationResult.dayTypeId == this.selectedDayType.dayTypeId });
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary, this.selectedModification.improveEndUseEfficiency);
+      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval, this.selectedModification.improveEndUseEfficiency);
     } 
     // else if (!this.selectedDayType && this.selectedModification) {
     //   //no day type (combined) and modification

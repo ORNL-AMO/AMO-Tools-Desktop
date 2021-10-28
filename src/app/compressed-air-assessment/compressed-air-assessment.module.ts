@@ -131,6 +131,14 @@ import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-pane
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
 import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
+import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.service';
+import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.service';
+import { ImproveEndUseEfficiencyItemComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-efficiency-item.component';
+import { ImproveEndUseEfficiencyService } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.service';
+import { UseAutomaticSequencerService } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.service';
+import { AdjustCascadingSetPointsService } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.service';
+import { ReduceRunTimeService } from './explore-opportunities/reduce-run-time/reduce-run-time.service';
+import { ExploreOpportunitiesValidationService } from './explore-opportunities/explore-opportunities-validation.service';
 
 @NgModule({
   declarations: [
@@ -221,7 +229,8 @@ import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-v
     SystemInfoSummaryComponent,
     CompressorItemSummaryComponent,
     AdjustCascadingSetPointsHelpComponent,
-    AssessmentNotesComponent
+    AssessmentNotesComponent,
+    ImproveEndUseEfficiencyItemComponent
   ],
   imports: [
     CommonModule,
@@ -269,7 +278,14 @@ import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-v
     CompressedAirAssessmentResultsService,
     ConvertCompressedAirService,
     SystemProfileGraphsService,
-    AddReceiverVolumeService
+    AddReceiverVolumeService,
+    ReduceAirLeaksService,
+    ReduceSystemAirPressureService,
+    ImproveEndUseEfficiencyService,
+    UseAutomaticSequencerService,
+    AdjustCascadingSetPointsService,
+    ReduceRunTimeService,
+    ExploreOpportunitiesValidationService
   ]
 })
 export class CompressedAirAssessmentModule { }

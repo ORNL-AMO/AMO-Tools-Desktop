@@ -48,3 +48,8 @@ form{
     padding-bottom: 4px;
     border-bottom: #bbb dashed 1px;
 }
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}

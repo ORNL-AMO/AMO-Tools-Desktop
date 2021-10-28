@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AddPrimaryReceiverVolume, CompressedAirAssessment, Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AddReceiverVolumeService } from './add-receiver-volume.service';
 
@@ -15,7 +16,6 @@ import { AddReceiverVolumeService } from './add-receiver-volume.service';
 export class AddReceiverVolumeComponent implements OnInit {
 
   selectedModificationIdSub: Subscription;
-  // addPrimaryReceiverVolume: AddPrimaryReceiverVolume;
   isFormChange: boolean = false;
   existingCapacity: number;
   selectedModificationIndex: number;
@@ -28,7 +28,7 @@ export class AddReceiverVolumeComponent implements OnInit {
 
   form: FormGroup
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private addReceiverVolumeService: AddReceiverVolumeService) { }
+    private addReceiverVolumeService: AddReceiverVolumeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
 
@@ -70,6 +70,9 @@ export class AddReceiverVolumeComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let addPrimaryReceiverVolume: AddPrimaryReceiverVolume = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume));
       this.form = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
+      if (addPrimaryReceiverVolume.order != 100) {
+        this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+      }
     }
   }
 
@@ -106,5 +109,6 @@ export class AddReceiverVolumeComponent implements OnInit {
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
   }
 }
