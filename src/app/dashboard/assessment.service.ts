@@ -347,6 +347,7 @@ export class AssessmentService {
     return {
       name: 'Baseline',
       modifications: new Array(),
+      setupDone: false,
       systemBasics: {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,

@@ -59,7 +59,7 @@ export class SystemBasicsComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemBasics: CASystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
     compressedAirAssessment.systemBasics = systemBasics;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   saveSettings() {
@@ -72,7 +72,7 @@ export class SystemBasicsComponent implements OnInit {
     if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
       let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       compressedAirAssessment.existingDataUnits = this.oldSettings.unitsOfMeasure;
-      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
       this.showUpdateDataReminder = true;
     }
 
@@ -98,7 +98,7 @@ export class SystemBasicsComponent implements OnInit {
     compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(compressedAirAssessment, this.oldSettings, newSettings);
     this.showUpdateDataReminder = false;
     compressedAirAssessment.existingDataUnits = newSettings.unitsOfMeasure;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.oldSettings = newSettings;
   }
 

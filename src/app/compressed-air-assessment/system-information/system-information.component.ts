@@ -40,7 +40,7 @@ export class SystemInformationComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
     compressedAirAssessment.systemInformation = systemInformation;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   focusField(str: string) {
@@ -81,7 +81,7 @@ export class SystemInformationComponent implements OnInit {
         modification.reduceRuntime.order = 100;
       });
     }
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
   changeTargetPressure() {

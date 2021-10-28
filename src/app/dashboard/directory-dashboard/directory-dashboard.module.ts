@@ -33,6 +33,7 @@ import { InventoryItemComponent } from './directory-items/inventory-item/invento
 import { MotorInventoryCardComponent } from './directory-items/inventory-item/motor-inventory-card/motor-inventory-card.component';
 import { WasteWaterSummaryCardComponent } from './directory-items/assessment-item/waste-water-summary-card/waste-water-summary-card.component';
 import { WasteWaterReportModule } from '../../waste-water/waste-water-report/waste-water-report.module';
+import { CompressedAirAssessmentCardComponent } from './directory-items/assessment-item/compressed-air-assessment-card/compressed-air-assessment-card.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { WasteWaterReportModule } from '../../waste-water/waste-water-report/was
      ContentControlsComponent,
      InventoryItemComponent,
      MotorInventoryCardComponent,
-     WasteWaterSummaryCardComponent
+     WasteWaterSummaryCardComponent,
+     CompressedAirAssessmentCardComponent
     ],
   imports: [
     CommonModule,

@@ -94,7 +94,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
 

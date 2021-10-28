@@ -123,7 +123,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       let newOrder: number = this.adjustCascadingSetPoints.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'adjustCascadingSetPoints', previousOrder, newOrder);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
 

@@ -55,7 +55,7 @@ export class ModificationListModalComponent implements OnInit {
   confirmDelete() {
     let deleteModIndex: number = this.compressedAirAssessment.modifications.findIndex(modification => { return modification.modificationId == this.deleteModificationId });
     this.compressedAirAssessment.modifications.splice(deleteModIndex, 1);
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     if (this.deleteModificationId == this.selectedModificationId) {
       if (this.compressedAirAssessment.modifications.length != 0) {
         this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
@@ -80,14 +80,14 @@ export class ModificationListModalComponent implements OnInit {
 
   selectModification(modId: string) {
     this.compressedAirAssessmentService.selectedModificationId.next(modId);
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.closeModal();
   }
 
   saveUpdates() {
     let renameModIndex: number = this.compressedAirAssessment.modifications.findIndex(modification => { return modification.modificationId == this.renameModificationId });
     this.compressedAirAssessment.modifications[renameModIndex].name = this.renameModificationName;
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.renameModificationId = undefined;
   }
 
@@ -99,7 +99,7 @@ export class ModificationListModalComponent implements OnInit {
     }
     modificationCopy.modificationId = Math.random().toString(36).substr(2, 9);
     this.compressedAirAssessment.modifications.push(modificationCopy);
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.compressedAirAssessmentService.selectedModificationId.next(modificationCopy.modificationId);
   }
 
@@ -115,10 +115,10 @@ export class ModificationListModalComponent implements OnInit {
   }
 
   addNewModification() {
-    let modification: Modification = this.exploreOpportunitiesServce.getNewModification();
-    modification.name = this.newModificationName? this.newModificationName : modification.name;
+    let modification: Modification = this.exploreOpportunitiesServce.getNewModification(this.compressedAirAssessment);
+    modification.name = this.newModificationName ? this.newModificationName : modification.name;
     this.compressedAirAssessment.modifications.push(modification);
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.compressedAirAssessmentService.selectedModificationId.next(modification.modificationId);
     this.closeModal();
   }

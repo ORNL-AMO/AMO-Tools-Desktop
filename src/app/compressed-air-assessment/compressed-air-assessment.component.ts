@@ -64,7 +64,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment);
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -132,6 +132,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.inventoryService.selectedCompressor.next(undefined);
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
+    this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
   }
 
   ngAfterViewInit() {
@@ -155,7 +156,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   setDisableNext() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors();
+    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
     let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
     let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     if (this.setupTab == 'system-information' && !hasValidSystemInformation) {

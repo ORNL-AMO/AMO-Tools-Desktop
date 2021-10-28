@@ -139,7 +139,7 @@ export class ReduceRunTimeComponent implements OnInit {
       let newOrder: number = this.reduceRuntime.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceRuntime', previousOrder, newOrder);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
   setAirflowData() {

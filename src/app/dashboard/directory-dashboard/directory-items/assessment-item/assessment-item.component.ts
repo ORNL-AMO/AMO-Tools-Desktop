@@ -15,6 +15,7 @@ import { DashboardService } from '../../../dashboard.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
+import { WasteWaterService } from '../../../../waste-water/waste-water.service';
 
 @Component({
   selector: 'app-assessment-item',
@@ -40,7 +41,8 @@ export class AssessmentItemComponent implements OnInit {
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
-    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
+    private wasteWaterService: WasteWaterService) { }
 
 
   ngOnInit() {
@@ -52,17 +54,21 @@ export class AssessmentItemComponent implements OnInit {
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
-    
-    if (this.assessment.phast) {
+
+    if (this.assessment.type == 'PHAST' && this.assessment.phast) {
       this.isSetup = this.assessment.phast.setupDone;
-    } else if (this.assessment.psat) {
+    } else if (this.assessment.type == 'PSAT' && this.assessment.psat) {
       this.isSetup = this.assessment.psat.setupDone;
-    } else if (this.assessment.fsat) {
+    } else if (this.assessment.type == 'FSAT' && this.assessment.fsat) {
       this.isSetup = this.assessment.fsat.setupDone;
-    } else if (this.assessment.ssmt) {
+    } else if (this.assessment.type == 'SSMT' && this.assessment.ssmt) {
       this.isSetup = this.assessment.ssmt.setupDone;
-    } else if (this.assessment.treasureHunt) {
+    } else if (this.assessment.type == 'TreasureHunt' && this.assessment.treasureHunt) {
       this.isSetup = this.assessment.treasureHunt.setupDone;
+    } else if (this.assessment.type == 'WasteWater' && this.assessment.wasteWater) {
+      this.isSetup = this.assessment.wasteWater.setupDone;
+    } else if (this.assessment.type == 'CompressedAir' && this.assessment.compressedAirAssessment) {
+      this.isSetup = this.assessment.compressedAirAssessment.setupDone;
     }
   }
 

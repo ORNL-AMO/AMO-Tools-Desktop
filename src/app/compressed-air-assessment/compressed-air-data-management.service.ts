@@ -196,7 +196,7 @@ export class CompressedAirDataManagementService {
       })
     };
     //update assessment
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor
     this.inventoryService.selectedCompressor.next(selectedCompressor);
   }

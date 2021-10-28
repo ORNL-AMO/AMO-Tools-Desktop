@@ -155,7 +155,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       let newOrder: number = this.useAutomaticSequencer.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
   resetOrdering() {

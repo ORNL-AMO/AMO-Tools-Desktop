@@ -116,6 +116,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment.compressorInventoryItems,
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
         this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
+        this.compressedAirAssessment.systemInformation.totalAirStorage,
         this.settings.electricityCost
       );
     }
@@ -135,7 +136,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   save() {
-    this.exploreOpportunitiesService.saveModification(this.modification);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId = this.modification.modificationId });
+    compressedAirAssessment.modifications[modIndex] = this.modification;
+    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, false);
   }
 
   setTab(str: string) {

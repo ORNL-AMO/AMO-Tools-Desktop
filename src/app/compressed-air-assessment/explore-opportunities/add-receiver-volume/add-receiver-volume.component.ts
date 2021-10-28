@@ -108,7 +108,7 @@ export class AddReceiverVolumeComponent implements OnInit {
       let newOrder: number = this.form.controls.order.value;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
   }
 }
