@@ -1,0 +1,77 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Operations Help
+        <br>
+        <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+        </small>
+    </h5>
+    <!-- <label class="p-1" (click)="toggleSuggestions()">
+        <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+        <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+        <span class="h6 pl-1">
+            General
+        </span>
+    </label>
+    <div class="my-2" *ngIf="displaySuggestions"> -->
+
+    <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="focusedField == 'MaxDays'">
+        <h6>
+            Max. Solids Retention Time (SRT)
+            <br>
+            <small class="text-muted">
+                Set the maximum number of retention days.
+                <hr>
+            </small>
+        </h6>
+        <!-- <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0 <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                        <td class="w-50 text-center">{{ranges.steamFlowMax}} <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'TimeIncrement'">
+        <h6>
+            Time Step for SRT Modeling
+            <br>
+            <small class="text-muted">
+                Set the time step increment to use for the SRT modeling process
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'operatingMonths'">
+        <h6>
+            Operating Months
+            <br>
+            <small class="text-muted">
+                Number of months per year operating at these specific conditions.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- EnergyCostUnit -->
+    <div class="my-2" *ngIf="focusedField == 'EnergyCostUnit'">
+        <h6>
+            Electricity Cost
+            <br>
+            <small class="text-muted">
+                Energy cost unit ($/kWh) represents the total cost of electric energy including the base kWh charge,
+                demand charge, fuel adjustment charge, environmental fee, administrative charge, power factor penalty,
+                and so on.
+                <hr>
+            </small>
+        </h6>
+    </div>
+</div>

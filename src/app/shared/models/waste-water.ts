@@ -8,11 +8,18 @@ export interface WasteWater {
     existingDataUnits?: string
 }
 
-export interface SystemBasics {
+export interface WasteWaterOperations {
     MaxDays: number,
-    TimeIncrement: number,
-    equipmentNotes: string,
-    operatingMonths: number
+    TimeIncrement?: number,
+    operatingMonths: number,
+    EnergyCostUnit: number
+}
+
+export interface SystemBasics {
+    MaxDays?: number,
+    TimeIncrement?: number,
+    equipmentNotes?: string,
+    operatingMonths?: number
 }
 
 export interface WasteWaterData {
@@ -28,7 +35,8 @@ export interface WasteWaterData {
     exploreReduceOxygen?: SavingsOpportunity,
     exploreMLSS?: SavingsOpportunity,
     exploreVOLR?: SavingsOpportunity,
-    exploreRAS?: SavingsOpportunity
+    exploreRAS?: SavingsOpportunity,
+    operations?: WasteWaterOperations
 }
 
 export interface ActivatedSludgeData {
@@ -64,7 +72,7 @@ export interface AeratorPerformanceData {
     TypeAerators: number,
     Aerator: string,
     Speed: number,
-    EnergyCostUnit: number,
+    EnergyCostUnit?: number,
     AnoxicZoneCondition: boolean
 }
 
@@ -178,5 +186,5 @@ export interface WasteWaterValid {
     isValid: boolean,
     activatedSludgeValid: boolean,
     aeratorPerformanceValid: boolean,
-    systemBasicsValid: boolean,
+    systemBasicsValid: boolean
 }

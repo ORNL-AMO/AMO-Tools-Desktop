@@ -44,6 +44,12 @@ export const MockWasteWater: Assessment = {
           Speed: 100,
           EnergyCostUnit: 0.09,
           AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: 0.09
         }
       },
       modifications: [

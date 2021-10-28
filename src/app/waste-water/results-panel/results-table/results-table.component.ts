@@ -29,7 +29,7 @@ export class ResultsTableComponent implements OnInit {
     this.initDisplayConditions();
     this.settings = this.wasteWaterService.settings.getValue();
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
-      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics, this.settings, false);
+      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics, this.settings, false, undefined ,val.baselineData.operations);
       this.checkDisplayConditions(val.baselineData, this.baselineConditions);
       this.setResultsByControlPoint(val.baselineData, this.baselineResults, 'baseline');
       let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();

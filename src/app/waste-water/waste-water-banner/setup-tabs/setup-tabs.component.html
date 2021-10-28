@@ -6,17 +6,24 @@
         <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
             [display]="systemBasicsBadge.hover"></app-tabs-tooltip>
     </li>
+    <li [ngClass]="operationsClassStatus">
+        <a (click)="changeSetupTab('operations')">
+            <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)"
+                class="step-number">2</span>Operations</a>
+        <app-tabs-tooltip [badgeClass]="operationsClassStatus[0]" [reveal]="operationsBadge.display"
+            [display]="operationsBadge.hover"></app-tabs-tooltip>
+    </li>
     <li [ngClass]="activatedSludgeClassStatus">
         <a (click)="changeSetupTab('activated-sludge')">
             <span (mouseenter)="showTooltip(activatedSludgeBadge)" (mouseleave)="hideTooltip(activatedSludgeBadge)"
-                class="step-number">2</span>Activated Sludge</a>
+                class="step-number">3</span>Activated Sludge</a>
         <app-tabs-tooltip [badgeClass]="activatedSludgeClassStatus[0]" [reveal]="activatedSludgeBadge.display"
             [display]="activatedSludgeBadge.hover"></app-tabs-tooltip>
     </li>
     <li [ngClass]="aeratorPerformanceClassStatus">
         <a (click)="changeSetupTab('aerator-performance')">
             <span (mouseenter)="showTooltip(aeratorPerformanceBadge)"
-                (mouseleave)="hideTooltip(aeratorPerformanceBadge)" class="step-number">3</span>Aerator Performance</a>
+                (mouseleave)="hideTooltip(aeratorPerformanceBadge)" class="step-number">4</span>Aerator Performance</a>
         <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
             [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip>
     </li>
