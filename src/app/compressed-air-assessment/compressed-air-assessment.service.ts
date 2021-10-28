@@ -47,14 +47,11 @@ export class CompressedAirAssessmentService {
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
     if (isBaselineChange) {
-      console.time('update');
       let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
       let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
       let hasValidSystemProfile = this.hasValidProfileSummaryData(compressedAirAssessment);
       compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && hasValidSystemProfile);
-      console.log(compressedAirAssessment.setupDone);
-      console.timeEnd('update');
     }
     //TODO? set modifications valid?
     this.compressedAirAssessment.next(compressedAirAssessment);

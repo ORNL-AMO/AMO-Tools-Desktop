@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 
 @Pipe({
   name: 'compressorName'
