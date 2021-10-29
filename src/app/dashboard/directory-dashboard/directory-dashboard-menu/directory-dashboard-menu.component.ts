@@ -60,6 +60,16 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
     })
+    this.init();
+  }
+
+  init(){
+    this.activatedRoute.params.subscribe(params => {
+      let id: number = Number(params['id']);
+      this.breadCrumbs = new Array();
+      this.directory = this.directoryDbService.getById(id);
+      this.getBreadcrumbs(id);
+    });
   }
 
   checkSelected() {
