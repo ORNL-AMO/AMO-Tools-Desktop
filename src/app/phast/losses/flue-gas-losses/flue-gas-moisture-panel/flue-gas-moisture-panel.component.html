@@ -8,9 +8,9 @@
         </div>
     </div>
 </div>
-<div class="pr-1 pl-2" *ngIf="tabSelect == 'help'" [ngStyle]="{'height.px': containerHeight}">
+<div class="pr-1 pl-2" *ngIf="tabSelect == 'help'" [ngStyle]="{'height.px': 422}">
     <app-flue-gas-moisture-help></app-flue-gas-moisture-help>
 </div>
-<div class="pr-1 pl-2" *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': containerHeight}">
+<div class="pr-1 pl-2" *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': 422}">
     <app-flue-gas-moisture-results [settings] = "settings"></app-flue-gas-moisture-results>
 </div>

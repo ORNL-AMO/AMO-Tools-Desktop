@@ -199,8 +199,18 @@
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <app-flue-gas-moisture-modal *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
-      [settings]="settings"></app-flue-gas-moisture-modal>
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideMoistureModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-0">
+        <app-flue-gas-moisture-modal *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
+              [settings]="settings"></app-flue-gas-moisture-modal>
+      </div> 
+      <div class="modal-footer fsat justify-content-between">
+        <button class="btn btn-default pull-left" (click)="hideMoistureModal()">Cancel</button>        
+      </div>     
     </div>
   </div>
 </div>

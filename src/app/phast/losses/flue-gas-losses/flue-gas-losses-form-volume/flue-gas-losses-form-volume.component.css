@@ -12,3 +12,7 @@
 .modal-lg{
     max-width: 90%; 
 }
+
+.modal-body{
+    height: 512px;
+}
