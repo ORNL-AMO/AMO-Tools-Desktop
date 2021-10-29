@@ -28,8 +28,14 @@
         </app-treasure-hunt-report>
     </div>
     <div class="assessment-item" *ngFor="let item of _wasteWaterAssessments" id="{{'assessment_'+item.assessment.id}}">
-        <app-waste-water-report *ngIf="item.assessment.wasteWater" [assessment]="item.assessment" [settings]="item.settings" [inRollup]="true">
+        <app-waste-water-report *ngIf="item.assessment.wasteWater" [assessment]="item.assessment" [inRollup]="true">
         </app-waste-water-report>
+    </div>
+    <div class="assessment-item" *ngFor="let item of _compressedAirAssessments"
+        id="{{'assessment_'+item.assessment.id}}">
+        <app-compressed-air-report *ngIf="item.assessment.compressedAirAssessment" [assessment]="item.assessment"
+            [inRollup]="true">
+        </app-compressed-air-report>
     </div>
 </div>
 <!--END NOT PRINT-->

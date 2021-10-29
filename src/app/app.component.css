@@ -657,6 +657,14 @@ Reports
   background-size: 40px;
   padding: 9px 0 0px 30px;
 }
+.assessment-report.report-in-compressed-air .assessment-name,
+.assessment-report.report-in-rollup.report-in-compressed-air .assessment-name {
+  background-image: url('../assets/images/ca-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
 
 
 

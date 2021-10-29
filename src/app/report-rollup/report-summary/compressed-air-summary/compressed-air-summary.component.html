@@ -1,0 +1,50 @@
+<div class="card compressed-air h-100">
+    <div class="card-header">
+        <h3>Compressed Air</h3>
+        <span>
+            <span>{{numCompressedAir}}</span>
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row no-gutters justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <dl class="summary-list mx-auto">
+                    <dt>Maximum Annual
+                        <br />Cost Savings
+                    </dt>
+                    <dd>
+                        <span *ngIf="settings.currency !== '$'">
+                            {{savingPotential| currencyThousands }}
+                        </span>
+                        <span *ngIf="settings.currency === '$'">
+                            {{savingPotential| currency:'USD':'symbol':'2.0-0'}}
+                        </span>
+                    </dd>
+                    <dt>Annual Cost</dt>
+                    <dd>
+                        <span *ngIf="settings.currency !== '$'">
+                            {{totalCost | currencyThousands}}
+                        </span>
+                        <span *ngIf="settings.currency === '$'">
+                            {{totalCost | currency:'USD':'symbol':'2.0-0'}}
+                        </span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <dl class="summary-list mx-auto">
+                    <dt>Maximum Annual
+                        <br />Energy Savings
+                    </dt>
+                    <dd>{{energySavingsPotential| number:'2.0-0'}} kWh</dd>
+                    <dt>Annual Energy</dt>
+                    <dd>{{totalEnergy| number:'2.0-0'}} kWh
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        Click for details
+    </div>
+</div>

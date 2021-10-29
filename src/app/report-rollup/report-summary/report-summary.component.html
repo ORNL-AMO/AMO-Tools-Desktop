@@ -27,6 +27,10 @@
                     (click)="showAssessmentModal('waste-water')">
                     <app-waste-water-summary [settings]="settings"></app-waste-water-summary>
                 </li>
+                <li *ngIf="showCompressedAir" [hidden]="showSummary == 'closed'" class="compressed-air-summary"
+                    (click)="showAssessmentModal('compressed-air')">
+                    <app-compressed-air-summary [settings]="settings"></app-compressed-air-summary>
+                </li>
             </ul>
         </div>
     </div>
