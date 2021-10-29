@@ -1,10 +1,10 @@
 <!--move modal-->
 <div bsModal #moveModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md move-items-modal">
         <div class="modal-content" *ngIf="moveForm">
             <div class="modal-header">
-                Selected Item(s) to Move
+                <h3>Selected Item(s) to Move</h3>
                 <button class="close" (click)="hideMoveModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -85,7 +85,7 @@
                             </div>
 
                             <div class="p-2">
-                                <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid"
+                                <button class="btn btn-primary" type="button" [disabled]="!newFolderForm.valid"
                                     (click)="createFolder()">Create Folder</button>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" (click)="save()">Save</button>
+                <button class="btn btn-primary" (click)="save()">Save</button>
             </div>
         </div>
     </div>

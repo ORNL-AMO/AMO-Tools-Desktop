@@ -1,10 +1,10 @@
 <!--copy modal-->
 <div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md copy-items-modal">
         <div class="modal-content" *ngIf="copyForm">
             <div class="modal-header">
-                Selected Item(s) to Copy
+                <h3>Selected Item(s) to Copy</h3>
                 <button class="close" (click)="hideCopyModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,7 +90,7 @@
                             </div>
 
                             <div class="p-2">
-                                <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid"
+                                <button class="btn btn-primary" type="button" [disabled]="!newFolderForm.valid"
                                     (click)="createFolder()">Create Folder</button>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" (click)="createCopy()">Copy Selected Item(s)</button>
+                <button class="btn btn-primary" (click)="createCopy()">Copy Selected Item(s)</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,50 @@
+.modal.move-items-modal {
+    margin-top: 7%;
+}
+
+.move-items-modal label {
+    font-weight: bold;
+}
+.move-items-modal .form-check {
+    margin-bottom: 0;
+}
+.move-items-modal label.form-check-label {
+    font-weight: normal;
+}
+
+.move-items-modal input[type=text] {
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.move-items-modal .form-group {
+    margin-bottom: 10px;
+}
+
+.move-items-modal select {
+    margin-bottom: 6px;
+}
+
+.move-items-modal .help-text {
+    margin-bottom: 10px;
+}
+.move-items-modal .help-text p {
+    margin-bottom: 0;
+}
+
+.btn {
+    padding: 6px;
+}
+
+
+.btn-secondary{
+    background-color: #BF3D00;
+    border-color: #BF3D00;
+    transition: all .5s ease-in-out;
+}
+
+.btn-primary{
+    background-color: #156739;
+    border-color: #156739;
+    transition: all .5s ease-in-out;
+}
