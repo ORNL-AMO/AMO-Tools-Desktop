@@ -170,7 +170,19 @@ export class CondensingEconomizerService {
   }
 
   convertPercentToFraction(percentInput: number): number {
-    return percentInput > 0? percentInput / 100 : percentInput;
+    if(percentInput > 0) {
+      return percentInput / 100;
+    } else {
+      return percentInput;
+    }
+  }
+
+  convertFractionToPercent(value: number): number {
+    if(value > 0) {
+      return value * 100;
+    } else {
+      return value;
+    }
   }
 
   convertExampleUnits(input: CondensingEconomizerInput): CondensingEconomizerInput {
@@ -199,15 +211,11 @@ export class CondensingEconomizerService {
   }
 
   convertResultUnits(output: CondensingEconomizerOutput, settings: Settings): CondensingEconomizerOutput {
-    output.excessAir = output.excessAir? output.excessAir * 100 : output.excessAir;
-    output.effThermal = output.effThermal? output.effThermal * 100 : output.effThermal;
-    output.effLH = output.effLH? output.effLH * 100 : output.effLH;
-    output.effThermalLH = output.effThermalLH? output.effThermalLH * 100 : output.effThermalLH;
-    output.fracCondensed = output.fracCondensed? output.fracCondensed * 100 : output.fracCondensed;
-
-    if (settings.unitsOfMeasure == 'Imperial') {
-      
-    }
+    output.excessAir = this.convertFractionToPercent(output.excessAir);
+    output.effThermal = this.convertFractionToPercent(output.effThermal);
+    output.effLH = this.convertFractionToPercent(output.effLH);
+    output.effThermalLH = this.convertFractionToPercent(output.effThermalLH);
+    output.fracCondensed = this.convertFractionToPercent(output.fracCondensed);
 
     if (settings.unitsOfMeasure == "Metric") {
       output.flowFlueGas = this.convertUnitsService.value(output.flowFlueGas).from('lb').to('kg');

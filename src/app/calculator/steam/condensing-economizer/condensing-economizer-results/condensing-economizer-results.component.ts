@@ -23,7 +23,6 @@ export class CondensingEconomizerResultsComponent implements OnInit {
   ngOnInit(): void {
     this.outputSubscription = this.condensingEconomizerService.condensingEconomizerOutput.subscribe(val => {
       this.output = val;
-      console.log(this.output);
     })
   }
 
