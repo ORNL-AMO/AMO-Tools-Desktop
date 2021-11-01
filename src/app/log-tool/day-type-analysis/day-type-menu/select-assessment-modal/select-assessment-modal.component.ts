@@ -77,12 +77,12 @@ export class SelectAssessmentModalComponent implements OnInit {
 
   selectAssessment(assessment: Assessment) {
     assessment.compressedAirAssessment = this.setDayTypesFromLogTool(assessment.compressedAirAssessment)
-    console.log(assessment.compressedAirAssessment);
     this.indexedDbService.putAssessment(assessment).then(() => {
       this.assessmentDbService.setAll().then(() => {
         this.compressedAirAssessmentService.mainTab.next('system-setup');
         this.compressedAirAssessmentService.setupTab.next('day-types');
-        this.router.navigateByUrl('/compressed-air/' + assessment.id);
+        // this.router.navigateByUrl('/compressed-air/' + assessment.id);
+        this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
       })
     })
   }

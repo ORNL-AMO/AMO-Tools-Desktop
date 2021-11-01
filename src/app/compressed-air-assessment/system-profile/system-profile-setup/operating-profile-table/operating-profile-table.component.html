@@ -54,8 +54,13 @@
                     <span *ngIf="profileDataType == 'percentCapacity'">% Capacity</span>
                     <span *ngIf="profileDataType == 'airflow'">Airflow</span>
                     <span *ngIf="profileDataType == 'percentPower'">% Power</span>
+                    <span *ngIf="profileDataType == 'powerFactor'">
+                        Power Factor<br>
+                        Amps<br>
+                        Volts
+                    </span>
                 </td>
-                <td *ngIf="showSelectField">
+                <td *ngIf="showSelectField && profileDataType != 'powerFactor'">
                     <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
                         name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
                         (change)="setLogToolData(summary)">
@@ -64,8 +69,32 @@
                         </option>
                     </select>
                 </td>
+                <!--power factor input-->
+                <td *ngIf="showSelectField && profileDataType == 'powerFactor'">
+                    <select [(ngModel)]="summary.logToolFieldIdPowerFactor" class="form-control w-100"
+                        name="{{compressorIndex+'logToolFieldId_powerFactor'}}" id="{{compressorIndex+'logToolFieldId_powerFactor'}}"
+                        (change)="setLogToolDataPowerFactor(summary)">
+                        <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
+                            {{field.alias}}
+                        </option>
+                    </select>
+                    <select [(ngModel)]="summary.logToolFieldIdAmps" class="form-control w-100"
+                        name="{{compressorIndex+'logToolFieldId_amps'}}" id="{{compressorIndex+'logToolFieldId_amps'}}"
+                        (change)="setLogToolDataAmps(summary)">
+                        <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
+                            {{field.alias}}
+                        </option>
+                    </select>
+                    <select [(ngModel)]="summary.logToolFieldIdVolts" class="form-control w-100"
+                        name="{{compressorIndex+'logToolFieldId'}}" id="{{compressorIndex+'logToolFieldId'}}"
+                        (change)="setLogToolDataVolts(summary)">
+                        <option *ngFor="let field of fieldOptions" [value]="field.fieldId">
+                            {{field.alias}}
+                        </option>
+                    </select>
+                </td>
                 <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
-                    <span *ngIf="summaryData.order != 0">
+                    <span *ngIf="summaryData.order != 0 && profileDataType != 'powerFactor'">
                         <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
@@ -86,6 +115,18 @@
                     </span>
                     <div class="w-100 bold text-center" *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
+                    </div>
+                    <div class="flex-column" *ngIf="summaryData.order != 0 && profileDataType == 'powerFactor'">
+                        <input type="number" class="form-control"
+                            id="{{'order_powerFactor_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_powerFactor_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.powerFactor">
+                        <input type="number" class="form-control" id="{{'order_amps_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_amps_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.amps">
+                        <input type="number" class="form-control" id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_volts_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.volts">
                     </div>
                 </td>
             </tr>
