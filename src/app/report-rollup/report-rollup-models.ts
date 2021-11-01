@@ -10,7 +10,7 @@ import { TreasureHuntResults, OpportunitiesPaybackDetails } from '../shared/mode
 import { OpportunityCardData } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
-import { BaselineResults, CompressedAirAssessmentResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
 
 export interface ReportItem {
     assessment: Assessment;
@@ -221,7 +221,7 @@ export interface CompressedAirCompare {
 
 export interface CompressedAirResultsData {
     baselineResults: BaselineResults;
-    modificationResults: CompressedAirAssessmentResult;
+    modificationResults: DayTypeModificationResult;
     assessmentId: number;
     name: string;
     modName: string;
@@ -233,7 +233,7 @@ export interface CompressedAirResultsData {
 
 export interface AllCompressedAirResultsData {
     baselineResults: BaselineResults;
-    modificationResults: Array<CompressedAirAssessmentResult>;
+    modificationResults: Array<DayTypeModificationResult>;
     assessmentId: number;
     isBaseline?: boolean;
 }

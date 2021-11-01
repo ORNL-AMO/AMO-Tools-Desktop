@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem } from './report-rollup-models';
 import * as _ from 'lodash';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
 @Injectable()
 export class CompressedAirReportRollupService {
 
@@ -25,8 +25,8 @@ export class CompressedAirReportRollupService {
   initCompressedAirCompare() {
     let tmpResults: Array<CompressedAirCompare> = new Array<CompressedAirCompare>();
     this.allAssessmentResults.forEach(result => {
-      let minCost: CompressedAirAssessmentResult = _.minBy(result.modificationResults, (result) => { return result.totalModificationCost; });
-      let modIndex: number = _.findIndex(result.modificationResults, { totalModificationCost: minCost.totalModificationCost });
+      let minCost: DayTypeModificationResult = _.minBy(result.modificationResults, (result) => { return result.totalAnnualOperatingCost; });
+      let modIndex: number = _.findIndex(result.modificationResults, { totalAnnualOperatingCost: minCost.totalAnnualOperatingCost });
       let compressedAirAssessments: Array<ReportItem> = this.compressedAirAssessments.value;
       let assessmentIndex: number = _.findIndex(compressedAirAssessments, (val) => { return val.assessment.id === result.assessmentId; });
       let item: ReportItem = compressedAirAssessments[assessmentIndex];
@@ -58,19 +58,20 @@ export class CompressedAirReportRollupService {
         let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment);
         if (val.assessment.compressedAirAssessment.modifications) {
           if (val.assessment.compressedAirAssessment.modifications.length !== 0) {
-            let modResultsArr: Array<CompressedAirAssessmentResult> = new Array<CompressedAirAssessmentResult>();
+            let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
             val.assessment.compressedAirAssessment.modifications.forEach(mod => {
               let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod);
-              modResultsArr.push(tmpResults);
+              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults)
+              modResultsArr.push(combinedResults);
             });
             this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
-            let modResultsArr: Array<CompressedAirAssessmentResult> = new Array<CompressedAirAssessmentResult>();
+            let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
             modResultsArr.push(undefined);
             this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
           }
         } else {
-          let modResultsArr: Array<CompressedAirAssessmentResult> = new Array<CompressedAirAssessmentResult>();
+          let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
           modResultsArr.push(undefined);
           this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
         }
@@ -84,7 +85,8 @@ export class CompressedAirReportRollupService {
       let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment);
       if (val.modification) {
         let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification);
-        this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
+        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults)
+        this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: combinedResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
       } else {
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: undefined, assessmentId: val.assessmentId, name: val.name, modName: 'Baseline', baseline: val.baseline, modification: val.modification, settings: val.settings });
       }

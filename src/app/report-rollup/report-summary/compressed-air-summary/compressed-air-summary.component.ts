@@ -51,10 +51,13 @@ export class CompressedAirSummaryComponent implements OnInit {
       let diffCost: number = 0;
       let diffEnergy: number = 0;
       if (result.modificationResults) {
-        diffCost = result.baselineResults.total.totalAnnualOperatingCost - result.modificationResults.totalModificationCost;
-        sumCost += result.modificationResults.totalModificationCost;
-        diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.totalModificationPower;
-        sumEnergy += result.modificationResults.totalModificationPower;
+        diffCost = result.baselineResults.total.totalAnnualOperatingCost - result.modificationResults.totalAnnualOperatingCost;
+        sumCost += result.modificationResults.totalAnnualOperatingCost;
+        diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
+        sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
+      }else{
+        sumCost += result.baselineResults.total.totalAnnualOperatingCost;
+        sumEnergy += result.baselineResults.total.energyUse;
       }
       sumSavings += diffCost;
       sumEnergySavings += diffEnergy;
