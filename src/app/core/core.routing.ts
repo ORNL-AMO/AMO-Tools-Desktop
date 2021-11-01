@@ -102,6 +102,7 @@ import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-check
 import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
 
 import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
+import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
 import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 
 export const coreRoutes: Routes = [
@@ -306,6 +307,10 @@ export const coreRoutes: Routes = [
           {
             path: 'water-heating',
             component: WaterHeatingComponent
+          },
+          {
+            path: 'feedwater-economizer',
+            component: FeedwaterEconomizerComponent
           },
           {
             path: 'steam-reduction',

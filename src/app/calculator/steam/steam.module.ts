@@ -21,6 +21,7 @@ import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-
 import { SaturatedPropertiesConversionService } from './saturated-properties-conversion.service';
 import { SaturatedPropertiesService } from './saturated-properties.service';
 import { WaterHeatingModule } from './water-heating/water-heating.module';
+import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-economizer.module';
 import { CondensingEconomizerModule } from './condensing-economizer/condensing-economizer.module';
 
 
@@ -34,6 +35,7 @@ import { CondensingEconomizerModule } from './condensing-economizer/condensing-e
     BoilerModule,
     FlashTankModule,
     PrvModule,
+    FeedwaterEconomizerModule,
     DeaeratorModule,
     HeaderModule,
     TurbineModule,

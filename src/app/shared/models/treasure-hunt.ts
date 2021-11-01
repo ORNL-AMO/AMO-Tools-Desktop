@@ -12,6 +12,7 @@ import { AirHeatingInput } from "./phast/airHeating";
 import { HeatCascadingInput } from "./phast/heatCascading";
 import { WaterHeatingInput } from "./steam/waterHeating";
 import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
+import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 
 export interface TreasureHunt {
@@ -66,6 +67,7 @@ export enum Treasure {
     openingLoss = 'opening-loss',
     heatCascading = 'heat-cascading',
     waterHeating = 'water-heating',
+    feedwaterEconomizer = 'feedWaterEconomizer',
     condensingEconomizer = 'condensing-economizer',
 }
 
@@ -280,6 +282,12 @@ export interface WaterHeatingTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface FeedwaterEconomizerTreasureHunt extends TreasureHuntOpportunity {
+    inputData: FeedwaterEconomizerInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
 
 export interface CondensingEconTreasureHunt extends TreasureHuntOpportunity {
     inputData: CondensingEconomizerInput;
