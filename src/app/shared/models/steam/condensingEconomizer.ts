@@ -61,7 +61,9 @@ export interface CondensingEconomizerOutput {
     effThermalLH: number,
     effLH: number,
     heatRecovery: number,
+    heatRecoveryAnnual: number,
     sensibleHeatRecovery: number,
+    sensibleHeatRecoveryAnnual: number,
     totalHeatRecovery?: number,
     annualHeatRecovery?: number,
 }

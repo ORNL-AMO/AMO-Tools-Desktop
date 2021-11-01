@@ -77,7 +77,9 @@ export class CondensingEconomizerService {
       effThermalLH: undefined,
       effLH: undefined,
       heatRecovery: undefined,
-      sensibleHeatRecovery: undefined, 
+      sensibleHeatRecovery: undefined,
+      heatRecoveryAnnual: undefined,
+      sensibleHeatRecoveryAnnual: undefined, 
     };
     this.condensingEconomizerOutput.next(emptyOutput);
   }
@@ -97,9 +99,9 @@ export class CondensingEconomizerService {
 
       let condensingEconomizerOutput: CondensingEconomizerOutput = processHeatAddon.airWaterCoolingUsingFlue(suiteInputInterface);
       condensingEconomizerOutput = this.convertResultUnits(condensingEconomizerOutput, settings);
-      condensingEconomizerOutput.sensibleHeatRecovery = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours; 
-      condensingEconomizerOutput.heatRecovery = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours; 
-      condensingEconomizerOutput.annualHeatRecovery = condensingEconomizerOutput.heatRecovery + condensingEconomizerOutput.sensibleHeatRecovery; 
+      condensingEconomizerOutput.sensibleHeatRecoveryAnnual = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours; 
+      condensingEconomizerOutput.heatRecoveryAnnual = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours; 
+      condensingEconomizerOutput.annualHeatRecovery = condensingEconomizerOutput.heatRecoveryAnnual + condensingEconomizerOutput.sensibleHeatRecoveryAnnual; 
       condensingEconomizerOutput.costSavings = condensingEconomizerOutput.annualHeatRecovery * inputCopy.fuelCost; 
 
       this.condensingEconomizerOutput.next(condensingEconomizerOutput);
@@ -198,6 +200,7 @@ export class CondensingEconomizerService {
 
   convertInputUnits(input: CondensingEconomizerInput, settings: Settings): CondensingEconomizerInput {
     input.flueGasO2 = this.convertPercentToFraction(input.flueGasO2);
+    input.moistureInCombustionAir = this.convertPercentToFraction(input.moistureInCombustionAir);
 
     if (settings.unitsOfMeasure == "Metric") {
       input.fuelTemp = this.convertUnitsService.value(input.fuelTemp).from('C').to('F');

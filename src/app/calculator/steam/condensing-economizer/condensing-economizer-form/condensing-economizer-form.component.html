@@ -75,23 +75,6 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="fuelTemp">Fuel Temperature</label>
-      <div class="input-group">
-        <input name="fuelTemp" type="number" step="10" class="form-control"
-          formControlName="fuelTemp" id="fuelTemp" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('fuelTemp')" >
-          <span class="input-group-addon units">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-            </span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.fuelTemp.invalid && !form.controls.fuelTemp.pristine">
-        <span *ngIf="form.controls.fuelTemp.errors.required">Value Required</span>
-      </span>
-      </div>
-
-    <div class="form-group">
       <label class="small" for="flueGasTemperature">Flue Gas Temperature</label>
       <div class="input-group">
         <input name="flueGasTemperature" type="number" step="10" class="form-control"
@@ -231,6 +214,23 @@
       <span class="alert-warning pull-right small" *ngIf="warnings.moistureInCombustionAir !== null">{{warnings.moistureInCombustionAir}}</span>
 
     </div>
+
+    <div class="form-group">
+      <label class="small" for="fuelTemp">Fuel Temperature</label>
+      <div class="input-group">
+        <input name="fuelTemp" type="number" step="10" class="form-control"
+          formControlName="fuelTemp" id="fuelTemp" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelTemp')" >
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.fuelTemp.invalid && !form.controls.fuelTemp.pristine">
+        <span *ngIf="form.controls.fuelTemp.errors.required">Value Required</span>
+      </span>
+      </div>
 
     <div class="form-group">
       <label class="small" for="ambientAirTemperature">Ambient Air Temperature</label>
