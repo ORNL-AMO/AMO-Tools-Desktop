@@ -32,7 +32,7 @@ export class CompressedAirSummaryComponent implements OnInit {
     this.selectedSub = this.compressedAirReportRollupService.selectedAssessments.subscribe(val => {
       if (val.length != 0) {
         this.compressedAirReportRollupService.setAssessmentResultsFromSelected(val);
-        this.calcWasteWaterSums();
+        this.calcTotals();
       }
     });
   }
@@ -42,7 +42,7 @@ export class CompressedAirSummaryComponent implements OnInit {
     this.selectedSub.unsubscribe();
   }
 
-  calcWasteWaterSums() {
+  calcTotals() {
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;

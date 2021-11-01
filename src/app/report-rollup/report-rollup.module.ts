@@ -61,6 +61,7 @@ import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-e
 import { CompressedAirReportRollupService } from './compressed-air-report-rollup.service';
 import { CompressedAirSummaryComponent } from './report-summary/compressed-air-summary/compressed-air-summary.component';
 import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
+import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
 
 @NgModule({
   imports: [
@@ -119,6 +120,7 @@ import { CompressedAirReportModule } from '../compressed-air-assessment/compress
     NutrientRemovalTableComponent,
     EffluentEnergyUseTableComponent,
     CompressedAirSummaryComponent,
+    CompressedAirRollupComponent,
 
   ],
   providers: [
