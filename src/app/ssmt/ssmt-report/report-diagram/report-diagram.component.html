@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="d-flex flex-column w-50 align-items-center justify-content-center">
-        <select name="ssmtSelect1" class="form-control mx-auto" id="ssmtSelect1" (change)="setSsmt1(index)"
+        <select name="ssmtSelect1" class="form-control mx-auto" id="ssmtSelect1" (change)="setSsmt1()"
           [(ngModel)]="selectedDiagram1">
           <option [ngValue]="ssmtBaselineDiagram1">Baseline</option>
           <option *ngFor="let modDiagram of modificationDiagramData; let index = index;" [ngValue]="modDiagram">
@@ -29,7 +29,7 @@
     <hr>
     <div class="d-flex">
       <div class="d-flex flex-column w-50 align-items-center justify-content-center">
-        <select name="ssmtSelect2" class="form-control mx-auto" id="ssmtSelect2" (change)="setSsmt2(index)"
+        <select name="ssmtSelect2" class="form-control mx-auto" id="ssmtSelect2" (change)="setSsmt2()"
           [(ngModel)]="selectedDiagram2">
           <option [ngValue]="ssmtBaselineDiagram2">Baseline</option>
           <option *ngFor="let modDiagram2 of modificationDiagramData; let index = index;" [ngValue]="modDiagram2">
