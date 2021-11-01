@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
+import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
@@ -26,18 +27,20 @@ export class ReportSummaryComponent implements OnInit {
   showSsmtSummary: boolean;
   showTreasureHuntSummary: boolean;
   showWasteWater: boolean;
+  showCompressedAir: boolean;
   psatAssessmentsSub: Subscription;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssessmentsSub: Subscription;
   wasteWaterAssessmentsSub: Subscription;
+  compressedAirAssessmentsSub: Subscription;
   settings: Settings;
   settingsSub: Subscription;
   constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService,
     private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit() {
     this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
@@ -66,7 +69,9 @@ export class ReportSummaryComponent implements OnInit {
     this.wasteWaterAssessmentsSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
       this.showWasteWater = val.length != 0;
     });
-
+    this.compressedAirAssessmentsSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
+      this.showCompressedAir = val.length != 0;
+    })
   }
 
   ngOnDestroy() {
@@ -78,6 +83,7 @@ export class ReportSummaryComponent implements OnInit {
     this.treasureHuntAssessmentsSub.unsubscribe();
     this.wasteWaterAssessmentsSub.unsubscribe();
     this.wasteWaterAssessmentsSub.unsubscribe();
+    this.compressedAirAssessmentsSub.unsubscribe();
   }
 
   showAssessmentModal(assessmentModalType: string) {

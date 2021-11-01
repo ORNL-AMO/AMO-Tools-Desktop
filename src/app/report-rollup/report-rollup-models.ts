@@ -9,6 +9,8 @@ import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 import { TreasureHuntResults, OpportunitiesPaybackDetails } from '../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
+import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
 
 export interface ReportItem {
     assessment: Assessment;
@@ -201,6 +203,37 @@ export interface WasteWaterResultsData {
 export interface AllWasteWaterResultsData {
     baselineResults: WasteWaterResults;
     modificationResults: Array<WasteWaterResults>;
+    assessmentId: number;
+    isBaseline?: boolean;
+}
+
+
+//compressedAir
+export interface CompressedAirCompare {
+    baseline: CompressedAirAssessment;
+    modification: Modification;
+    assessmentId: number;
+    selectedIndex: number;
+    name: string;
+    assessment: Assessment;
+    settings: Settings;
+}
+
+export interface CompressedAirResultsData {
+    baselineResults: BaselineResults;
+    modificationResults: DayTypeModificationResult;
+    assessmentId: number;
+    name: string;
+    modName: string;
+    baseline: CompressedAirAssessment;
+    modification: Modification;
+    settings: Settings;
+}
+
+
+export interface AllCompressedAirResultsData {
+    baselineResults: BaselineResults;
+    modificationResults: Array<DayTypeModificationResult>;
     assessmentId: number;
     isBaseline?: boolean;
 }

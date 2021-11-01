@@ -3,7 +3,8 @@
 .fsat .modal-dialog,
 .ssmt .modal-dialog,
 .treasureHunt .modal-dialog,
-.waste-water .modal-dialog {
+.waste-water .modal-dialog,
+.compressed-air .modal-dialog {
     top: 0px;
     margin: 10px;
     max-width: none;
@@ -39,12 +40,18 @@
     color: white;
 }
 
+.compressed-air .modal-header {
+    background-color: #7030A0;
+    color: white;
+}
+
 .phast .modal-content,
 .psat .modal-content,
 .fsat .modal-content,
 .ssmt .modal-content,
 .treasureHunt .modal-content,
-.waste-water .modal-content {
+.waste-water .modal-content,
+.compressed-air .modal-content {
     height: 95vh;
     width: 98vw;
 }

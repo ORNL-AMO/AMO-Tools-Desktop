@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CompressedAirReportRollupService } from '../../../report-rollup/compressed-air-report-rollup.service';
+import { Assessment } from '../../../shared/models/assessment';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
@@ -14,6 +17,12 @@ export class ExecutiveSummaryComponent implements OnInit {
   combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
   @Input()
   modifications: Array<Modification>;
+  @Input()
+  inRollup: boolean;
+  @Input()
+  assessment: Assessment;
+  @Input()
+  settings: Settings;
 
 
   notes: Array<{
@@ -30,7 +39,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayUseAutomaticSequencer: boolean;
   displayAuxiliaryPower: boolean;
   selectedModificationIndex: number;
-  constructor() { }
+  constructor(private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit(): void {
     this.combinedDayTypeResults.forEach(modResult => {
@@ -67,6 +76,18 @@ export class ExecutiveSummaryComponent implements OnInit {
       }
     });
     this.setNotes();
+
+    if (this.inRollup) {
+      this.compressedAirReportRollupService.selectedAssessments.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      })
+    }
   }
 
   getDemandEnergyProjects(modification: Modification): string {
@@ -128,4 +149,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     })
   }
 
+  useModification() {
+    this.compressedAirReportRollupService.updateSelectedCompressorAssessments({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
 }

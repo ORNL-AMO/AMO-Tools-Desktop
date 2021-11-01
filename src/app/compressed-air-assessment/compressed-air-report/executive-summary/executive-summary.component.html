@@ -408,7 +408,7 @@
                 </td>
             </tr>
             <tr class="bold-row">
-                <td>Annual Energy Cost
+                <td>Annual Operating Cost
                     <span> ($/yr)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -514,6 +514,18 @@
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span [innerHTML]="getSupplyEnergyProjects(result.modification)"></span>
+                </td>
+            </tr>
+            <tr class="hide-print" *ngIf="inRollup">
+                <td>Use for Summary</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()"
+                        [value]="-1" [(ngModel)]="selectedModificationIndex">
+                </td>
+                <td *ngFor="let modification of assessment.compressedAirAssessment.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()"
+                        [value]="index" [(ngModel)]="selectedModificationIndex">
                 </td>
             </tr>
         </tbody>
