@@ -16,10 +16,7 @@ export interface WasteWaterOperations {
 }
 
 export interface SystemBasics {
-    MaxDays?: number,
-    TimeIncrement?: number,
-    equipmentNotes?: string,
-    operatingMonths?: number
+    equipmentNotes?: string
 }
 
 export interface WasteWaterData {
@@ -72,7 +69,6 @@ export interface AeratorPerformanceData {
     TypeAerators: number,
     Aerator: string,
     Speed: number,
-    EnergyCostUnit?: number,
     AnoxicZoneCondition: boolean
 }
 
@@ -186,5 +182,5 @@ export interface WasteWaterValid {
     isValid: boolean,
     activatedSludgeValid: boolean,
     aeratorPerformanceValid: boolean,
-    systemBasicsValid: boolean
+    operationsValid: boolean
 }

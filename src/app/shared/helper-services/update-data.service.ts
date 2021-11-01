@@ -61,11 +61,16 @@ export class UpdateDataService {
             };
         };
 
-        // if (assessment.wasteWater.modifications) {
-        //     assessment.wasteWater.modifications.forEach(mod => {
-               
-        //     })
-        // }
+        if (assessment.wasteWater.modifications) {
+            assessment.wasteWater.modifications.forEach(mod => {
+                mod.operations = {
+                    MaxDays: 100,
+                    TimeIncrement: .5,
+                    operatingMonths: 12,
+                    EnergyCostUnit: 0.09
+                };
+            })
+        }
 
         return assessment;
     }

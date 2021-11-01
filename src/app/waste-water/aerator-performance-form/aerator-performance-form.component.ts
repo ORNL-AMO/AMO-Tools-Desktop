@@ -53,7 +53,6 @@ export class AeratorPerformanceFormComponent implements OnInit {
           let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
           this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(modificationData.aeratorPerformanceData);
           this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
-          //this.form.controls.EnergyCostUnit.patchValue(wasteWater.baselineData.operations.EnergyCostUnit);
           this.setDefaultSOTR();
           if(this.isModification){
             this.setDisableOptimize();
@@ -147,12 +146,10 @@ export class AeratorPerformanceFormComponent implements OnInit {
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.modifications[this.modificationIndex].aeratorPerformanceData = aeratorPerformanceData;
       wasteWater.modifications[this.modificationIndex].exploreOpportunities = false;
-      wasteWater.modifications[this.modificationIndex].aeratorPerformanceData.EnergyCostUnit = wasteWater.baselineData.operations.EnergyCostUnit;
     } else {
       let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
-      wasteWater.baselineData.aeratorPerformanceData.EnergyCostUnit = wasteWater.baselineData.operations.EnergyCostUnit;
     }
     this.wasteWaterService.updateWasteWater(wasteWater);
     if(this.isModification){
@@ -211,7 +208,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
 
   setDisableOptimize() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[this.modificationIndex].activatedSludgeData, wasteWater.modifications[this.modificationIndex].aeratorPerformanceData, wasteWater.systemBasics);
+    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[this.modificationIndex].activatedSludgeData, wasteWater.modifications[this.modificationIndex].aeratorPerformanceData, wasteWater.modifications[this.modificationIndex].operations);
     this.disableOptimize = modificationValid.isValid == false;
   }
 }

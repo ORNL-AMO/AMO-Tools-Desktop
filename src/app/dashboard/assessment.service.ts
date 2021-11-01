@@ -325,22 +325,18 @@ export class AssessmentService {
           OperatingTime: 24,
           TypeAerators: 2,
           Speed: 100,
-          EnergyCostUnit: settings.electricityCost,
           AnoxicZoneCondition: false
         },
         operations: {
           MaxDays: 100,
           TimeIncrement: .5,
           operatingMonths: 12,
-          EnergyCostUnit: 0.09
+          EnergyCostUnit: settings.electricityCost
         }
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: 100,
-        TimeIncrement: .5,
-        equipmentNotes: '',
-        operatingMonths: 12
+        equipmentNotes: ''
       }
     }
   }

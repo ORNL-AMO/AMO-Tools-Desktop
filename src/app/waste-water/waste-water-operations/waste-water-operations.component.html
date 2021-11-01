@@ -1,16 +1,17 @@
 <div class="d-flex flex-column panel-container">
-    <div class="header mr-2 ml-2">
-        <h3>Operations</h3>
-        <br>
-    </div>   
+    <div *ngIf="inSetup" class="d-flex flex-column">
+        <div class="header mr-2 ml-2">
+            <h3>Operations</h3>
+        </div>
+    </div> 
    
     <form class="pl-3 pr-3" #formRef [formGroup]="operationsForm">
-        <label class="group-label">Modeling Conditions</label>
+        <!-- <label class="group-label">Modeling Conditions</label> -->
         <!-- MaxDays -->
         <div class="form-group">
             <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
             <div class="input-group">
-                <input type="number" name="MaxDays" class="form-control number-input-field" id="MaxDays"
+                <input type="number" name="MaxDays" class="form-control number-input-field" id="{{'MaxDays_'+idString}}"
                     (focus)="focusField('MaxDays')" (input)="saveOperations()" formControlName="MaxDays">
                 <span class="input-group-addon units">days</span>
             </div>
@@ -45,7 +46,7 @@
         <div class="form-group">
             <label for="operatingMonths">Operating Months</label>
             <div class="input-group">
-                <input type="number" name="operatingMonths" class="form-control number-input-field" id="operatingMonths"
+                <input type="number" name="operatingMonths" class="form-control number-input-field" id="{{'operatingMonths_'+idString}}"
                     (focus)="focusField('operatingMonths')" (input)="saveOperations()"
                     formControlName="operatingMonths">
                 <span class="input-group-addon units">months</span>
@@ -64,7 +65,8 @@
             </span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group"
+            [ngClass]="{'indicate-different': operationsDifferent.EnergyCostUnit, 'invalid': operationsForm.controls.EnergyCostUnit.invalid}">
             <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
             <div class="input-group">
                 <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
