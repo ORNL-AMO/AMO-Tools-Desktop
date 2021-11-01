@@ -5,8 +5,6 @@
       <td class="bold w-50">Excess Air</td>
       <td *ngIf="output.excessAir" class="text-center w-50">
         {{output.excessAir | number:'1.0-1'}} %
-        <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span> -->
       </td>
       <td *ngIf="!output.excessAir" class="text-center w-50">
         &mdash; &mdash;
@@ -49,32 +47,18 @@
       <td class="bold w-50">Fraction Condensed</td>
       <td *ngIf="output.fracCondensed" class="text-center w-50">
         {{output.fracCondensed | number:'1.0-2'}} %
-        <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lbF</span> -->
-          <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span> -->
       </td>
       <td *ngIf="!output.fracCondensed" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr> 
-    
-    <!-- Eff thermal or eff thermal lh? -->
-    <!-- <tr>
-      <td class="bold w-50">Heat Reclaimed From Condensed Water</td>
-      <td *ngIf="output.effThermalLH" class="text-center w-50">
-        {{output.effThermalLH | number:'1.0-0'}} %
 
-      </td>
-      <td *ngIf="!output.effThermalLH" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>  -->
-    
     <tr>
       <td class="bold w-50">Sensible Heat Recovery</td>
       <td *ngIf="output.sensibleHeatRecovery" class="text-center w-50">
         {{output.sensibleHeatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
       </td>
       <td *ngIf="!output.sensibleHeatRecovery" class="text-center w-50">
         &mdash; &mdash;
@@ -85,25 +69,13 @@
       <td class="bold w-50">Latent Heat Recovery</td>
       <td *ngIf="output.heatRecovery" class="text-center w-50">
         {{output.heatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
       </td>
       <td *ngIf="!output.heatRecovery" class="text-center w-50">
         &mdash; &mdash;
       </td>
     </tr> 
-    <!-- <tr>
-      <td class="bold w-50">Total Heat Recovery</td>
-      <td *ngIf="output.totalHeatRecovery" class="text-center w-50">
-        {{output.totalHeatRecovery | number:'1.0-2'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
-      </td>
-      <td *ngIf="!output.totalHeatRecovery" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>  -->
-
 
   </tbody>
 </table>
@@ -112,6 +84,29 @@
 <label class="group-label mb-1">Annual Results</label>
 <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
   <tbody>
+    <tr>
+      <td class="bold w-50">Sensible Heat Recovery</td>
+      <td *ngIf="output.sensibleHeatRecoveryAnnual" class="text-center w-50">
+        {{output.sensibleHeatRecoveryAnnual | number:'1.0-0'}} 
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+      </td>
+      <td *ngIf="!output.sensibleHeatRecoveryAnnual" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr> 
+    
+    <tr>
+      <td class="bold w-50">Latent Heat Recovery</td>
+      <td *ngIf="output.heatRecoveryAnnual" class="text-center w-50">
+        {{output.heatRecoveryAnnual | number:'1.0-0'}} 
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+      </td>
+      <td *ngIf="!output.heatRecoveryAnnual" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr> 
     <tr>
       <td class="bold w-50">Annual Heat Recovery</td>
       <td *ngIf="output.annualHeatRecovery" class="text-center w-50">
