@@ -23,9 +23,10 @@
 
 <div class="scroll-item">
     <div class="p-2 alert alert-danger small" *ngIf="!validProfileSummaryData">
-        Profile Data values must be at least 0 
+        Profile Data values must be at least 0
     </div>
-    <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId" [ngClass]="{'single-entry': hourIntervals.length == 1}">
+    <table class="table bg-white" *ngIf="profileDataType && selectedDayTypeId"
+        [ngClass]="{'single-entry': hourIntervals.length == 1}">
         <thead>
             <tr>
                 <th>
@@ -52,6 +53,7 @@
                     <span *ngIf="profileDataType == 'power'">Power</span>
                     <span *ngIf="profileDataType == 'percentCapacity'">% Capacity</span>
                     <span *ngIf="profileDataType == 'airflow'">Airflow</span>
+                    <span *ngIf="profileDataType == 'percentPower'">% Power</span>
                 </td>
                 <td *ngIf="showSelectField">
                     <select [(ngModel)]="summary.logToolFieldId" class="form-control w-100"
@@ -66,22 +68,23 @@
                     <span *ngIf="summaryData.order != 0">
                         <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
-                            name="{{'summaryData_'+compressorIndex+dataIndex}}" 
-                            (input)="updateProfileSummary(summary, dataIndex)"
-                            [(ngModel)]="summaryData.power">
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.power">
                         <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
-                            (input)="updateProfileSummary(summary, dataIndex)"
-                            [(ngModel)]="summaryData.airflow">
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.airflow">
                         <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)"
                             [(ngModel)]="summaryData.percentCapacity">
+                        <input *ngIf="profileDataType == 'percentPower'" type="number" class="form-control"
+                            id="{{'order_'+compressorIndex+dataIndex}}"
+                            name="{{'summaryData_'+compressorIndex+dataIndex}}"
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentPower">
                     </span>
-                    <div class="w-100 bold text-center"
-                        *ngIf="summaryData.order == 0">
+                    <div class="w-100 bold text-center" *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
                     </div>
                 </td>

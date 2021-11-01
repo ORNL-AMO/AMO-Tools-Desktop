@@ -471,7 +471,7 @@ export class CompressedAirAssessmentResultsService {
       if (summary.dayTypeId == dayType.dayTypeId) {
         summary.profileSummaryData.forEach(summaryData => {
           if (summaryData.order != 0) {
-            let computeFrom: 1 | 2 | 3;
+            let computeFrom: 0 | 1 | 2 | 3;
             let computeFromVal: number;
             if (dayType.profileDataType == 'power') {
               computeFrom = 2;
@@ -482,6 +482,9 @@ export class CompressedAirAssessmentResultsService {
             } else if (dayType.profileDataType == 'airflow') {
               computeFrom = 3;
               computeFromVal = summaryData.airflow;
+            } else if (dayType.profileDataType == 'percentPower') {
+              computeFrom = 0;
+              computeFromVal = summaryData.percentPower;
             }
             let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, computeFrom, computeFromVal, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage, 0, true);
             summaryData.airflow = calcResult.capacityCalculated;
