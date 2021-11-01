@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData } from '../../../../shared/models/standalone';
+import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData, OrificeMethodData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
@@ -21,6 +21,7 @@ export class AirLeakFormComponent implements OnInit {
   currentLeakIndex: number;
   leakForm: FormGroup;
   currentLeakIndexSub: Subscription;
+  orificeMethodForm: FormGroup;
 
   measurementMethods: Array<{ display: string, value: number }> = [
     { display: 'Estimate', value: 0 },
@@ -59,6 +60,7 @@ export class AirLeakFormComponent implements OnInit {
   }
 
   saveLeak() {
+    debugger;
     let tempForm: AirLeakSurveyData = this.airLeakFormService.getAirLeakObjFromForm(this.leakForm);
     let airLeakInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
     airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex] = tempForm;
@@ -67,6 +69,8 @@ export class AirLeakFormComponent implements OnInit {
 
 
   changeField(str: string) {
+    debugger;
+    this.saveLeak();
     this.airLeakService.currentField.next(str);
   }
 
