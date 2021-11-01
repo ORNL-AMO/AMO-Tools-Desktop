@@ -84,7 +84,9 @@ export class AirHeatingTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: airHeatingOpportunity.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/air-heating-icon.png',
-      teamName: airHeatingOpportunity.opportunitySheet? airHeatingOpportunity.opportunitySheet.owner : undefined
+      teamName: airHeatingOpportunity.opportunitySheet? airHeatingOpportunity.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
 }

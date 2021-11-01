@@ -76,4 +76,27 @@
        font-size: 80%;
        /* font-weight: 400; */
    }
-     
+
+.inTreasureHunt-icon{
+    border-radius: 50%;
+}
+.calc-list-icon{
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+}
+ 
+.icon-background{
+    height: 55px;
+    width: 55px;
+    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
+}
+
+.vent-icon{    
+    height: auto;
+    width: 45px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

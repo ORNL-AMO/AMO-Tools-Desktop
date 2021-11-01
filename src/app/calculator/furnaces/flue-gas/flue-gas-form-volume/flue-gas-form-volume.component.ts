@@ -120,7 +120,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (updatedFlueGasData && updatedFlueGasData.flueGasByVolume) {
       this.byVolumeForm = this.flueGasFormService.initByVolumeFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byVolumeForm = this.flueGasFormService.initEmptyVolumeForm();
+      this.byVolumeForm = this.flueGasFormService.initEmptyVolumeForm(this.settings);
     }
     this.initFormSetup();
   }

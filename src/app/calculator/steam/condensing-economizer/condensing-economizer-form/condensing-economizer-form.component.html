@@ -1,0 +1,257 @@
+<form #formElement [formGroup]="form" class="my-4 mx-2">
+    <div class="form-group">
+      <label class="small" for="operatingHours">Operating Hours</label>
+      <div class="input-group">
+        <span class="input-group-addon op-hour-addon units">
+          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+        </span>
+        <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
+          type="number" (input)="calculate()" (focus)="focusField('operationHours')" onfocus="this.select();">
+        <span class="units input-group-addon">hrs/yr</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+        <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+        <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+          {{form.controls.operatingHours.errors.max.max}}.</span>
+        <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+          {{form.controls.operatingHours.errors.min.min}}.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="materialTypeId">Fuel
+      </label>
+      <select name="materialTypeId" class="form-control" formControlName="materialTypeId" id="materialTypeId"
+        (change)="setMaterialProperties()" (focus)="focusField('materialTypeId')">
+        <option *ngFor="let option of fuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="fuelCost">
+        Fuel Cost
+      </label>
+      <div class="input-group">
+        <input name="fuelCost" type="number" class="form-control" formControlName="fuelCost" id="fuelCost"
+          onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelCost')">
+        <span class="input-group-addon units">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+        </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
+        <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
+        <span *ngIf="form.controls.fuelCost.errors.min">Value can't be less than
+          {{form.controls.fuelCost.errors.min.min}}.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="heatInput">Heat Input</label>
+      <div class="input-group">
+        <input class="form-control" name="heatInput" id="heatInput" formControlName="heatInput" type="number"
+          (input)="calculate()" (focus)="focusField('heatInput')"  onfocus="this.select();">
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.heatInput.invalid && !form.controls.heatInput.pristine">
+        <span *ngIf="form.controls.heatInput.errors.required">Value Required</span>
+        <span *ngIf="form.controls.heatInput.errors.max">Value can't be greater than
+          {{form.controls.heatInput.errors.max.max}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          .</span>
+        <span *ngIf="form.controls.heatInput.errors.min">Value can't be less than
+          {{form.controls.heatInput.errors.min.min}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          .</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="fuelTemp">Fuel Temperature</label>
+      <div class="input-group">
+        <input name="fuelTemp" type="number" step="10" class="form-control"
+          formControlName="fuelTemp" id="fuelTemp" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelTemp')" >
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.fuelTemp.invalid && !form.controls.fuelTemp.pristine">
+        <span *ngIf="form.controls.fuelTemp.errors.required">Value Required</span>
+      </span>
+      </div>
+
+    <div class="form-group">
+      <label class="small" for="flueGasTemperature">Flue Gas Temperature</label>
+      <div class="input-group">
+        <input name="flueGasTemperature" type="number" step="10" class="form-control"
+          formControlName="flueGasTemperature" id="flueGasTemperature" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('flueGasTemperature')" >
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.flueGasTemperature.invalid && !form.controls.flueGasTemperature.pristine">
+        <span *ngIf="form.controls.flueGasTemperature.errors.required">Value Required</span>
+        <span *ngIf="form.controls.flueGasTemperature.errors.min">Value can't be less than Combustion Temperature
+          ({{form.controls.flueGasTemperature.errors.min.min}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+          ).</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flueGasTemp !== null">{{warnings.flueGasTemp}}</span>
+      </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="modifiedFlueGasTemperature">New Flue Gas Temperature</label>
+        <div class="input-group">
+          <input name="modifiedFlueGasTemperature" type="number" step="10" class="form-control"
+            formControlName="modifiedFlueGasTemperature" id="modifiedFlueGasTemperature" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('modifiedFlueGasTemperature')" >
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+              </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.modifiedFlueGasTemperature.invalid && !form.controls.modifiedFlueGasTemperature.pristine">
+          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.required">Value Required</span>
+          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.min">For all practical systems this temperature cannot be higher than
+            ({{form.controls.modifiedFlueGasTemperature.errors.max.max}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            ).</span>
+        </span>
+        </div>
+
+      <div class="form-group">
+        <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
+        <select name="oxygenCalculationMethod" class="form-control" (change)="changeMethod()"
+          formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
+          (focus)="focusField('oxygenCalculationMethod')" >
+          <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="!calcMethodExcessAir">
+        <div class="form-group">
+          <label class="small" for="flueGasO2">Oxygen In Flue Gas</label>
+          <div class="input-group">
+            <input name="flueGasO2" type="number" step="0.5" min="0" max="20.5" class="form-control"
+              formControlName="flueGasO2" id="flueGasO2" onfocus="this.select();" (input)="calcExcessAir()"
+              (focus)="focusField('flueGasO2')">
+            <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small"
+              *ngIf="form.controls.flueGasO2.invalid && !form.controls.flueGasO2.pristine">
+              <span *ngIf="form.controls.flueGasO2.errors.required">Value Required</span>
+            </span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="small">Excess Air</label>
+          <div class="text-center small">
+            {{calculationExcessAir | number:'2.2-2'}} %
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="calcMethodExcessAir">
+        <div class="form-group">
+          <label class="small">Oxygen In Flue Gas</label>
+          <div class="text-center small">
+            {{calculationFlueGasO2 | number:'2.2-2'}} %
+          </div>
+        </div>
+        <label class="small" for="excessAir">Excess Air</label>
+        <div class="input-group">
+          <input name="excessAir" type="number" step="any" min="0" class="form-control" formControlName="excessAir"
+            id="excessAir" onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('excessAir')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.excessAir.invalid && !form.controls.excessAir.pristine">
+          <span *ngIf="form.controls.excessAir.errors.required">Value Required</span>
+          <span *ngIf="form.controls.excessAir.errors.greaterThan == 0">Value must be greater than than
+            0.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+      <label class="small" for="combustionAirTemperature">Combustion Air Temperature</label>
+      <div class="input-group">
+        <input name="combustionAirTemperature" type="number" step="10" class="form-control"
+          formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('combustionAirTemperature')" >
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+      </div>
+
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.combustionAirTemperature.invalid && !form.controls.combustionAirTemperature.pristine">
+        <span *ngIf="form.controls.combustionAirTemperature.errors.required">Value Required</span>
+        <span *ngIf="form.controls.combustionAirTemperature.errors.max">Value can't be greater than Flue Gas
+          Temperature ({{form.controls.combustionAirTemperature.errors.max.max}} 
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="moistureInCombustionAir">Moisture in Combustion Air</label>
+      <div class="input-group">
+        <input name="moistureInCombustionAir" type="number" step="any" min="0" max="100" class="form-control"
+          formControlName="moistureInCombustionAir" id="moistureInCombustionAir" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('moistureInCombustionAir')" >
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.moistureInCombustionAir.invalid && !form.controls.moistureInCombustionAir.pristine">
+        <span *ngIf="form.controls.moistureInCombustionAir.errors.required">Value Required</span>
+        <span *ngIf="form.controls.moistureInCombustionAir.errors.max">Value can't be greater than
+          {{form.controls.moistureInCombustionAir.errors.max.max}} %.</span>
+        <span *ngIf="form.controls.moistureInCombustionAir.errors.min">Value can't be less than
+          {{form.controls.moistureInCombustionAir.errors.min.min}} %.</span>
+      </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.moistureInCombustionAir !== null">{{warnings.moistureInCombustionAir}}</span>
+
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="ambientAirTemperature">Ambient Air Temperature</label>
+      <div class="input-group">
+        <input name="ambientAirTemperature" type="number" step="10" class="form-control"
+          formControlName="ambientAirTemperature" id="ambientAirTemperature" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('ambientAirTemperature')" >
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.ambientAirTemperature.invalid && !form.controls.ambientAirTemperature.pristine">
+        <span *ngIf="form.controls.ambientAirTemperature.errors.required">Value Required</span>
+      </span>
+    </div>
+
+</form>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+(emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
+</app-operating-hours-modal>
