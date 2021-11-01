@@ -202,9 +202,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     // backend method needs moistureInAirCombustion to be ''
     // moistureInAirCombustion is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
-    if (this.flueGasLossForm.controls.moistureInAirCombustion === undefined) {
-      this.flueGasLossForm.patchValue({moistureInAirCombustion: ''});
-    }
+
     // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
   }

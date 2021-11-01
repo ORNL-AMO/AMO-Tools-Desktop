@@ -22,6 +22,7 @@ import { SaturatedPropertiesConversionService } from './saturated-properties-con
 import { SaturatedPropertiesService } from './saturated-properties.service';
 import { WaterHeatingModule } from './water-heating/water-heating.module';
 import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-economizer.module';
+import { CondensingEconomizerModule } from './condensing-economizer/condensing-economizer.module';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-econ
     WaterHeatingModule,
     RouterModule,
     PipeInsulationReductionModule,
-    TankInsulationReductionModule
+    TankInsulationReductionModule,
+    CondensingEconomizerModule
   ],
   declarations: [
     SteamListComponent,
