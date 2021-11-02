@@ -47,7 +47,8 @@ export class CompressedAirAssessmentService {
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
     if (isBaselineChange) {
-      let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+      let settings: Settings = this.settings.getValue();
+      let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
       let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
       let hasValidSystemProfile = this.hasValidProfileSummaryData(compressedAirAssessment);

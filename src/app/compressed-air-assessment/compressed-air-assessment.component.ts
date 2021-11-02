@@ -162,7 +162,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   setDisableNext() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
     let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
       this.disableNext = true;

@@ -1,9 +1,7 @@
-import { Input, ViewChild } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Subscription } from 'rxjs';
 import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -21,19 +19,14 @@ export class SystemInformationComponent implements OnInit {
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;
   form: FormGroup;
-  settingsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private systemInformationFormService: SystemInformationFormService, private systemProfileService: SystemProfileService,
     private altitudeCorrectionService: AltitudeCorrectionService) { }
 
   ngOnInit(): void {
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation);
-  }
-
-  ngOnDestroy() {
-    this.settingsSub.unsubscribe();
+    this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings);
   }
 
   save() {

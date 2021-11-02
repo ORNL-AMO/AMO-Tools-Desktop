@@ -29,13 +29,13 @@ export class ConvertCompressedAirService {
   convertSystemInformation(systemInformation: SystemInformation, oldSettings: Settings, newSettings: Settings): SystemInformation {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       systemInformation.systemElevation = this.convertUnitsService.value(systemInformation.systemElevation).from('m').to('ft');
-      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('kpaa').to('psia');
+      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('kPaa').to('psia');
       // dbl check
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('m3').to('gal');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('barg').to('psig');
       systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('barg').to('psig');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('psia').to('kpaa');
+      systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('psia').to('kPaa');
       systemInformation.systemElevation = this.convertUnitsService.value(systemInformation.systemElevation).from('ft').to('m');
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('gal').to('m3');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('psig').to('barg');
@@ -203,7 +203,7 @@ export class ConvertCompressedAirService {
     inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
     inputObj.dischargePsiMax = this.convertUnitsService.value(inputObj.dischargePsiMax).from('barg').to('psig');
     inputObj.modulatingPsi = this.convertUnitsService.value(inputObj.modulatingPsi).from('barg').to('psig');
-    inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kpaa').to('psia');
+    inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kPaa').to('psia');
     inputObj.unloadPointCapacity = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3/min').to('ft3/min');
     inputObj.receiverVolume = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3').to('ft3');
     //if lubricant free, hardcoded to 15 no conversion

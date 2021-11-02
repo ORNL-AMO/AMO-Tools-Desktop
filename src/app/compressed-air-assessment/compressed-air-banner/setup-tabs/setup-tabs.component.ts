@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeService } from '../../day-types/day-type.service';
 import { InventoryService } from '../../inventory/inventory.service';
@@ -33,11 +34,17 @@ export class SetupTabsComponent implements OnInit {
   profileTab: string;
   profileTabSub: Subscription;
   compressedAirAssessmentSub: Subscription;
-
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+  settingsSub: Subscription;
+  settings: Settings;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeService: DayTypeService, private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(val => {
+      this.settings = val;
+      this.disabledSetupTabs = [];
+      this.setTabStatus();
+    });
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
       this.disabledSetupTabs = [];
@@ -61,15 +68,15 @@ export class SetupTabsComponent implements OnInit {
     // TODO when validation in
     let hasValidSystemProfile: boolean = true;
     let hasValidEndUses: boolean = true;
-    
+
     let canViewInventory: boolean = false;
     let canViewDayTypes: boolean = false;
     let canViewSystemProfile: boolean = false;
     let canViewEndUses: boolean = false;
 
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (compressedAirAssessment) {
-      hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+    if (compressedAirAssessment && this.settings) {
+      hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
       hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
       hasValidSystemProfile = this.compressedAirAssessmentService.hasValidProfileSummaryData();
@@ -92,6 +99,7 @@ export class SetupTabsComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.profileTabSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   changeSetupTab(str: string) {
@@ -126,7 +134,7 @@ export class SetupTabsComponent implements OnInit {
     }
     if (canViewInventory && !hasValidCompressors) {
       this.inventoryStatus.push("missing-data");
-    } 
+    }
     if (this.setupTab == "inventory") {
       this.inventoryStatus.push("active");
     }
@@ -137,7 +145,7 @@ export class SetupTabsComponent implements OnInit {
     if (!canViewDayTypes) {
       this.dayTypesClassStatus.push("disabled");
       this.disabledSetupTabs.push('day-types');
-    } 
+    }
     if (canViewDayTypes && !hasValidDayTypes) {
       this.dayTypesClassStatus.push("missing-data");
     }
@@ -145,7 +153,7 @@ export class SetupTabsComponent implements OnInit {
       this.dayTypesClassStatus.push("active");
     }
   }
-  
+
   setSystemProfileStatus(hasValidSystemProfile: boolean, canViewSystemProfile: boolean) {
     this.systemProfileStatus = [];
     if (!canViewSystemProfile) {

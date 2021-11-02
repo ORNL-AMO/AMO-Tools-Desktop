@@ -49,8 +49,10 @@ export class SystemCapacityComponent implements OnInit {
 
   ngOnInit() {
     this.outputs = this.systemCapacityService.getDefaultEmptyOutput();
+    console.log(this.settings);
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
+      console.log('set');
     }
     this.inputs = this.systemCapacityService.inputs;
     this.calculate();
