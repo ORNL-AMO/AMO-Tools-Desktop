@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesValidationService, ValidationDataArrays } from '../explore-opportunities-validation.service';
@@ -44,16 +45,17 @@ export class UseAutomaticSequencerComponent implements OnInit {
   baselineHasSequencer: boolean;
   form: FormGroup;
   hasInvalidDayType: boolean;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private useAutomaticSequencerService: UseAutomaticSequencerService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
-      if (compressedAirAssessment) {
+      if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.baselineHasSequencer = this.compressedAirAssessment.systemInformation.isSequencerUsed;
-        this.setFormOrder();
         this.setOrderOptions();
       }
     });
@@ -74,7 +76,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
         this.setData();
       } else {
         this.isFormChange = false;
-        if (!this.dayTypeOptions) {
+        if (!this.dayTypeOptions || !this.form) {
           this.setData();
         } else {
           this.setAirflowData();
@@ -107,18 +109,12 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
         this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
       }
+
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
+      this.form.updateValueAndValidity();
       if (this.useAutomaticSequencer.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
         this.setReduceRuntimeValid();
-      }
-    }
-  }
-
-  setFormOrder() {
-    if (this.form && this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
-      if (this.form.controls.order.value != this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order) {
-        this.form.controls.order.patchValue(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order)
       }
     }
   }

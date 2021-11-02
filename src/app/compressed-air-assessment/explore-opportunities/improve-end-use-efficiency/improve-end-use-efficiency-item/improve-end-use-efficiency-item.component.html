@@ -30,8 +30,9 @@
 
     <div class="form-group" *ngIf="!form.controls.collapsed.value">
         <label for="{{'substituteAuxiliaryEquipment_'+itemIndex}}">Substitute Auxiliary Equipment?</label>
-        <select formControlName="substituteAuxiliaryEquipment" class="form-control" (change)="changeAuxiliaryEquipment()"
-            (focus)="helpTextField('substituteAuxiliaryEquipment')" id="{{'substituteAuxiliaryEquipment_'+itemIndex}}">
+        <select formControlName="substituteAuxiliaryEquipment" class="form-control"
+            (change)="changeAuxiliaryEquipment()" (focus)="helpTextField('substituteAuxiliaryEquipment')"
+            id="{{'substituteAuxiliaryEquipment_'+itemIndex}}">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
         </select>
@@ -76,7 +77,8 @@
         <div class="input-group">
             <input type="number" class="form-control" formControlName="airflowReduction"
                 (focus)="helpTextField('airflowReduction')" id="{{'airflowReduction_'+itemIndex}}" (input)="save()">
-            <span class="input-group-addon units">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/min</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.airflowReduction.invalid && !form.controls.airflowReduction.pristine">
@@ -86,7 +88,8 @@
             <span *ngIf="form.controls.airflowReduction.errors.max">
                 Value can't be greater than the max airflow in the system
                 ({{form.controls.airflowReduction.errors.max.max | number: '1.0-1'}}
-                acfm).
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>).
             </span>
         </span>
     </div>

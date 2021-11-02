@@ -54,7 +54,9 @@
                         <!-- Compressor -->
                     </th>
                     <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
-                        Capacity <br> acfm
+                        Capacity <br> 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     </th>
                     <th class="text-center" [ngClass]="{'w-25': reduceRuntime.runtimeData[0].intervalData.length == 1}">
                         Shutdown <br>
@@ -72,7 +74,9 @@
                         {{rData.compressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
                     </td>
                     <td class="text-center">
-                        {{rData.fullLoadCapacity}} acfm
+                        {{rData.fullLoadCapacity}} 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     </td>
                     <td class="text-center">
                         <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox"

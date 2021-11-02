@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-reduce-air-leaks',
@@ -25,12 +26,13 @@ export class ReduceAirLeaksComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   form: FormGroup;
   baselineResults: BaselineResults;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private reduceAirLeaksService: ReduceAirLeaksService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
-
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.baselineResults = this.exploreOpportunitiesService.baselineResults;

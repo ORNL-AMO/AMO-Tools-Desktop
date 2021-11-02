@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { InventoryService } from '../../../inventory/inventory.service';
 
 @Component({
@@ -26,6 +27,8 @@ export class AdjustSequencerProfileComponent implements OnInit {
   hasError: boolean;
   @Input()
   profilePower: Array<number>;
+  @Input()
+  settings: Settings;
 
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;
