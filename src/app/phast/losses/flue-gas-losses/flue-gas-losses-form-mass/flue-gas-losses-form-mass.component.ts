@@ -135,6 +135,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   calcExcessAir() {
+    debugger;
     let input: MaterialInputProperties = {
       carbon: this.flueGasLossForm.controls.carbon.value,
       hydrogen: this.flueGasLossForm.controls.hydrogen.value,
