@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, SystemInformation, SystemProfile } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
+import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
 @Injectable()
 export class ConvertCompressedAirService {
@@ -187,5 +188,56 @@ export class ConvertCompressedAirService {
 
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits));
+  }
+
+
+  convertInputObject(inputObj: CompressorsCalcInput): CompressorsCalcInput {
+    //capacity measured: 'm3/min'->'ft3/min'
+    if (inputObj.computeFrom == 3) {
+      inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
+    }
+    inputObj.dischargePsiFullLoad = this.convertUnitsService.value(inputObj.dischargePsiFullLoad).from('barg').to('psig');
+    inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
+    inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
+    inputObj.pressureAtUnload = this.convertUnitsService.value(inputObj.pressureAtUnload).from('barg').to('psig');
+    inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
+    inputObj.dischargePsiMax = this.convertUnitsService.value(inputObj.dischargePsiMax).from('barg').to('psig');
+    inputObj.modulatingPsi = this.convertUnitsService.value(inputObj.modulatingPsi).from('barg').to('psig');
+    inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kpaa').to('psia');
+    inputObj.unloadPointCapacity = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3/min').to('ft3/min');
+    inputObj.receiverVolume = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3').to('ft3');
+    //if lubricant free, hardcoded to 15 no conversion
+    if (inputObj.lubricantType != 1) {
+      inputObj.unloadSumpPressure = this.convertUnitsService.value(inputObj.unloadSumpPressure).from('barg').to('psig');
+    }
+    return inputObj;
+  }
+
+  convertCentrifugalInputObject(inputObj: CentrifugalInput): CentrifugalInput {
+    //capacity measured: 'm3/min'->'ft3/min'
+    if (inputObj.computeFrom == 3) {
+      inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
+    }
+    inputObj.fullLoadPressure = this.convertUnitsService.value(inputObj.fullLoadPressure).from('barg').to('psig');
+    inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
+    inputObj.capacityAtMinFullLoadPressure = this.convertUnitsService.value(inputObj.capacityAtMinFullLoadPressure).from('m3/min').to('ft3/min');
+    inputObj.capacityAtMaxFullLoadPressure = this.convertUnitsService.value(inputObj.capacityAtMaxFullLoadPressure).from('m3/min').to('ft3/min');
+    inputObj.minFullLoadPressure = this.convertUnitsService.value(inputObj.minFullLoadPressure).from('barg').to('psig');
+    inputObj.maxFullLoadPressure = this.convertUnitsService.value(inputObj.maxFullLoadPressure).from('barg').to('psig');
+    inputObj.surgeFlow = this.convertUnitsService.value(inputObj.surgeFlow).from('m3/min').to('ft3/min');
+    inputObj.maxPressure = this.convertUnitsService.value(inputObj.maxPressure).from('barg').to('psig');
+    inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
+    inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
+    return inputObj;
+  }
+
+  convertResults(result: CompressorCalcResult): CompressorCalcResult {
+    result.capacityCalculated = this.convertUnitsService.value(result.capacityCalculated).from('ft3/min').to('m3/min');
+    result.reRatedFlow = this.convertUnitsService.value(result.reRatedFlow).from('ft3/min').to('m3/min');
+    result.reRatedFlowMax = this.convertUnitsService.value(result.reRatedFlowMax).from('ft3/min').to('m3/min');
+    result.capacityAtFullLoadAdjusted = this.convertUnitsService.value(result.capacityAtFullLoadAdjusted).from('ft3/min').to('m3/min');
+    result.capacityAtMaxFullFlowAdjusted = this.convertUnitsService.value(result.capacityAtMaxFullFlowAdjusted).from('ft3/min').to('m3/min');
+    result.surgeFlow = this.convertUnitsService.value(result.surgeFlow).from('ft3/min').to('m3/min');
+    return result;
   }
 }

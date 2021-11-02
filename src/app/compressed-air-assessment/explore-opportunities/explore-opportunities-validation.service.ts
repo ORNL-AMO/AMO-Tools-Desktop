@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
+import { Settings } from '../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { AddReceiverVolumeService } from './add-receiver-volume/add-receiver-volume.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points/adjust-cascading-set-points.service';
@@ -37,9 +38,9 @@ export class ExploreOpportunitiesValidationService {
   }
 
   checkModificationValid(modification: Modification, baselineResults: BaselineResults, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,
-    compressedAirAssessment: CompressedAirAssessment, compressedAirAssessmentResult?: CompressedAirAssessmentResult): CompressedAirModificationValid {
+    compressedAirAssessment: CompressedAirAssessment, settings: Settings, compressedAirAssessmentResult?: CompressedAirAssessmentResult): CompressedAirModificationValid {
     if (!compressedAirAssessmentResult) {
-      compressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(compressedAirAssessment, modification);
+      compressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(compressedAirAssessment, modification, settings);
     }
 
     let addReceiverVolume: boolean = this.checkAddReceiverVolumeValid(modification.addPrimaryReceiverVolume);

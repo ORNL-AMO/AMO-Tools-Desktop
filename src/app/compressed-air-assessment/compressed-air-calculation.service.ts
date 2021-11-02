@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
+import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
+import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { InventoryService } from './inventory/inventory.service';
 import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
 
@@ -54,8 +56,8 @@ enum ComputeFrom {
 @Injectable()
 export class CompressedAirCalculationService {
 
-  constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private convertUnitsService: ConvertUnitsService) { }
+  constructor(private inventoryService: InventoryService,
+    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService) { }
 
   test() {
     console.log(compressorAddon);
@@ -96,7 +98,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
     let isShutdown: boolean = false;
     let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
@@ -111,7 +113,13 @@ export class CompressedAirCalculationService {
       let results: CompressorCalcResult;
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
+        if (settings.unitsOfMeasure == 'Metric') {
+          inputData = this.convertCompressedAirService.convertCentrifugalInputObject(inputData);
+        }
         results = this.suiteCompressorCalcCentrifugal(inputData);
+        if (settings.unitsOfMeasure == 'Metric') {
+          results = this.convertCompressedAirService.convertResults(results);
+        }
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         if (results.capacityCalculated < 0.001) {
@@ -120,7 +128,15 @@ export class CompressedAirCalculationService {
         }
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
+        if (settings.unitsOfMeasure == 'Metric') {
+          inputData = this.convertCompressedAirService.convertInputObject(inputData);
+        } else {
+          inputData.receiverVolume = this.convertUnitsService.value(inputData.receiverVolume).from('gal').to('ft3');
+        }
         results = this.suiteCompressorCalc(inputData);
+        if (settings.unitsOfMeasure == 'Metric') {
+          results = this.convertCompressedAirService.convertResults(results);
+        }
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
         if (results.capacityCalculated < 0.001) {
@@ -236,7 +252,7 @@ export class CompressedAirCalculationService {
     if (additionalRecieverVolume) {
       receiverVolume = receiverVolume + additionalRecieverVolume;
     }
-    receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
+    // receiverVolume = this.convertUnitsService.value(receiverVolume).from('gal').to('ft3');
 
     //lubricant free
     if (lubricantTypeEnumValue == 1) {
