@@ -23,6 +23,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
 
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -80,7 +81,6 @@ export class CondensingEconomizerFormComponent implements OnInit {
   initForm() {
     let condensingEconomizerInput: CondensingEconomizerInput = this.condensingEconomizerService.condensingEconomizerInput.getValue();
     this.form = this.condensingEconomizerFormService.getCondensingEconomizerForm(condensingEconomizerInput, this.settings);
-    this.form.controls.materialTypeId.disable();
     this.form.controls.oxygenCalculationMethod.disable();
     this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
     this.setMaterialProperties();
@@ -185,6 +185,25 @@ export class CondensingEconomizerFormComponent implements OnInit {
     if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  showMaterialModal() {
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+      let newMaterial = this.fuelOptions.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
+        this.form.patchValue({
+          gasTypeId: newMaterial[0].id
+        });
+        this.setMaterialProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.calculate();
   }
 
 }
