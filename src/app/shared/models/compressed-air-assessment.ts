@@ -238,7 +238,10 @@ export interface ProfileSummary {
     dayTypeId: string,
     automaticShutdownTimer?: boolean
     profileSummaryData: Array<ProfileSummaryData>,
-    logToolFieldId?: string
+    logToolFieldId?: string,
+    logToolFieldIdPowerFactor?: string,
+    logToolFieldIdAmps?: string,
+    logToolFieldIdVolts?: string
 }
 
 export interface ProfileSummaryData {
@@ -250,6 +253,9 @@ export interface ProfileSummaryData {
     percentSystemCapacity: number,
     percentSystemPower: number,
     order: number,
+    powerFactor?: number,
+    amps?: number,
+    volts?: number
 }
 
 export interface ProfileSummaryTotal {

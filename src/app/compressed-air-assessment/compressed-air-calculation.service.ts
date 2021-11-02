@@ -96,7 +96,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean, powerFactorData?: { amps: number, volts: number }): CompressorCalcResult {
     let isShutdown: boolean = false;
     let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
@@ -111,6 +111,11 @@ export class CompressedAirCalculationService {
       let results: CompressorCalcResult;
       if (compressor.nameplateData.compressorType == 6) {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
+        //power factor/amps/volts
+        if (computeFrom == 4) {
+          inputData.computeFromPFVoltage = powerFactorData.volts;
+          inputData.computeFromPFAmps = powerFactorData.amps;
+        }
         results = this.suiteCompressorCalcCentrifugal(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
@@ -120,6 +125,11 @@ export class CompressedAirCalculationService {
         }
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
+        //power factor/amps/volts
+        if (computeFrom == 4) {
+          inputData.computeFromPFVoltage = powerFactorData.volts;
+          inputData.computeFromPFAmps = powerFactorData.amps;
+        }
         results = this.suiteCompressorCalc(inputData);
         results.percentagePower = results.percentagePower * 100;
         results.percentageCapacity = results.percentageCapacity * 100;
