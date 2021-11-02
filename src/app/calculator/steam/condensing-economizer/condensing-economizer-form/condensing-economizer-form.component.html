@@ -21,6 +21,8 @@
 
     <div class="form-group">
       <label class="small" for="materialTypeId">Fuel
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add New
+          Fuel</a>
       </label>
       <select name="materialTypeId" class="form-control" formControlName="materialTypeId" id="materialTypeId"
         (change)="setMaterialProperties()" (focus)="focusField('materialTypeId')">
@@ -93,7 +95,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           ).</span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flueGasTemp !== null">{{warnings.flueGasTemp}}</span>
       </span>
       </div>
 
@@ -111,7 +112,7 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.modifiedFlueGasTemperature.invalid && !form.controls.modifiedFlueGasTemperature.pristine">
           <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.required">Value Required</span>
-          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.min">For all practical systems this temperature cannot be higher than
+          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.max">For all practical systems this temperature cannot be higher than
             ({{form.controls.modifiedFlueGasTemperature.errors.max.max}} 
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
@@ -144,12 +145,12 @@
           <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="small">Excess Air</label>
           <div class="text-center small">
             {{calculationExcessAir | number:'2.2-2'}} %
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="form-group" *ngIf="calcMethodExcessAir">
@@ -255,3 +256,15 @@
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
 (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
 </app-operating-hours-modal>
+
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="materialModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-flue-gas-material *ngIf="materialModal.isShown" (closeModal)="hideMaterialModal($event)"
+          (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+      </div>
+    </div>
+  </div>
+</div>
