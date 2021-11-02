@@ -152,9 +152,8 @@ export class PumpFluidComponent implements OnInit {
     if (fluidType && t) {
 
       if (fluidType === 'Other') {
-        return;
-      }
-      if (fluidType === 'Water') {
+        this.save();
+      } else if (fluidType === 'Water') {
         let tTemp = (t - 32) * (5.0 / 9) + 273.15;
         let density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
         let kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;

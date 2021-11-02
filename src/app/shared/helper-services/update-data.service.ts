@@ -53,9 +53,21 @@ export class UpdateDataService {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
 
+        if (assessment.psat.inputs.line_frequency === 0){
+            assessment.psat.inputs.line_frequency = 50;
+        }         
+        if (assessment.psat.inputs.line_frequency === 1){
+            assessment.psat.inputs.line_frequency = 60;
+        } 
         if (assessment.psat.modifications) {
             assessment.psat.modifications.forEach(mod => {
                 mod.psat = this.addWhatIfScenarioPsat(mod.psat);
+                if (mod.psat.inputs.line_frequency === 0){
+                    mod.psat.inputs.line_frequency = 50;
+                }         
+                if (mod.psat.inputs.line_frequency === 1){
+                    mod.psat.inputs.line_frequency = 60;
+                } 
             })
         }
 
