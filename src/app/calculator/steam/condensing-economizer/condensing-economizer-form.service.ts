@@ -38,7 +38,6 @@ export class CondensingEconomizerFormService {
       CO2: [inputObj.CO2, Validators.required],
       SO2: [inputObj.SO2, Validators.required],
       O2: [inputObj.O2, Validators.required],
-
     });
 
     return form;

@@ -95,7 +95,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           ).</span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flueGasTemp !== null">{{warnings.flueGasTemp}}</span>
       </span>
       </div>
 
@@ -113,7 +112,7 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.modifiedFlueGasTemperature.invalid && !form.controls.modifiedFlueGasTemperature.pristine">
           <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.required">Value Required</span>
-          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.min">For all practical systems this temperature cannot be higher than
+          <span *ngIf="form.controls.modifiedFlueGasTemperature.errors.max">For all practical systems this temperature cannot be higher than
             ({{form.controls.modifiedFlueGasTemperature.errors.max.max}} 
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
