@@ -61,7 +61,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
-    this.genericCompressorDbService.getAllCompressors();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
@@ -73,6 +72,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
       } else {
         this.settings = settings;
         this.compressedAirAssessmentService.settings.next(settings);
+        this.genericCompressorDbService.getAllCompressors(this.settings);
       }
     });
 
@@ -154,6 +154,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.indexedDbService.addSettings(settings).then(() => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.genericCompressorDbService.getAllCompressors(this.settings);
         this.compressedAirAssessmentService.settings.next(this.settings);
       });
     });

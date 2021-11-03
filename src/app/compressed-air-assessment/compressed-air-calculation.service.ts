@@ -130,8 +130,12 @@ export class CompressedAirCalculationService {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
         if (settings.unitsOfMeasure == 'Metric') {
           inputData = this.convertCompressedAirService.convertInputObject(inputData);
+          // console.log('METRIC:');
+          // console.log(inputData);
         } else {
           inputData.receiverVolume = this.convertUnitsService.value(inputData.receiverVolume).from('gal').to('ft3');
+          // console.log('IMPERIAL:');
+          // console.log(inputData);
         }
         results = this.suiteCompressorCalc(inputData);
         if (settings.unitsOfMeasure == 'Metric') {
@@ -323,7 +327,8 @@ export class CompressedAirCalculationService {
       unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
       blowdownTime: compressor.designDetails.blowdownTime,
       unloadSumpPressure: compressor.compressorControls.unloadSumpPressure,
-      noLoadPowerFM: compressor.designDetails.noLoadPowerFM / 100
+      noLoadPowerFM: compressor.designDetails.noLoadPowerFM / 100,
+      noLoadDischargePressure: compressor.performancePoints.noLoad.dischargePressure
 
     }
   }
@@ -448,6 +453,7 @@ export interface CompressorsCalcInput {
   unloadSumpPressure: number,
   noLoadPowerFM: number,
   pressureAtUnload: number,
+  noLoadDischargePressure: number
 }
 
 

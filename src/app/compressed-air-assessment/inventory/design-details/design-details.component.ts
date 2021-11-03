@@ -57,10 +57,10 @@ export class DesignDetailsComponent implements OnInit {
     this.inventoryService.collapseDesignDetails = this.contentCollapsed;
   }
 
-  save() {
+  save(updatePerformancePoints: boolean) {
     this.isFormChange = true;
     let designDetails: DesignDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
-    this.compressedAirDataManagementService.updateDesignDetails(designDetails, true);
+    this.compressedAirDataManagementService.updateDesignDetails(designDetails, updatePerformancePoints);
   }
 
   focusField(str: string) {
@@ -102,7 +102,7 @@ export class DesignDetailsComponent implements OnInit {
       }
       if (isNaN(pressureRange) == false && pressureRange != this.form.controls.modulatingPressureRange.value) {
         this.form.controls.modulatingPressureRange.patchValue(pressureRange);
-        this.save();
+        this.save(false);
       }
     }
   }

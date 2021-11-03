@@ -1,5 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
@@ -20,10 +22,12 @@ export class CompressorOptionsTableComponent implements OnInit {
   itemsPerPage: number = 25;
   pageNumber: number = 1;
   filteredCompressors: Array<GenericCompressor>;
+  settings: Settings;
   constructor(private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.genericCompressors = this.genericCompressorDbService.genericCompressors;
     this.filterCompressorOptionsSub = this.inventoryService.filterCompressorOptions.subscribe(val => {
       this.filterCompressorOptions = val;

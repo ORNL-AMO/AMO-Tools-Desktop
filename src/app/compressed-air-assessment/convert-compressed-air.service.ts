@@ -171,25 +171,28 @@ export class ConvertCompressedAirService {
     return profileSummaryData
   }
 
-  roundPressureForPresentation(dischargePressure: number) {
-    dischargePressure = this.roundVal(dischargePressure, 1);
+  roundPressureForPresentation(dischargePressure: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      dischargePressure = this.convertUnitsService.roundVal(dischargePressure, 1);
+    } else {
+      dischargePressure = this.convertUnitsService.roundVal(dischargePressure, 2);
+    }
     return dischargePressure;
   }
 
-  roundAirFlowForPresentation(airflow: number) {
-    airflow = this.roundVal(airflow, 0);
+  roundAirFlowForPresentation(airflow: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      airflow = this.convertUnitsService.roundVal(airflow, 0);
+    } else {
+      airflow = this.convertUnitsService.roundVal(airflow, 3);
+    }
     return airflow;
   }
 
   roundPowerForPresentation(power: number) {
-    power = this.roundVal(power, 1);
+    power = this.convertUnitsService.roundVal(power, 1);
     return power;
   }
-
-  roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits));
-  }
-
 
   convertInputObject(inputObj: CompressorsCalcInput): CompressorsCalcInput {
     //capacity measured: 'm3/min'->'ft3/min'
@@ -197,15 +200,24 @@ export class ConvertCompressedAirService {
       inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
     }
     inputObj.dischargePsiFullLoad = this.convertUnitsService.value(inputObj.dischargePsiFullLoad).from('barg').to('psig');
+    inputObj.noLoadDischargePressure = this.convertUnitsService.value(inputObj.noLoadDischargePressure).from('barg').to('psig');
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.pressureAtUnload = this.convertUnitsService.value(inputObj.pressureAtUnload).from('barg').to('psig');
     inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
     inputObj.dischargePsiMax = this.convertUnitsService.value(inputObj.dischargePsiMax).from('barg').to('psig');
-    inputObj.modulatingPsi = this.convertUnitsService.value(inputObj.modulatingPsi).from('barg').to('psig');
+    // inputObj.modulatingPsi = this.convertUnitsService.value(inputObj.modulatingPsi).from('barg').to('psig');
     inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kPaa').to('psia');
-    inputObj.unloadPointCapacity = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3/min').to('ft3/min');
-    inputObj.receiverVolume = this.convertUnitsService.value(inputObj.unloadPointCapacity).from('m3').to('ft3');
+    inputObj.receiverVolume = this.convertUnitsService.value(inputObj.receiverVolume).from('m3').to('ft3');
+
+    if (inputObj.controlType != 1 && (inputObj.pressureAtUnload && inputObj.dischargePsiMax)) {
+      inputObj.modulatingPsi = inputObj.pressureAtUnload - inputObj.dischargePsiMax
+    } else if (inputObj.noLoadDischargePressure && inputObj.dischargePsiFullLoad) {
+      inputObj.modulatingPsi = inputObj.noLoadDischargePressure - inputObj.dischargePsiFullLoad;
+    }
+    if (isNaN(inputObj.modulatingPsi)) {
+      inputObj.modulatingPsi = -9999;
+    }
     //if lubricant free, hardcoded to 15 no conversion
     if (inputObj.lubricantType != 1) {
       inputObj.unloadSumpPressure = this.convertUnitsService.value(inputObj.unloadSumpPressure).from('barg').to('psig');

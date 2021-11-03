@@ -292,7 +292,7 @@ export class PerformancePointsFormService {
   }
 
   getCompressorPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
-    let min: number = performancePoints.fullLoad.dischargePressure;
+    let min: number = performancePoints.fullLoad.dischargePressure || 0;
     let max: number = 0;
     if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10 || controlType == 5) {
       max = performancePoints.unloadPoint.dischargePressure;

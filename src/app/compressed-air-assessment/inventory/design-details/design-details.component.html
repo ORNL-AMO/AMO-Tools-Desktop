@@ -12,7 +12,7 @@
         <label for="blowdownTime">Blowdown Time</label>
         <div class="input-group">
             <input name="blowdownTime" type="number" step="any" class="form-control" id="blowdownTime"
-                formControlName="blowdownTime" (input)="save()" (focus)="focusField('blowdownTime')">
+                formControlName="blowdownTime" (input)="save(true)" (focus)="focusField('blowdownTime')">
             <span class="units input-group-addon">sec.</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -29,7 +29,7 @@
         <label for="modulatingPressureRange">Proportional Modulating Pressure Range</label>
         <div class="input-group">
             <input name="modulatingPressureRange" type="number" step="any" class="form-control"
-                id="modulatingPressureRange" formControlName="modulatingPressureRange" (input)="save()"
+                id="modulatingPressureRange" formControlName="modulatingPressureRange" (input)="save(true)"
                 (focus)="focusField('modulatingPressureRange')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
@@ -51,7 +51,7 @@
         <label for="inputPressure">Design Inlet Pressure</label>
         <div class="input-group">
             <input name="inputPressure" type="number" step="any" class="form-control" id="inputPressure"
-                formControlName="inputPressure" (input)="save()" (focus)="focusField('inputPressure')">
+                formControlName="inputPressure" (input)="save(true)" (focus)="focusField('inputPressure')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">bara</span>
         </div>
@@ -76,7 +76,7 @@
         <label for="designEfficiency">Motor Design Efficiency</label>
         <div class="input-group">
             <input name="designEfficiency" type="number" step="any" class="form-control" id="designEfficiency"
-                formControlName="designEfficiency" (input)="save()" (focus)="focusField('designEfficiency')">
+                formControlName="designEfficiency" (input)="save(true)" (focus)="focusField('designEfficiency')">
             <span class="units input-group-addon">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -94,7 +94,7 @@
         <label for="serviceFactor">Motor Service Factor</label>
         <div class="input-group">
             <input name="serviceFactor" type="number" step="any" class="form-control" id="serviceFactor"
-                formControlName="serviceFactor" (input)="save()" (focus)="focusField('serviceFactor')">
+                formControlName="serviceFactor" (input)="save(true)" (focus)="focusField('serviceFactor')">
             <!-- <span class="units input-group-addon">%</span> -->
         </div>
         <span class="alert-danger pull-right small"
@@ -113,7 +113,7 @@
         <label for="noLoadPowerFM">Full Modulated Power % of Full Load</label>
         <div class="input-group">
             <input name="noLoadPowerFM" type="number" step="any" class="form-control" id="noLoadPowerFM"
-                formControlName="noLoadPowerFM" (input)="save()" (focus)="focusField('noLoadPowerFM')">
+                formControlName="noLoadPowerFM" (input)="save(true)" (focus)="focusField('noLoadPowerFM')">
             <span class="units input-group-addon">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -127,7 +127,7 @@
         <label for="noLoadPowerUL">Full Unloaded Power % of Full Load</label>
         <div class="input-group">
             <input name="noLoadPowerUL" type="number" step="any" class="form-control" id="noLoadPowerUL"
-                formControlName="noLoadPowerUL" (input)="save()" (focus)="focusField('noLoadPowerUL')">
+                formControlName="noLoadPowerUL" (input)="save(true)" (focus)="focusField('noLoadPowerUL')">
             <span class="units input-group-addon">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -142,7 +142,7 @@
         <label for="maxFullFlowPressure">Max Full Flow Pressure</label>
         <div class="input-group">
             <input name="maxFullFlowPressure" type="number" step="any" class="form-control" id="maxFullFlowPressure"
-                formControlName="maxFullFlowPressure" (input)="save()" (focus)="focusField('maxFullFlowPressure')">
+                formControlName="maxFullFlowPressure" (input)="save(true)" (focus)="focusField('maxFullFlowPressure')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
         </div>
