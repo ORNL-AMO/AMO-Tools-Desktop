@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
@@ -20,10 +21,12 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   modificationResults: CompressedAirAssessmentResult;
   modificationResultsSub: Subscription;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
       this.selectedDayType = val;
       this.setProfile();

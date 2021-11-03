@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
@@ -14,6 +15,8 @@ export class SystemProfilesComponent implements OnInit {
   baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType }>;
   @Input()
   assessmentResults: Array<CompressedAirAssessmentResult>;
+  @Input()
+  settings: Settings;
   // @Input()
   // combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
 
