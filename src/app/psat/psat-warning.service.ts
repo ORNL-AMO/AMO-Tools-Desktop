@@ -316,7 +316,13 @@ export class PsatWarningService {
   //warnings for pump fluid form
   checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
     let rpmError: string = this.checkPumpRpm(psat);
-    let temperatureError: string = this.checkTemperatureError(psat, settings);
+    let temperatureError: string;
+    if(psat.inputs.fluidType !== 'Other'){
+      temperatureError = this.checkTemperatureError(psat, settings);
+    } else {
+      temperatureError = null;      
+    }
+    
     return {
       rpmError: rpmError,
       temperatureError: temperatureError
