@@ -39,7 +39,6 @@ export class OrificeMethodFormComponent implements OnInit {
   }
 
   save() {
-    debugger;
     let airLeakSurveyInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
     let orificeMethodData: OrificeMethodData = this.airLeakFormService.getOrificeObjFromForm(this.orificeMethodForm);
     airLeakSurveyInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex].orificeMethodData = orificeMethodData
@@ -47,9 +46,7 @@ export class OrificeMethodFormComponent implements OnInit {
   }
 
   changeField(str: string) {
-    this.save(); 
     this.airLeakService.currentField.next(str);
-
   }
 
 }

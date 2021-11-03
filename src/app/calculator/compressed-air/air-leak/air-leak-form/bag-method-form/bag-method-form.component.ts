@@ -40,7 +40,6 @@ export class BagMethodFormComponent implements OnInit {
   }
 
   save() {
-    debugger;
     let airLeakSurveyInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
     let bagMethodData = this.airLeakFormService.getBagObjFromForm(this.bagMethodForm);
     airLeakSurveyInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex].bagMethodData = bagMethodData
@@ -48,11 +47,7 @@ export class BagMethodFormComponent implements OnInit {
   }
 
   changeField(str: string) {
-    debugger;
-    this.save();
     this.airLeakService.currentField.next(str);
-    // this.airLeakFormService.saveLeak();
-
   }
 
 }
