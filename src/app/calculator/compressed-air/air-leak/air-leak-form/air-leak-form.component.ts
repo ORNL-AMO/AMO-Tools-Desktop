@@ -68,6 +68,7 @@ export class AirLeakFormComponent implements OnInit {
   }
 
   saveLeak() {
+    debugger;
     let tempForm: AirLeakSurveyData = this.airLeakFormService.getAirLeakObjFromForm(this.leakForm);
     let airLeakInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
     airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex] = tempForm;
@@ -76,6 +77,8 @@ export class AirLeakFormComponent implements OnInit {
 
 
   changeField(str: string) {
+    debugger;
+    this.saveLeak();
     this.airLeakService.currentField.next(str);
   }
 
