@@ -178,6 +178,10 @@ export class UpdateDataService {
             phast.losses.flueGasLosses.forEach(fg => {
                 if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
                     fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
+                } else if (fg.flueGasByMass && !fg.flueGasByMass.moistureInAirCombustion) {
+                    fg.flueGasByMass.moistureInAirCombustion = 0;
+                }  else if (fg.flueGasByVolume && !fg.flueGasByVolume.moistureInAirCombustion) {
+                    fg.flueGasByVolume.moistureInAirCombustion = 0;
                 }
             });
         }

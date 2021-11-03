@@ -83,7 +83,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.carbon.value === '') {
+        if (this.flueGasLossForm.controls.carbon.value === 0) {
           this.setProperties();
         }
       }
