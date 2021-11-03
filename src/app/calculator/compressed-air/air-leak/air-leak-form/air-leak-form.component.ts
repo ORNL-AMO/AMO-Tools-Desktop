@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData } from '../../../../shared/models/standalone';
+import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData, OrificeMethodData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
@@ -21,6 +21,8 @@ export class AirLeakFormComponent implements OnInit {
   currentLeakIndex: number;
   leakForm: FormGroup;
   currentLeakIndexSub: Subscription;
+  airLeakInputSub: Subscription;
+  orificeMethodForm: FormGroup;
 
   measurementMethods: Array<{ display: string, value: number }> = [
     { display: 'Estimate', value: 0 },
@@ -37,6 +39,7 @@ export class AirLeakFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.currentLeakIndexSub.unsubscribe();
+    this.airLeakInputSub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -45,6 +48,12 @@ export class AirLeakFormComponent implements OnInit {
       let airLeakInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
       if (airLeakInput) {
         let tempLeak = airLeakInput.compressedAirLeakSurveyInputVec[value]
+        this.leakForm = this.airLeakFormService.getLeakFormFromObj(tempLeak);
+      }
+    })
+    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(airLeakInput => {
+      if (airLeakInput) {
+        let tempLeak = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
         this.leakForm = this.airLeakFormService.getLeakFormFromObj(tempLeak);
       }
     })
