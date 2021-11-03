@@ -45,7 +45,6 @@ export class EstimateMethodFormComponent implements OnInit {
   }
 
   changeField(str: string) {
-    //this.save();
     this.airLeakService.currentField.next(str);
   }
 
