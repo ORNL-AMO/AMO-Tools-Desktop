@@ -27,11 +27,6 @@
     margin-top: .1rem;
 }
 
-.badge-primary:hover{
-    cursor: pointer;
-    box-shadow: 0 0 0 0.2rem #AED6F1;
-}
-
 .title-item{
     border-bottom: solid black 2px;
     border-left: none;

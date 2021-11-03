@@ -123,9 +123,31 @@ export class ModificationListModalComponent implements OnInit {
     this.closeModal();
   }
 
-  // getBadges(modificationData: WasteWaterData): Array<{ badge: string, componentStr: string }> {
-  //   return this.compareService.getBadges(this.wasteWater.baselineData, modificationData);
-  // }
+  getBadges(modification: Modification): Array<string> {
+    let badges: Array<string> = new Array();
+    if (modification.addPrimaryReceiverVolume.order != 100) {
+      badges.push('Primary Receiver Volume');
+    }
+    if (modification.adjustCascadingSetPoints.order != 100) {
+      badges.push('Adjust Cascading Set Points');
+    }
+    if (modification.improveEndUseEfficiency.order != 100) {
+      badges.push('Improve End Use Efficiency');
+    }
+    if (modification.reduceAirLeaks.order != 100) {
+      badges.push('Reduce Air Leaks');
+    }
+    if (modification.reduceRuntime.order != 100) {
+      badges.push('Reduce Run Time');
+    }
+    if (modification.reduceSystemAirPressure.order != 100) {
+      badges.push('Reduce System Pressure');
+    }
+    if (modification.useAutomaticSequencer.order != 100) {
+      badges.push('Use Automatic Sequencer');
+    }
+    return badges;
+  }
 
   goToModification(modificationId: string, componentStr: string) {
     this.compressedAirAssessmentService.mainTab.next(componentStr);
