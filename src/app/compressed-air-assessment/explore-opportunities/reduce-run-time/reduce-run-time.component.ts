@@ -44,11 +44,17 @@ export class ReduceRunTimeComponent implements OnInit {
   form: FormGroup;
   hasInvalidDayType: boolean;
   settings: Settings;
+  numberPipeDecimals: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.numberPipeDecimals = '1.0-2'
+    }else{
+      this.numberPipeDecimals = '1.0-0'
+    }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));

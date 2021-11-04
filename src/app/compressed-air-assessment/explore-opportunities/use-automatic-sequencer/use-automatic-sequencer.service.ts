@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { UseAutomaticSequencer } from '../../../shared/models/compressed-air-assessment';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class UseAutomaticSequencerService {
@@ -9,7 +10,7 @@ export class UseAutomaticSequencerService {
 
 
   getFormFromObj(useAutomaticSequencer: UseAutomaticSequencer): FormGroup {
-    let varianceValidators: Array<ValidatorFn> = [Validators.min(0), Validators.required];
+    let varianceValidators: Array<ValidatorFn> = [GreaterThanValidator.greaterThan(0), Validators.required];
     if (useAutomaticSequencer.targetPressure) {
       let maxVariance: number = useAutomaticSequencer.targetPressure * .5;
       varianceValidators.push(Validators.max(maxVariance));

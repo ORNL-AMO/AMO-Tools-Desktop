@@ -162,9 +162,9 @@ export class ConvertCompressedAirService {
   convertSystemProfileSummaryData(profileSummaryData: Array<ProfileSummaryData>, oldSettings: Settings, newSettings: Settings): Array<ProfileSummaryData> {
     profileSummaryData.forEach((data: ProfileSummaryData) => {
       if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-        data.airflow = this.convertUnitsService.value(data.airflow).from('ft3/min').to('m3/min');
-      } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
         data.airflow = this.convertUnitsService.value(data.airflow).from('m3/min').to('ft3/min');
+      } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        data.airflow = this.convertUnitsService.value(data.airflow).from('ft3/min').to('m3/min');
       }
       data.airflow = this.convertUnitsService.roundVal(data.airflow, 2);
     });
@@ -357,7 +357,7 @@ export class ConvertCompressedAirService {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       useAutomaticSequencer.targetPressure = this.convertUnitsService.value(useAutomaticSequencer.targetPressure).from('psig').to('barg');
       useAutomaticSequencer.variance = this.convertUnitsService.value(useAutomaticSequencer.variance).from('psia').to('bara');
-    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       useAutomaticSequencer.targetPressure = this.convertUnitsService.value(useAutomaticSequencer.targetPressure).from('barg').to('psig');
       useAutomaticSequencer.variance = this.convertUnitsService.value(useAutomaticSequencer.variance).from('bara').to('psia');
     }

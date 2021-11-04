@@ -56,10 +56,12 @@
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
                 <span *ngIf="form.controls.variance.errors.required">Value Required</span>
-                <span *ngIf="form.controls.variance.errors.min">Value can't be negative.
+                <span *ngIf="form.controls.variance.errors.greaterThan">Value must be greater than 0.
                 </span>
                 <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
-                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}}).
+                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}})
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>.
                 </span>
             </span>
         </div>

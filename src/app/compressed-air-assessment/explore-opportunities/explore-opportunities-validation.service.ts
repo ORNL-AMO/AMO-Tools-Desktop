@@ -180,13 +180,13 @@ export class ExploreOpportunitiesValidationService {
     let profilePower: Array<number> = new Array();
     adjustedProfileSummary.forEach(summary => {
       for (let i = 0; i < numberOfSummaryIntervals; i++) {
-        if (!requiredAirflow[i]) {
+        if (requiredAirflow[i] == undefined) {
           requiredAirflow.push(0);
         }
-        if (!availableAirflow[i]) {
+        if (availableAirflow[i] == undefined) {
           availableAirflow.push(0);
         }
-        if (!profilePower[i]) {
+        if (profilePower[i] == undefined) {
           profilePower.push(0);
         }
         if (summary.profileSummaryData[i].order != 0) {

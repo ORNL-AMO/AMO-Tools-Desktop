@@ -26,7 +26,7 @@
                     <!-- Compressor Name -->
                 </th>
                 <th class="text-center" [ngClass]="{'w-25': hourIntervals.length == 1}">
-                    Capacity <br> 
+                    Capacity <br>
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </th>
@@ -73,7 +73,7 @@
         <tfoot>
             <tr>
                 <td>
-                    Available Airflow, 
+                    Available Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -83,12 +83,12 @@
                 <td></td>
                 <td *ngFor="let airflow of availableAirflow; let index = index"
                     [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
-                    {{airflow | number:'1.0-0'}}
+                    {{airflow | number:numberPipeDecimals}}
                 </td>
             </tr>
             <tr>
                 <td>
-                    Required Airflow, 
+                    Required Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -97,7 +97,7 @@
                 </td>
                 <td></td>
                 <td *ngFor="let airflow of requiredAirflow">
-                    {{airflow| number:'1.0-0'}}
+                    {{airflow| number:numberPipeDecimals}}
                 </td>
             </tr>
             <tr>

@@ -102,7 +102,7 @@
                     </td>
                     <td *ngFor="let airflow of selectedDayType.availableAirflow; let index = index"
                         [ngClass]="{'cell-error': (airflow - selectedDayType.requiredAirflow[index]) < 0}">
-                        {{airflow | number:'1.0-0'}}
+                        {{airflow | number:numberPipeDecimals}}
                     </td>
                 </tr>
                 <tr>
@@ -116,7 +116,7 @@
 
                     </td>
                     <td *ngFor="let airflow of selectedDayType.requiredAirflow">
-                        {{airflow| number:'1.0-0'}}
+                        {{airflow| number:numberPipeDecimals}}
                     </td>
                 </tr>
                 <tr>

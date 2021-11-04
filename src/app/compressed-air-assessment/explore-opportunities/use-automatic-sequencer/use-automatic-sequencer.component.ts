@@ -109,7 +109,6 @@ export class UseAutomaticSequencerComponent implements OnInit {
       if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
         this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
       }
-
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
       this.form.updateValueAndValidity();
       if (this.useAutomaticSequencer.order != 100) {

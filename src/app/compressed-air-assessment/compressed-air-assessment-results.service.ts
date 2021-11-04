@@ -4,13 +4,15 @@ import { CompressedAirCalculationService, CompressorCalcResult } from './compres
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
 import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class CompressedAirAssessmentResultsService {
 
   flowReallocationSummaries: Array<FlowReallocationSummary>;
   constructor(private compressedAirCalculationService: CompressedAirCalculationService,
-    private performancePointCalculationsService: PerformancePointCalculationsService) { }
+    private performancePointCalculationsService: PerformancePointCalculationsService,
+    private convertUnitsService: ConvertUnitsService) { }
 
 
   calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment, settings: Settings, baselineProfileSummaries?: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>): BaselineResults {
@@ -165,7 +167,8 @@ export class CompressedAirAssessmentResultsService {
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedData.adjustedProfileSummary, numberOfSummaryIntervals, modification.improveEndUseEfficiency);
       let totalImplementationCost: number = this.getTotalImplementationCost(modification);
       let allSavingsResults: EemSavingsResults = this.calculateSavings(baselineProfileSummary, adjustedData.adjustedProfileSummary, dayType, compressedAirAssessmentCopy.systemBasics.electricityCost, totalImplementationCost, numberOfSummaryIntervals, adjustedData.auxiliaryPowerUsage);
-      let peakDemand: number = _.maxBy(totals, (result) => { return result.totalPower }).totalPower;
+      let peakDemandObj: ProfileSummaryTotal = _.maxBy(totals, (result) => { return result.totalPower });
+      let peakDemand: number = peakDemandObj?.totalPower || 0;
       let peakDemandCost: number = peakDemand * 12 * compressedAirAssessmentCopy.systemBasics.demandCost;
       let totalModifiedAnnualOperatingCost: number = peakDemandCost + allSavingsResults.adjustedResults.cost;
       modificationResults.push({
@@ -422,7 +425,7 @@ export class CompressedAirAssessmentResultsService {
       } else if (modification.useAutomaticSequencer.order == orderIndex) {
         //USE AUTOMATIC SEQUENCER
         adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors, modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId);
-        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
+        let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals, undefined);
         adjustedProfileSummary = this.useAutomaticSequencerMapOrders(modification.useAutomaticSequencer.profileSummary, adjustedProfileSummary);
         adjustedProfileSummary = this.reallocateFlow(dayType, settings, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, totalAirStorage, reduceRuntime);
         useAutomaticSequencerProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
@@ -493,7 +496,7 @@ export class CompressedAirAssessmentResultsService {
               computeFromVal = summaryData.powerFactor;
             }
             let calcResult: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, settings, computeFrom, computeFromVal, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage, 0, true, powerFactorData);
-            summaryData.airflow = calcResult.capacityCalculated;
+            summaryData.airflow = this.convertUnitsService.roundVal(calcResult.capacityCalculated, 2);
             summaryData.power = calcResult.powerCalculated;
             summaryData.percentCapacity = calcResult.percentageCapacity;
             summaryData.percentPower = calcResult.percentagePower;
@@ -533,7 +536,7 @@ export class CompressedAirAssessmentResultsService {
           totalAirFlow += dataItem.airflow;
           compressorPower += dataItem.power;
         }
-      })
+      });
       let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
       totals.push({
         auxiliaryPower: auxiliaryPower,
@@ -620,7 +623,7 @@ export class CompressedAirAssessmentResultsService {
           fullLoadAirFlow = 0;
         }
         //calc with full load
-        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true);
+        let calculateFullLoad: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true, undefined);
         let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
         //if excess air added then reduce amount and calc again
         if (tmpNeededAirFlow < 0 && (fullLoadAirFlow + tmpNeededAirFlow) > 0) {
