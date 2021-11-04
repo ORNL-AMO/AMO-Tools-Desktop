@@ -58,16 +58,21 @@
         <div class="input-group">
             <div class="d-flex flex-column">
                 <div class="d-flex">
-                    <label class="w-100" for="Fixed">
-                        <input type="radio" id="Fixed" (focus)="helpTextField('airflowReductionType')"
+                    <label class="w-100" for="{{'Fixed_'+itemIndex}}">
+                        <input type="radio" id="{{'Fixed_'+itemIndex}}" (focus)="helpTextField('airflowReductionType')"
                             formControlName="reductionType" value="Fixed" (change)="changeReductionType()"
                             class="mr-2">Fixed</label>
                 </div>
                 <div class="d-flex">
-                    <label class="w-100" for="Variable">
-                        <input type="radio" id="Variable" (focus)="helpTextField('airflowReductionType')"
-                            formControlName="reductionType" value="Variable" (change)="changeReductionType()"
-                            class="mr-2">Variable</label>
+                    <label class="w-100" for="{{'Variable_'+itemIndex}}">
+                        <input type="radio" id="{{'Variable_'+itemIndex}}"
+                            (focus)="helpTextField('airflowReductionType')" formControlName="reductionType"
+                            value="Variable" (change)="changeReductionType()" class="mr-2">Variable
+                        <span class="text-muted"
+                            *ngIf="settings.unitsOfMeasure == 'Imperial' && form.controls.reductionType.value == 'Variable'">(acfm)</span>
+                        <span class="text-muted"
+                            *ngIf="settings.unitsOfMeasure == 'Metric' && form.controls.reductionType.value == 'Variable'">(m<sup>3</sup>/min)</span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -126,7 +131,7 @@
                             &#60; 0
                         </span>
                         <span *ngIf="item.value.errors.max">
-                            &#62; {{item.value.errors.max.max | number:'1.0-0'}}
+                            &#62; {{item.value.errors.max.max | number:numberPipeDecimals}}
                         </span>
                     </div>
                 </td>

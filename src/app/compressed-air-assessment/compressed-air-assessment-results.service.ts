@@ -377,7 +377,7 @@ export class CompressedAirAssessmentResultsService {
         //adjust compressors
         adjustedCompressors = this.adjustCascadingSetPointsAdjustCompressors(adjustedCompressors, modification.adjustCascadingSetPoints);
         //adjusted air flow based on compressor pressure changes
-        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary, atmosphericPressure, dayType)
+        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, settings, adjustedCompressors, adjustedProfileSummary, atmosphericPressure, dayType)
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.reallocateFlow(dayType, settings, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, totalAirStorage, reduceRuntime);
         adjustCascadingSetPointsProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
@@ -415,7 +415,7 @@ export class CompressedAirAssessmentResultsService {
         //adjust compressors
         adjustedCompressors = this.reduceSystemAirPressureAdjustCompressors(adjustedCompressors, modification.reduceSystemAirPressure);
         //adjusted air flow based on compressor reduction
-        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, adjustedCompressors, adjustedProfileSummary, atmosphericPressure)
+        adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, settings, adjustedCompressors, adjustedProfileSummary, atmosphericPressure)
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
         adjustedProfileSummary = this.reallocateFlow(dayType, settings, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, totalAirStorage, reduceRuntime);
         reduceSystemAirPressureProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
@@ -797,13 +797,13 @@ export class CompressedAirAssessmentResultsService {
     return adjustedCompressors;
   }
 
-  systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItem>, adjustedCompressors: Array<CompressorInventoryItem>, adjustedProfileSummary: Array<ProfileSummary>, atmosphericPressure: number, dayType?: CompressedAirDayType): Array<ProfileSummary> {
+  systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItem>, settings: Settings, adjustedCompressors: Array<CompressorInventoryItem>, adjustedProfileSummary: Array<ProfileSummary>, atmosphericPressure: number, dayType?: CompressedAirDayType): Array<ProfileSummary> {
     //reduce airflow
     adjustedProfileSummary.forEach(profile => {
       let ogCompressors: CompressorInventoryItem = originalCompressors.find(ogCompressor => { return ogCompressor.itemId == profile.compressorId });
       let adjustedCompressor: CompressorInventoryItem = adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.itemId == profile.compressorId });
       profile.profileSummaryData.forEach(summaryData => {
-        summaryData.airflow = this.calculateReducedAirFlow(summaryData.airflow, adjustedCompressor.performancePoints.fullLoad.dischargePressure, atmosphericPressure, ogCompressors.performancePoints.fullLoad.dischargePressure);
+        summaryData.airflow = this.calculateReducedAirFlow(summaryData.airflow, adjustedCompressor.performancePoints.fullLoad.dischargePressure, atmosphericPressure, ogCompressors.performancePoints.fullLoad.dischargePressure, settings);
       });
     });
     if (dayType) {
@@ -927,12 +927,25 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
-  calculateReducedAirFlow(c_usage: number, adjustedFullLoadDischargePressure: number, p_alt: number, originalFullLoadDischargePressure: number): number {
+  calculateReducedAirFlow(c_usage: number, adjustedFullLoadDischargePressure: number, p_alt: number, originalFullLoadDischargePressure: number, settings: Settings): number {
     if (adjustedFullLoadDischargePressure == originalFullLoadDischargePressure) {
       return c_usage;
     } else {
-      let p: number = (adjustedFullLoadDischargePressure + p_alt) / (originalFullLoadDischargePressure + 14.7);
-      return (c_usage - (c_usage - (c_usage * p)) * .6);
+      if (settings.unitsOfMeasure == 'Imperial') {
+        let p: number = (adjustedFullLoadDischargePressure + p_alt) / (originalFullLoadDischargePressure + 14.7);
+        let reduceFlow: number = (c_usage - (c_usage - (c_usage * p)) * .6);
+        return reduceFlow;
+      } else {
+        //for metric convert values to imperial calcs and then convert back to metric
+        let c_usage_imperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(c_usage))).from('m3/min').to('ft3/min');
+        let adjustedFullLoadDischargePressureImperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(adjustedFullLoadDischargePressure))).from('barg').to('psig');
+        let p_alt_imperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(p_alt))).from('kPaa').to('psia');
+        let ogDischargePressureImperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(originalFullLoadDischargePressure))).from('barg').to('psig');
+        let p: number = (adjustedFullLoadDischargePressureImperial + p_alt_imperial) / (ogDischargePressureImperial + 14.7);
+        let reducedFlow: number = (c_usage_imperial - (c_usage_imperial - (c_usage_imperial * p)) * .6);
+        reducedFlow = this.convertUnitsService.value(reducedFlow).from('ft3/min').to('m3/min');
+        return reducedFlow;
+      }
     }
   }
 

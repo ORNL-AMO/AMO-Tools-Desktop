@@ -33,10 +33,16 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: FormGroup }>;
   hasInvalidForm: boolean;
   settings: Settings;
+  numberPipeDecimals: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.numberPipeDecimals = '1.0-2'
+    }else{
+      this.numberPipeDecimals = '1.0-0'
+    }
     this.form = this.improveEndUseEfficiencyService.getFormFromObj(this.item, this.baselineResults);
     this.dataForms = this.improveEndUseEfficiencyService.getDataForms(this.item, this.baselineProfileSummaries);
     this.setHasInvalidDataForm();
