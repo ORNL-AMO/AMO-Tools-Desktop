@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, SystemInformation, SystemProfile } from '../shared/models/compressed-air-assessment';
+import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, ImproveEndUseEfficiency, InletConditions, Modification, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, SystemProfile, UseAutomaticSequencer } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from './compressed-air-calculation.service';
 
@@ -11,11 +11,11 @@ export class ConvertCompressedAirService {
 
   convertCompressedAir(compressedAirAssessment: CompressedAirAssessment, oldSettings: Settings, newSettings: Settings): CompressedAirAssessment {
     compressedAirAssessment = this.convertCompressedAirAssessmentData(compressedAirAssessment, oldSettings, newSettings);
-    // if (compressedAirAssessment.modifications && compressedAirAssessment.modifications.length > 0) {
-    //   compressedAirAssessment.modifications.forEach(modification => {
-    //     modification = this.convertCompressedAirAssessmentData(modification, oldSettings, newSettings);
-    //   });
-    // }
+    if (compressedAirAssessment.modifications) {
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification = this.convertModification(modification, oldSettings, newSettings);
+      });
+    }
     return compressedAirAssessment;
   }
 
@@ -33,13 +33,13 @@ export class ConvertCompressedAirService {
       // dbl check
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('m3').to('gal');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('barg').to('psig');
-      systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('barg').to('psig');
+      systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('bara').to('psia');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       systemInformation.atmosphericPressure = this.convertUnitsService.value(systemInformation.atmosphericPressure).from('psia').to('kPaa');
       systemInformation.systemElevation = this.convertUnitsService.value(systemInformation.systemElevation).from('ft').to('m');
       systemInformation.totalAirStorage = this.convertUnitsService.value(systemInformation.totalAirStorage).from('gal').to('m3');
       systemInformation.targetPressure = this.convertUnitsService.value(systemInformation.targetPressure).from('psig').to('barg');
-      systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('psig').to('barg');
+      systemInformation.variance = this.convertUnitsService.value(systemInformation.variance).from('psia').to('bara');
     }
     systemInformation.atmosphericPressure = this.convertUnitsService.roundVal(systemInformation.atmosphericPressure, 2);
     systemInformation.systemElevation = this.convertUnitsService.roundVal(systemInformation.systemElevation, 2);
@@ -252,5 +252,117 @@ export class ConvertCompressedAirService {
     result.capacityAtMaxFullFlowAdjusted = this.convertUnitsService.value(result.capacityAtMaxFullFlowAdjusted).from('ft3/min').to('m3/min');
     result.surgeFlow = this.convertUnitsService.value(result.surgeFlow).from('ft3/min').to('m3/min');
     return result;
+  }
+
+  convertModification(modification: Modification, oldSettings: Settings, newSettings: Settings): Modification {
+    modification.addPrimaryReceiverVolume = this.convertAddPrimaryReceiverVolume(modification.addPrimaryReceiverVolume, oldSettings, newSettings);
+    modification.adjustCascadingSetPoints = this.convertAdjustCascadingSetPoints(modification.adjustCascadingSetPoints, oldSettings, newSettings);
+    modification.improveEndUseEfficiency = this.convertImproveEndUseEfficiency(modification.improveEndUseEfficiency, oldSettings, newSettings);
+    modification.reduceAirLeaks = this.convertAirLeaks(modification.reduceAirLeaks, oldSettings, newSettings);
+    modification.reduceRuntime = this.convertReduceRuntime(modification.reduceRuntime, oldSettings, newSettings);
+    modification.reduceSystemAirPressure = this.convertReduceSystemAirPressure(modification.reduceSystemAirPressure, oldSettings, newSettings);
+    modification.useAutomaticSequencer = this.convertUseAutomaticSequencer(modification.useAutomaticSequencer, oldSettings, newSettings);
+    return modification;
+  }
+
+
+  convertAddPrimaryReceiverVolume(addPrimaryReceiverVolume: AddPrimaryReceiverVolume, oldSettings: Settings, newSettings: Settings): AddPrimaryReceiverVolume {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      addPrimaryReceiverVolume.increasedVolume = this.convertUnitsService.value(addPrimaryReceiverVolume.increasedVolume).from('gal').to('m3');
+      addPrimaryReceiverVolume.increasedVolume = this.convertUnitsService.roundVal(addPrimaryReceiverVolume.increasedVolume, 2);
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      addPrimaryReceiverVolume.increasedVolume = this.convertUnitsService.value(addPrimaryReceiverVolume.increasedVolume).from('m3').to('gal');
+      addPrimaryReceiverVolume.increasedVolume = this.convertUnitsService.roundVal(addPrimaryReceiverVolume.increasedVolume, 2);
+    }
+    return addPrimaryReceiverVolume;
+  }
+
+  convertAdjustCascadingSetPoints(adjustCascadingSetPoints: AdjustCascadingSetPoints, oldSettings: Settings, newSettings: Settings): AdjustCascadingSetPoints {
+    adjustCascadingSetPoints.setPointData.forEach(dataPoint => {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        dataPoint.fullLoadDischargePressure = this.convertUnitsService.value(dataPoint.fullLoadDischargePressure).from('psig').to('barg');
+        dataPoint.maxFullFlowDischargePressure = this.convertUnitsService.value(dataPoint.maxFullFlowDischargePressure).from('psig').to('barg');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        dataPoint.fullLoadDischargePressure = this.convertUnitsService.value(dataPoint.fullLoadDischargePressure).from('barg').to('psig');
+        dataPoint.maxFullFlowDischargePressure = this.convertUnitsService.value(dataPoint.maxFullFlowDischargePressure).from('barg').to('psig');
+      }
+      dataPoint.fullLoadDischargePressure = this.convertUnitsService.roundVal(dataPoint.fullLoadDischargePressure, 2);
+      dataPoint.maxFullFlowDischargePressure = this.convertUnitsService.roundVal(dataPoint.maxFullFlowDischargePressure, 2);
+    });
+    return adjustCascadingSetPoints;
+  }
+
+  convertImproveEndUseEfficiency(improveEndUseEfficiency: ImproveEndUseEfficiency, oldSettings: Settings, newSettings: Settings): ImproveEndUseEfficiency {
+    improveEndUseEfficiency.endUseEfficiencyItems.forEach(efficiencyItem => {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        efficiencyItem.airflowReduction = this.convertUnitsService.value(efficiencyItem.airflowReduction).from('ft3/min').to('m3/min');
+        efficiencyItem.reductionData.forEach(dataItem => {
+          dataItem.data.forEach(data => {
+            if (isNaN(data.reductionAmount) == false) {
+              data.reductionAmount = this.convertUnitsService.value(data.reductionAmount).from('ft3/min').to('m3/min');
+              data.reductionAmount = this.convertUnitsService.roundVal(data.reductionAmount, 2);
+            }
+          });
+        })
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        efficiencyItem.airflowReduction = this.convertUnitsService.value(efficiencyItem.airflowReduction).from('m3/min').to('ft3/min');
+        efficiencyItem.reductionData.forEach(dataItem => {
+          dataItem.data.forEach(data => {
+            if (isNaN(data.reductionAmount) == false) {
+              data.reductionAmount = this.convertUnitsService.value(data.reductionAmount).from('m3/min').to('ft3/min');
+              data.reductionAmount = this.convertUnitsService.roundVal(data.reductionAmount, 2);
+            }
+          });
+        })
+      }
+      efficiencyItem.airflowReduction = this.convertUnitsService.roundVal(efficiencyItem.airflowReduction, 2);
+    })
+    return improveEndUseEfficiency;
+  }
+
+  convertAirLeaks(reduceAirLeaks: ReduceAirLeaks, oldSettings: Settings, newSettings: Settings): ReduceAirLeaks {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      reduceAirLeaks.leakFlow = this.convertUnitsService.value(reduceAirLeaks.leakFlow).from('ft3/min').to('m3/min');
+      reduceAirLeaks.leakFlow = this.convertUnitsService.roundVal(reduceAirLeaks.leakFlow, 2);
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      reduceAirLeaks.leakFlow = this.convertUnitsService.value(reduceAirLeaks.leakFlow).from('m3/min').to('ft3/min');
+      reduceAirLeaks.leakFlow = this.convertUnitsService.roundVal(reduceAirLeaks.leakFlow, 2);
+    }
+    return reduceAirLeaks;
+  }
+
+  convertReduceRuntime(reduceRuntime: ReduceRuntime, oldSettings: Settings, newSettings: Settings): ReduceRuntime {
+    reduceRuntime.runtimeData.forEach(dataItem => {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        dataItem.fullLoadCapacity = this.convertUnitsService.value(dataItem.fullLoadCapacity).from('ft3/min').to('m3/min');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        dataItem.fullLoadCapacity = this.convertUnitsService.value(dataItem.fullLoadCapacity).from('m3/min').to('ft3/min');
+      }
+      dataItem.fullLoadCapacity = this.convertUnitsService.roundVal(dataItem.fullLoadCapacity, 2);
+    });
+    return reduceRuntime;
+  }
+
+  convertReduceSystemAirPressure(reduceSystemAirPressure: ReduceSystemAirPressure, oldSettings: Settings, newSettings: Settings): ReduceSystemAirPressure {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      reduceSystemAirPressure.averageSystemPressureReduction = this.convertUnitsService.value(reduceSystemAirPressure.averageSystemPressureReduction).from('psig').to('barg');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      reduceSystemAirPressure.averageSystemPressureReduction = this.convertUnitsService.value(reduceSystemAirPressure.averageSystemPressureReduction).from('barg').to('psig');
+    }
+    reduceSystemAirPressure.averageSystemPressureReduction = this.convertUnitsService.roundVal(reduceSystemAirPressure.averageSystemPressureReduction, 2);
+    return reduceSystemAirPressure;
+  }
+
+  convertUseAutomaticSequencer(useAutomaticSequencer: UseAutomaticSequencer, oldSettings: Settings, newSettings: Settings): UseAutomaticSequencer {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      useAutomaticSequencer.targetPressure = this.convertUnitsService.value(useAutomaticSequencer.targetPressure).from('psig').to('barg');
+      useAutomaticSequencer.variance = this.convertUnitsService.value(useAutomaticSequencer.variance).from('psia').to('bara');
+    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      useAutomaticSequencer.targetPressure = this.convertUnitsService.value(useAutomaticSequencer.targetPressure).from('barg').to('psig');
+      useAutomaticSequencer.variance = this.convertUnitsService.value(useAutomaticSequencer.variance).from('bara').to('psia');
+    }
+    useAutomaticSequencer.targetPressure = this.convertUnitsService.roundVal(useAutomaticSequencer.targetPressure, 2);
+    useAutomaticSequencer.variance = this.convertUnitsService.roundVal(useAutomaticSequencer.variance, 2);
+    return useAutomaticSequencer;
   }
 }

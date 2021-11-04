@@ -50,8 +50,8 @@
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="variance" name="variance"
                     (focus)="helpTextField('variance')" id="variance" (input)="save(false)">
-                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
