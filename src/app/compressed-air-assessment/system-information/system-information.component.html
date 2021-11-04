@@ -124,21 +124,21 @@
             <div class="input-group">
                 <input name="variance" type="number" step="any" class="form-control" id="variance"
                     formControlName="variance" (input)="save()" (focus)="focusField('variance')" min="0">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">bara</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
                 <span *ngIf="form.controls.variance.errors.required">Value Required</span>
                 <span *ngIf="form.controls.variance.errors.min">Value can't be less than
                     {{form.controls.variance.errors.min.min}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>.
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>.
                 </span>
                 <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
                     ({{form.controls.variance.errors.max.max | number:'1.0-0'}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>).
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>).
                 </span>
             </span>
         </div>

@@ -4,6 +4,9 @@ import { InventoryService } from '../../inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions, ControlType, ControlTypes } from '../../inventoryOptions';
 import { FilterCompressorOptions } from '../filter-compressors.pipe';
 import * as _ from 'lodash';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-filter-compressors',
@@ -18,9 +21,12 @@ export class FilterCompressorsComponent implements OnInit {
   horsePowerOptions: Array<number>;
   minLabel: string = 'Min';
   maxLabel: string = 'Max';
-  constructor(private inventoryService: InventoryService, private genericCompressorDbService: GenericCompressorDbService) { }
+  settings: Settings;
+  constructor(private inventoryService: InventoryService, private genericCompressorDbService: GenericCompressorDbService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     let genericCompressors: Array<GenericCompressor> = this.genericCompressorDbService.genericCompressors;
 
     let uniqHpCompressors: Array<GenericCompressor> = _.uniqBy(genericCompressors, 'HP');
@@ -28,7 +34,7 @@ export class FilterCompressorsComponent implements OnInit {
 
     this.compressorTypeOptions = CompressorTypeOptions;
     this.filterCompressorOptions = this.inventoryService.filterCompressorOptions.getValue();
-    if (this.filterCompressorOptions == undefined) {
+    if (this.filterCompressorOptions == undefined || this.filterCompressorOptions.unitsOfMeasure != this.settings.unitsOfMeasure) {
       this.initFilterCompressorOptions(genericCompressors);
     }
     this.setControlTypes();
@@ -45,7 +51,8 @@ export class FilterCompressorsComponent implements OnInit {
       ratedPressureMin: Math.floor(_.minBy(genericCompressors, 'RatedPressure').RatedPressure),
       ratedPressureMax: Math.ceil(_.maxBy(genericCompressors, 'RatedPressure').RatedPressure),
       maxFullFlowMin: Math.floor(_.minBy(genericCompressors, 'MaxFullFlowPressure').MaxFullFlowPressure),
-      maxFullFlowMax: Math.ceil(_.maxBy(genericCompressors, 'MaxFullFlowPressure').MaxFullFlowPressure)
+      maxFullFlowMax: Math.ceil(_.maxBy(genericCompressors, 'MaxFullFlowPressure').MaxFullFlowPressure),
+      unitsOfMeasure: this.settings.unitsOfMeasure
     }
     this.save();
   }

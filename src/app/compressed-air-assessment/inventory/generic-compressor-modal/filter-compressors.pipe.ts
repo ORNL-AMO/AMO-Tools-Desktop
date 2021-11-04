@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { GenericCompressor } from '../../generic-compressor-db.service';
 import * as _ from 'lodash';
-import { filter } from 'lodash';
-
 
 @Pipe({
   name: 'filterCompressors',
@@ -61,5 +59,6 @@ export interface FilterCompressorOptions {
   ratedPressureMin: number,
   ratedPressureMax: number,
   maxFullFlowMin: number,
-  maxFullFlowMax: number
+  maxFullFlowMax: number,
+  unitsOfMeasure: string
 }

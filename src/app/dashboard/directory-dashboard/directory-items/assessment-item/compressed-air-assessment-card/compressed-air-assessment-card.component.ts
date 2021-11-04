@@ -35,12 +35,12 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
     this.setupDone = this.assessment.compressedAirAssessment.setupDone;
     if (this.setupDone) {
       this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-      this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment);
+      this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment, this.settings);
       this.numMods = this.assessment.compressedAirAssessment.modifications.length;
 
       let baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }> = new Array();
       this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType);
+        let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType, this.settings);
         let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(
           this.assessment.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.assessment.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
         )
@@ -52,9 +52,9 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
       });
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
-        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment)
+        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings)
         if (modificationValid) {
-          let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification);
+          let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification, this.settings);
           if (modificationResults.totalCostSavings > this.maxCostSavings) {
             this.maxCostSavings = modificationResults.totalCostSavings;
           }

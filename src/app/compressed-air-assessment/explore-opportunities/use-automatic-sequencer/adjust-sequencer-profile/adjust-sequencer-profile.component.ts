@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { InventoryService } from '../../../inventory/inventory.service';
 
 @Component({
@@ -26,13 +27,21 @@ export class AdjustSequencerProfileComponent implements OnInit {
   hasError: boolean;
   @Input()
   profilePower: Array<number>;
+  @Input()
+  settings: Settings;
 
   orderingOptions: Array<number>;
   hourIntervals: Array<number>;
   fillRight: boolean = false;
+  numberPipeDecimals: string;
   constructor(private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.numberPipeDecimals = '1.0-2'
+    }else{
+      this.numberPipeDecimals = '1.0-0'
+    }
     this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup);
     this.setOrderingOptions(this.compressedAirAssessment.compressorInventoryItems);
   }

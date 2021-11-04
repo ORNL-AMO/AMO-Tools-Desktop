@@ -12,7 +12,8 @@
                     Annual Op. Hours
                 </th>
                 <th>
-                    Avg. Airflow, acfm
+                    Avg. Airflow, <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </th>
                 <th>
                     Avg. Airflow, %C

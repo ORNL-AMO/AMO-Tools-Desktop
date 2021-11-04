@@ -26,7 +26,9 @@
                     <!-- Compressor Name -->
                 </th>
                 <th class="text-center" [ngClass]="{'w-25': hourIntervals.length == 1}">
-                    Capacity <br> acfm
+                    Capacity <br>
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </th>
                 <th class="text-center" [ngClass]="{'w-25': hourIntervals.length == 1}">
                     Shutdown <br>
@@ -40,13 +42,14 @@
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
                 <td class="bold text-center">
-                    {{summary.compressorId|compressorName:adjustedCompressors}} {{summary.compressorId}} {{selectedDayTypeId}}
+                    {{summary.compressorId|compressorName:adjustedCompressors}}
                 </td>
                 <td class="text-center">
                     {{getFullLoadCapacity(summary.compressorId)}}
                 </td>
                 <td class="text-center">
-                    <input *ngIf="checkShowShutdownTimer(summary.compressorId)" type="checkbox" [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
+                    <input *ngIf="checkShowShutdownTimer(summary.compressorId)" type="checkbox"
+                        [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
                 </td>
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">
@@ -66,11 +69,13 @@
                 </td>
             </tr>
         </tbody>
-        
+
         <tfoot>
             <tr>
                 <td>
-                    Available Airflow, acfm
+                    Available Airflow,
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
                 <td>
 
@@ -78,21 +83,23 @@
                 <td></td>
                 <td *ngFor="let airflow of availableAirflow; let index = index"
                     [ngClass]="{'cell-error': (airflow - requiredAirflow[index]) < 0}">
-                    {{airflow | number:'1.0-0'}}
+                    {{airflow | number:numberPipeDecimals}}
                 </td>
             </tr>
             <tr>
                 <td>
-                    Required Airflow, acfm
+                    Required Airflow,
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
                 <td>
 
                 </td>
                 <td></td>
                 <td *ngFor="let airflow of requiredAirflow">
-                    {{airflow| number:'1.0-0'}}
+                    {{airflow| number:numberPipeDecimals}}
                 </td>
-            </tr> 
+            </tr>
             <tr>
                 <td>
                     Power, kW

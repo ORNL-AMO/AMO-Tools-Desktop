@@ -7,6 +7,7 @@ import { ExploreOpportunitiesService } from '../../explore-opportunities/explore
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
 import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -38,10 +39,12 @@ export class SystemProfileGraphsComponent implements OnInit {
   totalFullLoadCapacity: number;
   showingCapacityMaxSub: Subscription;
   showingPowerMaxSub: Subscription;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
       if (!this.inModification) {
@@ -64,7 +67,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     });
 
     if (this.inModification) {
-     this.initModificationSubs();
+      this.initModificationSubs();
     }
   }
 
@@ -97,19 +100,19 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   setProfileData() {
     if (!this.inModification && this.compressedAirAssessment && this.selectedDayType) {
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings);
       this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
       this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
     } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
       let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
       let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
-      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, modification);
+      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, modification, this.settings);
       let dayTypeModificationResult: DayTypeModificationResult = compressedAirAssessmentResult.dayTypeModificationResults.find(dayTypeResult => { return dayTypeResult.dayTypeId == this.selectedDayType.dayTypeId });
       this.profileSummary = dayTypeModificationResult.adjustedProfileSummary;
       this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, dayTypeModificationResult.adjustedCompressors);
       this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
     } else if (this.compressedAirAssessment && this.selectedDayType && this.isBaseline) {
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType);
+      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings);
       this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
       this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
     }
@@ -139,7 +142,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [yMaxvalue, yMaxvalue],
         type: 'scatter',
-        showlegend: this.isBaseline === false? false : true,
+        showlegend: this.isBaseline === false ? false : true,
         mode: 'lines',
         name: name,
         line: {
@@ -152,21 +155,21 @@ export class SystemProfileGraphsComponent implements OnInit {
       return maxLineTrace;
     }
   }
-  
+
   setYAxisRanges(baselineSummary: Array<ProfileSummary>, modificationSummary: Array<ProfileSummary>) {
     let powerMax: Array<number> = [
-      this.getStackedPowerMax(baselineSummary), 
+      this.getStackedPowerMax(baselineSummary),
       this.getStackedPowerMax(modificationSummary)
     ];
 
     let airflowMax: Array<number> = [
-      this.getStackedAirFlowMax(baselineSummary), 
+      this.getStackedAirFlowMax(baselineSummary),
       this.getStackedAirFlowMax(modificationSummary)
     ];
 
     let yAxisRanges = {
-      systemPowerGraph: {min: 0, max: _.max(powerMax) },
-      systemCapacityGraph: {min: 0, max: _.max(airflowMax) },
+      systemPowerGraph: { min: 0, max: _.max(powerMax) },
+      systemCapacityGraph: { min: 0, max: _.max(airflowMax) },
     };
 
     this.systemProfileGraphService.yAxisRangeValues.next(yAxisRanges);
@@ -226,13 +229,13 @@ export class SystemProfileGraphsComponent implements OnInit {
   updateLayout(chart: any, chartRef: ElementRef) {
     chart.on('plotly_legendclick', (data) => {
       if (data.curveNumber == 2) {
-        if (chartRef.nativeElement.id == 'systemCapacityGraph'){
+        if (chartRef.nativeElement.id == 'systemCapacityGraph') {
           this.systemProfileGraphService.showingCapacityMax.next(!this.systemProfileGraphService.showingCapacityMax.getValue());
           this.drawSystemCapacityChart();
         } else {
           this.systemProfileGraphService.showingPowerMax.next(!this.systemProfileGraphService.showingPowerMax.getValue());
           this.drawSystemPowerChart();
-        } 
+        }
       }
     });
   }
@@ -267,14 +270,19 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(true, this.totalFullLoadCapacity);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
       let xRange: Array<number> = [1, xRangeMax];
-      var layout = this.getLayout("System Capacity (acfm)", xRange, yAxisRange, undefined);
+      let unit: string = 'acfm';
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        unit = 'm&#xB3;/min'
+      }
+      let yAxisTitle: string = "System Capacity (" + unit + ")";
+      var layout = this.getLayout(yAxisTitle, xRange, yAxisRange, undefined);
       var config = {
         responsive: true,
         displaylogo: false
       };
-      
+
       if (this.isBaseline !== false || (this.isBaseline === false && this.systemProfileGraphService.showingCapacityMax.getValue() === true)) {
         let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
         traceData.push(maxLineTrace);
@@ -289,16 +297,16 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   getYAxisRange(isCapacityGraph: boolean, maxValue: number): Array<number> {
     let yAxisRanges: AxisRanges = this.systemProfileGraphService.yAxisRangeValues.getValue();
-    let graphDataMin: number;  
+    let graphDataMin: number;
     let graphDataMax: number;
     let showingMax: boolean;
     if (isCapacityGraph) {
       showingMax = this.systemProfileGraphService.showingCapacityMax.getValue();
-      graphDataMin = yAxisRanges.systemCapacityGraph.min;  
+      graphDataMin = yAxisRanges.systemCapacityGraph.min;
       graphDataMax = yAxisRanges.systemCapacityGraph.max;
     } else {
       showingMax = this.systemProfileGraphService.showingPowerMax.getValue();
-      graphDataMin = yAxisRanges.systemPowerGraph.min;  
+      graphDataMin = yAxisRanges.systemPowerGraph.min;
       graphDataMax = yAxisRanges.systemPowerGraph.max;
     }
     let yAxisRange: Array<number> = [graphDataMin];
@@ -334,7 +342,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
         traceData.push(trace);
       });
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
       var layout = this.getLayout("Compressor Capacity (%)", [1, xRangeMax], [0, 105], '%');
       var config = {
         responsive: true,
@@ -375,7 +383,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(trace);
       });
       let yAxisRange: Array<number> = this.getYAxisRange(false, this.totalFullLoadPower);
-      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1? 24 : 1;
+      let xRangeMax: number = this.profileSummary[0].profileSummaryData.length > 1 ? 24 : 1;
       let xRange: Array<number> = [1, xRangeMax];
       var layout = this.getLayout("Power (kW)", xRange, yAxisRange, undefined);
       var config = {

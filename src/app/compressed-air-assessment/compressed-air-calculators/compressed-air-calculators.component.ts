@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Settings } from 'http2';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
+import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
@@ -14,7 +13,7 @@ export class CompressedAirCalculatorsComponent implements OnInit {
 
   @Input()
   assessment: Assessment;
-  @Input()
+
   settings: Settings;
   
   calcTabSub: Subscription;
@@ -22,6 +21,7 @@ export class CompressedAirCalculatorsComponent implements OnInit {
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.calcTabSub = this.compressedAirAssessmentService.calcTab.subscribe(currentCalcTab => {
       this.calcTab = currentCalcTab;
     });

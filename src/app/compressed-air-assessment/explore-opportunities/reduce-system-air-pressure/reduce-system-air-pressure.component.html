@@ -36,7 +36,8 @@
                 <input type="number" class="form-control" formControlName="averageSystemPressureReduction"
                     (focus)="helpTextField('avgSystemPressureReduction')" name="averageSystemPressureReduction"
                     id="averageSystemPressureReduction" (input)="save(false)">
-                <span class="input-group-addon units">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.averageSystemPressureReduction.invalid && !form.controls.averageSystemPressureReduction.pristine">
@@ -46,7 +47,8 @@
                 <span *ngIf="form.controls.averageSystemPressureReduction.errors.max">
                     Value can't be greater than the minumum pressure in the system
                     ({{form.controls.averageSystemPressureReduction.errors.max.max | number: '1.0-1'}}
-                    psig).
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>).
                 </span>
             </span>
         </div>

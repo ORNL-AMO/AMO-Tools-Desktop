@@ -101,17 +101,18 @@ export class ExploreOpportunitiesComponent implements OnInit {
       //set day type profile summarries
       this.exploreOpportunitiesService.baselineDayTypeProfileSummarries = new Array();
       this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let baselineProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType);
+        let baselineProfileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
         this.exploreOpportunitiesService.baselineDayTypeProfileSummarries.push({
           dayTypeId: dayType.dayTypeId,
           profileSummary: baselineProfileSummary
         });
       });
       //set baseline results
-      this.exploreOpportunitiesService.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      this.exploreOpportunitiesService.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
       //set flow reallocation data      
       this.compressedAirAssessmentResultsService.setFlowReallocationSummaries(
         this.compressedAirAssessment.compressedAirDayTypes,
+        this.settings,
         this.exploreOpportunitiesService.baselineDayTypeProfileSummarries,
         this.compressedAirAssessment.compressorInventoryItems,
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
@@ -156,7 +157,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setCompressedAirAssessmentResults() {
     if (this.modification && this.compressedAirAssessmentResultsService.flowReallocationSummaries) {
-      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
       this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
     } else {
       this.exploreOpportunitiesService.modificationResults.next(undefined);

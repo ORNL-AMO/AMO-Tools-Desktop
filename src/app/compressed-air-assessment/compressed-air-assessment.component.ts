@@ -61,7 +61,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
-    this.genericCompressorDbService.getAllCompressors();
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
@@ -73,6 +72,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
       } else {
         this.settings = settings;
         this.compressedAirAssessmentService.settings.next(settings);
+        this.genericCompressorDbService.getAllCompressors(this.settings);
       }
     });
 
@@ -154,6 +154,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.indexedDbService.addSettings(settings).then(() => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.genericCompressorDbService.getAllCompressors(this.settings);
         this.compressedAirAssessmentService.settings.next(this.settings);
       });
     });
@@ -162,7 +163,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   setDisableNext() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation).valid;
+    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
     let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
       this.disableNext = true;

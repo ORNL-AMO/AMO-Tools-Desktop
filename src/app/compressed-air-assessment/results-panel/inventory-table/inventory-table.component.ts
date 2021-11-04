@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
@@ -25,11 +26,12 @@ export class InventoryTableComponent implements OnInit {
   hasInvalidCompressors: boolean = false;
   confirmDeleteCompressorInventoryData: ConfirmDeleteData;
 
-
+  settings: Settings;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private systemProfileService: SystemProfileService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       this.selectedCompressor = val;
     })
@@ -106,7 +108,12 @@ export class InventoryTableComponent implements OnInit {
 
   getPressureMinMax(compressor: CompressorInventoryItem): string {
     let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-    return minMax.min + ' - ' + minMax.max + ' psig';
+    let unit: string = ' psig';
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      unit = ' barg';
+    }
+    
+    return minMax.min + ' - ' + minMax.max + unit;
   }
 
   createCopy(compressor: CompressorInventoryItem){

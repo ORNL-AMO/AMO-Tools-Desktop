@@ -22,7 +22,10 @@
                             (focus)="focusField('profileDataType')" (change)="save()">
                             <option [ngValue]="'percentCapacity'">Airflow, % Capacity</option>
                             <option [ngValue]="'power'">Power, kW</option>
-                            <option [ngValue]="'airflow'">Airflow, acfm</option>
+                            <option [ngValue]="'airflow'">Airflow,
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m&#xB3;/min</span>
+                            </option>
                             <option [ngValue]="'percentPower'">Power, %</option>
                             <option [ngValue]="'powerFactor'">V, PF, AMP</option>
                         </select>
@@ -40,12 +43,13 @@
                             <option [ngValue]="24">24 hr</option>
                         </select>
                     </div>
-                    <div class="alert alert-warning small" *ngIf="form.controls.dataInterval.disabled && profileTab == 'setup'">
+                    <div class="alert alert-warning small"
+                        *ngIf="form.controls.dataInterval.disabled && profileTab == 'setup'">
                         Data interval cannot be changed when modifications exist
                     </div>
                     <div class="form-group">
                         <label>Pressure Control Range</label>
-                        <label>{{pressureMin}} - {{pressureMax}} 
+                        <label>{{pressureMin}} - {{pressureMax}}
                             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
                             <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
                         </label>

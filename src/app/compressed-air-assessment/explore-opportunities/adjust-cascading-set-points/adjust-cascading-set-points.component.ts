@@ -28,7 +28,6 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   baselineSetPoints: Array<CascadingSetPointData>;
   setPointView: 'baseline' | 'modification' = 'modification';
   compressorForms: Array<CompressorForm>;
-  settingsSub: Subscription;
   settings: Settings;
   implementationCostForm: FormGroup;
   hasInvalidForm: boolean;
@@ -37,7 +36,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     private adjustCascadingSetPointsService: AdjustCascadingSetPointsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
@@ -63,7 +62,6 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   ngOnDestroy() {
     this.selectedModificationIdSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   focusField(str: string) {
@@ -209,7 +207,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   }
 
   setHasInvalidForm() {
-    if(this.adjustCascadingSetPoints.order != 100){
+    if (this.adjustCascadingSetPoints.order != 100) {
       this.hasInvalidForm = false;
       this.compressorForms.forEach(compressorForm => {
         if (compressorForm.form.invalid) {

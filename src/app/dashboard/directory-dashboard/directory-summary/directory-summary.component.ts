@@ -205,7 +205,8 @@ export class DirectorySummaryComponent implements OnInit {
     let totalCost: number = 0;
     compressedAirAssessments.forEach(assessment => {
       if(assessment.compressedAirAssessment.setupDone){
-        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment);
+        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment, assessmentSettings);
         totalCost += baselineResults.total.totalAnnualOperatingCost;
         totalEnergyUsed += (baselineResults.total.energyUse / 1000);
       }

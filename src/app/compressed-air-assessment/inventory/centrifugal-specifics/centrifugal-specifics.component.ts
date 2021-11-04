@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CentrifugalSpecifics } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
@@ -17,11 +18,13 @@ export class CentrifugalSpecificsComponent implements OnInit {
   form: FormGroup;
   isFormChange: boolean = false;
   contentCollapsed: boolean;
+  settings: Settings;
   constructor(private inventoryService: InventoryService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.contentCollapsed = this.inventoryService.collapseCentrifugal;
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {

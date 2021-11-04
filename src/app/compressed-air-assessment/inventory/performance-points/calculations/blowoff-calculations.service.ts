@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { UnloadPointCalculationsService } from './unload-point-calculations.service';
 
 @Injectable()
 export class BlowoffCalculationsService {
 
-  constructor(private unloadPointCalculationsService: UnloadPointCalculationsService, private convertCompressedAirService: ConvertCompressedAirService) { }
+  constructor(private unloadPointCalculationsService: UnloadPointCalculationsService, private convertCompressedAirService: ConvertCompressedAirService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   //inlet butterfly modulation with blowoff
   setBlowoff(selectedCompressor: CompressorInventoryItem): PerformancePoint {
@@ -19,8 +22,9 @@ export class BlowoffCalculationsService {
 
   getBlowoffDischargePressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
-      let defaultPressure: number = this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.performancePoints.fullLoad.dischargePressure);
-      return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure);
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      let defaultPressure: number = this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.performancePoints.fullLoad.dischargePressure, settings);
+      return defaultPressure;
     } else {
       return selectedCompressor.performancePoints.blowoff.dischargePressure;
     }
@@ -29,7 +33,8 @@ export class BlowoffCalculationsService {
   getBlowoffAirFlow(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
       let defaultAirflow: number = this.unloadPointCalculationsService.calculateCentrifugalUnloadPointAirFlow(selectedCompressor, selectedCompressor.performancePoints.blowoff.dischargePressure);
-      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow);
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.performancePoints.blowoff.airflow;
     }

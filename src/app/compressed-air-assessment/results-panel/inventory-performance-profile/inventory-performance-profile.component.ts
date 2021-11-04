@@ -8,6 +8,7 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { CompressedAirAssessmentResult } from '../../compressed-air-assessment-results.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
 import { TraceData } from '../../../shared/models/plotting';
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-inventory-performance-profile',
   templateUrl: './inventory-performance-profile.component.html',
@@ -43,12 +44,13 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   ];
   unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
 
-
+  settings: Settings;
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     if (!this.inAssessment) {
       this.dataSub = this.inventoryService.selectedCompressor.subscribe(val => {
         this.selectedCompressor = val;
@@ -381,7 +383,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     let isCompressorValid: boolean = this.inventoryService.isCompressorValid(compressor)
     for (let airFlow = 0; airFlow <= 100;) {
       if (isCompressorValid) {
-        let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.compressedAirAssessment.systemInformation.totalAirStorage, 0, false);
+        let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, this.settings, 1, airFlow, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.compressedAirAssessment.systemInformation.totalAirStorage, 0, false);
+        // console.log(results);
         compressorData.push(results);
       } else {
         let results: CompressorCalcResult = this.compressedAirCalculationService.getEmptyCalcResults();

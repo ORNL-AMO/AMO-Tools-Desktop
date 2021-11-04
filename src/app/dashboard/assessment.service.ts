@@ -68,9 +68,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
     } else if (assessment.type == "CompressedAir") {
-      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
-        this.tab = 'assessment';
-      }
+      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+      //   this.tab = 'assessment';
+      // }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }

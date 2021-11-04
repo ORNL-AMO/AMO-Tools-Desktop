@@ -35,7 +35,8 @@
                 <input type="number" class="form-control" formControlName="targetPressure"
                     (focus)="helpTextField('targetPressure')" name="targetPressure" id="targetPressure"
                     (input)="changeTargetPressure()">
-                <span class="input-group-addon units">psig</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
@@ -49,28 +50,33 @@
             <div class="input-group">
                 <input type="number" class="form-control" formControlName="variance" name="variance"
                     (focus)="helpTextField('variance')" id="variance" (input)="save(false)">
-                <span class="input-group-addon units">psia</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
                 <span *ngIf="form.controls.variance.errors.required">Value Required</span>
-                <span *ngIf="form.controls.variance.errors.min">Value can't be negative.
+                <span *ngIf="form.controls.variance.errors.greaterThan">Value must be greater than 0.
                 </span>
                 <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
-                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}}).
+                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}})
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>.
                 </span>
             </span>
         </div>
 
     </div>
 </form>
-<div *ngIf="selectedDayType && useAutomaticSequencer && useAutomaticSequencer.order != 100" class="d-flex flex-column mb-2 pt-1">
+<div *ngIf="selectedDayType && useAutomaticSequencer && useAutomaticSequencer.order != 100"
+    class="d-flex flex-column mb-2 pt-1">
     <div class="form-group" [ngClass]="{'invalid': hasInvalidDayType}">
         <label for="selectedDayType">Sequencer Day Type</label>
         <div class="input-group">
             <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
                 (focus)="helpTextField('dayType')">
-                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption" [ngClass]="{'alert-danger': !dayTypeOption.isValid}">
+                <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption"
+                    [ngClass]="{'alert-danger': !dayTypeOption.isValid}">
                     {{dayTypeOption.dayType.name}}
                 </option>
             </select>
@@ -81,7 +87,7 @@
         [selectedDayTypeId]="selectedDayType.dayType.dayTypeId" (emitSave)="save(false)"
         [adjustedCompressors]="selectedDayType.adjustedCompressors" [requiredAirflow]="selectedDayType.requiredAirflow"
         [availableAirflow]="selectedDayType.availableAirflow" [hasError]="!selectedDayType.isValid"
-        [profilePower]="selectedDayType.profilePower">
+        [profilePower]="selectedDayType.profilePower" [settings]="settings">
     </app-adjust-sequencer-profile>
     <div class="d-flex justify-content-end">
         <div class="pl-2 pr-2 border-right border-left">

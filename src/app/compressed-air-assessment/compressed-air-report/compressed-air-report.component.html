@@ -107,7 +107,8 @@
             *ngIf="currentTab == 'systemProfiles' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles [compressedAirAssessment]="assessment.compressedAirAssessment"
-                [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults">
+                [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
+                [settings]="settings">
             </app-system-profiles>
         </div>
         <div class="results scroll-item print-height"

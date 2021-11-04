@@ -40,13 +40,19 @@
                 {{compressor.Model}}
             </td>
             <td>
-                {{compressor.RatedCapacity}} acfm
+                {{compressor.RatedCapacity}} 
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">acfm</span>
             </td>
             <td>
-                {{compressor.RatedPressure}} psig
+                {{compressor.RatedPressure}}
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">psig</span>
             </td>
             <td>
-                {{compressor.MaxFullFlowPressure}} psig
+                {{compressor.MaxFullFlowPressure}}
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">psig</span>
             </td>
         </tr>
     </table>
@@ -55,9 +61,8 @@
 <div class="tableControls d-flex pull-right small pr-2">
     <p class="pull-right">({{filteredCompressors.length}} compressors)</p>
     <div class="pull-right">
-        <ngb-pagination [collectionSize]="filteredCompressors.length"
-            [(page)]="pageNumber" [pageSize]="itemsPerPage" [rotate]="true"
-            aria-label="Default pagination" [maxSize]="5">
+        <ngb-pagination [collectionSize]="filteredCompressors.length" [(page)]="pageNumber" [pageSize]="itemsPerPage"
+            [rotate]="true" aria-label="Default pagination" [maxSize]="5">
         </ngb-pagination>
     </div>
 </div>

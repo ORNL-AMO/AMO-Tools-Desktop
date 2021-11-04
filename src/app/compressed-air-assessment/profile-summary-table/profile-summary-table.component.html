@@ -30,7 +30,9 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, acfm
+                    Airflow, 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
                     <span *ngIf="data.order != 0">
@@ -111,7 +113,9 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, acfm
+                    Airflow, 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
                 <td *ngFor="let total of totals;">
                     {{total.airflow | number:'1.0-2'}}

@@ -3,12 +3,14 @@ import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/mo
 import * as regression from 'regression';
 import { SharedPointCalculationsService } from './shared-point-calculations.service';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Injectable()
 export class FullLoadCalculationsService {
 
   constructor(private sharedPointCalculationsService: SharedPointCalculationsService,
-    private convertCompressedAirService: ConvertCompressedAirService) { }
+    private convertCompressedAirService: ConvertCompressedAirService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   setFullLoad(selectedCompressor: CompressorInventoryItem): PerformancePoint {
     selectedCompressor.performancePoints.fullLoad.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultPressure);
@@ -19,7 +21,8 @@ export class FullLoadCalculationsService {
 
   getFullLoadDischargePressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
     if (isDefault) {
-      return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.nameplateData.fullLoadOperatingPressure);
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.nameplateData.fullLoadOperatingPressure, settings);
     } else {
       return selectedCompressor.performancePoints.fullLoad.dischargePressure;
     }
@@ -44,7 +47,8 @@ export class FullLoadCalculationsService {
       } else {
         defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
       }
-      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow);
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.performancePoints.fullLoad.airflow;
     }

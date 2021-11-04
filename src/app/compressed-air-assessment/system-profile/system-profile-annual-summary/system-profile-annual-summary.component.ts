@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 
@@ -18,11 +19,13 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
 
   compressedAirAssessment: CompressedAirAssessment;
   baselineResults: BaselineResults;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings);
   }
 
   updateTableString() {

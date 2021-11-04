@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntime } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResult } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory/inventory.service';
@@ -42,14 +43,21 @@ export class ReduceRunTimeComponent implements OnInit {
   }
   form: FormGroup;
   hasInvalidDayType: boolean;
+  settings: Settings;
+  numberPipeDecimals: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.numberPipeDecimals = '1.0-2'
+    }else{
+      this.numberPipeDecimals = '1.0-0'
+    }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.setFormOrder();
         this.setOrderOptions();
       }
     });
@@ -95,14 +103,6 @@ export class ReduceRunTimeComponent implements OnInit {
       if (this.reduceRuntime.order != 100) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
         this.setReduceRuntimeValid();
-      }
-    }
-  }
-
-  setFormOrder() {
-    if (this.form && this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
-      if (this.form.controls.order.value != this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order) {
-        this.form.controls.order.patchValue(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order)
       }
     }
   }
