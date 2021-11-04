@@ -46,6 +46,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   useAutomaticSequencerValid: boolean;
   useAutomaticSequencerValidSub: Subscription;
   hasInvalidData: boolean;
+  isInit: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
@@ -66,7 +67,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
       this.modificationResults = val;
       this.setResults();
-      this.setHasInvalidData();
     });
 
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
@@ -104,45 +104,70 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   setValidationSubs() {
     this.addReceiverVolumeValidSub = this.exploreOpportunitiesValidationService.addReceiverVolumeValid.subscribe(val => {
       this.addReceiverVolumeValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.adjustCascadingSetPointsValidSub = this.exploreOpportunitiesValidationService.adjustCascadingSetPointsValid.subscribe(val => {
       this.adjustCascadingSetPointsValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.improveEndUseEfficiencyValidSub = this.exploreOpportunitiesValidationService.improveEndUseEfficiencyValid.subscribe(val => {
       this.improveEndUseEfficiencyValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.reduceAirLeaksValidSub = this.exploreOpportunitiesValidationService.reduceAirLeaksValid.subscribe(val => {
       this.reduceAirLeaksValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.reduceRuntimeValidSub = this.exploreOpportunitiesValidationService.reduceRuntimeValid.subscribe(val => {
       this.reduceRuntimeValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.reduceSystemAirPressureValidSub = this.exploreOpportunitiesValidationService.reduceSystemAirPressureValid.subscribe(val => {
       this.reduceSystemAirPressureValid = val;
+      if (!this.isInit) {
+        this.setHasInvalidData();
+      }
     });
     this.useAutomaticSequencerValidSub = this.exploreOpportunitiesValidationService.useAutomaticSequencerValid.subscribe(val => {
       this.useAutomaticSequencerValid = val;
+      this.setHasInvalidData();
+      this.isInit = false;
     });
   }
 
   setHasInvalidData() {
-    if (this.modification) {
-      if (this.modification.addPrimaryReceiverVolume.order != 100 && this.addReceiverVolumeValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.adjustCascadingSetPoints.order != 100 && this.adjustCascadingSetPointsValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.improveEndUseEfficiency.order != 100 && this.improveEndUseEfficiencyValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.reduceAirLeaks.order != 100 && this.reduceAirLeaksValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.reduceRuntime.order != 100 && this.reduceRuntimeValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.reduceSystemAirPressure.order != 100 && this.reduceSystemAirPressureValid == false) {
-        this.hasInvalidData = true;
-      } else if (this.modification.useAutomaticSequencer.order != 100 && this.useAutomaticSequencerValid == false) {
-        this.hasInvalidData = true;
-      } else {
-        this.hasInvalidData = false;
+    let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    if (selectedModificationId != undefined && compressedAirAssessment) {
+      this.modification = compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
+      if (this.modification) {
+        if (this.modification.addPrimaryReceiverVolume.order != 100 && this.addReceiverVolumeValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.adjustCascadingSetPoints.order != 100 && this.adjustCascadingSetPointsValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.improveEndUseEfficiency.order != 100 && this.improveEndUseEfficiencyValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.reduceAirLeaks.order != 100 && this.reduceAirLeaksValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.reduceRuntime.order != 100 && this.reduceRuntimeValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.reduceSystemAirPressure.order != 100 && this.reduceSystemAirPressureValid == false) {
+          this.hasInvalidData = true;
+        } else if (this.modification.useAutomaticSequencer.order != 100 && this.useAutomaticSequencerValid == false) {
+          this.hasInvalidData = true;
+        } else {
+          this.hasInvalidData = false;
+        }
       }
     }
   }
