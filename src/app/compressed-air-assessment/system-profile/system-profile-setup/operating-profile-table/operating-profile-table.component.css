@@ -5,6 +5,7 @@ td, th{
     border-left: solid 1px darkgray;
     padding: 3px;
     white-space: nowrap;
+    vertical-align: middle;
   }
   
   /* tr > td:first-child {

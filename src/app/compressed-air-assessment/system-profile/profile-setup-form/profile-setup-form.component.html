@@ -26,6 +26,8 @@
                                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m&#xB3;/min</span>
                             </option>
+                            <option [ngValue]="'percentPower'">Power, %</option>
+                            <option [ngValue]="'powerFactor'">V, PF, AMP</option>
                         </select>
                     </div>
                 </div>
@@ -41,7 +43,8 @@
                             <option [ngValue]="24">24 hr</option>
                         </select>
                     </div>
-                    <div class="alert alert-warning small" *ngIf="form.controls.dataInterval.disabled">
+                    <div class="alert alert-warning small"
+                        *ngIf="form.controls.dataInterval.disabled && profileTab == 'setup'">
                         Data interval cannot be changed when modifications exist
                     </div>
                     <div class="form-group">

@@ -98,7 +98,7 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean, powerFactorData?: { amps: number, volts: number }): CompressorCalcResult {
     let isShutdown: boolean = false;
     let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
@@ -115,6 +115,11 @@ export class CompressedAirCalculationService {
         let inputData: CentrifugalInput = this.getCentrifugalInput(compressor, computeFrom, computeFromVal);
         if (settings.unitsOfMeasure == 'Metric') {
           inputData = this.convertCompressedAirService.convertCentrifugalInputObject(inputData);
+        }
+        //power factor/amps/volts
+        if (computeFrom == 4) {
+          inputData.computeFromPFVoltage = powerFactorData.volts;
+          inputData.computeFromPFAmps = powerFactorData.amps;
         }
         results = this.suiteCompressorCalcCentrifugal(inputData);
         if (settings.unitsOfMeasure == 'Metric') {
@@ -136,6 +141,11 @@ export class CompressedAirCalculationService {
           inputData.receiverVolume = this.convertUnitsService.value(inputData.receiverVolume).from('gal').to('ft3');
           // console.log('IMPERIAL:');
           // console.log(inputData);
+        }
+        //power factor/amps/volts
+        if (computeFrom == 4) {
+          inputData.computeFromPFVoltage = powerFactorData.volts;
+          inputData.computeFromPFAmps = powerFactorData.amps;
         }
         results = this.suiteCompressorCalc(inputData);
         if (settings.unitsOfMeasure == 'Metric') {

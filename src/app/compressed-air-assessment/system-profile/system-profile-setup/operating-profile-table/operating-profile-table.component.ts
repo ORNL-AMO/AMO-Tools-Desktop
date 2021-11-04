@@ -72,7 +72,7 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
-  
+
   updateSummaryDataFields(changedSummary: ProfileSummary, dataInputIndex: number) {
     changedSummary.profileSummaryData.forEach((summaryData, index) => {
       if (summaryData.order != 0 && index > dataInputIndex) {
@@ -82,10 +82,16 @@ export class OperatingProfileTableComponent implements OnInit {
           summaryData.percentCapacity = changedSummary.profileSummaryData[dataInputIndex].percentCapacity;
         } else if (this.profileDataType == 'airflow') {
           summaryData.airflow = changedSummary.profileSummaryData[dataInputIndex].airflow;
+        } else if (this.profileDataType == 'percentPower') {
+          summaryData.percentPower = changedSummary.profileSummaryData[dataInputIndex].percentPower;
+        } else if (this.profileDataType == 'powerFactor') {
+          summaryData.powerFactor = changedSummary.profileSummaryData[dataInputIndex].powerFactor;
+          summaryData.amps = changedSummary.profileSummaryData[dataInputIndex].amps;
+          summaryData.volts = changedSummary.profileSummaryData[dataInputIndex].volts;
         }
       }
     });
-    this.profileSummary.forEach(summary => { 
+    this.profileSummary.forEach(summary => {
       if (summary.dayTypeId == this.selectedDayTypeId && summary.compressorId == changedSummary.compressorId) {
         summary = changedSummary;
       }
@@ -158,7 +164,10 @@ export class OperatingProfileTableComponent implements OnInit {
         percentPower: undefined,
         percentSystemCapacity: 0,
         percentSystemPower: 0,
-        order: 0
+        order: 0,
+        powerFactor: 0,
+        amps: 0,
+        volts: 0
       })
       timeInterval = timeInterval + dataInterval;
     }
@@ -191,6 +200,8 @@ export class OperatingProfileTableComponent implements OnInit {
                     profileSummaryData.percentCapacity = Number(average.value.toFixed(0));
                   } else if (assessmentDayType.profileDataType == 'power') {
                     profileSummaryData.power = Number(average.value.toFixed(1));
+                  } else if (assessmentDayType.profileDataType == 'percentPower') {
+                    profileSummaryData.percentPower = Number(average.value.toFixed(1));
                   }
                 }
               }
@@ -202,4 +213,73 @@ export class OperatingProfileTableComponent implements OnInit {
     this.save();
   }
 
+
+  setLogToolDataPowerFactor(selectedProfileSummary: ProfileSummary) {
+    this.profileSummary.forEach(profileSummary => {
+      if (profileSummary.compressorId == selectedProfileSummary.compressorId) {
+        profileSummary.logToolFieldIdPowerFactor = selectedProfileSummary.logToolFieldIdPowerFactor;
+        this.logToolDayTypeSummaries.forEach(summary => {
+          if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
+            summary.hourlyAverages.forEach(hourlyAverage => {
+              let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdPowerFactor });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              if (average && profileSummaryData) {
+                let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
+                if (assessmentDayType) {
+                  profileSummaryData.powerFactor = Number(average.value.toFixed(0));
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+    this.save();
+  }
+
+  setLogToolDataAmps(selectedProfileSummary: ProfileSummary) {
+    this.profileSummary.forEach(profileSummary => {
+      if (profileSummary.compressorId == selectedProfileSummary.compressorId) {
+        profileSummary.logToolFieldIdAmps = selectedProfileSummary.logToolFieldIdAmps;
+        this.logToolDayTypeSummaries.forEach(summary => {
+          if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
+            summary.hourlyAverages.forEach(hourlyAverage => {
+              let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdAmps });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              if (average && profileSummaryData) {
+                let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
+                if (assessmentDayType) {
+                  profileSummaryData.amps = Number(average.value.toFixed(0));
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+    this.save();
+  }
+
+  setLogToolDataVolts(selectedProfileSummary: ProfileSummary) {
+    this.profileSummary.forEach(profileSummary => {
+      if (profileSummary.compressorId == selectedProfileSummary.compressorId) {
+        profileSummary.logToolFieldIdVolts = selectedProfileSummary.logToolFieldIdVolts;
+        this.logToolDayTypeSummaries.forEach(summary => {
+          if (summary.dayType.dayTypeId == profileSummary.dayTypeId) {
+            summary.hourlyAverages.forEach(hourlyAverage => {
+              let average = hourlyAverage.averages.find(average => { return average.field.fieldId == profileSummary.logToolFieldIdVolts });
+              let profileSummaryData = profileSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == hourlyAverage.hour });
+              if (average && profileSummaryData) {
+                let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
+                if (assessmentDayType) {
+                  profileSummaryData.volts = Number(average.value.toFixed(0));
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+    this.save();
+  }
 }

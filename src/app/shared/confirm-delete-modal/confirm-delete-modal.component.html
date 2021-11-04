@@ -11,16 +11,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                 <div class="card-block p-4">
+                <div class="card-block p-4">
                     {{confirmDeleteData.confirmMessage}}
                 </div>
                 <div class="modal-footer p-2">
-                    <span>
-                      <button type="button" class="btn btn-secondary btn-sm modal-btn"
-                        (click)="close(false)">Cancel</button>
-                      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="close(true)">Delete</button>
-                    </span>
-                  </div>
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(false)">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm " (click)="close(true)">Delete</button>
+                </div>
             </div>
         </div>
     </div>
