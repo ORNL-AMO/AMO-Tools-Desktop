@@ -134,7 +134,7 @@ export class CompressedAirCalculationService {
       } else {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
         if (settings.unitsOfMeasure == 'Metric') {
-          inputData = this.convertCompressedAirService.convertInputObject(inputData);
+          inputData = this.convertCompressedAirService.convertInputObject(inputData, compressor.compressorControls.controlType);
           // console.log('METRIC:');
           // console.log(inputData);
         } else {

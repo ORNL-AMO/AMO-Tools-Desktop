@@ -41,9 +41,7 @@
                                 Motor Power
                             </td>
                             <td *ngFor="let compressor of compressorInventoryItems">
-                                {{compressor.nameplateData.motorPower}}
-                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                                {{compressor.nameplateData.motorPower}} kW
                             </td>
                         </tr>
                         <!-- fullLoadOperatingPressure -->
@@ -83,7 +81,7 @@
                                 Total Package Input Power
                             </td>
                             <td *ngFor="let compressor of compressorInventoryItems">
-                                {{compressor.nameplateData.totalPackageInputPower}} amps
+                                {{compressor.nameplateData.totalPackageInputPower}} kW
                             </td>
                         </tr>
                         <!--CONTROLS-->
@@ -313,7 +311,9 @@
                             </td>
                             <td *ngFor="let compressor of compressorInventoryItems">
                                 <span *ngIf="compressor.nameplateData.compressorType == 6">
-                                    {{compressor.centrifugalSpecifics.surgeAirflow}} acfm
+                                    {{compressor.centrifugalSpecifics.surgeAirflow}} 
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                                 </span>
                                 <span *ngIf="compressor.nameplateData.compressorType != 6">
                                     &mdash;
@@ -343,7 +343,9 @@
                             </td>
                             <td *ngFor="let compressor of compressorInventoryItems">
                                 <span *ngIf="compressor.nameplateData.compressorType == 6">
-                                    {{compressor.centrifugalSpecifics.maxFullLoadCapacity}} acfm
+                                    {{compressor.centrifugalSpecifics.maxFullLoadCapacity}} 
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                                 </span>
                                 <span *ngIf="compressor.nameplateData.compressorType != 6">
                                     &mdash;

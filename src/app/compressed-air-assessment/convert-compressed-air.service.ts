@@ -194,7 +194,7 @@ export class ConvertCompressedAirService {
     return power;
   }
 
-  convertInputObject(inputObj: CompressorsCalcInput): CompressorsCalcInput {
+  convertInputObject(inputObj: CompressorsCalcInput, controlType: number): CompressorsCalcInput {
     //capacity measured: 'm3/min'->'ft3/min'
     if (inputObj.computeFrom == 3) {
       inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
@@ -210,8 +210,9 @@ export class ConvertCompressedAirService {
     inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kPaa').to('psia');
     inputObj.receiverVolume = this.convertUnitsService.value(inputObj.receiverVolume).from('m3').to('ft3');
 
-    if (inputObj.controlType != 1 && (inputObj.pressureAtUnload && inputObj.dischargePsiMax)) {
-      inputObj.modulatingPsi = inputObj.pressureAtUnload - inputObj.dischargePsiMax
+    // debugger
+    if (controlType != 1 && (inputObj.pressureAtUnload && inputObj.dischargePsiMax)) {
+      inputObj.modulatingPsi = (inputObj.pressureAtUnload - inputObj.dischargePsiMax) / (1 - (inputObj.unloadPointCapacity / 100))
     } else if (inputObj.noLoadDischargePressure && inputObj.dischargePsiFullLoad) {
       inputObj.modulatingPsi = inputObj.noLoadDischargePressure - inputObj.dischargePsiFullLoad;
     }
