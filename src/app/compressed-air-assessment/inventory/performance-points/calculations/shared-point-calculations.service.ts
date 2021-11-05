@@ -1,18 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Injectable()
 export class SharedPointCalculationsService {
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  calculateAirFlow(capacity: number, pointPressure: number, potentialPressure: number): number {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-    let atmosphericPressure: number = JSON.parse(JSON.stringify(compressedAirAssessment.systemInformation.atmosphericPressure));
+  calculateAirFlow(capacity: number, pointPressure: number, potentialPressure: number, atmosphericPressure: number, settings: Settings): number {
     let maxFullFlowAirFlow: number;
     if (settings.unitsOfMeasure == 'Metric') {
       atmosphericPressure = this.convertUnitsService.value(atmosphericPressure).from('kPaa').to('psia');
@@ -28,14 +23,11 @@ export class SharedPointCalculationsService {
     return maxFullFlowAirFlow;
   }
 
-  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number): number {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-    let atmosphericPressure: number = JSON.parse(JSON.stringify(compressedAirAssessment.systemInformation.atmosphericPressure));
+  calculatePower(compressorType: number, inputPressure: number, performancePointPressure: number, ratedFullLoadOperatingPressure: number, TotPackageInputPower: number, atmosphericPressure: number, settings: Settings): number {
     let polytropicExponent: number = (1.4 - 1) / 1.4;
     let p1: number;
     let p2: number;
-    if(settings.unitsOfMeasure == 'Metric'){
+    if (settings.unitsOfMeasure == 'Metric') {
       atmosphericPressure = this.convertUnitsService.value(atmosphericPressure).from('kPaa').to('psia');
       inputPressure = this.convertUnitsService.value(inputPressure).from('barg').to('psig');
       performancePointPressure = this.convertUnitsService.value(performancePointPressure).from('barg').to('psig');

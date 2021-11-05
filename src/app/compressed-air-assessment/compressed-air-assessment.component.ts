@@ -154,6 +154,12 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.indexedDbService.addSettings(settings).then(() => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        //on init, settings added. need to convert defaults
+        if (this.settings.unitsOfMeasure == 'Metric') {
+          let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
+          oldSettings.unitsOfMeasure = 'Imperial';
+          this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
+        }
         this.genericCompressorDbService.getAllCompressors(this.settings);
         this.compressedAirAssessmentService.settings.next(this.settings);
       });
