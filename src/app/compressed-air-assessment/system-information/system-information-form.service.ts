@@ -12,7 +12,7 @@ export class SystemInformationFormService {
 
   getFormFromObj(obj: SystemInformation, settings: Settings): FormGroup {
     let maxAtmosphericPressure: number = 16;
-    if(settings.unitsOfMeasure == 'Metric'){
+    if(settings && settings.unitsOfMeasure == 'Metric'){
       maxAtmosphericPressure = this.convertUnitsService.value(maxAtmosphericPressure).from('psia').to('kPaa');
       maxAtmosphericPressure = this.convertUnitsService.roundVal(maxAtmosphericPressure, 2);
     }

@@ -53,3 +53,8 @@ form{
     font-size: .75rem;
     padding-right: .5rem;
 }
+
+.item-border{
+  margin-top: .5rem;
+    border-top: groove 2px;
+}

@@ -70,7 +70,7 @@
 </form>
 <div *ngIf="selectedDayType && useAutomaticSequencer && useAutomaticSequencer.order != 100"
     class="d-flex flex-column mb-2 pt-1">
-    <div class="form-group" [ngClass]="{'invalid': hasInvalidDayType}">
+    <div *ngIf="dayTypeOptions.length > 1" class="form-group" [ngClass]="{'invalid': hasInvalidDayType}">
         <label for="selectedDayType">Sequencer Day Type</label>
         <div class="input-group">
             <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"

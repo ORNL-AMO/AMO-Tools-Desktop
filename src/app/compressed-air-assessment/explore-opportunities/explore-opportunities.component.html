@@ -74,7 +74,7 @@
             <p>Explore Opportunities to view results</p>
         </div>
         <div class="p-2 text-center"
-            *ngIf="modificationExists && (tabSelect == 'results' || tabSelect == 'compressor-profile')">
+            *ngIf="modificationExists && (tabSelect == 'results' || tabSelect == 'compressor-profile') && dayTypeOptions.length > 1">
             <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
                 (change)="changeDayType()">
                 <option *ngIf="tabSelect == 'results'" [ngValue]=undefined>All Day Types</option>
@@ -100,7 +100,7 @@
 
 <div class="d-flex flex-column modify-conditions panel-container"
     *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'">
-    <div class="p-2 text-center">
+    <div class="p-2 text-center" *ngIf="dayTypeOptions.length > 1">
         <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
             (change)="changeDayType()">
             <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
@@ -117,7 +117,8 @@
         </div>
         <div class="col-6">
             <!-- <label class="group-label bg-white">{{modification.name}}</label> -->
-            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="false" [labelName]="modification.name">
+            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="false"
+                [labelName]="modification.name">
             </app-system-profile-graphs>
         </div>
     </div>

@@ -64,7 +64,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     // this.compressedAirCalculationService.test();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -74,6 +73,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.compressedAirAssessmentService.settings.next(settings);
         this.genericCompressorDbService.getAllCompressors(this.settings);
       }
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
     });
 
     this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
