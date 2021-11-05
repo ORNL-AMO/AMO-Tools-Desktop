@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
@@ -78,6 +77,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
         if (!this.selectedDayType && this.dayTypeOptions) {
           this.exploreOpportunitiesService.selectedDayType.next(this.dayTypeOptions[0]);
         }
+      } else if (val == 'modifications') {
+        if (this.dayTypeOptions && this.dayTypeOptions.length == 1) {
+          this.exploreOpportunitiesService.selectedDayType.next(undefined);
+        }
       }
       this.secondaryAssessmentTab = val;
     });
@@ -147,6 +150,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.tabSelect = str;
     if (this.tabSelect == 'compressor-profile' && this.selectedDayType == undefined) {
       this.selectedDayType = this.dayTypeOptions[0];
+      this.changeDayType();
+    } else if (this.secondaryAssessmentTab == 'modifications' && this.dayTypeOptions.length == 1) {
+      this.selectedDayType = undefined;
       this.changeDayType();
     }
   }

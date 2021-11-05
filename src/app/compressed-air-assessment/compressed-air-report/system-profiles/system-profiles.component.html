@@ -10,7 +10,7 @@
         </div>
 
 
-        <div class="pl-1">
+        <div class="pl-1" *ngIf="compressedAirAssessment.compressedAirDayTypes.length > 1">
             <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
                 (change)="setSelectedProfileSummary()">
                 <!-- <option [ngValue]=undefined>All Day Types</option> -->

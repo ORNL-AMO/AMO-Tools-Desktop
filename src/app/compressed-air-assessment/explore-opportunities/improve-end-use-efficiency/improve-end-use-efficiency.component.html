@@ -13,7 +13,7 @@
 </div>
 
 <div *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
-    <div *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;">
+    <div *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" [ngClass]="{'item-border': itemIndex > 0}">
         <app-improve-end-use-efficiency-item [item]="item" [itemIndex]="itemIndex"
             [numberOfItems]="improveEndUseEfficiency.endUseEfficiencyItems.length" (emitSave)="saveItemChange($event)"
             (emitRemoveItem)="removeEndUseEfficiency($event)" [hourIntervals]="hourIntervals" [baselineProfileSummaries]="baselineProfileSummaries"
