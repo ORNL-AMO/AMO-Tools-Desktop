@@ -362,7 +362,7 @@ export class PhastService {
     let results: FlueGasByVolumeSuiteResults;
     // Suite named inputs
     inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
-    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion;
+    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion / 100;
     inputCopy.flueGasO2Percentage = inputCopy.o2InFlueGas;
     if (settings.unitsOfMeasure === 'Metric') {
       inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');

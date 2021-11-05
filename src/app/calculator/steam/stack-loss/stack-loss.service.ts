@@ -182,7 +182,7 @@ export class StackLossService {
   flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
     inputs.ambientAirTempF = inputs.ambientAirTemp;
-    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
     inputs.flueGasO2Percentage = inputs.o2InFlueGas;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
