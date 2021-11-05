@@ -316,7 +316,10 @@ export class CompressedAirAssessmentResultsService {
 
     dayTypeModificationResult.totalAnnualOperatingCost = dayTypeModificationResult.peakDemandCost + dayTypeModificationResult.allSavingsResults.adjustedResults.cost;
 
-    dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / dayTypeModificationResult.totalAnnualOperatingCost) * 12
+    dayTypeModificationResult.allSavingsResults.paybackPeriod = (dayTypeModificationResult.allSavingsResults.implementationCost / (baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost)) * 12
+    if (dayTypeModificationResult.allSavingsResults.paybackPeriod < 0) {
+      dayTypeModificationResult.allSavingsResults.paybackPeriod = 0;
+    }
     dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / dayTypeModificationResult.totalAnnualOperatingCost) * 100
 
     return dayTypeModificationResult;
@@ -900,12 +903,18 @@ export class CompressedAirAssessmentResultsService {
       power: baselineResults.power - adjustedResults.power,
       percentSavings: ((baselineResults.cost - adjustedResults.cost) / baselineResults.cost) * 100,
     };
+
+    let paybackPeriod: number = (implementationCost / savings.cost) * 12;
+    if (paybackPeriod < 0) {
+      paybackPeriod = 0;
+    }
+
     return {
       baselineResults: baselineResults,
       adjustedResults: adjustedResults,
       savings: savings,
       implementationCost: implementationCost,
-      paybackPeriod: (implementationCost / savings.cost) * 12,
+      paybackPeriod: paybackPeriod,
       dayTypeId: dayType.dayTypeId
     }
   }
