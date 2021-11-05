@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, Output, 
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGasByVolume, FlueGasByMass, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { StackLossService } from './stack-loss.service';
 import { Subscription } from 'rxjs';
 
@@ -130,9 +130,9 @@ export class StackLossComponent implements OnInit {
       this.stackLossService.stackLossInput.flueGasType = this.method;
       this.stackLossService.stackLossInput.flueGasByVolume = this.flueGasByVolume;
       if (form.valid == true) {
-        const availableHeat = this.stackLossService.flueGasByVolume(this.flueGasByVolume, this.settings);
-        this.boilerEfficiency = availableHeat * 100;
-        this.stackLossPercent = (1 - availableHeat) * 100;
+        let flueGasByVolumeSuiteResults: FlueGasByVolumeSuiteResults = this.stackLossService.flueGasByVolume(this.flueGasByVolume, this.settings);
+        this.boilerEfficiency = flueGasByVolumeSuiteResults.availableHeat * 100;
+        this.stackLossPercent = (1 - flueGasByVolumeSuiteResults.availableHeat) * 100;
       } else {
         this.stackLossPercent = 0;
         this.boilerEfficiency = 0;

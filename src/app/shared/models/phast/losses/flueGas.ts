@@ -46,6 +46,8 @@ export interface FlueGasByVolume {
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
+    //flueGasO2Percentage suite name for o2InFlueGas
+    flueGasO2Percentage?: number;
     combustionAirTemperature?: number;
     moistureInAirCombustion?: number;
     //combAirMoisturePerc suite name for moistureInAirCombustion
@@ -63,6 +65,12 @@ export interface FlueGasByVolume {
     SO2?: number;
     O2?: number;
     heatInput?: number;
+}
+
+export interface FlueGasByVolumeSuiteResults {
+    flueGasO2: number,
+    excessAir: number,
+    availableHeat: number,
 }
 
 export interface FlueGasHeatingValue {
@@ -104,6 +112,8 @@ export interface FlueGasOutput {
 }
 
 export interface FlueGasResult {
+    calculatedFlueGasO2?: number;
+    calculatedExcessAir?: number;
     availableHeat?: number;
     availableHeatError?: string;
     flueGasLosses?: number;

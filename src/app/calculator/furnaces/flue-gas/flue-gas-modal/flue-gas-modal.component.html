@@ -27,8 +27,29 @@
             [settings]="settings" [treasureHuntEnergySource]="treasureHuntEnergySource" [settings]="settings"
              [isBaseline]="true" [inModal]="true"></app-flue-gas-form-volume>
 
-             <!-- Calculations -->
-             <div class="d-flex flex-column mt-3 mb-2 p-2">
+            <!-- Calculations -->
+            <div class="d-flex flex-column mt-3 mb-2 p-2">
+              <ng-container *ngIf="method === 'By Volume'">
+
+                <div class="form-group m-0">
+                  <label class="bold">Oxygen In Flue Gas</label>
+                  <div *ngIf="output.baseline.calculatedFlueGasO2" class="text-center bold small">
+                    {{output.baseline.calculatedFlueGasO2 | number:'0.1-2'}} %
+                  </div>
+                  <div *ngIf="!output.baseline.calculatedFlueGasO2" class="text-center bold small">
+                  &mdash; &mdash;
+                </div>
+              </div>
+              <div class="form-group m-0">
+                <label class="bold">Excess Air </label>
+                <div *ngIf="output.baseline.calculatedExcessAir" class="text-center bold small">
+                  {{output.baseline.calculatedExcessAir | number:'0.1-2'}} %
+                </div>
+                <div *ngIf="!output.baseline.calculatedExcessAir" class="text-center bold small">
+                  &mdash; &mdash;
+                </div>
+              </div>
+            </ng-container>
                 <div class="form-group m-0">
                   <label class="bold">Available Heat</label>
                   <div *ngIf="output.baseline.availableHeat" class="text-center bold small">

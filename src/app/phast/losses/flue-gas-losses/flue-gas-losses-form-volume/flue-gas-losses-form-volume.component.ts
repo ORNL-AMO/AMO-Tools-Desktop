@@ -48,8 +48,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   ];
 
   warnings: FlueGasWarnings;
-  calculationExcessAir = 0.0;
-  calculationFlueGasO2 = 0.0;
   showModal: boolean = false;
   idString: string;
   showMoisture: boolean = false;
@@ -122,40 +120,14 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input: MaterialInputProperties = {
-      CH4: this.flueGasLossForm.controls.CH4.value,
-      C2H6: this.flueGasLossForm.controls.C2H6.value,
-      N2: this.flueGasLossForm.controls.N2.value,
-      H2: this.flueGasLossForm.controls.H2.value,
-      C3H8: this.flueGasLossForm.controls.C3H8.value,
-      C4H10_CnH2n: this.flueGasLossForm.controls.C4H10_CnH2n.value,
-      H2O: this.flueGasLossForm.controls.H2O.value,
-      CO: this.flueGasLossForm.controls.CO.value,
-      CO2: this.flueGasLossForm.controls.CO2.value,
-      SO2: this.flueGasLossForm.controls.SO2.value,
-      O2: this.flueGasLossForm.controls.O2.value,
-      o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
-      excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
-    };
-
     if (this.flueGasLossForm.controls.oxygenCalculationMethod.value === 'Oxygen in Flue Gas') {
-      if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
-        this.calculationExcessAir = 0.0;
-      } else {
-        this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
-      }
       this.flueGasLossForm.patchValue({
-        excessAirPercentage: this.calculationExcessAir
+        excessAirPercentage: 0
       });
     }
     else if (this.flueGasLossForm.controls.oxygenCalculationMethod.value === 'Excess Air') {
-      if (input.excessAir < 0) {
-        this.calculationFlueGasO2 = 0.0;
-      } else {
-        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
-      }
-      this.flueGasLossForm.patchValue({
-        o2InFlueGas: this.calculationFlueGasO2
+       this.flueGasLossForm.patchValue({
+        o2InFlueGas: 0
       });
     }
     this.save();

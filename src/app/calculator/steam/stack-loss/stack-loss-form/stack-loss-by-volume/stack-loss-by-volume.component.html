@@ -66,12 +66,6 @@
           (focus)="focusField('o2InFlueGas')" >
         <span class="input-group-addon units">%</span>
       </div>
-      <div class="form-group">
-        <label class="small">Excess Air</label>
-        <div class="text-center small">
-          {{calculationExcessAir | number:'2.2-2'}} %
-        </div>
-      </div>
       <span class="alert-danger pull-right small"
         *ngIf="stackLossForm.controls.o2InFlueGas.invalid && !stackLossForm.controls.o2InFlueGas.pristine">
         <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.required">Value Required</span>
@@ -83,12 +77,6 @@
     </div>
 
     <div class="form-group" *ngIf="calcMethodExcessAir">
-      <div class="form-group">
-        <label class="small">Oxygen In Flue Gas</label>
-        <div class="text-center small">
-          {{calculationFlueGasO2 | number:'2.2-2'}} %
-        </div>
-      </div>
       <label class="small" for="excessAirPercentage">Excess Air</label>
       <div class="input-group">
         <input name="excessAirPercentage" type="number" step="any" min="0" class="form-control"
