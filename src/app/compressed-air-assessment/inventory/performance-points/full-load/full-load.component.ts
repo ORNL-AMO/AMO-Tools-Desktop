@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
@@ -28,7 +28,7 @@ export class FullLoadComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  settingsSub: Subscription;
+  atmosphericPressure: number;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -36,7 +36,10 @@ export class FullLoadComponent implements OnInit {
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.atmosphericPressure = compressedAirAssessment.systemInformation.atmosphericPressure;
+
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -56,7 +59,6 @@ export class FullLoadComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   save() {
@@ -94,14 +96,14 @@ export class FullLoadComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow) {
-      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
       this.showAirflowCalc = (this.selectedCompressor.performancePoints.fullLoad.airflow != defaultValue);
     } else {
       this.showAirflowCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.fullLoad.isDefaultPower) {
-      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true);
+      let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
       this.showPowerCalc = (this.selectedCompressor.performancePoints.fullLoad.power != defaultValue);
     } else {
       this.showPowerCalc = false;
@@ -116,14 +118,14 @@ export class FullLoadComponent implements OnInit {
   }
 
   setAirFlow() {
-    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadAirFlow(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
     this.form.controls.airflow.patchValue(defaultValue);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true);
+    let defaultValue: number = this.fullLoadCalculationsService.getFullLoadPower(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
     this.form.controls.power.patchValue(defaultValue);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();

@@ -25,14 +25,13 @@ export class DesignDetailsComponent implements OnInit {
   displayNoLoadPowerUL: boolean;
   displayMaxFullFlow: boolean;
   contentCollapsed: boolean;
-  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseDesignDetails;
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.warnings = this.inventoryService.checkWarnings(compressor);
@@ -53,7 +52,6 @@ export class DesignDetailsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
-    this.settingsSub.unsubscribe();
     this.inventoryService.collapseDesignDetails = this.contentCollapsed;
   }
 

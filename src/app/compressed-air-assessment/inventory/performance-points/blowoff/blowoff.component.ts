@@ -27,14 +27,13 @@ export class BlowoffComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressorInventoryItem;
-  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -53,7 +52,6 @@ export class BlowoffComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   save() {
@@ -83,7 +81,7 @@ export class BlowoffComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.blowoff.isDefaultAirFlow) {
-      let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true);
+      let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true, this.settings);
       this.showAirflowCalc = (this.selectedCompressor.performancePoints.blowoff.airflow != defaultValue);
     } else {
       this.showAirflowCalc = false;
@@ -105,7 +103,7 @@ export class BlowoffComponent implements OnInit {
   }
 
   setAirFlow() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true);
+    let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true, this.settings);
     this.form.controls.airflow.patchValue(defaultValue);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();

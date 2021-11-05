@@ -12,10 +12,10 @@ export class FullLoadCalculationsService {
   constructor(private sharedPointCalculationsService: SharedPointCalculationsService,
     private convertCompressedAirService: ConvertCompressedAirService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
-  setFullLoad(selectedCompressor: CompressorInventoryItem): PerformancePoint {
+  setFullLoad(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
     selectedCompressor.performancePoints.fullLoad.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultPressure);
-    selectedCompressor.performancePoints.fullLoad.airflow = this.getFullLoadAirFlow(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow);
-    selectedCompressor.performancePoints.fullLoad.power = this.getFullLoadPower(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultPower);
+    selectedCompressor.performancePoints.fullLoad.airflow = this.getFullLoadAirFlow(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow, atmosphericPressure, settings);
+    selectedCompressor.performancePoints.fullLoad.power = this.getFullLoadPower(selectedCompressor, selectedCompressor.performancePoints.fullLoad.isDefaultPower, atmosphericPressure, settings);
     return selectedCompressor.performancePoints.fullLoad;
   }
 
@@ -28,7 +28,7 @@ export class FullLoadCalculationsService {
     }
   }
 
-  getFullLoadAirFlow(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getFullLoadAirFlow(selectedCompressor: CompressorInventoryItem, isDefault: boolean, atmosphericPressure: number, settings: Settings): number {
     if (isDefault) {
       let defaultAirflow: number;
       if (selectedCompressor.nameplateData.compressorType == 6) {
@@ -43,25 +43,24 @@ export class FullLoadCalculationsService {
         ];
         let regressionEquation = regression.polynomial(regressionData, { order: 2, precision: 50 });
         let regressionValue = regressionEquation.predict(selectedCompressor.performancePoints.fullLoad.dischargePressure);
-        defaultAirflow =  regressionValue[1];
+        defaultAirflow = regressionValue[1];
       } else {
-        defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure);
+        defaultAirflow = this.sharedPointCalculationsService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, atmosphericPressure, settings);
       }
-      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.performancePoints.fullLoad.airflow;
     }
   }
 
-  getFullLoadPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getFullLoadPower(selectedCompressor: CompressorInventoryItem, isDefault: boolean, atmosphericPressure: number, settings: Settings): number {
     if (isDefault) {
       let defaultPower: number;
       if (selectedCompressor.nameplateData.compressorType == 6) {
         //centrifugal
         defaultPower = selectedCompressor.nameplateData.totalPackageInputPower;
       } else {
-        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower);
+        defaultPower = this.sharedPointCalculationsService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.designDetails.inputPressure, selectedCompressor.performancePoints.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower, atmosphericPressure, settings);
       }
       return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {

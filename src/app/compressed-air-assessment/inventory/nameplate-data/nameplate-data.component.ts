@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, CompressorNameplateData } from '../../../shared/models/compressed-air-assessment';
+import { CompressorNameplateData } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
 import { CompressorTypeOptions } from '../inventoryOptions';
-import { PerformancePointCalculationsService } from '../performance-points/calculations/performance-point-calculations.service';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -20,9 +19,7 @@ export class NameplateDataComponent implements OnInit {
   form: FormGroup;
   isFormChange: boolean = false;
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
-  settingsSub: Subscription;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private performancePointCalculationsService: PerformancePointCalculationsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -35,12 +32,11 @@ export class NameplateDataComponent implements OnInit {
         }
       }
     });
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
   }
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   save() {

@@ -7,16 +7,16 @@ import { ConvertCompressedAirService } from '../../../convert-compressed-air.ser
 @Injectable()
 export class NoLoadCalculationsService {
 
-  constructor(private convertCompressedAirService: ConvertCompressedAirService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private convertCompressedAirService: ConvertCompressedAirService) { }
 
-  setNoLoad(selectedCompressor: CompressorInventoryItem): PerformancePoint {
-    selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPressure);
+  setNoLoad(selectedCompressor: CompressorInventoryItem, settings: Settings): PerformancePoint {
+    selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPressure, settings);
     selectedCompressor.performancePoints.noLoad.airflow = this.getNoLoadAirFlow(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultAirFlow);
     selectedCompressor.performancePoints.noLoad.power = this.getNoLoadPower(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPower);
     return selectedCompressor.performancePoints.noLoad;
   }
 
-  getNoLoadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getNoLoadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
       let defaultPressure: number;
       if (selectedCompressor.nameplateData.compressorType == 6 || selectedCompressor.compressorControls.controlType == 6
@@ -31,7 +31,6 @@ export class NoLoadCalculationsService {
         //rest of options
         defaultPressure = selectedCompressor.compressorControls.unloadSumpPressure;
       }
-      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
     } else {
       return selectedCompressor.performancePoints.noLoad.dischargePressure;

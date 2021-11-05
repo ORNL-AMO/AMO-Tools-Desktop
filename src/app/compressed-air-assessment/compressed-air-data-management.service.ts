@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, InletConditions, Modification, PerformancePoint } from '../shared/models/compressed-air-assessment';
+import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
@@ -170,7 +171,9 @@ export class CompressedAirDataManagementService {
   updateAssessmentFromDependentCompressorItem(selectedCompressor: CompressorInventoryItem, modificationsNeedUpdate: boolean, performancePointUpdateNeeded: boolean) {
     //update performance points
     if (performancePointUpdateNeeded) {
-      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor);
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
     }
     //update assessment
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();

@@ -148,7 +148,7 @@ export class CompressedAirAssessmentResultsService {
     let compressedAirAssessmentCopy: CompressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
     if (compressedAirAssessmentCopy.systemInformation.isSequencerUsed) {
       compressedAirAssessmentCopy.compressorInventoryItems.forEach(item => {
-        item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item)
+        item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, settings)
       });
     }
 
@@ -375,7 +375,7 @@ export class CompressedAirAssessmentResultsService {
         //ADJUST CASCADING SET POINTS
         let compressorPriorToAdjustement: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(adjustedCompressors));
         //adjust compressors
-        adjustedCompressors = this.adjustCascadingSetPointsAdjustCompressors(adjustedCompressors, modification.adjustCascadingSetPoints);
+        adjustedCompressors = this.adjustCascadingSetPointsAdjustCompressors(adjustedCompressors, modification.adjustCascadingSetPoints, atmosphericPressure, settings);
         //adjusted air flow based on compressor pressure changes
         adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, settings, adjustedCompressors, adjustedProfileSummary, atmosphericPressure, dayType)
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
@@ -413,7 +413,7 @@ export class CompressedAirAssessmentResultsService {
         //REDUCE SYSTEM AIR PRESSURE
         let compressorPriorToAdjustement: Array<CompressorInventoryItem> = JSON.parse(JSON.stringify(adjustedCompressors));
         //adjust compressors
-        adjustedCompressors = this.reduceSystemAirPressureAdjustCompressors(adjustedCompressors, modification.reduceSystemAirPressure);
+        adjustedCompressors = this.reduceSystemAirPressureAdjustCompressors(adjustedCompressors, modification.reduceSystemAirPressure, atmosphericPressure, settings);
         //adjusted air flow based on compressor reduction
         adjustedProfileSummary = this.systemPressureChangeAdjustProfile(compressorPriorToAdjustement, settings, adjustedCompressors, adjustedProfileSummary, atmosphericPressure)
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals);
@@ -424,7 +424,7 @@ export class CompressedAirAssessmentResultsService {
         }
       } else if (modification.useAutomaticSequencer.order == orderIndex) {
         //USE AUTOMATIC SEQUENCER
-        adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors, modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId);
+        adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, adjustedCompressors, modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId, atmosphericPressure, settings);
         let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(adjustedCompressors, dayType, adjustedProfileSummary, numberOfSummaryIntervals, undefined);
         adjustedProfileSummary = this.useAutomaticSequencerMapOrders(modification.useAutomaticSequencer.profileSummary, adjustedProfileSummary);
         adjustedProfileSummary = this.reallocateFlow(dayType, settings, adjustedProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, totalAirStorage, reduceRuntime);
@@ -463,7 +463,7 @@ export class CompressedAirAssessmentResultsService {
     //Adjuste perfomance points for sequencer
     if (compressedAirAssessment.systemInformation.isSequencerUsed) {
       inventoryItems.forEach(item => {
-        item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, item)
+        item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, item, compressedAirAssessment.systemInformation.atmosphericPressure, settings)
       });
     }
     let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
@@ -663,7 +663,7 @@ export class CompressedAirAssessmentResultsService {
   }
 
   //adjustCascadingSetPoints
-  adjustCascadingSetPointsAdjustCompressors(adjustedCompressors: Array<CompressorInventoryItem>, adjustCascadingSetPoints: AdjustCascadingSetPoints): Array<CompressorInventoryItem> {
+  adjustCascadingSetPointsAdjustCompressors(adjustedCompressors: Array<CompressorInventoryItem>, adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings): Array<CompressorInventoryItem> {
     adjustedCompressors.forEach(compressor => {
       let setPointData: CascadingSetPointData = adjustCascadingSetPoints.setPointData.find(data => { return data.compressorId == compressor.itemId });
       compressor.performancePoints.fullLoad.dischargePressure = setPointData.fullLoadDischargePressure;
@@ -684,7 +684,7 @@ export class CompressedAirAssessmentResultsService {
       compressor.performancePoints.blowoff.isDefaultAirFlow = true;
       compressor.performancePoints.blowoff.isDefaultPressure = true;
       compressor.performancePoints.blowoff.isDefaultPower = true;
-      compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor);
+      compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor, atmosphericPressure, settings);
     });
     return adjustedCompressors;
   }
@@ -769,7 +769,7 @@ export class CompressedAirAssessmentResultsService {
     return adjustedProfileSummary;
   }
   //reduceSystemAirPressure
-  reduceSystemAirPressureAdjustCompressors(adjustedCompressors: Array<CompressorInventoryItem>, reduceSystemAirPressure: ReduceSystemAirPressure): Array<CompressorInventoryItem> {
+  reduceSystemAirPressureAdjustCompressors(adjustedCompressors: Array<CompressorInventoryItem>, reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings): Array<CompressorInventoryItem> {
     adjustedCompressors.forEach(compressor => {
       //EEM: Reduce System Pressure
       compressor.performancePoints.fullLoad.dischargePressure = compressor.performancePoints.fullLoad.dischargePressure - reduceSystemAirPressure.averageSystemPressureReduction;
@@ -792,7 +792,7 @@ export class CompressedAirAssessmentResultsService {
       compressor.performancePoints.blowoff.isDefaultAirFlow = true;
       compressor.performancePoints.blowoff.isDefaultPressure = true;
       compressor.performancePoints.blowoff.isDefaultPower = true;
-      compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor);
+      compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor, atmosphericPressure, settings);
     });
     return adjustedCompressors;
   }
@@ -830,17 +830,17 @@ export class CompressedAirAssessmentResultsService {
     return adjustedProfileSummary;
   }
   //useAutomaticSequencer
-  useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, inventoryItems: Array<CompressorInventoryItem>, automaticSequencerProfile: Array<ProfileSummary>, dayTypeId: string): Array<CompressorInventoryItem> {
+  useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, inventoryItems: Array<CompressorInventoryItem>, automaticSequencerProfile: Array<ProfileSummary>, dayTypeId: string, atmosphericPressure: number, settings: Settings): Array<CompressorInventoryItem> {
     inventoryItems.forEach(item => {
       let sequencerProfile: ProfileSummary = automaticSequencerProfile.find(profileItem => { return profileItem.compressorId == item.itemId && profileItem.dayTypeId == dayTypeId });
       item.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
-      item = this.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, item)
+      item = this.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, item, atmosphericPressure, settings)
     });
     return inventoryItems;
   }
 
 
-  adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, item: CompressorInventoryItem): CompressorInventoryItem {
+  adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, item: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): CompressorInventoryItem {
     item.performancePoints.fullLoad.isDefaultPressure = false;
     item.performancePoints.fullLoad.isDefaultAirFlow = true;
     item.performancePoints.fullLoad.isDefaultPower = true;
@@ -877,7 +877,7 @@ export class CompressedAirAssessmentResultsService {
       item.performancePoints.blowoff.dischargePressure = targetPressure + variance;
       item.performancePoints.blowoff.isDefaultPressure = false;
     }
-    item.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(item);
+    item.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(item, atmosphericPressure, settings);
     return item;
   }
 
