@@ -58,6 +58,7 @@ export class WaterHeatingTreasureHuntService {
 
   getWaterHeatingOpportunityCardData(waterHeatingOpportunity: WaterHeatingTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let currentCosts: number = 0;
+    let energyData = this.getEnergyData(waterHeatingOpportunity, settings, currentEnergyUsage, opportunitySummary,);
     if (waterHeatingOpportunity.energySourceData.energySourceType == 'Natural Gas') {
       currentCosts = currentEnergyUsage.naturalGasCosts
     } else if (waterHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
@@ -70,18 +71,21 @@ export class WaterHeatingTreasureHuntService {
       opportunityType: Treasure.waterHeating,
       opportunityIndex: index,
       annualCostSavings: opportunitySummary.costSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: waterHeatingOpportunity.energySourceData.unit,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: (opportunitySummary.costSavings / currentCosts) * 100,
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
+      annualEnergySavings: energyData.annualEnergySavings,
+      percentSavings: energyData.percentSavings,
+      utilityType: energyData.utilityTypes,
+      // annualEnergySavings: [{
+      //   savings: opportunitySummary.totalEnergySavings,
+      //   energyUnit: waterHeatingOpportunity.energySourceData.unit,
+      //   label: opportunitySummary.utilityType
+      // }],
+      // utilityType: [opportunitySummary.utilityType],
+      // percentSavings: [{
+      //   percent: (opportunitySummary.costSavings / currentCosts) * 100,
+      //   label: opportunitySummary.utilityType,
+      //   baselineCost: opportunitySummary.baselineCost,
+      //   modificationCost: opportunitySummary.modificationCost,
+      // }],
       waterHeating: waterHeatingOpportunity,
       name: opportunitySummary.opportunityName,
       opportunitySheet: waterHeatingOpportunity.opportunitySheet,
@@ -91,6 +95,83 @@ export class WaterHeatingTreasureHuntService {
       needBackground: true
     }
     return cardData;
+}
+
+getEnergyData(waterHeatingOpportunity: WaterHeatingTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, opportunitySummary: OpportunitySummary): {
+  annualEnergySavings: Array<{
+    savings: number,
+    label: string,
+    energyUnit: string
+  }>,
+  percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }>,
+  utilityTypes: Array<string>
+}{
+  let annualEnergySavings: Array<{ savings: number, label: string, energyUnit: string }> = new Array();
+  let percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }> = new Array();
+  let utilityTypes: Array<string> = new Array();
+  let output: WaterHeatingOutput = this.waterHeatingService.waterHeatingOutput.getValue();
+
+  if (waterHeatingOpportunity.energySourceData.energySourceType == 'Natural Gas') {
+    let unit: string = 'MMBTu/yr';
+    if (settings.unitsOfMeasure == 'Metric') {
+      unit = 'MJ/yr';
+    }
+    annualEnergySavings.push({
+      savings: output.energySavedTotal,
+      label: 'Natural Gas',
+      energyUnit: unit
+    });
+    percentSavings.push(
+      {
+        percent: ((output.costSavingsBoiler + output.costSavingsDWH) / currentEnergyUsage.naturalGasCosts) * 100,
+        label: 'Natural Gas',
+        baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
+        modificationCost: opportunitySummary.modificationCost
+      }
+    )
+    utilityTypes.push('Natural Gas');
+  };
+  if (waterHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
+    let unit: string = 'MMBTu/yr';
+    if (settings.unitsOfMeasure == 'Metric') {
+      unit = 'MJ/yr';
+    }
+    annualEnergySavings.push({
+      savings: output.energySavedTotal,
+      label: 'Other Fuel',
+      energyUnit: unit
+    });
+    percentSavings.push(
+      {
+        percent: ((output.costSavingsBoiler + output.costSavingsDWH) / currentEnergyUsage.otherFuelCosts) * 100,
+        label: 'Other Fuel',
+        baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
+        modificationCost: opportunitySummary.modificationCost
+      }
+    )
+    utilityTypes.push('Natural Gas');
+  };
+  let unit: string = 'L/yr';
+      if (settings.unitsOfMeasure == 'Metric') {
+        unit = 'gal/yr';
+      }
+      annualEnergySavings.push({
+        savings: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
+        label: 'Water',
+        energyUnit: unit
+      });
+      percentSavings.push(
+        {
+          percent: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
+          label: 'Water',
+          baselineCost: output.costSavingsWNT,
+          modificationCost: opportunitySummary.modificationCost
+        }
+      )
+      utilityTypes.push('Water');
+
+  return { annualEnergySavings: annualEnergySavings, percentSavings: percentSavings, utilityTypes: utilityTypes }
+
 }
 
   convertWaterHeatingOpportunities(waterHeatingOpportunities: Array<WaterHeatingTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<WaterHeatingTreasureHunt> {
