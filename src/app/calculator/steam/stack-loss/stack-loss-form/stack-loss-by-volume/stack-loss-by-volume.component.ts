@@ -106,48 +106,16 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input: MaterialInputProperties = {
-      CH4: this.stackLossForm.controls.CH4.value,
-      C2H6: this.stackLossForm.controls.C2H6.value,
-      N2: this.stackLossForm.controls.N2.value,
-      H2: this.stackLossForm.controls.H2.value,
-      C3H8: this.stackLossForm.controls.C3H8.value,
-      C4H10_CnH2n: this.stackLossForm.controls.C4H10_CnH2n.value,
-      H2O: this.stackLossForm.controls.H2O.value,
-      CO: this.stackLossForm.controls.CO.value,
-      CO2: this.stackLossForm.controls.CO2.value,
-      SO2: this.stackLossForm.controls.SO2.value,
-      O2: this.stackLossForm.controls.O2.value,
-      o2InFlueGas: this.stackLossForm.controls.o2InFlueGas.value,
-      excessAir: this.stackLossForm.controls.excessAirPercentage.value
-    };
-
     if (!this.calcMethodExcessAir) {
-      if (this.stackLossForm.controls.o2InFlueGas.status === 'VALID') {
-        this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
         this.stackLossForm.patchValue({
-          excessAirPercentage: this.calculationExcessAir,
+          excessAirPercentage: 0,
         });
-      } else {
-        this.calculationExcessAir = 0;
-        this.stackLossForm.patchValue({
-          excessAirPercentage: this.calculationExcessAir,
-        });
-      }
     }
 
     if (this.calcMethodExcessAir) {
-      if (this.stackLossForm.controls.excessAirPercentage.status === 'VALID') {
-        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
         this.stackLossForm.patchValue({
-          o2InFlueGas: this.calculationFlueGasO2,
+          o2InFlueGas: 0,
         });
-      } else {
-        this.calculationFlueGasO2 = 0;
-        this.stackLossForm.patchValue({
-          o2InFlueGas: this.calculationFlueGasO2,
-        });
-      }
     }
     this.calculate();
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
@@ -153,16 +153,18 @@ export class FlueGasLossesComponent implements OnInit {
     if (loss.measurementType === "By Volume") {
       if (loss.formByVolume.status === 'VALID') {
         let tmpLoss: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(loss.formByVolume);
-        const availableHeat = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
-        loss.availableHeat = availableHeat * 100;
+        let flueGasLossesResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
+        loss.availableHeat = flueGasLossesResults.availableHeat * 100;
+        loss.calculatedFlueGasO2 = flueGasLossesResults.flueGasO2 * 100;
+        loss.calculatedExcessAir = flueGasLossesResults.excessAir * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
         } else {
           this.availableHeatError = null;
         }
         const sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = (sumHeat / availableHeat) - sumAdditionalHeat;
-        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
+        loss.grossHeat = (sumHeat / flueGasLossesResults.availableHeat) - sumAdditionalHeat;
+        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - flueGasLossesResults.availableHeat);
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
@@ -257,6 +259,8 @@ export interface FlueGasObj {
   measurementType: string;
   formByVolume: FormGroup;
   formByMass: FormGroup;
+  calculatedExcessAir?: number;
+  calculatedFlueGasO2?: number;
   availableHeat: number;
   grossHeat: number;
   systemLosses: number;

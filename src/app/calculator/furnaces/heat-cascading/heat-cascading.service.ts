@@ -109,6 +109,8 @@ export class HeatCascadingService {
       heatCascadingOutput = this.convertResultUnits(heatCascadingOutput, settings);
       heatCascadingOutput.priAvailableHeat = heatCascadingOutput.priAvailableHeat * 100;
       heatCascadingOutput.secAvailableHeat = heatCascadingOutput.secAvailableHeat * 100;
+      heatCascadingOutput.priExcessAir = heatCascadingOutput.priExcessAir * 100;
+      heatCascadingOutput.secExcessAir = heatCascadingOutput.secExcessAir * 100;
       heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.fuelCost;
       heatCascadingOutput.baselineEnergy = inputCopy.secFiringRate * inputCopy.secOpHours;
       heatCascadingOutput.modificationEnergy = inputCopy.secFiringRate * inputCopy.secOpHours - heatCascadingOutput.energySavings;
