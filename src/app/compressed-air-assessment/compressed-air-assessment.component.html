@@ -51,7 +51,7 @@
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-compressed-air-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
-        </app-compressed-air-report>
+      </app-compressed-air-report>
     </div>
   </div>
   <!--calculators-->
@@ -65,7 +65,10 @@
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="disableNext || setupTab == 'end-uses'" (click)="next()">Next</button>
+      <button class="btn btn-primary" [disabled]="disableNext || setupTab == 'end-uses'" (click)="next()">
+        <span *ngIf="setupTab != 'system-profile'">Next</span>
+        <span *ngIf="setupTab == 'system-profile'">Go To Assessment</span>
+      </button>
     </div>
   </div>
   <!--end footer-->
