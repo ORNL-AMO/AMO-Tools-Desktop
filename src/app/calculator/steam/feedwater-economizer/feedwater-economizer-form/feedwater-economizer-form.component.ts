@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
@@ -216,6 +216,13 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
     }
     this.gasMaterialModal.hide();
     this.feedwaterEconomizerService.modalOpen.next(false);
+    this.calculate();
+  }
+
+  setQuality(){
+    let temperatureValidators: Array<ValidatorFn> = this.feedwaterEconomizerFormService.getSteamTemperatureValidators(this.form.controls.steamCondition.value, this.settings);
+    this.form.controls.steamTemperature.setValidators(temperatureValidators);
+    this.form.controls.steamTemperature.updateValueAndValidity();
     this.calculate();
   }
 }

@@ -13,14 +13,14 @@ export class FeedwaterEconomizerService {
 
   feedwaterEconomizerInput: BehaviorSubject<FeedwaterEconomizerInput>;
   feedwaterEconomizerOutput: BehaviorSubject<FeedwaterEconomizerOutput>;
-  
+
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private feedwaterEconomizerFormService: FeedwaterEconomizerFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, private feedwaterEconomizerFormService: FeedwaterEconomizerFormService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.feedwaterEconomizerInput = new BehaviorSubject<FeedwaterEconomizerInput>(undefined);
     this.feedwaterEconomizerOutput = new BehaviorSubject<FeedwaterEconomizerOutput>(undefined);
@@ -30,7 +30,7 @@ export class FeedwaterEconomizerService {
   }
 
   initDefaultEmptyInputs(settings: Settings) {
-    let fuelCost: number = settings.fuelCost? settings.fuelCost : 0;
+    let fuelCost: number = settings.fuelCost ? settings.fuelCost : 0;
     let fuelTemp: number = 65;
 
     if (settings.unitsOfMeasure != 'Imperial') {
@@ -64,21 +64,21 @@ export class FeedwaterEconomizerService {
 
   initDefaultEmptyOutputs() {
     let emptyOutput: FeedwaterEconomizerOutput = {
-      effBoiler: undefined, 
-      tempSteamSat: undefined, 
-      enthalpySteam: undefined, 
-      enthalpyFW: undefined, 
-      flowSteam: undefined, 
-      flowFW: undefined, 
-      flowFlueGas: undefined, 
-      heatCapacityFG: undefined, 
-      specHeatFG: undefined, 
-      heatCapacityFW: undefined, 
-      specHeatFW: undefined, 
-      ratingHeatRecFW: undefined, 
-      tempFlueGasOut: undefined, 
-      tempFWOut: undefined, 
-      energySavingsBoiler: undefined, 
+      effBoiler: undefined,
+      tempSteamSat: undefined,
+      enthalpySteam: undefined,
+      enthalpyFW: undefined,
+      flowSteam: undefined,
+      flowFW: undefined,
+      flowFlueGas: undefined,
+      heatCapacityFG: undefined,
+      specHeatFG: undefined,
+      heatCapacityFW: undefined,
+      specHeatFW: undefined,
+      ratingHeatRecFW: undefined,
+      tempFlueGasOut: undefined,
+      tempFWOut: undefined,
+      energySavingsBoiler: undefined,
       costSavingsBoiler: undefined,
       energySavedTotal: undefined
     };
@@ -88,11 +88,9 @@ export class FeedwaterEconomizerService {
   calculate(settings: Settings): void {
     let feedwaterEconomizerInput: FeedwaterEconomizerInput = this.feedwaterEconomizerInput.getValue();
     let inputCopy: FeedwaterEconomizerInput = JSON.parse(JSON.stringify(feedwaterEconomizerInput));
-    let validInput: boolean;
+    let validInput: boolean = this.feedwaterEconomizerFormService.getFeedwaterEconomizerForm(inputCopy, settings).valid;
 
-    validInput = this.feedwaterEconomizerFormService.getFeedwaterEconomizerForm(inputCopy, settings).valid;
-    
-    if(!validInput) {
+    if (!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
@@ -100,9 +98,7 @@ export class FeedwaterEconomizerService {
 
       let feedwaterEconomizerOutput: FeedwaterEconomizerOutput = processHeatAddon.waterHeatingUsingFlue(suiteInputInterface);
       feedwaterEconomizerOutput = this.convertResultUnits(feedwaterEconomizerOutput, settings);
-      console.log(feedwaterEconomizerOutput);
-      // feedwaterEconomizerOutput.costSavingsBoiler = feedwaterEconomizerOutput.energySavingsBoiler * inputCopy.fuelCost;
-      
+
       this.feedwaterEconomizerOutput.next(feedwaterEconomizerOutput);
     }
   }
@@ -141,21 +137,21 @@ export class FeedwaterEconomizerService {
 
   getSuiteInputInterface(inputs: FeedwaterEconomizerInput) {
     return {
-      tempFlueGas: inputs.flueGasTemperature, 
-      percO2: inputs.flueGasO2, 
-      tempCombAir: inputs.combustionAirTemperature, 
-      moistCombAir: inputs.moistureInCombustionAir, 
-      ratingBoiler: inputs.energyRateInput, 
-      prSteam: inputs.steamPressure, 
-      condSteam: inputs.steamCondition, 
+      tempFlueGas: inputs.flueGasTemperature,
+      percO2: inputs.flueGasO2,
+      tempCombAir: inputs.combustionAirTemperature,
+      moistCombAir: inputs.moistureInCombustionAir,
+      ratingBoiler: inputs.energyRateInput,
+      prSteam: inputs.steamPressure,
+      condSteam: inputs.steamCondition,
       tempAmbientAir: inputs.ambientAirTemperature,
-      tempSteam: inputs.steamTemperature, 
-      tempFW: inputs.feedWaterTemperature, 
-      percBlowDown: inputs.percBlowdown, 
-      effHX: inputs.hxEfficiency, 
-      opHours: inputs.operatingHours, 
-      costFuel: inputs.fuelCost, 
-      fuelTempF: inputs.fuelTemp, 
+      tempSteam: inputs.steamTemperature || 0,
+      tempFW: inputs.feedWaterTemperature,
+      percBlowDown: inputs.percBlowdown,
+      effHX: inputs.hxEfficiency,
+      opHours: inputs.operatingHours,
+      costFuel: inputs.fuelCost,
+      fuelTempF: inputs.fuelTemp,
       hhvFuel: inputs.higherHeatingVal,
       CH4: inputs.CH4,
       C2H6: inputs.C2H6,
@@ -173,9 +169,9 @@ export class FeedwaterEconomizerService {
   }
 
   convertPercentToFraction(percentInput: number): number {
-    return percentInput > 0? percentInput / 100 : percentInput;
+    return percentInput > 0 ? percentInput / 100 : percentInput;
   }
-  
+
   convertExampleUnits(input: FeedwaterEconomizerInput): FeedwaterEconomizerInput {
     input.flueGasTemperature = this.convertUnitsService.value(input.flueGasTemperature).from('F').to('C');
     input.combustionAirTemperature = this.convertUnitsService.value(input.combustionAirTemperature).from('F').to('C');
@@ -198,7 +194,7 @@ export class FeedwaterEconomizerService {
     input.moistureInCombustionAir = this.convertPercentToFraction(input.moistureInCombustionAir);
 
     if (settings.unitsOfMeasure == 'Imperial') {
-      input.energyRateInput = this.convertUnitsService.value(input.energyRateInput).from('MMBtu').to('GJ'); 
+      input.energyRateInput = this.convertUnitsService.value(input.energyRateInput).from('MMBtu').to('GJ');
       input.steamPressure = this.convertUnitsService.value(input.steamPressure).from('psig').to('MPaa');
       input.higherHeatingVal = this.convertUnitsService.value(input.higherHeatingVal).from('btuSCF').to('kJNm3');
     }
@@ -216,11 +212,11 @@ export class FeedwaterEconomizerService {
   }
 
   convertResultUnits(output: FeedwaterEconomizerOutput, settings: Settings): FeedwaterEconomizerOutput {
-    output.effBoiler = output.effBoiler > 0? output.effBoiler * 100 : output.effBoiler;
+    output.effBoiler = output.effBoiler > 0 ? output.effBoiler * 100 : output.effBoiler;
     if (settings.unitsOfMeasure == 'Imperial') {
       output.tempSteamSat = this.convertUnitsService.value(output.tempSteamSat).from('K').to('F');
       output.tempSteamSat = this.roundVal(output.tempSteamSat, 2);
-      
+
       output.enthalpySteam = this.convertUnitsService.value(output.enthalpySteam).from('kJkg').to('btuLb');
       output.enthalpySteam = this.roundVal(output.enthalpySteam, 2);
 
@@ -238,7 +234,7 @@ export class FeedwaterEconomizerService {
 
       output.heatCapacityFG = this.convertUnitsService.value(output.heatCapacityFG).from('kJ').to('Btu');
       output.heatCapacityFG = this.roundVal(output.heatCapacityFG, 2);
-      
+
       output.specHeatFG = this.convertUnitsService.value(output.specHeatFG).from('kJkgK').to('btulbF');
       output.specHeatFG = this.roundVal(output.specHeatFG, 2);
 
@@ -280,7 +276,7 @@ export class FeedwaterEconomizerService {
   }
 
   getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
-    switch(energySourceType) {
+    switch (energySourceType) {
       case 'Natural Gas':
         return settings.fuelCost;
       case 'Other Fuel':
