@@ -112,8 +112,8 @@ export class HeatCascadingService {
       heatCascadingOutput.priExcessAir = heatCascadingOutput.priExcessAir * 100;
       heatCascadingOutput.secExcessAir = heatCascadingOutput.secExcessAir * 100;
       heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.fuelCost;
-      heatCascadingOutput.baselineEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate + inputCopy.priOpHours);
-      heatCascadingOutput.modificationEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate + inputCopy.priOpHours) - heatCascadingOutput.energySavings;
+      heatCascadingOutput.baselineEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate * inputCopy.priOpHours);
+      heatCascadingOutput.modificationEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate * inputCopy.priOpHours) - heatCascadingOutput.energySavings;
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }
