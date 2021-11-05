@@ -171,6 +171,13 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.disableNext = true;
     } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
       this.disableNext = true;
+    } else if (this.setupTab == 'system-information') {
+      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment);
+      if (hasValidSystemProfile) {
+        this.disableNext = false;
+      } else {
+        this.disableNext = true;
+      }
     } else {
       this.disableNext = false;
     }
@@ -187,6 +194,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.compressedAirAssessmentService.setupTab.next('system-profile');
     } else if (this.setupTab == 'system-profile') {
       // this.compressedAirAssessmentService.mainTab.next('end-uses');
+      this.compressedAirAssessmentService.mainTab.next('assessment');
     }
   }
 
