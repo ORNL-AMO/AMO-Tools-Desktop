@@ -13,14 +13,14 @@ export class HeatCascadingService {
 
   heatCascadingInput: BehaviorSubject<HeatCascadingInput>;
   heatCascadingOutput: BehaviorSubject<HeatCascadingOutput>;
-  
+
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private heatCascadingFormService: HeatCascadingFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, private heatCascadingFormService: HeatCascadingFormService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.heatCascadingInput = new BehaviorSubject<HeatCascadingInput>(undefined);
     this.heatCascadingOutput = new BehaviorSubject<HeatCascadingOutput>(undefined);
@@ -49,8 +49,8 @@ export class HeatCascadingService {
       priCombAirTemperature: undefined,
       priOpHours: undefined,
       fuelHV: 1032.44,
-      fuelTempF: fuelTempf, 
-      ambientAirTempF: ambientAirTempF, 
+      fuelTempF: fuelTempf,
+      ambientAirTempF: ambientAirTempF,
       combAirMoisturePerc: combAirMoisturePerc,
       secFiringRate: undefined,
       secExhaustTemperature: undefined,
@@ -59,7 +59,7 @@ export class HeatCascadingService {
       secAvailableHeat: undefined,
       secOpHours: undefined,
       fuelCost: undefined,
-  
+
       materialTypeId: 1,
       gasFuelType: true,
       substance: 'Typical Natural Gas - US',
@@ -87,9 +87,9 @@ export class HeatCascadingService {
       energySavings: 0,
       costSavings: 0,
       priExcessAir: 0,
-	    priAvailableHeat: 0,
-	    secExcessAir: 0,
-	    secAvailableHeat: 0,
+      priAvailableHeat: 0,
+      secExcessAir: 0,
+      secAvailableHeat: 0,
     };
     this.heatCascadingOutput.next(emptyOutput);
   }
@@ -99,8 +99,8 @@ export class HeatCascadingService {
     let inputCopy: HeatCascadingInput = JSON.parse(JSON.stringify(heatCascadingInput));
     let validInput: boolean;
     validInput = this.heatCascadingFormService.getHeatCascadingForm(inputCopy).valid;
-    
-    if(!validInput) {
+
+    if (!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
@@ -112,8 +112,8 @@ export class HeatCascadingService {
       heatCascadingOutput.priExcessAir = heatCascadingOutput.priExcessAir * 100;
       heatCascadingOutput.secExcessAir = heatCascadingOutput.secExcessAir * 100;
       heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.fuelCost;
-      heatCascadingOutput.baselineEnergy = inputCopy.secFiringRate * inputCopy.secOpHours;
-      heatCascadingOutput.modificationEnergy = inputCopy.secFiringRate * inputCopy.secOpHours - heatCascadingOutput.energySavings;
+      heatCascadingOutput.baselineEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate + inputCopy.priOpHours);
+      heatCascadingOutput.modificationEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate + inputCopy.priOpHours) - heatCascadingOutput.energySavings;
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }
@@ -131,10 +131,10 @@ export class HeatCascadingService {
       priCombAirTemperature: 80,
       priOpHours: 8000,
       fuelHV: 1032.44,
-      fuelTempF: fuelTempf, 
-      ambientAirTempF: ambientAirTempF, 
+      fuelTempF: fuelTempf,
+      ambientAirTempF: ambientAirTempF,
       combAirMoisturePerc: combAirMoisturePerc,
-  
+
       secFiringRate: 9.5,
       secExhaustTemperature: 225,
       secExhaustO2: 17.5,
@@ -142,7 +142,7 @@ export class HeatCascadingService {
       secAvailableHeat: 100,
       secOpHours: 7000,
       fuelCost: 5,
-      
+
       materialTypeId: 1,
       gasFuelType: true,
       substance: 'Typical Natural Gas - US',
@@ -167,43 +167,43 @@ export class HeatCascadingService {
   }
 
   convertPercentInputs(inputs: HeatCascadingInput): HeatCascadingInput {
-    inputs.priExhaustO2 = inputs.priExhaustO2 > 0? inputs.priExhaustO2 / 100 : inputs.priExhaustO2;
-    inputs.secExhaustO2 = inputs.secExhaustO2 > 0? inputs.secExhaustO2 / 100 : inputs.secExhaustO2;
-    inputs.combAirMoisturePerc = inputs.combAirMoisturePerc > 0? inputs.combAirMoisturePerc / 100 : inputs.combAirMoisturePerc;
-    inputs.secAvailableHeat = inputs.secAvailableHeat > 0? inputs.secAvailableHeat / 100 : inputs.secAvailableHeat;
+    inputs.priExhaustO2 = inputs.priExhaustO2 > 0 ? inputs.priExhaustO2 / 100 : inputs.priExhaustO2;
+    inputs.secExhaustO2 = inputs.secExhaustO2 > 0 ? inputs.secExhaustO2 / 100 : inputs.secExhaustO2;
+    inputs.combAirMoisturePerc = inputs.combAirMoisturePerc > 0 ? inputs.combAirMoisturePerc / 100 : inputs.combAirMoisturePerc;
+    inputs.secAvailableHeat = inputs.secAvailableHeat > 0 ? inputs.secAvailableHeat / 100 : inputs.secAvailableHeat;
     return inputs;
   }
 
-  
+
   convertExampleUnits(input: HeatCascadingInput): HeatCascadingInput {
-      input.priExhaustTemperature = this.convertUnitsService.value(input.priExhaustTemperature).from('F').to('C');
-      input.priExhaustTemperature = this.roundVal(input.priExhaustTemperature, 2);
+    input.priExhaustTemperature = this.convertUnitsService.value(input.priExhaustTemperature).from('F').to('C');
+    input.priExhaustTemperature = this.roundVal(input.priExhaustTemperature, 2);
 
-      input.priCombAirTemperature = this.convertUnitsService.value(input.priCombAirTemperature).from('F').to('C');
-      input.priCombAirTemperature = this.roundVal(input.priCombAirTemperature, 2);
-      
-      input.secExhaustTemperature = this.convertUnitsService.value(input.secExhaustTemperature).from('F').to('C');
-      input.secExhaustTemperature = this.roundVal(input.secExhaustTemperature, 2);
+    input.priCombAirTemperature = this.convertUnitsService.value(input.priCombAirTemperature).from('F').to('C');
+    input.priCombAirTemperature = this.roundVal(input.priCombAirTemperature, 2);
 
-      input.secCombAirTemperature = this.convertUnitsService.value(input.secCombAirTemperature).from('F').to('C');
-      input.secCombAirTemperature = this.roundVal(input.secCombAirTemperature, 2);
+    input.secExhaustTemperature = this.convertUnitsService.value(input.secExhaustTemperature).from('F').to('C');
+    input.secExhaustTemperature = this.roundVal(input.secExhaustTemperature, 2);
 
-      input.fuelTempF = this.convertUnitsService.value(input.fuelTempF).from('F').to('C');
-      input.fuelTempF = this.roundVal(input.fuelTempF, 2);
+    input.secCombAirTemperature = this.convertUnitsService.value(input.secCombAirTemperature).from('F').to('C');
+    input.secCombAirTemperature = this.roundVal(input.secCombAirTemperature, 2);
 
-      input.ambientAirTempF = this.convertUnitsService.value(input.ambientAirTempF).from('F').to('C');
-      input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
+    input.fuelTempF = this.convertUnitsService.value(input.fuelTempF).from('F').to('C');
+    input.fuelTempF = this.roundVal(input.fuelTempF, 2);
 
-      input.priFiringRate = this.convertUnitsService.value(input.priFiringRate).from('MMBtu').to('GJ');
-      input.priFiringRate = this.roundVal(input.priFiringRate, 2);
+    input.ambientAirTempF = this.convertUnitsService.value(input.ambientAirTempF).from('F').to('C');
+    input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
 
-      input.secFiringRate = this.convertUnitsService.value(input.secFiringRate).from('MMBtu').to('GJ');
-      input.secFiringRate = this.roundVal(input.secFiringRate, 2);
+    input.priFiringRate = this.convertUnitsService.value(input.priFiringRate).from('MMBtu').to('GJ');
+    input.priFiringRate = this.roundVal(input.priFiringRate, 2);
 
-      //kJNm3?
-      input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuSCF').to('MJNm3');
-      input.fuelHV = this.roundVal(input.fuelHV, 2);
-  
+    input.secFiringRate = this.convertUnitsService.value(input.secFiringRate).from('MMBtu').to('GJ');
+    input.secFiringRate = this.roundVal(input.secFiringRate, 2);
+
+    //kJNm3?
+    input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuSCF').to('MJNm3');
+    input.fuelHV = this.roundVal(input.fuelHV, 2);
+
     return input;
   }
 
@@ -214,7 +214,7 @@ export class HeatCascadingService {
 
       input.priCombAirTemperature = this.convertUnitsService.value(input.priCombAirTemperature).from('C').to('F');
       input.priCombAirTemperature = this.roundVal(input.priCombAirTemperature, 2);
-      
+
       input.secExhaustTemperature = this.convertUnitsService.value(input.secExhaustTemperature).from('C').to('F');
       input.secExhaustTemperature = this.roundVal(input.secExhaustTemperature, 2);
 
@@ -254,7 +254,7 @@ export class HeatCascadingService {
 
       output.priFlueVolume = this.convertUnitsService.value(output.priFlueVolume).from('ft3').to('m3');
       output.priFlueVolume = this.roundVal(output.priFlueVolume, 4);
-      
+
     }
     return output;
   }
