@@ -77,6 +77,18 @@
       </td>
     </tr> 
 
+    <tr>
+      <td class="bold w-50">Total Heat Recovery</td>
+      <td *ngIf="output.totalHeatRecovery" class="text-center w-50">
+        {{output.totalHeatRecovery | number:'1.0-2'}} 
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/hr</span>
+      </td>
+      <td *ngIf="!output.totalHeatRecovery" class="text-center w-50">
+        &mdash; &mdash;
+      </td>
+    </tr> 
+
   </tbody>
 </table>
 
