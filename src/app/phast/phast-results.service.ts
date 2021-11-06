@@ -8,6 +8,7 @@ import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasByVolumeSuiteResults } from '../shared/models/phast/losses/flueGas';
+import { FlueGasResultsComponent } from '../calculator/furnaces/flue-gas/flue-gas-results/flue-gas-results.component';
 
 
 @Injectable()
@@ -167,11 +168,13 @@ export class PhastResultsService {
           let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
             let flueGasResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            let availableHeat = flueGasResults.availableHeat;
+
             results.calculatedFlueGasO2 = flueGasResults.flueGasO2 * 100;
             results.calculatedExcessAir = flueGasResults.excessAir * 100;
-            results.flueGasAvailableHeat = flueGasResults.availableHeat * 100;
-            results.flueGasGrossHeat = (results.totalInput / results.flueGasAvailableHeat);
-            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - results.flueGasAvailableHeat);
+            results.flueGasAvailableHeat = availableHeat * 100;
+            results.flueGasGrossHeat = (results.totalInput / availableHeat);
+            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
             results.totalFlueGas = results.flueGasSystemLosses;
           }
         }
