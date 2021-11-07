@@ -1,14 +1,13 @@
 <div class="output-summary">
     <h4 class="show-print print-section-header">Payback Period Details</h4>
-    <div class="d-flex flex-column" *ngIf="assessmentResults.length != 0">
-        <div class="p-2" *ngFor="let assessmentResult of assessmentResults">
-            <label class="group-label">{{assessmentResult.modification.name}}</label>
-            <table class="table table-hover table-striped"
-                *ngFor="let dayTypeResult of assessmentResult.dayTypeModificationResults">
+    <div class="d-flex flex-column" *ngIf="combinedDayTypeResults.length != 0">
+        <div class="p-2" *ngFor="let result of combinedDayTypeResults">
+            <label class="group-label">{{result.modification.name}}</label>
+            <table class="table table-hover table-striped">
                 <tbody>
                     <tr>
                         <td class="w-25 bold">
-                            {{dayTypeResult.dayTypeName}}
+                            <!-- {{combinedResult.dayTypeName}} -->
                         </td>
                         <td class="w-25 bold">
                             Cost Savings <br> ($)
@@ -25,7 +24,7 @@
                             Flow Reallocation
                         </td>
                         <td>
-                            {{dayTypeResult.flowReallocationSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.flowReallocationSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
                             &mdash;
@@ -34,102 +33,102 @@
                             &mdash;
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.addReceiverVolumeSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.cost">
                         <td class="bold">
                             Add Receiver Volume
                         </td>
                         <td>
-                            {{dayTypeResult.addReceiverVolumeSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.addReceiverVolumeSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.addReceiverVolumeSavings.implementationCost}}
+                            {{result.combinedResults.addReceiverVolumeSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.addReceiverVolumeSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.addReceiverVolumeSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.adjustCascadingSetPointsSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.adjustCascadingSetPointsSavings.savings.cost">
                         <td class="bold">
                             Adjust Cascading Points
                         </td>
                         <td>
-                            {{dayTypeResult.adjustCascadingSetPointsSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.adjustCascadingSetPointsSavings.implementationCost}}
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.adjustCascadingSetPointsSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.improveEndUseEfficiencySavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.improveEndUseEfficiencySavings.savings.cost">
                         <td class="bold">
                             Improve End Use Efficiency
                         </td>
                         <td>
-                            {{dayTypeResult.improveEndUseEfficiencySavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.improveEndUseEfficiencySavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.improveEndUseEfficiencySavings.implementationCost}}
+                            {{result.combinedResults.improveEndUseEfficiencySavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.improveEndUseEfficiencySavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.improveEndUseEfficiencySavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.reduceAirLeaksSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.reduceAirLeaksSavings.savings.cost">
                         <td class="bold">
                             Reduce Air Leaks
                         </td>
                         <td>
-                            {{dayTypeResult.reduceAirLeaksSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.reduceAirLeaksSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceAirLeaksSavings.implementationCost}}
+                            {{result.combinedResults.reduceAirLeaksSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceAirLeaksSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.reduceAirLeaksSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.reduceRunTimeSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.reduceRunTimeSavings.savings.cost">
                         <td class="bold">
                             Reduce Runtime
                         </td>
                         <td>
-                            {{dayTypeResult.reduceRunTimeSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.reduceRunTimeSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceRunTimeSavings.implementationCost}}
+                            {{result.combinedResults.reduceRunTimeSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceRunTimeSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.reduceRunTimeSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.reduceSystemAirPressureSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.reduceSystemAirPressureSavings.savings.cost">
                         <td class="bold">
                             Reduce System Air Pressure
                         </td>
                         <td>
-                            {{dayTypeResult.reduceSystemAirPressureSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.reduceSystemAirPressureSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceSystemAirPressureSavings.implementationCost}}
+                            {{result.combinedResults.reduceSystemAirPressureSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.reduceSystemAirPressureSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.reduceSystemAirPressureSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
-                    <tr *ngIf="dayTypeResult.useAutomaticSequencerSavings.savings.cost">
+                    <tr *ngIf="result.combinedResults.useAutomaticSequencerSavings.savings.cost">
                         <td class="bold">
                             Use Automatic Sequencer
                         </td>
                         <td>
-                            {{dayTypeResult.useAutomaticSequencerSavings.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.useAutomaticSequencerSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.useAutomaticSequencerSavings.implementationCost}}
+                            {{result.combinedResults.useAutomaticSequencerSavings.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
                     <tr class="total">
@@ -137,13 +136,13 @@
                             Total
                         </td>
                         <td>
-                            {{dayTypeResult.allSavingsResults.savings.cost | number:'1.0-2'}}
+                            {{result.combinedResults.allSavingsResults.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{dayTypeResult.allSavingsResults.implementationCost}}
+                            {{result.combinedResults.allSavingsResults.implementationCost}}
                         </td>
                         <td>
-                            {{dayTypeResult.allSavingsResults.paybackPeriod | number:'1.0-2'}}
+                            {{result.combinedResults.allSavingsResults.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
                 </tbody>
@@ -151,6 +150,6 @@
         </div>
     </div>
 </div>
-<div class="alert alert-warning p-2" *ngIf="assessmentResults && assessmentResults.length == 0">
+<div class="alert alert-warning p-2" *ngIf="combinedDayTypeResults && combinedDayTypeResults.length == 0">
     No modifications found. Create a modification to see payback details.
 </div>

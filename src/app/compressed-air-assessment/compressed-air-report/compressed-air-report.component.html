@@ -114,7 +114,7 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-payback-period [assessmentResults]="assessmentResults"></app-payback-period>
+            <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
         </div>
     </div>
     <!-- End .report-data -->
