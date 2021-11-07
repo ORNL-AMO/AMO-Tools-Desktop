@@ -321,6 +321,28 @@ export class CompressedAirAssessmentResultsService {
     dayTypeModificationResult.peakDemand = _.maxBy(modificationResults.dayTypeModificationResults, (result) => { return result.peakDemand }).peakDemand;
     dayTypeModificationResult.peakDemandCost = _.maxBy(modificationResults.dayTypeModificationResults, (result) => { return result.peakDemandCost }).peakDemandCost;
 
+    if (modificationResults.dayTypeModificationResults && modificationResults.dayTypeModificationResults.length > 0) {
+      dayTypeModificationResult.addReceiverVolumeSavings.implementationCost = modificationResults.dayTypeModificationResults[0].addReceiverVolumeSavings.implementationCost;
+      dayTypeModificationResult.adjustCascadingSetPointsSavings.implementationCost = modificationResults.dayTypeModificationResults[0].adjustCascadingSetPointsSavings.implementationCost;
+      dayTypeModificationResult.improveEndUseEfficiencySavings.implementationCost = modificationResults.dayTypeModificationResults[0].improveEndUseEfficiencySavings.implementationCost;
+      dayTypeModificationResult.reduceAirLeaksSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceAirLeaksSavings.implementationCost;
+      dayTypeModificationResult.reduceRunTimeSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceRunTimeSavings.implementationCost;
+      dayTypeModificationResult.reduceSystemAirPressureSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceSystemAirPressureSavings.implementationCost;
+      dayTypeModificationResult.useAutomaticSequencerSavings.implementationCost = modificationResults.dayTypeModificationResults[0].useAutomaticSequencerSavings.implementationCost;
+    }
+
+    dayTypeModificationResult.flowReallocationSavings.paybackPeriod = 0;
+    dayTypeModificationResult.addReceiverVolumeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.addReceiverVolumeSavings);
+    dayTypeModificationResult.adjustCascadingSetPointsSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.adjustCascadingSetPointsSavings);
+    dayTypeModificationResult.improveEndUseEfficiencySavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.improveEndUseEfficiencySavings);
+    dayTypeModificationResult.reduceAirLeaksSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceAirLeaksSavings);
+    dayTypeModificationResult.reduceRunTimeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceRunTimeSavings);
+    dayTypeModificationResult.reduceSystemAirPressureSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceSystemAirPressureSavings);
+    dayTypeModificationResult.useAutomaticSequencerSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.useAutomaticSequencerSavings);
+
+    // dayTypeModificationResult.auxiliaryPowerUsage.cost += modResult.auxiliaryPowerUsage.cost;
+    // dayTypeModificationResult.auxiliaryPowerUsage.energyUse += modResult.auxiliaryPowerUsage.energyUse;
+    // dayTypeModificationResult.auxiliaryPowerUsage.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.auxiliaryPowerUsage);
 
 
     dayTypeModificationResult.totalAnnualOperatingCost = dayTypeModificationResult.peakDemandCost + dayTypeModificationResult.allSavingsResults.adjustedResults.cost;
@@ -334,6 +356,14 @@ export class CompressedAirAssessmentResultsService {
     return dayTypeModificationResult;
   }
 
+  getPaybackPeriod(savingsResult: EemSavingsResults): number {
+    let paybackPeriod: number = (savingsResult.implementationCost / savingsResult.savings.cost) * 12
+    if (paybackPeriod < 0) {
+      return 0;
+    } else {
+      return paybackPeriod;
+    }
+  }
 
   adjustProfileSummary(dayType: CompressedAirDayType, settings: Settings, baselineProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, modification: Modification, modificationOrders: Array<number>, atmosphericPressure: number, numberOfSummaryIntervals: number, totalAirStorage: number, electricityCost: number): AdjustProfileResults {
     let addReceiverVolumeSavings: EemSavingsResults = this.getEmptyEemSavings();

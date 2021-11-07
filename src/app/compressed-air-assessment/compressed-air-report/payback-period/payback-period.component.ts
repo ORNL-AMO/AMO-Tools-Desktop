@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CompressedAirAssessmentResult } from '../../compressed-air-assessment-results.service';
+import { Modification } from '../../../shared/models/compressed-air-assessment';
+import { DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-payback-period',
@@ -8,7 +9,7 @@ import { CompressedAirAssessmentResult } from '../../compressed-air-assessment-r
 })
 export class PaybackPeriodComponent implements OnInit {
   @Input()
-  assessmentResults: Array<CompressedAirAssessmentResult>;
+  combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
 
   constructor() { }
 
