@@ -117,21 +117,21 @@
                 <td *ngIf="dataForms.length != 1">
                     {{dataForm.dayTypeName}}
                 </td>
-                <td *ngFor="let item of dataForm.form.controls | keyvalue; let dataIndex = index;">
+                <td *ngFor="let item of getFormControls(dataForm.form);">
                     <!--FIXED-->
                     <input *ngIf="form.controls.reductionType.value == 'Fixed'" type="checkbox"
-                        formControlName={{item.key}} (change)="saveDataForm()">
+                        formControlName={{item.name}} (change)="saveDataForm()">
 
                     <!--VARIABLE-->
-                    <input class="form-control w-100 min-width" type="number" formControlName={{item.key}}
+                    <input class="form-control w-100 min-width" type="number" formControlName={{item.name}}
                         (focus)="helpTextField('airflowReductionVariable')"
                         *ngIf="form.controls.reductionType.value == 'Variable'" (input)="saveDataForm()">
-                    <div class="alert-danger m-0 p-0 bold" *ngIf="item.value.errors">
-                        <span *ngIf="item.value.errors.min">
+                    <div class="alert-danger m-0 p-0 bold" *ngIf="item.control.errors">
+                        <span *ngIf="item.control.errors.min">
                             &#60; 0
                         </span>
-                        <span *ngIf="item.value.errors.max">
-                            &#62; {{item.value.errors.max.max | number:numberPipeDecimals}}
+                        <span *ngIf="item.control.errors.max">
+                            &#62; {{item.control.errors.max.max | number:numberPipeDecimals}}
                         </span>
                     </div>
                 </td>

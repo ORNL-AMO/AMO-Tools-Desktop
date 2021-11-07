@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { BaselineResults } from '../../../compressed-air-assessment-results.service';
@@ -92,5 +92,13 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
         this.hasInvalidForm = true;
       }
     });
+  }
+
+  getFormControls(form: FormGroup): Array<{control: AbstractControl, name: string}>{
+    let controlNames: Array<{control: AbstractControl, name: string}> = new Array();
+    for (let key in form.controls) {
+      controlNames.push({ control: form.controls[key], name: key});
+    }
+    return controlNames;
   }
 }

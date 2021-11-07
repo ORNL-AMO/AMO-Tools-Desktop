@@ -64,7 +64,7 @@ export class ImproveEndUseEfficiencyService {
       let dayTypeSummaryTotal: Array<ProfileSummaryTotal> = baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dataItem.dayTypeId }).profileSummaryTotals;
       let form: FormGroup = this.formBuilder.group({});
       dataItem.data.forEach((d: { hourInterval: number, applyReduction: boolean, reductionAmount: number }, dataIndex: number) => {
-        let name: string = "reductionData_" + dataRowIndex + '_' + dataIndex;
+        let name: string = "reductionData_" + dataRowIndex + '_' + d.hourInterval;
         let control: AbstractControl = this.getControlFromData(d, dayTypeSummaryTotal, endUseEfficiencyItem.reductionType);
         form.addControl(name, control);
       });
