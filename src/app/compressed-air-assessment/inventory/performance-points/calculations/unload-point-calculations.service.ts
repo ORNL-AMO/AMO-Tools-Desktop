@@ -1,28 +1,27 @@
 import { Injectable } from '@angular/core';
 import { CompressorInventoryItem, PerformancePoint } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 
 @Injectable()
 export class UnloadPointCalculationsService {
 
-  constructor(private convertCompressedAirService: ConvertCompressedAirService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private convertCompressedAirService: ConvertCompressedAirService) { }
 
   setUnload(selectedCompressor: CompressorInventoryItem, settings: Settings): PerformancePoint {
     if (selectedCompressor.nameplateData.compressorType == 6) {
-      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
+      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure, settings);
       selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow, settings);
     } else {
       //non centrifugal calcs need airflow calc first, discharge pressure uses value
       selectedCompressor.performancePoints.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow, settings);
-      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure);
+      selectedCompressor.performancePoints.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPressure, settings);
     }
     selectedCompressor.performancePoints.unloadPoint.power = this.getUnloadPower(selectedCompressor, selectedCompressor.performancePoints.unloadPoint.isDefaultPower);
     return selectedCompressor.performancePoints.unloadPoint;
   }
 
-  getUnloadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean): number {
+  getUnloadPressure(selectedCompressor: CompressorInventoryItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
       let defaultPressure: number;
       if (selectedCompressor.nameplateData.compressorType == 6) {
@@ -31,7 +30,6 @@ export class UnloadPointCalculationsService {
       } else {
         defaultPressure = this.calculateUnloadPointDischargePressure(selectedCompressor.performancePoints.maxFullFlow.dischargePressure, selectedCompressor.designDetails.modulatingPressureRange, selectedCompressor.performancePoints.fullLoad.airflow, selectedCompressor.performancePoints.unloadPoint.airflow);
       }
-      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
     } else {
       return selectedCompressor.performancePoints.unloadPoint.dischargePressure;

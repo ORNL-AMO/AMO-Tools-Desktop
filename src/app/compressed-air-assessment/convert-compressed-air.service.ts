@@ -199,13 +199,13 @@ export class ConvertCompressedAirService {
     if (inputObj.computeFrom == 3) {
       inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
     }
-    inputObj.dischargePsiFullLoad = this.convertUnitsService.value(inputObj.dischargePsiFullLoad).from('barg').to('psig');
-    inputObj.noLoadDischargePressure = this.convertUnitsService.value(inputObj.noLoadDischargePressure).from('barg').to('psig');
+    inputObj.dischargePsiFullLoad = this.convertPressure(inputObj.dischargePsiFullLoad);
+    inputObj.noLoadDischargePressure = this.convertPressure(inputObj.noLoadDischargePressure);
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
-    inputObj.pressureAtUnload = this.convertUnitsService.value(inputObj.pressureAtUnload).from('barg').to('psig');
+    inputObj.pressureAtUnload = this.convertPressure(inputObj.pressureAtUnload);
     inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
-    inputObj.dischargePsiMax = this.convertUnitsService.value(inputObj.dischargePsiMax).from('barg').to('psig');
+    inputObj.dischargePsiMax = this.convertPressure(inputObj.dischargePsiMax);
     // inputObj.modulatingPsi = this.convertUnitsService.value(inputObj.modulatingPsi).from('barg').to('psig');
     inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kPaa').to('psia');
     inputObj.receiverVolume = this.convertUnitsService.value(inputObj.receiverVolume).from('m3').to('ft3');
@@ -221,9 +221,16 @@ export class ConvertCompressedAirService {
     }
     //if lubricant free, hardcoded to 15 no conversion
     if (inputObj.lubricantType != 1) {
-      inputObj.unloadSumpPressure = this.convertUnitsService.value(inputObj.unloadSumpPressure).from('barg').to('psig');
+      inputObj.unloadSumpPressure = this.convertPressure(inputObj.unloadSumpPressure);
     }
     return inputObj;
+  }
+
+  convertPressure(val: number): number {
+    if (val) {
+      val = this.convertUnitsService.value(val).from('barg').to('psig');
+    }
+    return val;
   }
 
   convertCentrifugalInputObject(inputObj: CentrifugalInput): CentrifugalInput {
@@ -231,14 +238,14 @@ export class ConvertCompressedAirService {
     if (inputObj.computeFrom == 3) {
       inputObj.computeFromVal = this.convertUnitsService.value(inputObj.computeFromVal).from('m3/min').to('ft3/min');
     }
-    inputObj.fullLoadPressure = this.convertUnitsService.value(inputObj.fullLoadPressure).from('barg').to('psig');
+    inputObj.fullLoadPressure = this.convertPressure(inputObj.fullLoadPressure);
     inputObj.capacityAtFullLoad = this.convertUnitsService.value(inputObj.capacityAtFullLoad).from('m3/min').to('ft3/min');
     inputObj.capacityAtMinFullLoadPressure = this.convertUnitsService.value(inputObj.capacityAtMinFullLoadPressure).from('m3/min').to('ft3/min');
     inputObj.capacityAtMaxFullLoadPressure = this.convertUnitsService.value(inputObj.capacityAtMaxFullLoadPressure).from('m3/min').to('ft3/min');
-    inputObj.minFullLoadPressure = this.convertUnitsService.value(inputObj.minFullLoadPressure).from('barg').to('psig');
-    inputObj.maxFullLoadPressure = this.convertUnitsService.value(inputObj.maxFullLoadPressure).from('barg').to('psig');
+    inputObj.minFullLoadPressure = this.convertPressure(inputObj.minFullLoadPressure);
+    inputObj.maxFullLoadPressure = this.convertPressure(inputObj.maxFullLoadPressure);
     inputObj.surgeFlow = this.convertUnitsService.value(inputObj.surgeFlow).from('m3/min').to('ft3/min');
-    inputObj.maxPressure = this.convertUnitsService.value(inputObj.maxPressure).from('barg').to('psig');
+    inputObj.maxPressure = this.convertPressure(inputObj.maxPressure);
     inputObj.capacityAtMaxFullFlow = this.convertUnitsService.value(inputObj.capacityAtMaxFullFlow).from('m3/min').to('ft3/min');
     inputObj.capacityAtUnload = this.convertUnitsService.value(inputObj.capacityAtUnload).from('m3/min').to('ft3/min');
     return inputObj;

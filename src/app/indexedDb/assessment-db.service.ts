@@ -38,88 +38,11 @@ export class AssessmentDbService {
     return selectedAssessments;
   }
 
-  getPhastExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample === true; });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'PHAST') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
-  }
-
-  getFsatExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample === true; });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'FSAT') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
-  }
-
-  getWasteWaterExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample === true; });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'WasteWater') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
-  }
-
-  getPsatExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
-      return (assessment.isExample === true);
+  getExample(exampleType: string): Assessment {
+    let example: Assessment = this.allAssessments.find(assessment => {
+      return assessment.isExample == true && assessment.type == exampleType;
     });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'PSAT') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
-  }
-
-  getSsmtExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
-      return (assessment.isExample === true);
-    });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'SSMT') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
-  }
-
-  getTreasureHuntExample(): Assessment {
-    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
-      return (assessment.isExample === true);
-    });
-    let tmpExample: Assessment;
-    if (examples) {
-      examples.forEach(example => {
-        if (example.type === 'TreasureHunt') {
-          tmpExample = example;
-        }
-      });
-    }
-    return tmpExample;
+    return example;
   }
 
 }

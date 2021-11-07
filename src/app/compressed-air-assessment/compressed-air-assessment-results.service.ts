@@ -46,9 +46,18 @@ export class CompressedAirAssessmentResultsService {
       if (isNaN(averagePower)) {
         averagePower = 0;
       }
-      let peakDemand: number = _.maxBy(totals, (total) => { return total.power }).power;
+
+      let peakDemandTotal: ProfileSummaryTotal = _.maxBy(totals, (total) => { return total.power });
+      let peakDemand: number = 0;
+      if (peakDemandTotal) {
+        peakDemand = peakDemandTotal.power;
+      }
       let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
-      let maxAirFlow: number = _.maxBy(totals, (total) => { return total.airflow }).airflow;
+      let maxAirFlowTotal: ProfileSummaryTotal = _.maxBy(totals, (total) => { return total.airflow });
+      let maxAirFlow: number = 0;
+      if (maxAirFlowTotal) {
+        maxAirFlow = maxAirFlowTotal.airflow;
+      }
       dayTypeResults.push({
         cost: baselineResults.cost,
         energyUse: baselineResults.power,
@@ -536,8 +545,12 @@ export class CompressedAirAssessmentResultsService {
       let compressorPower: number = 0;
       allData.forEach(dataItem => {
         if (dataItem.timeInterval == interval && dataItem.order != 0) {
-          totalAirFlow += dataItem.airflow;
-          compressorPower += dataItem.power;
+          if (isNaN(dataItem.airflow) == false) {
+            totalAirFlow += dataItem.airflow;
+          }
+          if (isNaN(dataItem.power) == false) {
+            compressorPower += dataItem.power;
+          }
         }
       });
       let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);

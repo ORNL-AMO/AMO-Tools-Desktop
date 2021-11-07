@@ -10,6 +10,7 @@ import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTrea
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
 import { BehaviorSubject } from 'rxjs';
 import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
+import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
 @Injectable()
 export class CoreService {
 
@@ -23,6 +24,7 @@ export class CoreService {
   exampleWasteWaterId: number;
   exampleTreasureHuntId: number;
   exampleMotorInventoryId: number;
+  exampleCompressedAirAssessmentId: number;
   constructor(private indexedDbService: IndexedDbService) {
     this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
@@ -62,8 +64,12 @@ export class CoreService {
 
                       MockWasteWater.directoryId = this.exampleDirectoryId;
                       this.indexedDbService.addAssessment(MockWasteWater).then(wwId => {
-                      this.exampleWasteWaterId = wwId;
-                        resolve(true);
+                        this.exampleWasteWaterId = wwId;
+                        MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
+                        this.indexedDbService.addAssessment(MockCompressedAirAssessment).then(compressedAirAssessmentId => {
+                          this.exampleCompressedAirAssessmentId = compressedAirAssessmentId;
+                          resolve(true);
+                        })
                       });
                     });
                   });
@@ -111,10 +117,13 @@ export class CoreService {
                     delete MockPsatSettings.assessmentId;
                     MockPsatSettings.inventoryId = this.exampleMotorInventoryId;
                     this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-                      
+
                       MockWasteWaterSettings.assessmentId = this.exampleWasteWaterId;
                       this.indexedDbService.addSettings(MockWasteWaterSettings).then(() => {
-                        resolve(true);
+                        MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
+                        this.indexedDbService.addSettings(MockCompressedAirAssessmentSettings).then(() => {
+                          resolve(true);
+                        })
                       });
                     });
                   });
