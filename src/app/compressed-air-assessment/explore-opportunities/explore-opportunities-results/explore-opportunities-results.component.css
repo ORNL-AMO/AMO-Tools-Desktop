@@ -1,0 +1,49 @@
+
+
+
+  .day-type-select{
+    font-size: 22px;
+}
+
+
+.positive-savings{
+	color: green;
+}
+
+.negative-savings{
+	color: red;
+}
+
+
+.no-data{
+    width: 100%;
+}
+
+.stripe{
+    border-bottom: solid;
+}
+
+.my-table-bg{
+    /* background-color: #FFE400; */
+    background-color: #D6DBDF;
+}
+
+/* .my-table{
+    box-shadow: 3px 3px 10px 0px #566573;
+} */
+
+.table-text{
+    font-size: 15px;
+}
+
+.my-table-item:hover{
+    background-color: white;
+}
+
+.energy-savings.stripe{
+    margin-bottom: 15px;
+}
+
+.invalid {
+    color: red;
+}

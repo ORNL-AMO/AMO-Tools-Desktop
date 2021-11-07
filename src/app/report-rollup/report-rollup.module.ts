@@ -58,6 +58,10 @@ import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-roll
 import { WasteWaterRollupPrintComponent } from './waste-water-rollup/waste-water-rollup-print/waste-water-rollup-print.component';
 import { NutrientRemovalTableComponent } from './waste-water-rollup/nutrient-removal-table/nutrient-removal-table.component';
 import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-energy-use-table/effluent-energy-use-table.component';
+import { CompressedAirReportRollupService } from './compressed-air-report-rollup.service';
+import { CompressedAirSummaryComponent } from './report-summary/compressed-air-summary/compressed-air-summary.component';
+import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
+import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
 
 @NgModule({
   imports: [
@@ -74,7 +78,8 @@ import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-e
     PieChartModule,
     SharedPipesModule,
     RouterModule,
-    WasteWaterReportModule
+    WasteWaterReportModule,
+    CompressedAirReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -114,6 +119,8 @@ import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-e
     WasteWaterRollupPrintComponent,
     NutrientRemovalTableComponent,
     EffluentEnergyUseTableComponent,
+    CompressedAirSummaryComponent,
+    CompressedAirRollupComponent,
 
   ],
   providers: [
@@ -123,7 +130,8 @@ import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-e
     FsatReportRollupService,
     SsmtReportRollupService,
     TreasureHuntReportRollupService,
-    WasteWaterReportRollupService
+    WasteWaterReportRollupService,
+    CompressedAirReportRollupService
   ],
   exports: [ReportRollupComponent]
 })

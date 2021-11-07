@@ -43,7 +43,8 @@ export class ApplicationSettingsComponent implements OnInit {
     'kcal',
     'kgce',
     'kgoe',
-    'kWh'
+    'kWh',
+    'MWh'
   ];
 
   energyResultOptions: Array<any>;

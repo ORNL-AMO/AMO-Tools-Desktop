@@ -1,6 +1,10 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { FullLoadAmpsService } from './full-load-amps.service';
 
@@ -12,6 +16,9 @@ import { FullLoadAmpsService } from './full-load-amps.service';
 export class FullLoadAmpsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;  
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -28,7 +35,12 @@ export class FullLoadAmpsComponent implements OnInit {
 
   flaInputSub: Subscription;
   currentField: string;
-  constructor(private settingsDbService: SettingsDbService, private fullLoadAmpsService: FullLoadAmpsService) { }
+  saving: boolean;
+  assessmentCalculator: Calculator;
+
+  constructor(private settingsDbService: SettingsDbService, 
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+    private fullLoadAmpsService: FullLoadAmpsService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -42,6 +54,10 @@ export class FullLoadAmpsComponent implements OnInit {
       this.fullLoadAmpsService.initDefualtEmptyOutputs();
     }
     this.initSubscriptions();
+
+    if(this.assessment) {
+      this.getCalculatorForAssessment();
+    }
   }
 
   ngAfterViewInit() {
@@ -65,6 +81,52 @@ export class FullLoadAmpsComponent implements OnInit {
 
   calculate() {
     this.fullLoadAmpsService.estimateFullLoadAmps(this.settings);
+    if (this.assessmentCalculator) {
+      this.assessmentCalculator.fullLoadAmpsInput = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
+      this.saveAssessmentCalculator();
+     }
+  }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if(this.assessmentCalculator) {
+      if (this.assessmentCalculator.fullLoadAmpsInput) {
+        this.fullLoadAmpsService.fullLoadAmpsInputs.next(this.assessmentCalculator.fullLoadAmpsInput);
+      } else {
+        this.assessmentCalculator.fullLoadAmpsInput = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
+      }
+    }else{
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  initNewAssessmentCalculator(): Calculator {
+    let inputs = this.fullLoadAmpsService.fullLoadAmpsInputs.getValue();
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      fullLoadAmpsInput: inputs
+    };
+    return tmpCalculator;
+  }
+
+  saveAssessmentCalculator(){
+    if (!this.saving) {
+      if (this.assessmentCalculator.id) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
   }
 
   

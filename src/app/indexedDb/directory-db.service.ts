@@ -56,7 +56,7 @@ export class DirectoryDbService {
   }
 
   getExample(): Directory {
-    let example: Directory = _.find(JSON.parse(JSON.stringify(this.allDirectories)), (directory: Directory) => {
+    let example: Directory = _.find(this.allDirectories, (directory: Directory) => {
       return (directory.isExample === true);
     });
     return example;

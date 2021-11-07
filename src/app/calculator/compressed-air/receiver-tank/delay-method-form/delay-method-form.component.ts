@@ -35,7 +35,15 @@ export class DelayMethodFormComponent implements OnInit {
   
   getTotalReceiverVolume() {
     this.totalReceiverVolume = this.standaloneService.receiverTankSizeBridgingCompressor(this.inputs, this.settings);
+    if (this.receiverTankService.inAssessmentCalculator) {
+      this.updateInputsForAssessmentCalculator();
+    }
   }
+
+  updateInputsForAssessmentCalculator() {
+    this.receiverTankService.inputs.next({bridgeCompressorInputs: this.inputs})
+  }
+
   changeField(str: string) {
     this.receiverTankService.currentField.next(str);
   }

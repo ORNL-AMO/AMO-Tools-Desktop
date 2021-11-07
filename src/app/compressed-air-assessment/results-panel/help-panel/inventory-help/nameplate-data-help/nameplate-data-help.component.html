@@ -1,0 +1,73 @@
+<!-- Nameplate Data Help  -->
+<div class="my-2" *ngIf="focusedField == 'compressorType'">
+    <h6>
+        Compressor Type
+        <br>
+        <small class="text-muted">
+            A general description of the air compressor design and style. The compressor type options in MEASUR are:
+            single stage lubricant-injected rotary screw, two stage lubricant-injected rotary screw, two stage
+            lubricant-free rotary screw, single stage reciprocating, two stage reciprocating, and centrifugal.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'motorPower'">
+    <h6>
+        Motor Power
+        <br>
+        <small class="text-muted">
+            Either Motor Power (kW) or Motor Current (amps) will be displayed, depending on the Load Estimation
+            Method selected. Power is the preferred measurement, but unless a permanently-installed power meter is
+            available, it is much more intrusive and challenging.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'fullLoadOperatingPressure'">
+    <h6>
+        Full Load Operating Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor begins to deliver air; at this point, the compressor may reload
+            or turn on, and is delivering full flow.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'fullLoadRatedCapacity'">
+    <h6>
+        Rated Capacity at Full Load Pressure
+        <br>
+        <small class="text-muted">
+            The designed flow for the compressor at full load preassure
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'fullLoadAmps'">
+    <h6>
+        Full Load Amps
+        <br>
+        <small class="text-muted">
+            The maximum current that the motor can draw/supply safely by meeting (either supplying or consuming) the
+            full-load conditions.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'totalPackageInputPower'">
+    <h6>
+        Total Package Input Power
+        <br>
+        <small class="text-muted">
+            The total electrical power (in kilowatts) input to an air compressor under rated conditions, including
+            drive motor, cooling fan, auxiliary motors, and controls.
+            <hr>
+        </small>
+    </h6>
+</div>

@@ -1,0 +1,136 @@
+<div class="p-3">
+    <table #dayTypeTable class="table table-hover bg-white">
+        <thead>
+            <tr>
+                <th>
+                    Day Type
+                </th>
+                <th>
+                    Annual Days
+                </th>
+                <th>
+                    Annual Op. Hours
+                </th>
+                <th>
+                    Avg. Airflow, <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                </th>
+                <th>
+                    Avg. Airflow, %C
+                </th>
+                <th>
+                    Peak Demand, kW
+                </th>
+                <th>
+                    Load Factor, %
+                </th>
+                <th>
+                    Annual Energy, kWh
+                </th>
+                <th>
+                    Annual Energy Cost, $/yr
+                </th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let dayTypeResult of baselineResults.dayTypeResults;">
+            <tr>
+                <td class="pl-2">
+                    {{dayTypeResult.name}}
+                </td>
+                <td>
+                    {{dayTypeResult.operatingDays | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{dayTypeResult.totalOperatingHours | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{dayTypeResult.averageAirFlow | number:'1.0-2'}}
+                </td>
+                <td>
+                    {{dayTypeResult.averageAirFlowPercentCapacity | number:'1.0-2'}}
+                </td>
+                <td>
+                    {{dayTypeResult.peakDemand | number:'1.0-2'}}
+                </td>
+                <td>
+                    {{dayTypeResult.loadFactorPercent | number:'1.0-2'}}
+                </td>
+                <td>
+                    {{dayTypeResult.energyUse | number:'1.0-2'}}
+                </td>
+                <td>
+                    {{dayTypeResult.cost | number:'1.0-2'}}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bold">
+                <td class="pl-2">
+                    {{baselineResults.total.name}}
+                </td>
+                <td>
+                    {{baselineResults.total.operatingDays | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{baselineResults.total.totalOperatingHours | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{baselineResults.total.averageAirFlow | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{baselineResults.total.averageAirFlowPercentCapacity | number:'1.0-1'}}
+                </td>
+                <td>
+                    {{baselineResults.total.peakDemand | number:'1.0-1'}}
+                </td>
+                <td>
+                    {{baselineResults.total.loadFactorPercent | number:'1.0-1'}}
+                </td>
+                <td>
+                    {{baselineResults.total.energyUse | number:'1.0-0'}}
+                </td>
+                <td>
+                    {{baselineResults.total.cost | number:'1.0-0'}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="d-flex w-100 justify-content-center">
+    <div class="p-2">
+        <table #totalsTable class="table table-hover bg-white totals">
+            <tbody>
+                <tr>
+                    <td class="w-50 bold">
+                        Total Energy Cost
+                    </td>
+                    <td class="w-50">
+                        ${{baselineResults.total.cost | number:'1.0-0'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-50 bold">
+                        Total Demand Cost
+                    </td>
+                    <td class="w-50">
+                        ${{baselineResults.total.demandCost | number:'1.0-0'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-50 bold">
+                        Total Annual Operating Costs
+                    </td>
+                    <td class="w-50">
+                        ${{baselineResults.total.totalAnnualOperatingCost | number:'1.0-0'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="w-100 justify-content-end d-flex">
+    <app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
+    </app-exportable-results-table>
+</div>

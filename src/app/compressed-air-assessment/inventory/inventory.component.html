@@ -1,0 +1,36 @@
+<div class="d-flex flex-column panel-container pb-4">
+    <div class="header mr-2 ml-2">
+        <h3>Compressor Inventory
+            <!-- <a *ngIf="hasInventoryItems" class="click-link small pull-right" (click)="addInventoryItem()">+Add
+                New</a> -->
+        </h3>
+        <br>
+    </div>
+    <div class="p-3 no-data" *ngIf="!hasInventoryItems">
+        <h3>Add your compressor Inventory for analysis..</h3>
+        <button type="button" class="btn btn-primary active" (click)="addInventoryItem()">+Add Compressor</button>
+    </div>
+    <div class="mr-2 ml-2" *ngIf="hasInventoryItems">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="name">Compressor Name</label>
+                <input type="text" class="form-control" name="name" formControlName="name" (focus)="focusField('compresorName')" (input)="save()" />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" type="text" id="description" formControlName="description"
+                (focus)="focusField('compresorDescription')" (input)="save()"></textarea>
+            </div>
+            <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
+        </form>
+        <app-nameplate-data></app-nameplate-data>
+        <app-control-data></app-control-data>
+        <app-inlet-conditions *ngIf="compressorType != undefined && controlType != undefined"></app-inlet-conditions>
+        <app-design-details *ngIf="compressorType != undefined && controlType != undefined"></app-design-details>
+        <app-centrifugal-specifics *ngIf="compressorType == 6 && controlType != undefined"></app-centrifugal-specifics>
+        <app-performance-points *ngIf="compressorType != undefined && controlType != undefined"></app-performance-points>
+    </div>
+</div>
+
+<app-generic-compressor-modal *ngIf="showCompressorModal" (emitClose)="closeCompressorModal()">
+</app-generic-compressor-modal>

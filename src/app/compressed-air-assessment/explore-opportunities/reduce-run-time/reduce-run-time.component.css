@@ -1,0 +1,70 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: nowrap;
+	vertical-align: middle !important;
+  }
+  
+  /* tr > td:first-child {
+    border-right: none;
+  }
+   */
+  
+  table {
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
+  }
+  
+
+  .cell-error{
+	  background-color: #F5B7B1;
+  }
+
+  select.form-control{
+	  width: auto;
+  }
+
+  thead tr, tfoot tr{
+	  /* background-color: lightgray; */
+	  font-weight: bold;
+  }
+
+
+  
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+  background-color: #7030A0;
+  color: white;
+}
+
+tfoot{
+  border-top: solid 3px;
+}
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+
+option.invalid{
+    color: red;
+}

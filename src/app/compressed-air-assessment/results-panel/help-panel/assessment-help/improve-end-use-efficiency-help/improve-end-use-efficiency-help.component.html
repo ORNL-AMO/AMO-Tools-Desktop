@@ -1,0 +1,94 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Improve End Use Efficiency Help
+        <br>
+        <small class="text-muted">Models airflow reductions for specific hours, achieved by reducing the amount of air
+            required by end users
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'name'">
+        <h6>
+            Name
+            <br>
+            <small class="text-muted">
+                Name of Improve End Use Efficiency modification. 
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'substituteAuxiliaryEquipment'">
+        <h6>
+            Substitute Auxiliary Equipment
+            <br>
+            <small class="text-muted">
+                Average power load of replacement equipment. If airflow is reduced by replacing an end use with a
+                electric alternative (for example a pneumatic valve with an electric actuated valve), the savings will
+                be the difference of the decreased compressor load and the additional electrical load.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'equipmentDemand'">
+        <h6>
+            Equipment Demand
+            <br>
+            <small class="text-muted">
+                Average power required by new equipment. If airflow is reduced by replacing an end use device (for
+                example a pneumatic valve with an electric actuated valve), that will decrease your compressor energy
+                use, but increase your direct energy use.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'airflowReductionType'">
+        <h6>
+            Airflow Reduction Type
+            <br>
+            <small class="text-muted">
+                Can choose either fixed or variable reduction. Fixed means the same reduction will be applied to all
+                hours, variable allows the user to set the reduction for each hour.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'airflowReduction'">
+        <h6>
+            Airflow reduction
+            <br>
+            <small class="text-muted">
+                Amount of airflow that will be reduced
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'airflowReductionVariable'">
+        <h6>
+            Airflow reduction (for variable)
+            <br>
+            <small class="text-muted">
+                Amount of airflow that will be reduced during that hour
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+</div>

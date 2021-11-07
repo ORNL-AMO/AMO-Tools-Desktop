@@ -10,6 +10,7 @@ import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
+import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -37,6 +38,7 @@ export class SidebarComponent implements OnInit {
   _treasureHuntAssessments: Array<ReportItem>;
   _reportAssessments: Array<ReportItem>;
   _wasteWaterAssessments: Array<ReportItem>;
+  _compressedAirAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
@@ -44,9 +46,11 @@ export class SidebarComponent implements OnInit {
   treasureHuntAssesmentsSub: Subscription;
   reportAssessmentsSub: Subscription;
   wasteWaterAssessmentsSub: Subscription;
+  compressedAirAssessmentsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private psatReportRollupService: PsatReportRollupService,
     private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService,
+    private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit(): void {
     this._phastAssessments = new Array<ReportItem>();
@@ -56,6 +60,7 @@ export class SidebarComponent implements OnInit {
     this._treasureHuntAssessments = new Array<ReportItem>();
     this._reportAssessments = new Array<ReportItem>();
     this._wasteWaterAssessments = new Array<ReportItem>();
+    this._compressedAirAssessments = new Array<ReportItem>();
     this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
@@ -94,6 +99,12 @@ export class SidebarComponent implements OnInit {
       if(items){
         this._wasteWaterAssessments = items;
       }
+    });
+
+    this.compressedAirAssessmentsSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(items => {
+      if(items){
+        this._compressedAirAssessments = items;
+      }
     })
 
     this.initFocusedAssessment();
@@ -107,6 +118,7 @@ export class SidebarComponent implements OnInit {
     this.treasureHuntAssesmentsSub.unsubscribe();
     this.wasteWaterAssessmentsSub.unsubscribe();
     this.reportAssessmentsSub.unsubscribe();
+    this.compressedAirAssessmentsSub.unsubscribe();
   }
 
   collapseSidebar() {
@@ -127,6 +139,8 @@ export class SidebarComponent implements OnInit {
         this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
       } else if(this._wasteWaterAssessments.length != 0){
         this.focusedAssessment = this._wasteWaterAssessments[0].assessment;
+      } else if(this._compressedAirAssessments.length != 0){
+        this.focusedAssessment = this._compressedAirAssessments[0].assessment;
       }
     }
   }
