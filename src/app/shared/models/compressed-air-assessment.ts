@@ -29,7 +29,7 @@ export interface Modification {
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
     addPrimaryReceiverVolume: AddPrimaryReceiverVolume,
-    notes: string
+    notes?: string
 }
 
 // export interface FlowReallocation {
@@ -233,7 +233,7 @@ export interface CentrifugalSpecifics {
 export interface ProfileSummary {
     // compressorName: string,
     fullLoadPressure: number,
-    fullLoadCapacity: number,
+    fullLoadCapacity?: number,
     compressorId: string,
     dayTypeId: string,
     automaticShutdownTimer?: boolean

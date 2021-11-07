@@ -19,6 +19,7 @@ import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { MockMotorInventory } from '../../../examples/mockMotorInventoryData';
 import { MockWasteWater, MockWasteWaterSettings } from '../../../examples/mockWasteWater';
+import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../../../examples/mockCompressedAirAssessment';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -141,6 +142,7 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   resetFactoryExampleAssessments() {
+    debugger
     let exampleDirectory: Directory = this.directoryDbService.getExample();
     if (exampleDirectory) {
       //example directory exists
@@ -173,7 +175,7 @@ export class ResetDataModalComponent implements OnInit {
   createExampleAssessments(id: number) {
     //check examples exists
     //psat
-    let psatExample: Assessment = this.assessmentDbService.getPsatExample();
+    let psatExample: Assessment = this.assessmentDbService.getExample('PSAT');
     if (psatExample) {
       //exists
       //delete
@@ -185,7 +187,7 @@ export class ResetDataModalComponent implements OnInit {
       this.createPsatExample(id);
     }
     //fsat
-    let fsatExample: Assessment = this.assessmentDbService.getFsatExample();
+    let fsatExample: Assessment = this.assessmentDbService.getExample('FSAT');
     if (fsatExample) {
       //exists
       //delete
@@ -197,7 +199,7 @@ export class ResetDataModalComponent implements OnInit {
       this.createFsatExample(id);
     }
     // Waste Water
-    let wasteWaterExample: Assessment = this.assessmentDbService.getWasteWaterExample();
+    let wasteWaterExample: Assessment = this.assessmentDbService.getExample('WasteWater');
     if (wasteWaterExample) {
       //exists
       //delete
@@ -209,7 +211,7 @@ export class ResetDataModalComponent implements OnInit {
       this.createWasteWaterExample(id);
     }
     //phast
-    let phastExample: Assessment = this.assessmentDbService.getPhastExample();
+    let phastExample: Assessment = this.assessmentDbService.getExample('PHAST');
     if (phastExample) {
       //exists
       //delete
@@ -222,7 +224,7 @@ export class ResetDataModalComponent implements OnInit {
       this.createPhastExample(id);
     }
     //ssmt
-    let ssmtExample: Assessment = this.assessmentDbService.getSsmtExample();
+    let ssmtExample: Assessment = this.assessmentDbService.getExample('SSMT');
     if (ssmtExample) {
       //exists
       //delete
@@ -236,7 +238,7 @@ export class ResetDataModalComponent implements OnInit {
     }
 
     //treasureHunt
-    let treasureHuntExample: Assessment = this.assessmentDbService.getTreasureHuntExample();
+    let treasureHuntExample: Assessment = this.assessmentDbService.getExample('TreasureHunt');
     if (treasureHuntExample) {
       //exists
       //delete
@@ -260,6 +262,20 @@ export class ResetDataModalComponent implements OnInit {
     } else {
       this.createMotorInventoryExample(id);
     }
+
+     //compressedAirAssessment
+     let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
+     if (compressedAirAssessmentExample) {
+       //exists
+       //delete
+       this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
+         //create
+         this.createCompressedAirExample(id);
+       });
+     } else {
+       //create
+       this.createCompressedAirExample(id);
+     }
 
   }
 
@@ -349,6 +365,20 @@ export class ResetDataModalComponent implements OnInit {
         MockTreasureHuntSettings.assessmentId = assessmentId;
         //add settings
         this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
+
+  createCompressedAirExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockCompressedAirAssessment.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockCompressedAirAssessment).then(assessmentId => {
+        MockCompressedAirAssessmentSettings.assessmentId = assessmentId;
+        //add settings
+        this.indexedDbService.addSettings(MockCompressedAirAssessmentSettings).then(() => {
           resolve(true);
         });
       });
