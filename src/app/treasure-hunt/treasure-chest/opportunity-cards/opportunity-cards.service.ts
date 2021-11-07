@@ -676,4 +676,6 @@ export interface OpportunityCardData {
   flueGas?: FlueGasTreasureHunt;
   heatCascading?: HeatCascadingTreasureHunt;
   waterHeating?: WaterHeatingTreasureHunt;
+  iconCalcType?: string;
+  needBackground?: boolean;
 }

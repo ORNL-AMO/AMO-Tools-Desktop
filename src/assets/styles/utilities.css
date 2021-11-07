@@ -59,6 +59,16 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.phast .btn-primary{
+    background-color: #bf3d00;
+    border-color: #bf3d00;
+}
+
+.inRollup .btn-primary{
+    background-color: #156739;
+    border-color: #156739;
+}
+
 .treasure-hunt .btn-primary{
     background-color: #2E4053;
     border-color: #2E4053;
@@ -275,7 +285,7 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 }
 
 .compressed-air .calc-icon-div{
-    background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
+    background: linear-gradient(#ffffff, #6f42c1);
 }
 
 .process-cooling .calc-icon-div{

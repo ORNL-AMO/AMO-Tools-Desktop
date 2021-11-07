@@ -83,7 +83,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.carbon.value === '') {
+        if (this.flueGasLossForm.controls.carbon.value === 0) {
           this.setProperties();
         }
       }
@@ -202,9 +202,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     // backend method needs moistureInAirCombustion to be ''
     // moistureInAirCombustion is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
-    if (this.flueGasLossForm.controls.moistureInAirCombustion === undefined) {
-      this.flueGasLossForm.patchValue({moistureInAirCombustion: ''});
-    }
+
     // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
   }
@@ -281,6 +279,15 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return false;
     }
   }
+
+  compareMassAmbientAirTemp() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareMassAmbientAirTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  
   compareMassExcessAirPercentage() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareMassExcessAirPercentage(this.lossIndex);

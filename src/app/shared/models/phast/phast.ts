@@ -132,6 +132,8 @@ export interface PhastResults {
   flueGasAvailableHeat: number;
   grossHeatInput: number;
   heatingSystemEfficiency: number;
+  calculatedExcessAir: number;
+  calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
 }

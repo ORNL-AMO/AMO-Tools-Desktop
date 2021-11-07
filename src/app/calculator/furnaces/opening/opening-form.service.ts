@@ -12,13 +12,13 @@ export class OpeningFormService {
     let formGroup =  this.formBuilder.group({
       'numberOfOpenings': [1, [Validators.required, Validators.min(0)]],
       'openingType': ['Round', Validators.required],
-      'wallThickness': ['', [Validators.required, Validators.min(0)]],
-      'lengthOfOpening': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'heightOfOpening': [''],
-      'viewFactor': ['', [Validators.required, Validators.min(0)]],
-      'insideTemp': ['', Validators.required],
-      'ambientTemp': ['', Validators.required],
-      'percentTimeOpen': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      'wallThickness': [0, [Validators.required, Validators.min(0)]],
+      'lengthOfOpening': [0, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'heightOfOpening': [0],
+      'viewFactor': [0, [Validators.required, Validators.min(0)]],
+      'insideTemp': [0, Validators.required],
+      'ambientTemp': [0, Validators.required],
+      'percentTimeOpen': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'emissivity': [0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
       'name': ['Loss #' + lossNum]
     });

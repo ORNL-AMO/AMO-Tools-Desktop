@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
-import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -11,17 +10,19 @@ import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
+
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
   styleUrls: ['./directory-dashboard-menu.component.css']
 })
-export class DirectoryDashboardMenuComponent implements OnInit {
-
+export class DirectoryDashboardMenuComponent implements OnInit { 
+  
   breadCrumbs: Array<Directory>;
   directory: Directory;
   view: string = 'grid';
   isAllSelected: boolean;
+  
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
     private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
@@ -119,4 +120,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.router.navigateByUrl('/report-rollup');
   }
 
+  moveToFolder() {
+    this.dashboardService.moveItems.next(true);
+  }
 }

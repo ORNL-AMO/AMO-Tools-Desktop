@@ -100,8 +100,10 @@ export class AirLeakTreasureHuntService {
       airLeakSurvey: airLeakSurvey,
       name: opportunitySummary.opportunityName,
       opportunitySheet: airLeakSurvey.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/compressed-air-icons/air-leak-icon.png',
-      teamName: airLeakSurvey.opportunitySheet? airLeakSurvey.opportunitySheet.owner : undefined
+      iconString: 'assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png',
+      teamName: airLeakSurvey.opportunitySheet? airLeakSurvey.opportunitySheet.owner : undefined,
+      iconCalcType: 'compressedAir',
+      needBackground: true
     }
     return cardData;
   }

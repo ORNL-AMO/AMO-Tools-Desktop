@@ -14,6 +14,8 @@
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+      <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+      [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
         (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>

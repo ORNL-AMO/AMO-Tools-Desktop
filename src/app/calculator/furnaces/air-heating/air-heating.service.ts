@@ -171,6 +171,10 @@ export class AirHeatingService {
       input.inletTemperature = this.convertUnitsService.value(input.inletTemperature).from('C').to('F');
       input.inletTemperature = this.roundVal(input.inletTemperature, 2);
     }
+
+    if (input.gasFuelType) {
+      input.moistureInAirCombustion = input.moistureInAirCombustion / 100;
+    }
     return input;
   }
 

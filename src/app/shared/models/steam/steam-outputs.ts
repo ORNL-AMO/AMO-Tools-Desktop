@@ -1,3 +1,5 @@
+import { SSMTInputs, SsmtValid } from "./ssmt";
+
 //THIS MODEL HAS BEEN UPDATED TO MATCH THE SUITE RETURN VALUES
 export interface SSMTOutput {
   boilerOutput: BoilerOutput;
@@ -390,3 +392,4 @@ export interface HeatExchangerOutput {
   coldOutletSpecificEnthalpy: number;
   coldOutletSpecificEntropy: number;
 }
+

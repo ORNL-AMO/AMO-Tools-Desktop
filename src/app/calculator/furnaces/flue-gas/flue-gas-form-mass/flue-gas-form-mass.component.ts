@@ -74,7 +74,7 @@ export class FlueGasFormMassComponent implements OnInit {
   initFormSetup() {
     this.setFormState();
     if (this.byMassForm.controls.gasTypeId.value && this.byMassForm.controls.gasTypeId.value !== '') {
-      if (this.byMassForm.controls.carbon.value === '') {
+      if (this.byMassForm.controls.carbon.value === 0) {
         this.setProperties();
       }
     }
@@ -101,7 +101,7 @@ export class FlueGasFormMassComponent implements OnInit {
     if (updatedFlueGasData && updatedFlueGasData.flueGasByMass) {
       this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byMassForm = this.flueGasFormService.initEmptyMassForm();
+      this.byMassForm = this.flueGasFormService.initEmptyMassForm(this.settings);
     }
 
     this.initFormSetup();

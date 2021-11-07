@@ -1,0 +1,207 @@
+<div class="p-3 pt-3 d-flex flex-column help-info">
+    <h5>
+      Heat Recovery From Condensing Heat Exchanger Help
+      <br>
+      <small class="text-muted">
+        This calculator can be used to calculate fuel savings resulting from boiler feed water economizer.  
+        By installing a condensing economizer, companies can improve overall heat recovery and steam system efficiency by up to 10%. 
+        A conventional feedwater economizer reduces steam boiler fuel requirements by transferring heat from the flue gas to the boiler feedwater, but 
+        the flue gas cannot be cooled below about 250°F, to prevent condensation and possible stack or stack liner corrosion. 
+        The condensing economizer improves waste heat recovery by cooling the flue gas below its dew point, which is about 135°F for products of combustion of natural gas. 
+        The economizer reclaims both sensible heat from the flue gas and latent heat by condensing flue gas water vapor. 
+        Condensing economizers require site-specific engineering and design, and a thorough understanding of the effect they will have on the existing steam system and water chemistry.
+        <br>
+        <div class="mt-3 alert-info p-3 small text-left">
+          Note: This calculator is only valid for Natural Gas. 
+        </div>
+        <hr>
+        <div class="small">
+
+          This calculator was developed by Arvind Thekdi, based on the 
+          <a href="http://www.aqmd.gov/docs/default-source/planning/Climate-Change/boiler-and-process-heater-efficiency-project-protocol.pdf" target="_blank">SCAQMD Protocol for the Improvement of the Efficiency of a Natural Gas-Fired Boilier or Process Heater</a>
+          and the 
+          <a href="https://www.energy.gov/sites/prod/files/2014/05/f16/steam26a_condensing.pdf" target="_blank">
+            AMO Steam Tip Sheet #26A 
+          </a>
+        </div>
+      </small>
+      <hr>
+    </h5>
+
+    <div class="my-2" *ngIf="currentField == 'operationHours'">
+      <h6>
+        Operating Hours
+        <br>
+        <small class="text-muted">
+          Number of hours for which the heat exchanger would be operated during the full year. 
+          This can be obtained from the data collection system if available or can be estimated from 
+          interview with knowledgeable operators. Generally, vent steam schedule and hot water demand 
+          schedule should be compared and overlapping hours should be used.
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0 hrs/yr</td>
+              <td class="text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flueGasTemperature'">
+      <h6>
+        Flue Gas Temperature
+        <br>
+        <small class="text-muted">
+          This is the temperature of the exhaust gases going out from the stack. 
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'modifiedFlueGasTemperature'">
+      <h6>
+        New Flue Gas Temperature
+        <br>
+        <small class="text-muted">
+          Estimate of flue gas temperature after condensing heat recovery. This value cannot be greater than 130°F for all practical systems.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'heatInput'">
+      <h6>
+        Heat Input
+        <br>
+        <small class="text-muted">
+          Heat delivered by process heating system. The process heating assessment can help estimate this value.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'fuelCost'">
+      <h6>
+        Fuel Cost
+        <br>
+        <small class="text-muted">
+          This is unit cost of gas.  It can be obtained from a gas bill or from a gas company representative. 
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+      <h6>
+        Operating Hours
+        <br>
+        <small class="text-muted">
+          Number of hours for which the heat exchanger would be operated during the full year. 
+          This can be obtained from the data collection system if available or can be estimated from 
+          interview with knowledgeable operators. Generally, vent steam schedule and hot water demand 
+          schedule should be compared and overlapping hours should be used.
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0 hrs/yr</td>
+              <td class="text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'fuelTemp'">
+      <h6>
+        Fuel Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the incoming fuel. For solid fuels, this can often be estimated to be ambient temperature. For
+          gases, this can often be estimated to be slightly less than ambient temperature (about 10&#8457; or 5&#8451;)
+          due to the
+          Joule-Thompson Effect. It will be higher if preheating is used.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flueGasO2'">
+      <h6>
+        O
+        <sub>2</sub> in Flue Gas
+        <br>
+        <small class="text-muted">
+          This is the percentage of oxygen in the flue gases of the boiler. This is usually determined using flue gas analysis using external combustion analyzer (dry basis) or in stack oxygen sensor (wet basis) measurement. An average value should be used.  
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0%</td>
+              <td class="text-center">21%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'combustionAirTemperature'">
+      <h6>
+        Combustion Air Temperature
+        <br>
+        <small class="text-muted">
+          This is temperature of the air supplied for combustion to the boiler.  
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'moistureInCombustionAir'">
+      <h6>
+        Moisture in Combustion Air
+        <br>
+        <small class="text-muted">
+          This is the moisture ratio of the combustion air. It is measured in lb of moisture per lb of dry air, expressed as fraction. 
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0%</td>
+              <td class="text-center">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'feedWaterTemperature'">
+      <h6>
+        Feedwater Temperature
+        <br>
+        <small class="text-muted">
+          This is the average temperature of the feedwater. It is usually found in the range of 180 F to 228 F in the field. When feedwater is coming from Deaerator Tank (DA) it is usually on the higher side (228F), but if the feed water is coming as steam condensate it is usually 180F. An average measured value should be used. 
+        </small>
+      </h6>
+    </div>

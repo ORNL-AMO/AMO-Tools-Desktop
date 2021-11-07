@@ -31,6 +31,21 @@
     </div>
 
     <div class="form-group">
+      <label class="small" for="{{'ambientAirTemp'+idString}}">Ambient Air Temperature</label>
+      <div class="input-group" [ngClass]="{'indicate-different': compareMassAmbientAirTemp(), 'invalid': flueGasLossForm.controls.ambientAirTemp.invalid}">
+        <input [readonly]="!baselineSelected" name="{{'ambientAirTemp'+lossIndex}}" type="number" step="10" class="form-control"
+          formControlName="ambientAirTemp" id="{{'ambientAirTemp'+idString}}" onfocus="this.select();" (input)="calcExcessAir()"
+          (focus)="focusField('ambientAirTemp')" >
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="flueGasLossForm.controls.ambientAirTemp.invalid && !flueGasLossForm.controls.ambientAirTemp.pristine">
+        <span *ngIf="flueGasLossForm.controls.ambientAirTemp.errors.required">Value Required</span>
+      </span>
+    </div>
+
+    <div class="form-group">
       <label class="small" for="{{'oxygenCalculationMethod'+idString}}">Percent Oxygen Or Excess Air?</label>
       <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()"
         formControlName="oxygenCalculationMethod" id="{{'oxygenCalculationMethod'+idString}}" (focus)="focusField('oxygenCalculationMethod')"
@@ -50,21 +65,9 @@
         </div>
         <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
       </div>
-      <div class="form-group">
-        <label class="small">Excess Air</label>
-        <div class="text-center small">
-          {{calculationExcessAir | number:'2.2-2'}} %
-        </div>
-      </div>
     </div>
 
     <div class="form-group" *ngIf="flueGasLossForm.controls.oxygenCalculationMethod.value == 'Excess Air'">
-      <div class="form-group">
-        <label class="small">Oxygen In Flue Gas</label>
-        <div class="text-center small">
-          {{calculationFlueGasO2 | number:'2.2-2'}} %
-        </div>
-      </div>
       <label class="small" for="{{'excessAirPercentage'+idString}}">Excess Air</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassExcessAirPercentage(), 'invalid': flueGasLossForm.controls.excessAirPercentage.invalid}">
         <input [readonly]="!baselineSelected" name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" min="0"

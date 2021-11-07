@@ -5,7 +5,11 @@ export interface HeatCascadingInput {
     priExhaustO2: number,
     priCombAirTemperature: number,
     priOpHours: number,
-    priFuelHV: number,
+    fuelHV: number,
+    fuelTempF: number, 
+    ambientAirTempF: number, 
+    combAirMoisturePerc: number
+    
 
     secFiringRate: number,
     secExhaustTemperature: number,
@@ -13,7 +17,7 @@ export interface HeatCascadingInput {
     secCombAirTemperature: number,
     secAvailableHeat: number,
     secOpHours: number,
-    secFuelCost: number,
+    fuelCost: number,
     
     // Gas fuel element properties
     materialTypeId: number,
@@ -32,11 +36,24 @@ export interface HeatCascadingInput {
     O2?: number
 }
 
+export interface FlueGasModalData {
+    calculatedAvailableHeat: number,
+    fuelTempF: number, 
+    ambientAirTempF: number, 
+    combAirMoisturePerc: number
+}
+
 export interface HeatCascadingOutput {
     priFlueVolume: number,
     hxEnergyRate: number,
     eqEnergSupply: number,
     effOppHours: number,
+
+    priExcessAir: number,
+	priAvailableHeat: number,
+	secExcessAir: number,
+	secAvailableHeat: number,
+
     energySavings: number,
     costSavings: number
     baselineEnergy?: number,

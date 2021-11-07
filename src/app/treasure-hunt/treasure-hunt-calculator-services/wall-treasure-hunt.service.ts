@@ -98,7 +98,9 @@ export class WallTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: wallLoss.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/wall-loss.png',
-      teamName: wallLoss.opportunitySheet? wallLoss.opportunitySheet.owner : undefined
+      teamName: wallLoss.opportunitySheet? wallLoss.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
   }

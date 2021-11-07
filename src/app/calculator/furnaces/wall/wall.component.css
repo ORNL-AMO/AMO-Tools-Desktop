@@ -76,3 +76,27 @@
 .modal-open {
     z-index: initial !important;
 }
+
+.inTreasureHunt-icon{
+    border-radius: 50%;
+}
+.calc-list-icon{
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+}
+ 
+.icon-background{
+    height: 55px;
+    width: 55px;
+    background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
+}
+
+.wall-icon{    
+    height: 45px;
+    width: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}

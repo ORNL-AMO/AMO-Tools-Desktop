@@ -93,14 +93,30 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isHeadDifferent(baseline, modification) ||
         this.isMotorFieldVoltageDifferent(baseline, modification) ||
         this.isMotorFieldCurrentDifferent(baseline, modification) ||
         this.isMotorFieldPowerDifferent(baseline, modification) ||
         this.isLoadEstimationMethodDifferent(baseline, modification)
+      )
+    }
+    else {
+      return false;
+    }
+  }
+
+  checkOperationsDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isOperatingHoursDifferent(baseline, modification) ||
+        this.isCostKwhrDifferent(baseline, modification)
       )
     }
     else {
@@ -641,6 +657,9 @@ export class CompareService {
       }
       if (this.checkPumpDifferent(settings, baseline, modification)) {
         badges.push({ badge: 'Pump Fluid', componentStr: 'pump-fluid' })
+      }
+      if (this.checkOperationsDifferent(baseline, modification)) {
+        badges.push({ badge: 'Operations', componentStr: 'operations' })
       }
     }
     return badges;

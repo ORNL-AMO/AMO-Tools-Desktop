@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
@@ -7,30 +8,41 @@ import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 @Injectable()
 export class FlueGasFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  initEmptyVolumeForm(loss?: number): FormGroup {
-    let lossNumber = loss? loss : 0;
+  initEmptyVolumeForm(settings: Settings, loss?: number): FormGroup {
+    let ambientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+    }
 
+    let defaultMoistureInAirComp: any = .0077;
+    let lossNumber: number = 0;
+    if (loss) {
+      defaultMoistureInAirComp = 0;
+      lossNumber = loss;
+    }
     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
+      'flueGasTemperature': [0, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', [Validators.required]],
-      'fuelTemperature': ['', Validators.required],
-      'CH4': ['', Validators.required],
-      'C2H6': ['', Validators.required],
-      'N2': ['', Validators.required],
-      'H2': ['', Validators.required],
-      'C3H8': ['', Validators.required],
-      'C4H10_CnH2n': ['', Validators.required],
-      'H2O': ['', Validators.required],
-      'CO': ['', Validators.required],
-      'CO2': ['', Validators.required],
-      'SO2': ['', Validators.required], 
-      'O2': ['', Validators.required],
+      'excessAirPercentage': [0, Validators.required],
+      'o2InFlueGas': [0, Validators.required],
+      'combustionAirTemperature': [0, [Validators.required]],
+      'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'fuelTemperature': [0, Validators.required],
+      'ambientAirTemp': [ambientAirTemp, Validators.required],
+      'CH4': [0, Validators.required],
+      'C2H6': [0, Validators.required],
+      'N2': [0, Validators.required],
+      'H2': [0, Validators.required],
+      'C3H8': [0, Validators.required],
+      'C4H10_CnH2n': [0, Validators.required],
+      'H2O': [0, Validators.required],
+      'CO': [0, Validators.required],
+      'CO2': [0, Validators.required],
+      'SO2': [0, Validators.required], 
+      'O2': [0, Validators.required],
       'name': ['Loss #' + lossNumber]
     });
 
@@ -42,37 +54,43 @@ export class FlueGasFormService {
     return formGroup;
   }
 
-  initEmptyMassForm(loss?: number): FormGroup {
+  initEmptyMassForm(settings: Settings, loss?: number): FormGroup {
     let defaultMoistureInAirComp: any = .0077;
     let lossNumber: number = 0;
     if (loss) {
-      defaultMoistureInAirComp = '';
+      defaultMoistureInAirComp = 0;
       lossNumber = loss;
-    } 
+    }
+
+    let ambientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+    }
 
      let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
+      'flueGasTemperature': [0, Validators.required],
       'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', [Validators.required]],
-      'fuelTemperature': ['', Validators.required],
+      'excessAirPercentage': [0, Validators.required],
+      'o2InFlueGas': [0, Validators.required],
+      'combustionAirTemperature': [0, [Validators.required]],
+      'fuelTemperature': [0, Validators.required],
+      'ambientAirTemp': [ambientAirTemp, Validators.required],
       'moistureInAirCombustion': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'ashDischargeTemperature': ['', Validators.required],
-      'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      'carbon': ['', Validators.required],
-      'hydrogen': ['', Validators.required],
-      'sulphur': ['', Validators.required],
-      'inertAsh': ['', Validators.required],
-      'o2': ['', Validators.required],
-      'moisture': ['', Validators.required],
-      'nitrogen': ['', Validators.required],
+      'ashDischargeTemperature': [0, Validators.required],
+      'unburnedCarbonInAsh': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'carbon': [0, Validators.required],
+      'hydrogen': [0, Validators.required],
+      'sulphur': [0, Validators.required],
+      'inertAsh': [0, Validators.required],
+      'o2': [0, Validators.required],
+      'moisture': [0, Validators.required],
+      'nitrogen': [0, Validators.required],
       'name': ['Loss #' + lossNumber]
     });
 
     if (!loss) {
-      formGroup.addControl('heatInput', new FormControl('', [Validators.required, Validators.min(0)]));
+      formGroup.addControl('heatInput', new FormControl(0, [Validators.required, Validators.min(0)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -84,10 +102,12 @@ export class FlueGasFormService {
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, Validators.required],
       'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, Validators.required],
       'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, [Validators.required, Validators.min(0)]],
+      'moistureInAirCombustion': [loss.flueGasByVolume.moistureInAirCombustion, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [loss.flueGasByVolume.fuelTemperature, Validators.required],
+      'ambientAirTemp': [loss.flueGasByVolume.ambientAirTemp, Validators.required],
       'CH4': [loss.flueGasByVolume.CH4, Validators.required],
       'C2H6': [loss.flueGasByVolume.C2H6, Validators.required],
       'N2': [loss.flueGasByVolume.N2, Validators.required],
@@ -115,8 +135,9 @@ export class FlueGasFormService {
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByMass.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, Validators.required],
       'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, Validators.required],
+      'ambientAirTemp': [loss.flueGasByMass.ambientAirTemp, Validators.required],
       'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, [Validators.required, Validators.min(0)]],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature, Validators.required],
       'moistureInAirCombustion': [loss.flueGasByMass.moistureInAirCombustion, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -181,6 +202,7 @@ export class FlueGasFormService {
         oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
         excessAirPercentage: form.controls.excessAirPercentage.value,
         o2InFlueGas: form.controls.o2InFlueGas.value,
+        ambientAirTemp: form.controls.ambientAirTemp.value,
         combustionAirTemperature: form.controls.combustionAirTemperature.value,
         fuelTemperature: form.controls.fuelTemperature.value,
         ashDischargeTemperature: form.controls.ashDischargeTemperature.value,
@@ -213,7 +235,9 @@ export class FlueGasFormService {
         oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
         excessAirPercentage: form.controls.excessAirPercentage.value,
         o2InFlueGas: form.controls.o2InFlueGas.value,
+        ambientAirTemp: form.controls.ambientAirTemp.value,
         combustionAirTemperature: form.controls.combustionAirTemperature.value,
+        moistureInAirCombustion: form.controls.moistureInAirCombustion.value,
         fuelTemperature: form.controls.fuelTemperature.value,
         CH4: form.controls.CH4.value,
         C2H6: form.controls.C2H6.value,
@@ -238,6 +262,7 @@ export class FlueGasFormService {
 
   checkFlueGasByVolumeWarnings(flueGas: FlueGasByVolume, settings: Settings): FlueGasWarnings {
     return {
+      moistureInAirCombustionWarning: this.checkMoistureInAir(flueGas),
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
       o2Warning: this.checkO2Warning(flueGas),

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
@@ -94,14 +94,14 @@ export class FlueGasLossesComponent implements OnInit {
           tmpLoss = {
             measurementType: 'By Volume',
             formByVolume: this.flueGasFormService.initByVolumeFormFromLoss(loss),
-            formByMass: this.flueGasFormService.initEmptyMassForm(lossIndex),
+            formByMass: this.flueGasFormService.initEmptyMassForm(this.settings, lossIndex),
             heatLoss: 0.0,
             collapse: false
           };
         } else if (loss.flueGasType === "By Mass") {
           tmpLoss = {
             measurementType: 'By Mass',
-            formByVolume: this.flueGasFormService.initEmptyVolumeForm(lossIndex),
+            formByVolume: this.flueGasFormService.initEmptyVolumeForm(this.settings, lossIndex),
             formByMass: this.flueGasFormService.initByMassFormFromLoss(loss),
             availableHeat: 0.0,
             grossHeat: 0.0,
@@ -129,8 +129,8 @@ export class FlueGasLossesComponent implements OnInit {
   addLoss() {
     this._flueGasLosses.push({
       measurementType: 'By Volume',
-      formByVolume: this.flueGasFormService.initEmptyVolumeForm(this._flueGasLosses.length + 1),
-      formByMass: this.flueGasFormService.initEmptyMassForm(this._flueGasLosses.length + 1),
+      formByVolume: this.flueGasFormService.initEmptyVolumeForm(this.settings, this._flueGasLosses.length + 1),
+      formByMass: this.flueGasFormService.initEmptyMassForm(this.settings, this._flueGasLosses.length + 1),
       availableHeat: 0.0,
       grossHeat: 0.0,
       systemLosses: 0.0,
@@ -153,16 +153,18 @@ export class FlueGasLossesComponent implements OnInit {
     if (loss.measurementType === "By Volume") {
       if (loss.formByVolume.status === 'VALID') {
         let tmpLoss: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(loss.formByVolume);
-        const availableHeat = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
-        loss.availableHeat = availableHeat * 100;
+        let flueGasLossesResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
+        loss.availableHeat = flueGasLossesResults.availableHeat * 100;
+        loss.calculatedFlueGasO2 = flueGasLossesResults.flueGasO2 * 100;
+        loss.calculatedExcessAir = flueGasLossesResults.excessAir * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
         } else {
           this.availableHeatError = null;
         }
         const sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = (sumHeat / availableHeat) - sumAdditionalHeat;
-        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
+        loss.grossHeat = (sumHeat / flueGasLossesResults.availableHeat) - sumAdditionalHeat;
+        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - flueGasLossesResults.availableHeat);
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
@@ -257,6 +259,8 @@ export interface FlueGasObj {
   measurementType: string;
   formByVolume: FormGroup;
   formByMass: FormGroup;
+  calculatedExcessAir?: number;
+  calculatedFlueGasO2?: number;
   availableHeat: number;
   grossHeat: number;
   systemLosses: number;
