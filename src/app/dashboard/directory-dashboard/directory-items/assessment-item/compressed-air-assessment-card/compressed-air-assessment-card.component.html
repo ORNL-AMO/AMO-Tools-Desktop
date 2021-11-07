@@ -7,7 +7,8 @@
             Annual Energy Use:
         </td>
         <td>
-            {{baselineResults.total.energyUse | number:'2.0-0'}} MWh
+            <!--results in kWh / 1000 for conversion-->
+            {{baselineResults.total.energyUse / 1000 | number:'2.0-0'}} MWh
         </td>
     </tr>
     <tr>
