@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/explore-opportunities/explore-opportunities-validation.service';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
@@ -55,8 +55,10 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
         let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings)
         if (modificationValid) {
           let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification, this.settings);
-          if (modificationResults.totalCostSavings > this.maxCostSavings) {
-            this.maxCostSavings = modificationResults.totalCostSavings;
+          let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults);
+          let savings: number = this.baselineResults.total.totalAnnualOperatingCost - combinedResults.totalAnnualOperatingCost;
+          if (savings > this.maxCostSavings) {
+            this.maxCostSavings = savings;
           }
           //divide /1000 kWh -> MWh
           if ((modificationResults.totalCostPower / 1000) > this.maxEnergySavings) {
