@@ -13,7 +13,7 @@ export class CompressedAirBannerComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  isBaselineValid: boolean = true;
+  isBaselineValid: boolean = false;
   mainTab: string;
   mainTabSub: Subscription;
   selectedModificationSub: Subscription;
@@ -22,6 +22,7 @@ export class CompressedAirBannerComponent implements OnInit {
   assessmentTabSub: Subscription;
   secondaryAssessmentTabSub: Subscription;
   secondaryAssessmentTab: string;
+  compresssedAirAssessmentSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -43,6 +44,12 @@ export class CompressedAirBannerComponent implements OnInit {
     this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
       this.secondaryAssessmentTab = val;
     });
+
+    this.compresssedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
+      if (val) {
+        this.isBaselineValid = val.setupDone;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -50,6 +57,7 @@ export class CompressedAirBannerComponent implements OnInit {
     this.selectedModificationSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
+    this.compresssedAirAssessmentSub.unsubscribe();
   }
 
   changeTab(str: string) {
@@ -67,7 +75,7 @@ export class CompressedAirBannerComponent implements OnInit {
   }
 
   changeSecondaryAssessmentTab(str: string) {
-    if(this.selectedModification){
+    if (this.selectedModification) {
       this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
     }
   }
