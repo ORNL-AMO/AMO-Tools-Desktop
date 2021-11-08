@@ -81,6 +81,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   ngAfterViewInit() {
     this.drawChart();
+    window.dispatchEvent(new Event("resize"));
   }
 
   setCompressorData() {
