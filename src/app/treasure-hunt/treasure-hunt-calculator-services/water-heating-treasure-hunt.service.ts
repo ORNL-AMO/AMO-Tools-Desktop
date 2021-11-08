@@ -39,6 +39,37 @@ export class WaterHeatingTreasureHuntService {
     this.waterHeatingService.waterHeatingInput.next(undefined);
   }
 
+  getWaterOpportunityResults(waterHeatingTreasureHunt: WaterHeatingTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    this.setCalculatorInputFromOpportunity(waterHeatingTreasureHunt);
+    this.waterHeatingService.calculate(settings);
+    let output: WaterHeatingOutput = this.waterHeatingService.waterHeatingOutput.getValue();
+
+    let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+      costSavings: output.costSavingsWNT,
+      energySavings: output.waterSaved,
+      baselineCost: output.costSavingsWNT,
+      modificationCost: 0,
+      utilityType: 'Water',
+    }
+
+    return treasureHuntOpportunityResults;
+  }
+
+  getGasOpportunityResults(waterHeatingTreasureHunt: WaterHeatingTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    this.setCalculatorInputFromOpportunity(waterHeatingTreasureHunt);
+    this.waterHeatingService.calculate(settings);
+    let output: WaterHeatingOutput = this.waterHeatingService.waterHeatingOutput.getValue();
+
+    let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+      costSavings: (output.costSavingsBoiler + output.costSavingsDWH),
+      energySavings: output.energySavedTotal,
+      baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
+      modificationCost: 0,
+      utilityType: waterHeatingTreasureHunt.inputData.boilerUtilityType,
+    }
+
+    return treasureHuntOpportunityResults;
+  }
 
   getTreasureHuntOpportunityResults(waterHeatingTreasureHunt: WaterHeatingTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     this.setCalculatorInputFromOpportunity(waterHeatingTreasureHunt);
@@ -50,20 +81,15 @@ export class WaterHeatingTreasureHuntService {
       energySavings: output.energySavedTotal,
       baselineCost: output.costSavingsTotal,
       modificationCost: 0,
-      utilityType: waterHeatingTreasureHunt.inputData.boilerUtilityType,
+      utilityType: 'Mixed',
     }
 
     return treasureHuntOpportunityResults;
   }
 
   getWaterHeatingOpportunityCardData(waterHeatingOpportunity: WaterHeatingTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
-    let currentCosts: number = 0;
     let energyData = this.getEnergyData(waterHeatingOpportunity, settings, currentEnergyUsage, opportunitySummary,);
-    if (waterHeatingOpportunity.energySourceData.energySourceType == 'Natural Gas') {
-      currentCosts = currentEnergyUsage.naturalGasCosts
-    } else if (waterHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
-      currentCosts = currentEnergyUsage.otherFuelCosts;
-    }
+    
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -74,18 +100,6 @@ export class WaterHeatingTreasureHuntService {
       annualEnergySavings: energyData.annualEnergySavings,
       percentSavings: energyData.percentSavings,
       utilityType: energyData.utilityTypes,
-      // annualEnergySavings: [{
-      //   savings: opportunitySummary.totalEnergySavings,
-      //   energyUnit: waterHeatingOpportunity.energySourceData.unit,
-      //   label: opportunitySummary.utilityType
-      // }],
-      // utilityType: [opportunitySummary.utilityType],
-      // percentSavings: [{
-      //   percent: (opportunitySummary.costSavings / currentCosts) * 100,
-      //   label: opportunitySummary.utilityType,
-      //   baselineCost: opportunitySummary.baselineCost,
-      //   modificationCost: opportunitySummary.modificationCost,
-      // }],
       waterHeating: waterHeatingOpportunity,
       name: opportunitySummary.opportunityName,
       opportunitySheet: waterHeatingOpportunity.opportunitySheet,

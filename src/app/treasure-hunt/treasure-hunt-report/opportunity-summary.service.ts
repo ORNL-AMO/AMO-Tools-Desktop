@@ -140,9 +140,23 @@ export class OpportunitySummaryService {
 
   
   getIndividualOpportunitySummary(thOpportunity: TreasureHuntOpportunity, settings: Settings): OpportunitySummary {
+    let oppSummary: OpportunitySummary;
     let results: TreasureHuntOpportunityResults = this.getCalculatorTreasureHuntResults(thOpportunity, settings);
     let opportunityMetaData: OpportunityMetaData = this.getOpportunityMetaData(thOpportunity.opportunitySheet);
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, results);
+    if (thOpportunity.opportunityType === Treasure.waterHeating){
+      let waterHeatingOpportunity = thOpportunity as WaterHeatingTreasureHunt;
+      let waterResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getWaterOpportunityResults(waterHeatingOpportunity, settings);
+      let gasResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getGasOpportunityResults(waterHeatingOpportunity, settings);
+      let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
+      let waterOppSum: OpportunitySummary  = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
+      mixedIndividualSummaries.push(waterOppSum);
+      let gasOppSum: OpportunitySummary  = this.getNewOpportunitySummary(opportunityMetaData, gasResults);
+      mixedIndividualSummaries.push(gasOppSum);
+      oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results, mixedIndividualSummaries);
+    } else {
+      oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results);
+    }
+    
     return oppSummary;
   }
   
