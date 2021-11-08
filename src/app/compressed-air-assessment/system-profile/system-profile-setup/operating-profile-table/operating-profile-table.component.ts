@@ -20,7 +20,7 @@ export class OperatingProfileTableComponent implements OnInit {
   isFormChange: boolean = false;
   hourIntervals: Array<number>;
   profileSummary: Array<ProfileSummary>;
-  profileDataType: "power" | "percentCapacity" | "airflow";
+  profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower";
   selectedDayTypeId: string;
   displayLogToolLink: boolean;
   fieldOptions: Array<LogToolField>

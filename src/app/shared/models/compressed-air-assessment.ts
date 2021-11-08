@@ -219,7 +219,7 @@ export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
     dataInterval: 1 | 24,
-    profileDataType: "power" | "percentCapacity" | "airflow"
+    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
 }
 
 export interface CentrifugalSpecifics {
@@ -273,5 +273,5 @@ export interface CompressedAirDayType {
     dayTypeId: string,
     name: string,
     numberOfDays: number,
-    profileDataType: "power" | "percentCapacity" | "airflow"
+    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
 }

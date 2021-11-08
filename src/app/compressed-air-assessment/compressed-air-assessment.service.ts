@@ -72,11 +72,15 @@ export class CompressedAirAssessmentService {
       if (summary.dayTypeId == selectedDayTypeId) {
         let hasInvalidData = summary.profileSummaryData.some(data => {
           if (data.order != 0) {
-            if (profileDataType == 'percentCapacity' && (data.percentCapacity < 0 || data.percentCapacity === null)) {
+            if (profileDataType == 'percentCapacity' && (data.percentCapacity < 0 || isNaN(data.percentCapacity))) {
               return true
-            } else if (profileDataType == 'power' && (data.power < 0 || data.power === null)) {
+            } else if (profileDataType == 'power' && (data.power < 0 || isNaN(data.power))) {
               return true;
-            } else if (profileDataType == 'airflow' && (data.airflow < 0 || data.airflow === null)) {
+            } else if (profileDataType == 'airflow' && (data.airflow < 0 || isNaN(data.airflow))) {
+              return true;
+            } else if (profileDataType == 'percentPower' && (data.percentPower < 0) || isNaN(data.airflow)) {
+              return true;
+            } else if (profileDataType == 'powerFactor' && (data.powerFactor < 0 || isNaN(data.powerFactor) || data.amps < 0 || isNaN(data.amps) || data.volts < 0 || isNaN(data.volts))) {
               return true;
             }
           }
