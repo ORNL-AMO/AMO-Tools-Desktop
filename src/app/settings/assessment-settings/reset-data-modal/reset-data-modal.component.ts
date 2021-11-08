@@ -142,7 +142,6 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   resetFactoryExampleAssessments() {
-    debugger
     let exampleDirectory: Directory = this.directoryDbService.getExample();
     if (exampleDirectory) {
       //example directory exists
@@ -263,19 +262,19 @@ export class ResetDataModalComponent implements OnInit {
       this.createMotorInventoryExample(id);
     }
 
-     //compressedAirAssessment
-     let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
-     if (compressedAirAssessmentExample) {
-       //exists
-       //delete
-       this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
-         //create
-         this.createCompressedAirExample(id);
-       });
-     } else {
-       //create
-       this.createCompressedAirExample(id);
-     }
+    //compressedAirAssessment
+    let compressedAirAssessmentExample: Assessment = this.assessmentDbService.getExample('CompressedAir');
+    if (compressedAirAssessmentExample) {
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
+        //create
+        this.createCompressedAirExample(id);
+      });
+    } else {
+      //create
+      this.createCompressedAirExample(id);
+    }
 
   }
 
@@ -342,7 +341,7 @@ export class ResetDataModalComponent implements OnInit {
       });
     });
   }
-  
+
   createSsmtExample(dirId: number): Promise<any> {
     return new Promise((resolve, reject) => {
       MockSsmt.directoryId = dirId;
