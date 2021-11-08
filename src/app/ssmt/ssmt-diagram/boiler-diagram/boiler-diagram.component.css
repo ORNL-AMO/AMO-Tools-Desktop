@@ -95,6 +95,11 @@
     cursor: pointer;
 }
 
+.boiler-img-holder:hover{
+    transform: scale(1.2);
+    padding: 5px; 
+    margin: 5px;
+}
 
 .boiler-steam-holder .boiler-mass-flow{
     position: absolute;

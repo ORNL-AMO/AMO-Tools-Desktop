@@ -35,6 +35,12 @@
     opacity: 1;
 }
 
+.turbine-img-holder:hover {
+    transform: scale(1.2);
+    padding: 5px; 
+    margin: 5px;
+}
+
 .outlet-power{
     position: absolute;
     z-index: +1;
