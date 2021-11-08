@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body custom-card-body card-container col">
       <div class="row">
-        <div #contentContainer class="col-sm-6 col-md-6 card-column">
+        <div class="col-sm-6 col-md-6 card-column" [ngStyle]="{'height.px': bodyHeight}">
           <div class="row phast align-items-top">
             <div class="col-12">
               <div class="header card-header">
@@ -14,9 +14,9 @@
           [settings]="settings"></app-flue-gas-losses-moisture>
         </div>
   
-        <div class="col-sm-6 col-md-6 card-help-column pb-5">
-            <app-flue-gas-moisture-panel [ngStyle]="{'height.px': 512}" 
-            [containerHeight]="containerHeight"
+        <div class="col-sm-6 col-md-6 card-help-column pb-5 leftPanel" [ngStyle]="{'height.px': bodyHeight}">
+            <app-flue-gas-moisture-panel 
+            
             [settings]="settings"></app-flue-gas-moisture-panel>
         </div>
   

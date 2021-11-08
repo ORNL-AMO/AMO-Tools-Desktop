@@ -13,33 +13,35 @@ import { Settings } from '../../../../shared/models/settings';
     settings: Settings;
     @Output('hideModal')
     hideModal = new EventEmitter<number>();
-    containerHeight: number;
+    //containerHeight: number;
+    @Input()
+    bodyHeight: number;
 
-    @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-    @HostListener('window:resize', ['$event'])
-    onResize(event) {
-      this.resizeTabs();
-    }
+    // @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+    // @HostListener('window:resize', ['$event'])
+    // onResize(event) {
+    //   this.resizeTabs();
+    // }
 
     constructor() {
     }
     
     ngOnInit() {}
 
-    ngAfterViewInit() {
-      setTimeout(() => {
-        this.resizeTabs();
-      }, 100);
-    }
+    // ngAfterViewInit() {
+    //   setTimeout(() => {
+    //     this.resizeTabs();
+    //   }, 100);
+    // }
 
     hideMoistureModal(event: number) {
       this.hideModal.emit(event);
     }
 
-    resizeTabs() {
-      // if (this.contentContainer) {
-      //   this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
-      // }
-    }
+    // resizeTabs() {
+    //   // if (this.contentContainer) {
+    //   //   this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
+    //   // }
+    // }
 
   }

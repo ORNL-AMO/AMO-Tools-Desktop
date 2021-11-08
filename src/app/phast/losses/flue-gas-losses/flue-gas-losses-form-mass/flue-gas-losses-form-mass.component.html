@@ -1,4 +1,4 @@
-<form [formGroup]="flueGasLossForm">
+<form [formGroup]="flueGasLossForm" #formElement>
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'gasTypeId'+idString}}">Fuel
@@ -196,7 +196,7 @@
 </div>
 
 <div bsModal #moistureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moistureModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -205,8 +205,8 @@
         </button>
       </div>
       <div #modalBody class="modal-body p-0">
-        <app-flue-gas-moisture-modal *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
-              [settings]="settings"></app-flue-gas-moisture-modal>
+        <app-flue-gas-moisture-modal *ngIf="showMoisture && bodyHeight" (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
+              [settings]="settings" [bodyHeight]="bodyHeight"></app-flue-gas-moisture-modal>
       </div> 
       <div class="modal-footer fsat justify-content-between">
         <button class="btn btn-default pull-left" (click)="hideMoistureModal()">Cancel</button>        

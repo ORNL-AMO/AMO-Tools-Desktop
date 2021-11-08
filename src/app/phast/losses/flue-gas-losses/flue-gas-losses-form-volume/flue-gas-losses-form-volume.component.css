@@ -1,18 +1,26 @@
+.btn{
+    padding: 6px;
+    font-size: small;
+}
 
+.modal-dialog{
+    top: 1rem;
+}
 
-.modal-header{
-    background: #fff;
+.modal-header, .modal-footer{
+    padding: 6px;
 }
 
 .modal-content{
-    border: none;
-    border-radius: 0px;
+    height: 85vh;
 }
 
-.modal-lg{
-    max-width: 90%; 
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
 }
 
-.modal-body{
-    height: 512px;
+.calculated-error {
+    color: red;
+    font-weight: bold;
 }

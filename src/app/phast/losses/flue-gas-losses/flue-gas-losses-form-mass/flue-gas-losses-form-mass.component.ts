@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef, ElementRef, HostListener } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
@@ -10,6 +10,7 @@ import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
@@ -38,9 +39,19 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getBodyHeight();
+  }
+
+  moistureModalSub: Subscription;
+
+  bodyHeight: number;
   warnings: FlueGasWarnings;
   options: Array<SolidLiquidFlueGasMaterial>;
   showModal: boolean = false;
@@ -119,6 +130,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   enableForm() {
     this.flueGasLossForm.controls.gasTypeId.enable();
     this.flueGasLossForm.controls.oxygenCalculationMethod.enable();
+  }
+
+  ngAfterViewInit() {
+    this.moistureModalSub = this.moistureModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
+  }
+
+  ngOnDestroy() {
+    this.moistureModalSub.unsubscribe();
   }
 
 
@@ -338,6 +359,14 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return this.flueGasCompareService.compareMassOxygenCalculationMethod(this.lossIndex);
     } else {
       return false;
+    }
+  }
+
+  getBodyHeight() {
+    if (this.modalBody) {
+      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
+    } else {
+      this.bodyHeight = 0;
     }
   }
 }

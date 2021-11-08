@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, HostListener, ElementRef } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 import { FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -35,10 +36,20 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getBodyHeight();
+  }
+
+  bodyHeight: number;
+  moistureModalSub: Subscription;
 
   firstChange: boolean = true;
   options: Array<FlueGasMaterial>;
@@ -93,6 +104,17 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       }
     }
   }
+
+  ngAfterViewInit() {
+    this.moistureModalSub = this.moistureModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
+  }
+
+  ngOnDestroy() {
+    this.moistureModalSub.unsubscribe();
+  }
+
 
   focusOut() {
     this.changeField.emit('default');
@@ -308,6 +330,14 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       return this.flueGasCompareService.compareVolumeOxygenCalculationMethod(this.lossIndex);
     } else {
       return false;
+    }
+  }
+
+  getBodyHeight() {
+    if (this.modalBody) {
+      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
+    } else {
+      this.bodyHeight = 0;
     }
   }
 }
