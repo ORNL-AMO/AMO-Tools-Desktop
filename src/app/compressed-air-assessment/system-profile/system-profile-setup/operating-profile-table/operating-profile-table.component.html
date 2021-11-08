@@ -100,22 +100,22 @@
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.power"
-                            step="any">
+                            step="any" min="0">
                         <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.airflow"
-                            step="any">
+                            step="any" min="0">
                         <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentCapacity"
-                            step="any">
+                            step="any" min="0">
                         <input *ngIf="profileDataType == 'percentPower'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentPower"
-                            step="any">
+                            step="any" min="0">
                     </span>
                     <div class="w-100 bold text-center" *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
@@ -125,15 +125,15 @@
                             id="{{'order_powerFactor_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_powerFactor_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.powerFactor"
-                            step=".1">
+                            step=".1" min="0">
                         <input type="number" class="form-control" id="{{'order_amps_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_amps_'+compressorIndex+dataIndex}}"
-                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.amps"
-                            step="any">
+                            (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.amps" step="any"
+                            min="0">
                         <input type="number" class="form-control" id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_volts_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.volts"
-                            step="any">
+                            step="any" min="0">
                     </div>
                 </td>
             </tr>
