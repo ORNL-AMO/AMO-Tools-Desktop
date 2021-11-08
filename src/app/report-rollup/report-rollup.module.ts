@@ -62,6 +62,7 @@ import { CompressedAirReportRollupService } from './compressed-air-report-rollup
 import { CompressedAirSummaryComponent } from './report-summary/compressed-air-summary/compressed-air-summary.component';
 import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
 import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
+import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compressed-air-rollup-print/compressed-air-rollup-print.component';
 
 @NgModule({
   imports: [
@@ -121,6 +122,7 @@ import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed
     EffluentEnergyUseTableComponent,
     CompressedAirSummaryComponent,
     CompressedAirRollupComponent,
+    CompressedAirRollupPrintComponent,
 
   ],
   providers: [

@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class="report-data" *ngIf="assessment.compressedAirAssessment">
+    <div class="report-data" *ngIf="assessment.compressedAirAssessment && assessment.compressedAirAssessment.setupDone">
 
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
@@ -79,50 +79,50 @@
             </li>
         </ul>
 
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
-            [ngStyle]="{'height.px':reportContainerHeight}">
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'facilityInfo' || showPrintView" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-        <div class="input-data results scroll-item print-height"
+        <div class="input-data results scroll-item print-height page-break-before"
             *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-summary [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings"
                 [printView]="showPrintView">
             </app-input-summary>
         </div>
-        <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printResults)"
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printExecutiveSummary)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"
                 [modifications]="assessment.compressedAirAssessment.modifications" [inRollup]="inRollup"
                 [assessment]="assessment" [settings]="settings"></app-executive-summary>
         </div>
-        <div class="results scroll-item print-height"
+        <div class="results scroll-item print-height page-break-before"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults"
-                [compressedAirAssessment]="assessment.compressedAirAssessment"></app-report-graphs>
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
+            </app-report-graphs>
         </div>
-        <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'systemProfiles' || (showPrintView && printOptions.printResults)"
+        <div class="results scroll-item print-height page-break-before" *ngIf="currentTab == 'systemProfiles'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles [compressedAirAssessment]="assessment.compressedAirAssessment"
                 [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
                 [settings]="settings">
             </app-system-profiles>
         </div>
-        <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printResults)"
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printReportOpportunityPayback)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
         </div>
     </div>
     <!-- End .report-data -->
 
-    <!-- <div *ngIf="!assessment.compressedAir.setupDone || !assessment.compressedAir.valid.isValid">
+    <div *ngIf="!assessment.compressedAirAssessment.setupDone">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
             see the resulting data.</p>
-    </div> -->
+    </div>
 
 
 </div>

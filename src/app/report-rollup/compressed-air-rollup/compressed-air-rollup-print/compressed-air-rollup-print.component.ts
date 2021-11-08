@@ -4,11 +4,11 @@ import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-
 import { RollupSummaryTableData } from '../../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
-  selector: 'app-ssmt-rollup-print',
-  templateUrl: './ssmt-rollup-print.component.html',
-  styleUrls: ['./ssmt-rollup-print.component.css']
+  selector: 'app-compressed-air-rollup-print',
+  templateUrl: './compressed-air-rollup-print.component.html',
+  styleUrls: ['./compressed-air-rollup-print.component.css']
 })
-export class SsmtRollupPrintComponent implements OnInit {
+export class CompressedAirRollupPrintComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
@@ -27,9 +27,10 @@ export class SsmtRollupPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.energyYAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
+    this.energyYAxisLabel = 'Annual Energy Usage (kWh)';
     this.energyTickFormat = '.2s'
     this.costYAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$' ? '$k' : '$'}/yr)`;
     this.costTickFormat = '$.2s';
   }
+
 }
