@@ -144,7 +144,7 @@ export class CompressedAirReportComponent implements OnInit {
   }
 
   print() {
-    this.printOptionsMenuService.printContext.next('wasteWater');
+    this.printOptionsMenuService.printContext.next('compressedAir');
     this.printOptionsMenuService.showPrintMenu.next(true);
   }
 }

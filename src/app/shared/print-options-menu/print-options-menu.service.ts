@@ -47,6 +47,10 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printTreasureHuntRollup = !currentPrintOptions.printTreasureHuntRollup;
         break;
       }
+      case "compressedAirRollup": {
+        currentPrintOptions.printCompressedAirRollup = !currentPrintOptions.printCompressedAirRollup;
+        break;
+      }
       case "ssmtRollup": {
         currentPrintOptions.printSsmtRollup = !currentPrintOptions.printSsmtRollup;
         break;
@@ -126,7 +130,8 @@ export class PrintOptionsMenuService {
       printWasteWaterRollup: settings.printWasteWaterRollup,
       printDetailedResults: settings.printDetailedResults,
       printReportDiagram: settings.printReportDiagram,
-      selectAll: settings.printAll
+      selectAll: settings.printAll,
+      printCompressedAirRollup: settings.printCompressedAirRollup
     }
   }
 
@@ -149,7 +154,8 @@ export class PrintOptionsMenuService {
       printWasteWaterRollup: bool,
       printDetailedResults: bool,
       printReportDiagram: bool,
-      selectAll: bool
+      selectAll: bool,
+      printCompressedAirRollup: bool
     }
   }
  

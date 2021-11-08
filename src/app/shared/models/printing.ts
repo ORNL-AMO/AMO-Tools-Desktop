@@ -4,6 +4,7 @@ export interface PrintOptions {
     printPhastRollup: boolean;
     printFsatRollup: boolean;
     printTreasureHuntRollup: boolean;
+    printCompressedAirRollup: boolean,
     printReportGraphs: boolean;
     printReportSankey: boolean;
     printResults: boolean;

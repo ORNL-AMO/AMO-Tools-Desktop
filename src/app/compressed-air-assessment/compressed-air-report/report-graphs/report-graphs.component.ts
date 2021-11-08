@@ -14,6 +14,9 @@ export class ReportGraphsComponent implements OnInit {
   assessmentResults: Array<CompressedAirAssessmentResult>;
   @Input()
   compressedAirAssessment: CompressedAirAssessment;
+  @Input()
+  printView: boolean;
+  
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
 
   selectedDayType: CompressedAirDayType;
