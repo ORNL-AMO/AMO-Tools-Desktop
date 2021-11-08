@@ -267,7 +267,7 @@ export class ResetDataModalComponent implements OnInit {
     if (compressedAirAssessmentExample) {
       //exists
       //delete
-      this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
+      this.indexedDbService.deleteAssessment(compressedAirAssessmentExample.id).then(() => {
         //create
         this.createCompressedAirExample(id);
       });
