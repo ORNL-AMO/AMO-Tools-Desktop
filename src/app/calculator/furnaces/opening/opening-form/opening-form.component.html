@@ -320,7 +320,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-flue-gas-modal *ngIf="showFlueGasModal" [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" [inTreasureHunt]="inTreasureHunt" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+        <app-flue-gas-modal *ngIf="showFlueGasModal" 
+        [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" [inTreasureHunt]="inTreasureHunt" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
           [settings]="settings"></app-flue-gas-modal>
       </div>
     </div>

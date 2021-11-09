@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-energy-analysis',
@@ -10,6 +11,8 @@ export class EnergyAnalysisComponent implements OnInit {
   containerHeight: number;
   @Input()
   printView: boolean;
+  @Input()
+  settings: Settings;
   
   constructor() { }
 

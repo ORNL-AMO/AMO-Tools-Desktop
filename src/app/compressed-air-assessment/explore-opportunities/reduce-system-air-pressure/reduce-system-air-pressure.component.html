@@ -1,0 +1,56 @@
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="reduceAirSystemAirPressure">
+            Reduce System Air Pressure
+            <span *ngIf="form.invalid && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="reduceSystemAirPressureOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
+
+
+    <div *ngIf="form.controls.order.value != 100" class="mb-2 pt-1">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="reduceSystemPressureImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="reduceSystemPressureImplementationCost" id="reduceSystemPressureImplementationCost"
+                    (input)="save(false)" (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+
+        <div class="form-group" [ngClass]="{'invalid': form.controls.averageSystemPressureReduction.invalid}">
+            <label for="averageSystemPressureReduction">Average System Pressure Reduction</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="averageSystemPressureReduction"
+                    (focus)="helpTextField('avgSystemPressureReduction')" name="averageSystemPressureReduction"
+                    id="averageSystemPressureReduction" (input)="save(false)">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.averageSystemPressureReduction.invalid && !form.controls.averageSystemPressureReduction.pristine">
+                <span *ngIf="form.controls.averageSystemPressureReduction.errors.required">Value Required</span>
+                <span *ngIf="form.controls.averageSystemPressureReduction.errors.min">Value can't be negative.
+                </span>
+                <span *ngIf="form.controls.averageSystemPressureReduction.errors.max">
+                    Value can't be greater than the minumum pressure in the system
+                    ({{form.controls.averageSystemPressureReduction.errors.max.max | number: '1.0-1'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>).
+                </span>
+            </span>
+        </div>
+    </div>
+</form>

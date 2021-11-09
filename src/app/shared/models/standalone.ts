@@ -82,6 +82,16 @@ export interface OperatingCostOutput {
   totalAnnualCost: number;
 }
 
+export interface OperatingSrcInput {
+  name: string;
+  usage: number;
+  cost: number;
+}
+
+export interface OperatingSrcOutput {
+  totalCost: number;
+}
+
 export interface PipeSizes {
   oneHalf: number;
   threeFourths: number;
@@ -455,6 +465,7 @@ export interface CompEEM_kWAdjustedInput {
 
 export interface CompressedAirPressureReductionData {
   name: string,
+  powerType?: string,
   isBaseline: boolean,
   hoursPerYear: number,
   electricityCost: number,

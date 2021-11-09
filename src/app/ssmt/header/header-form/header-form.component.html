@@ -118,7 +118,7 @@
 
   <!--Non Highest Pressure-->
   <div class="form-group" *ngIf="pressureLevel != 'highPressure'">
-    <label for="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}">Flash Condensate Into Header</label>
+    <label for="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}">Flash Condensate Coming into Header</label>
     <select name="flashCondensateIntoHeader" class="form-control"
       id="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}" (change)="save()"
       (focus)="focusField('flashCondensateIntoHeader')"  formControlName="flashCondensateIntoHeader"

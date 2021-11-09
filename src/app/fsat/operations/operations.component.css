@@ -1,0 +1,26 @@
+.btn{
+    padding: 6px;
+    font-size: small;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+.modal-content{
+    height: 85vh;
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
+
+.calculated-error {
+    color: red;
+    font-weight: bold;
+}

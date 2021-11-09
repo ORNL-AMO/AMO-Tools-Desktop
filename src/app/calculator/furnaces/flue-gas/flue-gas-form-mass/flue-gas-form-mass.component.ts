@@ -59,6 +59,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
+      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
       this.setFormState();
     }
   }
@@ -73,7 +74,7 @@ export class FlueGasFormMassComponent implements OnInit {
   initFormSetup() {
     this.setFormState();
     if (this.byMassForm.controls.gasTypeId.value && this.byMassForm.controls.gasTypeId.value !== '') {
-      if (this.byMassForm.controls.carbon.value === '') {
+      if (this.byMassForm.controls.carbon.value === 0) {
         this.setProperties();
       }
     }
@@ -100,7 +101,7 @@ export class FlueGasFormMassComponent implements OnInit {
     if (updatedFlueGasData && updatedFlueGasData.flueGasByMass) {
       this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byMassForm = this.flueGasFormService.initEmptyMassForm();
+      this.byMassForm = this.flueGasFormService.initEmptyMassForm(this.settings);
     }
 
     this.initFormSetup();
@@ -128,7 +129,7 @@ export class FlueGasFormMassComponent implements OnInit {
       o2: this.byMassForm.controls.o2.value,
       moisture: this.byMassForm.controls.moisture.value,
       nitrogen: this.byMassForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.byMassForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.byMassForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.byMassForm.controls.o2InFlueGas.value,
       excessAir: this.byMassForm.controls.excessAirPercentage.value
     };

@@ -1,12 +1,47 @@
 import { Injectable } from '@angular/core';
 import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 import { PHAST } from '../../../shared/models/phast/phast';
+import { PsychrometricResults } from '../../../shared/models/fans';
+import { BehaviorSubject } from 'rxjs';
+import { BaseGasDensity } from '../../../shared/models/fans';
 
 @Injectable()
 export class FlueGasCompareService {
   baselineFlueGasLoss: FlueGas[];
   modifiedFlueGasLoss: FlueGas[];
+  moistureSubject: BehaviorSubject<PsychrometricResults>;
+  currentField: BehaviorSubject<string>;
+  baseGasDensity: BaseGasDensity; 
+
   constructor() {
+    this.baseGasDensity = {
+      barometricPressure: 29.92,
+      dewPoint: 0,
+      dryBulbTemp: 68,
+      gasDensity: 0.07516579558441701,
+      gasType: "AIR",
+      inputType: "relativeHumidity",
+      relativeHumidity: 0,
+      specificGravity: 1,
+      specificHeatGas: 0.24,
+      specificHeatRatio: 1.4,
+      staticPressure: 0,
+      wetBulbTemp: 118.999
+    };
+    this.moistureSubject = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);
+  }
+
+  setPsychrometricResults(results: PsychrometricResults) {
+    this.moistureSubject.next(results);
+  }
+
+  setCurrentField(currField: string) {
+    this.currentField.next(currField);
+  }
+
+  setCurrentDensity(currDensity: BaseGasDensity) {
+    this.baseGasDensity = currDensity;
   }
 
   compareAllLosses() {
@@ -45,7 +80,7 @@ export class FlueGasCompareService {
       this.compareMassCombustionAirTemperature(index) ||
       this.compareMassFuelTemperature(index) ||
       this.compareMassAshDischargeTemperature(index) ||
-      this.compareMassMoistureInAirComposition(index) ||
+      this.compareMassMoistureInAirCombustion(index) ||
       this.compareMassUnburnedCarbonInAsh(index));
   }
   compareMassGasTypeId(index: number) {
@@ -63,11 +98,14 @@ export class FlueGasCompareService {
   compareMassFuelTemperature(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.fuelTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.fuelTemperature);
   }
+  compareMassAmbientAirTemp(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.ambientAirTemp, this.modifiedFlueGasLoss[index].flueGasByMass.ambientAirTemp);
+  }
   compareMassAshDischargeTemperature(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.ashDischargeTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.ashDischargeTemperature);
   }
-  compareMassMoistureInAirComposition(index: number) {
-    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.moistureInAirComposition, this.modifiedFlueGasLoss[index].flueGasByMass.moistureInAirComposition);
+  compareMassMoistureInAirCombustion(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.moistureInAirCombustion, this.modifiedFlueGasLoss[index].flueGasByMass.moistureInAirCombustion);
   }
   compareMassUnburnedCarbonInAsh(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh, this.modifiedFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh);
@@ -89,6 +127,12 @@ export class FlueGasCompareService {
   }
   compareVolumeFlueGasTemperature(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.flueGasTemperature, this.modifiedFlueGasLoss[index].flueGasByVolume.flueGasTemperature);
+  }
+  compareVolumeAmbientAirTemp(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.ambientAirTemp, this.modifiedFlueGasLoss[index].flueGasByVolume.ambientAirTemp);
+  }
+  compareVolumeMoistureInAirCombustion(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.moistureInAirCombustion, this.modifiedFlueGasLoss[index].flueGasByVolume.moistureInAirCombustion);
   }
   compareVolumeExcessAirPercentage(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.excessAirPercentage, this.modifiedFlueGasLoss[index].flueGasByVolume.excessAirPercentage);
@@ -140,7 +184,7 @@ export class FlueGasCompareService {
           this.compare(baseline.flueGasByMass.combustionAirTemperature, modification.flueGasByMass.combustionAirTemperature) ||
           this.compare(baseline.flueGasByMass.fuelTemperature, modification.flueGasByMass.fuelTemperature) ||
           this.compare(baseline.flueGasByMass.ashDischargeTemperature, modification.flueGasByMass.ashDischargeTemperature) ||
-          this.compare(baseline.flueGasByMass.moistureInAirComposition, modification.flueGasByMass.moistureInAirComposition) ||
+          this.compare(baseline.flueGasByMass.moistureInAirCombustion, modification.flueGasByMass.moistureInAirCombustion) ||
           this.compare(baseline.flueGasByMass.unburnedCarbonInAsh, modification.flueGasByMass.unburnedCarbonInAsh) ||
           this.compare(baseline.flueGasByMass.oxygenCalculationMethod, modification.flueGasByMass.oxygenCalculationMethod)) {
           isDiff = true;

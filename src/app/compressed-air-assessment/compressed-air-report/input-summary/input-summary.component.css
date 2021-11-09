@@ -1,0 +1,15 @@
+@media print {
+    .break-before{
+        page-break-before: always !important;
+    }
+
+    .print-page-title {
+        font-size: 40px !important;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: underline;
+    }
+    .avoid-break{
+        page-break-inside: avoid;
+    }
+}

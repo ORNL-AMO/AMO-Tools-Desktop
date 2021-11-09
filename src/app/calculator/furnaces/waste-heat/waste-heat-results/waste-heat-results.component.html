@@ -1,82 +1,29 @@
-<label class="group-label">Baseline Results</label>
- <table #copyTable0 class="table table-hover table-striped">
+<label class="group-label">
+    Annual Savings
+</label>
+ <table *ngIf="output" #copyTable0 class="table table-hover table-striped">
     <tbody>
-      <tr>
-          <td class="bold w-50">Recovered Heat</td>
-          <td *ngIf="output.baseline.recoveredHeat" class="text-center w-50">
-            {{output.baseline.recoveredHeat | number:'1.0-3'}}
-            <span class="input-group-addon">
-            <span [innerHTML]="output.energyUnit | settingsLabel"></span>/yr
-
-          </span>
+        <tr>
+          <td class="bold w-50">Baseline Electricity</td>
+          <td *ngIf="output.annualEnergy" class="text-center w-50">
+            {{output.annualEnergy | number:'1.0-0'}} kW/yr
           </td>
-          <td *ngIf="!output.baseline.recoveredHeat" class="text-center w-50">
+          <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
         <tr>
-          <td class="bold w-50">Hot Water Flow Rate</td>
-          <td *ngIf="output.baseline.hotWaterFlow" class="text-center w-50">
-            {{output.baseline.hotWaterFlow | number:'1.0-1'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/hr</span>
-          </td>
-          <td *ngIf="!output.baseline.hotWaterFlow" class="text-center w-50">
-            &mdash; &mdash;
+          <td class="bold w-50">Modification Electricity</td>
+          <td class="text-center w-50">
+            0 kW/yr
           </td>
         </tr>
         <tr>
-          <td class="bold w-50">Refrigeration</td>
-          <td *ngIf="output.baseline.tonsRefrigeration" class="text-center w-50">
-            {{output.baseline.tonsRefrigeration | number:'1.0-0'}}
-            <span class="input-group-addon">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">tons</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-            </span>
+          <td class="bold w-50">Annual Energy Savings</td>
+          <td *ngIf="output.annualEnergy" class="text-center w-50">
+            {{output.annualEnergy | number:'1.0-0'}} kW/yr
           </td>
-          <td *ngIf="!output.baseline.tonsRefrigeration" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Available Chiller Capacity</td>
-          <td *ngIf="output.baseline.capacityChiller" class="text-center w-50">
-            {{output.baseline.capacityChiller | number:'1.0-0'}} 
-            <span class="input-group-addon">
-              <span class="input-group-addon">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">tons</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-              </span>
-            </span>
-          </td>
-          <td *ngIf="!output.baseline.capacityChiller" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Electrical Energy Required</td>
-          <td *ngIf="output.baseline.electricalEnergy" class="text-center w-50">
-            {{output.baseline.electricalEnergy | number:'1.0-2'}} kW
-          </td>
-          <td *ngIf="!output.baseline.electricalEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Annual Energy </td>
-          <td *ngIf="output.baseline.annualEnergy" class="text-center w-50">
-            {{output.baseline.annualEnergy | number:'1.0-0'}} kW
-          </td>
-          <td *ngIf="!output.baseline.annualEnergy" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Annual Cost </td>
-          <td *ngIf="output.baseline.annualCost" class="text-center w-50">
-            {{output.baseline.annualCost | currency:'USD':'symbol':'1.0-0'}}
-          </td>
-          <td *ngIf="!output.baseline.annualCost" class="text-center w-50">
+          <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
@@ -85,53 +32,61 @@
   <!-- export table component -->
   <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
   </app-exportable-results-table>
+  
 
-
-
-
-  <label class="mt-2 group-label" *ngIf="modificationExists">Modification Results</label>
-  <table #copyTable0 *ngIf="modificationExists" class="table table-hover table-striped">
-    <tbody>
-      <tr>
+  
+<div>
+  <label class="group-label p-1" (click)="toggleResults()">
+    <span class="fa fa-chevron-down" *ngIf="displayAdditionalResults"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayAdditionalResults"></span>
+    <span class="pl-1">
+      Additional Results
+    </span>
+  </label>
+  <div class="my-2" *ngIf="displayAdditionalResults">
+    <table *ngIf="output" #copyTable1 class="table table-hover table-striped">
+      <tbody>
+        <tr>
           <td class="bold w-50">Recovered Heat</td>
-          <td *ngIf="output.modification.recoveredHeat" class="text-center w-50">
-            {{output.modification.recoveredHeat | number:'1.0-3'}}
+          <td *ngIf="output.recoveredHeat" class="text-center w-50">
+            {{output.recoveredHeat | number:'1.0-3'}}
             <span class="input-group-addon">
-            <span [innerHTML]="output.energyUnit | settingsLabel"></span>/yr
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
           </span>
           </td>
-          <td *ngIf="!output.modification.recoveredHeat" class="text-center w-50">
+          <td *ngIf="!output.recoveredHeat" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Hot Water Flow Rate</td>
-          <td *ngIf="output.modification.hotWaterFlow" class="text-center w-50">
-            {{output.modification.hotWaterFlow | number:'1.0-1'}}
+          <td *ngIf="output.hotWaterFlow" class="text-center w-50">
+            {{output.hotWaterFlow | number:'1.0-1'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/hr</span>
           </td>
-          <td *ngIf="!output.modification.hotWaterFlow" class="text-center w-50">
+          <td *ngIf="!output.hotWaterFlow" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Refrigeration</td>
-          <td *ngIf="output.modification.tonsRefrigeration" class="text-center w-50">
-            {{output.modification.tonsRefrigeration | number:'1.0-0'}}
+          <td *ngIf="output.tonsRefrigeration" class="text-center w-50">
+            {{output.tonsRefrigeration | number:'1.0-0'}}
             <span class="input-group-addon">
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'">tons</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
             </span>
           </td>
-          <td *ngIf="!output.modification.tonsRefrigeration" class="text-center w-50">
+          <td *ngIf="!output.tonsRefrigeration" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Available Chiller Capacity</td>
-          <td *ngIf="output.modification.capacityChiller" class="text-center w-50">
-            {{output.modification.capacityChiller | number:'1.0-0'}} 
+          <td *ngIf="output.capacityChiller" class="text-center w-50">
+            {{output.capacityChiller | number:'1.0-0'}} 
             <span class="input-group-addon">
               <span class="input-group-addon">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">tons</span>
@@ -139,65 +94,34 @@
               </span>
             </span>
           </td>
-          <td *ngIf="!output.modification.capacityChiller" class="text-center w-50">
+          <td *ngIf="!output.capacityChiller" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Electrical Energy Required</td>
-          <td *ngIf="output.modification.electricalEnergy" class="text-center w-50">
-            {{output.modification.electricalEnergy | number:'1.0-2'}} kW
+          <td *ngIf="output.electricalEnergy" class="text-center w-50">
+            {{output.electricalEnergy | number:'1.0-2'}} kW
           </td>
-          <td *ngIf="!output.modification.electricalEnergy" class="text-center w-50">
+          <td *ngIf="!output.electricalEnergy" class="text-center w-50">
             &mdash; &mdash;
           </td>
         </tr>
-        <tr>
-          <td class="bold w-50">Annual Energy</td>
-          <td *ngIf="output.modification.annualEnergy" class="text-center w-50">
-            {{output.modification.annualEnergy | number:'1.0-0'}} kW
+        <!-- <tr>
+          <td class="bold w-50">Annual Cost Savings</td>
+          <td *ngIf="output.annualCost" class="text-center w-50">
+            {{output.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
-          <td *ngIf="!output.modification.annualEnergy" class="text-center w-50">
+          <td *ngIf="!output.annualCost" class="text-center w-50">
             &mdash; &mdash;
           </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Annual Cost</td>
-          <td *ngIf="output.modification.annualCost" class="text-center w-50">
-            {{output.modification.annualCost | currency:'USD':'symbol':'1.0-0'}}
-          </td>
-          <td *ngIf="!output.modification.annualCost" class="text-center w-50">
-            &mdash; &mdash;
-          </td>
-        </tr>
-    </tbody>
-  </table>
-  <app-exportable-results-table *ngIf="modificationExists" [tableString]="table1String"
-  (updateTableString)="updateTable1String()"></app-exportable-results-table>
+        </tr> -->
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()">
+    </app-exportable-results-table>
+  </div>
 
-  <label class="mt-2 group-label" *ngIf="modificationExists">Savings</label>
-<table *ngIf="modificationExists" #copyTable2 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td class="bold w-50">Annual Energy Savings</td>
-      <td *ngIf="output.annualEnergySavings" class="text-center w-50">
-        {{output.annualEnergySavings | number:'1.0-0'}} kW
-      </td>
-      <td *ngIf="!output.annualEnergySavings" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-    <tr>
-      <td class="bold w-50">Annual Cost Savings</td>
-      <td *ngIf="output.annualCostSavings" class="text-center w-50">
-        {{output.annualCostSavings | currency:'USD':'symbol':'1.0-0'}}
-      </td>
-      <td *ngIf="!output.annualCostSavings" class="text-center w-50">
-        &mdash; &mdash;
-      </td>
-    </tr>
-  </tbody>
-</table>
-<app-exportable-results-table *ngIf="modificationExists" [tableString]="table2String"
-  (updateTableString)="updateTable2String()"></app-exportable-results-table>
+  </div>
+
   

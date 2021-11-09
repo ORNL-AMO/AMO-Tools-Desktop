@@ -11,7 +11,7 @@ import { VisualizeMenuService } from '../visualize-menu.service';
   styleUrls: ['./annotate-graph.component.css']
 })
 export class AnnotateGraphComponent implements OnInit {
-
+  
   annotateDataPointSub: Subscription;
   annotateDataPoint: AnnotationData;
   selectedGraphObjSub: Subscription;
@@ -30,9 +30,9 @@ export class AnnotateGraphComponent implements OnInit {
     });
 
     this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
-      this.annotateDataPoint = point;
+      this.annotateDataPoint = point;      
       this.cd.detectChanges();
-    });
+    });  
   }
 
   ngOnDestroy() {

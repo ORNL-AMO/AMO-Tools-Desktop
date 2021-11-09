@@ -345,6 +345,12 @@ export class ConvertSteamService {
     ssmtOperationsOutput.sitePowerDemand = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerDemand).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('m3/h').to(settings.steamVolumeFlowMeasurement);
     ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlowAnnual).from('m3').to(settings.steamVolumeMeasurement);
+    if (settings.currency !== "$") {
+      ssmtOperationsOutput.boilerFuelCost = this.convertUnitsService.value(ssmtOperationsOutput.boilerFuelCost).from('$').to(settings.currency);
+      ssmtOperationsOutput.makeupWaterCost = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterCost).from('$').to(settings.currency);
+      ssmtOperationsOutput.totalOperatingCost = this.convertUnitsService.value(ssmtOperationsOutput.totalOperatingCost).from('$').to(settings.currency);
+      ssmtOperationsOutput.powerGenerationCost = this.convertUnitsService.value(ssmtOperationsOutput.powerGenerationCost).from('$').to(settings.currency);
+    }
     return ssmtOperationsOutput;
   }
 

@@ -1,0 +1,53 @@
+.results{
+    padding-top: 20px;
+    overflow-x: auto;
+}
+
+.assessment-title{
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: -14px;
+}
+
+
+.date-modified{
+    color: #999;
+    font-size: 12px;
+    margin-top: 15px;
+    margin-left: 0;
+}
+
+@media print {
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+
+    .date-modified {
+        font-size: 18px;
+    }
+    
+    .print-height{
+        height: 100% !important;
+    }
+}
+
+.print-div{
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.print-col{
+    background-color:#CCD1D1;
+    text-align: center;
+}
+
+.print-col h4{
+    padding-top: 20px;
+}
+
+.fa-print{
+    font-size: 150px;
+}

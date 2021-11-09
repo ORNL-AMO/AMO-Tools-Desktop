@@ -3,15 +3,20 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
+import { CompressedAirPressureReductionData } from '../models/standalone';
+import { PSAT } from '../models/psat';
+import { PHAST } from '../models/phast/phast';
+import { ConvertUnitsService } from '../convert-units/convert-units.service';
+import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 declare const packageJson;
 
 @Injectable()
 export class UpdateDataService {
 
-    constructor(private settingsService: SettingsService) { }
+    constructor(private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
     checkAssessment(assessment: Assessment): Assessment {
         if (this.checkAssessmentVersionDifferent(assessment) === false) {
@@ -47,7 +52,33 @@ export class UpdateDataService {
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
+
+        if (assessment.psat.inputs.line_frequency === 0){
+            assessment.psat.inputs.line_frequency = 50;
+        }         
+        if (assessment.psat.inputs.line_frequency === 1){
+            assessment.psat.inputs.line_frequency = 60;
+        } 
+        if (assessment.psat.modifications) {
+            assessment.psat.modifications.forEach(mod => {
+                mod.psat = this.addWhatIfScenarioPsat(mod.psat);
+                if (mod.psat.inputs.line_frequency === 0){
+                    mod.psat.inputs.line_frequency = 50;
+                }         
+                if (mod.psat.inputs.line_frequency === 1){
+                    mod.psat.inputs.line_frequency = 60;
+                } 
+            })
+        }
+
         return assessment;
+    }
+
+    addWhatIfScenarioPsat(psat: PSAT): PSAT {
+        if (!psat.inputs.whatIfScenario) {
+            psat.inputs.whatIfScenario = true;
+        }
+        return psat;
     }
 
     updateFsat(assessment: Assessment): Assessment {
@@ -59,17 +90,47 @@ export class UpdateDataService {
         }
 
         assessment.fsat = this.updateSpecificHeatRatio(assessment.fsat);
-        if(assessment.fsat.modifications){
+        if (!assessment.fsat.fsatOperations) {
+            assessment.fsat = this.addFsatOperations(assessment.fsat);
+        }
+        if (assessment.fsat.modifications) {
             assessment.fsat.modifications.forEach(mod => {
                 mod.fsat = this.updateSpecificHeatRatio(mod.fsat);
+                mod.fsat = this.addWhatIfScenarioFsat(mod.fsat);
+                mod.fsat = this.addFsatOperations(mod.fsat);
             });
         }
         return assessment;
     }
 
+    addWhatIfScenarioFsat(fsat: FSAT): FSAT {
+        if (!fsat.whatIfScenario) {
+            fsat.whatIfScenario = true;
+        }
+        return fsat;
+    }
+
+    addFsatOperations(fsat: FSAT): FSAT {
+        if (!fsat.fsatOperations) {
+            let operatingHours: number = 8760;
+            let cost: number = .06;
+            if (fsat.fieldData['operatingHours']) {
+                operatingHours = fsat.fieldData['operatingHours'];
+            }
+            if (fsat.fieldData['cost']) {
+                cost = fsat.fieldData['cost'];
+            }
+            fsat.fsatOperations = {
+                operatingHours: operatingHours,
+                cost: cost
+            }
+        }
+        return fsat;
+    }
+
     updateSpecificHeatRatio(fsat: FSAT): FSAT {
-        if(fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
-            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio']; 
+        if (fsat.fieldData['specificHeatRatio'] && !fsat.baseGasDensity.specificHeatRatio) {
+            fsat.baseGasDensity.specificHeatRatio = fsat.fieldData['specificHeatRatio'];
         }
         return fsat;
     }
@@ -93,8 +154,63 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
+
+        assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateMoistureInAirCombustion(mod.phast);
+            });
+        }
+
+        assessment.phast = this.updateFlueGas(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateFlueGas(mod.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
+    }
+
+    updateMoistureInAirCombustion(phast: PHAST): PHAST {
+        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+            phast.losses.flueGasLosses.forEach(fg => {
+                if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
+                    fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
+                } else if (fg.flueGasByMass && !fg.flueGasByMass.moistureInAirCombustion) {
+                    fg.flueGasByMass.moistureInAirCombustion = 0;
+                }  else if (fg.flueGasByVolume && !fg.flueGasByVolume.moistureInAirCombustion) {
+                    fg.flueGasByVolume.moistureInAirCombustion = 0;
+                }
+            });
+        }
+        return phast;
+    }
+
+    updateFlueGas(phast: PHAST): PHAST {
+        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+            phast.losses.flueGasLosses.forEach(fg => {
+                if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
+                    fg.flueGasByMass = this.setAmbientAirTemp(phast, fg.flueGasByMass);
+                }
+                if (fg.flueGasByVolume && fg.flueGasByVolume['ambientAirTemp'] === undefined) {
+                    fg.flueGasByVolume = this.setAmbientAirTemp(phast, fg.flueGasByVolume);
+                }
+            });
+        }
+        return phast;
+    }
+
+    setAmbientAirTemp(phast: PHAST, fg: FlueGasByMass | FlueGasByVolume) {
+        let unitsOfMeasure: string = phast.lossDataUnits;
+        let ambientAirTemp: number = 60;
+        if (unitsOfMeasure == 'Metric') {
+            ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
+            ambientAirTemp = Number(ambientAirTemp.toFixed(2));
+        } 
+        fg.ambientAirTemp = ambientAirTemp;
+        return fg;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
@@ -191,7 +307,14 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.compressedAirPressureReductions) {
                 assessment.treasureHunt.compressedAirPressureReductions.forEach(opportunity => {
+                    opportunity = this.updateCompressedAirPressureReductionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.compressedAirPressure;
+                });
+            }
+            if (assessment.treasureHunt.heatCascadingOpportunities) {
+                assessment.treasureHunt.heatCascadingOpportunities.forEach(opportunity => {
+                    opportunity = this.updateHeatCascadingTreasureHunt(opportunity);
+                    opportunity.opportunityType = Treasure.heatCascading;
                 });
             }
             if (assessment.treasureHunt.waterReductions) {
@@ -219,7 +342,7 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.airLeak;
                 });
             }
-            
+
         }
         return assessment;
     }
@@ -238,6 +361,7 @@ export class UpdateDataService {
         return lightingReplacementTreasureHunt;
     }
 
+
     updateLightingReplacement(lightingReplacement: LightingReplacementData): LightingReplacementData {
         if (lightingReplacement.ballastFactor == undefined) {
             lightingReplacement.ballastFactor = 1;
@@ -252,5 +376,39 @@ export class UpdateDataService {
             lightingReplacement.category = 0;
         }
         return lightingReplacement;
+    }
+
+    updateCompressedAirPressureReductionTreasureHunt(compressedAirPressureReductionTreasureHunt: CompressedAirPressureReductionTreasureHunt): CompressedAirPressureReductionTreasureHunt {
+        if (compressedAirPressureReductionTreasureHunt.baseline) {
+            compressedAirPressureReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        if (compressedAirPressureReductionTreasureHunt.modification) {
+            compressedAirPressureReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateCompressedAirPressureReduction(reduction);
+            });
+        }
+        return compressedAirPressureReductionTreasureHunt;
+    }
+
+
+    updateCompressedAirPressureReduction(compressedAirPressureReduction: CompressedAirPressureReductionData): CompressedAirPressureReductionData {
+        if (compressedAirPressureReduction.powerType === undefined) {
+            compressedAirPressureReduction.powerType = 'Measured';
+        }
+        return compressedAirPressureReduction;
+    }
+
+    updateHeatCascadingTreasureHunt(heatCascadingTH: HeatCascadingTreasureHunt): HeatCascadingTreasureHunt {
+        if (heatCascadingTH) {
+            if (heatCascadingTH.inputData && heatCascadingTH.inputData['priFuelHV']) {
+                heatCascadingTH.inputData.fuelHV = heatCascadingTH.inputData['priFuelHV'];
+            }
+            if (heatCascadingTH.inputData && heatCascadingTH.inputData['secFuelCost']) {
+                heatCascadingTH.inputData.fuelCost = heatCascadingTH.inputData['secFuelCost'];
+            }
+        }
+        return heatCascadingTH;
     }
 }

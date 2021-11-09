@@ -1,0 +1,31 @@
+<div *ngIf="!printView">
+    <div class="row">
+        <div class="col-12 pt-2">
+            <label class="group-label">Compressed Air Systems Summary</label>
+            <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Compressed Air'"
+                [energyUnit]="energyUnit">
+            </app-rollup-summary-table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="btn-group btn-group-sm pt-2 pb-2 mx-auto">
+                <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('cost')"
+                    [ngClass]="{'active': dataOption == 'cost'}">Energy Cost</button>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('energy')"
+                    [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <app-rollup-summary-bar-chart [barChartData]="barChartData" [yAxisLabel]="yAxisLabel"
+                [tickFormat]="tickFormat">
+            </app-rollup-summary-bar-chart>
+        </div>
+    </div>
+</div>
+
+<app-compressed-air-rollup-print *ngIf="printView" [settings]="settings" [costChartData]="costChartData"
+    [energyChartData]="energyChartData" [rollupSummaryTableData]="rollupSummaryTableData" [energyUnit]="energyUnit">
+</app-compressed-air-rollup-print>

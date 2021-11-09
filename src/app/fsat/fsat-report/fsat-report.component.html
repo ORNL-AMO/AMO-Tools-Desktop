@@ -62,6 +62,9 @@
             <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
                 <a>Report Graphs</a>
             </li>
+            <li (click)="setTab('detailedResults')" [ngClass]="{'active': currentTab == 'detailedResults'}">
+                <a>Detailed Results</a>
+            </li>
             <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
                 <a>Sankey</a>
             </li>
@@ -96,6 +99,13 @@
                 [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
             </app-fsat-report-graphs>
         </div>
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'detailedResults' || (showPrintView && printOptions.printResults)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-detailed-results [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
+            </app-detailed-results>
+        </div>
+
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-fsat-report-sankey [settings]="settings" [assessment]="assessment">

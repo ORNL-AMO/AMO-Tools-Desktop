@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
 import { LeakageLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { LeakageService } from './leakage.service';
 
 @Component({
@@ -46,7 +47,7 @@ export class LeakageComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService, 
               private leakageService: LeakageService) { }
 
   ngOnInit() {
@@ -75,6 +76,8 @@ export class LeakageComponent implements OnInit {
       this.leakageService.modificationData.next(undefined);
       this.leakageService.baselineData.next(undefined);
       this.leakageService.energySourceType.next(undefined);
+      this.flueGasService.baselineData.next(undefined);
+      this.flueGasService.modificationData.next(undefined);
     }
   }
 

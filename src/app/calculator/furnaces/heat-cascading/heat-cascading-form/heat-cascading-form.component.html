@@ -1,4 +1,5 @@
-<form #formElement [formGroup]="form">
+<form #formElement [formGroup]="form" class="d-flex flex-direction-column">
+    <div class="w-50 px-4 py-1">
       <label class="group-label my-1">
         Primary Process
       </label>
@@ -24,56 +25,18 @@
         </span>
       </div>
 
-      <div class="form-group">
-        <label class="small" for="materialTypeId">Fuel
-          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New Fuel</a>
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="utilityType">Utility type
         </label>
-        <select name="materialTypeId" class="form-control" formControlName="materialTypeId" id="materialTypeId"
-          (change)="setMaterialProperties()" (focus)="focusField('materialTypeId')" >
-          <option *ngFor="let option of fuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+          (change)="calculate()" (focus)="focusField('utilityType')" >
+          <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label class="small" for="priFuelHV"> Fuel Heating Value</label>
-        <div class="input-group">
-          <input name="priFuelHV" type="number" step="10" class="form-control"
-            formControlName="priFuelHV" id="priFuelHV" onfocus="this.select();"
-            (input)="calculate()" (focus)="focusField('fuelHV')" >
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MJ/m<sup>3</sup>
-            </span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.priFuelHV.invalid && !form.controls.priFuelHV.pristine">
-          <span *ngIf="form.controls.priFuelHV.errors.required">Value Required</span>
-        </span>
-      </div>
-      
-      <div class="form-group">
-        <label class="small" for="priAvailableHeat">
-            Available Heat
-          <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal('primary')">Calculate</a>
-        </label>
-        <div class="input-group">
-          <input  name="priAvailableHeat" type="number" step="any" min="0"
-          class="form-control" formControlName="priAvailableHeat" id="priAvailableHeat" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('availableHeat')">
-          <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-        *ngIf="form.controls.priAvailableHeat.invalid && !form.controls.priAvailableHeat.pristine">
-        <span *ngIf="form.controls.priAvailableHeat.errors.required">Value Required</span>
-        <span *ngIf="form.controls.priAvailableHeat.errors.greaterThan == 0">Value must be greater than than
-          0.</span>
-          <span *ngIf="form.controls.priAvailableHeat.errors.max">Value can't be greater than
-            {{form.controls.priAvailableHeat.errors.max.max}}%</span>
-      </span>
-      </div>
-
-
-      <div class="form-group">
-        <label class="small" for="priFiringRate">Heat Input (Firing) Rate - Average </label>
+        <label class="small" for="priFiringRate">Heat Input (Firing) Rate </label>
         <div class="input-group">
           <input name="priFiringRate" type="number" step="10" class="form-control"
             formControlName="priFiringRate" id="priFiringRate" onfocus="this.select();"
@@ -92,7 +55,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="priExhaustTemperature"> (Hot) Process Exhaust Gas Temperature</label>
+        <label class="small" for="priExhaustTemperature">Process Exhaust Gas Temperature</label>
         <div class="input-group">
           <input name="priExhaustTemperature" type="number" step="10" class="form-control"
             formControlName="priExhaustTemperature" id="priExhaustTemperature" onfocus="this.select();"
@@ -107,7 +70,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="priExhaustO2"> % Oxygen in (Higher Temperature) Exhaust</label>
+        <label class="small" for="priExhaustO2"> % Oxygen in Exhaust</label>
         <div class="input-group">
           <input name="priExhaustO2" type="number" step="10" class="form-control"
             formControlName="priExhaustO2" id="priExhaustO2" onfocus="this.select();"
@@ -125,7 +88,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="priCombAirTemperature"> Combustion Air Temperature for Primary Process Burners</label>
+        <label class="small" for="priCombAirTemperature"> Combustion Air Temperature</label>
         <div class="input-group">
           <input name="priCombAirTemperature" type="number" step="10" class="form-control"
             formControlName="priCombAirTemperature" id="priCombAirTemperature" onfocus="this.select();"
@@ -139,9 +102,31 @@
         </span>
       </div>
 
-      
+      <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
+				<div class="form-group m-0">
+				  <label class="bold">Available Heat</label>
+				  <div *ngIf="output.priAvailableHeat" class="text-center bold small">
+					{{output.priAvailableHeat | number:'2.1-1'}} %
+				  </div>
+				  <div *ngIf="!output.priAvailableHeat" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+				<div class="form-group m-0">
+				  <label class="bold">Excess Air</label>
+				  <div *ngIf="output.priExcessAir" class="text-center bold small">
+					{{output.priExcessAir | sigFigs:'3'}} 
+					<span class="input-group-addon">%</span>
+				  </div>
+				  <div *ngIf="!output.priExcessAir" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+			  </div>
+    </div>
 
-      <label class="group-label mt-3 mb-1">
+    <div class="w-50 px-4 py-1">
+      <label class="group-label my-1">
         Secondary Process
       </label>
       
@@ -166,27 +151,53 @@
       </div>
       
       <div class="form-group">
-        <label class="small" for="secFuelCost">
+        <label class="small" for="fuelCost">
           Fuel Cost
         </label>
         <div class="input-group">
-          <input name="secFuelCost" type="number" class="form-control" formControlName="secFuelCost" id="secFuelCost"
-            onfocus="this.select();" (input)="calculate()" (focus)="focusField('secFuelCost')">
+          <input name="fuelCost" type="number" class="form-control" formControlName="fuelCost" id="fuelCost"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelCost')">
           <span class="input-group-addon units">$ /
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
 						<span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.secFuelCost.invalid && !form.controls.secFuelCost.pristine">
-          <span *ngIf="form.controls.secFuelCost.errors.required">Value Required</span>
+          *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
+          <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="materialTypeId">Fuel
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New Fuel</a>
+        </label>
+        <select name="materialTypeId" class="form-control" formControlName="materialTypeId" id="materialTypeId"
+          (change)="setMaterialProperties()" (focus)="focusField('materialTypeId')" >
+          <option *ngFor="let option of fuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="fuelHV"> Higher Heating Value</label>
+        <div class="input-group">
+          <input name="fuelHV" type="number" step="10" class="form-control"
+            formControlName="fuelHV" id="fuelHV" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('fuelHV')" >
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">MJ/m<sup>3</sup>
+            </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.fuelHV.invalid && !form.controls.fuelHV.pristine">
+          <span *ngIf="form.controls.fuelHV.errors.required">Value Required</span>
         </span>
       </div>
       
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label class="small" for="secAvailableHeat">
           Available Heat
-          <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal('secondary')">Calculate</a>
+          <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
         </label>
         <div class="input-group">
           <input name="secAvailableHeat" type="number" step="any" min="0" class="form-control"
@@ -202,10 +213,10 @@
           <span *ngIf="form.controls.secAvailableHeat.errors.max">Value can't be greater than
             {{form.controls.secAvailableHeat.errors.max.max}}%</span>
         </span>
-      </div>
+      </div> -->
           
       <div class="form-group">
-        <label class="small" for="secFiringRate">Heat Input (Firing) Rate - Average </label>
+        <label class="small" for="secFiringRate">Heat Input (Firing) Rate </label>
         <div class="input-group">
           <input name="secFiringRate" type="number" step="10" class="form-control"
             formControlName="secFiringRate" id="secFiringRate" onfocus="this.select();"
@@ -224,7 +235,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="secExhaustTemperature"> (Hot) Process Exhaust Gas Temperature</label>
+        <label class="small" for="secExhaustTemperature"> Process Exhaust Gas Temperature</label>
         <div class="input-group">
           <input name="secExhaustTemperature" type="number" step="10" class="form-control"
             formControlName="secExhaustTemperature" id="secExhaustTemperature" onfocus="this.select();"
@@ -239,7 +250,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="secExhaustO2"> % Oxygen in (Higher Temperature) Exhaust</label>
+        <label class="small" for="secExhaustO2"> % Oxygen in Exhaust</label>
         <div class="input-group">
           <input name="secExhaustO2" type="number" step="10" class="form-control"
             formControlName="secExhaustO2" id="secExhaustO2" onfocus="this.select();"
@@ -257,7 +268,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="secCombAirTemperature"> Combustion Air Temperature for Secondary Process Burners</label>
+        <label class="small" for="secCombAirTemperature"> Combustion Air Temperature</label>
         <div class="input-group">
           <input name="secCombAirTemperature" type="number" step="10" class="form-control"
             formControlName="secCombAirTemperature" id="secCombAirTemperature" onfocus="this.select();"
@@ -269,7 +280,30 @@
           *ngIf="form.controls.secCombAirTemperature.invalid && !form.controls.secCombAirTemperature.pristine">
           <span *ngIf="form.controls.secCombAirTemperature.errors.required">Value Required</span>
         </span>
-      </div>    
+      </div>
+
+      <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
+				<div class="form-group m-0">
+				  <label class="bold">Available Heat</label>
+				  <div *ngIf="output.secAvailableHeat" class="text-center bold small">
+					{{output.secAvailableHeat | number:'2.1-1'}} %
+				  </div>
+				  <div *ngIf="!output.secAvailableHeat" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+				<div class="form-group m-0">
+				  <label class="bold">Excess Air</label>
+				  <div *ngIf="output.secExcessAir" class="text-center bold small">
+					{{output.secExcessAir | sigFigs:'3'}} 
+					<span class="input-group-addon">%</span>
+				  </div>
+				  <div *ngIf="!output.secExcessAir" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+			  </div>
+    </div> 
 
   </form>
 
@@ -290,8 +324,9 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div>
-          <app-flue-gas-modal *ngIf="showPriFlueGasModal || showSecFlueGasModal" 
+          <app-flue-gas-modal *ngIf="showFlueGasModal" 
           [hideSolidLiquidMaterial]="true"
+          [selectedFuelId]="selectedFuelId"
           (closeModal)="hideFlueGasModal($event)" 
           (hideModal)="hideFlueGasModal($event)"
             [settings]="settings"></app-flue-gas-modal>

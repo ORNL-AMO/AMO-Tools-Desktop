@@ -12,12 +12,14 @@ export class LogToolService {
   dataSubmitted: BehaviorSubject<boolean>;
   isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
+  openExportData: BehaviorSubject<boolean>;
   constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
     this.isModalOpen = new BehaviorSubject<boolean>(false);
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
     this.individualDataFromCsv = new Array();
+    this.openExportData = new BehaviorSubject<boolean>(false);
   }
 
   resetData() {
@@ -26,10 +28,10 @@ export class LogToolService {
     this.dataSubmitted.next(false);
     this.noDayTypeAnalysis.next(false);
     this.individualDataFromCsv = new Array();
+    this.openExportData.next(false);
   }
 
   addCsvData(data: CsvImportData, csvName: string,) {
-    console.log(data)
     let csvId: string = Math.random().toString(36).substr(2, 9);
     let fields: Array<LogToolField> = data.meta.fields.map(field => {
       return {
@@ -40,7 +42,8 @@ export class LogToolService {
         unit: '',
         invalidField: false,
         csvId: csvId,
-        csvName: csvName
+        csvName: csvName,
+        fieldId: Math.random().toString(36).substr(2, 9)
       }
     });
     this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });

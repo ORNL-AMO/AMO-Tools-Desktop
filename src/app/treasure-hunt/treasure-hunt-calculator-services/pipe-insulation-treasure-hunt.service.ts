@@ -97,8 +97,10 @@ export class PipeInsulationTreasureHuntService {
       pipeInsulationReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/pipe-insulation-reduction-icon.png',
-      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined
+      iconString: 'assets/images/calculator-icons/utilities-icons/pipe-ins.png',
+      teamName: reduction.opportunitySheet? reduction.opportunitySheet.owner : undefined,
+      iconCalcType: 'steam',
+      needBackground: true
     }
     return cardData;
   }

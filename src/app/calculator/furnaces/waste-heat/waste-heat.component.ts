@@ -23,6 +23,7 @@ export class WasteHeatComponent implements OnInit {
   emitSave = new EventEmitter<WasteHeatTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
+  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild("contentContainer", { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -32,39 +33,40 @@ export class WasteHeatComponent implements OnInit {
     }, 100);
   }
   
-  baselineDataSub: Subscription;
-  modificationDataSub: Subscription;
+  wasteHeatInputsub: Subscription;
   modalSubscription: Subscription;
   
   containerHeight: number;
   isModalOpen: boolean;
-  tabSelect: string = 'results';
-  baselineSelected = true;
-  modificationExists: boolean;
+  tabSelect: string = 'help';
   
   constructor(private wasteHeatService: WasteHeatService,
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    let existingInputs = this.wasteHeatService.baselineData.getValue();
+    let existingInputs = this.wasteHeatService.wasteHeatInput.getValue();
     if(!existingInputs) {
-      this.resetWasteHeatInputs();
+      if (this.inTreasureHunt) {
+        this.wasteHeatService.initDefaultEmptyInputs(this.settings.electricityCost);
+      } else {
+        this.wasteHeatService.initDefaultEmptyInputs();
+      }
+      this.wasteHeatService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
-    if(this.wasteHeatService.modificationData.getValue()) {
-      this.modificationExists = true;
-    }
   }
 
   ngOnDestroy() {
-    this.baselineDataSub.unsubscribe();
-    this.modificationDataSub.unsubscribe();
+    this.wasteHeatInputsub.unsubscribe();
     this.modalSubscription.unsubscribe();
     if (this.inTreasureHunt) {
-      this.wasteHeatService.initDefaultEmptyInputs();
+      this.wasteHeatService.wasteHeatInput.next(undefined);
     }
   }
 
@@ -75,14 +77,8 @@ export class WasteHeatComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.baselineDataSub = this.wasteHeatService.baselineData.subscribe(baselineData => {
-      if (baselineData) {
-        this.setBaselineSelected();
-        this.calculate();
-      }
-    });
-    this.modificationDataSub = this.wasteHeatService.modificationData.subscribe(modificationData => {
-      if (modificationData) {
+    this.wasteHeatInputsub = this.wasteHeatService.wasteHeatInput.subscribe(input => {
+      if (input) {
         this.calculate();
       }
     });
@@ -91,35 +87,19 @@ export class WasteHeatComponent implements OnInit {
     });
   }
 
-  createModification() {
-    this.wasteHeatService.initModification();
-    this.modificationExists = true;
-    this.setModificationSelected();
-    this.wasteHeatService.calculate(this.settings);
-   }
-
-   setBaselineSelected() {
-    if (this.baselineSelected == false) {
-      this.baselineSelected = true;
-    }
-  }
-
-  setModificationSelected() {
-    if (this.baselineSelected == true) {
-      this.baselineSelected = false;
-    }
-  }
-
   calculate() {
     this.wasteHeatService.calculate(this.settings);
   }
 
+  btnResetData() {
+    this.wasteHeatService.initDefaultEmptyInputs();
+    this.wasteHeatService.resetData.next(true);
+  }
+
   save() {
-    let baselineData: WasteHeatInput = this.wasteHeatService.baselineData.getValue();
-    let modificationData: WasteHeatInput = this.wasteHeatService.modificationData.getValue();
+    let inputData: WasteHeatInput = this.wasteHeatService.wasteHeatInput.getValue();
     this.emitSave.emit({ 
-      baseline: baselineData, 
-      modification: modificationData, 
+      inputData: inputData, 
       opportunityType: Treasure.wasteHeat
     });
   }
@@ -128,23 +108,9 @@ export class WasteHeatComponent implements OnInit {
     this.emitCancel.emit(true);
   }
 
-  btnResetData() {
-    this.modificationExists = false;
-    this.resetWasteHeatInputs()
-    this.wasteHeatService.resetData.next(true);
-    this.baselineSelected = true;
-  }
-
-  resetWasteHeatInputs() {
-    let treasureHuntHours: number = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
-    this.wasteHeatService.initDefaultEmptyInputs(treasureHuntHours);
-  }
-
   btnGenerateExample() {
-    this.modificationExists = true;
     this.wasteHeatService.generateExampleData(this.settings);
     this.wasteHeatService.generateExample.next(true);
-    this.baselineSelected = true;
   }
 
   setTab(str: string) {

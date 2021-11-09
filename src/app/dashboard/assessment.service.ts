@@ -8,6 +8,7 @@ import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 
 declare const packageJson;
 @Injectable()
@@ -62,10 +63,15 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     } else if (assessment.type == 'WasteWater') {
-      if(assessment.wasteWater.setupDone && !str && !assessment.isExample){
+      if (assessment.wasteWater.setupDone && !str && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
+    } else if (assessment.type == "CompressedAir") {
+      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+      //   this.tab = 'assessment';
+      // }
+      this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
 
@@ -104,7 +110,7 @@ export class AssessmentService {
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: null,
+      cost_kw_hour: settings.electricityCost,
       fluidType: 'Water',
       fluidTemperature: 68
     };
@@ -166,7 +172,7 @@ export class AssessmentService {
   getNewFsat(): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        operatingHours: 8760,
+        
         flowRate: null,
         inletPressure: null,
         inletVelocityPressure: null,
@@ -174,9 +180,13 @@ export class AssessmentService {
         usingStaticPressure: true,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: null,
+       
         compressibilityFactor: 0.988,
         measuredVoltage: 460
+      },
+      fsatOperations: {
+        operatingHours: 8760,
+        cost: null,
       },
       fanMotor: {
         lineFrequency: 60,
@@ -332,6 +342,46 @@ export class AssessmentService {
         equipmentNotes: '',
         operatingMonths: 12
       }
+    }
+  }
+
+  getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
+    let initDayTypeId: string = Math.random().toString(36).substr(2, 9);
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        demandCost: 5.00,
+        notes: undefined
+      },
+      systemInformation: {
+        systemElevation: undefined,
+        totalAirStorage: undefined,
+        isSequencerUsed: false,
+        targetPressure: undefined,
+        variance: undefined,
+        atmosphericPressure: 14.7,
+        atmosphericPressureKnown: true
+      },
+      compressorInventoryItems: new Array(),
+      systemProfile: {
+        systemProfileSetup: {
+          dayTypeId: undefined,
+          numberOfHours: 24,
+          dataInterval: 1,
+          profileDataType: undefined,
+        },
+        profileSummary: new Array()
+      },
+      compressedAirDayTypes: [{
+        dayTypeId: initDayTypeId,
+        name: 'Standard Day Type',
+        numberOfDays: 365,
+        profileDataType: "percentCapacity"
+      }]
     }
   }
 

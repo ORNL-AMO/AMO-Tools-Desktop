@@ -19,12 +19,12 @@ export class AirLeakSurveyResultsComponent implements OnInit {
   modificationExists: boolean = false;
 
   @ViewChild('baselineTable', { static: false }) baselineTable: ElementRef;
-  baselineTableString: any;
+  baselineTableString: string;
   @ViewChild('modTable', { static: false }) modTable: ElementRef;
-  modTableString: any;
+  modTableString: string;
   @ViewChild('savingsTable', { static: false }) savingsTable: ElementRef;
-  savingsTableString: any;
-  allTablesString: any;
+  savingsTableString: string;
+  allTablesString: string;
   constructor(private airLeakService: AirLeakService) { }
 
   ngOnInit() {
@@ -39,8 +39,8 @@ export class AirLeakSurveyResultsComponent implements OnInit {
 
   updateTableString() {
     this.allTablesString = 
-    this.baselineTable.nativeElement.innerText +
-    this.modTable.nativeElement.innerText +
+    this.baselineTable.nativeElement.innerText + '\n' +
+    this.modTable.nativeElement.innerText + '\n' +
     this.savingsTable.nativeElement.innerText;
   }
 

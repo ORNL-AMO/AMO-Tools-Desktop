@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { HeatCascadingInput } from '../../../../shared/models/phast/heatCascading';
+import { FlueGasModalData, HeatCascadingInput, HeatCascadingOutput } from '../../../../shared/models/phast/heatCascading';
+import { FlueGasHeatingValue } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { HeatCascadingFormService } from '../heat-cascading-form.service';
@@ -21,6 +22,8 @@ export class HeatCascadingFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inModal: boolean;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
@@ -34,16 +37,19 @@ export class HeatCascadingFormComponent implements OnInit {
   
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
+  selectedFuelId: number;
   
   formWidth: number;
   
   showPriOpHoursModal: boolean = false;
   showSecOpHoursModal: boolean = false;
-  showSecFlueGasModal: boolean = false;
-  showPriFlueGasModal: boolean = false;
-
+  showFlueGasModal: boolean = false;
+  outputSubscription: Subscription;
+  output: HeatCascadingOutput;
+  
   constructor(private suiteDbService: SuiteDbService,
               private heatCascadingService: HeatCascadingService, 
+              private phastService: PhastService,
               private heatCascadingFormService: HeatCascadingFormService) { }
 
   ngOnInit() {
@@ -56,7 +62,11 @@ export class HeatCascadingFormComponent implements OnInit {
     })
     this.generateExampleSub = this.heatCascadingService.generateExample.subscribe(value => {
       this.initForm();
-    })
+    });
+
+    this.outputSubscription = this.heatCascadingService.heatCascadingOutput.subscribe(val => {
+      this.output = val;
+    });
   }
 
   ngAfterViewInit() {
@@ -68,6 +78,7 @@ export class HeatCascadingFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
   }
 
   initForm() {
@@ -88,6 +99,10 @@ export class HeatCascadingFormComponent implements OnInit {
 
   setMaterialProperties() {
     let material = this.suiteDbService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
+    this.selectedFuelId = this.form.controls.materialTypeId.value;
+    let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
+    this.form.controls.fuelHV.patchValue(this.heatCascadingService.roundVal(flueGasMaterialHeatingValue.heatingValueVolume, 2));
+  
     this.form.patchValue({
       CH4: this.heatCascadingService.roundVal(material.CH4, 4),
       C2H6: this.heatCascadingService.roundVal(material.C2H6, 4),
@@ -118,33 +133,26 @@ export class HeatCascadingFormComponent implements OnInit {
     this.heatCascadingService.heatCascadingInput.next(updatedInput)
   }
 
-  initFlueGasModal(processName: string) {
-    if (processName == 'primary') {
-      this.showPriFlueGasModal = true;
-    } else {
-      this.showSecFlueGasModal = true;
-    }
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.selectedFuelId = this.form.controls.materialTypeId.value;
     this.heatCascadingService.modalOpen.next(true);
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.heatCascadingService.roundVal(calculatedAvailableHeat, 1);
-      if (this.showPriFlueGasModal) {
-        this.form.patchValue({
-          priAvailableHeat: calculatedAvailableHeat
-        });
-      } else if (this.showSecFlueGasModal) {
-        this.form.patchValue({
-          secAvailableHeat: calculatedAvailableHeat
-        });
-      }
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.heatCascadingService.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
+      this.form.patchValue({
+        secAvailableHeat: flueGasModalData.calculatedAvailableHeat,
+        fuelTempF: flueGasModalData.fuelTempF,
+        ambientAirTempF: flueGasModalData.ambientAirTempF,
+        combAirMoisturePerc: flueGasModalData.combAirMoisturePerc,
+      });
     }
     this.calculate();
     this.flueGasModal.hide();
-    this.showPriFlueGasModal = false;
-    this.showSecFlueGasModal = false;
+    this.showFlueGasModal = false;
     this.heatCascadingService.modalOpen.next(false);
   }
 

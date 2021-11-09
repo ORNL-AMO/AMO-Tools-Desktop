@@ -11,7 +11,6 @@ import { ReportRollupService } from '../../report-rollup.service';
   styleUrls: ['./phast-summary.component.css', '../report-summary.component.css']
 })
 export class PhastSummaryComponent implements OnInit {
-
   settings: Settings;
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;

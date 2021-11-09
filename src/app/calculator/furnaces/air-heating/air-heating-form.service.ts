@@ -9,12 +9,13 @@ export class AirHeatingFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   getAirHeatingForm(inputObj: AirHeatingInput): FormGroup {
-    let moistureInAirComposition: number = .0077;
-    if (inputObj.moistureInAirComposition != undefined) {
-      moistureInAirComposition = inputObj.moistureInAirComposition;
+    let moistureInAirCombustion: number = .0077;
+    if (inputObj.moistureInAirCombustion != undefined) {
+      moistureInAirCombustion = inputObj.moistureInAirCombustion;
     }
 
     let form: FormGroup = this.formBuilder.group({
+      utilityType: [inputObj.utilityType],
       operatingHours: [inputObj.operatingHours, Validators.required],
       gasFuelType: [inputObj.gasFuelType],
       fuelCost: [inputObj.fuelCost],
@@ -22,7 +23,7 @@ export class AirHeatingFormService {
       flueTemperature: [inputObj.flueTemperature, Validators.required],
       excessAir: [inputObj.excessAir, Validators.required],
       oxygenCalculationMethod: [inputObj.oxygenCalculationMethod, Validators.required],
-      moistureInAirComposition: [moistureInAirComposition, [Validators.required, Validators.min(0)]],
+      moistureInAirCombustion: [moistureInAirCombustion, [Validators.required, Validators.min(0)]],
       flueGasO2: [inputObj.flueGasO2, Validators.required],
       fireRate: [inputObj.fireRate, [Validators.required, Validators.min(0)]],
       airflow: [inputObj.airflow, [Validators.required, Validators.min(0)]],
@@ -57,6 +58,7 @@ export class AirHeatingFormService {
 
   getAirHeatingInputGasMaterial(form: FormGroup): AirHeatingInput {
     let obj: AirHeatingInput = {
+      utilityType: form.controls.utilityType.value,
       operatingHours: form.controls.operatingHours.value,
       gasFuelType: form.controls.gasFuelType.value,
       fuelCost: form.controls.fuelCost.value,
@@ -90,12 +92,13 @@ export class AirHeatingFormService {
   getAirHeatingInputSolidMaterial(form: FormGroup): AirHeatingInput {
     let obj: AirHeatingInput = {
       operatingHours: form.controls.operatingHours.value,
+      utilityType: form.controls.utilityType.value,
       gasFuelType: form.controls.gasFuelType.value,
       fuelCost: form.controls.fuelCost.value,
       materialTypeId: form.controls.materialTypeId.value,
       flueTemperature: form.controls.flueTemperature.value,
       excessAir: form.controls.excessAir.value,
-      moistureInAirComposition: form.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: form.controls.moistureInAirCombustion.value,
       oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
       flueGasO2: form.controls.flueGasO2.value,
       fireRate: form.controls.fireRate.value,
@@ -145,7 +148,7 @@ export class AirHeatingFormService {
         nitrogen: form.controls.nitrogen.value,
         o2InFlueGas: form.controls.flueGasO2.value,
         excessAir: form.controls.excessAir.value,
-        moistureInAirCombustion: form.controls.moistureInAirComposition.value
+        moistureInAirCombustion: form.controls.moistureInAirCombustion.value
       }
     }
 

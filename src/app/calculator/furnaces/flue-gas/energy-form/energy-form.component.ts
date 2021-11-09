@@ -2,9 +2,8 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges,
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { EnergyData } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
-import { EnergyFormService } from '../../charge-material/energy-form/energy-form.service';
+import { EnergyFormService, FlueGasEnergyData } from '../energy-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
@@ -17,6 +16,10 @@ export class EnergyFormComponent implements OnInit {
   settings: Settings;
   @Input()
   isBaseline: boolean;
+  @Input()
+  method: string;
+  @Input()
+  inTreasureHunt: boolean;
   @Input()
   selected: boolean;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -76,7 +79,7 @@ export class EnergyFormComponent implements OnInit {
 
 
   initForm() {
-    let energyData: EnergyData;
+    let energyData: FlueGasEnergyData;
     if (this.isBaseline) {
       energyData = this.flueGasService.baselineEnergyData.getValue();
     } else {
@@ -104,7 +107,7 @@ export class EnergyFormComponent implements OnInit {
   }
 
   calculate() {
-    let currentEnergyData: EnergyData = this.energyFormService.buildEnergyData(this.energyForm);
+    let currentEnergyData: FlueGasEnergyData = this.energyFormService.buildEnergyData(this.energyForm);
     if (this.isBaseline) {
       this.flueGasService.baselineEnergyData.next(currentEnergyData);
     } else {

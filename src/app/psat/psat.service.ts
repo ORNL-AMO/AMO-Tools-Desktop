@@ -66,6 +66,10 @@ export class PsatService {
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
     }
+    if (settings.currency !== "$") {
+      psatOutputs.annual_cost = this.convertUnitsService.value(psatOutputs.annual_cost).from('$').to(settings.currency);
+      psatOutputs.annual_savings_potential = this.convertUnitsService.value(psatOutputs.annual_savings_potential).from('$').to(settings.currency);
+    }
     return psatOutputs;
   }
 
@@ -76,9 +80,7 @@ export class PsatService {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       //call results existing
       let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
-      if (settings.powerMeasurement != 'hp') {
-        tmpResults = this.convertOutputs(tmpResults, settings);
-      }
+      tmpResults = this.convertOutputs(tmpResults, settings);
       tmpResults = this.roundResults(tmpResults);
       return tmpResults;
     } else {
@@ -92,9 +94,7 @@ export class PsatService {
       let tmpInputs: any = this.convertInputs(psatInputs, settings);
       tmpInputs.margin = 1;
       let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
-      if (settings.powerMeasurement != 'hp') {
-        tmpResults = this.convertOutputs(tmpResults, settings);
-      }
+      tmpResults = this.convertOutputs(tmpResults, settings);
       tmpResults = this.roundResults(tmpResults);
       return tmpResults;
     } else {
@@ -586,7 +586,11 @@ export class PsatService {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
       if (isPsatValid.isValid) {
-        modificationResults = this.resultsModified(modInputs, settings);
+        if (modInputs.whatIfScenario == true) {
+          modificationResults = this.resultsModified(modInputs, settings);
+        } else {
+          modificationResults = this.resultsExisting(modInputs, settings);
+        }
       }
     }
     annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;

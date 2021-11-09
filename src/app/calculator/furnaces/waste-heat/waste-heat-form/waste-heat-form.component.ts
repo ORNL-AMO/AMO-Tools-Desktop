@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, ElementRef, HostListener, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { WasteHeatInput, WasteHeatWarnings } from '../../../../shared/models/phast/wasteHeat';
 import { Settings } from '../../../../shared/models/settings';
-import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WasteHeatFormService } from '../waste-heat-form.service';
 import { WasteHeatService } from '../waste-heat.service';
 
@@ -16,24 +16,15 @@ import { WasteHeatService } from '../waste-heat.service';
   styleUrls: ['./waste-heat-form.component.css']
 })
 export class WasteHeatFormComponent implements OnInit {
-  @Input()
-  isBaseline: boolean;
-  @Input()
-  selected: boolean;
+
   @Input()
   settings: Settings;
   @Input()
   inModal: boolean;
-  @Input()
-  inTreasureHunt: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   showFlueGasModal: boolean;
-  
-  energyUnit: string;
-  treasureHuntUtilityOptions: Array<string>;
-  energySourceTypeSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -47,72 +38,20 @@ export class WasteHeatFormComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   warnings: WasteHeatWarnings;
   
-  constructor(private wasteHeatService: WasteHeatService,
-              private cd: ChangeDetectorRef,
+  constructor(private wasteHeatService: WasteHeatService, 
               private wasteHeatFormService: WasteHeatFormService) { }
 
   ngOnInit() {
     this.initSubscriptions();
-    this.energyUnit = this.wasteHeatService.getAnnualEnergyUnit(this.form.controls.energySourceType.value, this.settings);
-    if (!this.isBaseline) {
-      let energySource = this.wasteHeatService.energySourceType.getValue();
-      this.setEnergySource(energySource);
-    } else {
-      this.wasteHeatService.energySourceType.next(this.form.controls.energySourceType.value);
-    }
-
-    if (this.inTreasureHunt) {
-      this.treasureHuntUtilityOptions = treasureHuntUtilityOptions;
-    }
-    this.setEnergySource();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.firstChange) {
-      this.setFormState();
-    }
-  }
-
-  setFormState() {
-    if (this.selected == false) {
-      this.form.disable();
-    } else {
-      this.form.enable();
-    }
-
-    if (this.inTreasureHunt && !this.isBaseline) {
-      this.form.controls.energySourceType.disable();
-    }
-  }
-  
   initSubscriptions() {
     this.resetDataSub = this.wasteHeatService.resetData.subscribe(value => {
       this.initForm();
-      this.cd.detectChanges();
     })
     this.generateExampleSub = this.wasteHeatService.generateExample.subscribe(value => {
       this.initForm();
     })
-    if (!this.isBaseline) {
-      this.energySourceTypeSub = this.wasteHeatService.energySourceType.subscribe(energySourceType => {
-        this.setEnergySource(energySourceType);
-      });
-    }
-  }
-
-  setEnergySource(baselineEnergySource?: string) {
-    if (baselineEnergySource) {
-      this.form.patchValue({
-        energySourceType: baselineEnergySource
-      });
-    }
-    this.energyUnit = this.wasteHeatService.getAnnualEnergyUnit(this.form.controls.energySourceType.value, this.settings);
-
-    if (this.isBaseline) {
-      this.wasteHeatService.energySourceType.next(this.form.controls.energySourceType.value);
-    }
-    this.cd.detectChanges();
-    this.calculate();
   }
 
   ngAfterViewInit() {
@@ -124,23 +63,12 @@ export class WasteHeatFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    if (!this.isBaseline) {
-      this.energySourceTypeSub.unsubscribe();
-    }
   }
 
   initForm() {
-    let wasteHeatInput: WasteHeatInput
-    if (this.isBaseline) {
-      wasteHeatInput = this.wasteHeatService.baselineData.getValue();
-    } else {
-      wasteHeatInput = this.wasteHeatService.modificationData.getValue();
-    }
-    if (wasteHeatInput) {
-      this.form = this.wasteHeatFormService.getWasteHeatForm(wasteHeatInput, this.settings);
-      this.calculate();
-    }
-    this.setFormState();
+    let wasteHeatInput: WasteHeatInput = this.wasteHeatService.wasteHeatInput.getValue();
+    this.form = this.wasteHeatFormService.getWasteHeatForm(wasteHeatInput, this.settings);
+    this.calculate();
   }
 
 
@@ -152,11 +80,7 @@ export class WasteHeatFormComponent implements OnInit {
     this.form = this.wasteHeatFormService.setChillerTempValidators(this.form, this.settings);
     let updatedInput: WasteHeatInput = this.wasteHeatFormService.getWasteHeatInput(this.form);
     this.warnings = this.wasteHeatFormService.checkWasteHeatWarnings(updatedInput);
-    if (this.isBaseline) {
-      this.wasteHeatService.baselineData.next(updatedInput);
-    } else {
-      this.wasteHeatService.modificationData.next(updatedInput);
-    }
+    this.wasteHeatService.wasteHeatInput.next(updatedInput);
   }
 
   closeOperatingHoursModal() {
@@ -185,11 +109,11 @@ export class WasteHeatFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.wasteHeatService.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.wasteHeatService.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.form.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
     }
     this.calculate();
@@ -197,6 +121,5 @@ export class WasteHeatFormComponent implements OnInit {
     this.showFlueGasModal = false;
     this.wasteHeatService.modalOpen.next(this.showFlueGasModal);
   }
-
 
 }

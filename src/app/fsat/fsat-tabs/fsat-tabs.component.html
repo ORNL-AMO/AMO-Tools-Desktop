@@ -4,14 +4,14 @@
       <a (click)="changeStepTab('system-basics')">
         <span class="step-number">1</span> Assessment Settings</a>
     </div>
-    <div class="fixed-tab-size" [ngClass]="fluidClassStatus">
-      <a (click)="changeStepTab('fsat-fluid')">
-        <span (mouseenter)="showTooltip(fluidBadge)" (mouseleave)="hideTooltip(fluidBadge)" class="step-number">2</span>Fluid</a>
-      <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover"></app-tabs-tooltip>
+    <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
+      <a (click)="changeStepTab('operations')">
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)" class="step-number">2</span>Operations</a>
+        <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="fanClassStatus">
       <a (click)="changeStepTab('fan-setup')">
-        <span (mouseenter)="showTooltip(fanBadge)" (mouseleave)="hideTooltip(fanBadge)" class="step-number">3</span>Fan</a>
+        <span (mouseenter)="showTooltip(fanBadge)" (mouseleave)="hideTooltip(fanBadge)" class="step-number">3</span>Fan and Fluid</a>
       <app-tabs-tooltip [badgeClass]="fanClassStatus[0]" [reveal]="fanBadge.display" [display]="fanBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="motorClassStatus">

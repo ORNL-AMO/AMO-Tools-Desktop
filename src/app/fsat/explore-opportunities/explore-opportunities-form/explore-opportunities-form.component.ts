@@ -9,9 +9,10 @@ import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FsatService } from '../../fsat.service';
-import { FanFieldDataWarnings, FsatWarningService } from '../../fsat-warning.service';
+import { FanFieldDataWarnings, FanOperationsWarnings, FsatWarningService } from '../../fsat-warning.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { OperationsService } from '../../operations/operations.service';
 
 @Component({
   selector: 'app-explore-opportunities-form',
@@ -41,6 +42,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   baselineFieldDataForm: FormGroup;
   modificationFieldDataForm: FormGroup;
 
+  baselineOperationsForm: FormGroup;
+  modificationOperationsForm: FormGroup;
+
   baselineMotorForm: FormGroup;
   modificationMotorForm: FormGroup;
 
@@ -51,6 +55,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   modificationFanFieldDataWarnings: FanFieldDataWarnings;
   baselineFanFieldDataWarnings: FanFieldDataWarnings;
 
+  modificationOperationsWarnings: FanOperationsWarnings;
+  baselineOperationsWarnings: FanOperationsWarnings;
+
   pressureCalcType: string;
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
@@ -58,7 +65,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fanFieldDataService: FanFieldDataService,
     private fanMotorService: FanMotorService, private fanSetupService: FanSetupService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private fsatWarningService: FsatWarningService) { }
+    private fsatWarningService: FsatWarningService, private fanOperationsService: OperationsService) { }
 
   ngOnInit() {
     this.initForms();
@@ -89,6 +96,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   save() {
     this.saveFieldData();
+    this.fsat.modifications[this.exploreModIndex].fsat.fsatOperations = this.fanOperationsService.getObjFromForm(this.modificationOperationsForm);    
     this.fsat.modifications[this.exploreModIndex].fsat.fanMotor = this.fanMotorService.getObjFromForm(this.modificationMotorForm);
     this.fsat.modifications[this.exploreModIndex].fsat.fanSetup = this.fanSetupService.getObjFromForm(this.modificationFanSetupForm);
     this.checkWarnings();
@@ -120,6 +128,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.baselineFieldDataForm.disable();
     this.modificationFieldDataForm = this.fanFieldDataService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fieldData);
 
+    this.baselineOperationsForm = this.fanOperationsService.getFormFromObj(this.fsat.fsatOperations);
+    this.baselineOperationsForm.disable();
+    this.modificationOperationsForm = this.fanOperationsService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fsatOperations);
+
     this.baselineMotorForm = this.fanMotorService.getFormFromObj(this.fsat.fanMotor);
     this.baselineMotorForm.disable();
     this.modificationMotorForm = this.fanMotorService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanMotor);
@@ -136,6 +148,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   checkWarnings() {
     this.baselineFanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, false);
     this.modificationFanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings, true);
+    this.baselineOperationsWarnings = this.fsatWarningService.checkOperationsWarnings(this.fsat, this.settings, false);
+    this.modificationOperationsWarnings = this.fsatWarningService.checkOperationsWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings, true);
+  
   }
 
   focusField(str: string) {

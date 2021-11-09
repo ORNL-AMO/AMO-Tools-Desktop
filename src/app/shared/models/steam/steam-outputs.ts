@@ -1,3 +1,5 @@
+import { SSMTInputs, SsmtValid } from "./ssmt";
+
 //THIS MODEL HAS BEEN UPDATED TO MATCH THE SUITE RETURN VALUES
 export interface SSMTOutput {
   boilerOutput: BoilerOutput;
@@ -343,6 +345,10 @@ export interface SSMTLosses {
   highToMediumTurbineEfficiencyLoss: number;
   highToLowTurbineEfficiencyLoss: number;
   mediumToLowTurbineEfficiencyLoss: number;
+  showCondensingTurbine: boolean;
+  showHighToMediumTurbine: boolean;
+  showHighToLowTurbine: boolean;
+  showMediumToLowTurbine: boolean;
   condensingLosses: number;
   condensateLosses: number;
   lowPressureVentLoss: number;
@@ -386,3 +392,4 @@ export interface HeatExchangerOutput {
   coldOutletSpecificEnthalpy: number;
   coldOutletSpecificEntropy: number;
 }
+

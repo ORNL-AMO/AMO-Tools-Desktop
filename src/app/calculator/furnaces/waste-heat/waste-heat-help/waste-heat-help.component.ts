@@ -31,5 +31,4 @@ export class WasteHeatHelpComponent implements OnInit {
   toggleDescription() {
     this.displayDescription = !this.displayDescription;
   }
-
 }

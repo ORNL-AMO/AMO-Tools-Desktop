@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class DashboardService {
 
+  moveItems: BehaviorSubject<boolean>;
   newAssessmentType: string;
   updateDashboardData: BehaviorSubject<boolean>;
   createAssessment: BehaviorSubject<boolean>;
@@ -11,6 +12,7 @@ export class DashboardService {
   sidebarX: BehaviorSubject<number>;
   createInventory:BehaviorSubject<boolean>;
   constructor() {
+    this.moveItems = new BehaviorSubject<boolean>(false);
     this.updateDashboardData = new BehaviorSubject<boolean>(false);
     this.dashboardToastMessage = new BehaviorSubject<string>(undefined);
     this.createAssessment = new BehaviorSubject<boolean>(false);

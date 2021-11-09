@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WasteWaterResults } from '../../../../shared/models/waste-water';
 import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
+import { Settings } from '../../../../shared/models/settings';
+import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
   selector: 'app-energy-analysis-table',
@@ -14,10 +16,12 @@ export class EnergyAnalysisTableComponent implements OnInit {
     name: string,
     results: WasteWaterResults,
   }>;
+  settings: Settings;
 
-  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
+  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService, private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.settings = this.wasteWaterService.settings.getValue();
     this.baselineResults = this.wasteWaterAnalysisService.baselineResults;
     this.modificationsResultsArr = this.wasteWaterAnalysisService.modificationsResultsArr;
   }

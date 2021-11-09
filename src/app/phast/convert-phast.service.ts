@@ -398,12 +398,14 @@ export class ConvertPhastService {
     if (oldSettings.unitsOfMeasure === 'Metric' && newSettings.unitsOfMeasure === 'Imperial') {
       loss.combustionAirTemperature = this.convertVal(loss.combustionAirTemperature, 'C', 'F');
       loss.flueGasTemperature = this.convertVal(loss.flueGasTemperature, 'C', 'F');
+      loss.ambientAirTemp = this.convertVal(loss.ambientAirTemp, 'C', 'F');
       loss.ashDischargeTemperature = this.convertVal(loss.ashDischargeTemperature, 'C', 'F');
       loss.fuelTemperature = this.convertVal(loss.fuelTemperature, 'C', 'F');
     }
     else if (oldSettings.unitsOfMeasure === 'Imperial' && newSettings.unitsOfMeasure === 'Metric') {
       loss.combustionAirTemperature = this.convertVal(loss.combustionAirTemperature, 'F', 'C');
       loss.flueGasTemperature = this.convertVal(loss.flueGasTemperature, 'F', 'C');
+      loss.ambientAirTemp = this.convertVal(loss.ambientAirTemp, 'F', 'C');
       loss.ashDischargeTemperature = this.convertVal(loss.ashDischargeTemperature, 'F', 'C');
       loss.fuelTemperature = this.convertVal(loss.fuelTemperature, 'F', 'C');
     }
@@ -414,10 +416,14 @@ export class ConvertPhastService {
     if (oldSettings.unitsOfMeasure === 'Metric' && newSettings.unitsOfMeasure === 'Imperial') {
       loss.combustionAirTemperature = this.convertVal(loss.combustionAirTemperature, 'C', 'F');
       loss.flueGasTemperature = this.convertVal(loss.flueGasTemperature, 'C', 'F');
+      loss.ambientAirTemp = this.convertVal(loss.ambientAirTemp, 'C', 'F');
+      loss.fuelTemperature = this.convertVal(loss.fuelTemperature, 'C', 'F');
     }
     else if (oldSettings.unitsOfMeasure === 'Imperial' && newSettings.unitsOfMeasure === 'Metric') {
       loss.combustionAirTemperature = this.convertVal(loss.combustionAirTemperature, 'F', 'C');
       loss.flueGasTemperature = this.convertVal(loss.flueGasTemperature, 'F', 'C');
+      loss.ambientAirTemp = this.convertVal(loss.ambientAirTemp, 'F', 'C');
+      loss.fuelTemperature = this.convertVal(loss.fuelTemperature, 'F', 'C');
     }
     return loss;
   }

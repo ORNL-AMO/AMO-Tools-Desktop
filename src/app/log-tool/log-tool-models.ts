@@ -5,10 +5,12 @@ export interface LogToolField {
     alias: string,
     useField: boolean,
     isDateField: boolean,
+    isTimeField?: boolean,
     unit: string,
     invalidField: boolean,
     csvId: string,
-    csvName: string
+    csvName: string,
+    fieldId: string
 }
 
 export interface LogToolDay {
@@ -44,6 +46,7 @@ export interface GraphDataObj {
 
 
 export interface DayType {
+    dayTypeId: string,
     color: string,
     label: string,
     useDayType: boolean,
@@ -71,7 +74,9 @@ export interface IndividualDataFromCsv {
     endDate?: string,
     dataPointsPerColumn?: number,
     hasDateField: boolean,
-    dateField?: LogToolField
+    hasTimeField?: boolean,
+    dateField?: LogToolField,
+    timeField?: LogToolField,
 }
 
 export interface HourlyAverage {
@@ -207,6 +212,7 @@ export interface LogToolDbData {
     id?: number,
     name: string,
     modifiedDate: Date,
+    origin?: string,
     setupData: {
         logToolDays: Array<LogToolDay>,
         individualDataFromCsv: Array<IndividualDataFromCsv>,

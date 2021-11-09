@@ -1,0 +1,46 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Reduce Run Time Help
+        <br>
+        <small class="text-muted">
+            Models the impact of turning off compressors while still meeting required airflow
+            demand. Users can individually turn on and off compressors (for each day type), while watching the available
+            airflow update until it matches or exceeds required.
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'dayType'">
+        <h6>
+            Day type select dropdown
+            <br>
+            <small class="text-muted">
+                Select your day type to modify
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'checkbox'">
+        <h6>
+            check boxes
+            <br>
+            <small class="text-muted">
+                A blue check box indicates that the compressor is turned on
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

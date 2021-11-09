@@ -3,17 +3,17 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
-import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
+import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasFormService } from './flue-gas-form.service';
 
 @Injectable()
 export class FlueGasService {
   baselineData: BehaviorSubject<FlueGas>;
   modificationData: BehaviorSubject<FlueGas>;
-  baselineEnergyData: BehaviorSubject<EnergyData>;
-  modificationEnergyData: BehaviorSubject<EnergyData>;
+  baselineEnergyData: BehaviorSubject<FlueGasEnergyData>;
+  modificationEnergyData: BehaviorSubject<FlueGasEnergyData>;
   output: BehaviorSubject<FlueGasOutput>;
   
   currentField: BehaviorSubject<string>;
@@ -29,8 +29,8 @@ export class FlueGasService {
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
     this.modificationData = new BehaviorSubject<FlueGas>(undefined);
-    this.baselineEnergyData = new BehaviorSubject<EnergyData>(undefined);
-    this.modificationEnergyData = new BehaviorSubject<EnergyData>(undefined);
+    this.baselineEnergyData = new BehaviorSubject<FlueGasEnergyData>(undefined);
+    this.modificationEnergyData = new BehaviorSubject<FlueGasEnergyData>(undefined);
 
     this.output = new BehaviorSubject<FlueGasOutput>(undefined);
 
@@ -45,8 +45,8 @@ export class FlueGasService {
     
     let baselineFlueGas: FlueGas = this.baselineData.getValue();
     let modificationFlueGas: FlueGas = this.modificationData.getValue();
-    let baselineEnergyData: EnergyData = this.baselineEnergyData.getValue();
-    let modificationEnergyData: EnergyData = this.modificationEnergyData.getValue();
+    let baselineEnergyData: FlueGasEnergyData = this.baselineEnergyData.getValue();
+    let modificationEnergyData: FlueGasEnergyData = this.modificationEnergyData.getValue();
 
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
     output.baseline = baselineResults;
@@ -60,8 +60,10 @@ export class FlueGasService {
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, energyData: EnergyData, settings: Settings, inModal: boolean): FlueGasResult {
+  getFlueGasResult(flueGasData: FlueGas, energyData: FlueGasEnergyData, settings: Settings, inModal: boolean): FlueGasResult {
     let result: FlueGasResult = {
+      calculatedFlueGasO2: 0,
+      calculatedExcessAir: 0,
       availableHeat: 0,
       availableHeatError: undefined,
       flueGasLosses: 0,
@@ -77,9 +79,11 @@ export class FlueGasService {
         validData = this.flueGasFormService.setValidators(formGroup, inModal).valid;
       } 
       if (validData) {
-        let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
-        result.availableHeat = availableHeat * 100;
-        let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
+        let flueGasByVolumeSuiteResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
+        result.availableHeat = flueGasByVolumeSuiteResults.availableHeat * 100;
+        result.calculatedExcessAir = flueGasByVolumeSuiteResults.excessAir * 100;
+        result.calculatedFlueGasO2 = flueGasByVolumeSuiteResults.flueGasO2 * 100;
+        let flueGasLosses = (1 - flueGasByVolumeSuiteResults.availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
         result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
@@ -120,9 +124,10 @@ export class FlueGasService {
       name: undefined
     };
 
-    let energyData: EnergyData = {
+    let energyData: FlueGasEnergyData = {
       fuelCost: 0,
-      hoursPerYear: treasureHuntHours? treasureHuntHours : 8760
+      hoursPerYear: treasureHuntHours? treasureHuntHours : 8760,
+      utilityType: 'Natural Gas',
     }
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
@@ -169,9 +174,9 @@ export class FlueGasService {
       };
     }
 
-    let currentBaselineEnergy: EnergyData = this.baselineEnergyData.getValue();
-    let baselineEnergyCopy: EnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
-    let modificationEnergy: EnergyData = {
+    let currentBaselineEnergy: FlueGasEnergyData = this.baselineEnergyData.getValue();
+    let baselineEnergyCopy: FlueGasEnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
+    let modificationEnergy: FlueGasEnergyData = {
       fuelCost: baselineEnergyCopy.fuelCost,
       hoursPerYear: baselineEnergyCopy.hoursPerYear
     }
@@ -187,10 +192,17 @@ export class FlueGasService {
     let exampleModFlueGasTemp: number = 250;
     let exampleFuelTemp: number = 80;
     let exampleHeatInput: number = 15;
-
+    let exampleMoistureInAirCombustion: number = .0077;
+    let exampleAmbientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+    }
+    
     if(settings.unitsOfMeasure != 'Imperial'){
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
       exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
+      
+      exampleAmbientAirTemp = this.convertUnitsService.value(exampleAmbientAirTemp).from('F').to('C')
+      exampleAmbientAirTemp = Number(exampleAmbientAirTemp.toFixed(2));
 
       exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
       exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
@@ -220,6 +232,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 15,
         flueGasTemperature: exampleFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
@@ -247,6 +261,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 10,
         flueGasTemperature: exampleModFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
@@ -259,9 +275,10 @@ export class FlueGasService {
       name: 'Modification Flue Gas'
     }
     
-    let energyExample: EnergyData = {
+    let energyExample: FlueGasEnergyData = {
       hoursPerYear: 8760,
-      fuelCost: 3.99
+      fuelCost: 3.99,
+      utilityType: 'Natural Gas',
     };
     
     this.baselineEnergyData.next(energyExample);

@@ -1,0 +1,95 @@
+<nav class="compressed-air navbar banner d-flex mr-auto p-0 flex-nowrap">
+    <div class="d-flex align-items-center p-1">
+        <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+            <img class="img-icon" src="assets/images/ca-icon.png">
+        </div>
+        <div class="d-flex flex-column pl-2">
+            <div class="h2-name">
+                {{assessment.name}}
+            </div>
+            <div class="h2-name">
+                <span class="small">
+                    Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
+                (click)="changeTab('system-setup')">System Basics</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
+                (click)="changeTab('assessment')">Assessment</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+                (click)="changeTab('report')">Report</a>
+        </div>
+        <!-- <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
+                (click)="changeTab('sankey')">Sankey</a>
+        </div> -->
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
+                (click)="changeTab('calculators')">Calculators</a>
+        </div>
+    </div>
+    <div class="d-flex ml-auto pr-2 h-100">
+        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/settings']">
+          <span class="fa fa-cog"></span>
+      </div>
+        <div class="pl-2 pr-2 border-right border-left home-nav-item"
+            [routerLink]="['/directory-dashboard', assessment.directoryId]">
+            <span class="fa fa-folder-open"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right home-nav-item" [routerLink]="['/landing-screen']">
+            <span class="fa fa-home"></span>
+        </div>
+    </div>
+</nav>
+
+
+<app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
+<app-calculator-tabs *ngIf="mainTab == 'calculators'"></app-calculator-tabs>
+
+
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
+    <ul class="h-100 tabs subtabs progress-tabs compressed-air">
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}">
+            <a (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
+        </li>
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}">
+            <a (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
+        </li>
+        <li [ngClass]="{'active': secondaryAssessmentTab == 'graphs', 'disabled': !selectedModification}">
+            <a (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
+        </li>
+    </ul>
+
+
+
+    <div class="d-flex align-items-center tabs subtabs waste-water ml-auto"
+        [ngClass]="{'br-color-white': selectedModification}">
+        <div class="mod-name active border-right" *ngIf="selectedModification">
+            <a>{{selectedModification.name}}
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="mod-name border-right" *ngIf="!selectedModification">
+            <a>&mdash; &mdash;
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2">
+            <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                Scenarios</button>
+        </div>
+    </div>
+</div>

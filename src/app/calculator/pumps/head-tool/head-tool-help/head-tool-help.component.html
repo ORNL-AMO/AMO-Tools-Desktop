@@ -27,18 +27,6 @@
         <hr>
       </small>
     </h6>
-    <div class="d-flex justify-content-center">
-      <table class="table table-hover table-striped w-50">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'flowRate'">
@@ -50,18 +38,6 @@
         <hr>
       </small>
     </h6>
-    <div class="d-flex justify-content-center">
-      <table class="table table-hover table-striped w-50">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0 {{settings.flowMeasurement}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
   <!--SUCTION TANK ELEVATION-->
   <div *ngIf="headToolType == 'Suction tank elevation'">
@@ -76,18 +52,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionTankGasOverPressure'">
@@ -101,18 +65,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionTankFluidSurfaceElevation'">
@@ -128,18 +80,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionLineLossCoefficients'">
@@ -169,18 +109,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'dischargePipeDiameter'">
       <h6>
@@ -193,18 +121,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'dischargeGaugePressure'">
       <h6>
@@ -215,18 +131,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'dischargeGaugeElevation'">
       <h6>
@@ -241,18 +145,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.distanceMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'dischargeLineLossCoefficients'">
@@ -281,18 +173,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 
@@ -309,18 +189,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{smallUnit}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'suctionGuagePressure'">
       <h6>
@@ -331,18 +199,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionGuageElevation'">
@@ -356,18 +212,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.distanceMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'suctionLineLossCoefficients'">
@@ -396,18 +240,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'dischargePipeDiameter'">
@@ -446,18 +278,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'dischargeGaugeElevation'">
@@ -471,18 +291,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.distanceMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="my-2" *ngIf="currentField == 'dischargeLineLossCoefficients'">
       <h6>
@@ -510,18 +318,6 @@
           <hr>
         </small>
       </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 </div>

@@ -12,6 +12,15 @@ export class FsatWarningService {
   constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private psatService: PsatService, private fsatService: FsatService) {
    }
 
+  checkOperationsWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanOperationsWarnings{
+    let warnings: FanOperationsWarnings = {
+      costError: this.checkCost(fsat),
+    };
+
+    return warnings;
+
+  }
+
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     let ratedPowerWarning: string = null;
     if (!isModification) {
@@ -19,7 +28,6 @@ export class FsatWarningService {
     }
     
     let warnings: FanFieldDataWarnings = {
-      costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
       suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
@@ -66,7 +74,7 @@ export class FsatWarningService {
 
 
   checkCost(fsat: FSAT) {
-    if (fsat.fieldData.cost > 1) {
+    if (fsat.fsatOperations.cost > 1) {
       return "Shouldn't be greater then 1";
     } else {
       return null;
@@ -345,7 +353,6 @@ export class FsatWarningService {
 
 export interface FanFieldDataWarnings {
   voltageError: string;
-  costError: string;
   ratedPowerError: string;
   suggestedVoltage: string,
   inletPressureError: string;
@@ -359,6 +366,10 @@ export interface FanMotorWarnings {
   flaError: string;
   efficiencyError: string;
   ratedPowerError: string;
+}
+
+export interface FanOperationsWarnings {
+  costError: string;
 }
 
 // export interface FanFluidWarnings {

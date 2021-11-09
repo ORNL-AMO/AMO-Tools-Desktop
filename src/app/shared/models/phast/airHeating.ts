@@ -1,11 +1,12 @@
 export interface AirHeatingInput {
+    utilityType?: string,
     operatingHours: number,
     gasFuelType: boolean,
     fuelCost: number,
     materialTypeId: number,
     flueTemperature: number,
     oxygenCalculationMethod: string,
-    moistureInAirComposition?: number
+    moistureInAirCombustion?: number
     flueGasO2: number,
     excessAir: number,
     fireRate: number,
@@ -43,4 +44,6 @@ export interface AirHeatingOutput {
     costSavings: number,
     heatCapacityFlue: number,
     heatCapacityAir: number
+    baselineEnergy: number,
+    modificationEnergy: number,
 }

@@ -11,6 +11,7 @@ import { OpeningService } from '../opening.service';
 
 import * as _ from 'lodash';
 import { treasureHuntUtilityOptions } from '../../furnace-defaults';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 
 @Component({
   selector: 'app-opening-form',
@@ -258,6 +259,8 @@ export class OpeningFormComponent implements OnInit {
       this.openingLossesForm = this.openingFormService.initForm();
     }
 
+    this.defaultFlueGasModalEnergySource = this.openingLossesForm.value.energySourceType;
+    
     this.calculate();
     this.setFormState();
   }
@@ -317,13 +320,12 @@ export class OpeningFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.openingFormService.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.openingFormService.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.openingLossesForm.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
-      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

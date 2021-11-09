@@ -9,6 +9,7 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { OperationsService } from './operations/operations.service';
 import { ConvertSteamService } from '../calculator/steam/convert-steam.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SsmtService {
@@ -28,10 +29,11 @@ export class SsmtService {
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
   isBaselineFocused: BehaviorSubject<boolean>;
+  currCurrency: string = "$";
 
   iterationCount: number;
   constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
-    private turbineService: TurbineService, private operationsService: OperationsService) {
+    private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
@@ -63,6 +65,9 @@ export class SsmtService {
     }
   }
 
+  
+
+  
   calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let baselineResultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
@@ -84,6 +89,7 @@ export class SsmtService {
         setupInputData = updatedResults.inputData;
         modificationOutputData = updatedResults.outputData;
       }
+      
       return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();

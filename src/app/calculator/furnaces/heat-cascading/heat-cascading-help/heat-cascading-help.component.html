@@ -1,6 +1,6 @@
 <div class="p-3 pt-3 d-flex flex-column help-info">
   <h5>
-    Heat Cascading from High Temperature Process to Lower Temperature Process
+    Heat Cascading from High Temperature Process to Lower Temperature Process Help
     <br>
     <small class="text-muted">
       This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher
@@ -29,6 +29,17 @@
         compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
         edit
         the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'utilityType'">
+    <h6>
+      Utility Type
+      <small class="text-muted">
+        <br>
+        Choose the utility type to set the appropriate utility for calculating energy and cost savings
+        <hr>
       </small>
     </h6>
   </div>
@@ -62,6 +73,20 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'availableHeat'">
@@ -158,7 +183,7 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'secFuelCost'">
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
     <h6>
       Fuel Cost
       <br>

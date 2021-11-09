@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Settings } from '../shared/models/settings';
 import { OpportunitiesPaybackDetails, OpportunitySummary, TreasureHuntResults } from '../shared/models/treasure-hunt';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { OpportunityPaybackService } from '../treasure-hunt/treasure-hunt-report/opportunity-payback.service';
@@ -24,14 +25,14 @@ export class TreasureHuntReportRollupService {
   }
 
    //TREASURE HUNT
-   initTreasureHuntResultsArray(thuntItems: Array<ReportItem>) {
+   initTreasureHuntResultsArray(thuntItems: Array<ReportItem>, settings?: Settings) {
     let tmpResultsArr: Array<TreasureHuntResultsData> = new Array<TreasureHuntResultsData>();
     thuntItems.forEach(item => {
       if (item.assessment.treasureHunt) {
         let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(item.assessment.treasureHunt, item.settings)
-        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt.currentEnergyUsage);
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt.currentEnergyUsage, item.settings);
         let opportunityCardsData: Array<OpportunityCardData> = this.opportunityCardsService.getOpportunityCardsData(item.assessment.treasureHunt, item.settings);
-        let opportunitiesPaybackDetails: OpportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(thuntResults.opportunitySummaries);
+        let opportunitiesPaybackDetails: OpportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(thuntResults.opportunitySummaries, settings);
         tmpResultsArr.push(
           {
             treasureHuntResults: thuntResults,

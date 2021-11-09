@@ -1,0 +1,26 @@
+<div class="checkbox">
+    <label class="group-label" for="improveEndUseEfficiency">
+        Improve End Use Efficiency
+        <span *ngIf="hasInvalidForm && improveEndUseEfficiency.order != 100">
+            <span class="fa fa-exclamation-circle"></span>
+        </span>
+        <select id="improveEndUseEfficiencyOrder" [(ngModel)]="improveEndUseEfficiency.order"
+            class="form-control pull-right" (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
+    </label>
+</div>
+
+<div *ngIf="improveEndUseEfficiency.order != 100" class="mb-2 pt-1">
+    <div *ngFor="let item of improveEndUseEfficiency.endUseEfficiencyItems; let itemIndex = index;" [ngClass]="{'item-border': itemIndex > 0}">
+        <app-improve-end-use-efficiency-item [item]="item" [itemIndex]="itemIndex"
+            [numberOfItems]="improveEndUseEfficiency.endUseEfficiencyItems.length" (emitSave)="saveItemChange($event)"
+            (emitRemoveItem)="removeEndUseEfficiency($event)" [hourIntervals]="hourIntervals" [baselineProfileSummaries]="baselineProfileSummaries"
+            [baselineResults]="baselineResults">
+        </app-improve-end-use-efficiency-item>
+    </div>
+    <div class="w-100 pb-2 text-right">
+        <a class="click-link" (click)="addEfficiencyImprovement()">+Add Efficiency Improvement</a>
+    </div>
+</div>

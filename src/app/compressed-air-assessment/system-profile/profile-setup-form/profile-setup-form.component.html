@@ -1,0 +1,62 @@
+<div class="row justify-content-center m-0">
+    <div class="col-10">
+        <form class="p-2" [formGroup]="form">
+            <div class="row m-0 bg-white">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="dayType">Select Day Type</label>
+                        <select class="form-control" id="dayTypeId" formControlName="dayTypeId"
+                            (focus)="focusField('dayType')" (change)="changeDayType()">
+                            <option *ngFor="let dayType of dayTypes" [ngValue]="dayType.dayTypeId">{{dayType.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="numberOfHours">Number of Hours</label>
+                        <input type="number" class="form-control" id="numberOfHours" formControlName="numberOfHours"
+                            (focus)="focusField('numberOfHours')" (input)="save()" step="1" min="24">
+                    </div> -->
+                    <div class="form-group">
+                        <label for="profileDataType">Profile Data Type</label>
+                        <select class="form-control" id="profileDataType" formControlName="profileDataType"
+                            (focus)="focusField('profileDataType')" (change)="save()">
+                            <option [ngValue]="'percentCapacity'">Airflow, % Capacity</option>
+                            <option [ngValue]="'power'">Power, kW</option>
+                            <option [ngValue]="'airflow'">Airflow,
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m&#xB3;/min</span>
+                            </option>
+                            <option [ngValue]="'percentPower'">Power, %</option>
+                            <option [ngValue]="'powerFactor'">V, PF, AMP</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="dataInterval">Data Interval</label>
+                        <select class="form-control" id="dataInterval" formControlName="dataInterval"
+                            (focus)="focusField('dataInterval')" (change)="changeDataInterval()">
+                            <option [ngValue]="1">1 hr</option>
+                            <!-- <option [ngValue]="2">2 hr</option>
+                            <option [ngValue]=".5">30 min</option>
+                            <option [ngValue]=".25">15 min</option> -->
+                            <option [ngValue]="24">24 hr</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-warning small"
+                        *ngIf="form.controls.dataInterval.disabled && profileTab == 'setup'">
+                        Data interval cannot be changed when modifications exist
+                    </div>
+                    <div class="form-group">
+                        <label>Pressure Control Range</label>
+                        <label>{{pressureMin}} - {{pressureMax}}
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr>

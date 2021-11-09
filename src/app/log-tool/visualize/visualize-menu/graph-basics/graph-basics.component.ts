@@ -3,6 +3,7 @@ import { GraphObj } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
 import { VisualizeMenuService } from '../visualize-menu.service';
+import { LogToolDataService } from '../../../log-tool-data.service';
 
 @Component({
   selector: 'app-graph-basics',
@@ -17,8 +18,11 @@ export class GraphBasicsComponent implements OnInit {
   ]
   selectedGraphObj: GraphObj;
   selectedGraphObjSub: Subscription;
+  markerTypes: Array<Object>;
+  markerType: string;
+  isTimeSeries: boolean;
 
-  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit(): void {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
@@ -31,7 +35,24 @@ export class GraphBasicsComponent implements OnInit {
           this.checkBarHistogramData();
         }
       }
+      
+      if (this.selectedGraphObj.layout.xaxis.type == "date") {
+        this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+      }
+      else {
+          this.markerTypes = [{label: "Markers", value: "markers"}];
+          this.markerType = "markers";
+      }
+        
     });
+    if (this.selectedGraphObj.layout.xaxis.type == "date") {
+    this.markerTypes = [{label: "Lines & Markers", value: "lines+markers"}, {label: "Lines", value: "lines"}, {label: "Markers", value: "markers"}];
+    }
+    else {
+      this.markerTypes = [{label: "Markers", value: "markers"}];
+    }
+    this.markerType = "markers";
+    this.isTimeSeries = this.logToolDataService.isTimeSeries;
   }
 
   ngOnDestroy() {
@@ -40,6 +61,14 @@ export class GraphBasicsComponent implements OnInit {
 
   saveChanges() {
     this.visualizeMenuService.save(this.selectedGraphObj);
+  }
+
+  setLinesMarkers() {
+    this.visualizeService.plotFunctionType = 'update';
+    this.selectedGraphObj.selectedYAxisDataOptions.forEach((option) => {
+      option.linesOrMarkers = this.markerType;
+    });
+    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
   setGraphType() {

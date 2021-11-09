@@ -23,7 +23,7 @@
   <div class="form-group">
     <label for="numTraverseHoles">Number of Traverse Holes</label>
     <input name="numTraverseHoles" type="number" step="any" class="form-control" formControlName="numTraverseHoles"
-      id="numTraverseHoles" (input)="updateTraverseData()" (focus)="focusField('numTraverseHoles')" onfocus="this.select();">
+    value = "planeData.numTraverseHoles" id="numTraverseHoles" (input)="updateTraverseData()" (focus)="focusField('numTraverseHoles')" onfocus="this.select();">
     <span class="alert-danger pull-right small"
       *ngIf="pitotDataForm.controls.numTraverseHoles.invalid && !pitotDataForm.controls.numTraverseHoles.pristine">
       <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.required">Value Required</span>
@@ -36,7 +36,7 @@
   <div class="form-group">
     <label for="numInsertionPoints">Number of Insertion Points</label>
     <input name="numInsertionPoints" type="number" step="any" class="form-control" formControlName="numInsertionPoints"
-      id="numInsertionPoints" (input)="updateTraverseData()" (focus)="focusField('numInsertionPoints')" onfocus="this.select();">
+      value = "planeData.numInsertionPoints" id="numInsertionPoints" (input)="updateTraverseData()" (focus)="focusField('numInsertionPoints')" onfocus="this.select();">
     <span class="alert-danger pull-right"
       *ngIf="pitotDataForm.controls.numInsertionPoints.invalid && !pitotDataForm.controls.numInsertionPoints.pristine">
       <span *ngIf="pitotDataForm.controls.numInsertionPoints.errors.max">Value can't be greater than

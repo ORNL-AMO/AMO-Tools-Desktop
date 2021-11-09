@@ -29,7 +29,9 @@
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
       [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"
       [modificationPsat]="psat.modifications[exploreModIndex].psat"
-      [currentModification]="psat.modifications[exploreModIndex]"></app-system-data-form>
+      [currentModification]="psat.modifications[exploreModIndex]"
+      [baselineOperationsForm]="baselineOperationsForm" [baselineOperationsWarnings] ="baselineOperationsWarnings" 
+      [modificationOperationsForm]="modificationOperationsForm" [modificationOperationsWarnings]="modificationOperationsaWarnings"></app-system-data-form>
 
     <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
       [exploreModIndex]="exploreModIndex" [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"

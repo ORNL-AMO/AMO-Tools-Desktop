@@ -58,6 +58,26 @@
       [inSetup]="inSetup" [isBaseline]="isBaseline"></app-flue-gas-losses-form-volume>
   </div>
   <div class="d-flex flex-column loss-total" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+    <ng-container *ngIf="loss.measurementType === 'By Volume'">
+        <div class="form-group m-0">
+        <label class="bold">Oxygen In Flue Gas</label>
+        <div *ngIf="loss.calculatedFlueGasO2" class="text-center bold">
+          {{loss.calculatedFlueGasO2 | number:'0.1-2'}} %
+        </div>
+        <div *ngIf="!loss.calculatedFlueGasO2" class="text-center bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+      <div class="form-group m-0">
+        <label class="bold">Excess Air </label>
+        <div *ngIf="loss.calculatedExcessAir" class="text-center bold">
+          {{loss.calculatedExcessAir | number:'0.1-2'}} %
+        </div>
+        <div *ngIf="!loss.calculatedExcessAir" class="text-center bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </ng-container>
     <div class="form-group m-0">
       <label class="bold">Available Heat</label>
       <div *ngIf="loss.availableHeat" class="text-center bold">

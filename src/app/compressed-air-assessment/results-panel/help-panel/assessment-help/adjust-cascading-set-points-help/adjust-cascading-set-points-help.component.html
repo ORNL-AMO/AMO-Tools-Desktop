@@ -1,0 +1,48 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Adjust Cascading Set Points Help
+        <br>
+        <small class="text-muted">
+            Enter pressure set points that determine the order in which compressors are brought
+            online to meet hourly average load requirements. The compressor with the highest cut-in pressure will be
+            turned on first.
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'fullLoadDischargePressure'">
+        <h6>
+            Full Load Discharge Pressure (cut-in)
+            <br>
+            <small class="text-muted">
+                The pressure at which the air compressor begins to deliver air; at this point, the compressor may reload
+                or turn on, and is delivering full flow.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'maxFullFlowDischargePressure'">
+        <h6>
+            Max Full Load Discharge Pressure (cut-out)
+            <br>
+            <small class="text-muted">
+                The pressure at which the air compressor cuts out or unloads, in pounds per square inch gauge. May
+                require additional power. At this point, the compressor may unload, be fully modulated, or turn off.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

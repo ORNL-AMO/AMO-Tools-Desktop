@@ -1,9 +1,9 @@
 <div class="d-flex flex-column h-100 w-100">
     <div class="d-flex w-100 h-100 tab-content">
-        <div class="w-50 panel-column panel-container modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+        <div class="w-50 scroll-item modification" [ngClass]="{'modal-open': isModalOpen == true}">
             <router-outlet></router-outlet>
         </div>
-        <div class="w-50">
+        <div class="w-50 scroll-item">
             <app-help-panel></app-help-panel>
         </div>
     </div>

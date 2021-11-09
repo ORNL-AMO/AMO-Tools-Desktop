@@ -282,14 +282,16 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div>
-          <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+          <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" 
+          [inTreasureHunt]="inTreasureHunt" [treasureHuntEnergySource]="defaultFlueGasModalEnergySource"
+          (hideModal)="hideFlueGasModal($event)"
             [settings]="settings"></app-flue-gas-modal>
         </div>
       </div>
     </div>
   </div>
 
-  <app-operating-hours-modal *ngIf="showOperatingHoursModal" [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" (emitClose)="closeOperatingHoursModal()"
+  <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
   [operatingHours]="operatingHours">
 </app-operating-hours-modal>

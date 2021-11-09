@@ -31,7 +31,8 @@ export class ApplicationSettingsComponent implements OnInit {
   ];
 
   currencies: Array<string> = [
-    '$ - US Dollar'
+    '$',
+    // '$k'
   ];
 
   energyOptions: Array<string> = [
@@ -42,7 +43,8 @@ export class ApplicationSettingsComponent implements OnInit {
     'kcal',
     'kgce',
     'kgoe',
-    'kWh'
+    'kWh',
+    'MWh'
   ];
 
   energyResultOptions: Array<any>;

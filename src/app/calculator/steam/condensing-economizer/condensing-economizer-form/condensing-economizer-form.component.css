@@ -1,0 +1,11 @@
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
+
+.form-section {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: #bbb dashed 1px;
+}
+

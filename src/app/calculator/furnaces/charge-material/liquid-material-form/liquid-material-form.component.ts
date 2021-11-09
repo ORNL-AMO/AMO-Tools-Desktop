@@ -159,6 +159,7 @@ export class LiquidMaterialFormComponent implements OnInit {
     if (this.selected == false) {
       this.chargeMaterialForm.disable();
     } else {
+      this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
       this.chargeMaterialForm.enable();
     }
   }

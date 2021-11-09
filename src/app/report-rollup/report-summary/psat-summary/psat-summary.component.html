@@ -11,9 +11,23 @@
                 <dl class="summary-list mx-auto">
                     <dt>Maximum Annual
                         <br/>Cost Savings</dt>
-                    <dd>{{pumpSavingsPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
+                    <dd>
+                        <span *ngIf="settings.currency !== '$'">
+                            {{pumpSavingsPotential| currencyThousands }}
+                        </span>
+                        <span *ngIf="settings.currency === '$'">
+                          {{pumpSavingsPotential| currency:'USD':'symbol':'2.0-0'}}
+                      </span>
+                  </dd>
                     <dt>Annual Cost</dt>
-                    <dd>{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
+                    <dd>
+                      <span *ngIf="settings.currency !== '$'">
+                          {{totalCost | currencyThousands}}
+                      </span>
+                      <span *ngIf="settings.currency === '$'">
+                          {{totalCost | currency:'USD':'symbol':'2.0-0'}}
+                      </span>  
+                  </dd>
                 </dl>
             </div>
             <div class="col-lg-6 col-md-8 col-sm-12">
