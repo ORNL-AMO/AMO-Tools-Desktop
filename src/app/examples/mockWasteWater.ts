@@ -43,8 +43,13 @@ export const MockWasteWater: Assessment = {
         OperatingTime: 24,
         TypeAerators: 1,
         Speed: 100,
-        EnergyCostUnit: 0.09,
         AnoxicZoneCondition: false
+      },
+      operations: {
+        MaxDays: 100,
+        TimeIncrement: .5,
+        operatingMonths: 12,
+        EnergyCostUnit: 0.09
       }
     },
     modifications: [
@@ -83,16 +88,18 @@ export const MockWasteWater: Assessment = {
           OperatingTime: 24,
           TypeAerators: 1,
           Speed: 100,
-          EnergyCostUnit: 0.09,
           AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: 0.09
         }
       },
     ],
     systemBasics: {
-      MaxDays: 100,
-      TimeIncrement: .5,
-      equipmentNotes: '',
-      operatingMonths: 12
+      equipmentNotes: ''
     }
   }
 };

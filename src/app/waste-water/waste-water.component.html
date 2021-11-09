@@ -8,6 +8,7 @@
     <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [assessment]="assessment"></app-system-basics>
+      <app-waste-water-operations *ngIf="setupTab == 'operations'" [inSetup]="true" [selected]="true"></app-waste-water-operations>
       <app-activated-sludge-form *ngIf="setupTab == 'activated-sludge'" [inSetup]="true" [selected]="true">
       </app-activated-sludge-form>
       <app-aerator-performance-form *ngIf="setupTab == 'aerator-performance'" [inSetup]="true" [selected]="true">

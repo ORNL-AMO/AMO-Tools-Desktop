@@ -32,11 +32,11 @@ export class WasteWaterAnalysisService {
 
   setResults(wasteWater: WasteWater, settings: Settings) {
     //baseline color: '#1E7640'
-    this.baselineResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings, true);
+    this.baselineResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.baselineData.operations, settings, true);
     this.modificationsResultsArr = new Array();
     let index: number = 1;
     wasteWater.modifications.forEach(modification => {
-      let modificationResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, true, this.baselineResults);
+      let modificationResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, true, this.baselineResults);
       this.modificationsResultsArr.push({
         name: modification.name,
         results: modificationResults,
