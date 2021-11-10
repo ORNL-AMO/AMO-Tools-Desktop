@@ -53,6 +53,7 @@ export class UtilityDonutChartComponent implements OnInit {
       hole: .5,
       textposition: 'outside',
       insidetextorientation: "horizontal",
+      automargin: true,
       hoverformat: '.2r',
       texttemplate: `<b>%{label}</b> <br> %{value:,.0f} (%{percent})`,
       hoverinfo: 'label+percent',
