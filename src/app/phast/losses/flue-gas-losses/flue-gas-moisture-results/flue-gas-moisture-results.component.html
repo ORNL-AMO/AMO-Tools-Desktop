@@ -1,13 +1,8 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
-<div class="mt-3">
+  <div class="mt-3">
     <label class="group-label mb-2">Psychrometric Data</label>
-    <table class="table table-hover table-striped resultsTable" *ngIf="modificationName">
-      <tbody [ngClass]="{'mod-exists': modificationName}">
-        <tr *ngIf="inSetup || modificationName" class="bold">
-          <td>&nbsp;</td>
-          <td class="text-center bold">Baseline</td>
-          <td class="text-center bold" *ngIf="modificationName">{{modificationName}}</td>
-        </tr>
+    <table class="table table-hover table-striped resultsTable">
+      <tbody>
         <!--humidity ratio-->
         <tr>
           <td>Humidity Ratio</td>
@@ -20,8 +15,7 @@
         <tr>
           <td>Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
           <td>
-            <span
-            *ngIf="psychrometricResults">{{ psychrometricResults.gasDensity | sigFigs: '4'}}</span>
+            <span *ngIf="psychrometricResults">{{ psychrometricResults.gasDensity | sigFigs: '4'}}</span>
             <span *ngIf="!psychrometricResults">&mdash;</span>
           </td>
         </tr>
@@ -41,8 +35,8 @@
             <span *ngIf="!psychrometricResults">&mdash;</span>
           </td>
         </tr>
-         <!-- Wet Bulb-->
-         <tr>
+        <!-- Wet Bulb-->
+        <tr>
           <td>Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
           <td>
             <span *ngIf="psychrometricResults">{{ psychrometricResults.wetBulbTemp | number:'1.0-1' }}</span>
@@ -61,7 +55,8 @@
         <tr>
           <td>Enthalpy
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span>
+          </td>
           <td>
             <span *ngIf="psychrometricResults">{{ psychrometricResults.enthalpy | number:'1.0-1' }}</span>
             <span *ngIf="!psychrometricResults">&mdash;</span>
@@ -121,5 +116,4 @@
       </tbody>
     </table>
   </div>
-  </div>
-  
+</div>

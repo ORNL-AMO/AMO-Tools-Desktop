@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 
 @Component({
@@ -13,33 +14,16 @@ import { Settings } from '../../../../shared/models/settings';
     settings: Settings;
     @Output('hideModal')
     hideModal = new EventEmitter<number>();
-    containerHeight: number;
 
-    @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-    @HostListener('window:resize', ['$event'])
-    onResize(event) {
-      this.resizeTabs();
-    }
-
-    constructor() {
+    constructor(private flueGasCompareService: FlueGasCompareService) {
     }
     
-    ngOnInit() {}
-
-    ngAfterViewInit() {
-      setTimeout(() => {
-        this.resizeTabs();
-      }, 100);
+    ngOnInit() {
+      this.settings = this.flueGasCompareService.setFanDefaultUnits(this.settings);
     }
+
 
     hideMoistureModal(event: number) {
       this.hideModal.emit(event);
     }
-
-    resizeTabs() {
-      if (this.contentContainer) {
-        this.containerHeight = this.contentContainer.nativeElement.offsetHeight;
-      }
-    }
-
   }
