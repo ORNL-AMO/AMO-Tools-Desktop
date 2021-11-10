@@ -4,6 +4,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 import { PsychrometricResults } from '../../../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
 import { BaseGasDensity } from '../../../shared/models/fans';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class FlueGasCompareService {
@@ -42,6 +43,19 @@ export class FlueGasCompareService {
 
   setCurrentDensity(currDensity: BaseGasDensity) {
     this.baseGasDensity = currDensity;
+  }
+
+  setFanDefaultUnits(settings: Settings): Settings {
+    if(settings.unitsOfMeasure == 'Imperial'){
+      settings.densityMeasurement = 'lbscf';
+      settings.fanPressureMeasurement = 'inH2o';
+      settings.fanBarometricPressure = 'inHg';
+    }else{
+      settings.densityMeasurement = 'kgNm3';
+      settings.fanPressureMeasurement = 'Pa';
+      settings.fanBarometricPressure = 'Pa';
+    }
+    return settings;
   }
 
   compareAllLosses() {
