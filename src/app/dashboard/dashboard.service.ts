@@ -11,6 +11,7 @@ export class DashboardService {
   dashboardToastMessage: BehaviorSubject<string>;
   sidebarX: BehaviorSubject<number>;
   createInventory:BehaviorSubject<boolean>;
+  copyItems: BehaviorSubject<boolean>;
   constructor() {
     this.moveItems = new BehaviorSubject<boolean>(false);
     this.updateDashboardData = new BehaviorSubject<boolean>(false);
@@ -18,5 +19,6 @@ export class DashboardService {
     this.createAssessment = new BehaviorSubject<boolean>(false);
     this.sidebarX = new BehaviorSubject<number>(undefined);
     this.createInventory = new BehaviorSubject<boolean>(false);
+    this.copyItems = new BehaviorSubject<boolean>(false);
   }
 }

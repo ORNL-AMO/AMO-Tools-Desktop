@@ -1,11 +1,11 @@
-<!--move modal-->
-<div bsModal #moveModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel"
+<!--copy modal-->
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md move-items-modal">
-        <div class="modal-content" *ngIf="moveForm">
+    <div class="modal-dialog modal-md copy-items-modal">
+        <div class="modal-content" *ngIf="copyForm">
             <div class="modal-header">
-                <h3>Selected Item(s) to Move</h3>
-                <button class="close" (click)="hideMoveModal()">
+                <h3>Selected Item(s) to Copy</h3>
+                <button class="close" (click)="hideCopyModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -20,19 +20,14 @@
                         {{calculator.name}} <br>
                     </span>
                 </div>
-                <div *ngFor="let subDir of directory.subDirectory">
-                    <span *ngIf="subDir.selected">
-                        {{subDir.name}} <br>
-                    </span>
-                </div>
                 <div *ngFor="let inventory of directory.inventories">
                     <span *ngIf="inventory.selected">
                         {{inventory.name}} <br>
                     </span>
                 </div>
-                <form [formGroup]="moveForm" *ngIf="!showNewFolder">
+                <form [formGroup]="copyForm" *ngIf="!showNewFolder">
                     <div class="form-group" *ngIf="allDirectories">
-                        <label>Move Item(s) to Different Location</label>
+                        <label>Copy Item(s) to Different Location</label>
                         <select class="form-control w-100" formControlName="directoryId">
                             <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
                                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
@@ -42,6 +37,16 @@
                         <div class="help-text">
                             <a class="click-link" (click)="addFolder()">Add a new folder for selected item(s)</a>
                         </div>
+                    </div>
+                    <div class="form-group" *ngIf="assessmentCopy">
+                        <label>
+                            <input type="checkbox" class="pr-2" formControlName="copyModifications">Include
+                            modifications?</label>
+                    </div>
+                    <div class="form-group" *ngIf="assessmentCalculatorCopy">
+                        <label>
+                            <input type="checkbox" class="pr-2" formControlName="copyCalculators">Include
+                            calculators?</label>
                     </div>
                 </form>
 
@@ -94,7 +99,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" (click)="save()">Save</button>
+                <button class="btn btn-primary" (click)="createCopy()">Copy Selected Item(s)</button>
             </div>
         </div>
     </div>

@@ -60,6 +60,16 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
     })
+    this.init();
+  }
+
+  init(){
+    this.activatedRoute.params.subscribe(params => {
+      let id: number = Number(params['id']);
+      this.breadCrumbs = new Array();
+      this.directory = this.directoryDbService.getById(id);
+      this.getBreadcrumbs(id);
+    });
   }
 
   checkSelected() {
@@ -84,6 +94,18 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       }
     });
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
+  }
+
+  checkIfCopyItem(){
+    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (inventorySelectedTest != undefined);
+    let calculatorSelectedTest: Calculator
+    if (this.directory.calculators) {
+      calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
+    }
+    return (checkAssessmentDirectorySelected || (calculatorSelectedTest != undefined)) && directorySelectedTest == undefined;
   }
 
   showCreateAssessment() {
@@ -118,6 +140,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   generateReport() {
     this.reportRollupService.getReportData(this.directory);
     this.router.navigateByUrl('/report-rollup');
+  }
+
+  showCopyItems(){
+    this.dashboardService.copyItems.next(true);
   }
 
   moveToFolder() {
