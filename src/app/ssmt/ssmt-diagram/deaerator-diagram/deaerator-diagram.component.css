@@ -72,6 +72,10 @@
     cursor: pointer;
 }
 
+.deaerator-img-holder:hover {
+    transform: scale(1.2);
+}
+
 
 .inlet-pressure-holder .inlet-pressure-mass-flow{
     position: absolute;
