@@ -38,6 +38,7 @@
 
 
 .btn-secondary{
+    color: rgb(255, 255, 255);
     background-color: #BF3D00;
     border-color: #BF3D00;
     transition: all .5s ease-in-out;
