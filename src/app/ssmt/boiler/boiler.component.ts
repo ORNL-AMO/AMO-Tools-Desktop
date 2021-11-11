@@ -62,6 +62,9 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+    console.log(this.boilerForm.controls);
+    console.log(this.highPressureHeaderForm.controls);
+    console.log(this.lowPressureHeaderForm.controls);
   }
 
   ngOnChanges(changes: SimpleChanges) {

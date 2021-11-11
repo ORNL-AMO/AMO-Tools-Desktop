@@ -49,6 +49,7 @@ export class HeaderFormComponent implements OnInit {
     if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
       this.showProcessSteamUsage = false;
     }
+    console.log(this.headerForm.controls);
   }
 
   ngOnChanges(changes: SimpleChanges) {
