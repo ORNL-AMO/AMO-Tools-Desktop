@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { EffluentEnergyResults, NutrientRemovalResults } from '../report-rollup-models';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
   selector: 'app-waste-water-rollup',
@@ -32,9 +33,10 @@ export class WasteWaterRollupComponent implements OnInit {
   rollupEffluentEnergyTable: Array<EffluentEnergyResults>;
   rollupNutrientTable: Array<NutrientRemovalResults>;
   constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService,
-    private convertUnitsService: ConvertUnitsService) { }
+    private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
+    this.settings = this.reportRollupService.settings.getValue();
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ActivatedSludgeData, AeratorPerformanceData, WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, WasteWater, WasteWaterData, WasteWaterOperations } from '../../../shared/models/waste-water';
 import { ActivatedSludgeFormService } from '../../activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from '../../aerator-performance-form/aerator-performance-form.service';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
+import { WasteWaterOperationsService } from '../../waste-water-operations/waste-water-operations.service';
 import { WasteWaterService } from '../../waste-water.service';
 
 @Component({
@@ -19,15 +20,18 @@ export class ModifyConditionsTabsComponent implements OnInit {
   modifyConditionsTabSub: Subscription;
   wasteWaterSub: Subscription;
 
+  displayOperationsTooltip: boolean = false;
+  operationsHover: boolean = false;
   displayActivatedSludgeTooltip: boolean = false;
   activatedSludgeHover: boolean = false;
   displayAeratorPerformanceTooltip: boolean = false;
   aeratorPerformanceHover: boolean = false;
 
+  operationsBadgeClass: string;
   activatedSludgeBadgeClass: string;
   aeratorPerformanceBadgeClass: string;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private activatedSludgeFormService: ActivatedSludgeFormService, private compareService: CompareService) { }
+    private activatedSludgeFormService: ActivatedSludgeFormService, private compareService: CompareService, private operationsService: WasteWaterOperationsService) { }
 
   ngOnInit(): void {
     this.modifyConditionsTabSub = this.wasteWaterService.modifyConditionsTab.subscribe(val => {
@@ -50,9 +54,29 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setBadgeClass(wasteWater: WasteWater) {
     let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
-    let wasteWaterDifferent: WasteWaterDifferent = this.compareService.compareBaselineModification(wasteWater.baselineData, modificationData)
+    let wasteWaterDifferent: WasteWaterDifferent = this.compareService.compareBaselineModification(wasteWater.baselineData, modificationData);
+    this.operationsBadgeClass = this.setOperationsBadgeClass(wasteWater.baselineData.operations, wasteWaterDifferent, modificationData);
     this.activatedSludgeBadgeClass = this.setActivatedSludgeBadgeClass(wasteWater.baselineData.activatedSludgeData, wasteWaterDifferent, modificationData);
     this.aeratorPerformanceBadgeClass = this.setAeratorPerformanceBadgeClass(wasteWater.baselineData.aeratorPerformanceData, wasteWaterDifferent, modificationData);
+  }
+
+  setOperationsBadgeClass(baselineData: WasteWaterOperations, wasteWaterDifferent: WasteWaterDifferent, modificationData?: WasteWaterData): string {
+    let badgeStr: string = 'success';
+    let baselineForm: FormGroup = this.operationsService.getFormFromObj(baselineData);
+    let validBaselineTest = baselineForm.valid;
+    let validModTest = true;
+    let isDifferent = false;
+    if (modificationData) {
+      let modificationForm: FormGroup = this.operationsService.getFormFromObj(modificationData.operations);
+      validModTest = modificationForm.valid;
+      isDifferent = this.compareService.checkHasDifferent(wasteWaterDifferent.operationsDifferent);
+    }
+    if (!validBaselineTest || !validModTest) {
+      badgeStr = 'missing-data';
+    } else if (isDifferent) {
+      badgeStr = 'loss-different';
+    }
+    return badgeStr;
   }
 
   setActivatedSludgeBadgeClass(baselineData: ActivatedSludgeData, wasteWaterDifferent: WasteWaterDifferent, modificationData?: WasteWaterData): string {

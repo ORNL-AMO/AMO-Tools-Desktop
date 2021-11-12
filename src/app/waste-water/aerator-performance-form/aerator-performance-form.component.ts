@@ -208,7 +208,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
 
   setDisableOptimize() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[this.modificationIndex].activatedSludgeData, wasteWater.modifications[this.modificationIndex].aeratorPerformanceData, wasteWater.systemBasics);
+    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[this.modificationIndex].activatedSludgeData, wasteWater.modifications[this.modificationIndex].aeratorPerformanceData, wasteWater.modifications[this.modificationIndex].operations);
     this.disableOptimize = modificationValid.isValid == false;
   }
 }
