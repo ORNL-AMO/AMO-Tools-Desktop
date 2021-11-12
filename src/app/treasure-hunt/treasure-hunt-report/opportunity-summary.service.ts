@@ -143,21 +143,29 @@ export class OpportunitySummaryService {
     let oppSummary: OpportunitySummary;
     let results: TreasureHuntOpportunityResults = this.getCalculatorTreasureHuntResults(thOpportunity, settings);
     let opportunityMetaData: OpportunityMetaData = this.getOpportunityMetaData(thOpportunity.opportunitySheet);
-    if (thOpportunity.opportunityType === Treasure.waterHeating){
-      let waterHeatingOpportunity = thOpportunity as WaterHeatingTreasureHunt;
-      let waterResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getWaterOpportunityResults(waterHeatingOpportunity, settings);
-      let gasResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getGasOpportunityResults(waterHeatingOpportunity, settings);
-      let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
-      let waterOppSum: OpportunitySummary  = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
-      mixedIndividualSummaries.push(waterOppSum);
-      let gasOppSum: OpportunitySummary  = this.getNewOpportunitySummary(opportunityMetaData, gasResults);
-      mixedIndividualSummaries.push(gasOppSum);
-      oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results, mixedIndividualSummaries);
+    if (thOpportunity.opportunityType === Treasure.waterHeating){      
+      oppSummary = this.getWaterHeatingOpportunitySummary(results, opportunityMetaData, thOpportunity, settings);
     } else {
       oppSummary = this.getNewOpportunitySummary(opportunityMetaData, results);
     }
     
     return oppSummary;
+  }
+
+  getWaterHeatingOpportunitySummary(results: TreasureHuntOpportunityResults, opportunityMetaData: OpportunityMetaData, thOpportunity: TreasureHuntOpportunity, settings: Settings): OpportunitySummary {
+    let opSum: OpportunitySummary;
+    let waterHeatingOpportunity = thOpportunity as WaterHeatingTreasureHunt;
+    let waterResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getWaterOpportunityResults(waterHeatingOpportunity, settings);
+    let gasResults: TreasureHuntOpportunityResults = this.waterHeatingTreasureHuntService.getGasOpportunityResults(waterHeatingOpportunity, settings);
+    let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
+    let waterOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, waterResults);
+    mixedIndividualSummaries.push(waterOppSum);
+    let gasOppSum: OpportunitySummary = this.getNewOpportunitySummary(opportunityMetaData, gasResults);
+    mixedIndividualSummaries.push(gasOppSum);
+    opSum = this.getNewOpportunitySummary(opportunityMetaData, results, mixedIndividualSummaries);
+
+    return opSum;
+
   }
   
   getCalculatorTreasureHuntResults(treasureHuntOpportunity: TreasureHuntOpportunity, settings: Settings): TreasureHuntOpportunityResults {

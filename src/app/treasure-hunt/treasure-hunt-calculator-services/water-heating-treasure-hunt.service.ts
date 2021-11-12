@@ -125,64 +125,50 @@ getEnergyData(waterHeatingOpportunity: WaterHeatingTreasureHunt, settings: Setti
   let utilityTypes: Array<string> = new Array();
   let output: WaterHeatingOutput = this.waterHeatingService.waterHeatingOutput.getValue();
 
+  let currentCosts: number = 0;
   if (waterHeatingOpportunity.energySourceData.energySourceType == 'Natural Gas') {
-    let unit: string = 'MMBTu/yr';
-    if (settings.unitsOfMeasure == 'Metric') {
-      unit = 'MJ/yr';
+    currentCosts = currentEnergyUsage.naturalGasCosts
+  } else if (waterHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
+    currentCosts = currentEnergyUsage.otherFuelCosts;
+  }
+  
+  let unit1: string = 'MMBTu/yr';
+  if (settings.unitsOfMeasure == 'Metric') {
+    unit1 = 'MJ/yr';
+  }
+  annualEnergySavings.push({
+    savings: output.energySavedTotal,
+    label: waterHeatingOpportunity.energySourceData.energySourceType,
+    energyUnit: unit1
+  });
+  percentSavings.push(
+    {
+      percent: ((output.costSavingsBoiler + output.costSavingsDWH) / currentCosts) * 100,
+      label: waterHeatingOpportunity.energySourceData.energySourceType,
+      baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
+      modificationCost: opportunitySummary.modificationCost
     }
-    annualEnergySavings.push({
-      savings: output.energySavedTotal,
-      label: 'Natural Gas',
-      energyUnit: unit
-    });
-    percentSavings.push(
-      {
-        percent: ((output.costSavingsBoiler + output.costSavingsDWH) / currentEnergyUsage.naturalGasCosts) * 100,
-        label: 'Natural Gas',
-        baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
-        modificationCost: opportunitySummary.modificationCost
-      }
-    )
-    utilityTypes.push('Natural Gas');
-  };
-  if (waterHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
-    let unit: string = 'MMBTu/yr';
-    if (settings.unitsOfMeasure == 'Metric') {
-      unit = 'MJ/yr';
-    }
-    annualEnergySavings.push({
-      savings: output.energySavedTotal,
-      label: 'Other Fuel',
-      energyUnit: unit
-    });
-    percentSavings.push(
-      {
-        percent: ((output.costSavingsBoiler + output.costSavingsDWH) / currentEnergyUsage.otherFuelCosts) * 100,
-        label: 'Other Fuel',
-        baselineCost: (output.costSavingsBoiler + output.costSavingsDWH),
-        modificationCost: opportunitySummary.modificationCost
-      }
-    )
-    utilityTypes.push('Natural Gas');
-  };
+  )
+  utilityTypes.push(waterHeatingOpportunity.energySourceData.energySourceType);
+  
   let unit: string = 'L/yr';
-      if (settings.unitsOfMeasure == 'Metric') {
-        unit = 'gal/yr';
-      }
-      annualEnergySavings.push({
-        savings: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
-        label: 'Water',
-        energyUnit: unit
-      });
-      percentSavings.push(
-        {
-          percent: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
-          label: 'Water',
-          baselineCost: output.costSavingsWNT,
-          modificationCost: opportunitySummary.modificationCost
-        }
-      )
-      utilityTypes.push('Water');
+  if (settings.unitsOfMeasure == 'Metric') {
+    unit = 'gal/yr';
+  }
+  annualEnergySavings.push({
+    savings: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
+    label: 'Water',
+    energyUnit: unit
+  });
+  percentSavings.push(
+    {
+      percent: (output.costSavingsWNT / currentEnergyUsage.waterCosts) * 100,
+      label: 'Water',
+      baselineCost: output.costSavingsWNT,
+      modificationCost: opportunitySummary.modificationCost
+    }
+  )
+  utilityTypes.push('Water');
 
   return { annualEnergySavings: annualEnergySavings, percentSavings: percentSavings, utilityTypes: utilityTypes }
 
