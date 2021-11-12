@@ -52,7 +52,6 @@ export class UpdateDataService {
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
-
         if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
         }         

@@ -30,6 +30,17 @@
           </div>
         </div>
 
+        <div class="form-section">
+          <label class="group-label general" (click)="toggleCo2Settings()">CO2 Savings Settings
+            <span *ngIf="!showCo2Settings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showCo2Settings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showCo2Settings">
+            <p class="help-text">These will be default settings for any new assessments and folders.</p>
+            <app-co2-savings-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings()"></app-co2-savings-settings>
+          </div>
+        </div>
+
         <div class="form-section psat">
           <label class="group-label" (click)="togglePsatSettings()">Pump Settings
             <span *ngIf="!showPsatSettings" class="fa fa-chevron-up pull-right"></span>

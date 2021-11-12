@@ -1,0 +1,15 @@
+<form [formGroup]="settingsForm">
+
+  <label class="group-label">Electricity</label>
+  <app-assessment-co2-savings 
+  [co2SavingsData]="co2SavingsData"
+  [isFormDisabled]="false"
+  [inBaseline]="true"
+  (emitUpdatePsatCo2SavingsData)="updateCo2SavingsSettings($event)"
+  ></app-assessment-co2-savings>
+  <br><br>
+  <label class="group-label">Process Heating</label>
+  <br>
+  <label class="group-label">Treasure Hunt</label>
+  <br>
+  </form>

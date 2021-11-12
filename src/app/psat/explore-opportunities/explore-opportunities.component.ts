@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, PsatOutputs, PsatValid } from '../../shared/models/psat';
+import { ExploreOpportunitiesResults, PSAT, PsatOutputs, PsatValid } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
@@ -34,6 +34,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
   annualSavings: number = 0;
+  co2EmissionsSavings: number = 0;
   percentSavings: number = 0;
   // title: string;
   // unit: string;
@@ -93,7 +94,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compareService.openNewModal.next(true);
   }
   getResults() {
-    let psatResults: { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number };
+    let psatResults: ExploreOpportunitiesResults;
     if (this.modificationExists) {
       if (this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario === true) {
         this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
@@ -115,6 +116,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.modificationResults = psatResults.modificationResults;
     this.annualSavings = psatResults.annualSavings;
     this.percentSavings = psatResults.percentSavings;
+    this.co2EmissionsSavings = psatResults.co2EmissionsSavings;
   }
 
   save() {

@@ -1208,5 +1208,16 @@ export const MockPhastSettings: Settings = {
             phoneNumber: 1234567890,
             email: 'AMO_ToolHelpDesk@ee.doe.gov'
         }
-    }
+    },
+    co2SavingsEnergyType: "electricity",
+    co2SavingsEnergySource: "",
+    co2SavingsFuelType: '',
+    totalEmissionOutputRate: 0,
+    electricityUse: 0,
+    eGridRegion: '',
+    eGridSubregion: '',
+    totalEmissionOutput: 0,
+    userEnteredBaselineEmissions: false,
+    userEnteredModificationEmissions: false,
+    zipcode: '',
 };
