@@ -153,6 +153,7 @@ export class BoilerComponent implements OnInit {
     this.setPressureForms(tmpBoiler);
     //where the validation is being checked
     this.boilerService.setApporachTempValidators(this.boilerForm, this.headerInput.highPressureHeader, this.operationsForm.controls.makeUpWaterTemperature.value);
+    // this.boilerService.setApporachTempValidators(this.boilerForm, this.ssmt);
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }
