@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
-import { BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderInput, OperationsInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
@@ -10,6 +10,7 @@ import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
+import { GeneralOperationsComponent } from '../operations/general-operations/general-operations.component';
 
 @Component({
   selector: 'app-boiler',
@@ -33,6 +34,10 @@ export class BoilerComponent implements OnInit {
   modificationIndex: number;
   @Input()
   headerInput: HeaderInput;
+  @Input()
+  operationsInput: OperationsInput;
+  @Input()
+  ssmt: SSMT;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -45,6 +50,7 @@ export class BoilerComponent implements OnInit {
   showBlowdownRateModal: boolean = false;
   showBoilerEfficiencyModal: boolean = false;
   boilerForm: FormGroup;
+  operationsForm: FormGroup;
   options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
@@ -62,6 +68,9 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+    console.log(this.boilerForm.controls);
+    console.log(this.highPressureHeaderForm.controls);
+    console.log(this.lowPressureHeaderForm.controls);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -116,6 +125,7 @@ export class BoilerComponent implements OnInit {
   }
 
   setPreheatMakeupWater() {
+    console.log(this.boilerForm.controls.preheatMakeupWater.value);
     if (this.boilerForm.controls.preheatMakeupWater.value == true) {
       this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
     } else {
@@ -141,6 +151,8 @@ export class BoilerComponent implements OnInit {
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
+    //where the validation is being checked
+    this.boilerService.setApporachTempValidators(this.boilerForm, this.headerInput.highPressureHeader, this.operationsForm.controls.makeUpWaterTemperature.value);
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }

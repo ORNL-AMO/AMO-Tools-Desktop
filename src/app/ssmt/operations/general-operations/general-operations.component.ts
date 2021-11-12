@@ -40,6 +40,7 @@ export class GeneralOperationsComponent implements OnInit {
   constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
+    console.log(this.form.controls);
   }
 
   ngAfterViewInit(){

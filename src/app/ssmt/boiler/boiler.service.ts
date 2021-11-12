@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { BoilerInput } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
+import { GeneralOperationsComponent } from '../operations/general-operations/general-operations.component';
+import { HeaderFormComponent } from '../header/header-form/header-form.component';
 
 @Injectable()
 export class BoilerService {
@@ -110,6 +112,24 @@ export class BoilerService {
       return false;
     }
   }
+
+  setApporachTempValidators(formGroup: FormGroup, headerForm: HeaderFormComponent, operationsForm: GeneralOperationsComponent) {
+    debugger;
+    //method to check for valid input
+    let approachTemp = formGroup.controls.approachTemperature.value;
+    let makeUpWaterTemperature = operationsForm.form.controls.makeUpWaterTemperature.value;
+    let pressure = headerForm.headerForm.controls.highPressureHeader.value;
+    let tempValue = pressure - makeUpWaterTemperature;
+    if (approachTemp) {
+    
+      formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue)]);
+      formGroup.controls.approachTemperature.markAsDirty();
+      formGroup.controls.approachTemperature.updateValueAndValidity();
+    }
+    return formGroup;
+  }
+
+
 }
 
 
