@@ -48,7 +48,7 @@ export class FixtureLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+          this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
           this.enableForm();
         }
       }

@@ -52,7 +52,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
+          this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
           this.enableForm();
         }
       }

@@ -143,7 +143,7 @@ export class FixtureFormComponent implements OnInit {
     if (this.selected == false) {
       this.fixtureForm.disable();
     } else {
-      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
       this.fixtureForm.enable();
     }
   }

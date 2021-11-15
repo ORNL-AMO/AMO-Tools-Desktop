@@ -12,7 +12,7 @@ import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
-import { FlueGasByMass, FlueGasByVolume, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { LeakageLoss } from '../shared/models/phast/losses/leakageLoss';
 import { CircularOpeningLoss, QuadOpeningLoss, ViewFactorInput } from '../shared/models/phast/losses/openingLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
@@ -223,7 +223,7 @@ export class ProcessHeatingApiService {
     return output;
   }
 
-  flueGasLossesByVolume(input: FlueGasByVolume): number {
+  flueGasLossesByVolume(input: FlueGasByVolume): FlueGasByVolumeSuiteResults {
     let GasCompositions = new Module.GasCompositions(
       "", 
       input.CH4, 
@@ -246,7 +246,7 @@ export class ProcessHeatingApiService {
       GasCompositions, 
       input.fuelTemperature
     );
-    let output: number = FlueGasLossByVolumeInstance.getHeatLoss();
+    let output = FlueGasLossByVolumeInstance.getHeatLoss();
     FlueGasLossByVolumeInstance.delete();
     return output;
   }
@@ -257,7 +257,7 @@ export class ProcessHeatingApiService {
       input.excessAirPercentage, 
       input.combustionAirTemperature,
       input.fuelTemperature, 
-      input.moistureInAirComposition, 
+      input.moistureInAirCombustion, 
       input.ashDischargeTemperature,                            
       input.unburnedCarbonInAsh, 
       input.carbon, 
@@ -733,12 +733,10 @@ export class ProcessHeatingApiService {
       input.priExhaustO2, 
       input.priCombAirTemperature, 
       input.priOpHours, 
-      input.priFuelHV,
       input.secFiringRate,
       input.secExhaustTemperature, 
       input.secCombAirTemperature, 
       input.secOpHours, 
-      input.secFuelCost
     );
 
     let output: HeatCascadingOutput = cascadeHeatHighToLowInstance.calculate();

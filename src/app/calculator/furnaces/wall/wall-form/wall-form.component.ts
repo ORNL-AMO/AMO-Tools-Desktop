@@ -148,7 +148,7 @@ export class WallFormComponent implements OnInit {
     if (this.selected == false) {
       this.wallLossesForm.disable();
     } else {
-      this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+      this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
       this.wallLossesForm.enable();
     }
 

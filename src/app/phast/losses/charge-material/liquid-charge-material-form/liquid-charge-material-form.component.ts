@@ -53,7 +53,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+          this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
           this.enableForm();
         }
       }
