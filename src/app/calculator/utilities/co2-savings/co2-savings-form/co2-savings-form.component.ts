@@ -20,6 +20,8 @@ export class Co2SavingsFormComponent implements OnInit {
   index: number;
   @Input()
   settings: Settings;
+  @Input()
+  currentField: string;
 
   otherFuels: Array<OtherFuel>;
   eGridRegions: Array<eGridRegion>;

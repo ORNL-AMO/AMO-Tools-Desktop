@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-co2-savings-help',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./co2-savings-help.component.css']
 })
 export class Co2SavingsHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
 
   constructor() { }
 

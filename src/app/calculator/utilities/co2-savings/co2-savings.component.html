@@ -96,7 +96,7 @@
             <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
               [modificationData]="modificationData" [baselineTotal]="baselineTotal"
               [modificationTotal]="modificationTotal"></app-co2-savings-results>
-            <app-co2-savings-help *ngIf="tabSelect == 'help'"></app-co2-savings-help>
+            <app-co2-savings-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-co2-savings-help>
           </div>
         </div>
       </div>
