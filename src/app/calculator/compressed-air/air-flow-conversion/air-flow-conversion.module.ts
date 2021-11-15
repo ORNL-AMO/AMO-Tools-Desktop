@@ -20,6 +20,9 @@ import { AirFlowConversionResultsComponent } from './air-flow-conversion-results
     CommonModule,
     ReactiveFormsModule
   ],
+  exports: [
+    AirFlowConversionComponent
+  ],
   providers: [
     AirFlowConversionService
   ]

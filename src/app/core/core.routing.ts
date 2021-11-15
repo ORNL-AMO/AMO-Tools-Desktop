@@ -97,9 +97,13 @@ import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-
+import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
+import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
+import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
+import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 
 export const coreRoutes: Routes = [
   {
@@ -268,6 +272,10 @@ export const coreRoutes: Routes = [
             component: CompressedAirReductionComponent
           },
           {
+            path: 'altitude-correction',
+            component: AltitudeCorrectionComponent
+          },
+          {
             path: 'electricity-reduction',
             component: ElectricityReductionComponent
           },
@@ -300,6 +308,10 @@ export const coreRoutes: Routes = [
             component: WaterHeatingComponent
           },
           {
+            path: 'feedwater-economizer',
+            component: FeedwaterEconomizerComponent
+          },
+          {
             path: 'steam-reduction',
             component: SteamReductionComponent
           },
@@ -326,6 +338,10 @@ export const coreRoutes: Routes = [
           {
             path: 'replace-existing',
             component: ReplaceExistingComponent
+          },
+          {
+            path: 'full-load-amps',
+            component: FullLoadAmpsComponent
           },
           {
             path: 'efficiency-improvement',
@@ -444,6 +460,10 @@ export const coreRoutes: Routes = [
             component: SteamPropertiesComponent
           },
           {
+            path: 'condensing-economizer',
+            component: CondensingEconomizerComponent
+          },
+          {
             path: 'turbine',
             component: TurbineComponent
           },
@@ -491,6 +511,10 @@ export const coreRoutes: Routes = [
   {
     path: 'treasure-hunt/:id',
     component: TreasureHuntComponent
+  },
+  {
+    path: 'compressed-air/:id',
+    component: CompressedAirAssessmentComponent
   },
   {
     path: 'report-rollup',

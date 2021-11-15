@@ -6,6 +6,7 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-ssmt-rollup',
@@ -25,7 +26,8 @@ export class SsmtRollupComponent implements OnInit {
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   energyUnit: string;
   settings: Settings;
-  constructor(private ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
+  constructor(private ssmtReportRollupService: SsmtReportRollupService,
+    private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -47,14 +49,14 @@ export class SsmtRollupComponent implements OnInit {
       this.tickFormat = '.2s'
       this.barChartData = this.energyChartData;
     } else {
-      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.yAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$'? '$k' : '$'}/yr)`;
       this.tickFormat = '$.2s';
       this.barChartData = this.costChartData;
     }
   }
 
   getDataObject(dataOption: string): Array<BarChartDataItem> {
-    let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
+    let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$'? 'k': ''}`;
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.steamEnergyMeasurement + '/hr';
@@ -95,8 +97,14 @@ export class SsmtRollupComponent implements OnInit {
     if (dataOption == 'cost') {
       this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost);
-        projectedCosts.push(result.modificationResults.operationsOutput.totalOperatingCost);
+        let savings: number = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
+        let modCost: number = result.modificationResults.operationsOutput.totalOperatingCost;
+        if (this.settings.currency !== '$') {
+          savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+          modCost = this.convertUnitsService.value(modCost).from('$').to(this.settings.currency);
+        }
+        costSavings.push(savings);
+        projectedCosts.push(modCost);
       })
     } else if (dataOption == 'energy') {
       this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
@@ -115,17 +123,29 @@ export class SsmtRollupComponent implements OnInit {
   setTableData() {
     this.rollupSummaryTableData = new Array();
     this.ssmtReportRollupService.selectedSsmtResults.forEach(resultItem => {
+      let baselineCost: number = resultItem.baselineResults.operationsOutput.totalOperatingCost;
+      let modificationCost: number = resultItem.modificationResults.operationsOutput.totalOperatingCost;
+      let savings: number = resultItem.baselineResults.operationsOutput.totalOperatingCost - resultItem.modificationResults.operationsOutput.totalOperatingCost;
+      let implementationCosts: number = resultItem.modification.operatingCosts.implementationCosts;
+      let currencyUnit = this.settings.currency;
+      if (this.settings.currency !== '$') {
+        modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
+        baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
+        savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+        implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
+      }
       let paybackPeriod: number = this.getPayback(resultItem.modificationResults.operationsOutput.totalOperatingCost, resultItem.baselineResults.operationsOutput.totalOperatingCost, resultItem.modification.operatingCosts.implementationCosts);
       this.rollupSummaryTableData.push({
         equipmentName: resultItem.name,
         modificationName: resultItem.modName,
         baselineEnergyUse: resultItem.baselineResults.operationsOutput.boilerFuelUsage,
-        baselineCost: resultItem.baselineResults.operationsOutput.totalOperatingCost,
+        baselineCost: baselineCost,
         modificationEnergyUse: resultItem.modificationResults.operationsOutput.boilerFuelUsage,
-        modificationCost: resultItem.modificationResults.operationsOutput.totalOperatingCost,
-        costSavings: resultItem.baselineResults.operationsOutput.totalOperatingCost - resultItem.modificationResults.operationsOutput.totalOperatingCost,
-        implementationCosts: resultItem.modification.operatingCosts.implementationCosts,
-        payBackPeriod: paybackPeriod
+        modificationCost: modificationCost,
+        costSavings: savings,
+        implementationCosts: implementationCosts,
+        payBackPeriod: paybackPeriod,
+        currencyUnit: currencyUnit
       })
     });
   }

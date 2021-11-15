@@ -29,7 +29,7 @@ export class SsmtRollupPrintComponent implements OnInit {
   ngOnInit(): void {
     this.energyYAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
     this.energyTickFormat = '.2s'
-    this.costYAxisLabel = 'Annual Energy Cost ($/yr)';
+    this.costYAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$' ? '$k' : '$'}/yr)`;
     this.costTickFormat = '$.2s';
   }
 }

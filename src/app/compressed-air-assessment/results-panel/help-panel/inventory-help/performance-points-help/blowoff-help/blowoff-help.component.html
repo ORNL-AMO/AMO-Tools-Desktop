@@ -1,0 +1,34 @@
+<!-- Blowoff Help -->
+<div class="my-2" *ngIf="focusedField == 'blowoffDischargePressure' || helpTextField == 'blowoffDischargePressure'">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The maximum achievable pressure above which air compressor operation becomes unstable at design
+            conditions.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'blowoffAirflow' || helpTextField == 'blowoffAirflow'">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The airflow below which air compressor operation is unstable at design conditions
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'blowoffPower' || helpTextField == 'blowoffPower'">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            The power consumed by the compressor when it reaches the surge point
+            <hr>
+        </small>
+    </h6>
+</div>

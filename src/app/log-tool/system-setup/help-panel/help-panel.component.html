@@ -1,4 +1,4 @@
-<div class="mr-2 ml-2 d-flex flex-column help-info">
+<div class="mr-2 ml-2 d-flex flex-column help-info scroll-item">
     <div class="header">
         <h3>
             Data Exploration Help
@@ -8,7 +8,7 @@
     <div class="pt-2 pl-2 pr-2 d-flex flex-column">
         <h6>
             <small>
-                This module is designed to help users establish daytypes for equipment analysis incorporating multiple
+                This module is designed to help users establish Day Types for equipment analysis incorporating multiple
                 operating
                 types (e.g., Compressed Air Assessments). It also provides a robust Data Visualization component to
                 allow users
@@ -19,7 +19,7 @@
     </div>
     <div class="pl-2 pr-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
         <h6>
-            <small>Choose a <b>.csv</b> data file from your file system
+            <small>Choose a <b>.csv</b> or <b>.xlsx</b> data file from your file system
             </small>
             <small>
                 <ul>
@@ -27,6 +27,10 @@
                         Select your data file and the corresponding header row. If there are unused rows in between the
                         header row and the start of the data then you will need to manually remove those rows manually
                         before processing.
+                        <dd>
+                            - If you selected a <b>.xlsx</b> data file, each sheet of the workbook will be treated as a
+                            <b>.csv</b> data file. You can select the worksheet from which the data will be used.
+                        </dd>
                     </li>
                     <li>
                         There is no restrictions on the column names (length/special characters). Columns can be renamed
@@ -36,13 +40,13 @@
                         There is NO required date format (e.g., MM/DD/YY vs. DD-MM-YYYY)
                     </li>
                     <li>
-                        Time stamps are required for the day type analysis
+                        Time stamps are required for the Day Type analysis
                     </li>
                     <li>
                         Time stamps with seconds are required for some additional functionality of the module. Some
                         loggers do not save time stamps in this format. To correct this, open the file in another data
                         analysis software and change the format of the column to an appropriate format. (This is NOT
-                        required for the day type analysis)
+                        required for the Day Type analysis)
                     </li>
                     <li>
                         Data files with a large time stamp gap (i.e., months) will take a long time to parse. If your
@@ -86,7 +90,7 @@
             </small>
             <hr class="mt-2 mb-2">
             <small>"Is Date" sets the date field corresponding to the csv file. Dates are needed for
-                day type analysis and time series plots
+                Day Type analysis and time series plots
             </small>
             <hr class="mt-2 mb-2">
             <small>

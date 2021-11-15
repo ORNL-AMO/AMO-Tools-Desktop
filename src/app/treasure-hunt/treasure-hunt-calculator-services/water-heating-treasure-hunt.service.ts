@@ -48,7 +48,7 @@ export class WaterHeatingTreasureHuntService {
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavingsTotal,
       energySavings: output.energySavedTotal,
-      baselineCost: waterHeatingTreasureHunt.inputData.fuelCost,
+      baselineCost: output.costSavingsTotal,
       modificationCost: 0,
       utilityType: waterHeatingTreasureHunt.inputData.boilerUtilityType,
     }
@@ -86,7 +86,9 @@ export class WaterHeatingTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: waterHeatingOpportunity.opportunitySheet,
       iconString: 'assets/images/calculator-icons/steam-icons/water-heating-icon.png',
-      teamName: waterHeatingOpportunity.opportunitySheet? waterHeatingOpportunity.opportunitySheet.owner : undefined
+      teamName: waterHeatingOpportunity.opportunitySheet? waterHeatingOpportunity.opportunitySheet.owner : undefined,
+      iconCalcType: 'steam',
+      needBackground: true
     }
     return cardData;
 }

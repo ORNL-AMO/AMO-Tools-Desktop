@@ -87,6 +87,8 @@ export class ReportRollupModalsComponent implements OnInit {
       this.assessmentModalLabel = 'Treasure Hunt Rollup';
     } else if (this.assessmentModalType == 'waste-water') {
       this.assessmentModalLabel = 'Waste Water Rollup';
+    } else if(this.assessmentModalType == 'compressed-air'){
+      this.assessmentModalLabel = 'Compressed Air Rollup';
     }
   }
 

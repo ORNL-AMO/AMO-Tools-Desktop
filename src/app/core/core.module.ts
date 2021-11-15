@@ -37,6 +37,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
 import { ToolsSuiteApiModule } from '../tools-suite-api/tools-suite-api.module';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     LogToolModule,
     MotorInventoryModule,
     WasteWaterModule,
-    ToolsSuiteApiModule
+    ToolsSuiteApiModule,
+    CompressedAirAssessmentModule
   ],
   providers: [
     AssessmentService,

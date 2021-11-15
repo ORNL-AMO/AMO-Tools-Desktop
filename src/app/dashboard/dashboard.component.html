@@ -23,7 +23,7 @@
 
 
 
-
+<app-move-items *ngIf="moveItems"></app-move-items>
 <app-assessment-create *ngIf="createAssessment"></app-assessment-create>
 <app-create-folder *ngIf="createFolder"></app-create-folder>
 <app-import-modal *ngIf="showImportModal"></app-import-modal>
@@ -31,3 +31,4 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
     [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
 <app-create-inventory *ngIf="createInventory"></app-create-inventory>
+<app-copy-items *ngIf="copyItems"></app-copy-items>

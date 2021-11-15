@@ -275,7 +275,7 @@ export class PsatComponent implements OnInit {
       let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
       return tmpForm.valid;
     }
   }
@@ -283,7 +283,7 @@ export class PsatComponent implements OnInit {
   save() {
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
     if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();
@@ -298,9 +298,11 @@ export class PsatComponent implements OnInit {
         this.modificationExists = true;
       }
       this._psat.modifications.forEach(mod => {
-        mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
-        mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
-        mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        if(mod.psat.inputs.whatIfScenario){
+          mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
+          mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
+          mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        }
       })
     } else {
       this.modificationExists = false;
@@ -371,6 +373,7 @@ export class PsatComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.whatIfScenario = true;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)

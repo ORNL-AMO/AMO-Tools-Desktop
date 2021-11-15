@@ -5,9 +5,11 @@ export interface FSAT {
   name?: string;
   modifications?: Modification[];
   selected?: boolean;
+  fsatOperations?: FsatOperations;
   fieldData?: FieldData;
   fanMotor?: FanMotor;
   fanSetup?: FanSetup;
+  fan203InputsForPlaneResults?: Fan203Inputs;
   baseGasDensity?: BaseGasDensity;
   notes: Notes;
   implementationCosts?: number;
@@ -18,7 +20,15 @@ export interface FSAT {
   valid?: FsatValid;
   modalFieldData?: FieldData;
   existingDataUnits?: string;
+  whatIfScenario?: boolean;
 }
+
+export interface FsatOperations {
+  operatingHours: number;
+  cost: number;
+  operatingFraction?: number;
+}
+
 
 export interface FsatValid {
   isValid: boolean;
@@ -26,6 +36,7 @@ export interface FsatValid {
   fanValid: boolean;
   motorValid: boolean;
   fieldDataValid: boolean;
+  fsatOperationsValid: boolean;
 }
 
 export interface Modification {
@@ -54,8 +65,6 @@ export interface FieldData {
   //TODO: remove operatingFraction support
   //removed from suite v0.3.2
   operatingFraction?: number;
-  operatingHours: number;
-  cost: number;
   flowRate: number;
   inletPressure: number;
   outletPressure: number;
@@ -364,6 +373,8 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  planeResults?: PlaneResults;
+  psychrometricResults?: PsychrometricResults;
 }
 
 export interface InletPressureData {

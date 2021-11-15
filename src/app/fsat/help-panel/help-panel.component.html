@@ -1,4 +1,4 @@
-<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup || stepTab == 'fan-field-data' || stepTab == 'fsat-fluid'" #resultTabs>
+<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup || stepTab == 'fan-field-data' || stepTab == 'fan-setup'" #resultTabs>
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
         <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
             <a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -12,15 +12,16 @@
     </div>
 </div>
 <div class="scroll-item mr-2 ml-2" [ngStyle]="{'height.px': helpHeight}">
-    <div *ngIf="inSetup && (stepTab != 'fan-field-data' && stepTab != 'fsat-fluid')" class="header">
+    <div *ngIf="inSetup && (stepTab != 'fan-field-data' && stepTab != 'fan-setup')" class="header">
         <h3>Help</h3>
     </div>
     <div class="pr-1 pl-2" *ngIf="tabSelect == 'help' || inSetup && (stepTab != 'fan-field-data' && stepTab != 'fsat-fluid')">
         <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+        <app-fan-operations-help *ngIf="stepTab == 'operations'" [currentField]="currentField"></app-fan-operations-help>
         <app-fan-field-data-help *ngIf="stepTab == 'fan-field-data'" [currentField]="currentField"></app-fan-field-data-help>
         <app-fan-motor-help *ngIf="stepTab == 'fan-motor'" [currentField]="currentField"></app-fan-motor-help>
-        <app-fan-setup-help *ngIf="stepTab == 'fan-setup'" [currentField]="currentField"></app-fan-setup-help>
-        <app-fsat-fluid-help *ngIf="stepTab == 'fsat-fluid'" [currentField]="currentField"></app-fsat-fluid-help>
+        <app-fan-setup-help *ngIf="tabSelect == 'help' && stepTab == 'fan-setup'" [currentField]="currentField"></app-fan-setup-help>
+        <app-fsat-fluid-help *ngIf="tabSelect == 'help' && stepTab == 'fan-setup'" [currentField]="currentField"></app-fsat-fluid-help>
     </div>
 
     <div *ngIf="tabSelect == 'notes' && !inSetup">
@@ -31,10 +32,10 @@
             You must add a modification to take notes on it.
         </div>
     </div>
-    <div *ngIf="(tabSelect == 'results' && !inSetup || (tabSelect == 'results' && stepTab == 'fan-field-data')) && (stepTab != 'fsat-fluid')">
+    <div *ngIf="(tabSelect == 'results' && !inSetup || (tabSelect == 'results' && stepTab == 'fan-field-data')) && (stepTab != 'fan-setup')">
         <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel>
     </div>
-    <div *ngIf="(tabSelect == 'results' && stepTab == 'fsat-fluid')">
+    <div *ngIf="(tabSelect == 'results' && stepTab == 'fan-setup')">
         <app-gas-density-results [inSetup]="inSetup" [settings]="settings"></app-gas-density-results>
     </div>
 </div>

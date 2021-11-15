@@ -15,6 +15,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   efficiencyForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
   @Input()
@@ -40,6 +42,10 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   emitChange() {
     this.checkWarnings();
     this.calculate.emit(true);
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 
   checkWarnings() {

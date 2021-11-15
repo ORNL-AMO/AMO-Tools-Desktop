@@ -12,3 +12,11 @@
 .modal-lg{
     max-width: 90%; 
 }
+
+.modal-dialog{
+    top: 10px;
+}
+
+.modal-dialog.flue-gas-modal{
+    height: 85vh;
+}

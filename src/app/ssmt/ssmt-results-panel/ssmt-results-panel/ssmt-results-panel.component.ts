@@ -5,6 +5,7 @@ import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outpu
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
 import { CalculateLossesService } from '../../calculate-losses.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-ssmt-results-panel',
@@ -36,7 +37,8 @@ export class SsmtResultsPanelComponent implements OnInit {
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
-  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService) { }
+  currCurrency: string = "$";
+  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -68,6 +70,10 @@ export class SsmtResultsPanelComponent implements OnInit {
     }
     this.getLosses();
 
+  }
+
+  convertCurrency(toConvert: number) {
+    return this.convertUnitsService.convertValue(toConvert, this.currCurrency, this.settings.currency);
   }
 
   checkValid() {

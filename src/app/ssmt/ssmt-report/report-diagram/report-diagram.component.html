@@ -1,26 +1,57 @@
-<div class="d-flex flex-column report-diagram-container align-items-center">
-  <div class="d-flex">
-    <h5>Baseline</h5>
-  </div>
-  <app-ssmt-diagram *ngIf="baselineOutput.boilerOutput" [settings]="settings" [inputData]="inputData"
-    [outputData]="baselineOutput"></app-ssmt-diagram>
-  <div *ngIf="!baselineOutput.boilerOutput" class="p-2 w-100 alert-danger text-center">
-    <span class="p-2">Invalid Baseline</span>
-  </div>
-</div>
+<div class="output-summary d-flex ssmt modify-conditions panel-container ssmt-diagram w-100">
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <div class="d-flex flex-column w-50 align-items-center justify-content-center">
+        <select name="ssmtSelect1" class="form-control mx-auto" id="ssmtSelect1" (change)="setSsmt1()"
+          [(ngModel)]="selectedDiagram1">
+          <option [ngValue]="ssmtBaselineDiagram1">Baseline</option>
+          <option *ngFor="let modDiagram of modificationDiagramData; let index = index;" [ngValue]="modDiagram">
+            {{modDiagram.name}}</option>
+        </select>
+      </div>
+    </div>
+      <div class="w-75 m-3 p-3">
+        <app-ssmt-diagram *ngIf="selectedDiagram1" [assessment]="assessment" 
+        [inputData]='selectedDiagram1.inputData' 
+        [outputData]='selectedDiagram1.outputData' 
+        [settings]="settings"
+        [isBaseline]="ssmt1Baseline"
+         ></app-ssmt-diagram>
 
-<div class="d-flex flex-column report-diagram-container align-items-center" *ngFor="let mod of modificationOutputs; let index = index;">
-  <hr class="my-4">
-  <div class="d-flex">
-    <h5>{{mod.name}}</h5>
-  </div>
-  <app-ssmt-diagram *ngIf="mod.valid.isValid && mod.outputData.boilerOutput" [settings]="settings"
-    [inputData]="modificationInputData[index].inputData" [outputData]="mod.outputData"></app-ssmt-diagram>
-  <div class="p-2 w-100 alert-danger text-center" *ngIf="!mod.valid.isValid || !mod.outputData.boilerOutput">
-    Invalid Modification<br>
-    <span *ngIf="!mod.valid.boilerValid">Errors found in Boiler<br></span>
-    <span *ngIf="!mod.valid.headerValid">Errors found in Header<br></span>
-    <span *ngIf="!mod.valid.turbineValid">Errors found in Turbine<br></span>
-    <span *ngIf="!mod.valid.operationsValid">Errors found in Operations<br></span>
+        </div>
+        <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram1.valid.isValid || (!selectedDiagram1.outputData && baselineOutput.boilerOutput)">
+         Invalid Modification<br>
+         <span *ngIf="!selectedDiagram1.valid.boilerValid">Errors found in Boiler<br></span>
+         <span *ngIf="!selectedDiagram1.valid.headerValid">Errors found in Header<br></span>
+         <span *ngIf="!selectedDiagram1.valid.turbineValid">Errors found in Turbine<br></span>
+         <span *ngIf="!selectedDiagram1.valid.operationsValid">Errors found in Operations<br></span>
+     </div>
+    <hr>
+    <div class="d-flex">
+      <div class="d-flex flex-column w-50 align-items-center justify-content-center">
+        <select name="ssmtSelect2" class="form-control mx-auto" id="ssmtSelect2" (change)="setSsmt2()"
+          [(ngModel)]="selectedDiagram2">
+          <option [ngValue]="ssmtBaselineDiagram2">Baseline</option>
+          <option *ngFor="let modDiagram2 of modificationDiagramData; let index = index;" [ngValue]="modDiagram2">
+            {{modDiagram2.name}}</option>
+        </select>
+      </div>
+    </div> 
+      <div class="w-75 m-3 p-3">
+        <app-ssmt-diagram *ngIf="selectedDiagram2" [assessment]="assessment" 
+        [inputData]='selectedDiagram2.inputData' 
+        [outputData]='selectedDiagram2.outputData' 
+        [settings]="settings"
+        [isBaseline]="ssmt2Baseline"
+         ></app-ssmt-diagram>
+        </div>
+        <div class="p-2 w-100 alert-danger text-center" *ngIf="!selectedDiagram2.valid.isValid || (!selectedDiagram2.outputData && baselineOutput.boilerOutput)">
+         Invalid Modification<br>
+         <span *ngIf="!selectedDiagram2.valid.boilerValid">Errors found in Boiler<br></span>
+         <span *ngIf="!selectedDiagram2.valid.headerValid">Errors found in Header<br></span>
+         <span *ngIf="!selectedDiagram2.valid.turbineValid">Errors found in Turbine<br></span>
+         <span *ngIf="!selectedDiagram2.valid.operationsValid">Errors found in Operations<br></span>
+     </div>
+
   </div>
 </div>

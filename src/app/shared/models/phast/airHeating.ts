@@ -6,7 +6,7 @@ export interface AirHeatingInput {
     materialTypeId: number,
     flueTemperature: number,
     oxygenCalculationMethod: string,
-    moistureInAirComposition?: number
+    moistureInAirCombustion?: number
     flueGasO2: number,
     excessAir: number,
     fireRate: number,

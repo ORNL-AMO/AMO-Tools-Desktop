@@ -50,7 +50,7 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Fuel Cost ($/yr)</span>
+      <span class="table-text">Fuel Cost ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
@@ -89,19 +89,19 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Electricity Cost ($/yr)</span>
+      <span class="table-text">Electricity Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
         baselineOutput.operationsOutput.powerGenerationCost 
-          | currency: "USD":"symbol":"1.0-0"
+          | number: "2.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
         modificationOutput.operationsOutput.powerGenerationCost 
-          | currency: "USD":"symbol":"1.0-0"
+          | number: "2.0-0"
       }}</span>
       <span *ngIf="!modValid">&mdash;</span>
     </div>
@@ -132,19 +132,19 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Water Cost ($/yr)</span>
+      <span class="table-text">Water Cost ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
         baselineOutput.operationsOutput.makeupWaterCost 
-          | currency: "USD":"symbol":"1.0-0"
+          | number: "2.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
         modificationOutput.operationsOutput.makeupWaterCost 
-          | currency: "USD":"symbol":"1.0-0"
+          | number: "2.0-0"
       }}</span>
       <span *ngIf="!modValid">&mdash;</span>
     </div>
@@ -310,12 +310,12 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Cost ($/yr)</span>
+      <span class="bold table-text">Annual Cost ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="bold table-text">{{
         baselineOutput.operationsOutput.totalOperatingCost 
-          | currency: "USD":"symbol":"1.0-0"
+          | number: "2.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
@@ -328,7 +328,7 @@
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
         >{{
           modificationOutput.operationsOutput.totalOperatingCost 
-            | currency: "USD":"symbol":"1.0-0"
+            | number: "2.0-0"
         }}</span
       >
       <span
@@ -343,7 +343,7 @@
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Savings ($/yr)</span>
+      <span class="bold table-text">Annual Savings ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>
@@ -354,7 +354,7 @@
         *ngIf="annualSavings && modValid"
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
       >
-        {{ annualSavings  | currency: "USD":"symbol":"1.0-0" }}</span
+        {{ annualSavings  | number: "2.0-0" }}</span
       >
       <span class="bold table-text" *ngIf="!annualSavings || !modValid"
         >&mdash;</span

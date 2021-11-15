@@ -10,13 +10,28 @@
       <div class="col-lg-6 col-md-8 col-sm-12">
         <dl class="summary-list mx-auto">
           <dt>Annual Cost Savings</dt>
-          <dd>{{totalSavings | currency:'USD'}}</dd>
+          <dd>
+            <span *ngIf="settings.currency !== '$'">
+              {{totalSavings| currencyThousands }}
+          </span>
+          <span *ngIf="settings.currency === '$'">
+            {{totalSavings| currency:'USD':'symbol':'2.0-0'}}
+        </span>
+          </dd>
         </dl>
+        
       </div>
       <div class="col-lg-6 col-md-8 col-sm-12">
         <dl class="summary-list mx-auto">
           <dt>Annual Cost</dt>
-          <dd>{{totalCost | currency: 'USD'}}</dd>
+          <dd>
+            <span *ngIf="settings.currency !== '$'">
+              {{totalCost| currencyThousands }}
+          </span>
+          <span *ngIf="settings.currency === '$'">
+            {{totalCost| currency:'USD':'symbol':'2.0-0'}}
+        </span>
+          </dd>
         </dl>
       </div>
     </div>

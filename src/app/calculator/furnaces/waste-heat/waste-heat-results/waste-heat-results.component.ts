@@ -15,9 +15,9 @@ export class WasteHeatResultsComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
-  table0String: any;
+  table0String: string;
   @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
-  table1String: any;
+  table1String: string;
   
   displayAdditionalResults: boolean = true;
 

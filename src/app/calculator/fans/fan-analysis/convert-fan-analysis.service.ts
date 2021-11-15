@@ -238,17 +238,17 @@ export class ConvertFanAnalysisService {
 
   convertPsychrometricResults(input: PsychrometricResults, settings: Settings): PsychrometricResults {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
-    input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
     input.relativeHumidity = input.relativeHumidity * 100;
     //metric/imperial
     if(settings.unitsOfMeasure == 'Metric'){
+      input.absolutePressure = this.convertNum(input.absolutePressure, 'inHg', 'Pa');
+      input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', 'Pa')
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
       input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
       input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
     }
     
     input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);
-    input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', settings.fanBarometricPressure);
     return input;
   }
 

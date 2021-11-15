@@ -29,6 +29,11 @@
                 <button class="btn btn-secondary action-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
+                <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
+                    (click)="moveToFolder()">Move Items</button>
+                <button class="btn btn-secondary action-btn" [disabled]="!checkIfCopyItem()" type="button"
+                    (click)="showCopyItems()">Copy Items
+                </button>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>

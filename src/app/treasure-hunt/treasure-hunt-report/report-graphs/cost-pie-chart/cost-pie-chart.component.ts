@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-cost-pie-chart',
@@ -15,6 +16,8 @@ export class CostPieChartComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   showPrint: boolean;
+  @Input()
+  settings: Settings
 
   @ViewChild('costPieChart', { static: false }) costPieChart: ElementRef;
   constructor() { }
@@ -55,7 +58,7 @@ export class CostPieChartComponent implements OnInit {
       // automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
       direction: "clockwise",
@@ -94,7 +97,7 @@ export class CostPieChartComponent implements OnInit {
       // automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
       direction: "clockwise",

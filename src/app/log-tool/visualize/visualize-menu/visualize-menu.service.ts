@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import { LogToolService } from '../../log-tool.service';
 @Injectable()
 export class VisualizeMenuService {
-
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService, private logToolService: LogToolService) { }
 
   save(selectedGraphObj: GraphObj) {
@@ -99,7 +98,8 @@ export class VisualizeMenuService {
         unit: 'time',
         invalidField: false,
         csvId: undefined,
-        csvName: undefined
+        csvName: undefined,
+        fieldId: undefined
       })
     }
     selectedGraphObj.xAxisDataOptions = new Array();
@@ -114,7 +114,7 @@ export class VisualizeMenuService {
 
 
   setXAxisDataOption(selectedGraphObj: GraphObj) {
-    selectedGraphObj.layout.annotations = [];
+    // selectedGraphObj.layout.annotations = [];
     if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
       this.setYAxisDataOptions(selectedGraphObj);

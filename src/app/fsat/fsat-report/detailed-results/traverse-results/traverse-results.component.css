@@ -1,0 +1,21 @@
+td{
+    font-size: small;
+    text-align: center;   
+    padding: 3px;
+}
+
+td > span {
+    font-weight: bold;
+}
+
+
+
+label{
+    font-weight: bold;
+    text-align: center;
+    font-size: small;
+}
+
+table{
+    font-size: small;
+}

@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -46,7 +46,6 @@ export class FsatComponent implements OnInit {
 
   stepTabs: Array<string> = [
     'system-basics',
-    'fsat-fluid',
     'fan-setup',
     'fan-motor',
     'fan-field-data'
@@ -294,6 +293,11 @@ export class FsatComponent implements OnInit {
 
   saveFieldData(newFieldData: FieldData) {
     this._fsat.fieldData = newFieldData;
+    this.saveFsat(this._fsat);
+  }
+
+  saveFsatOperations(newFsatOperations: FsatOperations) {
+    this._fsat.fsatOperations = newFsatOperations;
     this.saveFsat(this._fsat);
   }
 

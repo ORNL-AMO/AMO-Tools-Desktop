@@ -146,6 +146,7 @@ export class SolidMaterialFormComponent implements OnInit {
     if (this.selected == false) {
       this.chargeMaterialForm.disable();
     } else {
+      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
       this.chargeMaterialForm.enable();
     }
   }

@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SSMTInputs } from '../../shared/models/steam/ssmt';
+import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-ssmt-diagram',
@@ -15,6 +16,12 @@ export class SsmtDiagramComponent implements OnInit {
   inputData: SSMTInputs;
   @Input()
   outputData: SSMTOutput;
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  ssmt: SSMT;
+  @Input()
+  assessment: Assessment;
   @Output('emitTableSelected')
   emitTableSelected = new EventEmitter<string>();
   @Output('emitHoverChange')

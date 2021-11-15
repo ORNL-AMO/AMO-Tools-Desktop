@@ -38,17 +38,17 @@ export class AirHeatingTreasureHuntService {
   }
 
 
-  getTreasureHuntOpportunityResults(heatCascadingTreasureHunt: AirHeatingTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
-    this.setCalculatorInputFromOpportunity(heatCascadingTreasureHunt);
+  getTreasureHuntOpportunityResults(airHeatingTreasureHunt: AirHeatingTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    this.setCalculatorInputFromOpportunity(airHeatingTreasureHunt);
     this.airHeatingService.calculate(settings);
     let output: AirHeatingOutput = this.airHeatingService.airHeatingOutput.getValue();
 
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: output.costSavings,
       energySavings: output.energySavings,
-      baselineCost: heatCascadingTreasureHunt.inputData.fuelCost,
+      baselineCost: output.energySavings * airHeatingTreasureHunt.inputData.fuelCost,
       modificationCost: 0,
-      utilityType: heatCascadingTreasureHunt.inputData.gasFuelType? heatCascadingTreasureHunt.inputData.utilityType : 'Other Fuel',
+      utilityType: airHeatingTreasureHunt.inputData.gasFuelType? airHeatingTreasureHunt.inputData.utilityType : 'Other Fuel',
     }
 
     return treasureHuntOpportunityResults;
@@ -84,7 +84,9 @@ export class AirHeatingTreasureHuntService {
       name: opportunitySummary.opportunityName,
       opportunitySheet: airHeatingOpportunity.opportunitySheet,
       iconString: 'assets/images/calculator-icons/furnace-icons/air-heating-icon.png',
-      teamName: airHeatingOpportunity.opportunitySheet? airHeatingOpportunity.opportunitySheet.owner : undefined
+      teamName: airHeatingOpportunity.opportunitySheet? airHeatingOpportunity.opportunitySheet.owner : undefined,
+      iconCalcType: 'heat',
+      needBackground: true
     }
     return cardData;
 }

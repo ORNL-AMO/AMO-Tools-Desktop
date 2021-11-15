@@ -2,7 +2,7 @@
   <div class="card-body justify-content-center">
     <div class="row m-0 justify-content-center">
       <div class="col-12 text-center treasure-hunt-item">
-        <label class="mb-0 group-label">Total Cost Savings</label>
+        <label class="mb-0 group-label">Total Cost Savings ({{settings.currency}})</label>
         <app-treasure-hunt-gauge [value]="totals.totalPercentSavings" [chartHeight]="125">
         </app-treasure-hunt-gauge>
         <table class="mx-auto">
@@ -12,7 +12,7 @@
                 Baseline
               </td>
               <td>
-                {{ totals.baselineCost | currency: "USD":"symbol":"1.0-0" }}
+                {{ totals.baselineCost | number:"1.0-0" }}
               </td>
             </tr>
             <tr>
@@ -20,7 +20,7 @@
                 Modified
               </td>
               <td>
-                {{ totals.modificationCost | currency: "USD":"symbol":"1.0-0" }}
+                {{ totals.modificationCost | number:"1.0-0" }}
               </td>
             </tr>
             <tr class="bold">
@@ -28,7 +28,7 @@
                 Annual Savings
               </td>
               <td>
-                {{ totals.totalCostSavings | currency: "USD":"symbol":"1.0-0" }}
+                {{ totals.totalCostSavings | number:"1.0-0" }}
               </td>
             </tr>
           </tbody>

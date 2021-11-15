@@ -1,0 +1,85 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+        <h5>System Information
+            <span class="pull-right fa hide-print"
+                [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+        </h5>
+    </div>
+
+    <div *ngIf="!collapse || printView">
+        <div class="card-body">
+            <div class="output-summary">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="w-25">
+                                System Elevation
+                            </td>
+                            <td>
+                                {{systemInformation.systemElevation}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>
+                            </td>
+                        </tr>
+                        <!-- atmosphericPressure -->
+                        <tr>
+                            <td>
+                                Atmospheric Pressure
+                            </td>
+                            <td>
+                                {{systemInformation.atmosphericPressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Total Air Storage
+                            </td>
+                            <td>
+                                {{systemInformation.totalAirStorage}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Is a target pressure sequencer used?
+                            </td>
+                            <td>
+                                <span *ngIf="systemInformation.isSequencerUsed">Yes</span>
+                                <span *ngIf="!systemInformation.isSequencerUsed">No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Target Pressure
+                            </td>
+                            <td>
+                                <span *ngIf="systemInformation.isSequencerUsed">
+                                    {{systemInformation.targetPressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="!systemInformation.isSequencerUsed">&mdash;</span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Target Pressure Variance
+                            </td>
+                            <td>
+                                <span *ngIf="systemInformation.isSequencerUsed">
+                                    {{systemInformation.variance}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="!systemInformation.isSequencerUsed">&mdash;</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

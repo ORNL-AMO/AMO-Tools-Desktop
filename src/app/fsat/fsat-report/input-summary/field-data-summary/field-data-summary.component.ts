@@ -24,9 +24,7 @@ export class FieldDataSummaryComponent implements OnInit {
 
   collapse: boolean = true;
   numMods: number = 0;
-
-  operatingHoursDiff: Array<boolean>;
-  costDiff: Array<boolean>;
+  
   flowRateDiff: Array<boolean>;
   inletPressureDiff: Array<boolean>;
   outletPressureDiff: Array<boolean>;
@@ -40,8 +38,6 @@ export class FieldDataSummaryComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.operatingHoursDiff = new Array<boolean>();
-    this.costDiff = new Array<boolean>();
     this.flowRateDiff = new Array<boolean>();
     this.inletPressureDiff = new Array<boolean>();
     this.outletPressureDiff = new Array<boolean>();
@@ -66,9 +62,6 @@ export class FieldDataSummaryComponent implements OnInit {
             // fieldData changes
             mods.push(this.fsat.modifications[i].fsat.fieldData);
           }
-
-          this.operatingHoursDiff.push(false);
-          this.costDiff.push(false);
           this.flowRateDiff.push(false);
           this.inletPressureDiff.push(false);
           this.outletPressureDiff.push(false);

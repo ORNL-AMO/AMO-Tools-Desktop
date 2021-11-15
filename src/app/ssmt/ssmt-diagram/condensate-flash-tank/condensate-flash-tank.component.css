@@ -46,6 +46,10 @@
     opacity: 1;
 }
 
+.flash-tank-img-holder:hover{
+    transform: scale(1.2);
+}
+
 .inlet-temp-holder, .vented-steam-holder{
     position: relative;
 }

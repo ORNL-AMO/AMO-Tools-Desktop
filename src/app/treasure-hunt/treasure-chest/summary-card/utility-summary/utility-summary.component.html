@@ -9,7 +9,7 @@
           Baseline
         </td>
         <td>
-          <span *ngIf="summaryData.baselineCost != 0">{{ summaryData.baselineCost | currency: "USD":"symbol":"1.0-0" }}</span>
+          <span *ngIf="summaryData.baselineCost != 0">{{ summaryData.baselineCost | number:"1.0-0" }}</span>
           <span *ngIf="summaryData.baselineCost == 0">&mdash;</span>    
         </td>
       </tr>
@@ -18,7 +18,7 @@
           Modified
         </td>
         <td>
-          <span *ngIf="summaryData.modificationCost != 0">{{ summaryData.modificationCost | currency: "USD":"symbol":"1.0-0" }}</span>
+          <span *ngIf="summaryData.modificationCost != 0">{{ summaryData.modificationCost | number:"1.0-0" }}</span>
           <span *ngIf="summaryData.modificationCost == 0">&mdash;</span>    
         </td>
       </tr>
@@ -27,7 +27,7 @@
           Annual Savings
         </td>
         <td>
-          <span *ngIf="summaryData.totalCostSavings != 0">{{ summaryData.totalCostSavings | currency: "USD":"symbol":"1.0-0" }}</span>
+          <span *ngIf="summaryData.totalCostSavings != 0">{{ summaryData.totalCostSavings | number:"1.0-0" }}</span>
           <span *ngIf="summaryData.totalCostSavings == 0">&mdash;</span>          
         </td>
       </tr>

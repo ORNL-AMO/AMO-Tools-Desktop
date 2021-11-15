@@ -229,6 +229,16 @@ export class OpportunitySummaryService {
     
     }
 
+    if (!treasureHuntOpportunityResults) {
+      treasureHuntOpportunityResults = {
+        costSavings: undefined,
+        energySavings: undefined,
+        baselineCost: undefined,
+        modificationCost: undefined,
+        utilityType: '',
+      }; 
+    }
+    
     return treasureHuntOpportunityResults;
   }
 

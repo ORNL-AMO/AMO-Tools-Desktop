@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { TreasureHuntResultsData } from '../../report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../treasure-hunt-report-rollup.service';
 
@@ -9,7 +10,8 @@ import { TreasureHuntReportRollupService } from '../../treasure-hunt-report-roll
   styleUrls: ['./treasure-hunt-summary.component.css', '../report-summary.component.css']
 })
 export class TreasureHuntSummaryComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   treasureHuntAssessmentsSub: Subscription;
   treasureResultsSub: Subscription;
   totalSavings: number;
@@ -41,7 +43,7 @@ export class TreasureHuntSummaryComponent implements OnInit {
     resultsArr.forEach(result => {
       tmpSavings = tmpSavings + result.treasureHuntResults.totalSavings;
       tmpCost = tmpCost + result.treasureHuntResults.totalModificationCost;
-    })
+    });
     this.totalSavings = tmpSavings;
     this.totalCost = tmpCost;
 

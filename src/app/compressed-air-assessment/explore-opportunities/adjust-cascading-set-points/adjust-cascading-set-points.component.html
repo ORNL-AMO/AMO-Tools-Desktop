@@ -1,0 +1,197 @@
+<div class="checkbox">
+    <label class="group-label" for="adjustCascadingSetPoints">
+        Adjust Cascading Set Points
+        <span *ngIf="(hasInvalidForm || implementationCostForm.invalid) && adjustCascadingSetPoints.order != 100">
+            <span class="fa fa-exclamation-circle"></span>
+        </span>
+        <select id="adjustCascadingSetPointsOrder" [(ngModel)]="adjustCascadingSetPoints.order"
+            class="form-control pull-right" (change)="save(true)">
+            <option [ngValue]=100>Off</option>
+            <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+        </select>
+    </label>
+</div>
+
+<div class="d-flex flex-column align-items-center" *ngIf="adjustCascadingSetPoints.order != 100">
+    <form [formGroup]="implementationCostForm" class="p-0 w-100 pb-2">
+        <div class="form-group" [ngClass]="{'invalid': implementationCostForm.controls.implementationCost.invalid}">
+            <label for="cascadingPointsImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="cascadingPointsImplementationCost" id="cascadingPointsImplementationCost"
+                    (input)="saveImplementationCost()" (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="implementationCostForm.controls.implementationCost.invalid && !implementationCostForm.controls.implementationCost.pristine">
+                <span *ngIf="implementationCostForm.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+    </form>
+    <div class="p-2 btn-group-sm">
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setDataView('baseline')"
+            [ngClass]="{'active': setPointView == 'baseline'}">Baseline
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setDataView('modification')"
+            [ngClass]="{'active': setPointView == 'modification'}">Proposed</button>
+    </div>
+    <div class="scroll-item">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <!-- Compressor -->
+                        Order
+                    </th>
+                    <th class="text-center">
+                        Compressor
+                    </th>
+
+                    <th class="text-center">
+                        Control Type
+                    </th>
+                    <th class="text-center">
+                        Full Load or <br>
+                        Cut-in Pressure
+                    </th>
+                    <th class="text-center">
+                        Max Full Flow or <br>
+                        Cut-out Pressure
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="setPointView == 'modification'">
+                <tr
+                    *ngFor="let compressorForm of compressorForms | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
+                    <td class="bold text-center">
+                        <span *ngIf="index == 0">
+                            Lead
+                        </span>
+                        <span *ngIf="index != 0">
+                            {{index + 1}}
+                        </span>
+                    </td>
+                    <td class="bold text-center">
+                        {{compressorForm.compressorId | compressorName:inventoryItems}}
+                    </td>
+                    <td class="bold text-center">
+                        {{compressorForm.controlType | controlType}}
+                    </td>
+                    <td class="text-center" [formGroup]="compressorForm.form">
+                        <div class="input-group">
+                            <input id="{{'fullLoadDischarge'+index}}" class="form-control" type="number"
+                                formControlName="fullLoadDischargePressure" (input)="saveFormChange(compressorForm)"
+                                (focus)="helpTextField('fullLoadDischargePressure')">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+                                psig
+                            </span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+                                barg
+                            </span>
+                        </div>
+                        <span class="alert-danger pull-right small"
+                            *ngIf="compressorForm.form.controls.fullLoadDischargePressure.invalid && !compressorForm.form.controls.fullLoadDischargePressure.pristine">
+                            <span *ngIf="compressorForm.form.controls.fullLoadDischargePressure.errors.required">Value
+                                Required</span>
+                            <span *ngIf="compressorForm.form.controls.fullLoadDischargePressure.errors.min">Value can't
+                                be less than
+                                {{form.controls.fullLoadDischargePressure.errors.min.min}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="text-center" [formGroup]="compressorForm.form"
+                        *ngIf="checkShowMaxFullFlow(compressorForm.compressorType, compressorForm.controlType)">
+                        <div class="input-group">
+                            <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
+                                formControlName="maxFullFlowDischargePressure" (input)="saveFormChange(compressorForm)"
+                                (focus)="helpTextField('maxFullFlowDischargePressure')">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+                                psig
+                            </span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+                                barg
+                            </span>
+                        </div>
+                        <span class="alert-danger pull-right small"
+                            *ngIf="compressorForm.form.controls.maxFullFlowDischargePressure.invalid && !compressorForm.form.controls.maxFullFlowDischargePressure.pristine">
+                            <span
+                                *ngIf="compressorForm.form.controls.maxFullFlowDischargePressure.errors.required">Value
+                                Required</span>
+                            <span *ngIf="compressorForm.form.controls.maxFullFlowDischargePressure.errors.min">Value
+                                can't be less than
+                                Full Load Discharge Pressure
+                                ({{compressorForm.form.controls.maxFullFlowDischargePressure.errors.min.min}})
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </span>
+                            <span
+                                *ngIf="compressorForm.form.controls.maxFullFlowDischargePressure.errors.greaterThan !== undefined">Value
+                                must be greater
+                                than
+                                Full Load Discharge Pressure
+                                ({{compressorForm.form.controls.maxFullFlowDischargePressure.errors.greaterThan}})
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="text-center"
+                        *ngIf="!checkShowMaxFullFlow(compressorForm.compressorType, compressorForm.controlType)">
+                        <span>&mdash;</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="setPointView == 'baseline'">
+                <tr
+                    *ngFor="let spData of baselineSetPoints | sortBy:'fullLoadDischargePressure':'desc'; let index = index;">
+                    <td class="bold text-center">
+                        <span *ngIf="index == 0">
+                            Lead
+                        </span>
+                        <span *ngIf="index != 0">
+                            {{index + 1}}
+                        </span>
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.compressorId | compressorName:inventoryItems}}
+                    </td>
+                    <td class="bold text-center">
+                        {{spData.controlType | controlType}}
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group">
+                            <input id="{{'fullLoadDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.fullLoadDischargePressure" [disabled]="true"
+                                (focus)="helpTextField('fullLoadDischargePressure')">
+                            <span class="input-group-addon units"
+                                *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span class="input-group-addon units"
+                                *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="input-group"
+                            *ngIf="checkShowMaxFullFlow(spData.compressorType, spData.controlType)">
+                            <input id="{{'maxFullFlowDischarge'+index}}" class="form-control" type="number"
+                                [(ngModel)]="spData.maxFullFlowDischargePressure" [disabled]="true"
+                                (focus)="helpTextField('maxFullFlowDischargePressure')">
+                            <span class="input-group-addon units"
+                                *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span class="input-group-addon units"
+                                *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </div>
+                        <span *ngIf="!checkShowMaxFullFlow(spData.compressorType, spData.controlType)">&mdash;</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="setPointView == 'modification'" class="d-flex justify-content-end">
+            <div class="pl-2 pr-2 border-right border-left">
+                <a class="click-link small" (click)="resetData()">Reset to Baseline</a>
+            </div>
+        </div>
+    </div>
+</div>

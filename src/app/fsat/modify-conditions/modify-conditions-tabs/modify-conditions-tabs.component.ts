@@ -8,8 +8,9 @@ import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { FSAT } from '../../../shared/models/fans';
 import { FsatService } from '../../fsat.service';
-import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings } from '../../fsat-warning.service';
+import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings, FanOperationsWarnings } from '../../fsat-warning.service';
 import { Settings } from '../../../shared/models/settings';
+import { OperationsService } from '../../operations/operations.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -22,6 +23,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
+
+  displayFanOperationsTooltip: boolean;
+  fanOperationsBadgeHover: boolean;
+  fanOperationsBadgeClass: string;
+
 
   displayFanMotorTooltip: boolean;
   fanMotorBadgeHover: boolean;
@@ -43,7 +49,8 @@ export class ModifyConditionsTabsComponent implements OnInit {
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService,
     private fsatFluidService: FsatFluidService, private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService, private fanSetupService: FanSetupService,
-    private fsatService: FsatService, private fsatWarningService: FsatWarningService) { }
+    private fsatService: FsatService, private fsatWarningService: FsatWarningService,    
+    private fanOperationsService: OperationsService) { }
 
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
@@ -56,6 +63,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
     this.displayFanMotorTooltip = false;
     this.fanMotorBadgeHover = false;
+
+    this.displayFanOperationsTooltip = false;
+    this.fanOperationsBadgeHover = false;
 
     this.displayFluidTooltip = false;
     this.fluidBadgeHover = false;
@@ -83,6 +93,8 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.fanMotorBadgeClass = this.setFanMotorBadgeClass(baseline, modification);
     this.fieldDataBadgeClass = this.setFanFieldDataBadgeClass(baseline, modification);
     this.fanSetupBadgeClass = this.setFanSetupBadgeClass(baseline, modification);
+    
+    this.fanOperationsBadgeClass = this.setFanOperationsBadgeClass(baseline, modification);
   }
 
   setFanFieldDataBadgeClass(baseline: FSAT, modification?: FSAT) {
@@ -115,6 +127,45 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
       let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings, true);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setFanOperationsBadgeClass(baseline: FSAT, modification?: FSAT) {
+    let badgeStr: string = 'success';
+    let validBaselineTest = this.fanOperationsService.isOperationsDataValid(baseline.fsatOperations);
+    let validModTest = true;
+    let isDifferent = false;
+    if (modification) {
+      validModTest = this.fanOperationsService.isOperationsDataValid(modification.fsatOperations);
+      isDifferent = this.compareService.checkFanOperationsDifferent();
+    }
+    let inputError = this.checkOperationsWarnings();
+    if (!validBaselineTest || !validModTest) {
+      badgeStr = 'missing-data';
+    } else if (inputError) {
+      badgeStr = 'input-error';
+    } else if (isDifferent) {
+      badgeStr = 'loss-different';
+    }
+    return badgeStr;
+  }
+
+  checkOperationsWarnings() {
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanOperationsWarnings = this.fsatWarningService.checkOperationsWarnings(this.compareService.baselineFSAT, this.settings, false);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanOperationsWarnings = this.fsatWarningService.checkOperationsWarnings(this.compareService.modifiedFSAT, this.settings, true);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;
@@ -253,6 +304,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
     else if (badge === 'fsatFluid') {
       this.fluidBadgeHover = true;
     }
+    else if (badge === 'operations') {
+      this.fanOperationsBadgeHover = true;
+    }
 
     setTimeout(() => {
       this.checkHover();
@@ -275,6 +329,10 @@ export class ModifyConditionsTabsComponent implements OnInit {
     else if (badge === 'fsatFluid') {
       this.fluidBadgeHover = false;
       this.displayFluidTooltip = false;
+    }
+    else if (badge === 'operations') {
+      this.fanOperationsBadgeHover = false;
+      this.displayFanOperationsTooltip = false;
     }
   }
 
@@ -302,6 +360,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     else {
       this.displayFluidTooltip = false;
+    }
+    if (this.fanOperationsBadgeHover) {
+      this.displayFanOperationsTooltip = true;
+    }
+    else {
+      this.displayFanOperationsTooltip = false;
     }
   }
 

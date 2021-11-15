@@ -83,7 +83,7 @@ export class FanPsychrometricFormComponent implements OnInit {
     let exponentOp = Math.pow(parensOp, 5.2559);
     let barometricPressure = 101.325 * exponentOp;
     if (this.settings.unitsOfMeasure != 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('inHg');
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('Pa').to('inHg');
     }
 
     return barometricPressure;

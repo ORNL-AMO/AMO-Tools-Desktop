@@ -187,3 +187,11 @@ export interface SsmtValid {
     turbineValid: boolean;
     operationsValid: boolean;
   } 
+  
+  export interface DiagramData
+{
+  name: string,
+  inputData: SSMTInputs,
+  outputData: SSMTOutput,
+  valid: SsmtValid
+};
