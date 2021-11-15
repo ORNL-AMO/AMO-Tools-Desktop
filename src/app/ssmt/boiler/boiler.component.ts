@@ -68,9 +68,6 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
-    console.log(this.boilerForm.controls);
-    console.log(this.highPressureHeaderForm.controls);
-    console.log(this.lowPressureHeaderForm.controls);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -124,15 +121,14 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
-  setPreheatMakeupWater() {
-    console.log(this.boilerForm.controls.preheatMakeupWater.value);
-    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
-      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
-    } else {
-      this.boilerForm.controls.approachTemperature.setValidators([]);
-    }
-    this.save();
-  }
+  // setPreheatMakeupWater() {
+  //   if (this.boilerForm.controls.preheatMakeupWater.value == true) {
+  //     this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required, Validators.max()]);
+  //   } else {
+  //     this.boilerForm.controls.approachTemperature.setValidators([]);
+  //   }
+  //   this.save();
+  // }
 
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
@@ -149,10 +145,11 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
+    console.log(this.ssmt.generalSteamOperations.makeUpWaterTemperature);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
     //where the validation is being checked
-    this.boilerService.setApporachTempValidators(this.boilerForm, this.headerInput.highPressureHeader, this.operationsForm.controls.makeUpWaterTemperature.value);
+   this.boilerService.setApporachTempValidators(this.boilerForm, this.ssmt);
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }

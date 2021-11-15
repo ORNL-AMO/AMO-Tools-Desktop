@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { BoilerInput } from '../../shared/models/steam/ssmt';
+import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { GeneralOperationsComponent } from '../operations/general-operations/general-operations.component';
@@ -9,10 +9,12 @@ import { HeaderFormComponent } from '../header/header-form/header-form.component
 @Injectable()
 export class BoilerService {
 
+  boilerForm: FormGroup;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
+
 
     // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
     // defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
@@ -113,24 +115,22 @@ export class BoilerService {
     }
   }
 
-  setApporachTempValidators(formGroup: FormGroup, headerForm: HeaderFormComponent, operationsForm: GeneralOperationsComponent) {
-    debugger;
+  setApporachTempValidators(formGroup: FormGroup, ssmt: SSMT) {
     //method to check for valid input
     let approachTemp = formGroup.controls.approachTemperature.value;
-    let makeUpWaterTemperature = operationsForm.form.controls.makeUpWaterTemperature.value;
-    let pressure = headerForm.headerForm.controls.highPressureHeader.value;
+    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
+    // Double check if highPressureHeader or high pressure
+    let pressure = ssmt.headerInput.highPressure.pressure;
     let tempValue = pressure - makeUpWaterTemperature;
-    if (approachTemp) {
-    
-      formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue)]);
+
+    if (approachTemp) {    
+      formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
       formGroup.controls.approachTemperature.markAsDirty();
       formGroup.controls.approachTemperature.updateValueAndValidity();
     }
     return formGroup;
   }
-
-
-}
+ }
 
 
 
