@@ -11,7 +11,7 @@ import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
-declare const packageJson;
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UpdateDataService {
@@ -42,7 +42,7 @@ export class UpdateDataService {
     }
 
     checkAssessmentVersionDifferent(assessment: Assessment): boolean {
-        if (assessment.appVersion !== packageJson.version) {
+        if (assessment.appVersion !== environment.version) {
             return true;
         } else {
             return false;
@@ -51,7 +51,7 @@ export class UpdateDataService {
 
     updateWasteWater(assessment: Assessment): Assessment {
         //logic for updating wastewater data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (!assessment.wasteWater.baselineData.operations) {
             assessment.wasteWater.baselineData.operations = {
                 MaxDays: 100,
@@ -78,7 +78,7 @@ export class UpdateDataService {
 
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
 
         if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
@@ -110,7 +110,7 @@ export class UpdateDataService {
 
     updateFsat(assessment: Assessment): Assessment {
         //logic for updating fsat data
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         if (assessment.fsat.fieldData && !assessment.fsat.fieldData.inletVelocityPressure) {
             assessment.fsat.fieldData.inletVelocityPressure = 0;
             assessment.fsat.fieldData.usingStaticPressure = true;
@@ -196,7 +196,7 @@ export class UpdateDataService {
             });
         }
 
-        assessment.appVersion = packageJson.version;
+        assessment.appVersion = environment.version;
         return assessment;
     }
 
@@ -241,7 +241,7 @@ export class UpdateDataService {
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
-        if (settings.appVersion !== packageJson.version) {
+        if (settings.appVersion !== environment.version) {
             return true;
         } else {
             return false;
@@ -268,7 +268,7 @@ export class UpdateDataService {
         if (!settings.electricityCost) {
             settings.electricityCost = .066;
         }
-        settings.appVersion = packageJson.version;
+        settings.appVersion = environment.version;
         return settings;
     }
 
