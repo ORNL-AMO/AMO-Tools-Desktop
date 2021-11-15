@@ -3,13 +3,11 @@ import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
-import { GeneralOperationsComponent } from '../operations/general-operations/general-operations.component';
-import { HeaderFormComponent } from '../header/header-form/header-form.component';
+
 
 @Injectable()
 export class BoilerService {
 
-  boilerForm: FormGroup;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(settings: Settings) {
@@ -117,13 +115,27 @@ export class BoilerService {
 
   setApporachTempValidators(formGroup: FormGroup, ssmt: SSMT) {
     //method to check for valid input
+    let pressure: number;
     let approachTemp = formGroup.controls.approachTemperature.value;
     let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
-    // Double check if highPressureHeader or high pressure
-    let pressure = ssmt.headerInput.highPressure.pressure;
-    let tempValue = pressure - makeUpWaterTemperature;
+    
+    if(formGroup.controls.blowdownFlashed.value == false){
+      // Double check if highPressureHeader or high pressure
+    if(ssmt.headerInput.highPressureHeader){
+     pressure = ssmt.headerInput.highPressureHeader.pressure;
+      }else if(ssmt.headerInput.highPressure){
+      pressure = ssmt.headerInput.highPressure.pressure;
+    }
+   }else if(formGroup.controls.blowdownFlashed.value == true){
+     if(ssmt.headerInput.lowPressureHeader){
+     pressure = ssmt.headerInput.lowPressureHeader.pressure;
+      }else if(ssmt.headerInput.lowPressure){
+   pressure = ssmt.headerInput.lowPressure.pressure;
+ }
+}
 
-    if (approachTemp) {    
+    if (approachTemp && pressure != undefined) { 
+      let tempValue = pressure - makeUpWaterTemperature;   
       formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
       formGroup.controls.approachTemperature.markAsDirty();
       formGroup.controls.approachTemperature.updateValueAndValidity();

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
-import { BoilerInput, HeaderInput, OperationsInput, SSMT } from '../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
@@ -10,7 +10,6 @@ import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
-import { GeneralOperationsComponent } from '../operations/general-operations/general-operations.component';
 
 @Component({
   selector: 'app-boiler',
@@ -35,8 +34,6 @@ export class BoilerComponent implements OnInit {
   @Input()
   headerInput: HeaderInput;
   @Input()
-  operationsInput: OperationsInput;
-  @Input()
   ssmt: SSMT;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
@@ -60,6 +57,8 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
+    console.log(this.ssmt);
+  
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -96,6 +95,8 @@ export class BoilerComponent implements OnInit {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
     this.setPressureForms(this.boilerInput);
+    this.boilerService.setApporachTempValidators(this.boilerForm, this.ssmt);
+    console.log(this.boilerForm)
   }
 
   setFuelTypes() {
@@ -121,15 +122,6 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
-  // setPreheatMakeupWater() {
-  //   if (this.boilerForm.controls.preheatMakeupWater.value == true) {
-  //     this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required, Validators.max()]);
-  //   } else {
-  //     this.boilerForm.controls.approachTemperature.setValidators([]);
-  //   }
-  //   this.save();
-  // }
-
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
@@ -145,7 +137,6 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
-    console.log(this.ssmt.generalSteamOperations.makeUpWaterTemperature);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
     //where the validation is being checked

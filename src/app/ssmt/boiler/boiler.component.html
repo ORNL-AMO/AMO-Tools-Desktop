@@ -110,23 +110,16 @@
           <span *ngIf="boilerForm.controls.approachTemperature.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value must be greater than 0 <span
               [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-         <span *ngIf="boilerForm.controls.approachTemperature.errors.max">Approach temperature must less than the difference
+         <span *ngIf="boilerForm.controls.approachTemperature.errors.max && boilerForm.controls.blowdownFlashed.value == false">Approach temperature must less than the difference
           between the temperature into the heat exchanger (Saturation temperature of high pressure header) and the makeup 
-          water temperature ({{boilerForm.controls.approachTemperature | number:'1.0-1'}} <span
-          [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
-           [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-          <!-- <span *ngIf="boilerForm.controls.approachTemperature.errors.max">Approach temperature must be less than
-              {{boilerForm.controls.approachTemperature.errors.max.max}}
-           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span> -->
-        <!-- </span> -->
-        <!-- <span class="alert-warning pull-right small"
-        *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid"> -->
-        <!-- <span *ngIf="highPressureHeaderForm.controls.pressure.errors.boilerTemp">Approach temperature must less than the difference
-          between the temperature into the heat exchanger (Saturation temperature of high pressure header) and the makeup 
-          water temperature
-          ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span> -->
-       <!-- </span> -->
+          water temperature ({{boilerForm.controls.approachTemperature.errors.max.max | number:'1.0-1'}} <span
+          [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
+           <span *ngIf="boilerForm.controls.approachTemperature.errors.max && boilerForm.controls.blowdownFlashed.value == true">Approach temperature must less than the difference
+            between the temperature into the heat exchanger (Saturation temperature of low pressure header) and the makeup 
+            water temperature ({{boilerForm.controls.approachTemperature.errors.max.max | number:'1.0-1'}} <span
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>           
+          </span>
+           
       </div>
 
 

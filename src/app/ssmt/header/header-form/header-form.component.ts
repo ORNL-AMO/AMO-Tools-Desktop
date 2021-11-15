@@ -3,7 +3,7 @@ import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService, HeaderRanges } from '../header.service';
 import { SsmtService } from '../../ssmt.service';
-import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../shared/models/steam/ssmt';
+import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
 
 @Component({
@@ -32,6 +32,8 @@ export class HeaderFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
+  @Input()
+  ssmt: SSMT;
 
   headerLabel: string;
   minPressureErrorMsg: string;
@@ -49,7 +51,7 @@ export class HeaderFormComponent implements OnInit {
     if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
       this.showProcessSteamUsage = false;
     }
-    console.log(this.headerForm.controls);
+    console.log(this.headerForm);
   }
 
   ngOnChanges(changes: SimpleChanges) {

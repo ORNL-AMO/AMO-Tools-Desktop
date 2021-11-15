@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
-import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure, BoilerInput } from '../../shared/models/steam/ssmt';
+import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure, BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { HeaderService, HeaderRanges } from './header.service';
 import { SsmtService } from '../ssmt.service';
@@ -31,6 +31,8 @@ export class HeaderComponent implements OnInit {
   modificationIndex: number;
   @Input()
   boilerInput: BoilerInput;
+  @Input()
+  ssmt: SSMT;
 
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
