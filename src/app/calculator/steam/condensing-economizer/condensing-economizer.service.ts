@@ -3,7 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { CondensingEconomizerInput, CondensingEconomizerOutput } from '../../../shared/models/steam/condensingEconomizer';
+import { CondensingEconomizerInput, CondensingEconomizerOutput, CondensingEconomizerSuiteInput } from '../../../shared/models/steam/condensingEconomizer';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { CondensingEconomizerFormService } from './condensing-economizer-form.service';
 
 declare var processHeatAddon;
@@ -19,7 +20,9 @@ export class CondensingEconomizerService {
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private condensingEconomizerFormService: CondensingEconomizerFormService) {
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private processHeatingApiService: ProcessHeatingApiService, 
+    private condensingEconomizerFormService: CondensingEconomizerFormService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.condensingEconomizerInput = new BehaviorSubject<CondensingEconomizerInput>(undefined);
     this.condensingEconomizerOutput = new BehaviorSubject<CondensingEconomizerOutput>(undefined);
@@ -95,9 +98,10 @@ export class CondensingEconomizerService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let suiteInputInterface = this.getSuiteInputInterface(inputCopy);
+      let suiteInputInterface: CondensingEconomizerSuiteInput = this.getSuiteInputInterface(inputCopy);
 
-      let condensingEconomizerOutput: CondensingEconomizerOutput = processHeatAddon.airWaterCoolingUsingFlue(suiteInputInterface);
+      let condensingEconomizerOutput = processHeatAddon.airWaterCoolingUsingFlue(suiteInputInterface);
+      // let condensingEconomizerOutput: CondensingEconomizerOutput = this.processHeatingApiService.airWaterCoolingUsingFlue(suiteInputInterface);
       condensingEconomizerOutput = this.convertResultUnits(condensingEconomizerOutput, settings);
       condensingEconomizerOutput.sensibleHeatRecoveryAnnual = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours;
       condensingEconomizerOutput.heatRecoveryAnnual = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours;
@@ -146,7 +150,7 @@ export class CondensingEconomizerService {
     this.condensingEconomizerInput.next(exampleInput);
   }
 
-  getSuiteInputInterface(inputs: CondensingEconomizerInput) {
+  getSuiteInputInterface(inputs: CondensingEconomizerInput): CondensingEconomizerSuiteInput {
     return {
       heatInput: inputs.heatInput,
       tempFlueGasInF: inputs.flueGasTemperature,

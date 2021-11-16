@@ -37,10 +37,11 @@ export interface FeedwaterEconomizerSuiteInput {
     tempFlueGas: number, 
     percO2: number, 
     tempCombAir: number, 
+    tempAmbientAir: number,
     moistCombAir: number, 
     ratingBoiler: number, 
     prSteam: number, 
-    condSteam: string, 
+    condSteam: number, 
     tempSteam: number, 
     tempFW: number, 
     percBlowDown: number, 
@@ -48,7 +49,19 @@ export interface FeedwaterEconomizerSuiteInput {
     opHours: number, 
     costFuel: number, 
     hhvFuel: number,
-    fuelTempF: number
+    fuelTempF: number,
+    CH4: number,
+    C2H6: number,
+    N2: number,
+    H2: number,
+    C3H8: number,
+    C4H10_CnH2n: number,
+    H2O: number,
+    CO: number,
+    CO2: number,
+    SO2: number,
+    O2: number,
+    substance: string,
 }
 
 export interface FeedwaterEconomizerOutput {

@@ -4,6 +4,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
 import { FeedwaterEconomizerInput, FeedwaterEconomizerOutput, FeedwaterEconomizerSuiteInput } from '../../../shared/models/steam/feedwaterEconomizer';
+import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { FeedwaterEconomizerFormService } from './feedwater-economizer-form.service';
 
 declare var processHeatAddon;
@@ -20,7 +21,9 @@ export class FeedwaterEconomizerService {
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private feedwaterEconomizerFormService: FeedwaterEconomizerFormService) {
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private processHeatingApiService: ProcessHeatingApiService, 
+    private feedwaterEconomizerFormService: FeedwaterEconomizerFormService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.feedwaterEconomizerInput = new BehaviorSubject<FeedwaterEconomizerInput>(undefined);
     this.feedwaterEconomizerOutput = new BehaviorSubject<FeedwaterEconomizerOutput>(undefined);
@@ -94,9 +97,10 @@ export class FeedwaterEconomizerService {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      let suiteInputInterface = this.getSuiteInputInterface(inputCopy);
+      let suiteInputInterface: FeedwaterEconomizerSuiteInput = this.getSuiteInputInterface(inputCopy);
 
-      let feedwaterEconomizerOutput: FeedwaterEconomizerOutput = processHeatAddon.waterHeatingUsingFlue(suiteInputInterface);
+      let feedwaterEconomizerOutput = processHeatAddon.waterHeatingUsingFlue(suiteInputInterface);
+      // let feedwaterEconomizerOutput: FeedwaterEconomizerOutput = this.processHeatingApiService.waterHeatingUsingFlue(suiteInputInterface);
       feedwaterEconomizerOutput = this.convertResultUnits(feedwaterEconomizerOutput, settings);
 
       this.feedwaterEconomizerOutput.next(feedwaterEconomizerOutput);
@@ -135,7 +139,7 @@ export class FeedwaterEconomizerService {
     this.feedwaterEconomizerInput.next(exampleInput);
   }
 
-  getSuiteInputInterface(inputs: FeedwaterEconomizerInput) {
+  getSuiteInputInterface(inputs: FeedwaterEconomizerInput): FeedwaterEconomizerSuiteInput {
     return {
       tempFlueGas: inputs.flueGasTemperature,
       percO2: inputs.flueGasO2,
