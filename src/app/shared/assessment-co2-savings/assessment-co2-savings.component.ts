@@ -19,8 +19,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   isFormDisabled: boolean;
   @Input()
   inBaseline: boolean;
-  @Output('emitUpdatePsatCo2SavingsData')
-  emitUpdatePsatCo2SavingsData = new EventEmitter<Co2SavingsData>();
+  @Output('emitUpdateCo2SavingsData')
+  emitUpdateCo2SavingsData = new EventEmitter<Co2SavingsData>();
   @Output('emitCurrentField')
   emitCurrentField = new EventEmitter<string>();
 
@@ -228,7 +228,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     if (this.inBaseline) {
       this.setLockedModificationValues();
     }
-    // emit results up to parent component (pump-operations) to save on psat object
-    this.emitUpdatePsatCo2SavingsData.emit(this.co2SavingsData);
+    // emit results up to parent component  to save on the ssmt/psat/fsat/etc object
+    this.emitUpdateCo2SavingsData.emit(this.co2SavingsData);
   }
 }
