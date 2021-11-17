@@ -1,94 +1,61 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
+import { CompressedAirSuiteApiService } from '../tools-suite-api/compressed-air-suite-api.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { InventoryService } from './inventory/inventory.service';
 import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
 
 
-declare var compressorAddon: any;
+// enum CompressorType {
+//   Centrifugal,
+//   Screw,
+//   Reciprocating
+// };
 
-enum CompressorType {
-  Centrifugal,
-  Screw,
-  Reciprocating
-};
+// enum ControlType {
+//   LoadUnload,
+//   ModulationUnload,
+//   BlowOff,
+//   ModulationWOUnload,
+//   StartStop,
+//   VariableDisplacementUnload,
+//   MultiStepUnloading,
+//   VFD
+// };
 
-enum ControlType {
-  LoadUnload,
-  ModulationUnload,
-  BlowOff,
-  ModulationWOUnload,
-  StartStop,
-  VariableDisplacementUnload,
-  MultiStepUnloading,
-  VFD
-};
+// enum Stage {
+//   Single,
+//   Two,
+//   Multiple
+// };
 
-enum Stage {
-  Single,
-  Two,
-  Multiple
-};
+// enum Lubricant {
+//   Injected,
+//   Free,
+//   None
+// };
 
-enum Lubricant {
-  Injected,
-  Free,
-  None
-};
+// enum Modulation {
+//   Throttle,
+//   VariableDisplacement
+// };
 
-enum Modulation {
-  Throttle,
-  VariableDisplacement
-};
-
-enum ComputeFrom {
-  PercentagePower,
-  PercentageCapacity,
-  PowerMeasured,
-  CapacityMeasured,
-  PowerFactor
-};
+// enum ComputeFrom {
+//   PercentagePower,
+//   PercentageCapacity,
+//   PowerMeasured,
+//   CapacityMeasured,
+//   PowerFactor
+// };
 
 
 @Injectable()
 export class CompressedAirCalculationService {
 
   constructor(private inventoryService: InventoryService,
-    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService) { }
-
-  test() {
-    console.log(compressorAddon);
-    // var input = {
-    //   compressorType: 0,
-    //   controlType: 0,
-    //   computeFrom: 0,
-
-    //   fullLoadPressure: 100,
-
-    //   powerAtFullLoad: 452.3,
-    //   capacityAtFullLoad: 3138,
-
-    //   capacityAtMinFullLoadPressure: 3200,
-    //   capacityAtMaxFullLoadPressure: 2885,
-    //   minFullLoadPressure: 91,
-    //   maxFullLoadPressure: 117,
-
-    //   computeFromVal: 0.36,
-    //   computeFromPFVoltage: 0,
-    //   computeFromPFAmps: 0,
-
-    //   powerAtNoLoad: 71.3,
-    //   capacityAtMaxFullFlow: 3005,
-    //   powerAtUnload: 411.9,
-    //   capacityAtUnload: 2731,
-    //   adjustForDischargePressure: false
-    // };
-    // let testCalc = compressorAddon.CompressorsCalc(input);
-    // console.log(testCalc);
-  }
+    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
 
 
   //computeFrom
@@ -135,12 +102,8 @@ export class CompressedAirCalculationService {
         let inputData: CompressorsCalcInput = this.getInputFromInventoryItem(compressor, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, additionalRecieverVolume);
         if (settings.unitsOfMeasure == 'Metric') {
           inputData = this.convertCompressedAirService.convertInputObject(inputData, compressor.compressorControls.controlType);
-          // console.log('METRIC:');
-          // console.log(inputData);
         } else {
           inputData.receiverVolume = this.convertUnitsService.value(inputData.receiverVolume).from('gal').to('ft3');
-          // console.log('IMPERIAL:');
-          // console.log(inputData);
         }
         //power factor/amps/volts
         if (computeFrom == 4) {
@@ -173,7 +136,7 @@ export class CompressedAirCalculationService {
 
   suiteCompressorCalcCentrifugal(inputData: CentrifugalInput): CompressorCalcResult {
     try {
-      return compressorAddon.CompressorsCalc(inputData);
+      return this.compressedAirSuiteApiService.compressorCalcCentrifugal(inputData);
     } catch (err) {
       console.log(err);
       return this.getEmptyCalcResults();
@@ -182,7 +145,7 @@ export class CompressedAirCalculationService {
 
   suiteCompressorCalc(inputData: CompressorsCalcInput): CompressorCalcResult {
     try {
-      return compressorAddon.CompressorsCalc(inputData);
+      return this.compressedAirSuiteApiService.compressorCalc(inputData);
     } catch (err) {
       console.log(err);
       return this.getEmptyCalcResults();
@@ -311,7 +274,7 @@ export class CompressedAirCalculationService {
       powerMax: compressor.performancePoints.maxFullFlow.power,
       dischargePsiMax: compressor.performancePoints.maxFullFlow.dischargePressure,
 
-      modulatingPsi: compressor.designDetails.modulatingPressureRange,
+      modulatingPsi: compressor.designDetails.modulatingPressureRange || 0,
 
 
       //TODO: Sort out correct pressure mapping 
@@ -335,8 +298,8 @@ export class CompressedAirCalculationService {
       loadFactorUnloaded: loadFactorUnloaded,
 
       unloadPointCapacity: compressor.compressorControls.unloadPointCapacity,
-      blowdownTime: compressor.designDetails.blowdownTime,
-      unloadSumpPressure: compressor.compressorControls.unloadSumpPressure,
+      blowdownTime: compressor.designDetails.blowdownTime || 0,
+      unloadSumpPressure: compressor.compressorControls.unloadSumpPressure || 0,
       noLoadPowerFM: compressor.designDetails.noLoadPowerFM / 100,
       noLoadDischargePressure: compressor.performancePoints.noLoad.dischargePressure
 
@@ -379,10 +342,6 @@ export class CompressedAirCalculationService {
     }
 
   }
-
-
-
-
 }
 
 export interface CompressorCalcResult {

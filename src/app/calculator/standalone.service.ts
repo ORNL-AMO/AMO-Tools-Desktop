@@ -1,7 +1,6 @@
 // @ts-ignore
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-declare var compressorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
