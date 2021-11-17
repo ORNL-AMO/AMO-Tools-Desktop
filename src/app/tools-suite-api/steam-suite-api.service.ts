@@ -301,21 +301,19 @@ export class SteamSuiteApiService {
     inputData.turbineInput.mediumToLowTurbine.operationType = this.suiteApiHelperService.getPressureTurbineOperation(inputData.turbineInput.mediumToLowTurbine.operationType);
 
 
-  let mediumPressureHeaderObj;
-  if (inputData.headerInput.mediumPressureHeader) {
+  let mediumPressureHeaderObj = null;
+  if (inputData.headerInput.mediumPressureHeader !== null && inputData.headerInput.mediumPressureHeader !== undefined) {
     this.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressureHeader);
     mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressureHeader);
-  } else {
+  } else if (inputData.headerInput.mediumPressure !== null && inputData.headerInput.mediumPressure !== undefined) {
     this.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressure);
     mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressure); 
   }
-  
-
-  let lowPressureHeaderObj;
-  if (inputData.headerInput.lowPressureHeader) {
+  let lowPressureHeaderObj = null;
+  if (inputData.headerInput.lowPressureHeader !== null && inputData.headerInput.lowPressureHeader !== undefined) {
     this.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressureHeader);
     lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressureHeader);
-  } else {
+  } else if (inputData.headerInput.lowPressure !== null && inputData.headerInput.lowPressure !== undefined) {
     this.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressure);
     lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressure); 
   }
