@@ -58,4 +58,7 @@ export interface Co2SavingsData {
   eGridRegion?: string;
   eGridSubregion?: string;
   totalEmissionOutput: number;
+  userEnteredBaselineEmissions?: boolean;
+  userEnteredModificationEmissions?: boolean;
+  zipcode?: string,
 }
