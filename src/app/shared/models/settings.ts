@@ -80,7 +80,41 @@ export interface Settings {
     compressedAirCost?: number,
     otherFuelCost?: number,
     waterCost?: number,
-    waterWasteCost?: number
+    waterWasteCost?: number,
+
+    //Print 
+    printPsatRollup?: boolean,
+    printPhastRollup?: boolean,
+    printFsatRollup?: boolean,
+    printTreasureHuntRollup?: boolean,
+    printReportGraphs?: boolean,
+    printReportSankey?: boolean,
+    printResults?: boolean,
+    printInputData?: boolean,
+    printExecutiveSummary?: boolean,
+    printEnergySummary?: boolean,
+    printLossesSummary?: boolean,
+    printReportOpportunityPayback?: boolean,
+    printReportOpportunitySummary?: boolean,
+    printSsmtRollup?: boolean,
+    printWasteWaterRollup?: boolean,
+    printDetailedResults?: boolean,
+    printReportDiagram?: boolean,
+    printAll?: boolean,
+    printCompressedAirRollup?: boolean
+
+    // Co2SavingsData
+    co2SavingsEnergyType?: string,
+    co2SavingsEnergySource?: string,
+    co2SavingsFuelType?: string,
+    totalEmissionOutputRate?: number,
+    electricityUse?: number,
+    eGridRegion?: string,
+    eGridSubregion?: string,
+    totalEmissionOutput?: number,
+    userEnteredBaselineEmissions?: boolean,
+    userEnteredModificationEmissions?: boolean,
+    zipcode?: string
 }
 
 

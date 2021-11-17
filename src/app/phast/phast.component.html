@@ -8,7 +8,7 @@
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav
-      *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
+      *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab?.step == 2)">
       <app-losses-tabs [phast]="_phast" [settings]="settings" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
     </nav>
     <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>

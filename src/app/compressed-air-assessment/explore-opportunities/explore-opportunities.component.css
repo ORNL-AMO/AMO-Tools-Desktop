@@ -1,0 +1,15 @@
+p {
+	font-size: small;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 0px;
+    padding-top: .25rem;
+}
+
+.btn.btn-primary{
+    padding: 6px;
+}
+
+.day-type-select{
+    font-size: 22px;
+}

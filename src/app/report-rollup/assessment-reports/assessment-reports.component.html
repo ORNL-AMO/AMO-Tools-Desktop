@@ -31,6 +31,12 @@
         <app-waste-water-report *ngIf="item.assessment.wasteWater" [assessment]="item.assessment" [inRollup]="true">
         </app-waste-water-report>
     </div>
+    <div class="assessment-item" *ngFor="let item of _compressedAirAssessments"
+        id="{{'assessment_'+item.assessment.id}}">
+        <app-compressed-air-report *ngIf="item.assessment.compressedAirAssessment" [assessment]="item.assessment"
+            [inRollup]="true">
+        </app-compressed-air-report>
+    </div>
 </div>
 <!--END NOT PRINT-->
 
@@ -82,7 +88,7 @@
     <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0}">
         <div class="col-12">
-            <app-ssmt-rollup [settings]="settings" [printView]="true"></app-ssmt-rollup>
+            <app-ssmt-rollup [printView]="true"></app-ssmt-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}">
@@ -110,7 +116,7 @@
     <div *ngIf="_wasteWaterAssessments.length > 0 && rollupPrintOptions.printWasteWaterRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0 || _treasureHuntAssessments.length != 0}">
         <div class="col-12">
-            <app-waste-water-rollup [printView]="true"></app-waste-water-rollup>
+            <app-waste-water-rollup [settings]="settings" [printView]="true"></app-waste-water-rollup>
         </div>
     </div>
 
@@ -119,6 +125,23 @@
         <div class="col-12">
             <app-waste-water-report *ngIf="item.assessment.wasteWater" [assessment]="item.assessment" [inRollup]="true">
             </app-waste-water-report>
+        </div>
+    </div>
+
+    <div *ngIf="_compressedAirAssessments.length > 0 && rollupPrintOptions.printCompressedAirRollup" class="row"
+        [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0 || _treasureHuntAssessments.length != 0
+                    || _wasteWaterAssessments.length > 0}">
+        <div class="col-12">
+            <app-compressed-air-rollup [printView]="true"></app-compressed-air-rollup>
+        </div>
+    </div>
+
+    <div class="assessment-item row" *ngFor="let item of _compressedAirAssessments"
+        id="{{'assessment_'+item.assessment.id}}">
+        <div class="col-12">
+            <app-compressed-air-report *ngIf="item.assessment.compressedAirAssessment" [assessment]="item.assessment"
+                [inRollup]="true">
+            </app-compressed-air-report>
         </div>
     </div>
 </div>

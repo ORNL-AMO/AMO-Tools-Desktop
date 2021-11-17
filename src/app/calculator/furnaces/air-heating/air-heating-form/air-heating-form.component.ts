@@ -109,6 +109,13 @@ export class AirHeatingFormComponent implements OnInit {
     this.initForm();
   }
 
+  setTreasureHuntFuelCost() {
+    let energySourceType = this.form.controls.utilityType.value;
+    let treasureHuntFuelCost = this.airHeatingService.getTreasureHuntFuelCost(energySourceType, this.settings);
+    this.form.patchValue({fuelCost: treasureHuntFuelCost});
+    this.calculate();
+  }
+
   setFuelOptions() {
     if (this.form.controls.gasFuelType.value == true) {
       this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();

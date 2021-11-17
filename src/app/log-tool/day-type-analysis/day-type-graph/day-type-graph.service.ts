@@ -42,7 +42,7 @@ export class DayTypeGraphService {
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     dayTypeSummary.hourlyAverages.forEach(hourlyAverage => {
       let currentFieldAverageValue: number = _.find(hourlyAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
-      xData.push(hourlyAverage.hour);
+      xData.push(hourlyAverage.hour+1);
       yData.push(currentFieldAverageValue);
     });
     return { xData: xData, yData: yData }
@@ -79,7 +79,7 @@ export class DayTypeGraphService {
         let hourAverage: { value: number, field: LogToolField } = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName });
         if (hourAverage) {
           yData.push(hourAverage.value);
-          xData.push(hourOfDay);
+          xData.push(hourOfDay+1);
         }
       }
     }

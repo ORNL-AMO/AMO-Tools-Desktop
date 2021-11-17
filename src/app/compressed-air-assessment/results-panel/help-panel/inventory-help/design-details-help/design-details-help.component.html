@@ -1,0 +1,98 @@
+<!-- Design Details Help -->
+<div class="my-2" *ngIf="focusedField == 'blowdownTime'">
+    <h6>
+        Blowdown Time
+        <br>
+        <small class="text-muted">
+            The number of seconds required for a compressor to completely unload or to reach its
+            fully unloaded power, or the number of seconds required for the sump pressure to
+            decrease from the cut-out (unloading) pressure to the minimum unloaded sump
+            pressure. This only applies to lubricant-injected rotary screw compressors with
+            load/unload controls. Distinct from “drain-down time.”
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'modulatingPressureRange'">
+    <h6>
+        Proportional Modulating Pressure Range
+        <br>
+        <small class="text-muted">
+            The difference between the full-load and no-load discharge pressures (in pounds per square inch), if the
+            air compressor has modulation controls.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'inputPressure'">
+    <h6>
+        Design Inlet Pressure
+        <br>
+        <small class="text-muted">
+            The inlet pressure for which the air compressor is designed, which is also the design pressure under
+            which the air compressor is rated.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'designEfficiency'">
+    <h6>
+        Design Efficiency
+        <br>
+        <small class="text-muted">
+            The mechanical efficiency of a motor, defined as ideal kW divided by actual kW to drive the motor.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'serviceFactor'">
+    <h6>
+        Service Factor
+        <br>
+        <small class="text-muted">
+            The percentage multiplier that a motor can withstand for short periods of time when operating within its
+            normal voltage and frequency tolerance.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'noLoadPowerFM'">
+    <h6>
+        Full Modulated Power % of Full Load
+        <br>
+        <small class="text-muted">
+            The power draw when the air compressor is fully modulated and delivering no air (expressed as a
+            percentage of full-load power), if it is a lubricant injected air compressor with modulation controls.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'noLoadPowerUL'">
+    <h6>
+        Full Unloaded Power % of Full Load
+        <br>
+        <small class="text-muted">
+            The power required when the lubricant-injected rotary screw air compressor is unloaded and completely
+            blown down, expressed as a percentage of the full-load power.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'maxFullFlowPressure'">
+    <h6>
+        Max Full Flow Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor no longer delivers air; at this point, the compressor may
+            unload, be fully modulated, or turn off.
+            <hr>
+        </small>
+    </h6>
+</div>

@@ -7,6 +7,8 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { FlueGasByVolumeSuiteResults } from '../shared/models/phast/losses/flueGas';
+import { FlueGasResultsComponent } from '../calculator/furnaces/flue-gas/flue-gas-results/flue-gas-results.component';
 
 
 @Injectable()
@@ -58,6 +60,8 @@ export class PhastResultsService {
       flueGasAvailableHeat: 0,
       grossHeatInput: 0,
       heatingSystemEfficiency: 0,
+      calculatedExcessAir: 0,
+      calculatedFlueGasO2: 0,
       availableHeatPercent: 0
     };
     return results;
@@ -94,7 +98,7 @@ export class PhastResultsService {
       results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(phast.losses.extendedSurfaces, settings);
     }
     if (this.checkLoss(phast.losses.chargeMaterials)) {
-      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
+      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings, undefined);
     }
     if (resultCats.showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
       results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses);
@@ -163,7 +167,11 @@ export class PhastResultsService {
         } else if (tmpFlueGas.flueGasType === 'By Volume') {
           let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
-            const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            let flueGasResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            let availableHeat = flueGasResults.availableHeat;
+
+            results.calculatedFlueGasO2 = flueGasResults.flueGasO2 * 100;
+            results.calculatedExcessAir = flueGasResults.excessAir * 100;
             results.flueGasAvailableHeat = availableHeat * 100;
             results.flueGasGrossHeat = (results.totalInput / availableHeat);
             results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);

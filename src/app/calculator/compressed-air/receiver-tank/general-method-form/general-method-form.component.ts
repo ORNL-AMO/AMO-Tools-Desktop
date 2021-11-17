@@ -33,6 +33,13 @@ export class GeneralMethodFormComponent implements OnInit {
 
   getStorage() {
     this.finalTankPressure = this.standAloneService.receiverTankSizeGeneral(this.inputs, this.settings);
+    if (this.receiverTankService.inAssessmentCalculator) {
+      this.updateInputsForAssessmentCalculator();
+    }
+  }
+
+  updateInputsForAssessmentCalculator() {
+    this.receiverTankService.inputs.next({generalMethodInputs: this.inputs})
   }
 
   changeField(str: string) {

@@ -37,12 +37,19 @@ export class WaterHeatingComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.waterHeatingService.waterHeatingInput.getValue();
     if(!existingInputs) {
-      this.waterHeatingService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.waterHeatingService.initDefaultEmptyInputs(this.settings.fuelCost);
+      } else {
+        this.waterHeatingService.initDefaultEmptyInputs();
+      }
       this.waterHeatingService.initDefaultEmptyOutputs();
     }
     

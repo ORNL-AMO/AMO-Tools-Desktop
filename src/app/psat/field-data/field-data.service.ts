@@ -7,12 +7,12 @@ export class FieldDataService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean): FormGroup {
+  getFormFromObj(psatInputs: PsatInputs, isBaseline: boolean, isWhatIfScenario?: boolean): FormGroup {
     let loadEstimationMethodValidators: Array<ValidatorFn> = [];
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
     let measuredVoltageValidators: Array<ValidatorFn> = [];
-    if (isBaseline) {
+    if (isBaseline || !psatInputs.whatIfScenario) {
       loadEstimationMethodValidators = [Validators.required];
       measuredVoltageValidators = [Validators.required];
       if (psatInputs.load_estimation_method == 0) {
@@ -21,14 +21,7 @@ export class FieldDataService {
         motorAmpsValidators = [Validators.required]
       }
     }
-    //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
-    if (!psatInputs.operating_hours && psatInputs.operating_fraction) {
-      psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
-    }
-
     let form: FormGroup = this.formBuilder.group({
-      operatingHours: [psatInputs.operating_hours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
       loadEstimatedMethod: [psatInputs.load_estimation_method, loadEstimationMethodValidators],
@@ -47,8 +40,6 @@ export class FieldDataService {
 
 
   getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
-    psatInputs.operating_hours = form.controls.operatingHours.value;
-    psatInputs.cost_kw_hour = form.controls.costKwHr.value;
     psatInputs.flow_rate = form.controls.flowRate.value;
     psatInputs.head = form.controls.head.value;
     psatInputs.load_estimation_method = form.controls.loadEstimatedMethod.value;

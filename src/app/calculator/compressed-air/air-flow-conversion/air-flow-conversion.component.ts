@@ -3,6 +3,10 @@ import { Settings } from '../../../shared/models/settings';
 import { AirFlowConversionService } from './air-flow-conversion.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
   selector: 'app-air-flow-conversion',
@@ -12,11 +16,16 @@ import { Subscription } from 'rxjs';
 export class AirFlowConversionComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+  
   headerHeight: number;
 
   airFlowConversionInputSub: Subscription;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  saving: boolean;
+  assessmentCalculator: Calculator;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -24,8 +33,8 @@ export class AirFlowConversionComponent implements OnInit {
   }
 
   
-  constructor(private airFlowConversionService: AirFlowConversionService,
-              private settingsDbService: SettingsDbService) { }
+  constructor(private airFlowConversionService: AirFlowConversionService, private calculatorDbService: CalculatorDbService, 
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -34,6 +43,10 @@ export class AirFlowConversionComponent implements OnInit {
     this.airFlowConversionService.initDefaultEmptyInputs(this.settings);
     this.airFlowConversionService.initDefaultEmptyOutputs();
     this.initSubscriptions();
+
+    if (this.assessment) {
+      this.getCalculatorForAssessment();
+    }
   }
 
   ngOnDestroy() {
@@ -60,7 +73,54 @@ export class AirFlowConversionComponent implements OnInit {
 
   calculate() {
     this.airFlowConversionService.calculate(this.settings);
+    if (this.assessmentCalculator) {
+      this.assessmentCalculator.airFlowConversionInputs = this.airFlowConversionService.airFlowConversionInput.getValue();
+      this.saveAssessmentCalculator();
+     }
   }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.assessmentCalculator) {
+      if (this.assessmentCalculator.airFlowConversionInputs) {
+        this.airFlowConversionService.airFlowConversionInput.next(this.assessmentCalculator.airFlowConversionInputs);
+      } else {
+        this.assessmentCalculator.airFlowConversionInputs = this.airFlowConversionService.airFlowConversionInput.getValue();
+      }
+    } else{
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  initNewAssessmentCalculator(): Calculator {
+    let inputs = this.airFlowConversionService.airFlowConversionInput.getValue();
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      airFlowConversionInputs: inputs
+    };
+    return tmpCalculator;
+  }
+
+  saveAssessmentCalculator(){
+    if (!this.saving) {
+      if (this.assessmentCalculator.id) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
+  }
+
   
 
   btnResetData() {

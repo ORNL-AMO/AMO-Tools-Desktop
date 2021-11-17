@@ -1,0 +1,89 @@
+<div #content class="compressed-air-container compressed-air d-flex flex-column" *ngIf="settings && assessment">
+  <!--header-->
+  <div #header class="w-100 hide-print sticky-top" id="compressedAirBanner">
+    <app-compressed-air-banner [assessment]="assessment"></app-compressed-air-banner>
+  </div>
+  <!--end header-->
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" *ngIf="setupTab !='system-profile'"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
+        [assessment]="assessment"></app-system-basics>
+      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
+      <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
+      <app-end-uses *ngIf="setupTab == 'end-uses'"></app-end-uses>
+      <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>
+    </div>
+    <div *ngIf="setupTab != 'system-profile'" class="scroll-item" [ngClass]="{'w-50': setupTab != 'system-profile'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-results-panel></app-results-panel>
+    </div>
+    <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item bg-white"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-profile-setup-form *ngIf="profileTab != 'annual-summary'"></app-profile-setup-form>
+      <app-system-profile-setup class="w-100" *ngIf="profileTab == 'setup'">
+      </app-system-profile-setup>
+      <app-system-profile-summary class="w-100" *ngIf="profileTab == 'summary'">
+      </app-system-profile-summary>
+      <app-system-profile-graphs class="w-100" *ngIf="profileTab == 'graphs'">
+      </app-system-profile-graphs>
+      <app-system-profile-annual-summary class="w-100" *ngIf="profileTab == 'annual-summary'">
+      </app-system-profile-annual-summary>
+    </div>
+  </div>
+
+
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+    class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
+      (exploreOppsToast)="hideToast($event)">
+    </app-explore-opportunities>
+  </div>
+  <!--diagram-->
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-compressed-air-diagram></app-compressed-air-diagram>
+  </div>
+
+  <!--Report-->
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-11 report-column">
+      <app-compressed-air-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
+      </app-compressed-air-report>
+    </div>
+  </div>
+  <!--calculators-->
+  <app-compressed-air-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+    [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-compressed-air-calculators>
+
+
+  <!--footer-->
+  <div #footer id="compressedAirFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup'">
+    <div class="pull-left">
+      <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" [disabled]="disableNext || setupTab == 'end-uses'" (click)="next()">
+        <span *ngIf="setupTab != 'system-profile'">Next</span>
+        <span *ngIf="setupTab == 'system-profile'">Go To Assessment</span>
+      </button>
+    </div>
+  </div>
+  <!--end footer-->
+</div>
+
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
+
+<!-- 
+  <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+    [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
+    (emitDisable)="disableDisclaimer()"></app-toast>
+  -->
+
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+  [assessmentType]="'compressed-air'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
+</app-update-units-modal>

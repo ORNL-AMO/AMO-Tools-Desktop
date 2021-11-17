@@ -1,0 +1,671 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+        <h5>Compressor Inventory Data
+            <span class="pull-right fa hide-print"
+                [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+        </h5>
+    </div>
+
+    <div *ngIf="!collapse || printView">
+        <div class="card-body">
+            <div class="output-summary">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th class="bold" *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.name}}
+                            </th>
+                        </tr>
+                        <!--NAMEPLATE DATA-->
+                        <tr>
+                            <th class="section-header">Nameplate Data</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- compressorType -->
+                        <tr>
+                            <td>
+                                Compressor Type
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.compressorType | compressorType}}
+                            </td>
+                        </tr>
+                        <!-- motorPower -->
+                        <tr>
+                            <td>
+                                Motor Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.motorPower}} kW
+                            </td>
+                        </tr>
+                        <!-- fullLoadOperatingPressure -->
+                        <tr>
+                            <td>
+                                Full Load Operating Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadOperatingPressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </td>
+                        </tr>
+                        <!-- fullLoadRatedCapacity -->
+                        <tr>
+                            <td>
+                                Full Load Rated Capacity
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadRatedCapacity}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                            </td>
+                        </tr>
+                        <!-- fullLoadAmps -->
+                        <tr>
+                            <td>
+                                Full Load Amps
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.fullLoadAmps}} amps
+                            </td>
+                        </tr>
+                        <!-- totalPackageInputPower -->
+                        <tr>
+                            <td>
+                                Total Package Input Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.nameplateData.totalPackageInputPower}} kW
+                            </td>
+                        </tr>
+                        <!--CONTROLS-->
+                        <tr>
+                            <th class="section-header">Controls</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- controlType -->
+                        <tr>
+                            <td>
+                                Control Type
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.compressorControls.controlType | controlType}}
+                            </td>
+                        </tr>
+                        <!-- unloadPointCapacity -->
+                        <tr>
+                            <td>
+                                Unload Point Capacity
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    {{compressor.compressorControls.unloadPointCapacity}} %
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- numberOfUnloadSteps -->
+                        <tr>
+                            <td>
+                                Number of Unload Steps
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    {{compressor.compressorControls.numberOfUnloadSteps}}
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadCapacity(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- automaticShutdown -->
+                        <tr>
+                            <td>
+                                Automatic Shutdown Timer
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayAutomaticShutdown(compressor.compressorControls.controlType)">
+                                    <span *ngIf="compressor.compressorControls.automaticShutdown">Yes</span>
+                                    <span *ngIf="!compressor.compressorControls.automaticShutdown">No</span>
+                                </span>
+                                <span *ngIf="!checkDisplayAutomaticShutdown(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- unloadSumpPressure -->
+                        <tr>
+                            <td>
+                                Unload Sump Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.compressorControls.unloadSumpPressure }}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="!checkDisplayUnloadSumpPressure(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--INLET CONDITIONS-->
+                        <tr>
+                            <th class="section-header">Inlet Conditions</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- temperature -->
+                        <tr>
+                            <td>
+                                Temperature
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.inletConditions.temperature}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                            </td>
+                        </tr>
+                        <!--DESIGN DETAILS-->
+                        <tr>
+                            <th class="section-header">Design Details</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- blowdownTime -->
+                        <tr>
+                            <td>
+                                Blowdown Time
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkDisplayBlowdownTime(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.designDetails.blowdownTime}} sec.
+                                </span>
+                                <span
+                                    *ngIf="!checkDisplayBlowdownTime(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- modulatingPressureRange -->
+                        <tr>
+                            <td>
+                                Modulating Pressure Range
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="checkDisplayModulation(compressor.compressorControls.controlType)">
+                                    {{compressor.designDetails.modulatingPressureRange}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="!checkDisplayModulation(compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- inputPressure -->
+                        <tr>
+                            <td>
+                                Input Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.designDetails.inputPressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>
+                            </td>
+                        </tr>
+                        <!-- designEfficiency -->
+                        <tr>
+                            <td>
+                                Design Efficiency
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.designDetails.designEfficiency}} %
+                            </td>
+                        </tr>
+                        <!-- serviceFactor -->
+                        <tr>
+                            <td>
+                                Service Factor
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.designDetails.serviceFactor}}
+                            </td>
+                        </tr>
+                        <!-- noLoadPowerFM -->
+                        <tr>
+                            <td>
+                                No Load Power FM
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkDisplayNoLoadPowerFM(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.designDetails.noLoadPowerFM}} %
+                                </span>
+                                <span
+                                    *ngIf="!checkDisplayNoLoadPowerFM(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- noLoadPowerUL -->
+                        <tr>
+                            <td>
+                                No Load Power UL
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkDisplayNoLoadPowerUL(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.designDetails.noLoadPowerUL}} %
+                                </span>
+                                <span
+                                    *ngIf="!checkDisplayNoLoadPowerUL(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- maxFullFlowPressure -->
+                        <tr>
+                            <td>
+                                Max Full Flow Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkDisplayMaxFullFlow(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.designDetails.maxFullFlowPressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkDisplayMaxFullFlow(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!--CENTRIFUGAL SPECIFICS-->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <th class="section-header">Centrifugal Specifics</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+
+                        <!-- surgeAirflow -->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <td>
+                                Surge Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="compressor.nameplateData.compressorType == 6">
+                                    {{compressor.centrifugalSpecifics.surgeAirflow}} 
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span *ngIf="compressor.nameplateData.compressorType != 6">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- maxFullLoadPressure -->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <td>
+                                Max. Full Load (surge) Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="compressor.nameplateData.compressorType == 6">
+                                    {{compressor.centrifugalSpecifics.maxFullLoadPressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="compressor.nameplateData.compressorType != 6">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- maxFullLoadCapacity -->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <td>
+                                Capacity at Max Full Load Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="compressor.nameplateData.compressorType == 6">
+                                    {{compressor.centrifugalSpecifics.maxFullLoadCapacity}} 
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span *ngIf="compressor.nameplateData.compressorType != 6">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- minFullLoadPressure -->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <td>
+                                Min. Full Load (stonewall) Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="compressor.nameplateData.compressorType == 6">
+                                    {{compressor.centrifugalSpecifics.minFullLoadPressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span *ngIf="compressor.nameplateData.compressorType != 6">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- minFullLoadCapacity -->
+                        <tr *ngIf="displayCentrifugalSection">
+                            <td>
+                                Capacity at Min. Full Load Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span *ngIf="compressor.nameplateData.compressorType == 6">
+                                    {{compressor.centrifugalSpecifics.minFullLoadCapacity}} acfm
+                                </span>
+                                <span *ngIf="compressor.nameplateData.compressorType != 6">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--PERFORMANCE POINTS-->
+                        <tr>
+                            <th class="section-header">Performance Points</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!-- FULL LOAD -->
+                        <tr>
+                            <th>Full Load</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!--dischargePressure-->
+                        <tr>
+                            <td class="pl-1">
+                                Discharge Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.performancePoints.fullLoad.dischargePressure}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                            </td>
+                        </tr>
+                        <!--airflow-->
+                        <tr>
+                            <td class="pl-1">
+                                Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.performancePoints.fullLoad.airflow}}
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                            </td>
+                        </tr>
+                        <!--power-->
+                        <tr>
+                            <td class="pl-1">
+                                Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                {{compressor.performancePoints.fullLoad.power}} kW
+                            </td>
+                        </tr>
+                        <!-- MAX FULL FLOw -->
+                        <tr *ngIf="showMaxFullFlow">
+                            <th>Max Full Flow</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!--dischargePressure-->
+                        <tr *ngIf="showMaxFullFlow">
+                            <td class="pl-1">
+                                Discharge Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.maxFullFlow.dischargePressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--airflow-->
+                        <tr *ngIf="showMaxFullFlow">
+                            <td class="pl-1">
+                                Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.maxFullFlow.airflow}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--power-->
+                        <tr *ngIf="showMaxFullFlow">
+                            <td class="pl-1">
+                                Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.maxFullFlow.power}} kW
+                                </span>
+                                <span
+                                    *ngIf="!checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- UNLOAD POINT -->
+                        <tr *ngIf="showUnloadPoint">
+                            <th>Unload Point</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!--dischargePressure-->
+                        <tr *ngIf="showUnloadPoint">
+                            <td class="pl-1">
+                                Discharge Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.unloadPoint.dischargePressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--airflow-->
+                        <tr *ngIf="showUnloadPoint">
+                            <td class="pl-1">
+                                Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.unloadPoint.airflow}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--power-->
+                        <tr *ngIf="showUnloadPoint">
+                            <td class="pl-1">
+                                Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.unloadPoint.power}} kW
+                                </span>
+                                <span
+                                    *ngIf="!checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- BLOWOFF -->
+                        <tr *ngIf="showBlowoff">
+                            <th>Blowoff</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!--dischargePressure-->
+                        <tr *ngIf="showBlowoff">
+                            <td class="pl-1">
+                                Discharge Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.blowoff.dischargePressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--airflow-->
+                        <tr *ngIf="showBlowoff">
+                            <td class="pl-1">
+                                Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.blowoff.airflow}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--power-->
+                        <tr *ngIf="showBlowoff">
+                            <td class="pl-1">
+                                Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.blowoff.power}} kW
+                                </span>
+                                <span
+                                    *ngIf="!checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- NO LOAD -->
+                        <tr *ngIf="showNoLoad">
+                            <th>No Load</th>
+                            <th *ngFor="let compressor of compressorInventoryItems">
+
+                            </th>
+                        </tr>
+                        <!--dischargePressure-->
+                        <tr *ngIf="showNoLoad">
+                            <td class="pl-1">
+                                Discharge Pressure
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.noLoad.dischargePressure}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--airflow-->
+                        <tr *ngIf="showNoLoad">
+                            <td class="pl-1">
+                                Airflow
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.noLoad.airflow}}
+                                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                                </span>
+                                <span
+                                    *ngIf="!checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                        <!--power-->
+                        <tr *ngIf="showNoLoad">
+                            <td class="pl-1">
+                                Power
+                            </td>
+                            <td *ngFor="let compressor of compressorInventoryItems">
+                                <span
+                                    *ngIf="checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    {{compressor.performancePoints.noLoad.power}} kW
+                                </span>
+                                <span
+                                    *ngIf="!checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType)">
+                                    &mdash;
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

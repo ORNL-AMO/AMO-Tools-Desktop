@@ -5,7 +5,7 @@ import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/ps
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { JsonToCsvService } from '../shared/helper-services/json-to-csv.service';
 import { CompareService } from './compare.service';
@@ -19,6 +19,7 @@ import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { SettingsService } from '../settings/settings.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-psat',
@@ -77,6 +78,7 @@ export class PsatComponent implements OnInit {
   showToast: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
+    private router: Router,
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -89,27 +91,33 @@ export class PsatComponent implements OnInit {
     private motorService: MotorService,
     private fieldDataService: FieldDataService,
     private cd: ChangeDetectorRef,
+    private egridService: EGridService,
     private settingsService: SettingsService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this.getSettings();
-      this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
-      if (this._psat.modifications) {
-        if (this._psat.modifications.length != 0) {
-          this.modificationExists = true;
-          this.modificationIndex = 0;
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'PSAT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        if (this._psat.modifications) {
+          if (this._psat.modifications.length != 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+          }
+          if (this._psat.setupDone) {
+            this.compareService.setCompareVals(this._psat, 0);
+          }
+        } else {
+          this._psat.modifications = new Array();
+          this.modificationExists = false;
         }
-        if (this._psat.setupDone) {
-          this.compareService.setCompareVals(this._psat, 0);
-        }
-      } else {
-        this._psat.modifications = new Array();
-        this.modificationExists = false;
+        this.initSankeyList();
       }
-      this.initSankeyList();
     })
     let tmpTab = this.assessmentService.getTab();
     if (tmpTab) {
@@ -270,7 +278,7 @@ export class PsatComponent implements OnInit {
       let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
       return tmpForm.valid;
     }
   }
@@ -278,7 +286,7 @@ export class PsatComponent implements OnInit {
   save() {
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
     if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();
@@ -293,9 +301,11 @@ export class PsatComponent implements OnInit {
         this.modificationExists = true;
       }
       this._psat.modifications.forEach(mod => {
-        mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
-        mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
-        mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        if(mod.psat.inputs.whatIfScenario){
+          mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
+          mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
+          mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        }
       })
     } else {
       this.modificationExists = false;
@@ -366,6 +376,7 @@ export class PsatComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.whatIfScenario = true;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)

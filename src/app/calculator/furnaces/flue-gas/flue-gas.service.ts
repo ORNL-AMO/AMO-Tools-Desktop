@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasFormService } from './flue-gas-form.service';
@@ -62,6 +62,8 @@ export class FlueGasService {
 
   getFlueGasResult(flueGasData: FlueGas, energyData: FlueGasEnergyData, settings: Settings, inModal: boolean): FlueGasResult {
     let result: FlueGasResult = {
+      calculatedFlueGasO2: 0,
+      calculatedExcessAir: 0,
       availableHeat: 0,
       availableHeatError: undefined,
       flueGasLosses: 0,
@@ -77,9 +79,11 @@ export class FlueGasService {
         validData = this.flueGasFormService.setValidators(formGroup, inModal).valid;
       } 
       if (validData) {
-        let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
-        result.availableHeat = availableHeat * 100;
-        let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
+        let flueGasByVolumeSuiteResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
+        result.availableHeat = flueGasByVolumeSuiteResults.availableHeat * 100;
+        result.calculatedExcessAir = flueGasByVolumeSuiteResults.excessAir * 100;
+        result.calculatedFlueGasO2 = flueGasByVolumeSuiteResults.flueGasO2 * 100;
+        let flueGasLosses = (1 - flueGasByVolumeSuiteResults.availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
         result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
@@ -188,10 +192,17 @@ export class FlueGasService {
     let exampleModFlueGasTemp: number = 250;
     let exampleFuelTemp: number = 80;
     let exampleHeatInput: number = 15;
-
+    let exampleMoistureInAirCombustion: number = .0077;
+    let exampleAmbientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+    }
+    
     if(settings.unitsOfMeasure != 'Imperial'){
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
       exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
+      
+      exampleAmbientAirTemp = this.convertUnitsService.value(exampleAmbientAirTemp).from('F').to('C')
+      exampleAmbientAirTemp = Number(exampleAmbientAirTemp.toFixed(2));
 
       exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
       exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
@@ -221,6 +232,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 15,
         flueGasTemperature: exampleFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
@@ -248,6 +261,8 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
+        moistureInAirCombustion: exampleMoistureInAirCombustion,
+        ambientAirTemp: exampleAmbientAirTemp,
         excessAirPercentage: 10,
         flueGasTemperature: exampleModFlueGasTemp,
         fuelTemperature: exampleFuelTemp,

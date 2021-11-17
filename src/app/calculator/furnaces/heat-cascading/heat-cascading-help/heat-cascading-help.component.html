@@ -1,32 +1,18 @@
 <div class="p-3 pt-3 d-flex flex-column help-info">
   <h5>
-    Heat Cascading from High Temperature Process to Lower Temperature Process
-    <label class="mt-2 p-1" (click)="toggleDescription()">
-      <span class="fa fa-chevron-down" *ngIf="displayDescription"></span>
-      <span class="fa fa-chevron-right" *ngIf="!displayDescription"></span>
-      <span class="h6 pl-1">
-        Description
-      </span>
-    </label>
-    <div class="mt-2" *ngIf="displayDescription">
-      <h6>
-        <small class="text-muted">
-          This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher
-          temperature (primary) process heating equipment is used to supply heat to lower temperature (secondary)
-          process
-          heating equipment. The energy savings result from reduction of heat supply for the secondary process. This is
-          a
-          very attractive method of energy saving, however several issues must be considered before application of this
-          method. They include matching of heat supply and heat use timing or schedule, distance between primary and
-          secondary process equipment, quality of gases from primary process - they must be free of any contamination
-          such
-          as particulates, chemicals, organic or inorganic material vapors etc. In general, this method should be
-          considered
-          for a continuous process line in which primary and secondary processes are running at the same time and the
-          loading (production) rate is constant.
-        </small>
-      </h6>
-    </div>
+    Heat Cascading from High Temperature Process to Lower Temperature Process Help
+    <br>
+    <small class="text-muted">
+      This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher
+      temperature (primary) process heating equipment is used to supply heat to lower temperature (secondary) process
+      heating equipment. The energy savings result from reduction of heat supply for the secondary process. This is a
+      very attractive method of energy saving, however several issues must be considered before application of this
+      method. They include matching of heat supply and heat use timing or schedule, distance between primary and
+      secondary process equipment, quality of gases from primary process - they must be free of any contamination such
+      as particulates, chemicals, organic or inorganic material vapors etc. In general, this method should be considered
+      for a continuous process line in which primary and secondary processes are running at the same time and the
+      loading (production) rate is constant.
+    </small>
     <hr>
   </h5>
 
@@ -87,6 +73,20 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'availableHeat'">
@@ -183,7 +183,7 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'secFuelCost'">
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
     <h6>
       Fuel Cost
       <br>

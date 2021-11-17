@@ -33,29 +33,32 @@ import { InventoryItemComponent } from './directory-items/inventory-item/invento
 import { MotorInventoryCardComponent } from './directory-items/inventory-item/motor-inventory-card/motor-inventory-card.component';
 import { WasteWaterSummaryCardComponent } from './directory-items/assessment-item/waste-water-summary-card/waste-water-summary-card.component';
 import { WasteWaterReportModule } from '../../waste-water/waste-water-report/waste-water-report.module';
+import { CompressedAirAssessmentCardComponent } from './directory-items/assessment-item/compressed-air-assessment-card/compressed-air-assessment-card.component';
+import { CompressedAirReportModule } from '../../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
 
 @NgModule({
   declarations: [
     DirectoryDashboardComponent,
-     DirectoryDashboardMenuComponent,
-     FsatSummaryCardComponent,
-     PhastSummaryCardComponent,
-     PsatSummaryCardComponent,
-     SsmtSummaryCardComponent,
-     TreasureHuntSummaryCardComponent,
-     DeleteItemsModalComponent,
-     DirectorySummaryComponent,
-     DirectoryContactInfoComponent,
-     PreAssessmentModalComponent,
-     AssessmentItemComponent,
-     DirectoryItemComponent,
-     PreAssessmentItemComponent,
-     AddPreAssessmentItemComponent,
-     ContentControlsComponent,
-     InventoryItemComponent,
-     MotorInventoryCardComponent,
-     WasteWaterSummaryCardComponent
-    ],
+    DirectoryDashboardMenuComponent,
+    FsatSummaryCardComponent,
+    PhastSummaryCardComponent,
+    PsatSummaryCardComponent,
+    SsmtSummaryCardComponent,
+    TreasureHuntSummaryCardComponent,
+    DeleteItemsModalComponent,
+    DirectorySummaryComponent,
+    DirectoryContactInfoComponent,
+    PreAssessmentModalComponent,
+    AssessmentItemComponent,
+    DirectoryItemComponent,
+    PreAssessmentItemComponent,
+    AddPreAssessmentItemComponent,
+    ContentControlsComponent,
+    InventoryItemComponent,
+    MotorInventoryCardComponent,
+    WasteWaterSummaryCardComponent,
+    CompressedAirAssessmentCardComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -71,7 +74,8 @@ import { WasteWaterReportModule } from '../../waste-water/waste-water-report/was
     SettingsModule,
     PreAssessmentModule,
     DashboardPipeModule,
-    WasteWaterReportModule
+    WasteWaterReportModule,
+    CompressedAirReportModule
   ],
   providers: [DirectoryDashboardService]
 })

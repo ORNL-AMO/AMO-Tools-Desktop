@@ -1,0 +1,30 @@
+<div class="ssmt">
+    <div class="row">
+        <div class="col-12">
+            <div class="print-page-title">
+                Compressed Air System Rollup Summary
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex flex-column">
+                <label class="group-label">Compressed Air Systems Cost</label>
+                <app-rollup-summary-bar-chart [barChartData]="costChartData" [yAxisLabel]="costYAxisLabel"
+                    [tickFormat]="costTickFormat" [printView]="true">
+                </app-rollup-summary-bar-chart>
+                <label class="group-label">Compressed Air Systems Energy Usage</label>
+                <app-rollup-summary-bar-chart [barChartData]="energyChartData" [yAxisLabel]="energyYAxisLabel"
+                    [tickFormat]="energyTickFormat" [printView]="true">
+                </app-rollup-summary-bar-chart>
+            </div>
+        </div>
+    </div>
+    <div class="row print-avoid-break">
+        <div class="col-12">
+            <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Compressed Air'"
+                [energyUnit]="energyUnit">
+            </app-rollup-summary-table>
+        </div>
+    </div>
+</div>

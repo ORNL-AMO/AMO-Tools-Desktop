@@ -44,12 +44,19 @@ export class WasteHeatComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.wasteHeatService.wasteHeatInput.getValue();
     if(!existingInputs) {
-      this.wasteHeatService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.wasteHeatService.initDefaultEmptyInputs(this.settings.electricityCost);
+      } else {
+        this.wasteHeatService.initDefaultEmptyInputs();
+      }
       this.wasteHeatService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();

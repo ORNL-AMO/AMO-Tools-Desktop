@@ -1,0 +1,14 @@
+.secondary-group{
+    width: auto;
+    text-transform: none;
+    padding-bottom: 0px;
+}
+
+
+.input-group-addon.calc-addon{
+    border-left: solid 1px;
+}
+
+td {
+    border-top: none !important;
+}

@@ -5,7 +5,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { MotorInventoryData } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
@@ -37,6 +37,7 @@ export class MotorInventoryComponent implements OnInit {
   motorInventoryItem: InventoryItem;
   batchAnalysisSettingsSub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
+    private router: Router,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
     private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService) { }
 
@@ -44,11 +45,16 @@ export class MotorInventoryComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
-      let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
-      this.motorInventoryService.settings.next(settings);
-      this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
-      if (this.motorInventoryItem.batchAnalysisSettings) {
-        this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
+      if (!this.motorInventoryItem) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'motor inventory' }});
+      } else { 
+      
+        let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
+        this.motorInventoryService.settings.next(settings);
+        this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
+        if (this.motorInventoryItem.batchAnalysisSettings) {
+          this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
+        }
       }
     });
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {

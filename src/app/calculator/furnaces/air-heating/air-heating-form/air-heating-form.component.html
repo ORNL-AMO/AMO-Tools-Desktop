@@ -25,6 +25,16 @@
       </span>
     </div>
 
+    <div *ngIf="inTreasureHunt && form.controls.gasFuelType.value === true" class="form-group">
+      <label class="small" for="utilityType">Utility type
+      </label>
+      <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
+        (change)="setTreasureHuntFuelCost()" (focus)="focusField('utilityType')" >
+        <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+        <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label class="small" for="method">Type of fuel</label>
       <select name="gasFuelType" class="form-control" formControlName="gasFuelType" id="gasFuelType"
@@ -34,15 +44,6 @@
       </select>
     </div>
 
-    <div *ngIf="inTreasureHunt && form.controls.gasFuelType.value === true" class="form-group">
-      <label class="small" for="utilityType">Utility type
-      </label>
-      <select name="utilityType" class="form-control" formControlName="utilityType" id="utilityType"
-        (change)="calculate()" (focus)="focusField('utilityType')" >
-        <option for="utilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
-        <option for="utilityType" [ngValue]="'Other Fuel'">Other Gas</option>
-      </select>
-    </div>
 
     <div class="form-group">
       <label class="small" for="materialTypeId">Fuel
@@ -143,20 +144,20 @@
     </div>
 
     <div *ngIf="form.controls.gasFuelType.value == false" class="form-group">
-      <label class="small" for="moistureInAirComposition">Moisture in Combustion Air</label>
+      <label class="small" for="moistureInAirCombustion">Moisture in Combustion Air</label>
       <div class="input-group">
-        <input name="moistureInAirComposition" type="number" step="any" min="0" max="100" class="form-control"
-          formControlName="moistureInAirComposition" id="moistureInAirComposition" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('moistureInAirComposition')">
+        <input name="moistureInAirCombustion" type="number" step="any" min="0" max="100" class="form-control"
+          formControlName="moistureInAirCombustion" id="moistureInAirCombustion" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('moistureInAirCombustion')">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small"
-        *ngIf="form.controls.moistureInAirComposition.invalid && !form.controls.moistureInAirComposition.pristine">
-        <span *ngIf="form.controls.moistureInAirComposition.errors.required">Value Required</span>
-        <span *ngIf="form.controls.moistureInAirComposition.errors.max">Value can't be greater than
-          {{form.controls.moistureInAirComposition.errors.max.max}} %.</span>
-        <span *ngIf="form.controls.moistureInAirComposition.errors.min">Value can't be less than
-          {{form.controls.moistureInAirComposition.errors.min.min}} %.</span>
+        *ngIf="form.controls.moistureInAirCombustion.invalid && !form.controls.moistureInAirCombustion.pristine">
+        <span *ngIf="form.controls.moistureInAirCombustion.errors.required">Value Required</span>
+        <span *ngIf="form.controls.moistureInAirCombustion.errors.max">Value can't be greater than
+          {{form.controls.moistureInAirCombustion.errors.max.max}} %.</span>
+        <span *ngIf="form.controls.moistureInAirCombustion.errors.min">Value can't be less than
+          {{form.controls.moistureInAirCombustion.errors.min.min}} %.</span>
       </span>
     </div>
 

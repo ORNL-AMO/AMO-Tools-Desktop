@@ -42,12 +42,19 @@ export class AirHeatingComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.airHeatingService.airHeatingInput.getValue();
     if(!existingInputs) {
-      this.airHeatingService.initDefaultEmptyInputs();
+      if (this.inTreasureHunt) {
+        this.airHeatingService.initDefaultEmptyInputs(this.settings.fuelCost);
+      } else {
+        this.airHeatingService.initDefaultEmptyInputs();
+      }
       this.airHeatingService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();

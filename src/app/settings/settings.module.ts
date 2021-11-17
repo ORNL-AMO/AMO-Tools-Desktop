@@ -16,6 +16,9 @@ import { ResetDataModalComponent } from './assessment-settings/reset-data-modal/
 import { ModalModule } from 'ngx-bootstrap';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 import { RouterModule } from '@angular/router';
+import { PrintSettingsComponent } from './print-settings/print-settings.component';
+import { Co2SavingsSettingsComponent } from './co2-savings-settings/co2-savings-settings.component';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
     declarations: [
@@ -29,6 +32,8 @@ import { RouterModule } from '@angular/router';
         TreasureHuntSettingsComponent,
         AssessmentSettingsComponent,
         ResetDataModalComponent,
+        PrintSettingsComponent,
+        Co2SavingsSettingsComponent,
 
     ],
     imports: [
@@ -37,10 +42,11 @@ import { RouterModule } from '@angular/router';
         FormsModule,
         ReactiveFormsModule,
         ModalModule,
-        AnimatedCheckmarkModule
+        AnimatedCheckmarkModule,
+        AssessmentCo2SavingsModule
     ],
     providers: [
-        SettingsService
+        SettingsService,
     ],
     exports: [
         PsatSettingsComponent,

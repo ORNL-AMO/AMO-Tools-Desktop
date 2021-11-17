@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { StackLossInput } from '../../../shared/models/steam/steam-inputs';
@@ -23,7 +23,11 @@ export class StackLossService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initFormVolume(): FormGroup {
+  initFormVolume(settings: Settings): FormGroup {
+    let ambientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+    }
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
@@ -31,7 +35,9 @@ export class StackLossService {
       'excessAirPercentage': ['', [Validators.required, Validators.min(0)]],
       'o2InFlueGas': ['', [Validators.required, Validators.min(0), Validators.max(21)]],
       'combustionAirTemperature': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [''],
+      'ambientAirTemp': [ambientAirTemp, Validators.required],
       'CH4': ['', Validators.required],
       'C2H6': ['', Validators.required],
       'N2': ['', Validators.required],
@@ -47,7 +53,11 @@ export class StackLossService {
     });
   }
 
-  initFormMass(): FormGroup {
+  initFormMass(settings: Settings): FormGroup {
+    let ambientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C')
+    }
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
@@ -56,7 +66,8 @@ export class StackLossService {
       'o2InFlueGas': ['', [Validators.required, Validators.min(0), Validators.max(21)]],
       'combustionAirTemperature': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [''],
-      'moistureInAirComposition': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'ambientAirTemp': [ambientAirTemp, Validators.required],
+      'moistureInAirCombustion': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': ['', Validators.required],
       'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': ['', Validators.required],
@@ -78,7 +89,9 @@ export class StackLossService {
       'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, Validators.min(0)]],
       'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
       'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'moistureInAirCombustion': [loss.flueGasByVolume.moistureInAirCombustion, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [loss.flueGasByVolume.fuelTemperature],
+      'ambientAirTemp': [loss.flueGasByVolume.ambientAirTemp, Validators.required],
       'CH4': [loss.flueGasByVolume.CH4, Validators.required],
       'C2H6': [loss.flueGasByVolume.C2H6, Validators.required],
       'N2': [loss.flueGasByVolume.N2, Validators.required],
@@ -103,7 +116,8 @@ export class StackLossService {
       'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
       'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature],
-      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'ambientAirTemp': [loss.flueGasByMass.ambientAirTemp, Validators.required],
+      'moistureInAirCombustion': [loss.flueGasByMass.moistureInAirCombustion, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': [loss.flueGasByMass.ashDischargeTemperature, Validators.required],
       'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': [loss.flueGasByMass.carbon, Validators.required],
@@ -126,8 +140,9 @@ export class StackLossService {
       o2InFlueGas: form.controls.o2InFlueGas.value,
       combustionAirTemperature: form.controls.combustionAirTemperature.value,
       fuelTemperature: form.controls.fuelTemperature.value,
+      ambientAirTemp: form.controls.ambientAirTemp.value,
       ashDischargeTemperature: form.controls.ashDischargeTemperature.value,
-      moistureInAirComposition: form.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: form.controls.moistureInAirCombustion.value,
       unburnedCarbonInAsh: form.controls.unburnedCarbonInAsh.value,
       carbon: form.controls.carbon.value,
       hydrogen: form.controls.hydrogen.value,
@@ -148,7 +163,9 @@ export class StackLossService {
       excessAirPercentage: form.controls.excessAirPercentage.value,
       o2InFlueGas: form.controls.o2InFlueGas.value,
       combustionAirTemperature: form.controls.combustionAirTemperature.value,
+      moistureInAirCombustion: form.controls.moistureInAirCombustion.value,
       fuelTemperature: form.controls.fuelTemperature.value,
+      ambientAirTemp: form.controls.ambientAirTemp.value,
       CH4: form.controls.CH4.value,
       C2H6: form.controls.C2H6.value,
       N2: form.controls.N2.value,
@@ -164,22 +181,28 @@ export class StackLossService {
     return flueGasByVolume;
   }
 
-  flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
+  flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
-
+    inputs.ambientAirTempF = inputs.ambientAirTemp;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
+    inputs.flueGasO2Percentage = inputs.o2InFlueGas;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
+    inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    let results = this.processHeatingApiService.flueGasLossesByVolume(inputs);
+    let results: FlueGasByVolumeSuiteResults = this.processHeatingApiService.flueGasLossesByVolume(inputs);
     return results;
   }
 
   flueGasByMass(input: FlueGasByMass, settings: Settings) {
     let inputs: FlueGasByMass = JSON.parse(JSON.stringify(input));
+    inputs.ambientAirTempF = inputs.ambientAirTemp;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
+    inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
     let results = this.processHeatingApiService.flueGasLossesByMass(inputs);
     return results;
   }
@@ -189,7 +212,13 @@ export class StackLossService {
     let exampleCombAirTemp: number = 80;
     let exampleFlueGasTemp: number = 320;
     let exampleFuelTemp: number = 80;
+    let ambientAirTemp: number = 60;
+    if (settings.unitsOfMeasure != 'Imperial') {
+    }
     if(settings.unitsOfMeasure != 'Imperial'){
+      ambientAirTemp = this.convertUnitsService.value(ambientAirTemp).from('F').to('C');
+      ambientAirTemp = Number(ambientAirTemp.toFixed(2));
+
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
       exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
 
@@ -215,6 +244,8 @@ export class StackLossService {
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
         excessAirPercentage: 15,
+        moistureInAirCombustion: 0,
+        ambientAirTemp: ambientAirTemp,
         flueGasTemperature: exampleFlueGasTemp,
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,

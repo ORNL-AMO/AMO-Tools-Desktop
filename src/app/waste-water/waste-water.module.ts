@@ -39,6 +39,9 @@ import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/exp
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { WasteWaterOperationsComponent } from './waste-water-operations/waste-water-operations.component';
+import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
+import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
 
 
 @NgModule({
@@ -65,6 +68,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ExploreAeratorFormComponent,
     WasteWaterDiagramComponent,
     ExploreActivatedSludgeFormComponent,
+    WasteWaterOperationsComponent,
+    OperationsHelpComponent,
   ],
   imports: [
     CommonModule,
@@ -87,7 +92,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AeratorPerformanceFormService,
     CompareService,
     SystemBasicsService,
-    ConvertWasteWaterService
+    ConvertWasteWaterService,
+    WasteWaterOperationsService
   ]
 })
 export class WasteWaterModule { }

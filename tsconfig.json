@@ -12,5 +12,6 @@
       "dom"
     ],
     "resolveJsonModule": true,
-  }
+  },
+  "allowSyntheticDefaultImports": true
 }

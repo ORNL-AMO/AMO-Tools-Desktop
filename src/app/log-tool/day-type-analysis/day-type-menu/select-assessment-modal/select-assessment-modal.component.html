@@ -1,0 +1,84 @@
+<div bsModal #selectAssessmentModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="selectAssessmentModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content p-0">
+            <div class="h-100 d-flex flex-column">
+                <div class="header">
+                    <h3>
+                        Select Assessment
+                        <button class="close pull-right mr-3" aria-label="Close" (click)="closeModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </h3>
+                </div>
+                <!--select assessment-->
+                <div class="p-2" *ngIf="!addNewAssessment">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <th>
+                                Assessment Name
+                            </th>
+                            <th>
+                                Last Modified
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let assessment of compressedAirAssessments">
+                                <td>
+                                    <!-- <span>{{getParentDirStr(assessment.directoryId)}}</span> -->
+                                    <a class="click-link" (click)="selectAssessment(assessment)">
+                                        {{assessment.name}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{assessment.modifiedDate | date}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--create new assessment-->
+                <div class="p-2" *ngIf="addNewAssessment">
+                    <form [formGroup]="newAssessmentForm" (ngSubmit)="createAssessment()" *ngIf="!showNewFolder">
+                        <div class="form-group">
+                            <label class="form-control-label" for="assessmentName">Assessment Name</label>
+                            <input #assessmentName class="form-control w-100" formControlName="assessmentName"
+                                id="assessmentName" type="text" />
+                        </div>
+                        <!-- End .form-group -->
+
+                        <div class="form-group">
+                            <label>Assessment Type</label>
+                            <select class="form-control type-select w-100" formControlName="assessmentType">
+                                <option [ngValue]="'CompressedAir'">Compressed Air</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="directories">
+                            <label>Folder Location</label>
+                            <select class="form-control w-100" formControlName="directoryId">
+                                <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                                    <span
+                                        *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                    <span class="bold">{{dir.name}}/</span>
+                                </option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="pl-2 pt-2 pb-2 w-100 text-right">
+                        <button class="btn btn-sm" (click)="createAssessment()">Create Assessment</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="w-100 p-2 small text-right" *ngIf="!addNewAssessment">
+                <a class="click-link" (click)="showAddNewAssessment()">+ Create New
+                    Assessment</a>
+            </div>
+            <div class="w-100 p-2 small" *ngIf="addNewAssessment">
+                <a class="click-link" (click)="hideAddNewAssessment()"><span class="fa fa-chevron-left"></span> Select
+                    Existing Assessment</a>
+            </div>
+        </div>
+    </div>
+</div>

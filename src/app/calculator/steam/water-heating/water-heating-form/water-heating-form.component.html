@@ -23,6 +23,16 @@
         </span>
       </div>
 
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="boilerUtilityType">Boiler Utility Type
+        </label>
+        <select name="boilerUtilityType" class="form-control" formControlName="boilerUtilityType" id="boilerUtilityType"
+          (change)="setUtilityType()" (focus)="focusField('boilerUtilityType')" >
+          <option for="boilerUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
+          <option for="boilerUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
+        </select>
+      </div>
+      
       <div class="form-group">
         <label class="small" for="fuelCost">
           Cost of Fuel (Water Heater)
@@ -61,16 +71,6 @@
           <span *ngIf="form.controls.fuelCostBoiler.errors.min">Value can't be less than
             {{form.controls.fuelCostBoiler.errors.min.min}}.</span>
         </span>
-      </div>
-
-      <div *ngIf="inTreasureHunt" class="form-group">
-        <label class="small" for="boilerUtilityType">Boiler Utility Type
-        </label>
-        <select name="boilerUtilityType" class="form-control" formControlName="boilerUtilityType" id="boilerUtilityType"
-          (change)="setUtilityType()" (focus)="focusField('boilerUtilityType')" >
-          <option for="boilerUtilityType" [ngValue]="'Natural Gas'">Natural Gas</option>
-          <option for="boilerUtilityType" [ngValue]="'Other Fuel'">Other Gas</option>
-        </select>
       </div>
 
       <div class="form-group">

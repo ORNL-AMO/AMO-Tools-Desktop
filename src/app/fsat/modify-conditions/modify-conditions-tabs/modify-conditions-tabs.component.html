@@ -1,13 +1,15 @@
 <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
-  <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fsat-fluid'}">
-    <a class="nav-link small" (click)="changeModTab('fsat-fluid')">Fluid
-      <span (mouseenter)="showTooltip('fsatFluid')" (mouseleave)="hideTooltip('fsatFluid')" class="badge gray-badge" [ngClass]="fluidBadgeClass">
+
+  <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-operations'}">
+    <a class="nav-link small" (click)="changeModTab('fan-operations')">Operations
+      <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="fanOperationsBadgeClass">
       </span>
     </a>
-    <app-tabs-tooltip [display]="fluidBadgeHover" [reveal]="displayFluidTooltip" [badgeClass]="fluidBadgeClass"></app-tabs-tooltip>
+    <app-tabs-tooltip [display]="fanOperationsBadgeHover" [reveal]="displayFanOperationsTooltip" [badgeClass]="fanOperationsBadgeClass"></app-tabs-tooltip>
   </div>
+
   <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-setup'}">
-    <a class="nav-link small" (click)="changeModTab('fan-setup')">Fan
+    <a class="nav-link small" (click)="changeModTab('fan-setup')">Fan and Fluid
       <span (mouseenter)="showTooltip('fanSetup')" (mouseleave)="hideTooltip('fanSetup')" class="badge gray-badge" [ngClass]="fanSetupBadgeClass">
       </span>
     </a>

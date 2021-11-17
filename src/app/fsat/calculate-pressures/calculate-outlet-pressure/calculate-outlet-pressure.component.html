@@ -100,8 +100,8 @@
             <span class="mr-2" *ngIf="outletPressureData.inletVelocityPressure === undefined">&mdash; &mdash;</span>
           </div>
           <span class="alert-warning pull-right small"
-            *ngIf="calcInletVelocityPressureError !== null && !outletPressureData.userDefinedVelocityPressure">
-            {{ calcInletVelocityPressureError }}
+            *ngIf="calcInletVelocityPressureError != null || !outletPressureData.inletVelocityPressure">
+            Flow rate is required to calculate Inlet Velocity Pressure
           </span>
         </div>
     

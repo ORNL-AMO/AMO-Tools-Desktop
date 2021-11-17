@@ -209,23 +209,6 @@
         <div class="alert alert-info small text-center" *ngIf="showSpeedAlert">
             Value cannot be optimized further.
         </div>
-        <!-- EnergyCostUnit -->
-        <div class="form-group"
-            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.EnergyCostUnit, 'invalid': form.controls.EnergyCostUnit.invalid}">
-            <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
-            <div class="input-group">
-                <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
-                    id="{{'EnergyCostUnit_'+idString}}" (focus)="focusField('EnergyCostUnit')" (input)="save()"
-                    formControlName="EnergyCostUnit" [readonly]="!selected">
-                <span class="input-group-addon units">$/kWh</span>
-            </div>
-            <span *ngIf="form.controls.EnergyCostUnit.invalid && !form.controls.EnergyCostUnit.pristine">
-                <span class="alert-danger pull-right small" *ngIf="form.controls.EnergyCostUnit.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small" *ngIf="form.controls.EnergyCostUnit.errors.min">Value can't
-                    be less than {{form.controls.EnergyCostUnit.errors.min.min | currency}}</span>
-            </span>
-        </div>
         <!-- AnoxicZoneCondition -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.AnoxicZoneCondition, 'invalid': form.controls.AnoxicZoneCondition.invalid}">

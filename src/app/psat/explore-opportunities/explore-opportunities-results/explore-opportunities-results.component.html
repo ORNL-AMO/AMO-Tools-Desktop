@@ -162,6 +162,35 @@
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+      <span class="bold table-text">Annual CO2 Emissions (tonne CO<sub>2</sub>)</span>
+    </div>
+    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+      <span class="bold table-text">{{baselineResults.co2EmissionsOutput | number:'1.1-1'}} </span>
+    </div>
+    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
+      <span class="bold table-text"
+        *ngIf="modificationResults.co2EmissionsOutput">{{modificationResults.co2EmissionsOutput | number:'1.1-1'}} </span>
+      <span class="bold table-text" *ngIf="!modificationResults.co2EmissionsOutput">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-bg my-table-item">
+    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+      <span class="bold table-text">Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</span>
+    </div>
+    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+      <span class="bold table-text">&mdash;</span>
+    </div>
+    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
+      <span class="bold table-text" *ngIf="modificationResults.co2EmissionsOutput && isWhatIfScenario == true">
+        {{getDiff(baselineResults.co2EmissionsOutput, modificationResults.co2EmissionsOutput) | number:'0.0-1'}}
+      </span>
+      <span class="bold table-text" *ngIf="!modificationResults.co2EmissionsOutput || isWhatIfScenario == false">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-bg my-table-item">
+    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">Annual Energy (MWh)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
@@ -182,37 +211,37 @@
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
-      <span class="bold table-text" *ngIf="modificationResults.annual_energy"
+      <span class="bold table-text" *ngIf="modificationResults.annual_energy && isWhatIfScenario == true"
         [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annual_energy, modificationResults.annual_energy) | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annual_energy">&mdash;</span>
+      <span class="bold table-text" *ngIf="!modificationResults.annual_energy || isWhatIfScenario == false">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual Cost</span>
+      <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">{{baselineResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold table-text">{{baselineResults.annual_cost | number: '2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
       <span class="bold table-text" *ngIf="modificationResults.annual_cost"
-        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</span>
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annual_cost">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual Savings</span>
+      <span class="bold table-text">Annual Savings ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
-      <span class="bold table-text" *ngIf="annualSavings" [ngClass]="{'positive-savings': percentSavings > 10}">
-        {{annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!annualSavings">&mdash;</span>
+      <span class="bold table-text" *ngIf="annualSavings && isWhatIfScenario == true" [ngClass]="{'positive-savings': percentSavings > 10}">
+        {{annualSavings | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="!annualSavings || isWhatIfScenario == false">&mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-bg my-table-item"

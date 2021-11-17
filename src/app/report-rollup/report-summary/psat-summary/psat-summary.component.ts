@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { PsatReportRollupService } from '../../psat-report-rollup.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { PsatReportRollupService } from '../../psat-report-rollup.service';
   styleUrls: ['./psat-summary.component.css', '../report-summary.component.css']
 })
 export class PsatSummaryComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   pumpSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;

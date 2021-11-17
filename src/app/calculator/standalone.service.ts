@@ -176,6 +176,16 @@ export class StandaloneService {
     let denominator = (inputCpy.leakRateInput.dischargeTime / 60) * inputCpy.leakRateInput.atmosphericPressure;
     outputs.leakRate = numerator / denominator;
 
+    if (settings.unitsOfMeasure == 'Imperial') {
+      outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('gal');
+      outputs.totalPipeVolume = this.convertUnitsService.value(outputs.totalPipeVolume).from('ft3').to('gal');
+      outputs.totalCapacityOfCompressedAirSystem = this.convertUnitsService.value(outputs.totalCapacityOfCompressedAirSystem).from('ft3').to('gal');
+
+      outputs.totalReceiverVolume = Number(outputs.totalReceiverVolume.toFixed());
+      outputs.totalPipeVolume = Number(outputs.totalPipeVolume.toFixed());
+      outputs.totalCapacityOfCompressedAirSystem = Number(outputs.totalCapacityOfCompressedAirSystem.toFixed());
+    }
+
     return outputs;
   }
 

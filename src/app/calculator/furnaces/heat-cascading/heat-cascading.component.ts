@@ -41,12 +41,15 @@ export class HeatCascadingComponent implements OnInit {
               private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     let existingInputs = this.heatCascadingService.heatCascadingInput.getValue();
     if(!existingInputs) {
-      this.heatCascadingService.initDefaultEmptyInputs();
+      this.heatCascadingService.initDefaultEmptyInputs(this.settings);
       this.heatCascadingService.initDefaultEmptyOutputs();
     }
     this.initSubscriptions();
@@ -82,7 +85,7 @@ export class HeatCascadingComponent implements OnInit {
   }
 
   btnResetData() {
-    this.heatCascadingService.initDefaultEmptyInputs();
+    this.heatCascadingService.initDefaultEmptyInputs(this.settings);
     this.heatCascadingService.resetData.next(true);
   }
 
@@ -104,7 +107,7 @@ export class HeatCascadingComponent implements OnInit {
   }
 
   cancel() {
-    this.heatCascadingService.initDefaultEmptyInputs();
+    this.heatCascadingService.initDefaultEmptyInputs(this.settings);
     this.emitCancel.emit(true);
   }
 

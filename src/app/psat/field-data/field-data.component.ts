@@ -9,7 +9,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 import { FieldDataService } from './field-data.service';
 import { PsatService } from '../psat.service';
-import { OperatingHours } from '../../shared/models/operations';
+
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -35,10 +35,6 @@ export class FieldDataComponent implements OnInit {
 
   @ViewChild('headToolModal', { static: false }) public headToolModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setOpHoursModalWidth();
-  }
 
   formWidth: number;
   showOperatingHoursModal: boolean = false;
@@ -95,17 +91,12 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.setOpHoursModalWidth();
-    }, 100)
-  }
 
   init() {
     if (!this.psat.inputs.cost_kw_hour) {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
-    this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
+    this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline, this.psat.inputs.whatIfScenario);
     this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
   }
@@ -175,29 +166,6 @@ export class FieldDataComponent implements OnInit {
     this.headToolModal.hide();
   }
 
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-    this.psatService.modalOpen.next(false);
-  }
-
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-    this.psatService.modalOpen.next(true);
-  }
-
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.psat.operatingHours = oppHours;
-    this.psatForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
-    this.save();
-    this.closeOperatingHoursModal();
-  }
-
-  setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
-
   canCompare() {
     if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT && !this.inSetup) {
       return true;
@@ -206,20 +174,6 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingHoursDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isOperatingHoursDifferent();
-    } else {
-      return false;
-    }
-  }
-  isCostKwhrDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isCostKwhrDifferent();
-    } else {
-      return false;
-    }
-  }
   isFlowRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isFlowRateDifferent();
@@ -250,7 +204,7 @@ export class FieldDataComponent implements OnInit {
   }
   isMotorFieldCurrentDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isMotorFieldCurrentDifferent();
+      return this.compareService.isMotorFieldCurrentDifferent(); 
     } else {
       return false;
     }

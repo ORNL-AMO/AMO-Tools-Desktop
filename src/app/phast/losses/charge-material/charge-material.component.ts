@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
@@ -52,7 +52,8 @@ export class ChargeMaterialComponent implements OnInit {
   constructor(private phastService: PhastService, 
               private liquidMaterialFormService: LiquidMaterialFormService,
               private gasMaterialFormService: GasMaterialFormService,
-              private solidMaterialFormService: SolidMaterialFormService
+              private solidMaterialFormService: SolidMaterialFormService,
+              private cd: ChangeDetectorRef
     ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,6 +91,7 @@ export class ChargeMaterialComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
     }
+    this.cd.detectChanges();
   }
   
   initChargeMaterial() {
@@ -279,6 +281,7 @@ export class ChargeMaterialComponent implements OnInit {
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+    this.cd.detectChanges();
   }
   focusOut() {
     this.fieldChange.emit('default');

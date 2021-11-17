@@ -6,46 +6,6 @@
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isOperatingHoursDifferent(), 'invalid': psatForm.controls.operatingHours.invalid}">
-      <label for="{{'operatingHours_'+idString}}">Operating Hours</label>
-      <div class="input-group">
-        <span class="input-group-addon op-hour-addon units">
-          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-        </span>
-        <input [readonly]="!selected" name="operatingHours" type="number" min="0" max="1" step="any"
-          class="form-control" formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()"
-          (focus)="focusField('operatingHours')" onfocus="this.select();">
-        <span class="input-group-addon units">hrs/yr</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.operatingHours.invalid && !psatForm.controls.operatingHours.pristine">
-        <span *ngIf="psatForm.controls.operatingHours.errors.required">Value Required</span>
-        <span *ngIf="psatForm.controls.operatingHours.errors.max">Value can't be greater than
-          {{psatForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
-        <span *ngIf="psatForm.controls.operatingHours.errors.min">Value can't be less than
-          {{psatForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
-      </span>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isCostKwhrDifferent(), 'invalid': psatForm.controls.costKwHr.invalid}">
-      <label for="{{'costKwHr_'+idString}}">Electricity Cost</label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="costKwHr" type="number" min="0" max="1" step="any" class="form-control"
-          formControlName="costKwHr" id="{{'costKwHr_'+idString}}" (input)="save()" (focus)="focusField('costKwHr')"
-          onfocus="this.select();">
-        <span class="input-group-addon units">$/kWh</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.costKwHr.invalid && !psatForm.controls.costKwHr.pristine">
-        <span *ngIf="psatForm.controls.costKwHr.errors.required">Value Required</span>
-        <span *ngIf="psatForm.controls.costKwHr.errors.max">Value can't be greater than
-          {{psatForm.controls.costKwHr.errors.max.max}} $/kWh.</span>
-        <span *ngIf="psatForm.controls.costKwHr.errors.min">Value can't be less than
-          {{psatForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
-      </span>
-    </div>
 
     <div class="form-group"
       [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': fieldDataWarnings.flowError !== null, 'invalid': psatForm.controls.flowRate.invalid}">
@@ -97,7 +57,8 @@
       </span>
     </div>
 
-    <div class="form-group" *ngIf="baseline">
+    <div class="form-group" *ngIf="baseline"
+      [ngClass]="{'indicate-different': isLoadEstimationMethodDifferent()}">
       <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
       <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod"
         id="{{'loadEstimatedMethod_'+idString}}" (change)="changeLoadMethod()"
@@ -107,7 +68,7 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 0 && baseline"
-      [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorKW.invalid}">
+      [ngClass]="{'indicate-different': isMotorFieldPowerDifferent(), 'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorKW.invalid}">
       <label for="{{'motorKW_'+idString}}">Motor Power</label>
       <div class="input-group">
         <input [readonly]="!selected" name="motorKW" type="number" min="0" step="any" class="form-control"
@@ -124,7 +85,7 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 1 && baseline"
-      [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
+      [ngClass]="{'indicate-different': isMotorFieldCurrentDifferent(), 'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
       <label for="{{'motorAmps_'+idString}}">Motor Current</label>
       <div class="input-group">
         <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control"
@@ -187,8 +148,3 @@
     </div>
   </div>
 </div>
-
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="psat.operatingHours">
-</app-operating-hours-modal>

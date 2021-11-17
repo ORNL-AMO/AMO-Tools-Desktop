@@ -3,7 +3,7 @@ import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';
@@ -51,6 +51,7 @@ export class TreasureHuntComponent implements OnInit {
   selectedCalc: string;
   constructor(
     private assessmentService: AssessmentService,
+    private router: Router,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
@@ -67,6 +68,9 @@ export class TreasureHuntComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      if (this.assessment && this.assessment.type !== 'TreasureHunt') {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -97,6 +101,7 @@ export class TreasureHuntComponent implements OnInit {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
         this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
+      }
     });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {

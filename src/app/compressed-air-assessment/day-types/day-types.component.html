@@ -1,0 +1,90 @@
+<div class="d-flex flex-column panel-container">
+    <div class="header mr-2 ml-2">
+        <h3>Day Types</h3>
+        <br>
+    </div>
+    <div class="p-2">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th>
+                        Day Type
+                    </th>
+                    <th>
+                        Operating Days
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="form-group form-array" *ngFor="let dayTypeForm of dayTypesFormArray; let i = index">
+                    <ng-container [formGroup]="dayTypeForm">
+                        <td class="w-45">
+                            <input class="form-control w-100" name="{{'name'+i}}" id="{{'name'+i}}"
+                                formControlName="name" type="text" (input)="save()" (focus)="focusField('name')"
+                                onfocus="this.select();">
+                            <span class="alert-danger pull-right"
+                                *ngIf="dayTypeForm.controls.name.invalid && !dayTypeForm.controls.name.pristine">
+                                <span *ngIf="dayTypeForm.controls.name.errors.required">Value required.</span>
+                            </span>
+                        </td>
+                        <td class="w-45">
+                            <input class="form-control w-100" name="{{'numberOfDays'+i}}" id="{{'numberOfDays'+i}}"
+                                formControlName="numberOfDays" type="number" (input)="save()"
+                                (focus)="focusField('numberOfDays')" onfocus="this.select();">
+                            <span class="alert-danger pull-right"
+                                *ngIf="dayTypeForm.controls.numberOfDays.invalid && !dayTypeForm.controls.numberOfDays.pristine">
+                                <span *ngIf="dayTypeForm.controls.numberOfDays.errors.required">Value required.</span>
+                                <span *ngIf="dayTypeForm.controls.numberOfDays.errors.min">Value can't be less than
+                                    {{dayTypeForm.controls.numberOfDays.errors.min.min}}.</span>
+                                <span *ngIf="dayType.controls.numberOfDays.errors.max">Value can't be greater than
+                                    {{dayTypeForm.controls.numberOfDays.errors.max.max}}.</span>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="dayTypesFormArray.length > 1">
+                                <button class="btn btn-sm btn-danger"
+                                    (click)="openConfirmDeleteModal(dayTypeForm.controls.dayTypeId.value)">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </span>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bold">
+                    <td>
+                        Total Annual Days
+                    </td>
+                    <td>
+                        {{totalAnnualDays}}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr class="bold">
+                    <td>
+                        Total Down Days
+                    </td>
+                    <td>
+                        {{totalDownDays}}
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <a class="click-link pull-right small" (click)="addDayType()">+Add Day Type</a>
+    </div>
+    <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be
+        greater than 0 and less than or equal to 365.
+    </div>
+    <div class="p-2 w-100 text-center">
+        <button class="btn btn-primary btn-sm" (click)="openDataExplorer()">Find Day Types With Data Explorer</button>
+    </div>
+</div>
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteDayTypeData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

@@ -33,7 +33,7 @@
             <span *ngIf="conductivityForm.controls.blowdownConductivity.errors.required">Value Required</span>
             <span *ngIf="conductivityForm.controls.blowdownConductivity.errors.max">Value can't be greater than
                 {{conductivityForm.controls.blowdownConductivity.errors.max.max}} &#x3bc;S/cm.</span>
-            <span *ngIf="form.controls.feedwaterConductivity.errors.min">Value can't be less than
+            <span *ngIf="conductivityForm.controls.blowdownConductivity.errors.min">Value can't be less than
                 {{conductivityForm.controls.blowdownConductivity.errors.min.min}} &#x3bc;S/cm.</span>
         </span>
     </div>

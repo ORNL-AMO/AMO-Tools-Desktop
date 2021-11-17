@@ -23,6 +23,7 @@ export class AddModificationComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  isWhatIfScenario: boolean = true;
 
   newModificationName: string;
   currentTab: string;
@@ -38,6 +39,7 @@ export class AddModificationComponent implements OnInit {
     this.tabSubscription = this.psatTabService.secondaryTab.subscribe(val => {
       this.currentTab = val;
     })
+
   }
 
   ngOnDestroy() {
@@ -58,10 +60,16 @@ export class AddModificationComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.whatIfScenario = this.isWhatIfScenario;
     tmpModification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     console.log(tmpModification.psat.inputs.pump_specified);
     this.save.emit(tmpModification)
   }
+
+  saveScenarioChange(isNewModWhatIfScenario: boolean){
+    this.isWhatIfScenario = isNewModWhatIfScenario;
+  }
+
 }

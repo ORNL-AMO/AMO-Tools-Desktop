@@ -38,6 +38,10 @@
             </div>
         </div>
     </div>
-
-
+    <div class="nav-item pr-2">
+        <button class="btn active" (click)="applyToAssessment()">Apply To Assessment</button>
+    </div>
 </div>
+
+
+<app-select-assessment-modal *ngIf="showAssessmentModal" (close)="hideAssessmentModal()"></app-select-assessment-modal>

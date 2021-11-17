@@ -2,12 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChil
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { FieldDataWarnings, PsatWarningService, MotorWarnings } from '../../psat-warning.service';
+import { FieldDataWarnings, PsatWarningService, MotorWarnings, OperationsWarnings } from '../../psat-warning.service';
 import { FieldDataService } from '../../field-data/field-data.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
 import { MotorService } from '../../motor/motor.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PsatService } from '../../psat.service';
+import { PumpOperationsService } from '../../pump-operations/pump-operations.service';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -57,8 +58,15 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   baselineFieldDataWarnings: FieldDataWarnings;
   modificationFieldDataWarnings: FieldDataWarnings;
+
+  baselineOperationsForm: FormGroup;
+  modificationOperationsForm: FormGroup;
+
+  baselineOperationsWarnings: OperationsWarnings;
+  modificationOperationsaWarnings: OperationsWarnings;
+
   showHeadTool: boolean = false;
-  constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService) { }
+  constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService, private pumpOperationsService: PumpOperationsService) { }
 
 
   ngOnInit() {
@@ -99,6 +107,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.baselinePumpFluidForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.baselinePumpFluidForm.disable();
     this.modificationPumpFluidForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
+
+    this.baselineOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs, true);
+    this.baselineOperationsForm.disable();
+    this.modificationOperationsForm = this.pumpOperationsService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
   }
 
   focusField(str: string) {
@@ -116,7 +128,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   save() {
     this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationPumpFluidForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.psat.modifications[this.exploreModIndex].psat.inputs = this.motorService.getInputsFromFrom(this.modificationMotorForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
-    this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationFieldDataForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationFieldDataForm, this.psat.modifications[this.exploreModIndex].psat.inputs);    
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpOperationsService.getPsatInputsFromForm(this.modificationOperationsForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.checkWarnings();
     this.emitSave.emit(true);
   }
@@ -127,6 +140,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
     this.baselineMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, false);
     this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings, true);
+
+    this.baselineOperationsWarnings = this.psatWarningService.checkPumpOperations(this.psat, this.settings);
+    this.modificationOperationsaWarnings = this.psatWarningService.checkPumpOperations(this.psat.modifications[this.exploreModIndex].psat, this.settings);
   }
 
   addNewMod() {

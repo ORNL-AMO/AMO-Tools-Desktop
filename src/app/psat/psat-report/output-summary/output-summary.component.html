@@ -136,11 +136,36 @@
         <td>Motor power (kW)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_power |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;"
+          <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_power">{{modification.psat.outputs.motor_power |
             number:'1.0-1'}}</span>
-          <span *ngIf="!modification.psat.outputs.motor_power">&mdash;</span>
+            <span *ngIf="!modification.psat.outputs.motor_power">&mdash;</span>
+          </td>
+        </tr>
+
+      <tr class="callout">
+        <td>Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.co2EmissionsOutput |
+          number:'1.1-1'}}</td>
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.psat.outputs.co2EmissionsOutput">{{modification.psat.outputs.co2EmissionsOutput |
+            number:'1.1-1'}}</span>
+          <span *ngIf="!modification.psat.outputs.co2EmissionsOutput">&mdash;</span>
+        </td>
+      </tr>
+      <tr class="callout">
+        <td>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
+          <span
+            *ngIf="getDiff(psat.outputs.co2EmissionsOutput, modification.psat.outputs.co2EmissionsOutput) && modification.psat.inputs.whatIfScenario == true">
+            {{getDiff(psat.outputs.co2EmissionsOutput, modification.psat.outputs.co2EmissionsOutput) | sigFigs:'3'}}</span>
+          <span
+            *ngIf="!getDiff(psat.outputs.co2EmissionsOutput, modification.psat.outputs.co2EmissionsOutput) || modification.psat.inputs.whatIfScenario == false">
+            &mdash;</span>
         </td>
       </tr>
       <tr class="callout">
@@ -160,25 +185,27 @@
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span
-            *ngIf="getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">{{getDiff(psat.outputs.annual_energy,
-            modification.psat.outputs.annual_energy) | sigFigs:'3'}}</span>
-          <span *ngIf="!getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">&mdash;</span>
+            *ngIf="getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy) && modification.psat.inputs.whatIfScenario == true">
+            {{getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy) | sigFigs:'3'}}</span>
+          <span
+            *ngIf="!getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy) || modification.psat.inputs.whatIfScenario == false">
+            &mdash;</span>
         </td>
       </tr>
       <tr class="callout">
-        <td>Annual Cost ($)</td>
+        <td>Annual Cost ({{settings.currency}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.annual_cost |
-          currency:'USD':'symbol':'2.0-0'}}</td>
+          number: '2.0-0'}}</td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost |
-            currency:'USD':'symbol':'2.0-0'}}</span>
+              number: '2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_cost">&mdash;</span>
         </td>
       </tr>
       <tr class="callout">
         <td>
-          Annual Savings ($)
+          Annual Savings ({{settings.currency}})
         </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
@@ -186,9 +213,12 @@
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span
-            *ngIf="getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">{{getDiff(psat.outputs.annual_cost,
-            modification.psat.outputs.annual_cost)| currency:'USD':'symbol':'2.0-0'}}</span>
-          <span *ngIf="!getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">&mdash;</span>
+            *ngIf="getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost) && modification.psat.inputs.whatIfScenario == true">
+            {{getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)|
+            number:'2.0-0'}}</span>
+          <span
+            *ngIf="!getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost) || modification.psat.inputs.whatIfScenario == false">
+            &mdash;</span>
         </td>
       </tr>
       <tr>
@@ -201,7 +231,7 @@
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.implementationCosts">{{modification.psat.inputs.implementationCosts|
-            currency:'USD':'symbol':'2.0-0'}}</span>
+            number:'2.0-0'}}</span>
           <span *ngIf="!modification.psat.inputs.implementationCosts">&mdash;</span>
         </td>
       </tr>

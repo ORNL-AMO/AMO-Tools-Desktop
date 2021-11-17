@@ -3,20 +3,33 @@
         <h2 class="mb-1">Steam Calculators</h2>
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img"
-                        [routerLink]="['/calculators/water-heating']">
+               <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
+                  <img src="assets/images/calculator-icons/steam-icons/steam-properties.png" class="calc-img"
+                   [routerLink]="['/calculators/steam-properties']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a [routerLink]="['/calculators/water-heating']">Vent Steam to Heat Water</a>
+               <a class="click-item" [routerLink]="['/calculators/steam-properties']">Steam Properties</a>
                 <p>
-                    This calculator is used to calculate energy and related energy cost saving when vent stream is used to heat water using a steam to liquid heat exchanger.
+                  Calculate the properties of steam, via IAPWS R7-97
                 </p>
+              </div>
+         </div>
+         <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/saturated-properties.png" class="calc-img"
+                        [routerLink]="['/calculators/saturated-properties']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center steam">
+                <a class="click-item" [routerLink]="['/calculators/saturated-properties']">Saturated Properties</a>
+                <p>
+                    Calculate the properties of saturated steam, via IAPWS R7-97 </p>
             </div>
         </div>
         <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png" class="calc-img"
                         [routerLink]="['/calculators/steam-reduction']">
@@ -30,35 +43,6 @@
             </div>
         </div>
         <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
-                    <img src="assets/images/calculator-icons/steam-icons/steam-properties.png" class="calc-img"
-                        [routerLink]="['/calculators/steam-properties']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/steam-properties']">Steam Properties</a>
-                <p>
-                    Calculate the properties of steam, via IAPWS R7-97
-                </p>
-            </div>
-        </div>
-
-        <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
-                    <img src="assets/images/calculator-icons/steam-icons/saturated-properties.png" class="calc-img"
-                        [routerLink]="['/calculators/saturated-properties']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center steam">
-                <a class="click-item" [routerLink]="['/calculators/saturated-properties']">Saturated Properties</a>
-                <p>
-                    Calculate the properties of saturated steam, via IAPWS R7-97 </p>
-            </div>
-        </div>
-
-        <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/stack-loss.png" class="calc-img"
@@ -69,23 +53,6 @@
                 <a class="click-item" [routerLink]="['/calculators/stack-loss']">Stack Loss</a>
                 <p>
                     Determine the amount of heat lost in the boiler stack gas
-                </p>
-            </div>
-        </div>
-
-        <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/steam-icons/heat-loss.png" class="calc-img w-75"
-                        [routerLink]="['/calculators/heat-loss']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/heat-loss']">Heat Loss</a>
-                <p>
-                    Calculate the energy (heat) loss and outlet steam properties given inlet steam conditions and a %
-                    heat
-                    loss
                 </p>
             </div>
         </div>
@@ -103,12 +70,81 @@
                 </p>
             </div>
         </div>
-
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
+                    <img src="assets/images/calculator-icons/steam-icons/steam-turbine.png"
+                        class="calc-img steam-turbine" [routerLink]="['/calculators/turbine']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/turbine']">Steam Turbine</a>
+                <p>
+                    Calculate the energy generated or steam outlet conditions for a steam turbine
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/pipe-ins.png"
+                        class="calc-img" [routerLink]="['/calculators/pipe-insulation-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/pipe-insulation-reduction']">Pipe Insulation</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with insulating hot pipes.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/tank-ins.png"
+                        class="calc-img" [routerLink]="['/calculators/tank-insulation-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/tank-insulation-reduction']">Tank Insulation</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with insulating hot tanks.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
+                    <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png" class="calc-img"
+                    [routerLink]="['/calculators/boiler-blowdown-rate']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/boiler-blowdown-rate']">Boiler Blowdown Rate</a>
+                <p>
+                    Calculate the blowdown rate of a boiler
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/deaerator.png" class="calc-img"
+                    [routerLink]="['/calculators/deaerator']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/deaerator']">Deaerator</a>
+                <p>
+                    Determine the required water and steam flows for a required feedwater mass flow
+                </p>
+            </div>
+        </div>
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/flash-tank.png" class="calc-img flash-tank"
-                        [routerLink]="['/calculators/flash-tank']">
+                    [routerLink]="['/calculators/flash-tank']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
@@ -119,7 +155,6 @@
                 </p>
             </div>
         </div>
-
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
@@ -136,23 +171,8 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/steam-icons/deaerator.png" class="calc-img"
-                        [routerLink]="['/calculators/deaerator']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/deaerator']">Deaerator</a>
-                <p>
-                    Determine the required water and steam flows for a required feedwater mass flow
-                </p>
-            </div>
-        </div>
-
-        <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/header.png" class="calc-img header-steam"
-                        [routerLink]="['/calculators/header']">
+                    [routerLink]="['/calculators/header']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
@@ -162,61 +182,62 @@
                 </p>
             </div>
         </div>
-
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
-                    <img src="assets/images/calculator-icons/steam-icons/steam-turbine.png"
-                        class="calc-img steam-turbine" [routerLink]="['/calculators/turbine']">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/heat-loss.png" class="calc-img w-75"
+                    [routerLink]="['/calculators/heat-loss']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/turbine']">Steam Turbine</a>
+                <a class="click-item" [routerLink]="['/calculators/heat-loss']">Heat Loss</a>
                 <p>
-                    Calculate the energy generated or steam outlet conditions for a steam turbine
+                    Calculate the energy (heat) loss and outlet steam properties given inlet steam conditions and a %
+                    heat
+                    loss
                 </p>
             </div>
         </div>
-
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
-                    <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png" class="calc-img"
-                        [routerLink]="['/calculators/boiler-blowdown-rate']">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/water-heating-icon.png" class="calc-img"
+                    [routerLink]="['/calculators/water-heating']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" [routerLink]="['/calculators/boiler-blowdown-rate']">Boiler Blowdown Rate</a>
+                <a [routerLink]="['/calculators/water-heating']">Vent Steam to Heat Water</a>
                 <p>
-                    Calculate the blowdown rate of a boiler
+                    This calculator is used to calculate energy and related energy cost saving when vent stream is used to heat water using a steam to liquid heat exchanger.
+                </p>
+            </div>
+        </div>    
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/steam-icons/condensing-economizer.png" class="calc-img"
+                    [routerLink]="['/calculators/condensing-economizer']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/condensing-economizer']">Heat Recovery From Condensing Heat Exchanger</a>
+                <p>
+                    This calculator is used to calculate energy and related energy cost saving when stack waste heat is 
+                    recovered using condensing heat exchanger to heat boiler feed water.
                 </p>
             </div>
         </div>
         <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/utilities-icons/pipe-insulation-reduction-icon.png"
-                        class="calc-img" [routerLink]="['/calculators/pipe-insulation-reduction']">
+                    <img src="assets/images/calculator-icons/steam-icons/feedwater-econ-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/feedwater-economizer']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a [routerLink]="['/calculators/pipe-insulation-reduction']">Pipe Insulation</a>
+                <a [routerLink]="['/calculators/feedwater-economizer']">Feedwater Economizer</a>
                 <p>
-                    This calculator is used to quantify the energy savings associated with insulating hot pipes.
-                </p>
-            </div>
-        </div>
-        <div class="d-flex calc-item-row w-100">
-            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-                <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/utilities-icons/tank-insulation-reduction-icon.png"
-                        class="calc-img" [routerLink]="['/calculators/tank-insulation-reduction']">
-                </div>
-            </div>
-            <div class="d-flex flex-fill flex-column justify-content-center">
-                <a [routerLink]="['/calculators/tank-insulation-reduction']">Tank Insulation</a>
-                <p>
-                    This calculator is used to quantify the energy savings associated with insulating hot tanks.
+                    This calculator is used to calculate energy and related energy cost saving when stack waste heat is recovered using non-condensing heat exchanger to heat boiler feed water. 
                 </p>
             </div>
         </div>

@@ -16,6 +16,7 @@ export class WasteWaterAnalysisComponent implements OnInit {
 
   analysisTab: string;
   analysisTabSub: Subscription;
+  settings: Settings;
   constructor(private wasteWaterService: WasteWaterService, private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
 
   ngOnInit(): void {
@@ -23,8 +24,8 @@ export class WasteWaterAnalysisComponent implements OnInit {
       this.analysisTab = val;
     });
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    let settings: Settings = this.wasteWaterService.settings.getValue();
-    this.wasteWaterAnalysisService.setResults(wasteWater, settings);
+    this.settings = this.wasteWaterService.settings.getValue();
+    this.wasteWaterAnalysisService.setResults(wasteWater, this.settings);
     this.wasteWaterAnalysisService.initXAxisVariables();
     this.wasteWaterAnalysisService.setGraphData();
     this.wasteWaterAnalysisService.selectedTableData.next({

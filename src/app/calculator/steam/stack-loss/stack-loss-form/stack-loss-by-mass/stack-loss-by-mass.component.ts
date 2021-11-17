@@ -123,7 +123,7 @@ export class StackLossByMassComponent implements OnInit {
       o2: this.stackLossForm.controls.o2.value,
       moisture: this.stackLossForm.controls.moisture.value,
       nitrogen: this.stackLossForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.stackLossForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.stackLossForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.stackLossForm.controls.o2InFlueGas.value,
       excessAir: this.stackLossForm.controls.excessAirPercentage.value
     };

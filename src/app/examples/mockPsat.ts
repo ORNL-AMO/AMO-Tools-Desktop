@@ -35,11 +35,25 @@ export const MockPsat: Assessment = {
             "fluidType": "Water",
             "fluidTemperature": 68,
             "specifiedDriveEfficiency": null,
-            "implementationCosts": null
+            "implementationCosts": null,
+            "whatIfScenario": true,
+            "co2SavingsData": {
+                "energyType": 'electricity',
+                "energySource": '',
+                "fuelType": '',
+                "totalEmissionOutputRate": 0,
+                "electricityUse": 0,
+                "eGridRegion": '',
+                "eGridSubregion": 'SRTV',
+                "totalEmissionOutput": 0,
+                "userEnteredBaselineEmissions": false,
+                "userEnteredModificationEmissions": false,
+                "zipcode": '37830',
+            }
         },
         "modifications": [{
             "psat": {
-                "name": "New Pump and Motor",
+                "name": "New Pump and Motor",                
                 "inputs": {
                     "pump_style": 6,
                     "pump_specified": 87.52,
@@ -68,7 +82,20 @@ export const MockPsat: Assessment = {
                     "fluidType": "Water",
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
-                    "implementationCosts": null
+                    "implementationCosts": null,
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 650,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '37830',
+                    }
                 }
             },
             "notes": {
@@ -76,7 +103,7 @@ export const MockPsat: Assessment = {
                 "motorNotes": "",
                 "pumpFluidNotes": "",
                 "systemBasicsNotes": ""
-            }
+            }            
         }, {
             "psat": {
                 "name": "VFD reduce speed to 90%",
@@ -109,7 +136,21 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": 95,
                     "implementationCosts": null,
-                    "isVFD": true
+                    "isVFD": true,
+                    "whatIfScenario": true,
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 650,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '37830',
+                    }
                 }
             },
             "notes": {
@@ -129,7 +170,7 @@ export const MockPsat: Assessment = {
 
 export const MockPsatSettings: Settings = {
     "language": "English",
-    "currency": "$ - US Dollar",
+    "currency": "$",
     "unitsOfMeasure": "Imperial",
     "distanceMeasurement": "ft",
     "flowMeasurement": "gpm",

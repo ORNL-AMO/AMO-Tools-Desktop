@@ -7,6 +7,9 @@
     font-size: small;
 }
 
+.imports {
+    font-size: small;
+}
 
 .vert-text{
     writing-mode: vertical-rl;
@@ -47,3 +50,5 @@ label{
 .form-padding{
     padding-top: 15px;
 }
+
+

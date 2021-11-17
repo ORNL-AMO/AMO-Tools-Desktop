@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -46,7 +46,6 @@ export class FsatComponent implements OnInit {
 
   stepTabs: Array<string> = [
     'system-basics',
-    'fsat-fluid',
     'fan-setup',
     'fan-motor',
     'fan-field-data'
@@ -85,6 +84,7 @@ export class FsatComponent implements OnInit {
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
+    private router: Router,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
     private settingsDbService: SettingsDbService,
@@ -103,9 +103,12 @@ export class FsatComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
-      this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
-      if (this._fsat.modifications) {
-        if (this._fsat.modifications.length !== 0) {
+      if (!this.assessment || (this.assessment && this.assessment.type !== 'FSAT')) {
+        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
+      } else { 
+        this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
+        if (this._fsat.modifications) {
+          if (this._fsat.modifications.length !== 0) {
           this.modificationExists = true;
           this.modificationIndex = 0;
           this.compareService.setCompareVals(this._fsat, 0);
@@ -124,6 +127,7 @@ export class FsatComponent implements OnInit {
       if (tmpTab) {
         this.fsatService.mainTab.next(tmpTab);
       }
+    }
     });
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -289,6 +293,11 @@ export class FsatComponent implements OnInit {
 
   saveFieldData(newFieldData: FieldData) {
     this._fsat.fieldData = newFieldData;
+    this.saveFsat(this._fsat);
+  }
+
+  saveFsatOperations(newFsatOperations: FsatOperations) {
+    this._fsat.fsatOperations = newFsatOperations;
     this.saveFsat(this._fsat);
   }
 
