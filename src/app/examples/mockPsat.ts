@@ -37,6 +37,19 @@ export const MockPsat: Assessment = {
             "specifiedDriveEfficiency": null,
             "implementationCosts": null,
             "whatIfScenario": true,
+            "co2SavingsData": {
+                "energyType": 'electricity',
+                "energySource": '',
+                "fuelType": '',
+                "totalEmissionOutputRate": 0,
+                "electricityUse": 0,
+                "eGridRegion": '',
+                "eGridSubregion": 'SRTV',
+                "totalEmissionOutput": 0,
+                "userEnteredBaselineEmissions": false,
+                "userEnteredModificationEmissions": false,
+                "zipcode": '37830',
+            }
         },
         "modifications": [{
             "psat": {
@@ -69,7 +82,20 @@ export const MockPsat: Assessment = {
                     "fluidType": "Water",
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
-                    "implementationCosts": null
+                    "implementationCosts": null,
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 650,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '37830',
+                    }
                 }
             },
             "notes": {
@@ -112,6 +138,19 @@ export const MockPsat: Assessment = {
                     "implementationCosts": null,
                     "isVFD": true,
                     "whatIfScenario": true,
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 650,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '37830',
+                    }
                 }
             },
             "notes": {

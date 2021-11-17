@@ -9,6 +9,8 @@ import { PsatWarningService, OperationsWarnings } from '../psat-warning.service'
 import { PsatService } from '../psat.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { PumpOperationsService } from './pump-operations.service';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
   selector: 'app-pump-operations',
@@ -39,15 +41,18 @@ export class PumpOperationsComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   formWidth: number;
   showOperatingHoursModal: boolean = false;
+  co2SavingsFormDisabled: boolean;
+  co2SavingsData: Co2SavingsData;
 
   psatForm: FormGroup;
   operationsWarnings: OperationsWarnings;
   idString: string;
 
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private pumpOperationsService: PumpOperationsService) { }
+  constructor(private psatService: PsatService, private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private pumpOperationsService: PumpOperationsService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -83,6 +88,7 @@ export class PumpOperationsComponent implements OnInit {
   }
 
   init() {
+    this.setCo2SavingsData();
     this.psatForm = this.pumpOperationsService.getFormFromObj(this.psat.inputs, this.baseline, this.psat.inputs.whatIfScenario);
     this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
@@ -90,10 +96,12 @@ export class PumpOperationsComponent implements OnInit {
 
   disableForm() {
     this.psatForm.controls.operatingHours.disable();
+    this.co2SavingsFormDisabled = true;
   }
 
   enableForm() {
     this.psatForm.controls.operatingHours.enable();
+    this.co2SavingsFormDisabled = false;
   }
 
   focusField(inputName: string) {
@@ -104,6 +112,20 @@ export class PumpOperationsComponent implements OnInit {
     this.psat.inputs = this.pumpOperationsService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);
+  }
+
+  updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.psat.inputs.co2SavingsData = co2SavingsData;
+    this.save();
+  }
+
+  setCo2SavingsData() {
+    if (this.psat.inputs.co2SavingsData) {
+      this.co2SavingsData = this.psat.inputs.co2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
+    }
   }
 
   checkWarnings() {

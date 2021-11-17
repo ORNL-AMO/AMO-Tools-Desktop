@@ -134,7 +134,18 @@ export class SettingsService {
       'printWasteWaterRollup': settings.printWasteWaterRollup || true,
       'printDetailedResults': settings.printDetailedResults || true,
       'printReportDiagram': settings.printReportDiagram || true,
-      'printAll': settings.printAll || true
+      'printAll': settings.printAll || true,
+      'co2SavingsEnergyType': settings.co2SavingsEnergyType,
+      'co2SavingsEnergySource': settings.co2SavingsEnergySource,
+      'co2SavingsFuelType': settings.co2SavingsFuelType,
+      'totalEmissionOutputRate': settings.totalEmissionOutputRate,
+      'electricityUse': settings.electricityUse,
+      'eGridRegion': settings.eGridRegion,
+      'eGridSubregion': settings.eGridSubregion,
+      'totalEmissionOutput': settings.totalEmissionOutput,
+      'userEnteredBaselineEmissions': settings.userEnteredBaselineEmissions,
+      'userEnteredModificationEmissions': settings.userEnteredModificationEmissions,
+      'zipcode': settings.zipcode,
     
     });
   }
@@ -217,7 +228,18 @@ export class SettingsService {
       printWasteWaterRollup: form.controls.printWasteWaterRollup.value,
       printDetailedResults: form.controls.printDetailedResults.value,
       printReportDiagram: form.controls.printReportDiagram.value,
-      printAll: form.controls.printAll.value
+      printAll: form.controls.printAll.value,
+      co2SavingsEnergyType: form.controls.co2SavingsEnergyType.value,
+      co2SavingsEnergySource: form.controls.co2SavingsEnergySource.value,
+      co2SavingsFuelType: form.controls.co2SavingsFuelType.value,
+      totalEmissionOutputRate: form.controls.totalEmissionOutputRate.value,
+      electricityUse: form.controls.electricityUse.value,
+      eGridRegion: form.controls.eGridRegion.value,
+      eGridSubregion: form.controls.eGridSubregion.value,
+      totalEmissionOutput: form.controls.totalEmissionOutput.value,
+      userEnteredBaselineEmissions: form.controls.userEnteredBaselineEmissions.value,
+      userEnteredModificationEmissions: form.controls.userEnteredModificationEmissions.value,
+      zipcode: form.controls.zipcode.value,
     };
     return tmpSettings;
   }
@@ -299,7 +321,18 @@ export class SettingsService {
       printWasteWaterRollup: settings.printWasteWaterRollup,
       printDetailedResults: settings.printDetailedResults,
       printReportDiagram: settings.printReportDiagram,
-      printAll: settings.printAll
+      printAll: settings.printAll,
+      co2SavingsEnergyType: settings.co2SavingsEnergyType,
+      co2SavingsEnergySource: settings.co2SavingsEnergySource,
+      co2SavingsFuelType: settings.co2SavingsFuelType,
+      totalEmissionOutputRate: settings.totalEmissionOutputRate,
+      electricityUse: settings.electricityUse,
+      eGridRegion: settings.eGridRegion,
+      eGridSubregion: settings.eGridSubregion,
+      totalEmissionOutput: settings.totalEmissionOutput,
+      userEnteredBaselineEmissions: settings.userEnteredBaselineEmissions,
+      userEnteredModificationEmissions: settings.userEnteredModificationEmissions,
+      zipcode: settings.zipcode,
     }
     return newSettings;
   }

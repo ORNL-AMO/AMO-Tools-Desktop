@@ -19,6 +19,7 @@ import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { SettingsService } from '../settings/settings.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-psat',
@@ -90,10 +91,12 @@ export class PsatComponent implements OnInit {
     private motorService: MotorService,
     private fieldDataService: FieldDataService,
     private cd: ChangeDetectorRef,
+    private egridService: EGridService,
     private settingsService: SettingsService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this.getSettings();

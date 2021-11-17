@@ -57,6 +57,7 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { PumpOperationsComponent } from './pump-operations/pump-operations.component';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { PumpOperationsService } from './pump-operations/pump-operations.service
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
     PsatSankeyModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule
   ],
   providers: [
     PsatService,
