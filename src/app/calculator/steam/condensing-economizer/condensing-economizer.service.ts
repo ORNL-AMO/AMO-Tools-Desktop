@@ -100,8 +100,7 @@ export class CondensingEconomizerService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let suiteInputInterface: CondensingEconomizerSuiteInput = this.getSuiteInputInterface(inputCopy);
 
-      let condensingEconomizerOutput = processHeatAddon.airWaterCoolingUsingFlue(suiteInputInterface);
-      // let condensingEconomizerOutput: CondensingEconomizerOutput = this.processHeatingApiService.airWaterCoolingUsingFlue(suiteInputInterface);
+      let condensingEconomizerOutput: CondensingEconomizerOutput = this.processHeatingApiService.airWaterCoolingUsingFlue(suiteInputInterface);
       condensingEconomizerOutput = this.convertResultUnits(condensingEconomizerOutput, settings);
       condensingEconomizerOutput.sensibleHeatRecoveryAnnual = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours;
       condensingEconomizerOutput.heatRecoveryAnnual = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours;

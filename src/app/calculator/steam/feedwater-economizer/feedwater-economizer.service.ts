@@ -46,6 +46,7 @@ export class FeedwaterEconomizerService {
       fuelCost: fuelCost,
       materialTypeId: 1,
       oxygenCalculationMethod: 'Excess Air',
+      substance: 'Gas',
       flueGasTemperature: undefined,
       flueGasO2: undefined,
       fuelTemp: fuelTemp,
@@ -99,15 +100,12 @@ export class FeedwaterEconomizerService {
       inputCopy = this.convertInputUnits(inputCopy, settings);
       let suiteInputInterface: FeedwaterEconomizerSuiteInput = this.getSuiteInputInterface(inputCopy);
 
-      let feedwaterEconomizerOutput = processHeatAddon.waterHeatingUsingFlue(suiteInputInterface);
-      // let feedwaterEconomizerOutput: FeedwaterEconomizerOutput = this.processHeatingApiService.waterHeatingUsingFlue(suiteInputInterface);
+      let feedwaterEconomizerOutput: FeedwaterEconomizerOutput = this.processHeatingApiService.waterHeatingUsingFlue(suiteInputInterface);
       feedwaterEconomizerOutput = this.convertResultUnits(feedwaterEconomizerOutput, settings);
 
       this.feedwaterEconomizerOutput.next(feedwaterEconomizerOutput);
     }
   }
-
-
 
   generateExampleData(settings: Settings) {
     let exampleInput: FeedwaterEconomizerInput = {

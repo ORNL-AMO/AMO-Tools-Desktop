@@ -350,7 +350,6 @@ export class PhastService {
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
       results = this.processHeatingApiService.flueGasLossesByVolume(inputCopy);
     } else {
-      console.log('fg by volume inputs', inputCopy);
       results = this.processHeatingApiService.flueGasLossesByVolume(inputCopy);
     }
 

@@ -364,5 +364,14 @@ export class SuiteApiHelperService {
     }
     return validInput;
   }
+
+  getSteamCondition(steamCondition: number) {
+    switch (steamCondition) {
+      case 0:
+        return Module.SteamConditionType.Superheated;
+      case 1:
+        return Module.SteamConditionType.Saturated;
+    }
+  }
   
 }
