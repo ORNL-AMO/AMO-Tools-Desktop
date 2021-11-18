@@ -312,7 +312,7 @@ export class SuiteApiHelperService {
       case 3:
         return Module.PressureTurbineOperation.POWER_RANGE;
       case 4:
-      return Module.PressureTurbineOperation.FLOW_RANGE;
+        return Module.PressureTurbineOperation.FLOW_RANGE;
     }
   }
 
@@ -333,6 +333,77 @@ export class SuiteApiHelperService {
         return Module.Solve.IsentropicEfficiency;
     }
   }
+
+
+  getCompressorTypeEnum(compressorType: number) {
+    switch (compressorType) {
+      case 0:
+        return Module.CompressorType.Centrifugal;
+      case 1:
+        return Module.CompressorType.Screw;
+      case 2:
+        return Module.CompressorType.Reciprocating;
+    }
+  }
+
+  getControlTypeEnum(controlType: number) {
+    switch (controlType) {
+      case 0:
+        return Module.ControlType.LoadUnload;
+      case 1:
+        return Module.ControlType.ModulationUnload;
+      case 2:
+        return Module.ControlType.BlowOff;
+      case 3:
+        return Module.ControlType.ModulationWOUnload;
+      case 4:
+        return Module.ControlType.StartStop;
+      case 5:
+        return Module.ControlType.VariableDisplacementUnload;
+      case 6:
+        return Module.ControlType.MultiStepUnloading;
+      case 7:
+        return Module.ControlType.VFD;
+    }
+  }
+
+  getLubricantEnum(lubricant: number) {
+    switch (lubricant) {
+      case 0:
+        return Module.Lubricant.Injected;
+      case 1:
+        return Module.Lubricant.Free;
+      case 2:
+        return Module.Lubricant.None;
+    }
+  }
+
+  getStageEnum(stage: number) {
+    switch (stage) {
+      case 0:
+        return Module.Stage.Single;
+      case 1:
+        return Module.Stage.Two;
+      case 2:
+        return Module.Stage.Multiple;
+    }
+  }
+
+  getComputeFromEnum(computeFrom: number) {
+    switch (computeFrom) {
+      case 0:
+        return Module.ComputeFrom.PercentagePower;
+      case 1:
+        return Module.ComputeFrom.PercentageCapacity;
+      case 2:
+        return Module.ComputeFrom.PowerMeasured;
+      case 3:
+        return Module.ComputeFrom.CapacityMeasured;
+      case 4:
+        return Module.ComputeFrom.PowerFactor;
+    }
+  }
+
 
   returnDoubleVector(doublesArray: Array<number>) {
     let doubleVector = new Module.DoubleVector();
@@ -373,5 +444,5 @@ export class SuiteApiHelperService {
         return Module.SteamConditionType.Saturated;
     }
   }
-  
+
 }
