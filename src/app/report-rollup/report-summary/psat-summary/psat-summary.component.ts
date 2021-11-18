@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { PsatReportRollupService } from '../../psat-report-rollup.service';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-psat-summary',
@@ -18,7 +21,7 @@ export class PsatSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numPsats: number;
-  constructor(public psatReportRollupService: PsatReportRollupService) { }
+  constructor(public psatReportRollupService: PsatReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
@@ -33,6 +36,9 @@ export class PsatSummaryComponent implements OnInit {
       if (val.length !== 0) {
         this.psatReportRollupService.setResultsFromSelected(val);
         this.calcPsatSums();
+        this.getPsatPieChartData();
+        this.getTotalEnergy();
+        this.getTotalElectricity();
       }
     });
   }
@@ -60,4 +66,33 @@ export class PsatSummaryComponent implements OnInit {
     this.totalCost = sumCost;
     this.totalEnergy = sumEnergy;
   }
+
+  getPsatPieChartData(){
+    let psatArray: Array<PieChartDataItem>;
+    psatArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
+    let pieChartData: PieChartDataItem = {
+      equipmentName: 'Pumps',
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit),
+      annualCost: this.totalCost,
+      energySavings: this.energySavingsPotential,
+      costSavings: this.pumpSavingsPotential,
+      percentCost: this.pumpSavingsPotential / this.totalCost * 100,
+      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
+      color: '#2980b9',
+      currencyUnit: this.settings.currency
+    }
+    psatArray.push(pieChartData);
+    this.reportSummaryGraphService.reportSummaryGraphData.next(psatArray);
+  }
+
+  getTotalEnergy(){
+    let psatTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalEnergyUsed(psatTotalEnergy);
+  }
+
+  getTotalElectricity(){
+    let psatTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalElectricityUsed(psatTotalElectricity);
+  }
+  
 }

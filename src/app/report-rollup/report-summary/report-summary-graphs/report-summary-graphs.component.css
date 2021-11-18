@@ -1,0 +1,26 @@
+.report-summary {
+    padding: 5px;
+    background: #f5f5f5;
+}
+
+.report-summary ul {
+    padding-left: 5;
+    margin-left: 5;
+    padding-right: 5;
+    margin-right: 5;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.report-summary ul li {
+    list-style: none;
+    width: 30%;
+}
+
+.energy-pie-chart{
+    width: 100%;
+}
+
+p{
+    font-size: 20px;
+}

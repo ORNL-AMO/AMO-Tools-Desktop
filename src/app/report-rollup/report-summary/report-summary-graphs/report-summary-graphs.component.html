@@ -1,0 +1,22 @@
+
+<div class="report-summary">
+        <div class="row no-gutters">
+                <div class="col-12">
+                        <ul>
+                                <li>
+                                        <p>Assessment Energy Usage Summary</p>
+                                        <app-rollup-summary-pie-chart class="energy-pie-chart" [pieChartData]="pieChartData"
+                                                [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit">
+                                        </app-rollup-summary-pie-chart>
+                                </li>
+                                <li>
+                                        <p>Fuel vs Electricity Energy Usage </p>
+                                        <app-rollup-summary-pie-chart class="energy-pie-chart"
+                                                [pieChartData]="energyChartData" [dataOption]="pieChartDataOption"
+                                                [energyUnit]="reportSummaryEnergyUnit">
+                                        </app-rollup-summary-pie-chart>
+                                </li>
+                        </ul>
+                </div>
+        </div>
+</div>

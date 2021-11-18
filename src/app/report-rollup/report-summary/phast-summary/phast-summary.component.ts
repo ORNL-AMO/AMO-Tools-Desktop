@@ -4,6 +4,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Subscription } from 'rxjs';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-phast-summary',
@@ -20,7 +23,7 @@ export class PhastSummaryComponent implements OnInit {
   selectedPhastSub: Subscription;
   phastAssessmentsSub: Subscription;
   constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
-    private reportRollupService: ReportRollupService) { }
+    private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -35,6 +38,9 @@ export class PhastSummaryComponent implements OnInit {
       if (val.length !== 0) {
         this.phastReportRollupService.setPhastResultsFromSelected(val);
         this.calcPhastSums();
+        this.getPhastPieChartData();
+        this.getPhastEnergyData();
+        this.getTotalEnergy();
       }
     });
   }
@@ -62,5 +68,54 @@ export class PhastSummaryComponent implements OnInit {
     this.totalCost = sumCost;
     this.totalEnergy = sumEnergy;
   }
+
+  getPhastPieChartData(){
+    let phastArray: Array<PieChartDataItem>;
+    phastArray = this.reportSummaryGraphService.reportSummaryGraphData.value;
+    let pieChartData: PieChartDataItem = {
+      equipmentName: 'Furnaces',
+      energyUsed: this.totalEnergy + this.energySavingsPotential,
+      annualCost: this.totalCost,
+      energySavings: this.energySavingsPotential,
+      costSavings: this.furnaceSavingsPotential,
+      percentCost: this.furnaceSavingsPotential / this.totalCost * 100,
+      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
+      color: '#bf3d00',
+      currencyUnit: this.settings.currency
+    }
+
+    phastArray.push(pieChartData);
+    this.reportSummaryGraphService.reportSummaryGraphData.next(phastArray);
+  }
+
+  getPhastEnergyData(){      
+    this.phastReportRollupService.selectedPhastResults.forEach(result => {
+      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      let sumEnergySavings = diffEnergy;
+      let sumEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+
+      if(result.settings.energySourceType === 'Steam'){
+        let phastFuelEnergy = sumEnergy + sumEnergySavings;
+        this.reportSummaryGraphService.calculateTotalFuelUsed(phastFuelEnergy);
+      }
+      if(result.settings.energySourceType === 'Fuel'){
+        let phastFuelEnergy = sumEnergy + sumEnergySavings;
+        this.reportSummaryGraphService.calculateTotalFuelUsed(phastFuelEnergy);
+      }
+      if(result.settings.energySourceType === 'Electricity'){
+        let phastTotalElectricity = sumEnergy + sumEnergySavings;
+        this.reportSummaryGraphService.calculateTotalElectricityUsed(phastTotalElectricity);
+      }      
+      
+    }); 
+   
+  }
+
+  getTotalEnergy(){
+    let phastTotalEnergy = this.totalEnergy + this.energySavingsPotential;
+    this.reportSummaryGraphService.calculateTotalEnergyUsed(phastTotalEnergy);
+  }
+
+  
 
 }

@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.service';
+import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-waste-water-summary',
@@ -18,7 +21,7 @@ export class WasteWaterSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numWasteWater: number;
-  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private convertUnitsService: ConvertUnitsService ) { }
 
   ngOnInit() {
     this.assessmentSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
@@ -32,6 +35,9 @@ export class WasteWaterSummaryComponent implements OnInit {
       if (val.length != 0) {
         this.wasteWaterReportRollupService.setWasteWaterResultsFromSelected(val);
         this.calcWasteWaterSums();
+        this.getWasteWaterPieChartData();
+        this.getTotalEnergy();
+        this.getTotalElectricity();
       }
     });
   }
@@ -58,5 +64,33 @@ export class WasteWaterSummaryComponent implements OnInit {
     this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;
     this.totalEnergy = sumEnergy;
+  }
+
+  getWasteWaterPieChartData(){
+    let waterArray: Array<PieChartDataItem>;
+    waterArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
+    let pieChartData: PieChartDataItem = {
+      equipmentName: 'Waste Water',
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit),
+      annualCost: this.totalCost,
+      energySavings: this.energySavingsPotential,
+      costSavings: this.savingPotential,
+      percentCost: this.savingPotential / this.totalCost * 100,
+      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
+      color: '#003087',
+      currencyUnit: this.settings.currency
+    }
+
+    waterArray.push(pieChartData);
+    this.reportSummaryGraphService.reportSummaryGraphData.next(waterArray);
+  }
+  getTotalEnergy(){
+    let waterTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalEnergyUsed(waterTotalEnergy);
+  }
+
+  getTotalElectricity(){
+    let waterTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalElectricityUsed(waterTotalElectricity);
   }
 }

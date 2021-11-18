@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReportRollupService } from '../../compressed-air-report-rollup.service';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-compressed-air-summary',
@@ -19,7 +22,7 @@ export class CompressedAirSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numCompressedAir: number;
-  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService) { }
+  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
@@ -33,6 +36,9 @@ export class CompressedAirSummaryComponent implements OnInit {
       if (val.length != 0) {
         this.compressedAirReportRollupService.setAssessmentResultsFromSelected(val);
         this.calcTotals();
+        this.getCompressedAirPieChartData();
+        this.getTotalElectricity();
+        this.getTotalEnergy();
       }
     });
   }
@@ -66,5 +72,33 @@ export class CompressedAirSummaryComponent implements OnInit {
     this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;
     this.totalEnergy = sumEnergy;
+  }
+
+  getCompressedAirPieChartData(){
+    let airArray: Array<PieChartDataItem>;
+    airArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
+    let pieChartData: PieChartDataItem = {
+      equipmentName: 'Compressed Air',
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit),
+      annualCost: this.totalCost,
+      energySavings: this.energySavingsPotential,
+      costSavings: this.savingPotential,
+      percentCost: this.savingPotential / this.totalCost * 100,
+      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
+      color: '#7030A0',
+      currencyUnit: this.settings.currency
+    }
+
+    airArray.push(pieChartData);
+    this.reportSummaryGraphService.reportSummaryGraphData.next(airArray);
+  }
+  getTotalEnergy(){
+    let airTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalEnergyUsed(airTotalEnergy);
+  }
+
+  getTotalElectricity(){
+    let airTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit);
+    this.reportSummaryGraphService.calculateTotalElectricityUsed(airTotalElectricity);
   }
 }

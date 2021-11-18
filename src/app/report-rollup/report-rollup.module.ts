@@ -63,6 +63,8 @@ import { CompressedAirSummaryComponent } from './report-summary/compressed-air-s
 import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
 import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
 import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compressed-air-rollup-print/compressed-air-rollup-print.component';
+import { ReportSummaryGraphsComponent } from './report-summary/report-summary-graphs/report-summary-graphs.component';
+import { ReportSummaryGraphsService } from './report-summary/report-summary-graphs/report-summary-graphs.service';
 
 @NgModule({
   imports: [
@@ -123,6 +125,7 @@ import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compr
     CompressedAirSummaryComponent,
     CompressedAirRollupComponent,
     CompressedAirRollupPrintComponent,
+    ReportSummaryGraphsComponent,
 
   ],
   providers: [
@@ -133,7 +136,8 @@ import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compr
     SsmtReportRollupService,
     TreasureHuntReportRollupService,
     WasteWaterReportRollupService,
-    CompressedAirReportRollupService
+    CompressedAirReportRollupService,
+    ReportSummaryGraphsService
   ],
   exports: [ReportRollupComponent]
 })
