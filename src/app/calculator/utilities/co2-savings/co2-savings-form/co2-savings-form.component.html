@@ -41,7 +41,7 @@
       <label for="{{'eGridRegion'+modId+index}}">eGrid Region</label>
       <div class="input-group">
         <select name="{{'eGridRegion'+modId+index}}" class="form-control" id="{{'eGridRegion'+modId+index}}"
-          [(ngModel)]="data.eGridRegion" (change)="setRegion()" [required]="true" (focus)="focusField('eGridRegions')">
+          [(ngModel)]="data.eGridRegion" (change)="setRegion()" [required]="true" (focus)="focusField('eGridRegion')">
           <option *ngFor="let option of eGridRegions" [ngValue]="option.region">{{option.region}}</option>
         </select>
       </div>
