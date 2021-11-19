@@ -127,7 +127,6 @@ export class PhastComponent implements OnInit {
       this.mainTab = val;
       //on tab change get container height
       this.getContainerHeight();
-      this.checkTutorials();
     });
     //subscription for stepTab
     this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
@@ -177,6 +176,10 @@ export class PhastComponent implements OnInit {
       }
     });
 
+  }
+
+  ngAfterContentInit(){
+    this.checkTutorials();
   }
 
   setExploreOppsDefaults(modification: Modification) {  
