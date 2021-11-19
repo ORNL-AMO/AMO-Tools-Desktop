@@ -113,36 +113,75 @@ export class BoilerService {
     }
   }
 
-  setApporachTempValidators(formGroup: FormGroup, ssmt: SSMT) {
-    //method to check for valid input
-    let pressure: number;
-    let approachTemp = formGroup.controls.approachTemperature.value;
-    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
+//   setApporachTempValidators(formGroup: FormGroup, ssmt: SSMT) {
+//     //method to check for valid input
+//     let pressure: number;
+//     let approachTemp = formGroup.controls.approachTemperature.value;
+//     let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
     
-    if(formGroup.controls.blowdownFlashed.value == false){
-      // Double check if highPressureHeader or high pressure
-    if(ssmt.headerInput.highPressureHeader){
-     pressure = ssmt.headerInput.highPressureHeader.pressure;
-      }else if(ssmt.headerInput.highPressure){
-      pressure = ssmt.headerInput.highPressure.pressure;
-    }
-   }else if(formGroup.controls.blowdownFlashed.value == true){
-     if(ssmt.headerInput.lowPressureHeader){
-     pressure = ssmt.headerInput.lowPressureHeader.pressure;
-      }else if(ssmt.headerInput.lowPressure){
-   pressure = ssmt.headerInput.lowPressure.pressure;
- }
-}
+//     if(formGroup.controls.blowdownFlashed.value == false){
+//       // Double check if highPressureHeader or high pressure
+//     if(ssmt.headerInput.highPressureHeader){
+//      pressure = ssmt.headerInput.highPressureHeader.pressure;
+//       }else if(ssmt.headerInput.highPressure){
+//       pressure = ssmt.headerInput.highPressure.pressure;
+//     }
+//    }else if(formGroup.controls.blowdownFlashed.value == true){
+//      if(ssmt.headerInput.lowPressureHeader){
+//      pressure = ssmt.headerInput.lowPressureHeader.pressure;
+//       }else if(ssmt.headerInput.lowPressure){
+//    pressure = ssmt.headerInput.lowPressure.pressure;
+//  }
+// }
 
-    if (approachTemp && pressure != undefined) { 
-      let tempValue = pressure - makeUpWaterTemperature;   
-      formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
-      formGroup.controls.approachTemperature.markAsDirty();
-      formGroup.controls.approachTemperature.updateValueAndValidity();
-    }
-    return formGroup;
+//     if (approachTemp && pressure != undefined) { 
+//       let tempValue = pressure - makeUpWaterTemperature;   
+//       formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
+//       formGroup.controls.approachTemperature.markAsDirty();
+//       formGroup.controls.approachTemperature.updateValueAndValidity();
+//     }
+//     return formGroup;
+//   }
+
+  // For yellow warning 
+  checkBoilerWarnings(boilerInput: BoilerInput, ssmt: SSMT): BoilerWarnings {
+    return {
+      approachTemperature: this.checkApproachTempWarning(boilerInput, ssmt)
+    };
   }
+
+  // For yellow warning 
+  checkApproachTempWarning(boilerInput: BoilerInput, ssmt: SSMT): string {
+    let pressure: number;
+    if (boilerInput.blowdownFlashed == false) {
+      // Double check if highPressureHeader or high pressure
+      if (ssmt.headerInput.highPressureHeader) {
+        pressure = ssmt.headerInput.highPressureHeader.pressure;
+      } else if (ssmt.headerInput.highPressure) {
+        pressure = ssmt.headerInput.highPressure.pressure;
+      }
+    } else if (boilerInput.blowdownFlashed == true) {
+      if (ssmt.headerInput.lowPressureHeader) {
+        pressure = ssmt.headerInput.lowPressureHeader.pressure;
+      } else if (ssmt.headerInput.lowPressure) {
+        pressure = ssmt.headerInput.lowPressure.pressure;
+      }
+    }
+    let approachTemp = boilerInput.approachTemperature;
+    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
+    let approachTempWarning = true;
+    let tempValue = pressure - makeUpWaterTemperature;
+    debugger;
+    if (approachTemp >= tempValue) {
+      return 'Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of low pressure header) and the makeup water temperature ' + tempValue;
+    } else {
+      return null
+    }
+  }
+
  }
+
+ 
 
 
 
@@ -151,4 +190,9 @@ export interface BoilerRanges {
   steamTemperatureMax: number;
   deaeratorPressureMin: number;
   deaeratorPressureMax: number;
+}
+
+
+export interface BoilerWarnings {
+  approachTemperature?: string;
 }

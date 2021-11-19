@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
+import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
@@ -43,6 +43,7 @@ export class BoilerComponent implements OnInit {
     this.setBlowdownRateModalWidth();
   }
 
+  warnings: BoilerWarnings;
   formWidth: number;
   showBlowdownRateModal: boolean = false;
   showBoilerEfficiencyModal: boolean = false;
@@ -57,8 +58,6 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
-    console.log(this.ssmt);
-  
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -91,12 +90,11 @@ export class BoilerComponent implements OnInit {
   initForm() {
     if (this.boilerInput) {
       this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
+      this.warnings = this.boilerService.checkBoilerWarnings(this.boilerInput, this.ssmt);
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
     this.setPressureForms(this.boilerInput);
-    this.boilerService.setApporachTempValidators(this.boilerForm, this.ssmt);
-    console.log(this.boilerForm)
   }
 
   setFuelTypes() {
@@ -125,13 +123,13 @@ export class BoilerComponent implements OnInit {
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput);
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.ssmt, this.settings, boilerInput);
       }
 
       if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressureHeader) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.ssmt, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
       } else if (this.headerInput.lowPressureHeader && this.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.ssmt, this.settings, boilerInput.deaeratorPressure, undefined);
       }
     }
   }
@@ -140,10 +138,10 @@ export class BoilerComponent implements OnInit {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
     //where the validation is being checked
-   this.boilerService.setApporachTempValidators(this.boilerForm, this.ssmt);
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
-    }
+    }    
+    this.warnings = this.boilerService.checkBoilerWarnings(tmpBoiler, this.ssmt);
     this.emitSave.emit(tmpBoiler);
   }
 

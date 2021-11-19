@@ -5,6 +5,7 @@ import { SsmtService } from '../../ssmt.service';
 import { FormGroup } from '@angular/forms';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { OperationsService } from '../operations.service';
 
 @Component({
   selector: 'app-general-operations',
@@ -37,10 +38,10 @@ export class GeneralOperationsComponent implements OnInit {
 
   formWidth: number;
   showOperatingHoursModal: boolean = false;
-  constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
+  constructor(private operationsService: OperationsService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
-    console.log(this.form.controls);
+    console.log(this.form);
   }
 
   ngAfterViewInit(){
@@ -50,6 +51,7 @@ export class GeneralOperationsComponent implements OnInit {
   }
 
   save() {
+    this.form = this.operationsService.setMakeUpTempValidators(this.form, this.ssmt)
     this.emitSave.emit(true);
   }
 

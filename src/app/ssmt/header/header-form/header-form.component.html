@@ -61,7 +61,7 @@
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
       <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
         pressure value.</span>
-        <span *ngIf="boilerForm.controls.approachTemperature.errors.max">This value may need to be adjusted to be able to use a heat exchanger to pre-heat makeup water.
+        <span *ngIf="headerForm.controls.pressure.errors.max">This value may need to be adjusted to be able to use a heat exchanger to pre-heat makeup water.
         </span>
 
     </span>

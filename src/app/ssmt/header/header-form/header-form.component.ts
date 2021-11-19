@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
-import { HeaderService, HeaderRanges } from '../header.service';
+import { HeaderService, HeaderRanges} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
@@ -118,6 +118,8 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
+    console.log(this.ssmt);
+      this.headerForm = this.headerService.setHeaderValidators(this.headerForm, this.ssmt, this.pressureLevel)
     if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);

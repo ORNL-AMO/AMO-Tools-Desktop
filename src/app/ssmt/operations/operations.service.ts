@@ -18,13 +18,14 @@ export class OperationsService {
 
     let form: FormGroup = this.formBuilder.group({
       sitePowerImport: [ssmt.generalSteamOperations.sitePowerImport, [Validators.required]],
-      makeUpWaterTemperature: [ssmt.generalSteamOperations.makeUpWaterTemperature, [Validators.required, Validators.min(makeupWaterTempMin), Validators.max(makeupWaterTempMax)]],
+      makeUpWaterTemperature: [ssmt.generalSteamOperations.makeUpWaterTemperature, [Validators.required, Validators.min(makeupWaterTempMin)]],
       fuelCost: [ssmt.operatingCosts.fuelCost, [Validators.required, Validators.min(.00000001)]],
       electricityCost: [ssmt.operatingCosts.electricityCost, [Validators.required, Validators.min(.0000001)]],
       makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost, [Validators.required, Validators.min(.0000001)]],
       hoursPerYear: [ssmt.operatingHours.hoursPerYear, [Validators.required, Validators.min(1), Validators.max(8760)]],
       implementationCosts: [ssmt.operatingCosts.implementationCosts, Validators.min(0)]
     })
+    form = this.setMakeUpTempValidators(form, ssmt);
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -53,4 +54,36 @@ export class OperationsService {
       generalSteamOperations: generalSteamOperations
     }
   }
+
+  setMakeUpTempValidators(formGroup: FormGroup, ssmt: SSMT) {
+    // method to check for valid input
+    let pressure: number;
+    let approachTemp = ssmt.boilerInput.approachTemperature;
+    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
+
+
+    if (ssmt.boilerInput.blowdownFlashed == false) {
+      // Double check if highPressureHeader or high pressure
+      if (ssmt.headerInput.highPressureHeader) {
+        pressure = ssmt.headerInput.highPressureHeader.pressure;
+      } else if (ssmt.headerInput.highPressure) {
+        pressure = ssmt.headerInput.highPressure.pressure;
+      }
+    } else if (ssmt.boilerInput.blowdownFlashed == true) {
+      if (ssmt.headerInput.lowPressureHeader) {
+        pressure = ssmt.headerInput.lowPressureHeader.pressure;
+      } else if (ssmt.headerInput.lowPressure) {
+        pressure = ssmt.headerInput.lowPressure.pressure;
+      }
+    }
+
+    if (approachTemp && pressure != undefined) { 
+      let tempValue = pressure - makeUpWaterTemperature;   
+      formGroup.controls.makeUpWaterTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
+      formGroup.controls.makeUpWaterTemperature.markAsDirty();
+      formGroup.controls.makeUpWaterTemperature.updateValueAndValidity();
+    }
+    return formGroup;
+  }
+
 }

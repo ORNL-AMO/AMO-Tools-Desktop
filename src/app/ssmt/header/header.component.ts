@@ -62,10 +62,10 @@ export class HeaderComponent implements OnInit {
       minHighPressure = this.boilerInput.deaeratorPressure;
     }
     if (this.headerInput.highPressureHeader) {
-      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, minHighPressure);
+      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.ssmt, this.settings, this.boilerInput, minHighPressure);
     }
     else {
-      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.boilerInput, minHighPressure);
+      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt, this.boilerInput, minHighPressure);
     }
 
     if (this.headerInput.mediumPressureHeader) {
@@ -77,9 +77,9 @@ export class HeaderComponent implements OnInit {
       if (this.headerInput.highPressureHeader) {
         max = this.headerInput.highPressureHeader.pressure;
       }
-      this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressureHeader, this.settings, min, max);
+      this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressureHeader,this.ssmt, this.settings, min, max, 'mediumPresure');
     } else {
-      this.mediumPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline);
+      this.mediumPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, this.isBaseline, undefined, undefined, 'mediumPressure');
     }
 
     if (this.headerInput.lowPressureHeader) {
@@ -89,9 +89,9 @@ export class HeaderComponent implements OnInit {
       } else if (this.headerInput.highPressureHeader) {
         pressureMax = this.headerInput.highPressureHeader.pressure;
       }
-      this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, this.boilerInput.deaeratorPressure, pressureMax);
+      this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.ssmt, this.settings, this.boilerInput.deaeratorPressure, pressureMax);
     } else {
-      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline, this.boilerInput.deaeratorPressure);
+      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, this.isBaseline, this.boilerInput.deaeratorPressure);
     }
   }
 
