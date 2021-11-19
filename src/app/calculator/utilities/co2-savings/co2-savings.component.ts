@@ -17,7 +17,7 @@ export class Co2SavingsComponent implements OnInit {
     this.resizeTabs();
   }
   headerHeight: number;
-  currentField: string;
+  currentField: string = 'default';
   tabSelect: string = 'results';
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{
@@ -42,6 +42,7 @@ export class Co2SavingsComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private co2SavingsService: Co2SavingsService) { }
 
   ngOnInit() {
+    debugger;
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -126,6 +127,7 @@ export class Co2SavingsComponent implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
+    debugger;
   }
 
   calculate() {
