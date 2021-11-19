@@ -12,6 +12,7 @@ export class Co2SavingsHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('help component', this.currentField);
   }
 
 }

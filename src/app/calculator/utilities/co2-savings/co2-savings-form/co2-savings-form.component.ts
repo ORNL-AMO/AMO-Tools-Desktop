@@ -86,6 +86,7 @@ export class Co2SavingsFormComponent implements OnInit {
     this.calculate();
   }
   focusField(str: string) {
+    console.log('focusField() str', str);
     this.emitChangeField.emit(str);
   }
   calculate() {
