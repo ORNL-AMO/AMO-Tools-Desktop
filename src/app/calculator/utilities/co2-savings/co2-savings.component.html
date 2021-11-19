@@ -56,8 +56,8 @@
               <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
                 <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large"
                   (click)="removeModificationFixture(index)"></span></label>
-              <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()"
-                [modId]="'modification'" [index]="index"></app-co2-savings-form>
+              <app-co2-savings-form [settings]="settings" [data]="data" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)" 
+              [modId]="'modification'" [index]="index"></app-co2-savings-form>
             </div>
           </div>
         </div>
