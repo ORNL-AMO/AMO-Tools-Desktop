@@ -1,6 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="modifyEfficiencyClass"><input type="checkbox" id="modifyEfficiencyClass" (focus)="focusField('efficiencyClass')"
-      (change)="toggleEfficiencyClass()" 
+      (change)="toggleEfficiencyClass()" [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
       [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity" /> 
       {{fsat.modifications[exploreModIndex].exploreOppsShowMotor.display}}
   </label>

@@ -1,6 +1,7 @@
 <div *ngIf="!isVFD" class="checkbox">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')"
+            [disabled]="currentModification.psat.inputs.whatIfScenario == false"
             (change)="toggleFlowRate()" [(ngModel)]="currentModification.exploreOppsShowFlowRate.hasOpportunity" /> {{ currentModification.exploreOppsShowFlowRate.display}}
     </label>
 </div>

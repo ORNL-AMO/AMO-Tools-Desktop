@@ -88,7 +88,16 @@ export class PsatTabsComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    this.psatTabService.secondaryTab.next(str);
+    if (this.selectedModification.inputs.whatIfScenario == false) {
+      if (str === 'explore-opportunities') {
+        this.psatTabService.secondaryTab.next('modify-conditions');
+      } else {
+        this.psatTabService.secondaryTab.next(str);
+      }
+    } else {
+      this.psatTabService.secondaryTab.next(str);
+    }
+
   }
 
   changeCalcTab(str: string) {
