@@ -1,0 +1,101 @@
+<!--move modal-->
+<div bsModal #moveModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md move-items-modal">
+        <div class="modal-content" *ngIf="moveForm">
+            <div class="modal-header">
+                <h3>Selected Item(s) to Move</h3>
+                <button class="close" (click)="hideMoveModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let assessment of directory.assessments">
+                    <span *ngIf="assessment.selected">
+                        {{assessment.name}} <br>
+                    </span>
+                </div>
+                <div *ngFor="let calculator of directory.calculators">
+                    <span *ngIf="calculator.selected">
+                        {{calculator.name}} <br>
+                    </span>
+                </div>
+                <div *ngFor="let subDir of directory.subDirectory">
+                    <span *ngIf="subDir.selected">
+                        {{subDir.name}} <br>
+                    </span>
+                </div>
+                <div *ngFor="let inventory of directory.inventories">
+                    <span *ngIf="inventory.selected">
+                        {{inventory.name}} <br>
+                    </span>
+                </div>
+                <form [formGroup]="moveForm" *ngIf="!showNewFolder">
+                    <div class="form-group" *ngIf="allDirectories">
+                        <label>Move Item(s) to Different Location</label>
+                        <select class="form-control w-100" formControlName="directoryId">
+                            <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                <span class="bold">{{dir.name}}/</span>
+                            </option>
+                        </select>
+                        <div class="help-text">
+                            <a class="click-link" (click)="addFolder()">Add a new folder for selected item(s)</a>
+                        </div>
+                    </div>
+                </form>
+
+                <form [formGroup]="newFolderForm" *ngIf="showNewFolder">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-control-label" for="folderName">Folder Name</label>
+                            <div class="input-group">
+                                <input class="form-control input-group" formControlName="folderName" id="folderName" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="companyName">Company Name</label>
+                            <div class="input-group">
+                                <input class="form-control input-group" formControlName="companyName"
+                                    id="companyName" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="facilityName">Facility Name</label>
+                            <div class="input-group">
+                                <input class="form-control input-group" formControlName="facilityName"
+                                    id="facilityName" />
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="allDirectories">
+                            <label>New Folder Location</label>
+                            <select class="form-control w-100" formControlName="directoryId">
+                                <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                    <span
+                                        *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                    <span class="bold">{{dir.name}}/</span>
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="p-2">
+                                <button class="btn btn-secondary" type="button"
+                                    (click)="cancelNewFolder()">Cancel</button>
+                            </div>
+
+                            <div class="p-2">
+                                <button class="btn btn-primary" type="button" [disabled]="!newFolderForm.valid"
+                                    (click)="createFolder()">Create Folder</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,12 +7,11 @@ import { PowerFactorCorrectionModule } from './power-factor-correction/power-fac
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
 import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
 import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
-import { WaterReductionModule } from './water-reduction/water-reduction.module';
 import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
-import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
+import { AltitudeCorrectionModule } from './altitude-correction/altitude-correction.module';
 
 @NgModule({
     declarations: [
@@ -31,11 +30,10 @@ import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.mo
         Co2SavingsModule,
         ElectricityReductionModule,
         NaturalGasReductionModule,
-        WaterReductionModule,
         CashFlowModule,
         UnitConverterModule,
         RouterModule,
-        FanPsychrometricModule
+        AltitudeCorrectionModule
     ]
 })
 

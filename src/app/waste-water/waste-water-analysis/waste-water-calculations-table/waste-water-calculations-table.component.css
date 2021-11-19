@@ -1,0 +1,58 @@
+.sticky-left{
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+}
+
+.sticky-right{
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+}
+
+
+.table{
+    font-size: small;
+    margin-bottom: 0px;
+}
+
+
+.name-cell, .header-cell{
+    background-color: white;
+}
+
+.name-cell{
+    font-weight: bold;
+}
+
+
+th, td{
+    min-width: 75px;
+}
+
+.max-height{
+    max-height: 100%;
+}
+
+.sort-by-active{
+    text-decoration: underline;
+}
+
+.header-cell:hover, .name-cell:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+tbody tr:hover{
+    background-color: white;
+}
+
+
+td{
+    white-space: nowrap;
+}
+
+
+tr.selected-row, tr.selected-row .name-cell{
+    background-color: #003087;
+    color: white;
+}

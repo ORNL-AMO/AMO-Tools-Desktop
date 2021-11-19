@@ -4,8 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
 import * as _ from 'lodash';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { PhastCompareService } from '../../phast-compare.service';
+import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -35,7 +35,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   //percent graph variables
   unit: string;
   titlePlacement: string;
-  constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService, private compareService: PhastCompareService) { }
+  constructor(private executiveSummaryService: ExecutiveSummaryService, private phastReportRollupService: PhastReportRollupService, private compareService: PhastCompareService) { }
 
   ngOnInit() {
     this.unit = '%';
@@ -65,7 +65,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
 
     if (!this.inPhast) {
-      this.reportRollupService.selectedPhasts.subscribe(val => {
+      this.phastReportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -88,7 +88,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.phastReportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
 }

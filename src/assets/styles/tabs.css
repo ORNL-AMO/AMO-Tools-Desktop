@@ -78,7 +78,7 @@ Tabs
 
   .compressed-air .tabs.primary .active a {
     border: none;
-    border-bottom:   #A569BD groove 3px;
+    border-bottom:   #7030A0 groove 3px;
   }
 
   .process-cooling .tabs.primary .active a {
@@ -182,6 +182,12 @@ Tabs
   .tabs.subtabs.waste-water {
     border-bottom: #003087 solid 3px;
   }
+  .tabs.subtabs.compressed-air {
+    border-bottom: #7030A0 solid 3px;
+  }
+
+  
+
     .tabs.subtabs.progress-tabs a {
       color: #000;
       padding-top: 8px;
@@ -215,7 +221,11 @@ Tabs
     .tabs.subtabs.psat .active.missing-data .step-number,
     .tabs.subtabs.psat .missing-data .step-number,
     .tabs.subtabs.ssmt .missing-data .step-number,
-    .tabs.subtabs.ssmt .active.missing-data .step-number {
+    .tabs.subtabs.ssmt .active.missing-data .step-number,
+    .tabs.subtabs.waste-water .missing-data .step-number,
+    .tabs.subtabs.waste-water .active.missing-data .step-number,
+    .tabs.subtabs.compressed-air .missing-data .step-number,
+    .tabs.subtabs.compressed-air .active.missing-data .step-number {
       background: red;
     }
 
@@ -226,7 +236,11 @@ Tabs
     .tabs.subtabs.psat .active.input-error .step-number,
     .tabs.subtabs.psat .input-error .step-number,
     .tabs.subtabs.ssmt .active.input-error .step-number,
-    .tabs.subtabs.ssmt .input-error .step-number {
+    .tabs.subtabs.ssmt .input-error .step-number,
+    .tabs.subtabs.waste-water .active.input-error .step-number,
+    .tabs.subtabs.waste-water .input-error .step-number,
+    .tabs.subtabs.compressed-air .active.input-error .step-number,
+    .tabs.subtabs.compressed-air .input-error .step-number  {
       background: orange;
     }
 
@@ -237,7 +251,11 @@ Tabs
     .tabs.subtabs.psat .active.success .step-number,
     .tabs.subtabs.psat .success .step-number,
     .tabs.subtabs.ssmt .active.success .step-number,
-    .tabs.subtabs.ssmt .success .step-number  {
+    .tabs.subtabs.ssmt .success .step-number,
+    .tabs.subtabs.waste-water .active.success .step-number,
+    .tabs.subtabs.waste-water .success .step-number,
+    .tabs.subtabs.compressed-air.active.success .step-number,
+    .tabs.subtabs.compressed-air .success .step-number {
       background: green;
     }
 
@@ -260,10 +278,17 @@ Tabs
         background: #84b641;
       }
 
+      .tabs.subtabs.waste-water .active .step-number {
+        background: #003087;
+      }
+
+      .tabs.subtabs.compressed-air .active .step-number {
+        background: #7030A0;
+      }
       .tabs.subtabs.fsat .active .step-number{
         background: #FFE400;
         color: black;
-    transition: all .1s ease-in-out;
+        transition: all .1s ease-in-out;
       }
 
       .disabled .step-number {

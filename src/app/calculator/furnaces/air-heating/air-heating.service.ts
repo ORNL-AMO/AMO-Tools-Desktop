@@ -29,10 +29,13 @@ export class AirHeatingService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  initDefaultEmptyInputs() {
+  initDefaultEmptyInputs(treasureHuntFuelCost?: number) {
+    let fuelCost: number = treasureHuntFuelCost? treasureHuntFuelCost : 0;
     let emptyInput: AirHeatingInput = {
       operatingHours: 8760,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
+      fuelCost: fuelCost,
       materialTypeId: 1,
       flueTemperature: 0,
       flueGasO2: 0,
@@ -64,8 +67,11 @@ export class AirHeatingService {
       hxColdAir: 0,
       hxOutletExhaust: 0,
       energySavings: 0,
+      costSavings: 0,
       heatCapacityFlue: 0,
       heatCapacityAir: 0,
+      baselineEnergy: 0,
+      modificationEnergy: 0,
     };
     this.airHeatingOutput.next(emptyOutput);
   }
@@ -83,6 +89,9 @@ export class AirHeatingService {
         inputCopy = this.convertPercentInputs(inputCopy);
         let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
+        airHeatingOutput.costSavings = airHeatingOutput.energySavings * inputCopy.fuelCost;
+        airHeatingOutput.baselineEnergy = inputCopy.fireRate * inputCopy.operatingHours;
+        airHeatingOutput.modificationEnergy = inputCopy.fireRate * inputCopy.operatingHours - airHeatingOutput.energySavings;
         this.airHeatingOutput.next(airHeatingOutput);
     }
   }
@@ -92,6 +101,8 @@ export class AirHeatingService {
       operatingHours: 8760,
       materialTypeId: 1,
       gasFuelType: true,
+      utilityType: 'Natural Gas',
+      fuelCost: 3.50,
       flueTemperature: 400,
       flueGasO2: 5.8,
       oxygenCalculationMethod: 'Excess Air',
@@ -160,6 +171,10 @@ export class AirHeatingService {
       input.inletTemperature = this.convertUnitsService.value(input.inletTemperature).from('C').to('F');
       input.inletTemperature = this.roundVal(input.inletTemperature, 2);
     }
+
+    if (input.gasFuelType) {
+      input.moistureInAirCombustion = input.moistureInAirCombustion / 100;
+    }
     return input;
   }
 
@@ -186,6 +201,19 @@ export class AirHeatingService {
   roundVal(val: number, digits: number): number {
     let rounded = Number(val.toFixed(digits));
     return rounded;
+  }
+
+  getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {
+    switch(energySourceType) {
+      case 'Natural Gas':
+        return settings.fuelCost;
+      case 'Other Fuel':
+        return settings.otherFuelCost;
+      case 'Electricity':
+        return settings.electricityCost;
+      case 'Steam':
+        return settings.steamCost;
+    }
   }
 
 }

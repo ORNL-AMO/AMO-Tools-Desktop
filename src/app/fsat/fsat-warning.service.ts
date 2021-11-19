@@ -4,12 +4,22 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
 import { FsatService } from './fsat.service';
+import { CompareService } from './compare.service';
 
 @Injectable()
 export class FsatWarningService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private psatService: PsatService, private fsatService: FsatService) {
    }
+
+  checkOperationsWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanOperationsWarnings{
+    let warnings: FanOperationsWarnings = {
+      costError: this.checkCost(fsat),
+    };
+
+    return warnings;
+
+  }
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     let ratedPowerWarning: string = null;
@@ -18,19 +28,37 @@ export class FsatWarningService {
     }
     
     let warnings: FanFieldDataWarnings = {
-      costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
+      suggestedVoltage: this.checkSuggestedVoltage(fsat, isModification),
       ratedPowerError: ratedPowerWarning,
-      outletPressureError: this.checkOutletPressure(fsat)
+      inletPressureError: this.checkInletPressure(fsat),
+      outletPressureError: this.checkOutletPressure(fsat),
+      calcInletVelocityPressureError: this.checkCalcInletVelocityPressureError(fsat.fieldData.flowRate)
     };
 
     return warnings;
   }
 
+  checkCalcInletVelocityPressureError(flowRate: number) {
+    if (flowRate <= 0) {
+      return 'Flow rate is required to calculate Inlet Velocity Pressure';
+    } else {
+      return null;
+    }
+  }
+
   //REQUIRED?
   checkOutletPressure(fsat: FSAT) {
     if (fsat.fieldData.outletPressure < 0) {
-      return 'Outlet pressure should be greater than or equal to 0';
+      return 'Outlet pressure is usually not less than zero';
+    } else {
+      return null;
+    }
+  }
+
+  checkInletPressure(fsat: FSAT) {
+    if(fsat.fieldData.inletPressure > 0) {
+      return 'Inlet Pressure is usually not greater than zero';
     } else {
       return null;
     }
@@ -44,8 +72,9 @@ export class FsatWarningService {
     }
   }
 
+
   checkCost(fsat: FSAT) {
-    if (fsat.fieldData.cost > 1) {
+    if (fsat.fsatOperations.cost > 1) {
       return "Shouldn't be greater then 1";
     } else {
       return null;
@@ -121,6 +150,20 @@ export class FsatWarningService {
     } else if (fsat.fieldData.measuredVoltage < 1) {
       return "Voltage should be greater then 1 V.";
     } else {
+      return null;
+    }
+  }
+
+  checkSuggestedVoltage(fsat: FSAT, isModification: boolean) {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && isModification) {
+      let ratedVoltage = this.compareService.modifiedFSAT.fanMotor.motorRatedVoltage;
+      if (this.compareService.isMotorRatedVoltageDifferent() && fsat.fieldData.measuredVoltage != ratedVoltage) {
+        return `Motor modification Rated Voltage differs from baseline. Consider using ${ratedVoltage} (modification Rated Voltage) for Measured Voltage`;
+      } else {
+        return null;
+      }
+    }
+    else {
       return null;
     }
   }
@@ -310,9 +353,11 @@ export class FsatWarningService {
 
 export interface FanFieldDataWarnings {
   voltageError: string;
-  costError: string;
   ratedPowerError: string;
+  suggestedVoltage: string,
+  inletPressureError: string;
   outletPressureError: string;
+  calcInletVelocityPressureError: string;
 }
 
 export interface FanMotorWarnings {
@@ -321,6 +366,10 @@ export interface FanMotorWarnings {
   flaError: string;
   efficiencyError: string;
   ratedPowerError: string;
+}
+
+export interface FanOperationsWarnings {
+  costError: string;
 }
 
 // export interface FanFluidWarnings {

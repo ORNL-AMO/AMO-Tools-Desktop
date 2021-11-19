@@ -14,7 +14,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
   @Input()
   dataOption: string;
   @Input()
-  energyUnit: string;
+  energyUnit: string; 
+  
 
   @ViewChild('rollupSummaryPieChart', { static: false }) rollupSummaryPieChart: ElementRef;
 
@@ -32,6 +33,9 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   ngOnChanges() {
+    if(this.rollupSummaryPieChart){
+      Plotly.purge(this.rollupSummaryPieChart.nativeElement);
+    }
     if (this.rollupSummaryPieChart && !this.printView) {
       // this.setHeight();
       this.drawPlot();
@@ -53,7 +57,19 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = '%{label}:<br>%{value:$,.0f}';
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
+    }
+    else if (this.dataOption == 'energySavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energySavings
+      });
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
+    }
+    else if (this.dataOption == 'costSavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.costSavings
+      });
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
     }
     var data = [{
       values: valuesArr,
@@ -64,7 +80,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
+      automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: textTemplate,
@@ -87,7 +103,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -102,6 +118,18 @@ export class RollupSummaryPieChartComponent implements OnInit {
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
+    }
+    else if (this.dataOption == 'energySavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energySavings
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}' + this.energyUnit;
+    }
+    else if (this.dataOption == 'costSavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.costSavings
       });
       textTemplate = '%{label}:<br>%{value:$,.0f}';
     }
@@ -132,7 +160,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.react(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 }
 
@@ -140,8 +168,11 @@ export interface PieChartDataItem {
   equipmentName: string,
   energyUsed: number,
   annualCost: number,
+  energySavings: number,
+  costSavings: number,
   percentCost: number,
   percentEnergy: number,
   color: string,
   furnaceType?: string
+  currencyUnit?: string
 }

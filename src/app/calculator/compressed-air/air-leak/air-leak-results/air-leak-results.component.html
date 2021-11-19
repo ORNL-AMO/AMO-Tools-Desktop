@@ -1,104 +1,104 @@
 <label class="group-label">Baseline Results</label>
 <table #baselineTable class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Consumption</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-0'}} 
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Compressed Air Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.baselineData.annualTotalFlowRate  | number:'1.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Energy Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.baselineData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Annual Cost</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.baselineData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}} 
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.baselineData.annualTotalFlowRate  | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.baselineData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.baselineData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <label class="group-label">Modification Summary</label>
-  <table #modTable class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Consumption</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-0'}} 
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Compressed Air Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.modificationData.annualTotalFlowRate  | number:'1.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Energy Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.modificationData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Annual Cost</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.modificationData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<label class="group-label">Modification Summary</label>
+<table #modTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.modificationData.annualTotalFlowRate  | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.modificationData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.modificationData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 <label class="group-label">Savings</label>
-  <table #savingsTable class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="bold w-50">Consumption</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-0'}} 
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Compressed Air Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.savingsData.annualTotalFlowRate  | number:'1.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50">Energy Use</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.savingsData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
-        </td>
-      </tr>
-      <tr>
-        <td class="bold w-50" >Annual Cost</td>
-        <td class="text-center w-50">
-          {{airLeakOutput.savingsData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-<app-exportable-results-table [tableString]="allTablesString"
-  (updateTableString)="updateTableString()"></app-exportable-results-table>
+<table #savingsTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.savingsData.annualTotalFlowRate  | number:'1.0-1'}}
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.savingsData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">
+        {{airLeakOutput.savingsData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

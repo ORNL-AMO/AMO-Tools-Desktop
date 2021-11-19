@@ -9,16 +9,19 @@ export const MockFsat: Assessment = {
     fsat: {
         name: "Baseline",
         fieldData: {
-            operatingHours: 8760,
-            cost: 0.06,
             flowRate: 129691,
             inletPressure: -16.36,
+            inletVelocityPressure: -2.5,
+            usingStaticPressure: true,
             outletPressure: 1.1,
             loadEstimatedMethod: 0,
             motorPower: 450,
-            specificHeatRatio: 1.4,
             compressibilityFactor: 0.988,
             measuredVoltage: 460
+        },
+        fsatOperations: {
+            operatingHours: 8760,
+            cost: 0.06,
         },
         fanMotor: {
             lineFrequency: 60,
@@ -45,6 +48,7 @@ export const MockFsat: Assessment = {
             wetBulbTemp: 119,
             relativeHumidity: 0,
             dewPoint: 0,
+            specificHeatRatio: 1.4,
             gasDensity: 0.0308,
             specificHeatGas: 0.24
         },
@@ -59,7 +63,8 @@ export const MockFsat: Assessment = {
         modifications: [
             {
                 fsat: {
-                    name: "Optimize Fan & Motor Combo",
+                    name: "Optimize Fan & Motor Combo",                    
+                    whatIfScenario: true,
                     notes: {
                         fieldDataNotes: "",
                         fanMotorNotes: "",
@@ -77,7 +82,8 @@ export const MockFsat: Assessment = {
                         relativeHumidity: 0,
                         dewPoint: 0,
                         gasDensity: 0.0308,
-                        specificHeatGas: 0.24
+                        specificHeatGas: 0.24,
+                        specificHeatRatio: 1.4,
                     },
                     fanMotor: {
                         lineFrequency: 60,
@@ -95,15 +101,18 @@ export const MockFsat: Assessment = {
                         drive: 1,
                         specifiedDriveEfficiency: 100
                     },
-                    fieldData: {
+                    fsatOperations: {
                         operatingHours: 8760,
+                        cost: 0.06,
+                    },
+                    fieldData: {
                         flowRate: 129691,
                         inletPressure: -16.36,
+                        inletVelocityPressure: -1.5,
+                        usingStaticPressure: true,
                         outletPressure: 1.1,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        cost: 0.06,
-                        specificHeatRatio: 1.4,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }
@@ -113,6 +122,7 @@ export const MockFsat: Assessment = {
             {
                 fsat: {
                     name: "Reduce pressure & flow",
+                    whatIfScenario: true,
                     notes: {
                         fieldDataNotes: "",
                         fanMotorNotes: "",
@@ -130,7 +140,8 @@ export const MockFsat: Assessment = {
                         relativeHumidity: 0,
                         dewPoint: 0,
                         gasDensity: 0.0308,
-                        specificHeatGas: 0.24
+                        specificHeatGas: 0.24,
+                        specificHeatRatio: 1.4,
                     },
                     fanMotor: {
                         lineFrequency: 60,
@@ -148,15 +159,18 @@ export const MockFsat: Assessment = {
                         drive: 1,
                         specifiedDriveEfficiency: 100
                     },
-                    fieldData: {
+                    fsatOperations: {
                         operatingHours: 8760,
+                        cost: 0.06,
+                    },
+                    fieldData: {
                         flowRate: 86461,
                         inletPressure: -19.19,
+                        inletVelocityPressure: -3.5,
+                        usingStaticPressure: true,
                         outletPressure: 1.29,
                         loadEstimatedMethod: 0,
                         motorPower: 450,
-                        cost: 0.06,
-                        specificHeatRatio: 1.4,
                         compressibilityFactor: 0.988,
                         measuredVoltage: 460
                     }
@@ -169,7 +183,7 @@ export const MockFsat: Assessment = {
 
 export const MockFsatSettings: Settings = {
     language: "English",
-    currency: "$ - US Dollar",
+    currency: "$",
     unitsOfMeasure: "Imperial",
     distanceMeasurement: "ft",
     flowMeasurement: "gpm",
@@ -316,37 +330,5 @@ export const MockFsatCalculator: Calculator = {
             ],
             dataOrder: 2
         },
-        systemCurveDataPoints: [
-            {
-                pointName: "Baseline1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Baseline",
-                flowRate: 129691,
-                yValue: 17.46
-            },
-            {
-                pointName: "Optimize Fan & Motor Combo1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Optimize Fan & Motor Combo",
-                flowRate: 129691,
-                yValue: 17.46
-            },
-            {
-                pointName: "Reduce pressure & flow1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Reduce pressure & flow",
-                flowRate: 86461,
-                yValue: 20.48
-            }
-        ]
     }
 };

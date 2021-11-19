@@ -24,12 +24,14 @@ export class FsatFluidService {
       dryBulbTemp: [obj.dryBulbTemp, gasDensityValidators.dryBulbTempValidators],
       staticPressure: [obj.staticPressure, gasDensityValidators.staticPressureValidators],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(barometricMin), Validators.max(barometricMax)]],
-      specificGravity: [obj.specificGravity, gasDensityValidators.specificGravityValidators],
+      specificGravity: [1, gasDensityValidators.specificGravityValidators],
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
       gasDensity: [obj.gasDensity, [GreaterThanValidator.greaterThan(0), Validators.required]],
-      specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
+      specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators],
+      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, GreaterThanValidator.greaterThan(1), Validators.max(2)]],
+      
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -59,7 +61,7 @@ export class FsatFluidService {
       specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
     if (obj.inputType === 'relativeHumidity') {
-      relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
+      relativeHumidityValidators = [Validators.min(0), Validators.max(100), Validators.required];
     }
     if (obj.inputType === 'dewPoint') {
       dewPointValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];
@@ -133,12 +135,14 @@ export class FsatFluidService {
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,
       barometricPressure: form.controls.barometricPressure.value,
-      specificGravity: form.controls.specificGravity.value,
+      //hard coded from issue 4332
+      specificGravity:1,
       wetBulbTemp: form.controls.wetBulbTemp.value,
       relativeHumidity: form.controls.relativeHumidity.value,
       dewPoint: form.controls.dewPoint.value,
       gasDensity: form.controls.gasDensity.value,
-      specificHeatGas: form.controls.specificHeatGas.value
+      specificHeatGas: form.controls.specificHeatGas.value,
+      specificHeatRatio: form.controls.specificHeatRatio.value,
     };
     return fanGasDensity;
   }

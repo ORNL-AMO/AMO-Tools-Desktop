@@ -34,6 +34,8 @@ export interface PHAST {
   implementationCost?: number;
   disableSetupDialog?: boolean;
   equipmentNotes?: string;
+  dataUpdated?: boolean;
+  lossDataUnits?: string;
   valid?: PhastValid;
 }
 
@@ -130,6 +132,8 @@ export interface PhastResults {
   flueGasAvailableHeat: number;
   grossHeatInput: number;
   heatingSystemEfficiency: number;
+  calculatedExcessAir: number;
+  calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
 }

@@ -87,8 +87,6 @@ export class CurveDataService {
   }
 
   initializeDataFromPSAT(psat: PSAT) {
-    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getPumpSystemCurveDataPoints(psat);
-    this.systemAndEquipmentCurveService.systemCurveDataPoints = systemCurveDataPoints;
     let pumpSystemCurveData: PumpSystemCurveData = {
       specificGravity: psat.inputs.specific_gravity,
       systemLossExponent: 1.9,
@@ -101,28 +99,8 @@ export class CurveDataService {
     this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
   }
 
-  getPumpSystemCurveDataPoints(psat: PSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
-    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
-    dataPoints.push({
-      pointName: 'Baseline',
-      flowRate: psat.inputs.flow_rate,
-      yValue: psat.inputs.head
-    });
-    if (psat.modifications) {
-      psat.modifications.forEach(modification => {
-        dataPoints.push({
-          pointName: modification.psat.name,
-          flowRate: modification.psat.inputs.flow_rate,
-          yValue: modification.psat.inputs.head
-        });
-      })
-    }
-    return dataPoints;
-  }
 
   initializeDataFromFSAT(fsat: FSAT) {
-    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getFanSystemCurveDataPoints(fsat);
-    this.systemAndEquipmentCurveService.systemCurveDataPoints = systemCurveDataPoints;
     let fanSystemCurveData: FanSystemCurveData = {
       compressibilityFactor: fsat.fieldData.compressibilityFactor,
       systemLossExponent: .98,
@@ -135,25 +113,6 @@ export class CurveDataService {
     this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
   }
 
-  getFanSystemCurveDataPoints(fsat: FSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
-    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
-    dataPoints.push({
-      pointName: 'Baseline',
-      flowRate: fsat.fieldData.flowRate,
-      yValue: fsat.fieldData.outletPressure - fsat.fieldData.inletPressure
-    });
-    if (fsat.modifications) {
-      fsat.modifications.forEach(modification => {
-        dataPoints.push({
-          pointName: modification.fsat.name,
-          flowRate: modification.fsat.fieldData.flowRate,
-          yValue: modification.fsat.fieldData.outletPressure - modification.fsat.fieldData.inletPressure
-        })
-      })
-    }
-    return dataPoints;
-  }
-
   setAssessmentCalculatorData(equipmentType: string, assessment: Assessment) {
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     if (calculator != undefined && calculator.systemAndEquipmentCurveData != undefined) {
@@ -162,17 +121,7 @@ export class CurveDataService {
       this.systemAndEquipmentCurveService.equipmentInputs.next(calculator.systemAndEquipmentCurveData.equipmentInputs);
       if (equipmentType == 'fan') {
         this.systemAndEquipmentCurveService.fanSystemCurveData.next(calculator.systemAndEquipmentCurveData.fanSystemCurveData);
-        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
-        } else {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.getFanSystemCurveDataPoints(assessment.fsat);
-        }
       } else if (equipmentType == 'pump') {
-        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
-        } else {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.getPumpSystemCurveDataPoints(assessment.psat);
-        }
         this.systemAndEquipmentCurveService.pumpSystemCurveData.next(calculator.systemAndEquipmentCurveData.pumpSystemCurveData);
       }
       this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next(calculator.systemAndEquipmentCurveData.equipmentCurveFormView);

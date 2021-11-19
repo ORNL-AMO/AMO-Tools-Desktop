@@ -10,9 +10,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
   styleUrls: ['./report-banner.component.css']
 })
 export class ReportBannerComponent implements OnInit {
-  // @Output('emitExport')
-  // emitExport = new EventEmitter<boolean>();
-
 
   constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router,
     private printOptionsMenuService: PrintOptionsMenuService, private reportRollupService: ReportRollupService) { }

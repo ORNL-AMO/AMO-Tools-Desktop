@@ -46,7 +46,7 @@ import { PipeInsulationReductionComponent } from '../calculator/steam/pipe-insul
 import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
-import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
+import { WaterReductionComponent } from '../calculator/waste-water/water-reduction/water-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
@@ -80,7 +80,7 @@ import { SteamReductionComponent } from '../calculator/steam/steam-reduction/ste
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
-import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { FanPsychrometricComponent } from '../calculator/process-cooling/fan-psychrometric/fan-psychrometric.component';
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 import { WallComponent } from '../calculator/furnaces/wall/wall.component';
@@ -95,6 +95,17 @@ import { StatePointAnalysisComponent } from '../calculator/waste-water/state-poi
 import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
 import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
 import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
+import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
+import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
+import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
+import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
+
+import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
+import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
+import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 
 export const coreRoutes: Routes = [
   {
@@ -232,6 +243,10 @@ export const coreRoutes: Routes = [
             component: FanAnalysisComponent
           },
           {
+            path: 'fan-system-checklist',
+            component: FanSystemChecklistComponent
+          },
+          {
             path: 'fan-efficiency',
             component: FanEfficiencyComponent
           },
@@ -258,6 +273,10 @@ export const coreRoutes: Routes = [
           {
             path: 'compressed-air-reduction',
             component: CompressedAirReductionComponent
+          },
+          {
+            path: 'altitude-correction',
+            component: AltitudeCorrectionComponent
           },
           {
             path: 'electricity-reduction',
@@ -288,6 +307,14 @@ export const coreRoutes: Routes = [
             component: WaterReductionComponent
           },
           {
+            path: 'water-heating',
+            component: WaterHeatingComponent
+          },
+          {
+            path: 'feedwater-economizer',
+            component: FeedwaterEconomizerComponent
+          },
+          {
             path: 'steam-reduction',
             component: SteamReductionComponent
           },
@@ -314,6 +341,10 @@ export const coreRoutes: Routes = [
           {
             path: 'replace-existing',
             component: ReplaceExistingComponent
+          },
+          {
+            path: 'full-load-amps',
+            component: FullLoadAmpsComponent
           },
           {
             path: 'efficiency-improvement',
@@ -348,12 +379,20 @@ export const coreRoutes: Routes = [
             component: OpeningComponent
           },
           {
+            path: 'heat-cascading',
+            component: HeatCascadingComponent
+          },
+          {
             path: 'flue-gas',
             component: FlueGasComponent
           },
           {
             path: 'air-heating',
             component: AirHeatingComponent
+          },
+          {
+            path: 'waste-heat',
+            component: WasteHeatComponent
           },
           {
             path: 'charge-material',
@@ -424,6 +463,10 @@ export const coreRoutes: Routes = [
             component: SteamPropertiesComponent
           },
           {
+            path: 'condensing-economizer',
+            component: CondensingEconomizerComponent
+          },
+          {
             path: 'turbine',
             component: TurbineComponent
           },
@@ -477,6 +520,10 @@ export const coreRoutes: Routes = [
     component: TreasureHuntComponent
   },
   {
+    path: 'compressed-air/:id',
+    component: CompressedAirAssessmentComponent
+  },
+  {
     path: 'report-rollup',
     component: ReportRollupComponent,
     children: [
@@ -496,4 +543,8 @@ export const coreRoutes: Routes = [
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
   },
+  {
+    component: WasteWaterComponent,
+    path: 'waste-water/:id',
+  }
 ];

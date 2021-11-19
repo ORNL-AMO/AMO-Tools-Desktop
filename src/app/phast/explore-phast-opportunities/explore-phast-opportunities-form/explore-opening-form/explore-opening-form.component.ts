@@ -35,7 +35,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>;
   showSize: Array<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, 
+  constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesService: OpeningService,
     private openingFormService: OpeningFormService,
     private phastService: PhastService) { }
@@ -51,22 +51,22 @@ export class ExploreOpeningFormComponent implements OnInit {
       }
     }
   }
-  
+
   initData() {
     this.initWarnings();
     this.showViewFactor = new Array();
     this.showSize = new Array();
     this.showEmissivity = new Array<boolean>();
     this.showTimeOpen = new Array<boolean>();
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' }; 
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install curtains or radiation shields to reduce opening losses' }; 
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
-    
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' };
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install Curtains or Radiation Shields to Reduce Opening Losses' };
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' };
+
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: check, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: check, display: 'Minimize Opening Size or Install Tunnel-like Extensions' };
       }
       this.showSize.push(check);
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index);
@@ -76,13 +76,13 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.showViewFactor.push(!check);
       check = (loss.emissivity !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: check, display: 'Install curtains or radiation shields to reduce opening losses' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: check, display: 'Install Curtains or Radiation Shields to Reduce Opening Losses' };
       }
       this.showEmissivity.push(check);
       check = (loss.percentTimeOpen !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
       this.showTimeOpen.push(check);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' };
       }
 
       let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);

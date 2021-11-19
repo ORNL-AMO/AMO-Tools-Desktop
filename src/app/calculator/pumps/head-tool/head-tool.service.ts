@@ -12,7 +12,7 @@ export class HeadToolService {
   headToolType: string;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  initHeadToolSuctionForm(settings: Settings) {
+  getExampleHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
     if (settings.distanceMeasurement === 'ft') {
       smallUnit = 'in';
@@ -33,7 +33,7 @@ export class HeadToolService {
     });
   }
 
-  resetHeadToolSuctionForm(settings: Settings) {
+  initHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
     if (settings.distanceMeasurement === 'ft') {
       smallUnit = 'in';
@@ -49,12 +49,12 @@ export class HeadToolService {
       dischargeGaugePressure: [this.roundVal(this.convertUnitsService.value(0).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
       dischargeGaugeElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       dischargeLineLossCoefficients: [0, Validators.required],
-      specificGravity: [0, [Validators.required, Validators.min(0)]],
+      specificGravity: [1, [Validators.required, Validators.min(0)]],
       flowRate: [this.roundVal(this.convertUnitsService.value(0).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
     });
   }
 
-  initHeadToolForm(settings: Settings) {
+  getExampleHeadToolForm(settings: Settings) {
     let smallUnit;
     if (settings.distanceMeasurement === 'ft') {
       smallUnit = 'in';
@@ -75,7 +75,7 @@ export class HeadToolService {
     });
   }
 
-  resetHeadToolForm(settings: Settings) {
+  initHeadToolForm(settings: Settings) {
     let smallUnit;
     if (settings.distanceMeasurement === 'ft') {
       smallUnit = 'in';
@@ -91,7 +91,7 @@ export class HeadToolService {
       dischargeGaugePressure: [this.roundVal(this.convertUnitsService.value(0).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
       dischargeGaugeElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       dischargeLineLossCoefficients: [0, Validators.required],
-      specificGravity: [0, [Validators.required, Validators.min(0)]],
+      specificGravity: [1, [Validators.required, Validators.min(0)]],
       flowRate: [this.roundVal(this.convertUnitsService.value(0).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
     });
   }

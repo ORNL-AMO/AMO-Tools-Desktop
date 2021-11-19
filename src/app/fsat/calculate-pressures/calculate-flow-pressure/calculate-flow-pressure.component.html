@@ -1,7 +1,7 @@
 <div class="panel-container d-flex w-100">
   <div class="panel-column flow-pressure-form w-50 scroll-item pl-1 pr-1" [ngStyle]="{'height.px': bodyHeight}">
     <app-calculate-flow-pressure-banner [settings]="settings"></app-calculate-flow-pressure-banner>
-    <app-fan-info-form *ngIf="stepTab == 'fan-info'" [settings]="settings"></app-fan-info-form>
+    <app-fan-info-form *ngIf="stepTab == 'fan-info'" [inModal]="true" [settings]="settings"></app-fan-info-form>
     <app-plane-data-form *ngIf="stepTab == 'plane-data'" [settings]="settings"></app-plane-data-form>
   </div>
   <div class="w-50 help-panel scroll-item" [ngStyle]="{'height.px': bodyHeight}">

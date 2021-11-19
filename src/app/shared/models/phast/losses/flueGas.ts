@@ -5,16 +5,26 @@ export interface FlueGas {
     name?: string;
 }
 
+export interface AvailableHeatData {
+    availableHeat: number,
+    higherHeatingValue: number;
+}
+
 export interface FlueGasByMass {
     gasTypeId?: number;
     flueGasTemperature?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
+    ambientAirTemp?: number;
+    //ambientAirTempF suite name for ambientAirTemp
+    ambientAirTempF?: number;
     combustionAirTemperature?: number;
     fuelTemperature?: number;
     ashDischargeTemperature?: number;
-    moistureInAirComposition?: number;
+    moistureInAirCombustion?: number;
+    //combAirMoisturePerc suite name for moistureInAirCombustion
+    combAirMoisturePerc?: number;
     unburnedCarbonInAsh?: number;
     carbon?: number;
     hydrogen?: number;
@@ -28,11 +38,20 @@ export interface FlueGasByMass {
 
 export interface FlueGasByVolume {
     gasTypeId?: number;
+    utilityType?: string;
     flueGasTemperature?: number;
+    ambientAirTemp?: number;
+    //ambientAirTempF suite name for ambientAirTemp
+    ambientAirTempF?: number;
     oxygenCalculationMethod?: string;
     excessAirPercentage?: number;
     o2InFlueGas?: number;
+    //flueGasO2Percentage suite name for o2InFlueGas
+    flueGasO2Percentage?: number;
     combustionAirTemperature?: number;
+    moistureInAirCombustion?: number;
+    //combAirMoisturePerc suite name for moistureInAirCombustion
+    combAirMoisturePerc?: number;
     fuelTemperature?: number;
     CH4?: number;
     C2H6?: number;
@@ -46,6 +65,18 @@ export interface FlueGasByVolume {
     SO2?: number;
     O2?: number;
     heatInput?: number;
+}
+
+export interface FlueGasByVolumeSuiteResults {
+    flueGasO2: number,
+    excessAir: number,
+    availableHeat: number,
+}
+
+export interface FlueGasHeatingValue {
+    heatingValue: number;
+    heatingValueVolume: number;
+    specificGravity: number;
 }
 
 export interface MaterialInputProperties {
@@ -81,6 +112,8 @@ export interface FlueGasOutput {
 }
 
 export interface FlueGasResult {
+    calculatedFlueGasO2?: number;
+    calculatedExcessAir?: number;
     availableHeat?: number;
     availableHeatError?: string;
     flueGasLosses?: number;
@@ -92,7 +125,7 @@ export interface FlueGasResult {
   
 
   export interface FlueGasWarnings {
-    moistureInAirCompositionWarning?: string;
+    moistureInAirCombustionWarning?: string;
     unburnedCarbonInAshWarning?: string;
     combustionAirTempWarning?: string;
     excessAirWarning?: string;

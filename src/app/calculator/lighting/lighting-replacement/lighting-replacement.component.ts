@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { LightingReplacementService } from './lighting-replacement.service';
 import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
-import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 @Component({
   selector: 'app-lighting-replacement',
@@ -194,7 +194,8 @@ export class LightingReplacementComponent implements OnInit {
       baseline: this.baselineData,
       modifications: this.modificationData,
       baselineElectricityCost: this.baselineElectricityCost,
-      modificationElectricityCost: this.modificationElectricityCost
+      modificationElectricityCost: this.modificationElectricityCost,
+      opportunityType: Treasure.lightingReplacement
     };
   }
 

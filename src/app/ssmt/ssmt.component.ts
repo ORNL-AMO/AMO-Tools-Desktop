@@ -13,6 +13,7 @@ import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService } from '../settings/settings.service';
+import { ConvertSsmtService } from './convert-ssmt.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -29,6 +30,10 @@ export class SsmtComponent implements OnInit {
   }
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   stepTabs: Array<string> = [
     'system-basics',
@@ -58,8 +63,8 @@ export class SsmtComponent implements OnInit {
   showAddModal: boolean;
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
-  stepTabIndex: number;
   modalOpenSubscription: Subscription;
+  stepTabIndex: number;
 
   calcTab: string;
   calcTabSubscription: Subscription;
@@ -84,7 +89,8 @@ export class SsmtComponent implements OnInit {
     private compareService: CompareService,
     private assessmentService: AssessmentService,
     private cd: ChangeDetectorRef,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private convertSsmtService: ConvertSsmtService
   ) { }
 
   ngOnInit() {
@@ -137,7 +143,7 @@ export class SsmtComponent implements OnInit {
       }
     });
 
-    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+      this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
@@ -244,6 +250,7 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
+    this.initSankeyList();
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);
@@ -436,5 +443,37 @@ export class SsmtComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.stepTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    }
+    else {
+      this.save();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    this._ssmt = this.convertSsmtService.convertExistingData(this._ssmt, this.oldSettings, this.settings);
+    this._ssmt.existingDataUnits = this.settings.unitsOfMeasure;
+    this.save();
+    this.getSettings();
   }
 }

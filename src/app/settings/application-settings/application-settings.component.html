@@ -13,7 +13,7 @@
   <div class="form-group">
     <label for="currency">Currency</label>
     <div class="input-group">
-      <select class="form-control" formControlName="currency" id="currency">
+      <select class="form-control" formControlName="currency" id="currency" (change)="save()">
         <option *ngFor="let currency of currencies" [ngValue]="currency">{{currency}}</option>
       </select>
     </div>

@@ -15,14 +15,22 @@ export interface SimpleChart {
         barmode?: string,
         height?: number,
         width?: number,
+        shapes?: Array<any>,
         legend?: {
             orientation: string,
             font?: {
                 size: number,
               },
-              x?: number,
-              y?: number
+            x?: number,
+            y?: number,
+            margin?: {
+                t: number,
+                b: number,
+                l: number,
+                r: number
+              }
         },
+        annotations?: any,
         title?: {
             text: string,
             font: {
@@ -30,6 +38,7 @@ export interface SimpleChart {
             }
         },
         hovermode: string,
+        showlegend?: boolean,
         xaxis: AxisObj,
         yaxis: AxisObj,
         xaxis2?: AxisObj,
@@ -90,6 +99,7 @@ export interface TraceData {
     showlegend?: boolean,
     legendGroup?: string,
     hovertemplate?: string,
+    textposition?: string,
     customdata?: Array<number | string>,
     xaxis?: any,
     yaxis?: any,
@@ -104,6 +114,7 @@ export interface TraceData {
     text?: string[],
     marker?: {
         color?: string | Array<string>,
+        opacity?: number,
         line?: {
             color: string,
             width: number,
@@ -119,7 +130,7 @@ export interface TraceData {
         sizemode?: string,
     },
     line?: {
-        shape: string,
+        shape?: string,
         color?: string,
         dash?: string,
         smoothing?: number

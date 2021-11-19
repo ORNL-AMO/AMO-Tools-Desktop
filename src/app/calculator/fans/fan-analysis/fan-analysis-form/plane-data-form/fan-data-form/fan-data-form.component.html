@@ -60,6 +60,12 @@
       <div class="input-group">
         <input name="numInletBoxes" type="number" step="any" class="form-control" formControlName="numInletBoxes"
           id="numInletBoxes" (input)="calcArea()" (focus)="focusField('numInletBoxes')" onfocus="this.select();">
+          <span class="alert-danger pull-right"
+            *ngIf="dataForm.controls.numInletBoxes.invalid && !dataForm.controls.numInletBoxes.pristine">
+            <span *ngIf="dataForm.controls.numInletBoxes.errors.required">Value Required</span>
+            <span *ngIf="dataForm.controls.numInletBoxes.errors.min">Value can't be less than
+              {{dataForm.controls.numInletBoxes.errors.min.min}}.</span>
+          </span>
       </div>
     </div>
     <div class="form-group">
@@ -97,6 +103,26 @@
           {{dataForm.controls.dryBulbTemp.errors.min.min}}.</span>
       </span>
     </div>
+
+    <div *ngIf="planeNum == '4' || planeNum == '5'" class="form-group mt-4">
+      <label for="{{'staticPressure_'+idString}}">Static Pressure
+      </label>
+        <div class="input-group">
+          <input name="staticPressure" type="number" step="any" class="form-control" 
+          formControlName="staticPressure"
+          id="staticPressure" (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger small pull-right"
+          *ngIf="dataForm.controls.staticPressure.invalid && !dataForm.controls.staticPressure.pristine">
+          <span *ngIf="dataForm.controls.staticPressure.errors.required">Value Required</span>
+          <span *ngIf="dataForm.controls.staticPressure.errors.max">Value can't be greater than
+            {{dataForm.controls.staticPressure.errors.max.max}}.</span>
+          <span *ngIf="dataForm.controls.staticPressure.errors.min">Value can't be less than
+            {{dataForm.controls.staticPressure.errors.min.min}}.</span>
+        </span>
+      </div>
+
     <div class="form-group">
       <label for="barometricPressure">Barometric Pressure (P<sub>bx</sub>)</label>
       <div class="input-group" *ngIf="variationInBarometricPressure">

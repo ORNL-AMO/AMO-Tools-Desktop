@@ -3,6 +3,7 @@ import { PSAT } from '../shared/models/psat';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 @Injectable()
 export class CompareService {
 
@@ -11,7 +12,8 @@ export class CompareService {
   selectedModification: BehaviorSubject<PSAT>;
   openModificationModal: BehaviorSubject<boolean>;
   openNewModal: BehaviorSubject<boolean>;
-  constructor(private psatService: PsatService) {
+  currCurrency: string = "$";
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
     this.openNewModal = new BehaviorSubject<boolean>(undefined);
@@ -41,6 +43,7 @@ export class CompareService {
     if (!modification) {
       modification = this.modifiedPSAT;
     }
+
     if (baseline && modification) {
       return (
         this.isPumpTypeDifferent(baseline, modification) ||
@@ -90,10 +93,30 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
-        this.isHeadDifferent(baseline, modification)
+        this.isHeadDifferent(baseline, modification) ||
+        this.isMotorFieldVoltageDifferent(baseline, modification) ||
+        this.isMotorFieldCurrentDifferent(baseline, modification) ||
+        this.isMotorFieldPowerDifferent(baseline, modification) ||
+        this.isLoadEstimationMethodDifferent(baseline, modification)
+      )
+    }
+    else {
+      return false;
+    }
+  }
+
+  checkOperationsDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isOperatingHoursDifferent(baseline, modification) ||
+        this.isCostKwhrDifferent(baseline, modification)
       )
     }
     else {
@@ -567,24 +590,7 @@ export class CompareService {
       return false;
     }
   }
-  //cost
-  isCostDifferent(baseline?: PSAT, modification?: PSAT) {
-    if (!baseline) {
-      baseline = this.baselinePSAT;
-    }
-    if (!modification) {
-      modification = this.modifiedPSAT;
-    }
-    if (baseline && modification) {
-      if (baseline.inputs.cost != modification.inputs.cost) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+ 
   //load factor
   isLoadFactorDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
@@ -651,6 +657,9 @@ export class CompareService {
       }
       if (this.checkPumpDifferent(settings, baseline, modification)) {
         badges.push({ badge: 'Pump Fluid', componentStr: 'pump-fluid' })
+      }
+      if (this.checkOperationsDifferent(baseline, modification)) {
+        badges.push({ badge: 'Operations', componentStr: 'operations' })
       }
     }
     return badges;

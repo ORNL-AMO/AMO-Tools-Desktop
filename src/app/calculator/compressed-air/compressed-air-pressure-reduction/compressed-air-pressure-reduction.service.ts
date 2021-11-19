@@ -27,11 +27,14 @@ export class CompressedAirPressureReductionService {
     let obj: CompressedAirPressureReductionData = {
       name: 'Equipment #' + (index + 1),
       isBaseline: isBaseline,
+      powerType: 'Measured',
       hoursPerYear: hoursPerYear,
       electricityCost: electricityCost,
       compressorPower: 0,
       pressure: 0,
-      proposedPressure: 0
+      proposedPressure: 0,
+      pressureRated: 0,
+      atmosphericPressure: 0
     };
     return obj;
   }
@@ -39,11 +42,14 @@ export class CompressedAirPressureReductionService {
   getFormFromObj(inputObj: CompressedAirPressureReductionData, index: number, isBaseline: boolean): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
+      powerType: [inputObj.powerType],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
       compressorPower: [inputObj.compressorPower],
       pressure: [inputObj.pressure],
-      proposedPressure: [inputObj.proposedPressure]
+      proposedPressure: [inputObj.proposedPressure],
+      pressureRated: [inputObj.pressureRated],
+      atmosphericPressure: [inputObj.atmosphericPressure]
     });
     form = this.setValidators(form, isBaseline);
     return form;
@@ -53,6 +59,8 @@ export class CompressedAirPressureReductionService {
     if (isBaseline) {
       form.controls.compressorPower.setValidators([Validators.required, Validators.min(0)]);
       form.controls.pressure.setValidators([Validators.required, Validators.min(0)]);
+      form.controls.pressureRated.setValidators([Validators.required, Validators.min(0)]);
+      form.controls.atmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     }
     else {
       form.controls.compressorPower.disable();
@@ -65,12 +73,15 @@ export class CompressedAirPressureReductionService {
   getObjFromForm(form: FormGroup, isBaseline: boolean): CompressedAirPressureReductionData {
     let obj: CompressedAirPressureReductionData = {
       name: form.controls.name.value,
+      powerType: form.controls.powerType.value,
       isBaseline: isBaseline,
       hoursPerYear: form.controls.hoursPerYear.value,
       electricityCost: form.controls.electricityCost.value,
       compressorPower: form.controls.compressorPower.value,
       pressure: form.controls.pressure.value,
-      proposedPressure: form.controls.proposedPressure.value
+      proposedPressure: form.controls.proposedPressure.value,
+      pressureRated: form.controls.pressureRated.value,
+      atmosphericPressure: form.controls.atmosphericPressure.value
     };
     return obj;
   }
@@ -85,8 +96,11 @@ export class CompressedAirPressureReductionService {
     };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify(modification));
+      if (modificationInpCpy.length > 0) {
+        modificationInpCpy[0].pressure = modificationInpCpy[0].proposedPressure;
+      }
       modificationResults = this.calculate(modificationInpCpy, settings);
-    }else{
+    } else {
       modificationResults = baselineResults;
     }
     let compressedAirPressureReductionResults: CompressedAirPressureReductionResults = {
@@ -125,6 +139,8 @@ export class CompressedAirPressureReductionService {
   convertInputs(inputArray: Array<CompressedAirPressureReductionData>, settings: Settings): Array<CompressedAirPressureReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].pressureRated = this.convertUnitsService.value(inputArray[i].pressureRated).from('barg').to('psig');
+        inputArray[i].atmosphericPressure = this.convertUnitsService.value(inputArray[i].atmosphericPressure).from('bara').to('psia');
         inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from('barg').to('psig');
         inputArray[i].proposedPressure = this.convertUnitsService.value(inputArray[i].proposedPressure).from('barg').to('psig');
       }
@@ -135,20 +151,33 @@ export class CompressedAirPressureReductionService {
   generateExample(settings: Settings, isBaseline: boolean): CompressedAirPressureReductionData {
     let proposedPressure: number = 90;
     let pressure: number = 100;
-    if(settings.unitsOfMeasure != 'Imperial'){
+
+    let pressureRated: number = 100;
+    let atmosphericPressure: number = 14.7;
+
+    if (settings.unitsOfMeasure != 'Imperial') {
       proposedPressure = this.convertUnitsService.value(proposedPressure).from('psig').to('barg');
       proposedPressure = Number(proposedPressure.toFixed(3));
       pressure = this.convertUnitsService.value(pressure).from('psig').to('barg');
       pressure = Number(pressure.toFixed(3));
+
+      pressureRated = this.convertUnitsService.value(pressureRated).from('psig').to('barg');
+      pressureRated = Number(pressureRated.toFixed(3));
+
+      atmosphericPressure = this.convertUnitsService.value(atmosphericPressure).from('psia').to('bara');
+      atmosphericPressure = Number(atmosphericPressure.toFixed(3));
     }
     let exampleData: CompressedAirPressureReductionData = {
       name: 'Equipment #1',
+      powerType: 'Measured',
       isBaseline: isBaseline,
       hoursPerYear: 8760,
       electricityCost: .066,
       compressorPower: 200,
       pressure: pressure,
-      proposedPressure: proposedPressure
+      proposedPressure: proposedPressure,
+      pressureRated: pressureRated,
+      atmosphericPressure: atmosphericPressure
     }
     return exampleData;
   }

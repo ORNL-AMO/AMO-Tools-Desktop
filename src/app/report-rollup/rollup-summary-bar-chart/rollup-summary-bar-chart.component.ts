@@ -31,6 +31,9 @@ export class RollupSummaryBarChartComponent implements OnInit {
   }
 
   ngOnChanges() {
+    if(this.rollupBarChart){
+      Plotly.purge(this.rollupBarChart.nativeElement);
+    }
     if (this.rollupBarChart && !this.printView) {
       this.createBarChart();
     } else if (this.rollupBarChart && this.printView) {
@@ -74,7 +77,7 @@ export class RollupSummaryBarChartComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.react(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
+    Plotly.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 
   createPrintChart() {
@@ -109,7 +112,7 @@ export class RollupSummaryBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    Plotly.react(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
+    Plotly.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 }
 

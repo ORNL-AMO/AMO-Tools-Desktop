@@ -39,6 +39,11 @@ export class AirCapacityFormComponent implements OnInit {
     this.airCapacity = this.standaloneService.usableAirCapacity(this.inputs, this.settings);
     this.getTankSize();
     this.getLeakRate();
+    
+  }
+
+  updateInputsForAssessmentCalculator() {
+    this.receiverTankService.inputs.next({airCapacityInputs: this.inputs})
   }
 
   getTankSize() {

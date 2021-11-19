@@ -1,0 +1,101 @@
+<div class="p-2">
+    <table #copyTable class="table table-bordered mb-0">
+        <thead>
+            <tr>
+                <th>
+                    Scenario
+                </th>
+                <th>
+                    SRT Days
+                </th>
+                <th>
+                    Annual Energy Use
+                </th>
+                <th>
+                    Annual Energy Savings
+                </th>
+                <th>
+                    Annual Energy Cost ({{settings.currency}})
+                </th>
+                <th>
+                    Annual Cost Savings ({{settings.currency}})
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="department-item-row" [ngStyle]="{'background-color': '#1E7640'}">
+                <td>
+                    Baseline
+                </td>
+                <td>
+                    {{baselineResults.SolidsRetentionTime}}
+                </td>
+                <td>
+                    <span *ngIf="baselineResults.AeEnergyAnnual">
+                        {{baselineResults.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
+                    </span>
+                    <span *ngIf="!baselineResults.AeEnergyAnnual">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    &mdash; kWh/yr
+                </td>
+                <td>
+                    <span *ngIf="baselineResults.AeCost">
+                        {{baselineResults.AeCost | number:'2.0-0'}}
+                    </span>
+                    <span *ngIf="!baselineResults.AeCost">
+                         &mdash;
+                    </span>
+                </td>
+                <td>
+                    &mdash;
+                </td>
+            </tr>
+            <tr class="department-item-row" *ngFor="let modificationResults of modificationsResultsArr"
+                [ngStyle]="{'background-color': modificationResults.color}">
+                <td>
+                    {{modificationResults.name}}
+                </td>
+                <td>
+                    {{modificationResults.results.SolidsRetentionTime}}
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.AeEnergyAnnual">
+                        {{modificationResults.results.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
+                    </span>
+                    <span *ngIf="!modificationResults.results.AeEnergyAnnual">
+                        &mdash; MWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.energySavings">
+                        {{modificationResults.results.energySavings | number:'1.0-0'}} MWh/yr
+                    </span>
+                    <span *ngIf="!modificationResults.results.energySavings">
+                        &mdash; MWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.AeCost">
+                        {{modificationResults.results.AeCost | number:'2.0-0'}}
+                    </span>
+                    <span *ngIf="!modificationResults.results.AeCost">
+                         &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.costSavings">
+                        {{modificationResults.results.costSavings | number:'2.0-0'}}
+                    </span>
+                    <span *ngIf="!modificationResults.results.costSavings">
+                         &mdash;
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table> -->

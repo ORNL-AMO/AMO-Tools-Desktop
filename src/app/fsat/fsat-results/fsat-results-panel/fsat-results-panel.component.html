@@ -42,10 +42,10 @@
     </div>
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</span>
+      <span class="table-text">{{baselineResults.fanEnergyIndex | number:'1.0-2'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.fanEnergyIndex | number:'2.0-1'}}</span>
+      <span class="table-text">{{modificationResults.fanEnergyIndex | number:'1.0-2'}}</span>
     </div>
   </div>
   <div class="d-flex my-table-item">
@@ -171,7 +171,7 @@
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor current (amps)</span>
+      <span class="table-text">Motor current (A)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
@@ -227,24 +227,24 @@
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.energySavings"
+      <span class="bold table-text" *ngIf="modificationResults.energySavings && isWhatIfScenario == true"
         [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.energySavings">&mdash;</span>
+      <span class="bold table-text" *ngIf="!modificationResults.energySavings || isWhatIfScenario == false">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Cost</span>
+      <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold table-text">{{baselineResults.annualCost | number:'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
       <span class="bold table-text" *ngIf="modificationResults.annualCost"
-        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
+        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annualCost">&mdash;</span>
     </div>
   </div>
@@ -252,17 +252,17 @@
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Savings</span>
+      <span class="bold table-text">Annual Savings ({{settings.currency }})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1"
       [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualSavings"
+      <span class="bold table-text" *ngIf="modificationResults.annualSavings && isWhatIfScenario == true"
         [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
-        {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annualSavings">&mdash;</span>
+        {{modificationResults.annualSavings | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="!modificationResults.annualSavings || isWhatIfScenario == false">&mdash;</span>
     </div>
   </div>
 </div>

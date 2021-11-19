@@ -1,0 +1,39 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Inventory Help
+        <br>
+        <small class="text-muted">Enter data relating to all individual compressors within the system
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="focusedField == 'compresorName'">
+        <h6>
+            Compressor Name
+            <br>
+            <small class="text-muted">
+                The identifier for the compressor
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'compresorDescription'">
+        <h6>
+            Compressor Description
+            <br>
+            <small class="text-muted">
+                Give a short description about the compresor
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <app-nameplate-data-help></app-nameplate-data-help>
+    <app-control-data-help></app-control-data-help>
+    <app-inlet-conditions-help></app-inlet-conditions-help>
+    <app-design-details-help></app-design-details-help>
+    <app-centrifugal-specifics-help></app-centrifugal-specifics-help>
+    <app-performance-points-help></app-performance-points-help>
+
+</div>

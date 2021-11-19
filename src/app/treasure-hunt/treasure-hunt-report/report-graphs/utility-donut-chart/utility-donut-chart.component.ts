@@ -53,8 +53,9 @@ export class UtilityDonutChartComponent implements OnInit {
       hole: .5,
       textposition: 'outside',
       insidetextorientation: "horizontal",
+      automargin: true,
       hoverformat: '.2r',
-      texttemplate: `<b>%{label}</b> <br> %{value:$,.0f} (%{percent})`,
+      texttemplate: `<b>%{label}</b> <br> %{value:,.0f} (%{percent})`,
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: rotationAmount
@@ -69,7 +70,7 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.currencyPipe.transform(this.savingsItem.currentCost, "USD", "symbol", "1.0-0")}`,
+          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
           x: .5,
           y: 0.5
         },
@@ -118,7 +119,7 @@ export class UtilityDonutChartComponent implements OnInit {
             size: 12
           },
           showarrow: false,
-          text: `<b>Current Cost</b> <br>${this.currencyPipe.transform(this.savingsItem.currentCost, "USD", "symbol", "1.0-0")}`,
+          text: `<b>Current Cost</b> <br>${this.savingsItem.currentCost}`,
           x: 0,
           y: 0.5
         },

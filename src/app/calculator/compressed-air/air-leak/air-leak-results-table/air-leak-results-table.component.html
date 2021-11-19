@@ -30,7 +30,7 @@
           </td>
           <td class="p-3 col-item-br">
             <span *ngIf="leak.totalFlowRate">
-              {{ leak.totalFlowRate | number:'1.0-0'}}
+              {{ leak.totalFlowRate | number:'1.0-1'}}
             </span>
             <span *ngIf="!leak.totalFlowRate">
               --
@@ -38,7 +38,7 @@
           </td>
           <td class="p-3 col-item-br">
             <span *ngIf="leak.annualTotalFlowRate">
-              {{ leak.annualTotalFlowRate | number:'1.0-0'}}   
+              {{ leak.annualTotalFlowRate | number:'1.0-1'}}   
             </span>
             <span *ngIf="!leak.annualTotalFlowRate">
               --

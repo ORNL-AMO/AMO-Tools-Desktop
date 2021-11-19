@@ -4,6 +4,7 @@ import { SettingsService } from '../settings.service'
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FormGroup } from '@angular/forms';
+import { EGridService } from '../../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-assessment-settings',
@@ -22,12 +23,16 @@ export class AssessmentSettingsComponent implements OnInit {
   showSteamSettings: boolean = false;
   showFsatSettings: boolean = false;
   showTutorialSettings: boolean = false;
+  showPrintSettings: boolean = false;
   showSettingsModal: boolean = false;
+  showCo2Settings: boolean = false;
 
-  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
+  constructor(private indexedDbService: IndexedDbService, 
+    private egridService: EGridService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.initializeSettings();
   }
 
@@ -65,6 +70,16 @@ export class AssessmentSettingsComponent implements OnInit {
     );
   }
 
+  savePrintSettings(){
+    this.indexedDbService.putSettings(this.settings).then(
+      results => {
+        this.settingsDbService.setAll().then(() => {
+          this.settings = this.settingsDbService.getByDirectoryId(this.settings.id);
+        });
+      }
+    );
+  }
+
   //simple toggle function needed for each section
   toggleGeneralSettings() {
     this.showGeneralSettings = !this.showGeneralSettings;
@@ -85,6 +100,14 @@ export class AssessmentSettingsComponent implements OnInit {
 
   toggleTutorialSettings() {
     this.showTutorialSettings = !this.showTutorialSettings;
+  }
+
+  togglePrintSettings() {
+    this.showPrintSettings = !this.showPrintSettings;
+  }
+
+  toggleCo2Settings() {
+    this.showCo2Settings = !this.showCo2Settings;
   }
 
   showResetSystemSettingsModal() {

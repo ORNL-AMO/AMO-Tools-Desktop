@@ -121,8 +121,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "natural-gas-reduction",
             "selected": true
         },
         {
@@ -211,8 +213,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "natural-gas-reduction"
         },
         {
             "baseline": [{
@@ -299,8 +303,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "natural-gas-reduction",
             "selected": true
         }],
         "lightingReplacements": [{
@@ -443,8 +449,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "lighting-replacement"
         },
         {
             "baseline": [{
@@ -561,8 +569,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "lighting-replacement",
             "selected": true
         },
         {
@@ -624,8 +634,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "lighting-replacement",
             "selected": true
         },
         {
@@ -680,8 +692,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "lighting-replacement"
         }],
         "compressedAirReductions": [{
             "baseline": [{
@@ -768,8 +782,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "compressed-air-reduction",
             "selected": true
         },
         {
@@ -857,8 +873,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "compressed-air-reduction",
             "selected": true
         }],
         "electricityReductions": [{
@@ -995,8 +1013,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "electricity-reduction"
         },
         {
             "baseline": [{
@@ -1074,8 +1094,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "electricity-reduction"
         }],
         "opportunitySheets": [{
             "name": "Increase Boiler CoC",
@@ -1109,6 +1131,7 @@ export const MockTreasureHunt: Assessment = {
                 "type": "Water",
                 "amount": 1400000
             }],
+            "opportunityType": "opportunity-sheet",
             "selected": true
         }],
         "replaceExistingMotors": [{
@@ -1144,8 +1167,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
-            }
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
+            },
+            "opportunityType": "replace-existing"
         },
         {
             "replaceExistingData": {
@@ -1179,8 +1204,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "replace-existing",
             "selected": true
         }],
         "waterReductions": [{
@@ -1248,28 +1275,36 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "water-reduction",
             "selected": true
         }],
         "compressedAirPressureReductions": [{
             "baseline": [{
                 "name": "Equipment #1",
+                "powerType": "Measured",
                 "isBaseline": true,
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
                 "pressure": 120,
-                "proposedPressure": 0
+                "proposedPressure": 0,
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "modification": [{
                 "name": "Equipment #1",
+                "powerType": "Measured",
                 "isBaseline": false,
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
                 "pressure": 120,
-                "proposedPressure": 110
+                "proposedPressure": 110,
+                "pressureRated": 100,
+                "atmosphericPressure": 14.7
             }],
             "opportunitySheet": {
                 "name": "CA Pressure Reduction",
@@ -1291,8 +1326,10 @@ export const MockTreasureHunt: Assessment = {
                     "type": "Electricity",
                     "amount": 0
                 }],
-                "modificationEnergyUseItems": []
+                "modificationEnergyUseItems": [],
+                "opportunityType": "opportunity-sheet"
             },
+            "opportunityType": "compressed-air-pressure-reduction",
             "selected": true
         }]
 
@@ -1305,7 +1342,7 @@ export const MockTreasureHunt: Assessment = {
 
 export const MockTreasureHuntSettings: Settings = {
     "language": "English",
-    "currency": "$ - US Dollar",
+    "currency": "$",
     "unitsOfMeasure": "Imperial",
     "distanceMeasurement": "ft",
     "flowMeasurement": "gpm",

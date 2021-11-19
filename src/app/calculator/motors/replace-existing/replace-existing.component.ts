@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../shared/models/operations';
-import { ReplaceExistingMotorTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { ReplaceExistingMotorTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-replace-existing',
@@ -126,7 +126,7 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ replaceExistingData: this.inputs });
+    this.emitSave.emit({ replaceExistingData: this.inputs, opportunityType: Treasure.replaceExisting });
   }
 
   cancel() {

@@ -1,6 +1,6 @@
 <div class="px-2 pt-3 d-flex flex-column help-info">
   <h5>
-    Compressed Air Reduction
+    Compressed Air Reduction Help
     <br>
     <small class="text-muted">
       This calculator is used to quantify the energy savings associated with reducing compressed air usage.
@@ -28,6 +28,20 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'compressedAirCost'">
@@ -217,6 +231,8 @@
         <hr>
         IBV - Inlet Butterfly Value<br>
         IGV - Inlet Guide Vanes
+        <hr>
+        Each CCAF value represents the slope of the performance curve when operating within the 40% to 80% capacity range as this is a common operating range for a trim compressor.
         <hr>
       </small>
     </h6>

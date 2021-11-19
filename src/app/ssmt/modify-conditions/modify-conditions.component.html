@@ -1,65 +1,63 @@
-<div class="row modify-conditions no-gutters">
-  <div class="scroll-item col-8" [ngStyle]="{'height.px': containerHeight}">
-    <div class="row row-min-height no-gutters">
-      <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
-        [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
-        <div class="header mr-2 ml-2">
-          <h3>Baseline</h3>
-        </div>
-        <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt" [settings]="settings"
-          (emitSave)="saveBaselineSsmt($event)" [selected]="baselineSelected" [isBaseline]="true"></app-operations>
-        <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
-          [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"
-          [headerInput]="ssmt.headerInput"></app-boiler>
-        <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
-          [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
-          [boilerInput]="ssmt.boilerInput"></app-header>
-        <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings"
-          [turbineInput]="ssmt.turbineInput" [numberOfHeaders]="ssmt.headerInput.numberOfHeaders"
-          (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
+<div class="modify-conditions d-flex ssmt" *ngIf="settings">
+  <div class="scroll-item col-8 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
+    <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+      <div class="header mr-2 ml-2">
+        <h3>Baseline</h3>
       </div>
+      <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt" [settings]="settings"
+        (emitSave)="saveBaselineSsmt($event)" [selected]="baselineSelected" [isBaseline]="true"></app-operations>
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
+        [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"
+        [headerInput]="ssmt.headerInput"></app-boiler>
+      <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
+        [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
+        [boilerInput]="ssmt.boilerInput"></app-header>
+      <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings"
+        [turbineInput]="ssmt.turbineInput" [numberOfHeaders]="ssmt.headerInput.numberOfHeaders"
+        (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
+    </div>
 
-      <!-- Modifications Start -->
-      <div *ngIf="modificationExists" class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
-        [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
-        <!-- Modification Header -->
-        <div class="header mr-2 ml-2">
-          <h3>{{ssmt.modifications[modificationIndex].ssmt.name}}</h3>
-        </div>
-        <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
-          [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
-          [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
-        <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
-          [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
-          [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
-          [isBaseline]="false">
-        </app-boiler>
-        <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
-          [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
-          [modificationIndex]="modificationIndex" [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput"
-          [isBaseline]="false">
-        </app-header>
-        <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
-          [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
-          [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
-          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
-        </app-turbine>
+    <!-- Modifications Start -->
+    <div *ngIf="modificationExists" class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
+      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+      <!-- Modification Header -->
+      <div class="header mr-2 ml-2">
+        <h3>{{ssmt.modifications[modificationIndex].ssmt.name}}</h3>
       </div>
-      <!-- No content message -->
-      <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"
-        [ngClass]="{'modal-open': isModalOpen == true}">
-        <div class="header mr-2 ml-2">
-          <h3>Modification</h3>
-        </div>
-        <div class="p-3 no-data">
-          <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions
-            to
-            find efficiency
-            opportunities.
-          </h3>
-          <button type="button" class="btn btn-primary">Add Modified Condition</button>
-          <p>Data will be copied from your current baseline condition.</p>
-        </div>
+      <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
+        [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
+        [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
+        [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
+        [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
+        [isBaseline]="false">
+      </app-boiler>
+      <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
+        [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
+        [modificationIndex]="modificationIndex" [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput"
+        [isBaseline]="false">
+      </app-header>
+      <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
+        [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
+        [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
+        (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
+      </app-turbine>
+    </div>
+    <!-- No content message -->
+    <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"
+      [ngClass]="{'modal-open': isModalOpen == true}">
+      <div class="header mr-2 ml-2">
+        <h3>Modification</h3>
+      </div>
+      <div class="p-3 no-data">
+        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions
+          to
+          find efficiency
+          opportunities.
+        </h3>
+        <button type="button" class="btn btn-primary">Add Modified Condition</button>
+        <p>Data will be copied from your current baseline condition.</p>
       </div>
     </div>
   </div>

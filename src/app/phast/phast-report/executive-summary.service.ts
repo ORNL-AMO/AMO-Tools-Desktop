@@ -16,15 +16,24 @@ export class ExecutiveSummaryService {
     tmpResultsSummary.energyPerMass = this.calcEnergyPer(phast, settings, tmpPhastResults.grossHeatInput);
     tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, phast);
     if (isMod && baselineSummary) {
-      tmpResultsSummary.annualCostSavings = baselineSummary.annualCost - tmpResultsSummary.annualCost;
+      let actualSummaryCost = baselineSummary.annualCost
+      if (settings.currency !== "$") {
+        actualSummaryCost = this.convertUnitsService.convertValue(actualSummaryCost, settings.currency, "$")
+      }
+      tmpResultsSummary.annualCostSavings = actualSummaryCost - tmpResultsSummary.annualCost;
       tmpResultsSummary.annualEnergySavings = baselineSummary.annualEnergyUsed - tmpResultsSummary.annualEnergyUsed;
-      tmpResultsSummary.percentSavings = Number(Math.round(((((tmpResultsSummary.annualCostSavings) * 100) / baselineSummary.annualCost) * 100) / 100).toFixed(0));
+      tmpResultsSummary.percentSavings = Number(Math.round(((((tmpResultsSummary.annualCostSavings) * 100) / actualSummaryCost) * 100) / 100).toFixed(0));
       tmpResultsSummary.implementationCosts = phast.implementationCost;
       if (tmpResultsSummary.annualCostSavings > 0 && phast.implementationCost) {
         tmpResultsSummary.paybackPeriod = (phast.implementationCost / tmpResultsSummary.annualCostSavings) * 12;
       } else {
         tmpResultsSummary.paybackPeriod = 0;
       }
+    }
+    if (settings.currency !== "$") {
+      tmpResultsSummary.annualCost = this.convertUnitsService.value(tmpResultsSummary.annualCost).from("$").to(settings.currency);
+      tmpResultsSummary.annualCostSavings = this.convertUnitsService.value(tmpResultsSummary.annualCostSavings).from("$").to(settings.currency);
+      tmpResultsSummary.implementationCosts = this.convertUnitsService.value(tmpResultsSummary.implementationCosts).from("$").to(settings.currency);
     }
     return tmpResultsSummary;
   }

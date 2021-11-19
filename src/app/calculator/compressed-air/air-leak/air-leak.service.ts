@@ -17,6 +17,7 @@ export class AirLeakService {
   currentLeakIndex: BehaviorSubject<number>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  settings: Settings;
 
   constructor(private convertAirleakService: ConvertAirLeakService,
     private airLeakFormService: AirLeakFormService,
@@ -81,8 +82,13 @@ export class AirLeakService {
   }
 
   deleteLeak(index: number) {
-    this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
-    this.airLeakOutput.value.leakResults.splice(index, 1);
+    if(this.airLeakInput.value.compressedAirLeakSurveyInputVec.length == 1 && index == 0){
+      this.initDefaultEmptyInputs(this.settings);
+      this.currentLeakIndex.next(0);
+    }else {
+      this.airLeakInput.value.compressedAirLeakSurveyInputVec.splice(index, 1);
+      this.airLeakOutput.value.leakResults.splice(index, 1);
+    }
   }
 
   copyLeak(index: number) {
@@ -138,14 +144,11 @@ export class AirLeakService {
       let converted = this.convertAirleakService.convertResult(leakResult, settings);
       leakResults.push(converted)
     });
-
     // Get cumulative leak results
     let baselineResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(baselineLeaks);
     let modificationResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(modificationLeaks);
     baselineResults = this.convertAirleakService.convertResult(baselineResults, settings);
     modificationResults = this.convertAirleakService.convertResult(modificationResults, settings);
-
-
 
     let savings: AirLeakSurveyResult = {
       totalFlowRate: baselineResults.totalFlowRate - modificationResults.totalFlowRate,
@@ -159,6 +162,10 @@ export class AirLeakService {
       savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
       savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
     }
+
+      // overwrite estimated annualTotalElectricity value originally set in suite results
+    modificationResults.annualTotalElectricity = baselineResults.annualTotalElectricity - savings.annualTotalElectricity;
+    modificationResults.annualTotalElectricityCost = baselineResults.annualTotalElectricityCost - savings.annualTotalElectricityCost;
 
     let outputs: AirLeakSurveyOutput = {
       leakResults: leakResults,

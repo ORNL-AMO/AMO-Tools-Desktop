@@ -40,6 +40,7 @@ import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit
 import { PhastValidService } from './phast-valid.service';
 import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
     ToastModule,
     UnitConverterModule,
     PhastSankeyModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     PhastService,

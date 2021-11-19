@@ -14,12 +14,28 @@ export class ReceiverTankService {
   receiverTankMethod: number;
   airCapacityInputs: CalculateUsableCapacity;
   setForm: BehaviorSubject<boolean>;
+  inputs: BehaviorSubject<ReceiverTankInputs>;
   currentField: BehaviorSubject<string>;
+  inAssessmentCalculator: boolean = false;
+
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.setForm = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
     this.setDefaults();
     this.setAirCapacityDefault();
+  }
+  
+  setAssessmentCalculatorSubject() {
+    this.inAssessmentCalculator = true;
+    this.inputs = new BehaviorSubject(
+      {
+        dedicatedStorageInputs: undefined,
+        airCapacityInputs: undefined,
+        generalMethodInputs: undefined,
+        meteredStorageInputs: undefined,
+        bridgeCompressorInputs: undefined,
+      }
+    );
   }
 
   setDefaults() {
@@ -181,8 +197,8 @@ export class ReceiverTankService {
   convertTankMeteredStorageExample(inputs: ReceiverTankMeteredStorage, settings: Settings) {
     let tmpInputs: ReceiverTankMeteredStorage = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.meteredControl = Math.round(this.convertUnitsService.value(tmpInputs.meteredControl).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('m3').to('ft3') * 100) / 100;
+      tmpInputs.meteredControl = Math.round(this.convertUnitsService.value(tmpInputs.meteredControl).from('m3').to('ft3') * 100) / 100;
       tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('kPa') * 100) / 100;
       tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('kPa') * 100) / 100;
       tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
@@ -225,4 +241,13 @@ export class ReceiverTankService {
     }
     return tmpInputs;
   }
+}
+
+export interface ReceiverTankInputs {
+    dedicatedStorageInputs?: ReceiverTankDedicatedStorage,
+    airCapacityInputs?: CalculateUsableCapacity,
+    generalMethodInputs?: ReceiverTankGeneral,
+    meteredStorageInputs?: ReceiverTankMeteredStorage,
+    bridgeCompressorInputs?: ReceiverTankBridgingCompressor,
+  
 }

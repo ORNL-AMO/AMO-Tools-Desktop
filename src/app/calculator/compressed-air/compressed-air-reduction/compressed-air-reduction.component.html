@@ -33,8 +33,7 @@
           [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mx-2 mb-4">
             <h3>Baseline</h3>
-            <!--remove add equipment issue 4528 (will be added back)-->
-            <!-- <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a> -->
+            <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
           <div class="d-flex flex-column mx-4 mb-4">
             <!-- app form -->
@@ -64,8 +63,7 @@
           <!-- modification header -->
           <div class="header mx-2 mb-4">
             <h3>Modification</h3>
-            <!--remove add equipment issue 4528 (will be added back)-->
-            <!-- <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a> -->
+            <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
           <!-- forms -->
           <div class="d-flex flex-column mx-4 mb-4">
@@ -75,8 +73,10 @@
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
                 (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
                 [utilityType]="baselineData[0].utilityType"
-                [compressorControl]="baselineData[0].compressorElectricityData.compressorControl"
-                [compressorControlAdjustment]="baselineData[0].compressorElectricityData.compressorControlAdjustment">
+                [compressorControl]="baselineData[i].compressorElectricityData.compressorControl"
+                [compressorControlAdjustment]="baselineData[i].compressorElectricityData.compressorControlAdjustment"
+                [compressorSpecificPowerControl]="baselineData[i].compressorElectricityData.compressorSpecificPowerControl"
+                [compressorSpecificPower]="baselineData[i].compressorElectricityData.compressorSpecificPower">
               </app-compressed-air-reduction-form>
             </div>
           </div>
@@ -118,7 +118,7 @@
           <div class="p-2">
             <!-- app results if results tab -->
             <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
-              [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists"
+              [modificationExists]="modificationExists"
               [utilityType]="baselineData[0].utilityType">
             </app-compressed-air-reduction-results>
 

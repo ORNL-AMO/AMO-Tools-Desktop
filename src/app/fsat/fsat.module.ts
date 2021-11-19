@@ -36,13 +36,15 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
-import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { OperationsComponent } from './operations/operations.component';
+import { OperationsService } from './operations/operations.service';
 
 @NgModule({
   imports: [
@@ -62,13 +64,13 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
     MotorPerformanceModule,
     FanEfficiencyModule,
     CalculatePressuresModule,
-    FanAnalysisModule,
     OperatingHoursModalModule,
     TabsTooltipModule,
     ToastModule,
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
-    FsatSankeyModule
+    FsatSankeyModule,
+    UpdateUnitsModalModule,
   ],
   declarations: [
     FsatComponent,
@@ -84,7 +86,8 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
     AddModificationComponent,
     ModificationListComponent,
     ModifyFieldDataFormComponent,
-    FsatDiagramComponent
+    FsatDiagramComponent,
+    OperationsComponent
   ],
   providers: [
     FsatService,
@@ -96,7 +99,8 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
     ModifyConditionsService,
     CompareService,
     ConvertFsatService,
-    FsatWarningService
+    FsatWarningService,
+    OperationsService
   ]
 })
 export class FsatModule { }

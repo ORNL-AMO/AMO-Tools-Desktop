@@ -54,8 +54,8 @@
               <td class="bold w-50 text-center">Energy Used</td>
               <td class="text-center w-50">
                 {{getEnergyUsed(assessment) | sigFigs:'6'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
               </td>
             </tr>
             <tr>

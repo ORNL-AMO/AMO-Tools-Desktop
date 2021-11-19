@@ -6,7 +6,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
+import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
+
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -59,6 +62,16 @@ export class AssessmentService {
         this.tab = 'treasure-chest';
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
+    } else if (assessment.type == 'WasteWater') {
+      if (assessment.wasteWater.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/waste-water/' + assessment.id);
+    } else if (assessment.type == "CompressedAir") {
+      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+      //   this.tab = 'assessment';
+      // }
+      this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
 
@@ -84,8 +97,8 @@ export class AssessmentService {
       stages: 1,
       fixed_speed: 0,
       line_frequency: 60,
-      motor_rated_power: 200,
-      motor_rated_speed: 1780,
+      motor_rated_power: null,
+      motor_rated_speed: null,
       efficiency_class: 1,
       efficiency: 95,
       motor_rated_voltage: 460,
@@ -93,11 +106,11 @@ export class AssessmentService {
       motor_rated_fla: null,
       operating_hours: 8760,
       flow_rate: null,
-      head: 277,
+      head: null,
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: null,
+      cost_kw_hour: settings.electricityCost,
       fluidType: 'Water',
       fluidTemperature: 68
     };
@@ -159,21 +172,26 @@ export class AssessmentService {
   getNewFsat(): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        operatingHours: 8760,
+        
         flowRate: null,
         inletPressure: null,
+        inletVelocityPressure: null,
         outletPressure: null,
+        usingStaticPressure: true,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: null,
+       
         compressibilityFactor: 0.988,
-        specificHeatRatio: 1.4,
         measuredVoltage: 460
+      },
+      fsatOperations: {
+        operatingHours: 8760,
+        cost: null,
       },
       fanMotor: {
         lineFrequency: 60,
         motorRatedPower: null,
-        motorRpm: 1785,
+        motorRpm: null,
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,
@@ -181,23 +199,24 @@ export class AssessmentService {
       },
       fanSetup: {
         fanType: 0,
-        fanSpeed: 1180,
+        fanSpeed: null,
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: null,
-        staticPressure: null,
+        dryBulbTemp: 68,
+        staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: 0.0749,
         gasType: 'AIR',
         //Mark Additions
-        inputType: 'custom',
+        inputType: 'relativeHumidity',
         //Method 2 variables
         specificGravity: 1,
         wetBulbTemp: 119,
         relativeHumidity: 0,
         dewPoint: 0,
-        specificHeatGas: .24
+        specificHeatGas: .24,
+        specificHeatRatio: 1.4,
       },
       notes: {
         fieldDataNotes: '',
@@ -274,4 +293,98 @@ export class AssessmentService {
       }
     };
   }
+
+  getNewWasteWater(settings: Settings): WasteWater {
+    return {
+      baselineData: {
+        name: 'Baseline',
+        id: Math.random().toString(36).substr(2, 9),
+        activatedSludgeData: {
+          Temperature: undefined,
+          So: undefined,
+          Volume: undefined,
+          FlowRate: undefined,
+          InertVSS: undefined,
+          OxidizableN: undefined,
+          Biomass: undefined,
+          InfluentTSS: undefined,
+          InertInOrgTSS: undefined,
+          EffluentTSS: undefined,
+          RASTSS: undefined,
+          MLSSpar: undefined,
+          CalculateGivenSRT: false,
+          DefinedSRT: undefined,
+          BiomassYeild: 0.6,
+          HalfSaturation: 60,
+          FractionBiomass: 0.1,
+          MicrobialDecay: 0.1,
+          MaxUtilizationRate: 8,
+        },
+        aeratorPerformanceData: {
+          OperatingDO: undefined,
+          Alpha: .84,
+          Beta: .92,
+          Aerator: 'Ultra-fine bubble diffusers',
+          SOTR: undefined,
+          Aeration: undefined,
+          Elevation: undefined,
+          OperatingTime: 24,
+          TypeAerators: 2,
+          Speed: 100,
+          AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: settings.electricityCost
+        }
+      },
+      modifications: new Array(),
+      systemBasics: {
+        equipmentNotes: ''
+      }
+    }
+  }
+
+  getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
+    let initDayTypeId: string = Math.random().toString(36).substr(2, 9);
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        demandCost: 5.00,
+        notes: undefined
+      },
+      systemInformation: {
+        systemElevation: undefined,
+        totalAirStorage: undefined,
+        isSequencerUsed: false,
+        targetPressure: undefined,
+        variance: undefined,
+        atmosphericPressure: 14.7,
+        atmosphericPressureKnown: true
+      },
+      compressorInventoryItems: new Array(),
+      systemProfile: {
+        systemProfileSetup: {
+          dayTypeId: undefined,
+          numberOfHours: 24,
+          dataInterval: 1,
+          profileDataType: undefined,
+        },
+        profileSummary: new Array()
+      },
+      compressedAirDayTypes: [{
+        dayTypeId: initDayTypeId,
+        name: 'Standard Day Type',
+        numberOfDays: 365,
+        profileDataType: "percentCapacity"
+      }]
+    }
+  }
+
 }

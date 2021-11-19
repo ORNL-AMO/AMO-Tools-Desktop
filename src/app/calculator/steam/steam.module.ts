@@ -20,6 +20,9 @@ import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-
 import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 import { SaturatedPropertiesConversionService } from './saturated-properties-conversion.service';
 import { SaturatedPropertiesService } from './saturated-properties.service';
+import { WaterHeatingModule } from './water-heating/water-heating.module';
+import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-economizer.module';
+import { CondensingEconomizerModule } from './condensing-economizer/condensing-economizer.module';
 
 
 @NgModule({
@@ -32,17 +35,20 @@ import { SaturatedPropertiesService } from './saturated-properties.service';
     BoilerModule,
     FlashTankModule,
     PrvModule,
+    FeedwaterEconomizerModule,
     DeaeratorModule,
     HeaderModule,
     TurbineModule,
     BoilerBlowdownRateModule,
     SteamReductionModule,
+    WaterHeatingModule,
     RouterModule,
     PipeInsulationReductionModule,
-    TankInsulationReductionModule
+    TankInsulationReductionModule,
+    CondensingEconomizerModule
   ],
   declarations: [
-    SteamListComponent
+    SteamListComponent,
   ],
   exports: [
     SteamListComponent

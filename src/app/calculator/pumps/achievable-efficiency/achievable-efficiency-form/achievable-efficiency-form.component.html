@@ -1,7 +1,8 @@
 <form [formGroup]="efficiencyForm">
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="emitChange()">
+    <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="emitChange()"
+    autofocus (focus)="focusField('pumpType')">
       <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
     </select>
   </div>
@@ -9,7 +10,7 @@
     <label for="flowRate">Flow Rate</label>
     <div class="input-group" [ngClass]="{'error': flowRateWarning !== null}">
       <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate"
-        (input)="emitChange()" onfocus="this.select();">
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.flowRate.invalid && !efficiencyForm.controls.flowRate.pristine">

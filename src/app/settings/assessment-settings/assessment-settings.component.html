@@ -2,6 +2,19 @@
   <div class="col-10  mx-auto">
     <div class="tab-content content-container" *ngIf="settingsForm">
       <div class="card-form">
+        <div class="d-flex ml-auto justify-content-end p-1">
+          <div class="pl-1">
+            <button [routerLink]="['/directory-dashboard', 1]" class="btn btn-secondary action-btn">
+              <span class="fa fa-folder"></span>
+            </button>
+          </div>
+          <div class="pl-1">
+            <button [routerLink]="['/landing-screen']" class="btn btn-secondary action-btn">
+              <span class="fa fa-home"></span>
+            </button>
+          </div>
+        </div>
+        <hr class="my-1 hr-spacer">
         <div class="form-section">
           <!--add click event to call function that toggles section boolean-->
           <label class="group-label general" (click)="toggleGeneralSettings()">General Settings
@@ -14,6 +27,17 @@
             <p class="help-text">These will be default settings for any new assessments and folders.</p>
             <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings()"></app-application-settings>
             <app-treasure-hunt-settings [(settingsForm)]="settingsForm" (emitSave)="updateSettings()"></app-treasure-hunt-settings>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="group-label general" (click)="toggleCo2Settings()">CO2 Savings Settings
+            <span *ngIf="!showCo2Settings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showCo2Settings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showCo2Settings">
+            <p class="help-text">These will be default settings for any new assessments and folders.</p>
+            <app-co2-savings-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings()"></app-co2-savings-settings>
           </div>
         </div>
 
@@ -74,11 +98,21 @@
           </div>
         </div>
 
+        <div class="form-section general">
+          <label class="group-label" (click)="togglePrintSettings()">Print Settings
+            <span *ngIf="!showPrintSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showPrintSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showPrintSettings">
+            <p class="help-text">Select all report items you would like to include in your printed report.</p>
+            <app-print-settings [(settings)]="settings" (savePrintSettings)="savePrintSettings()"></app-print-settings>
+          </div>
+        </div>
+
         <div class="reset-data">
           <h3>Restore System Settings</h3>
-          <p class="help-text">Restoring system settings will provide options for resetting all application settings to
-            their default values, returning all example assessments to their original state, deleting all user-created
-            assessments/pre-assessments, and deleting all user-created materials.
+          <p class="help-text">Restoring system settings will provide options for resetting all application settings to their default values, returning all example assessments to their original state, deleting all user-created assessments/pre-assessments, and deleting all user-created materials.
+          Selecting this button opens the menu where you can choose to reset one or all of these before-mentioned settings. If you reset only one option (e.g. resetting example assessments), it will not impact any other areas or options.
             <span class="red">This cannot be undone!</span>
           </p>
           <button class="btn btn-danger pull-right" (click)="showResetSystemSettingsModal()">Restore System Settings</button>

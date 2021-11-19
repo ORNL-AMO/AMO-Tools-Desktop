@@ -1,9 +1,47 @@
+<form [formGroup]="headerForm">
+  
+    <!-- Condensate Return -->
+  <div *ngIf="pressureLevel == 'highPressure'" class="py-1">
+      <label class="group-label">Condensate Return</label>
+      <div class="form-group">
+        <label for="{{idString+pressureLevel+'_condensateReturnTemperature'}}">Condensate Return Temperature</label>
+        <div class="input-group">
+          <input name="condensateReturnTemperature" type="number" step="any" class="form-control"
+          id="{{idString+pressureLevel+'_condensateReturnTemperature'}}" (input)="save()" [readonly]="!selected"
+          formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
+          [ngClass]="{'indicate-different': isCondensateReturnTemperatureDifferent()}">
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
+        <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
+        <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value must be lower than saturation
+          temperature at deaerator pressure.
+          ({{headerForm.controls.condensateReturnTemperature.errors.max.max}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
+          <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
+            {{headerForm.controls.condensateReturnTemperature.errors.min.min}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          </span>
+        </div>
+        
+        <div class="form-group">
+          <label for="{{idString+pressureLevel+'_flashCondensateReturn'}}">Flash Condensate Return</label>
+          <select name="flashCondensateReturn" class="form-control" id="{{idString+pressureLevel+'_flashCondensateReturn'}}"
+          (change)="save()" (focus)="focusField('flashCondensateReturn')" 
+          formControlName="flashCondensateReturn" [ngClass]="{'indicate-different': isFlashCondensateReturnDifferent()}">
+          <option [ngValue]=true>Yes</option>
+          <option [ngValue]=false>No</option>
+        </select>
+      </div>
+</div>
+
 <label class="group-label">
   <span *ngIf="pressureLevel == 'highPressure'">High Pressure Header</span>
   <span *ngIf="pressureLevel == 'mediumPressure'">Medium Pressure Header</span>
   <span *ngIf="pressureLevel == 'lowPressure'">Low Pressure Header</span>
 </label>
-<form [formGroup]="headerForm">
+
   <div class="form-group">
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
     <div class="input-group">
@@ -78,42 +116,9 @@
     </span>
   </div>
 
-  <!--Highest Pressure-->
-  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
-    <label for="{{idString+pressureLevel+'_condensateReturnTemperature'}}">Condensate Return Temperature</label>
-    <div class="input-group">
-      <input name="condensateReturnTemperature" type="number" step="any" class="form-control"
-        id="{{idString+pressureLevel+'_condensateReturnTemperature'}}" (input)="save()" [readonly]="!selected"
-        formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
-         [ngClass]="{'indicate-different': isCondensateReturnTemperatureDifferent()}">
-      <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-    </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
-      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
-      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value must be lower than saturation
-        temperature at deaerator pressure.
-        ({{headerForm.controls.condensateReturnTemperature.errors.max.max}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
-      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
-        {{headerForm.controls.condensateReturnTemperature.errors.min.min}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-    </span>
-  </div>
-
-  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
-    <label for="{{idString+pressureLevel+'_flashCondensateReturn'}}">Flash Condensate Return</label>
-    <select name="flashCondensateReturn" class="form-control" id="{{idString+pressureLevel+'_flashCondensateReturn'}}"
-      (change)="save()" (focus)="focusField('flashCondensateReturn')" 
-      formControlName="flashCondensateReturn" [ngClass]="{'indicate-different': isFlashCondensateReturnDifferent()}">
-      <option [ngValue]=true>Yes</option>
-      <option [ngValue]=false>No</option>
-    </select>
-  </div>
-
   <!--Non Highest Pressure-->
   <div class="form-group" *ngIf="pressureLevel != 'highPressure'">
-    <label for="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}">Flash Condensate Into Header</label>
+    <label for="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}">Flash Condensate Coming into Header</label>
     <select name="flashCondensateIntoHeader" class="form-control"
       id="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}" (change)="save()"
       (focus)="focusField('flashCondensateIntoHeader')"  formControlName="flashCondensateIntoHeader"
@@ -180,4 +185,5 @@
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
     </span>
   </div>
+
 </form>

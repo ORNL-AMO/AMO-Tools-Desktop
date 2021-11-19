@@ -6,15 +6,19 @@
 
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item"
     [ngStyle]="{'height.px': containerHeight}">
-    <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+    <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"></app-system-basics>
-      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true"
-        [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
-        [baseline]="true" [fsat]="_fsat"></app-fsat-fluid>
+        (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+        
+      <app-operations *ngIf="stepTab == 'operations'" [settings]="settings" [inSetup]="true" [selected]="true"
+      [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat"></app-operations>
+
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
         [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"
         (emitSave)="saveFanSetup($event)"></app-fan-setup>
+      <app-fsat-fluid *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true"
+        [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
+        [baseline]="true" [fsat]="_fsat"></app-fsat-fluid>
       <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true"
         [fanMotor]="_fsat.fanMotor" [baseline]="true" (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"
         [fsat]="_fsat"></app-fan-motor>
@@ -50,8 +54,6 @@
   </div>
 
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-fan-analysis *ngIf="calcTab == 'fan-analysis'" [assessment]="assessment" [settings]="settings">
-    </app-fan-analysis>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
@@ -142,3 +144,6 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'fsat'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

@@ -6,6 +6,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
+import { BaseGasDensity } from '../../../../shared/models/fans';
 import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -38,10 +39,26 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   isBaseline: boolean;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   warnings: FlueGasWarnings;
   options: Array<SolidLiquidFlueGasMaterial>;
   showModal: boolean = false;
+  showMoisture: boolean = false;
+  baseGasDensity: BaseGasDensity = {
+    barometricPressure: 29.92,
+    dewPoint: 0,
+    dryBulbTemp: 68,
+    gasDensity: 0.07516579558441701,
+    gasType: "AIR",
+    inputType: "relativeHumidity",
+    relativeHumidity: 0,
+    specificGravity: 1,
+    specificHeatGas: 0.24,
+    specificHeatRatio: 1.4,
+    staticPressure: 0,
+    wetBulbTemp: 118.999
+  }
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -66,7 +83,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.carbon.value === '') {
+        if (this.flueGasLossForm.controls.carbon.value === 0) {
           this.setProperties();
         }
       }
@@ -84,6 +101,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
           this.enableForm();
         }
       }
@@ -125,7 +143,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       o2: this.flueGasLossForm.controls.o2.value,
       moisture: this.flueGasLossForm.controls.moisture.value,
       nitrogen: this.flueGasLossForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
       excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
@@ -143,6 +161,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       if (input.excessAir < 0) {
         this.calculationFlueGasO2 = 0.0;
       } else {
+        // bandaid
+        if (input.moistureInAirCombustion === undefined) {
+          input.moistureInAirCombustion = null;
+        }
         this.calculationFlueGasO2 = this.phastService.flueGasByMassCalculateO2(input);
       }
       this.flueGasLossForm.patchValue({
@@ -176,13 +198,18 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   save() {
     this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
+
+    // backend method needs moistureInAirCombustion to be ''
+    // moistureInAirCombustion is "" before saveEmit and undefined after
     this.saveEmit.emit(true);
+
+    // this.calculate should emit a loss object, though still working with this boolean
     this.calculate.emit(true);
   }
 
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
-    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss, this.settings);
     let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
@@ -191,6 +218,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
+  }
+
+  showMoistureModal() {
+    this.showMoisture = true;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.moistureModal.show();
   }
 
   hideMaterialModal(event?: any) {
@@ -207,6 +240,17 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
+  }
+
+  hideMoistureModal(moistureInAirCombustion?: number) {
+    if (moistureInAirCombustion) {
+      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
+      this.flueGasLossForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.lossesService.modalOpen.next(this.showMoisture);
+    this.save();
   }
 
   canCompare() {
@@ -235,6 +279,15 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return false;
     }
   }
+
+  compareMassAmbientAirTemp() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareMassAmbientAirTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  
   compareMassExcessAirPercentage() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareMassExcessAirPercentage(this.lossIndex);
@@ -263,9 +316,9 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       return false;
     }
   }
-  compareMassMoistureInAirComposition() {
+  compareMassMoistureInAirCombustion() {
     if (this.canCompare()) {
-      return this.flueGasCompareService.compareMassMoistureInAirComposition(this.lossIndex);
+      return this.flueGasCompareService.compareMassMoistureInAirCombustion(this.lossIndex);
     } else {
       return false;
     }

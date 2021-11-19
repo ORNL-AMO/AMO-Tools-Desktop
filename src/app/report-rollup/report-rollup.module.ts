@@ -46,6 +46,23 @@ import { RollupSummaryBarChartComponent } from './rollup-summary-bar-chart/rollu
 import { RollupSummaryTableComponent } from './rollup-summary-table/rollup-summary-table.component';
 import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table/rollup-summary-energy-table.component';
+import { PsatReportRollupService } from './psat-report-rollup.service';
+import { PhastReportRollupService } from './phast-report-rollup.service';
+import { FsatReportRollupService } from './fsat-report-rollup.service';
+import { SsmtReportRollupService } from './ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
+import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary/waste-water-summary.component';
+import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-water-report.module';
+import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-rollup.component';
+import { WasteWaterRollupPrintComponent } from './waste-water-rollup/waste-water-rollup-print/waste-water-rollup-print.component';
+import { NutrientRemovalTableComponent } from './waste-water-rollup/nutrient-removal-table/nutrient-removal-table.component';
+import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-energy-use-table/effluent-energy-use-table.component';
+import { CompressedAirReportRollupService } from './compressed-air-report-rollup.service';
+import { CompressedAirSummaryComponent } from './report-summary/compressed-air-summary/compressed-air-summary.component';
+import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
+import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
+import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compressed-air-rollup-print/compressed-air-rollup-print.component';
 
 @NgModule({
   imports: [
@@ -61,7 +78,9 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     PrintOptionsMenuModule,
     PieChartModule,
     SharedPipesModule,
-    RouterModule
+    RouterModule,
+    WasteWaterReportModule,
+    CompressedAirReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -96,9 +115,26 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     RollupSummaryTableComponent,
     RollupSummaryPieChartComponent,
     RollupSummaryEnergyTableComponent,
+    WasteWaterSummaryComponent,
+    WasteWaterRollupComponent,
+    WasteWaterRollupPrintComponent,
+    NutrientRemovalTableComponent,
+    EffluentEnergyUseTableComponent,
+    CompressedAirSummaryComponent,
+    CompressedAirRollupComponent,
+    CompressedAirRollupPrintComponent,
 
   ],
-  providers: [ReportRollupService],
+  providers: [
+    ReportRollupService,
+    PsatReportRollupService,
+    PhastReportRollupService,
+    FsatReportRollupService,
+    SsmtReportRollupService,
+    TreasureHuntReportRollupService,
+    WasteWaterReportRollupService,
+    CompressedAirReportRollupService
+  ],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

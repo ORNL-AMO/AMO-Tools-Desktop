@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FanTypes } from '../../../../fsat/fanOptions';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -25,7 +24,6 @@ export class FanEfficiencyFormComponent implements OnInit {
 
   ngOnInit() {
     this.fanTypes = FanTypes;
-    this.fanTypes.pop();
   }
 
 

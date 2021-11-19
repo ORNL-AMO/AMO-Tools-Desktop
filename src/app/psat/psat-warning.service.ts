@@ -4,6 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { fluidProperties } from './psatConstants';
+import { CompareService } from './compare.service';
 
 
 //PSAT Warnings are messages for input fields
@@ -14,12 +15,15 @@ import { fluidProperties } from './psatConstants';
 export class PsatWarningService {
 
   updateFla: boolean = false;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, 
+    private compareService: CompareService, 
+    private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
   //warnings for field data form
   checkFieldData(psat: PSAT, settings: Settings, isBaseline?: boolean): FieldDataWarnings {
     let flowError: string = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
     let voltageError: string = this.checkVoltage(psat);
+    let suggestedVoltage: string = this.checkSuggestedVoltage(psat, isBaseline);
     let ratedPowerError: string = null;
     if (isBaseline) {
       ratedPowerError = this.checkRatedPower(psat);
@@ -27,6 +31,7 @@ export class PsatWarningService {
     return {
       flowError: flowError,
       voltageError: voltageError,
+      suggestedVoltage: suggestedVoltage,
       ratedPowerError: ratedPowerError,
     }
   }
@@ -52,6 +57,21 @@ export class PsatWarningService {
       return null;
     }
   }
+
+  checkSuggestedVoltage(psat: PSAT, isBaseline: boolean) {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT && !isBaseline) {
+      let ratedVoltage = this.compareService.modifiedPSAT.inputs.motor_rated_voltage;
+      if (this.compareService.isMotorRatedVoltageDifferent() && psat.inputs.motor_field_voltage != ratedVoltage) {
+        return `Motor modification Rated Voltage differs from baseline. Consider using ${ratedVoltage} (modification Rated Voltage) for Measured Voltage`;
+      } else {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+  
   //used by checkFlowRate()
   getFlowRateMinMax(pumpStyle: number): { min: number, max: number } {
     //min/max values from Daryl
@@ -121,7 +141,7 @@ export class PsatWarningService {
       compare = psat.inputs.motor_rated_power;
       compare = compare * 1.5;
       if (val > compare) {
-        return 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+        return 'The Field Data Motor Current is too high compared to the Rated Motor Power, please adjust the input values.';
       } else {
         return null
       }
@@ -296,7 +316,13 @@ export class PsatWarningService {
   //warnings for pump fluid form
   checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
     let rpmError: string = this.checkPumpRpm(psat);
-    let temperatureError: string = this.checkTemperatureError(psat, settings);
+    let temperatureError: string;
+    if(psat.inputs.fluidType !== 'Other'){
+      temperatureError = this.checkTemperatureError(psat, settings);
+    } else {
+      temperatureError = null;      
+    }
+    
     return {
       rpmError: rpmError,
       temperatureError: temperatureError
@@ -357,8 +383,24 @@ export class PsatWarningService {
     }
   }
 
+  checkPumpOperations(psat: PSAT, settings: Settings, isBaseline?: boolean): OperationsWarnings {
+    let warnings: OperationsWarnings = {
+      cost: this.checkCost(psat),
+    };
+
+    return warnings;
+  }
+
+  checkCost(psat: PSAT) {
+    if (psat.inputs.cost_kw_hour > 1) {
+      return "Shouldn't be greater then 1";
+    } else {
+      return null;
+    }
+  }
+
   //Iterates warnings objects to see if any warnings are not null
-  checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings): boolean {
+  checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings | OperationsWarnings): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
       if (warnings[key] !== null) {
@@ -374,6 +416,7 @@ export interface FieldDataWarnings {
   flowError: string;
   voltageError: string;
   ratedPowerError: string;
+  suggestedVoltage: string;
 }
 
 export interface MotorWarnings {
@@ -386,4 +429,8 @@ export interface MotorWarnings {
 export interface PumpFluidWarnings {
   rpmError: string;
   temperatureError: string;
+}
+
+export interface OperationsWarnings {
+  cost: string;
 }

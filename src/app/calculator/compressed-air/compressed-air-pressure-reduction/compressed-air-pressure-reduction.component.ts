@@ -5,7 +5,11 @@ import { CompressedAirPressureReductionService } from './compressed-air-pressure
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FormBuilder } from '@angular/forms';
 import { CompressedAirPressureReductionResults, CompressedAirPressureReductionData } from '../../../shared/models/standalone';
-import { CompressedAirPressureReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-compressed-air-pressure-reduction',
@@ -23,6 +27,8 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   settings: Settings;
   @Input()
   operatingHours: OperatingHours;
+  @Input()
+  assessment: Assessment;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -46,7 +52,11 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   baselineData: Array<CompressedAirPressureReductionData>;
   modificationData: Array<CompressedAirPressureReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
+  saving: boolean;
+  assessmentCalculator: Calculator;
+
+  constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+    private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -55,8 +65,12 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.initData();
-    this.getResults();
+    if(this.assessment) {
+      this.getCalculatorForAssessment();
+    } else{
+      this.initData();
+      this.getResults();
+    }
   }
 
   ngAfterViewInit() {
@@ -127,6 +141,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   createModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.modificationData.forEach(modification => {
+      modification.isBaseline = false;
+    });
     this.getResults();
     this.modificationExists = true;
     this.setModificationSelected();
@@ -149,15 +166,86 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     dataArray[index].electricityCost = data.electricityCost;
     dataArray[index].compressorPower = data.compressorPower;
     dataArray[index].pressure = data.pressure;
+    dataArray[index].powerType = data.powerType;
     dataArray[index].proposedPressure = data.proposedPressure;
+    dataArray[index].atmosphericPressure = data.atmosphericPressure;
+    dataArray[index].pressureRated = data.pressureRated;
     if (data.isBaseline && this.modificationExists) {
       this.modificationData[index].compressorPower = data.compressorPower;
       this.modificationData[index].pressure = data.pressure;
+      this.modificationData[index].powerType = data.powerType;
+      this.modificationData[index].pressureRated = data.pressureRated;
+      this.modificationData[index].atmosphericPressure = data.atmosphericPressure;
     }
   }
 
   getResults() {
     this.compressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(this.settings, this.baselineData, this.modificationData);
+    if (this.assessmentCalculator) {
+      this.setAssessmentCalculatorData();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  getCalculatorForAssessment() {
+    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if(this.assessmentCalculator) {
+      if (this.assessmentCalculator.compressedAirPressureReduction) {
+        if (this.assessmentCalculator.compressedAirPressureReduction.baselineData) {
+          this.compressedAirPressureReductionService.baselineData = this.assessmentCalculator.compressedAirPressureReduction.baselineData;
+          if (this.assessmentCalculator.compressedAirPressureReduction.modificationData) {
+            this.compressedAirPressureReductionService.modificationData = this.assessmentCalculator.compressedAirPressureReduction.modificationData;
+          }
+        }
+        this.initData();
+      } else {
+        this.setAssessmentCalculatorData();
+      }
+      this.getResults();
+    }else{
+      this.assessmentCalculator = this.initNewAssessmentCalculator();
+      this.saveAssessmentCalculator();
+    }
+  }
+
+  setAssessmentCalculatorData() {
+    this.initData();
+    this.assessmentCalculator.compressedAirPressureReduction = {
+      baselineData: this.baselineData
+    };
+    if (this.modificationData) {
+      this.assessmentCalculator.compressedAirPressureReduction.modificationData = this.modificationData;
+    }
+  }
+
+  initNewAssessmentCalculator(): Calculator {
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      compressedAirPressureReduction: {
+        baselineData: this.baselineData,
+        modificationData: this.modificationData,
+      }
+    };
+    return tmpCalculator;
+  }
+
+  saveAssessmentCalculator(){
+    if (!this.saving) {
+      if (this.assessmentCalculator.id) {
+        this.indexedDbService.putCalculator(this.assessmentCalculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.assessmentCalculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.assessmentCalculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentCalculator.id = result;
+            this.saving = false;
+          });
+        });
+      }
+    }
   }
 
   btnResetData() {
@@ -187,7 +275,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
   
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAirPressure });
   }
 
   cancel() {

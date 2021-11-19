@@ -11,31 +11,45 @@
                             <td class="bold">Annual Energy Used</td>
                             <td class="bold">Annual Energy Cost</td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="psatSummary.totalAssessments != 0">
                             <td>Pumps</td>
                             <td>{{psatSummary.totalAssessments}}</td>
                             <td>{{psatSummary.totalEnergyUsed | sigFigs:'6'}} MWh</td>
                             <td>{{psatSummary.totalCost | currency}}</td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="phastSummary.totalAssessments != 0">
                             <td>Process Heating</td>
                             <td>{{phastSummary.totalAssessments}}</td>
                             <td>{{phastSummary.totalEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}
                             </td>
                             <td>{{phastSummary.totalCost | currency}}</td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="fsatSummary.totalAssessments != 0">
                             <td>Fans</td>
                             <td>{{fsatSummary.totalAssessments}}</td>
                             <td>{{fsatSummary.totalEnergyUsed | sigFigs:'6'}} MWh</td>
                             <td>{{fsatSummary.totalCost | currency}}</td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="ssmtSummary.totalAssessments != 0">
                             <td>Steam</td>
                             <td>{{ssmtSummary.totalAssessments}}</td>
                             <td>{{ssmtSummary.totalEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}
                             </td>
                             <td>{{ssmtSummary.totalCost | currency}}</td>
+                        </tr>
+                        <tr *ngIf="wasteWaterSummary.totalAssessments != 0">
+                            <td>Waste Water</td>
+                            <td>{{wasteWaterSummary.totalAssessments}}</td>
+                            <td>{{wasteWaterSummary.totalEnergyUsed | sigFigs:'6'}} MWh
+                            </td>
+                            <td>{{wasteWaterSummary.totalCost | currency}}</td>
+                        </tr>
+                        <tr *ngIf="compressedAirSummary.totalAssessments != 0">
+                            <td>Compressed Air</td>
+                            <td>{{compressedAirSummary.totalAssessments}}</td>
+                            <td>{{compressedAirSummary.totalEnergyUsed | sigFigs:'6'}} MWh
+                            </td>
+                            <td>{{compressedAirSummary.totalCost | currency}}</td>
                         </tr>
                         <tr>
                             <td class="bold">Total</td>
@@ -69,7 +83,7 @@
                         </tr>
                         <tr>
                             <td class="bold">Electricity Cost</td>
-                            <td>{{directorySettings.electricityCost | currency}}
+                            <td>{{directorySettings.electricityCost | currency:'USD':'symbol':'1.0-3' }}
                                 <span>/kWh</span>
                             </td>
                         </tr>
@@ -89,7 +103,8 @@
             <div class="modal-body tab-content">
                 <app-application-settings [settingsForm]="settingsForm"></app-application-settings>
                 <p class="help-text">Modifying these settings will not effect existing assessments.
-                    <br> New assessments in this folder will inherit these settings.</p>
+                    <br> New assessments in this folder will inherit these settings.
+                </p>
             </div>
             <div class="modal-footer justify-content-center">
                 <button class="btn btn-primary save-btn" (click)="updateSettings()">Save to Folder</button>

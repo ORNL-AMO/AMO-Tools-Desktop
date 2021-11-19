@@ -3,20 +3,19 @@ import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { PhastResultsData } from '../report-rollup-models';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
-import { ReportRollupService } from '../report-rollup.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PhastResultsService } from '../../phast/phast-results.service';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 @Component({
   selector: 'app-phast-rollup',
   templateUrl: './phast-rollup.component.html',
   styleUrls: ['./phast-rollup.component.css']
 })
 export class PhastRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
   @Input()
   phastResults: Array<PhastResultsData>;
   @Input()
@@ -34,12 +33,13 @@ export class PhastRollupComponent implements OnInit {
   tickFormat: string;
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
-  // rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService,
-    private phastResultsService: PhastResultsService) { }
+  settings: Settings;
+
+  constructor(private phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
+    private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    // this.setTableData();
+    this.settings = this.reportRollupService.settings.getValue();
     this.setBarChartData();
     this.setBarChartOption('energy');
     this.setPieChartData();
@@ -56,7 +56,7 @@ export class PhastRollupComponent implements OnInit {
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else if (this.barChartDataOption == 'cost') {
-      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.yAxisLabel = `Annual Energy Cost (${this.settings.currency !== '$'? '$k' : '$'}/yr)`;
       this.tickFormat = '$.2s';
       this.barChartData = this.costBarChartData;
     } else if (this.barChartDataOption == 'availableHeat') {
@@ -124,7 +124,7 @@ export class PhastRollupComponent implements OnInit {
       }
     } else if (dataOption == 'cost') {
       return {
-        hoverTemplate: '%{y:$,.0f}<extra></extra>',
+        hoverTemplate: `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$'? 'k': ''}`,
         traceName: "Modification Costs"
       }
     } else if (dataOption == 'availableHeat') {
@@ -147,20 +147,25 @@ export class PhastRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let phastResults: Array<PhastResultsData> = this.reportRollupService.phastResults.getValue();
     //use copy for converting data
-    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
+    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
 
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (dataOption == 'cost') {
+    if (dataOption == 'cost' || dataOption == 'costSavings') {
       phastResultsCpy.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
-        projectedCosts.push(result.modificationResults.annualCost);
+        let savings: number = result.baselineResults.annualCost - result.modificationResults.annualCost;
+        let modCost: number = result.modificationResults.annualCost;
+        if (this.settings.currency !== '$') {
+          savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
+          modCost = this.convertUnitsService.value(modCost).from('$').to(this.settings.currency);
+        }
+        costSavings.push(savings);
+        projectedCosts.push(modCost);
       })
-    } else if (dataOption == 'energy') {
+    } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       phastResultsCpy.forEach(result => {
         result.baselineResults.annualEnergyUsed = this.getConvertedEnergyValue(result.baselineResults.annualEnergyUsed, result.settings);
         result.modificationResults.annualEnergyUsed = this.getConvertedEnergyValue(result.modificationResults.annualEnergyUsed, result.settings);
@@ -196,9 +201,8 @@ export class PhastRollupComponent implements OnInit {
 
   setPieChartData() {
     this.pieChartData = new Array();
-    let phastResults: Array<PhastResultsData> = this.reportRollupService.phastResults.getValue();
     //Use copy to avoid changing original results, convert all data to a common unit for comparisons
-    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
+    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
     phastResultsCpy.forEach(result => {
       result.baselineResults.annualEnergyUsed = this.getConvertedEnergyValue(result.baselineResults.annualEnergyUsed, result.settings);
       result.modificationResults.annualEnergyUsed = this.getConvertedEnergyValue(result.modificationResults.annualEnergyUsed, result.settings);
@@ -208,14 +212,25 @@ export class PhastRollupComponent implements OnInit {
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
     phastResultsCpy.forEach(result => {
+      let annualCost: number = result.baselineResults.annualCost;
+      let costSavings: number = result.baselineResults.annualCost - result.modificationResults.annualCost;
+      let total: number = totalCost;
+      if (this.settings.currency !== '$') {
+        annualCost = this.convertUnitsService.value(annualCost).from('$').to(this.settings.currency);
+        costSavings = this.convertUnitsService.value(costSavings).from('$').to(this.settings.currency);
+        total = this.convertUnitsService.value(total).from('$').to(this.settings.currency);
+      }
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergyUsed,
-        annualCost: result.baselineResults.annualCost,
+        annualCost: annualCost,
+        energySavings: result.baselineResults.annualEnergyUsed - result.modificationResults.annualEnergyUsed,
+        costSavings: costSavings,
         percentCost: result.baselineResults.annualCost / totalCost * 100,
         percentEnergy: result.baselineResults.annualEnergyUsed / totalEnergyUse * 100,
         color: graphColors[colorIndex],
-        furnaceType: result.settings.energySourceType
+        furnaceType: result.settings.energySourceType,
+        currencyUnit: this.settings.currency
       });
       colorIndex++;
     });

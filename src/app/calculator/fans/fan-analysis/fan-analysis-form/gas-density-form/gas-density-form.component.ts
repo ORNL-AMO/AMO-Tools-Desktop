@@ -76,7 +76,7 @@ export class GasDensityFormComponent implements OnInit {
     } else if (this.gasDensityForm.controls.inputType.value === 'dewPoint') {
       psychrometricResults = this.calcPsychrometricDewPoint();
     }
-
+    
     if (this.gasDensityForm.controls.inputType.value != 'custom') {
       if (psychrometricResults && isNaN(psychrometricResults.gasDensity) === false) {
         this.gasDensityForm.patchValue({
@@ -87,8 +87,12 @@ export class GasDensityFormComponent implements OnInit {
           gasDensity: undefined
         });
       }
+    } 
+    
+    if (psychrometricResults) {
+      psychrometricResults.dryBulbTemp = this.gasDensityForm.controls.dryBulbTemp.value;
+      psychrometricResults.barometricPressure = this.gasDensityForm.controls.barometricPressure.value;
     }
-
     this.gasDensityFormService.baselinePsychrometricResults.next(psychrometricResults);
     this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
     this.save();

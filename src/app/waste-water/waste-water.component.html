@@ -1,0 +1,72 @@
+<div #content class="waste-water-container waste-water d-flex flex-column" *ngIf="assessment && settings">
+  <!--header-->
+  <div #header class="w-100 hide-print sticky-top" id="wasteWaterBanner">
+    <app-waste-water-banner [assessment]="assessment"></app-waste-water-banner>
+  </div>
+  <!--end header-->
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [assessment]="assessment"></app-system-basics>
+      <app-waste-water-operations *ngIf="setupTab == 'operations'" [inSetup]="true" [selected]="true"></app-waste-water-operations>
+      <app-activated-sludge-form *ngIf="setupTab == 'activated-sludge'" [inSetup]="true" [selected]="true">
+      </app-activated-sludge-form>
+      <app-aerator-performance-form *ngIf="setupTab == 'aerator-performance'" [inSetup]="true" [selected]="true">
+      </app-aerator-performance-form>
+    </div>
+    <div class="w-50">
+      <app-results-panel></app-results-panel>
+    </div>
+  </div>
+
+
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}" class="tab-content"
+    [ngStyle]="{'height.px': containerHeight}">
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
+    </app-modify-conditions>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
+    (exploreOppsToast)="hideToast($event)">
+    </app-explore-opportunities>
+  </div>
+
+  <!--Analysis-->
+  <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
+    <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
+  </div>
+
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-waste-water-diagram></app-waste-water-diagram>
+  </div>
+
+  <!--Report-->
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-11 report-column">
+      <app-waste-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
+      </app-waste-water-report>
+    </div>
+  </div>
+
+
+  <!--footer-->
+  <div #footer id="wasteWaterFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup'">
+    <div class="pull-left">
+      <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" [disabled]="disableNext" (click)="continue()">Next</button>
+    </div>
+  </div>
+  <!--end footer-->
+</div>
+
+
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
+
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
+  (emitDisable)="disableDisclaimer()"></app-toast>
+
+  <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'waste-water'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

@@ -1,0 +1,4 @@
+<app-waste-water-graphs *ngIf="analysisTab == 'graphs'" [containerHeight]="containerHeight"></app-waste-water-graphs>
+<app-waste-water-calculations-table *ngIf="analysisTab == 'tables'" [containerHeight]="containerHeight">
+</app-waste-water-calculations-table>
+<app-energy-analysis *ngIf="analysisTab == 'energy-analysis'" [settings] = "settings" [containerHeight]="containerHeight"></app-energy-analysis>

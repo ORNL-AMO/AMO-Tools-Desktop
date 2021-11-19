@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
-import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -11,17 +10,19 @@ import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
+
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
   styleUrls: ['./directory-dashboard-menu.component.css']
 })
-export class DirectoryDashboardMenuComponent implements OnInit {
-
+export class DirectoryDashboardMenuComponent implements OnInit { 
+  
   breadCrumbs: Array<Directory>;
   directory: Directory;
   view: string = 'grid';
   isAllSelected: boolean;
+  
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
     private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
@@ -59,6 +60,16 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
     })
+    this.init();
+  }
+
+  init(){
+    this.activatedRoute.params.subscribe(params => {
+      let id: number = Number(params['id']);
+      this.breadCrumbs = new Array();
+      this.directory = this.directoryDbService.getById(id);
+      this.getBreadcrumbs(id);
+    });
   }
 
   checkSelected() {
@@ -83,6 +94,18 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       }
     });
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
+  }
+
+  checkIfCopyItem(){
+    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (inventorySelectedTest != undefined);
+    let calculatorSelectedTest: Calculator
+    if (this.directory.calculators) {
+      calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
+    }
+    return (checkAssessmentDirectorySelected || (calculatorSelectedTest != undefined)) && directorySelectedTest == undefined;
   }
 
   showCreateAssessment() {
@@ -119,4 +142,11 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.router.navigateByUrl('/report-rollup');
   }
 
+  showCopyItems(){
+    this.dashboardService.copyItems.next(true);
+  }
+
+  moveToFolder() {
+    this.dashboardService.moveItems.next(true);
+  }
 }

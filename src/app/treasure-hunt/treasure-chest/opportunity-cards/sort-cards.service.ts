@@ -1,17 +1,64 @@
+
 import { Injectable } from '@angular/core';
 import { OpportunityCardData, OpportunityCardsService } from './opportunity-cards.service';
 import { SortCardsData } from './sort-cards-by.pipe';
 import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
-  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt
+  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
+
+import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
+import { AirLeakTreasureHuntService } from '../../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
+import { TankInsulationTreasureHuntService } from '../../treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
+import { CaPressureReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/ca-pressure-reduction-treasure-hunt.service';
+import { CaReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/ca-reduction-treasure-hunt.service';
+import { ElectricityReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/electricity-reduction-treasure-hunt.service';
+import { FlueGasTreasureHuntService } from '../../treasure-hunt-calculator-services/flue-gas-treasure-hunt.service';
+import { LightingReplacementTreasureHuntService } from '../../treasure-hunt-calculator-services/lighting-replacement-treasure-hunt.service';
+import { MotorDriveTreasureHuntService } from '../../treasure-hunt-calculator-services/motor-drive-treasure-hunt.service';
+import { NaturalGasReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/natural-gas-reduction-treasure-hunt.service';
+import { PipeInsulationTreasureHuntService } from '../../treasure-hunt-calculator-services/pipe-insulation-treasure-hunt.service';
+import { ReplaceExistingTreasureHuntService } from '../../treasure-hunt-calculator-services/replace-existing-treasure-hunt.service';
+import { StandaloneOpportunitySheetService } from '../../treasure-hunt-calculator-services/standalone-opportunity-sheet.service';
+import { SteamReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
+import { WallTreasureHuntService } from '../../treasure-hunt-calculator-services/wall-treasure-hunt.service';
+import { WaterReductionTreasureHuntService } from '../../treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { LeakageTreasureHuntService } from '../../treasure-hunt-calculator-services/leakage-treasure-hunt.service';
+import { WasteHeatTreasureHuntService } from '../../treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
+import { OpeningTreasureHuntService } from '../../treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { AirHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from '../../treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from '../../treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @Injectable()
 export class SortCardsService {
 
-  constructor(private opportunityCardsService: OpportunityCardsService) { }
+  constructor(private opportunityCardsService: OpportunityCardsService,
+    private opportunitySummaryService: OpportunitySummaryService,
+    private airLeakTreasureService: AirLeakTreasureHuntService,
+    private tankInsulationTreasureHuntService: TankInsulationTreasureHuntService,
+    private lightingTreasureHuntService: LightingReplacementTreasureHuntService,
+    private replaceExistingTreasureService: ReplaceExistingTreasureHuntService,
+    private motorDriveTreasureHuntService: MotorDriveTreasureHuntService,
+    private naturalGasTreasureHuntService: NaturalGasReductionTreasureHuntService,
+    private electricityReductionTreasureHuntService: ElectricityReductionTreasureHuntService,
+    private compressedAirTreasureHuntService: CaReductionTreasureHuntService,
+    private compressedAirPressureTreasureHuntService: CaPressureReductionTreasureHuntService,
+    private waterReductionTreasureHuntService: WaterReductionTreasureHuntService,
+    private steamReductionTreasureHuntService: SteamReductionTreasureHuntService,
+    private pipeInsulationTreasureHuntService: PipeInsulationTreasureHuntService,
+    private standaloneOpportunitySheetService: StandaloneOpportunitySheetService,
+    private leakageTreasureHuntService: LeakageTreasureHuntService,
+    private wallLossTreasureHuntService: WallTreasureHuntService,
+    private airHeatingTreasureHuntService: AirHeatingTreasureHuntService,
+    private flueGasTreasureHuntService: FlueGasTreasureHuntService,
+    private wasteHeatTreasureHuntService: WasteHeatTreasureHuntService,
+    private openingTreasureHuntService: OpeningTreasureHuntService,
+    private heatCascadingTreasureHuntService: HeatCascadingTreasureHuntService,
+    private waterHeatingTreasureHuntService: WaterHeatingTreasureHuntService
+    ) { }
 
   sortCards(value: Array<OpportunityCardData>, sortByData: SortCardsData): Array<OpportunityCardData> {
     if (sortByData.utilityTypes.length != 0) {
@@ -51,24 +98,32 @@ export class SortCardsService {
     let calculatorTypes: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });
 
     let allCalcTypes = calculatorTypes.length == 0;
-    let hasLightingReplacement = calculatorTypes.includes('lighting-replacement');
-    let hasOppSheet: boolean = calculatorTypes.includes('opportunity-sheet');
-    let hasReplaceExisting: boolean = calculatorTypes.includes('replace-existing');
-    let hasMotorDrive: boolean = calculatorTypes.includes('motor-drive');
-    let hasNaturalGasReduction: boolean = calculatorTypes.includes('natural-gas-reduction');
-    let hasElectricityReduction: boolean = calculatorTypes.includes('electricity-reduction');
-    let hasCompAirReduction: boolean = calculatorTypes.includes('compressed-air-reduction');
-    let hasCompAirPressureReduction: boolean = calculatorTypes.includes('compressed-air-pressure-reduction');
-    let hasWaterReduction: boolean = calculatorTypes.includes('water-reduction');
-    let hasSteamReduction: boolean = calculatorTypes.includes('steam-reduction');
-    let hasPipeInsulationReduction: boolean = calculatorTypes.includes('pipe-insulation-reduction');
-    let hasTankInsulationReduction: boolean = calculatorTypes.includes('tank-insulation-reduction');
-    let hasAirLeakSurvey: boolean = calculatorTypes.includes('air-leak-survey');
+    let hasLightingReplacement = calculatorTypes.includes(Treasure.lightingReplacement);
+    let hasOppSheet: boolean = calculatorTypes.includes(Treasure.opportunitySheet);
+    let hasReplaceExisting: boolean = calculatorTypes.includes(Treasure.replaceExisting);
+    let hasMotorDrive: boolean = calculatorTypes.includes(Treasure.motorDrive);
+    let hasNaturalGasReduction: boolean = calculatorTypes.includes(Treasure.naturalGasReduction);
+    let hasElectricityReduction: boolean = calculatorTypes.includes(Treasure.electricityReduction);
+    let hasCompAirReduction: boolean = calculatorTypes.includes(Treasure.compressedAir);
+    let hasCompAirPressureReduction: boolean = calculatorTypes.includes(Treasure.compressedAirPressure);
+    let hasWaterReduction: boolean = calculatorTypes.includes(Treasure.waterReduction);
+    let hasSteamReduction: boolean = calculatorTypes.includes(Treasure.steamReduction);
+    let hasPipeInsulationReduction: boolean = calculatorTypes.includes(Treasure.pipeInsulation);
+    let hasTankInsulationReduction: boolean = calculatorTypes.includes(Treasure.tankInsulation);
+    let hasAirLeakSurvey: boolean = calculatorTypes.includes(Treasure.airLeak);
+    let hasWallLoss: boolean = calculatorTypes.includes(Treasure.wallLoss);
+    let hasFlueGas: boolean = calculatorTypes.includes(Treasure.flueGas);
+    let hasWasteHeat: boolean = calculatorTypes.includes(Treasure.wasteHeat);
+    let hasAirHeating: boolean = calculatorTypes.includes(Treasure.airHeating);
+    let hasLeakageLoss: boolean = calculatorTypes.includes(Treasure.leakageLoss);
+    let hasOpeningLoss: boolean = calculatorTypes.includes(Treasure.openingLoss);
+    let hasHeatCascading: boolean = calculatorTypes.includes(Treasure.heatCascading);
+    let hasWaterHeating: boolean = calculatorTypes.includes(Treasure.waterHeating);
 
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
       if (treasureHunt.lightingReplacements && treasureHunt.lightingReplacements.length != 0) {
-        lightingReplacements = this.sortLightingReplacements(treasureHunt.lightingReplacements, sortBy, treasureHunt);
+        lightingReplacements = this.sortLightingReplacements(treasureHunt.lightingReplacements, sortBy, treasureHunt, settings);
       }
     }
     let opportunitySheets: Array<OpportunitySheet> = [];
@@ -86,7 +141,7 @@ export class SortCardsService {
     let motorDrives: Array<MotorDriveInputsTreasureHunt> = [];
     if (allCalcTypes || hasMotorDrive) {
       if (treasureHunt.motorDrives && treasureHunt.motorDrives.length != 0) {
-        motorDrives = this.sortMotorDrives(treasureHunt.motorDrives, sortBy, treasureHunt);
+        motorDrives = this.sortMotorDrives(treasureHunt.motorDrives, sortBy, treasureHunt, settings);
       }
     }
     let naturalGasReductions: Array<NaturalGasReductionTreasureHunt> = [];
@@ -143,6 +198,54 @@ export class SortCardsService {
         airLeakSurveys = this.sortAirLeakSurveys(treasureHunt.airLeakSurveys, sortBy, treasureHunt, settings);
       }
     }
+    let wallLosses: Array<WallLossTreasureHunt> = [];
+    if (allCalcTypes || hasWallLoss) {
+      if (treasureHunt.wallLosses && treasureHunt.wallLosses.length != 0) {
+        wallLosses = this.sortWallLosses(treasureHunt.wallLosses, sortBy, treasureHunt, settings);
+      }
+    }
+    let openingLosses: Array<OpeningLossTreasureHunt> = [];
+    if (allCalcTypes || hasOpeningLoss) {
+      if (treasureHunt.openingLosses && treasureHunt.openingLosses.length != 0) {
+        openingLosses = this.sortOpeningLosses(treasureHunt.openingLosses, sortBy, treasureHunt, settings);
+      }
+    }
+    let flueGasLosses: Array<FlueGasTreasureHunt> = [];
+    if (allCalcTypes || hasFlueGas) {
+      if (treasureHunt.flueGasLosses && treasureHunt.flueGasLosses.length != 0) {
+        flueGasLosses = this.sortFlueGasLosses(treasureHunt.flueGasLosses, sortBy, treasureHunt, settings);
+      }
+    }
+    let wasteHeatReductions: Array<WasteHeatTreasureHunt> = [];
+    if (allCalcTypes || hasWasteHeat) {
+      if (treasureHunt.wasteHeatReductions && treasureHunt.wasteHeatReductions.length != 0) {
+        wasteHeatReductions = this.sortWasteHeatReductions(treasureHunt.wasteHeatReductions, sortBy, treasureHunt, settings);
+      }
+    }
+    let airHeatingOpportunities: Array<AirHeatingTreasureHunt> = [];
+    if (allCalcTypes || hasAirHeating) {
+      if (treasureHunt.airHeatingOpportunities && treasureHunt.airHeatingOpportunities.length != 0) {
+        airHeatingOpportunities = this.sortAirHeatingOpportunities(treasureHunt.airHeatingOpportunities, sortBy, treasureHunt, settings);
+      }
+    }
+    let leakageLosses: Array<LeakageLossTreasureHunt> = [];
+    if (allCalcTypes || hasLeakageLoss) {
+      if (treasureHunt.leakageLosses && treasureHunt.leakageLosses.length != 0) {
+        leakageLosses = this.sortLeakageLosses(treasureHunt.leakageLosses, sortBy, treasureHunt, settings);
+      }
+    }
+    let heatCascadingOpportunities: Array<HeatCascadingTreasureHunt> = [];
+    if (allCalcTypes || hasHeatCascading) {
+      if (treasureHunt.heatCascadingOpportunities && treasureHunt.heatCascadingOpportunities.length != 0) {
+        heatCascadingOpportunities = this.sortheatCascadingOpportunities(treasureHunt.heatCascadingOpportunities, sortBy, treasureHunt, settings);
+      }
+    }
+    let waterHeatingOpportunities: Array<WaterHeatingTreasureHunt> = [];
+    if (allCalcTypes || hasWaterHeating) {
+      if (treasureHunt.waterHeatingOpportunities && treasureHunt.waterHeatingOpportunities.length != 0) {
+        waterHeatingOpportunities = this.sortWaterHeatingOpportunities(treasureHunt.waterHeatingOpportunities, sortBy, treasureHunt, settings);
+      }
+    }
 
     let filteredTreasureHunt: TreasureHunt = {
       name: treasureHunt.name,
@@ -159,6 +262,14 @@ export class SortCardsService {
       pipeInsulationReductions: pipeInsulationReductions,
       tankInsulationReductions: tankInsulationReductions,
       airLeakSurveys: airLeakSurveys,
+      openingLosses: openingLosses,
+      wallLosses: wallLosses,
+      airHeatingOpportunities: airHeatingOpportunities,
+      flueGasLosses: flueGasLosses,
+      leakageLosses: leakageLosses,
+      wasteHeatReductions: wasteHeatReductions,
+      heatCascadingOpportunities: heatCascadingOpportunities,
+      waterHeatingOpportunities: waterHeatingOpportunities,
       operatingHours: treasureHunt.operatingHours,
       currentEnergyUsage: treasureHunt.currentEnergyUsage,
       setupDone: treasureHunt.setupDone
@@ -196,92 +307,161 @@ export class SortCardsService {
     return (isUtilityType && isCalcTypeIncluded && isTeamIncluded && isEquipmentIncluded);
   }
 
-  sortLightingReplacements(items: Array<LightingReplacementTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt): Array<LightingReplacementTreasureHunt> {
+  sortLightingReplacements(items: Array<LightingReplacementTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<LightingReplacementTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getLightingReplacementCardData(item, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.lightingTreasureHuntService.getLightingReplacementCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortOpportunitySheets(items: Array<OpportunitySheet>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySheet> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(item, treasureHunt.currentEnergyUsage, 0, settings);
+      // let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortReplaceExisting(items: Array<ReplaceExistingMotorTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<ReplaceExistingMotorTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getReplaceExistingCardData(item, 0, treasureHunt.currentEnergyUsage, settings);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.replaceExistingTreasureService.getReplaceExistingCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
-  sortMotorDrives(items: Array<MotorDriveInputsTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt): Array<MotorDriveInputsTreasureHunt> {
+  sortMotorDrives(items: Array<MotorDriveInputsTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<MotorDriveInputsTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getMotorDriveCard(item, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.motorDriveTreasureHuntService.getMotorDriveCard(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortNaturalGasReductions(items: Array<NaturalGasReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<NaturalGasReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getNaturalGasReductionCard(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.naturalGasTreasureHuntService.getNaturalGasReductionCard(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage,  settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortElectricityReductions(items: Array<ElectricityReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<ElectricityReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getElectricityReductionCard(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.electricityReductionTreasureHuntService.getElectricityReductionCard(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortCompressedAirReductions(items: Array<CompressedAirReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<CompressedAirReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getCompressedAirReductionCardData(item, settings, treasureHunt.currentEnergyUsage, 0);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.compressedAirTreasureHuntService.getCompressedAirReductionCardData(item, opportunitySummary, settings, treasureHunt.currentEnergyUsage, 0);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortCompressedAirPressureReductions(items: Array<CompressedAirPressureReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<CompressedAirPressureReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getCompressedAirPressureReductionCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.compressedAirPressureTreasureHuntService.getCompressedAirPressureReductionCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortWaterReductions(items: Array<WaterReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<WaterReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getWaterReductionCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.waterReductionTreasureHuntService.getWaterReductionCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortSteamReductions(items: Array<SteamReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<SteamReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getSteamReductionCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.steamReductionTreasureHuntService.getSteamReductionCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortPipeInsulationReductions(items: Array<PipeInsulationReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<PipeInsulationReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getPipeInsulationReductionCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.pipeInsulationTreasureHuntService.getPipeInsulationReductionCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
 
   sortTankInsulationReductions(items: Array<TankInsulationReductionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<TankInsulationReductionTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getTankInsulationReductionCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.tankInsulationTreasureHuntService.getTankInsulationReductionCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }
   sortAirLeakSurveys(items: Array<AirLeakSurveyTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<AirLeakSurveyTreasureHunt> {
     return items.filter(item => {
-      let cardItem: OpportunityCardData = this.opportunityCardsService.getAirLeakSurveyCardData(item, settings, 0, treasureHunt.currentEnergyUsage);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.airLeakTreasureService.getAirLeakSurveyCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+  sortOpeningLosses(items: Array<OpeningLossTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<OpeningLossTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.openingTreasureHuntService.getOpeningLossCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+  });
+  }
+  sortWallLosses(items: Array<WallLossTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<WallLossTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.wallLossTreasureHuntService.getWallLossCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+  });
+}
+sortLeakageLosses(items: Array<LeakageLossTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<LeakageLossTreasureHunt> {
+  return items.filter(item => {
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+    let cardItem: OpportunityCardData = this.leakageTreasureHuntService.getLeakageLossCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+    return this.checkCardItemIncluded(cardItem, sortBy);
+});
+}
+sortAirHeatingOpportunities(items: Array<AirHeatingTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<AirHeatingTreasureHunt> {
+  return items.filter(item => {
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+    let cardItem: OpportunityCardData = this.airHeatingTreasureHuntService.getAirHeatingOpportunityCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+    return this.checkCardItemIncluded(cardItem, sortBy);
+});
+}
+  sortFlueGasLosses(items: Array<FlueGasTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<FlueGasTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.flueGasTreasureHuntService.getFlueGasCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+  sortWasteHeatReductions(items: Array<WasteHeatTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<WasteHeatTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.wasteHeatTreasureHuntService.getWasteHeatCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+  sortheatCascadingOpportunities(items: Array<HeatCascadingTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<HeatCascadingTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.heatCascadingTreasureHuntService.getHeatCascadingOpportunityCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+  sortWaterHeatingOpportunities(items: Array<WaterHeatingTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<WaterHeatingTreasureHunt> {
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.waterHeatingTreasureHuntService.getWaterHeatingOpportunityCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }

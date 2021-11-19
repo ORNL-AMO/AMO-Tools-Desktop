@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { SsmtValid } from '../../../shared/models/steam/ssmt';
+import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 
 @Component({
@@ -35,11 +36,11 @@ export class LossesSummaryComponent implements OnInit {
   showCondensingLoss: boolean;
   showLowPressureVentedSteam: boolean;
   showCondensateFlashTank: boolean;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit() {
     if (this.inRollup) {
-      this.reportRollupService.selectedSsmt.forEach(val => {
+      this.ssmtReportRollupService.selectedSsmt.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -68,35 +69,35 @@ export class LossesSummaryComponent implements OnInit {
           this.checkCondensingLoss(loss.outputData);
           this.checkLowPressureVentedSteam(loss.outputData);
         }
-      })
-    }
+      }) 
+    } 
 
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.ssmtReportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   checkCondensingTurbine(loss: SSMTLosses) {
-    if (loss.condensingTurbineEfficiencyLoss || loss.condensingTurbineUsefulEnergy) {
+    if (loss.showCondensingTurbine) {
       this.showCondensingTurbine = true;
     }
   }
 
   checkHighToLowTurbine(loss: SSMTLosses) {
-    if (loss.highToLowTurbineEfficiencyLoss || loss.highToLowTurbineUsefulEnergy) {
+    if (loss.showHighToLowTurbine) {
       this.showHighToLowTurbine = true;
     }
   }
 
   checkHighToMediumTurbine(loss: SSMTLosses) {
-    if (loss.highToMediumTurbineEfficiencyLoss || loss.highToMediumTurbineUsefulEnergy) {
+    if (loss.showHighToMediumTurbine) {
       this.showHighToMediumTurbine = true;
     }
   }
 
   checkMediumtoLowTurbine(loss: SSMTLosses) {
-    if (loss.mediumToLowTurbineEfficiencyLoss || loss.mediumToLowTurbineUsefulEnergy) {
+    if (loss.showMediumToLowTurbine) {
       this.showMediumToLowTurbine = true;
     }
   }

@@ -53,6 +53,7 @@ export class ConvertFsatService {
     if (oldSettings.densityMeasurement !== newSettings.densityMeasurement) {
       inputCpy.baseGasDensity.gasDensity = this.convertNum(inputCpy.baseGasDensity.gasDensity, oldSettings.densityMeasurement, newSettings.densityMeasurement);
     }
+
     if (oldSettings.fanBarometricPressure !== newSettings.fanBarometricPressure) {
       inputCpy.baseGasDensity.barometricPressure = this.convertNum(inputCpy.baseGasDensity.barometricPressure, oldSettings.fanBarometricPressure, newSettings.fanBarometricPressure);
     }
@@ -85,6 +86,11 @@ export class ConvertFsatService {
       results.motorRatedPower = this.convertUnitsService.value(results.motorRatedPower).from('hp').to(settings.fanPowerMeasurement);
       results.motorShaftPower = this.convertUnitsService.value(results.motorShaftPower).from('hp').to(settings.fanPowerMeasurement);
     }
+
+    if (settings.currency !== "$") {
+      results.annualCost = this.convertUnitsService.value(results.annualCost).from("$").to(settings.currency);
+      results.annualSavings = this.convertUnitsService.value(results.annualSavings).from("$").to(settings.currency);
+    }
     return results;
   }
 
@@ -92,5 +98,15 @@ export class ConvertFsatService {
     num = this.convertUnitsService.value(num).from(from).to(to);
     num = Number(num.toFixed(3));
     return num;
+  }
+
+  convertExistingData(fsat: FSAT, oldSettings: Settings, settings: Settings): FSAT {
+    fsat = this.convertAllInputData(fsat, oldSettings, settings);
+    if(fsat.modifications){
+      fsat.modifications.forEach(mod => {
+        mod.fsat = this.convertAllInputData(mod.fsat, oldSettings, settings);
+      })
+    }
+    return fsat;
   }
 }

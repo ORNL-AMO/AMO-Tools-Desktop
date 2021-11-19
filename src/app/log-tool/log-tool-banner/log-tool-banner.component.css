@@ -25,3 +25,24 @@
     background-color: white;
     border-radius: 5px;
 }
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit !important;
+    opacity: 1;
+}
+
+.download-nav-item.active{
+    border: none !important;
+    background-color: #117A65 !important;
+}
+
+.disabled.download-nav-item{
+    cursor: inherit;
+    opacity: .6;
+}
+
+.disabled.download-nav-item:hover{
+    opacity: .6;
+    cursor: inherit;
+}

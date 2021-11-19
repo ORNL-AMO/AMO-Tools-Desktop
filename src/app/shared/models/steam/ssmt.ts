@@ -18,6 +18,7 @@ export interface SSMT {
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
     valid?: SsmtValid;
+    existingDataUnits?: string;
 }
 
 export interface SSMTInputs {
@@ -186,3 +187,11 @@ export interface SsmtValid {
     turbineValid: boolean;
     operationsValid: boolean;
   } 
+  
+  export interface DiagramData
+{
+  name: string,
+  inputData: SSMTInputs,
+  outputData: SSMTOutput,
+  valid: SsmtValid
+};

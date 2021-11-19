@@ -23,6 +23,7 @@ import { pressure } from './definitions/pressure';
 import { speed } from './definitions/speed';
 import { power } from './definitions/power';
 import { current } from './definitions/current';
+import { cost } from './definitions/cost';
 import { energy } from './definitions/energy';
 import { voltage } from './definitions/voltage';
 import { apparentPower } from './definitions/apparentPower';
@@ -50,6 +51,7 @@ import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
+import { Settings } from '../models/settings';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
@@ -67,6 +69,7 @@ export class ConvertUnitsService {
     pressure: pressure,
     power: power,
     current: current,
+    cost: cost,
     energy: energy,
     voltage: voltage,
     apparentPower: apparentPower,
@@ -294,5 +297,224 @@ export class ConvertUnitsService {
 
   measures() {
     return keys(this._measures);
+  }
+
+  
+  convertFt3AndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'ft3', 'm3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'm3', 'ft3');
+    }
+  }
+
+  convertMMBtuAndGJValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'MMBtu', 'GJ');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'GJ', 'MMBtu');
+    }
+  }
+
+  convertPowerValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'hp', 'kW');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kW', 'hp');
+    }
+  }
+
+  convertTemperatureValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'F', 'C');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'C', 'F');
+    }
+  }
+
+  convertFt2AndCm2Value(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'ft2', 'cm2');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'cm2', 'ft2');
+    }
+  }
+
+  convertFt3AndLiterValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'ft3', 'L');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'L', 'ft3');
+    }
+  }
+
+  convertFtAndMeterValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'ft', 'm');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'm', 'ft');
+    }
+  }
+
+  convertGallonPerMinuteAndLiterPerSecondValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'gpm', 'L/s');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'L/s', 'gpm');
+    }
+  }
+
+  convertInAndCmValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'in', 'cm');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'cm', 'in');
+    }
+  }
+
+  convertPsigAndBargValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'psig', 'barg');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'barg', 'psig');
+    }
+  }
+
+  convertGalAndLiterValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'gal', 'L');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'L', 'gal');
+    }
+  }
+
+  convertGalAndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'gal', 'm3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'm3', 'gal');
+    }
+  }
+
+  convertLbAndKgValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'lb', 'kg');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kg', 'lb');
+    }
+  }
+
+  convertKGalAndLiterValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'kgal', 'L');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'L', 'kgal');
+    }
+  }
+
+  convertKSCFAndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'kSCF', 'm3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'm3', 'kSCF');
+    }
+  }
+
+  convertKlbAndTonneValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'klb', 'tonne');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'tonne', 'klb');
+    }
+  }
+
+  convertDollarsPerMMBtuAndGJ(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertDollarPerValue(val, 'MMBtu', 'GJ');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertDollarPerValue(val, 'GJ', 'MMBtu');
+    }
+  }
+
+  convertDollarsPerGalAndLiter(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertDollarPerValue(val, 'gal', 'L');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertDollarPerValue(val, 'L', 'gal');
+    }
+  }
+
+  convertDollarsPerFt3AndM3(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertDollarPerValue(val, 'ft3', 'm3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertDollarPerValue(val, 'm3', 'ft3');
+    }
+  }
+
+  convertDollarsPerKlbAndTonne(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertDollarPerValue(val, 'klb', 'tonne');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertDollarPerValue(val, 'tonne', 'klb');
+    }
+  }
+
+  convertConductivity(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'Btu/hr-ft-R', 'W/mK');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'W/mK', 'Btu/hr-ft-R');
+    }
+  }
+
+  convertPsiaAndKpaa(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'psia', 'kPaa');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kPaa', 'psia');
+    }
+  }
+
+  convertPsigAndKpag(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'psig', 'kPag');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kPag', 'psig');
+    }
+  }
+  convertInAndMm(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'in', 'mm');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'mm', 'in');
+    }
+  }
+
+
+  convertValue(value: number, oldUnit: string, newUnit: string): number {
+    value = this.value(value).from(oldUnit).to(newUnit);
+    return value;
+  }
+
+  convertDollarPerValue(value: number, oldUnit: string, newUnit: string): number {
+    let conversionHelper: number = this.value(1).from(oldUnit).to(newUnit);
+    return value / conversionHelper;
+  }
+
+  convertSettingsUnitCosts(oldSettings: Settings, newSettings: Settings): Settings {
+    //imperial: $/MMBtu, metric: $/GJ
+    newSettings.fuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.fuelCost, oldSettings, newSettings);
+    //imperial: $/klb, metric: $/tonne
+    newSettings.steamCost = this.convertDollarsPerKlbAndTonne(newSettings.steamCost, oldSettings, newSettings);
+    //imperial: $/gal, metric: $/L
+    newSettings.waterCost = this.convertDollarsPerGalAndLiter(newSettings.waterCost, oldSettings, newSettings);
+    //imperial: $/MMBtu, metric: $/GJ
+    newSettings.otherFuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.otherFuelCost, oldSettings, newSettings);
+    //imperial: $/gal, metric: $/L
+    newSettings.waterWasteCost = this.convertDollarsPerGalAndLiter(newSettings.waterWasteCost, oldSettings, newSettings);
+    //imperial: $/SCF, metric: $/m2
+    newSettings.compressedAirCost = this.convertDollarsPerFt3AndM3(newSettings.compressedAirCost, oldSettings, newSettings);
+    return newSettings;
   }
 }

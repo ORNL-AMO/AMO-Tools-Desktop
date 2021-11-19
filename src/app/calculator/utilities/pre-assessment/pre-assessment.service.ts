@@ -5,7 +5,6 @@ import { DesignedEnergyService } from '../../../phast/designed-energy/designed-e
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
-import { DesignedZone } from '../../../shared/models/phast/designedEnergy';
 
 @Injectable()
 export class PreAssessmentService {

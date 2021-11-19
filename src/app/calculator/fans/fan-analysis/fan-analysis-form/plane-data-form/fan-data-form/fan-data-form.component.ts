@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
@@ -13,7 +13,7 @@ import { FsatService } from '../../../../../../fsat/fsat.service';
   templateUrl: './fan-data-form.component.html',
   styleUrls: ['./fan-data-form.component.css']
 })
-export class FanDataFormComponent implements OnInit {
+export class FanDataFormComponent implements OnInit, OnDestroy {
   @Input()
   planeNum: string;
   @Input()
@@ -45,7 +45,9 @@ export class FanDataFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();
-    this.staticPressureValueSubscription.unsubscribe();
+    if (this.planeNum.includes('3')) {
+      this.staticPressureValueSubscription.unsubscribe();
+    }
   }
 
   initSubscriptions() {
@@ -61,16 +63,22 @@ export class FanDataFormComponent implements OnInit {
       this.calcVelocityResults();
     });
 
-    this.staticPressureValueSubscription = this.planeDataFormService.staticPressureValue.subscribe(staticPressureControlValue => {
-      if (staticPressureControlValue != undefined) {
-        this.dataForm.patchValue({staticPressure: staticPressureControlValue});
-        this.save();
-      }
-    });
+    if (this.planeNum.includes('3')) {
+      this.staticPressureValueSubscription = this.planeDataFormService.staticPressureValue.subscribe(staticPressureControlValue => {
+        if (staticPressureControlValue != undefined) { 
+          this.dataForm.patchValue({
+            staticPressure: staticPressureControlValue,
+            userDefinedStaticPressure: staticPressureControlValue
+          });
+          this.save();
+        }
+      });
+    }
+
   }
 
   resetData() {
-    this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    this.planeDataFormService.staticPressureValue.next(undefined);
   }
 
   setPlaneData() {
@@ -103,8 +111,10 @@ export class FanDataFormComponent implements OnInit {
   }
 
   calcVelocityResults() {
-    if (this.dataForm.valid && (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c')) {
-        this.fanAnalysisService.calculateVelocityResults(this.planeData, this.settings);
+    // update validation from staticPressure in traverse-planes
+    let tempForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    if (tempForm.valid && (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c')) {
+      this.fanAnalysisService.calculateVelocityResults(this.planeData, this.settings);
     }
   }
 
@@ -118,7 +128,6 @@ export class FanDataFormComponent implements OnInit {
 
   save() {
     this.planeData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
-    this.calcVelocityResults();
     this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
     this.fanAnalysisService.getResults.next(true);
   }

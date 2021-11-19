@@ -57,28 +57,8 @@
                 {{pumpSystemCurveForm.controls.pointOneHead.errors.min.min}}.</span>
         </span>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <small>Fluid Power,
-                <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
-            </small>
-        </div>
-        <div class="col-6 text-center">
-            <small>
-                <strong>{{pointOneFluidPower| number:'2.2-2'}}</strong>
-            </small>
-        </div>
-    </div>
     <!--Point 2-->
     <label class="group-label" for="pointTwo">Point 2</label>
-    <div class="form-group">
-        <select class="form-control w-50 float-right" *ngIf="showDataPointOptions" (change)="setFormValues()" formControlName="pointTwo"
-            id="pointTwo" (focus)="focusField('pointTwo')">
-            <option *ngFor="let dataPoint of assessmentDataPoints" [ngValue]="dataPoint.pointName">
-                {{dataPoint.pointName}}
-            </option>
-        </select>
-    </div>
     <div class="form-group">
         <label class="small" for="pointTwoFlowRate">Flow Rate</label>
         <div class="input-group calc-addon-group">
@@ -108,18 +88,6 @@
             <span *ngIf="pumpSystemCurveForm.controls.pointTwoHead.errors.min">Value can't be less than
                 {{pumpSystemCurveForm.controls.pointTwoHead.errors.min.min}}.</span>
         </span>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <small>Fluid Power,
-                <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
-            </small>
-        </div>
-        <div class="col-6 text-center">
-            <small>
-                <strong>{{pointTwoFluidPower | number:'2.2-2'}}</strong>
-            </small>
-        </div>
     </div>
 
     <div class="d-block pt-3">

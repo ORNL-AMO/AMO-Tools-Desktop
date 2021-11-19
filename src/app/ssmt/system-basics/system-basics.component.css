@@ -30,3 +30,7 @@ a:not([href]):not([tabindex]).no-data-link{
     width: 100%;
     font-size: small;
   }
+
+  .alert-warning {
+    width: 90%;
+  }

@@ -1,0 +1,61 @@
+
+<table *ngFor="let data of tableData; let i = index" class="table table-hover mb-0 table-striped">
+  <thead [ngClass]="{'hide-headers': i > 0}">
+    <tr>
+      <th class="name-width">
+        Waste Water Name
+      </th>
+      <th class="name-width">
+        Equipment
+      </th>
+      <th>
+        Monthly<br>(kWh)
+      </th>
+      <th>
+        Per Million Gallons<br>(kWh)
+      </th>
+      <th>
+        Person Equivalents/year<br>(kWh)
+      </th>
+      <th>
+        Per BOD removed<br>(kWh)
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{data.baseline.assessmentName}}</td>
+
+      <td>{{data.baseline.equipmentName}}</td>
+
+      <td *ngIf="data.baseline.kWhMonth">{{data.baseline.kWhMonth | sigFigs:'3' }}</td>
+      <td *ngIf="!data.baseline.kWhMonth">&mdash;</td>
+      
+      <td *ngIf="data.baseline.millionGallons">{{data.baseline.millionGallons | sigFigs:'3' }}</td>
+      <td *ngIf="!data.baseline.millionGallons">&mdash;</td>
+
+      <td *ngIf="data.baseline.personEquivalents">{{data.baseline.personEquivalents | sigFigs:'3' }}</td>
+      <td *ngIf="!data.baseline.personEquivalents">&mdash;</td>
+
+      <td *ngIf="data.baseline.BODRemoved">{{data.baseline.BODRemoved | sigFigs:'3' }}</td>
+      <td *ngIf="!data.baseline.BODRemoved">&mdash;</td>
+    </tr>
+    <tr *ngIf="data.modification">
+      
+      <td>{{data.modification.assessmentName}}</td>
+      <td>{{data.modification.equipmentName}}</td>
+
+      <td *ngIf="data.modification.kWhMonth">{{data.modification.kWhMonth | sigFigs:'3' }}</td>
+      <td *ngIf="!data.modification.kWhMonth">&mdash;</td>
+      
+      <td *ngIf="data.modification.millionGallons">{{data.modification.millionGallons | sigFigs:'3' }}</td>
+      <td *ngIf="!data.modification.millionGallons">&mdash;</td>
+
+      <td *ngIf="data.modification.personEquivalents">{{data.modification.personEquivalents | sigFigs:'3' }}</td>
+      <td *ngIf="!data.modification.personEquivalents">&mdash;</td>
+
+      <td *ngIf="data.modification.BODRemoved">{{data.modification.BODRemoved | sigFigs:'3' }}</td>
+      <td *ngIf="!data.modification.BODRemoved">&mdash;</td>
+    </tr>
+  </tbody>
+</table>

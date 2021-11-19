@@ -118,13 +118,29 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
         this.addAssessment(tmpAssessment, '/ssmt/');
-      } 
+      }
       //treasure hunt
       else if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         this.addAssessment(tmpAssessment, '/treasure-hunt/');
+      } 
+      // Waste Water
+      else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
+        let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.directory.id;
+        tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater(this.settings);
+        this.addAssessment(tmpAssessment, '/waste-water/');
+      }
+      // Compressed Air
+      else if (this.newAssessmentForm.controls.assessmentType.value == 'CompressedAir') {
+        let tmpAssessment = this.assessmentService.getNewAssessment('CompressedAir');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.directory.id;
+        tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
+        this.addAssessment(tmpAssessment, '/compressed-air/');
       }
     }
   }

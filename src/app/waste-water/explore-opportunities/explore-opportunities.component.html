@@ -1,0 +1,30 @@
+<div class="d-flex waste-water modify-conditions panel-container">
+    <div *ngIf="modificationExists" class="w-50 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+        <div class="header mr-2 ml-2">
+            <h3>Select Potential Adjustment Projects</h3>
+        </div>
+        <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
+            your system.</p>
+        <app-explore-opportunities-form></app-explore-opportunities-form>
+
+    </div>
+    <div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to
+            find efficiency
+            opportunities.
+        </h3>
+        <button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
+        <p>Data will be copied from your current baseline condition.</p>
+    </div>
+    <div class="w-50 d-flex flex-column mr-2 ml-2" [ngStyle]="{'height.px': containerHeight}">
+        <app-results-panel *ngIf="modificationExists"></app-results-panel>
+        <div *ngIf="!modificationExists">
+            <p>Explore Opportunities to view results</p>
+        </div>
+
+        <!-- End .help-panel -->
+    </div>
+</div>
+
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'explore-opps'"></app-toast>

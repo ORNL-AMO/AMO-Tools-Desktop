@@ -1,0 +1,54 @@
+
+.list-group-item{
+    font-size: 12px;
+    padding: .25rem;
+}
+
+.list-group-item.active, .btn.active{
+    color: white;
+    background: #003087;
+}
+
+
+.dropdown-menu{
+    right: 0px;
+    left: inherit;
+}
+
+
+.nav-item .dropdown-toggle{
+    font-size: 12px;
+    color: white;
+    background: #003087;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px;
+    line-height: 1;
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+
+.navbar{
+    padding: 0px;
+}
+
+.btn.active{
+    color: white;
+    background: #003087;
+}
+
+.btn{
+    padding: 4px;
+}
+
+.tabs.subtabs a{
+    font-size: 12px;
+}
+
+.tabs.subtabs .assessment-tab a{
+    font-size: 18px;
+}
+
+.middle-tab{
+    border-left: groove 2px;
+    border-right: groove 2px;
+}

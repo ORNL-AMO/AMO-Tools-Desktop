@@ -15,11 +15,14 @@ export class RollupSummaryEnergyTableComponent implements OnInit {
   @Input()
   equipmentType: string;
 
+  currencyUnit: string;
+
   totalEnergyUse: number;
   totalCost: number;
   constructor() { }
 
   ngOnInit(): void {
+    this.currencyUnit = this.pieChartData[0].currencyUnit;
     this.totalEnergyUse = _.sumBy(this.pieChartData, 'energyUsed');
     this.totalCost = _.sumBy(this.pieChartData, 'annualCost');
   }

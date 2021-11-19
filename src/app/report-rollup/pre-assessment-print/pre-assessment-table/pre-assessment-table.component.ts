@@ -24,6 +24,7 @@ export class PreAssessmentTableComponent implements OnInit {
     let energyResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'value', false);
     this.tableData = new Array();
     let resultIndex: number = 0;
+    let getColorIndex: number = costResults.length -1;
     costResults.forEach(result => {
       this.tableData.push({
         name: costResults[resultIndex].name,
@@ -32,9 +33,10 @@ export class PreAssessmentTableComponent implements OnInit {
         energyCost: energyResults[resultIndex].energyCost,
         percentEnergy: energyResults[resultIndex].percent / 100,
         percentCost: costResults[resultIndex].percent / 100,
-        color: graphColors[resultIndex]
+        color: graphColors[getColorIndex]
       });
       resultIndex++;
+      getColorIndex --;
     });
   }
 

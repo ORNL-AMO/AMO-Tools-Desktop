@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -142,6 +143,7 @@ export class AtmosphereFormComponent implements OnInit {
     if (this.selected == false) {
       this.atmosphereLossForm.disable();
     } else {
+      this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
       this.atmosphereLossForm.enable();
     }
   }
@@ -279,11 +281,11 @@ export class AtmosphereFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.atmosphereLossForm.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
     }
     this.calculate();

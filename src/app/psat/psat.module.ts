@@ -54,6 +54,10 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { PumpOperationsComponent } from './pump-operations/pump-operations.component';
+import { PumpOperationsService } from './pump-operations/pump-operations.service';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
   declarations: [
@@ -74,7 +78,8 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     AddModificationComponent,
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
-    PsatReportGraphsPrintComponent
+    PsatReportGraphsPrintComponent,
+    PumpOperationsComponent
   ],
   exports: [
     PsatReportComponent
@@ -105,7 +110,9 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     SharedPipesModule,
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
-    PsatSankeyModule
+    PsatSankeyModule,
+    UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule
   ],
   providers: [
     PsatService,
@@ -115,7 +122,8 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     PumpFluidService,
     MotorService,
     FieldDataService,
-    DecimalPipe
+    DecimalPipe, 
+    PumpOperationsService
   ]
 })
 

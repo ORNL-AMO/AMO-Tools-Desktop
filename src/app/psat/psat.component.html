@@ -13,11 +13,13 @@
   <!--system setup-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true}">
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
+      <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+      [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
-        [(psat)]="_psat" (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()"
-        (closeModal)="modalClose()"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
+        (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+        <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
       <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
@@ -26,7 +28,7 @@
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true"
+      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex" [currentTab]="stepTab" [inSetup]="true"
         [containerHeight]="containerHeight" [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>
@@ -170,3 +172,6 @@
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
   [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
   (emitDisable)="disableDisclaimer()"></app-toast>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

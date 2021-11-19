@@ -57,6 +57,16 @@
     box-shadow: 0px 0px 6px 0px #2E4053 !important;
 }
 
+.waste-water-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #003087 !important;
+}
+.compressed-air-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #7030A0 !important;
+}
+
+
 .coming-soon .summary-header {
     border-bottom: #ddd solid 1px;
     padding: 6px;
@@ -233,6 +243,17 @@ dl.summary-list {
     background: #2E4053;
     color: white;
 }
+
+.card.waste-water .card-header > span {
+    background: #003087;
+    color: white;
+}
+
+.card.compressed-air .card-header > span {
+    background: #7030A0;
+    color: white;
+}
+
 
 .card.fans .card-header > span span {
     color: black !important;

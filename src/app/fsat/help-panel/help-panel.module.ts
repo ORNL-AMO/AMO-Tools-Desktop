@@ -12,6 +12,7 @@ import { ModifyConditionsNotesComponent } from './modify-conditions-notes/modify
 import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GasDensityResultsModule } from '../../shared/gas-density-results/gas-density-results.module';
+import { FanOperationsHelpComponent } from './fan-operations-help/fan-operations-help.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { GasDensityResultsModule } from '../../shared/gas-density-results/gas-de
     FanMotorHelpComponent,
     FanSetupHelpComponent,
     FsatFluidHelpComponent,
-    ModifyConditionsNotesComponent
+    ModifyConditionsNotesComponent,
+    FanOperationsHelpComponent
   ],
   providers: [
     HelpPanelService

@@ -76,6 +76,14 @@ export const power = {
       }
       , to_anchor: 1.4148532
     }
+    , tons: {
+      name: {
+        singular: 'Ton of Refridgeration'
+        , plural: 'Tons of Refridgeration',
+        display: '(tons)'
+      }
+      , to_anchor: 4.71617735
+    }
     , btuhr: {
       name: {
         singular: 'British thermal unit per hour'

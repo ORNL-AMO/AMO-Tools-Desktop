@@ -1,0 +1,32 @@
+<div class="scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!printView">
+    <div class="row no-gutters w-100">
+        <div class="col-12">
+            <app-energy-analysis-table></app-energy-analysis-table>
+        </div>
+    </div>
+    <div class="row no-gutters w-100 min-row-height">
+        <div class="col-6">
+            <app-energy-analysis-bar-chart [settings] = "settings" [chartInfo]="'energyUse'"></app-energy-analysis-bar-chart>
+        </div>
+        <div class="col-6">
+            <app-energy-analysis-bar-chart [settings] = "settings" [chartInfo]="'energyCost'"></app-energy-analysis-bar-chart>
+        </div>
+    </div>
+</div>
+
+<div class="print-break-before" *ngIf="printView">
+    <div class="row no-gutters w-100">
+        <div class="col-12">
+            <app-energy-analysis-table></app-energy-analysis-table>
+        </div>
+    </div>
+    <div class="row no-gutters w-100">
+        <div class="col-12 min-row-height">
+            <app-energy-analysis-bar-chart [chartInfo]="'energyUse'" [settings] = "settings" [printView]="true"></app-energy-analysis-bar-chart>
+        </div>
+        <div class="col-12 min-row-height">
+            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'" [settings] = "settings" [printView]="true">
+            </app-energy-analysis-bar-chart>
+        </div>
+    </div>
+</div>

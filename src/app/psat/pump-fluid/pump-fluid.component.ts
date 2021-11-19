@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { PsatService } from '../psat.service';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -20,6 +20,8 @@ export class PumpFluidComponent implements OnInit {
   psat: PSAT;
   @Output('saved')
   saved = new EventEmitter<boolean>();
+  @Input()
+  psatInputs: PsatInputs;
   @Input()
   selected: boolean;
   @Input()
@@ -41,7 +43,12 @@ export class PumpFluidComponent implements OnInit {
   psatForm: FormGroup;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
+  constructor(private psatService: PsatService, 
+              private psatWarningService: PsatWarningService, 
+              private compareService: CompareService, 
+              private helpPanelService: HelpPanelService, 
+              private convertUnitsService: ConvertUnitsService, 
+              private pumpFluidService: PumpFluidService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -145,9 +152,8 @@ export class PumpFluidComponent implements OnInit {
     if (fluidType && t) {
 
       if (fluidType === 'Other') {
-        return;
-      }
-      if (fluidType === 'Water') {
+        this.save();
+      } else if (fluidType === 'Water') {
         let tTemp = (t - 32) * (5.0 / 9) + 273.15;
         let density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
         let kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
@@ -195,6 +201,7 @@ export class PumpFluidComponent implements OnInit {
     //save
     this.saved.emit(this.selected);
   }
+
 
   checkWarnings() {
     this.pumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);

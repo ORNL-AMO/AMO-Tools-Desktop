@@ -13,6 +13,7 @@
                     <tr>
                         <td class="bold">Use Column</td>
                         <td class="bold">Is Date</td>
+                        <td class = "bold">Is Time</td>
                         <td class="bold">Column Name</td>
                         <td class="bold">Alias</td>
                         <td class="bold">Unit</td>
@@ -23,8 +24,13 @@
                         </td>
                         <td>
                             <input type="checkbox" [(ngModel)]="field.isDateField"
-                                [disabled]="dataExists == true || (csvData.hasDateField && !field.isDateField)"
+                                [disabled]="dataExists == true || (csvData.hasDateField && !field.isDateField) || field.isTimeField"
                                 (change)="setDateField(csvData)">
+                        </td>
+                        <td>
+                            <input type="checkbox" [(ngModel)]="field.isTimeField"
+                                [disabled]="dataExists == true || (csvData.hasTimeField && !field.isTimeField) || field.isDateField"
+                                (change)="setTimeField(csvData)">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>

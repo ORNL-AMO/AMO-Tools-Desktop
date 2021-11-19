@@ -52,6 +52,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
+          this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
           this.enableForm();
         }
       }

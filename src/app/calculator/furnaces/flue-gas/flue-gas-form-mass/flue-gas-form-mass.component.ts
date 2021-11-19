@@ -16,7 +16,6 @@ import { FlueGasService } from '../flue-gas.service';
   styleUrls: ['./flue-gas-form-mass.component.css']
 })
 export class FlueGasFormMassComponent implements OnInit {
-
   @Input()
   settings: Settings;
   @Input()
@@ -60,6 +59,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
+      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
       this.setFormState();
     }
   }
@@ -68,13 +68,13 @@ export class FlueGasFormMassComponent implements OnInit {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.initForm();
       this.cd.detectChanges();
-    })
+    });
   }
 
   initFormSetup() {
     this.setFormState();
     if (this.byMassForm.controls.gasTypeId.value && this.byMassForm.controls.gasTypeId.value !== '') {
-      if (this.byMassForm.controls.carbon.value === '') {
+      if (this.byMassForm.controls.carbon.value === 0) {
         this.setProperties();
       }
     }
@@ -101,7 +101,7 @@ export class FlueGasFormMassComponent implements OnInit {
     if (updatedFlueGasData && updatedFlueGasData.flueGasByMass) {
       this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byMassForm = this.flueGasFormService.initEmptyMassForm();
+      this.byMassForm = this.flueGasFormService.initEmptyMassForm(this.settings);
     }
 
     this.initFormSetup();
@@ -109,7 +109,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
-    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss, this.settings);
   }
 
   setCalcMethod() {
@@ -129,7 +129,7 @@ export class FlueGasFormMassComponent implements OnInit {
       o2: this.byMassForm.controls.o2.value,
       moisture: this.byMassForm.controls.moisture.value,
       nitrogen: this.byMassForm.controls.nitrogen.value,
-      moistureInAirCombustion: this.byMassForm.controls.moistureInAirComposition.value,
+      moistureInAirCombustion: this.byMassForm.controls.moistureInAirCombustion.value,
       o2InFlueGas: this.byMassForm.controls.o2InFlueGas.value,
       excessAir: this.byMassForm.controls.excessAirPercentage.value
     };

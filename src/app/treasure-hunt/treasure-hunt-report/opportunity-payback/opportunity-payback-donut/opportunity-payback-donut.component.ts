@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-hunt';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-opportunity-payback-donut',
   templateUrl: './opportunity-payback-donut.component.html',
@@ -12,6 +13,8 @@ export class OpportunityPaybackDonutComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   @Input()
   showPrint: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('paybackDonutChart', { static: false }) paybackDonutChart: ElementRef;
   constructor() { }
@@ -48,7 +51,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       hoverinfo: 'label+percent',
     }];
     var layout = {
@@ -79,7 +82,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}</b> <br> %{value:,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: 45
@@ -111,10 +114,10 @@ export class OpportunityPaybackDonutComponent implements OnInit {
         this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
       ],
       labels: [
-        'Less than 1 Year',
-        '1 to 2 Years',
-        '2 to 3 Years',
-        'More than 3 Years'
+        'Less than 1 Year (' + this.settings.currency + ')',
+        '1 to 2 Years (' + this.settings.currency + ')',
+        '2 to 3 Years (' + this.settings.currency + ')',
+        'More than 3 Years (' + this.settings.currency + ')'
       ]
     };
   }

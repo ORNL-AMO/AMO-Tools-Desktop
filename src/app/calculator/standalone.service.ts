@@ -3,15 +3,16 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 declare var standaloneAddon: any;
 declare var calculatorAddon: any;
+declare var compressorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
-  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, 
-  CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, 
-  CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput, 
-  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult
+  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
+  CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult,
+  CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput,
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -150,7 +151,7 @@ export class StandaloneService {
   airSystemCapacity(input: AirSystemCapacityInput, settings: Settings): AirSystemCapacityOutput {
     let inputCpy: AirSystemCapacityInput = JSON.parse(JSON.stringify(input));
     inputCpy = this.sumPipeInputs(inputCpy);
-    
+
     let outputs: AirSystemCapacityOutput;
     if (settings.unitsOfMeasure === 'Metric') {
       //convert input data
@@ -191,7 +192,17 @@ export class StandaloneService {
     // Output airCap used to calculate leakRate
     let numerator = outputs.totalCapacityOfCompressedAirSystem * (inputCpy.leakRateInput.airPressureIn - inputCpy.leakRateInput.airPressureOut);
     let denominator = (inputCpy.leakRateInput.dischargeTime / 60) * inputCpy.leakRateInput.atmosphericPressure;
-    outputs.leakRate = numerator/denominator;
+    outputs.leakRate = numerator / denominator;
+
+    if (settings.unitsOfMeasure == 'Imperial') {
+      outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('gal');
+      outputs.totalPipeVolume = this.convertUnitsService.value(outputs.totalPipeVolume).from('ft3').to('gal');
+      outputs.totalCapacityOfCompressedAirSystem = this.convertUnitsService.value(outputs.totalCapacityOfCompressedAirSystem).from('ft3').to('gal');
+
+      outputs.totalReceiverVolume = Number(outputs.totalReceiverVolume.toFixed());
+      outputs.totalPipeVolume = Number(outputs.totalPipeVolume.toFixed());
+      outputs.totalCapacityOfCompressedAirSystem = Number(outputs.totalCapacityOfCompressedAirSystem.toFixed());
+    }
 
     return outputs;
   }
@@ -355,7 +366,26 @@ export class StandaloneService {
   }
 
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
-    return calculatorAddon.compressedAirPressureReduction(inputObj);
+    if(inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0){
+      let input: CompEEM_kWAdjustedInput = {
+        kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
+        P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
+        P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
+        P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
+        P_atm: 14.7
+      }
+      let result: { kW_adjusted: number } = compressorAddon.CompEEM_kWAdjusted(input);
+      let annualEnergyUsage: number = result.kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
+      let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
+      return {
+        energyCost: annualEnergyCost,
+        energyUse: annualEnergyUsage
+      }
+    }
+    return {
+      energyCost: 0,
+      energyUse: 0
+    }
   }
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {

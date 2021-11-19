@@ -31,6 +31,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   constructor(private atmosphereFormService: AtmosphereFormService) { }
 
   ngOnInit() {
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: false, display: 'Optimize Furnace Atmosphere Makeup System' }; 
     this.initData();
   }
   ngOnChanges(changes: SimpleChanges) {

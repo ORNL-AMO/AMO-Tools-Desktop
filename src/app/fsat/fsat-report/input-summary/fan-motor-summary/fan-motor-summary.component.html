@@ -24,7 +24,7 @@
             <!-- Line Frequency -->
             <tr>
               <td [ngClass]="{'indicate-report-field-different':lineFrequencyDiff[0] == true}">
-                Line Frequency
+                Line Frequency (Hz)
               </td>
               <td [ngClass]="{'indicate-report-field-different':lineFrequencyDiff[0] == true}">
                 {{fanMotor.baseline.lineFrequency}}
@@ -36,7 +36,9 @@
             <!-- Motor Rated Power -->
             <tr>
               <td [ngClass]="{'indicate-report-field-different':motorRatedPowerDiff[0] == true}">
-                Motor Rated Power
+                Motor Rated Power 
+                (<span [innerHTML]="settings.fanPowerMeasurement|settingsLabel"></span>)
+
               </td>
               <td [ngClass]="{'indicate-report-field-different':motorRatedPowerDiff[0] == true}">
                 {{fanMotor.baseline.motorRatedPower}}
@@ -49,6 +51,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':motorRpmDiff[0] == true}">
                 Motor RPM
+                (rpm)
               </td>
               <td [ngClass]="{'indicate-report-field-different':motorRpmDiff[0] == true}">
                 {{fanMotor.baseline.motorRpm}}
@@ -73,6 +76,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':specifiedEfficiencyDiff[0] == true}">
                 Specified Efficiency
+                (%)
               </td>
               <td [ngClass]="{'indicate-report-field-different':specifiedEfficiencyDiff[0] == true}">
                 <span *ngIf="fanMotor.baseline.efficiencyClass == 3">
@@ -95,6 +99,7 @@
             <tr>
               <td [ngClass]="{'indicate-report-field-different':motorRatedVoltageDiff[0] == true}">
                 Motor Rated Voltage
+                (V)
               </td>
               <td [ngClass]="{'indicate-report-field-different':motorRatedVoltageDiff[0] == true}">
                 {{fanMotor.baseline.motorRatedVoltage}}
@@ -106,7 +111,8 @@
             <!-- Full Load Amps -->
             <tr>
               <td [ngClass]="{'indicate-report-field-different':fullLoadAmpsDiff[0] == true}">
-                Full Load Amps
+                Full Load Amps 
+                (A)
               </td>
               <td [ngClass]="{'indicate-report-field-different':fullLoadAmpsDiff[0] == true}">
                 {{fanMotor.baseline.fullLoadAmps | number:'1.0-0'}}

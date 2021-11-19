@@ -19,7 +19,7 @@
         </span>
       </td>
       <td (click)="setSortBy('totalEnergySavings')" [ngClass]="{ active: sortBy == 'totalEnergySavings' }">
-        Utility Savings
+        Utility Savings 
         <span *ngIf="sortBy == 'totalEnergySavings'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
@@ -27,28 +27,28 @@
       </td>
       <td></td>
       <td (click)="setSortBy('costSavings')" [ngClass]="{ active: sortBy == 'costSavings' }">
-        Utility Cost Savings
+        Utility Cost Savings ({{settings.currency}})
         <span *ngIf="sortBy == 'costSavings'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
         </span>
       </td>
       <td (click)="setSortBy('additionalSavings')" [ngClass]="{ active: sortBy == 'additionalSavings' }">
-        Other Savings
+        Other Savings ({{settings.currency}})
         <span *ngIf="sortBy == 'additionalSavings'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
         </span>
       </td>
       <td (click)="setSortBy('opportunityCost.material')" [ngClass]="{ active: sortBy == 'opportunityCost.material' }">
-        Material Cost
+        Material Cost ({{settings.currency}})
         <span *ngIf="sortBy == 'opportunityCost.material'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
         </span>
       </td>
       <td (click)="setSortBy('opportunityCost.labor')" [ngClass]="{ active: sortBy == 'opportunityCost.labor' }">
-        Labor Cost
+        Labor Cost ({{settings.currency}})
         <span *ngIf="sortBy == 'opportunityCost.labor'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
@@ -57,7 +57,7 @@
       <td (click)="setSortBy('opportunityCost.engineeringServices')" [ngClass]="{
               active: sortBy == 'opportunityCost.engineeringServices'
             }">
-        Engineering Cost
+        Engineering Cost ({{settings.currency}})
         <span *ngIf="sortBy == 'opportunityCost.engineeringServices'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
@@ -65,14 +65,14 @@
       </td>
       <td (click)="setSortBy('opportunityCost.otherCosts')"
         [ngClass]="{ active: sortBy == 'opportunityCost.otherCosts' }">
-        Other Costs/Rebates
+        Other Costs/Rebates ({{settings.currency}})
         <span *ngIf="sortBy == 'opportunityCost.otherCosts'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
         </span>
       </td>
       <td (click)="setSortBy('totalCost')" [ngClass]="{ active: sortBy == 'totalCost' }">
-        Total Cost
+        Total Cost ({{settings.currency}})
         <span *ngIf="sortBy == 'totalCost'">
           <span class="fa"
             [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
@@ -168,36 +168,36 @@
       </td>
       <!--cost savings-->
       <td *ngIf="opportunity.utilityType != 'Mixed'">
-        {{ opportunity.costSavings | currency: "USD":"symbol":"1.0-0" }}
+        {{ opportunity.costSavings | number:"1.0-0"  }}
       </td>
       <td *ngIf="opportunity.utilityType == 'Mixed'">
         <span *ngFor="let result of opportunity.mixedIndividualResults">
-          {{ result.costSavings | currency: "USD":"symbol":"1.0-0" }}<br />
+          {{ result.costSavings | number:"1.0-0"  }}<br />
         </span>
       </td>
       <!--additional savings-->
       <td>
-        {{ getAdditionalSavings(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0" }}
+        {{ getAdditionalSavings(opportunity.opportunityCost) | number:"1.0-0" }}
       </td>
       <!--material cost-->
       <td>
-        {{getMaterialCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+        {{getMaterialCost(opportunity.opportunityCost) | number:"1.0-0" }}
       </td>
       <!--labor cost-->
       <td>
-        {{getLaborCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0" }}
+        {{getLaborCost(opportunity.opportunityCost) | number:"1.0-0" }}
       </td>
       <!--engineering cost-->
       <td>
-        {{getEngineeringCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+        {{getEngineeringCost(opportunity.opportunityCost) | number:"1.0-0" }}
       </td>
       <!--other cost-->
       <td>
-        {{getOtherCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+        {{getOtherCost(opportunity.opportunityCost) | number:"1.0-0" }}
       </td>
       <!--total cost-->
       <td>
-        {{ opportunity.totalCost | currency: "USD":"symbol":"1.0-0" }}
+        {{ opportunity.totalCost | number:"1.0-0"  }}
       </td>
       <!--payback-->
       <td>

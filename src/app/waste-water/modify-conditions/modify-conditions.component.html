@@ -1,0 +1,66 @@
+<div class="row modify-conditions no-gutters">
+    <div class="scroll-item col-8" [ngStyle]="{'height.px': containerHeight}">
+        <div class="row h-100 no-gutters">
+            <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+                [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+                <div class="header mr-2 ml-2">
+                    <h3>Baseline</h3>
+                </div>
+                <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
+                    [selected]="baselineSelected">
+                </app-waste-water-operations>
+                <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
+                    [selected]="baselineSelected">
+                </app-activated-sludge-form>
+                <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
+                    [selected]="baselineSelected">
+                </app-aerator-performance-form>
+            </div>
+
+            <!-- Modifications Start -->
+            <div *ngIf="modificationExists" class="modification w-50 panel-column"
+                (click)="togglePanel(modificationSelected)"
+                [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+                <!-- Modification Header -->
+                <div class="header mr-2 ml-2">
+                    <h3>{{selectedModification.name}}</h3>
+                </div>
+                <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
+                    [selected]="modificationSelected" [isModification]="true">
+                </app-waste-water-operations>
+                <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
+                    [selected]="modificationSelected" [isModification]="true">
+                </app-activated-sludge-form>
+                <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
+                    [selected]="modificationSelected" [isModification]="true">
+                </app-aerator-performance-form>
+            </div>
+            <!-- No content message -->
+            <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"
+                [ngClass]="{'modal-open': isModalOpen == true}">
+                <div class="header mr-2 ml-2">
+                    <h3>Modification</h3>
+                </div>
+                <div class="p-3 no-data">
+                    <h3>Now that you have setup your system and have baseline information, create duplicate baseline
+                        conditions to find efficiency opportunities.
+                    </h3>
+                    <button type="button" class="btn btn-primary">Add Modified Condition</button>
+                    <p>Data will be copied from your current baseline condition.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Help Panel -->
+    <div class="col-4 p-0 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
+        <app-results-panel *ngIf="modificationExists"></app-results-panel>
+        <div *ngIf="!modificationExists">
+            <div class="header mr-2 ml-2">
+                <h3>Help</h3>
+            </div>
+            <div class="p-4">
+                <p>Add Modification to view results and get additional help.</p>
+            </div>
+        </div>
+    </div>
+</div>

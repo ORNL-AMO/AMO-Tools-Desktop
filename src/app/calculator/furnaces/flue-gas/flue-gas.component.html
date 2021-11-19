@@ -3,8 +3,8 @@
 	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
-		  <div class="col-md-auto">
-			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size2 px-2">
+		  <div class="align-items-center icon-background" [ngClass]="{'inTreasureHunt-icon': inTreasureHunt, 'calc-list-icon': !inTreasureHunt}">
+			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="flue-icon">
 		  </div>
 		  <div class="pl-2">
 			<h3>Flue Gas</h3>
@@ -34,7 +34,7 @@
 			  <h3>Baseline</h3>
 			</div>
 			<div class="d-flex flex-column mx-2 mb-4">
-				<app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
+				<app-energy-form [selected]="baselineSelected" [inTreasureHunt]="inTreasureHunt" [method]="method" [isBaseline]="true" [settings]="settings"></app-energy-form>
 				<div class="form-group">
 					<label class="small" for="method">Type of fuel</label>
 					<select class="form-control" id="method" [(ngModel)]="method" [disabled]="!baselineSelected"
@@ -45,11 +45,31 @@
 				</div>
 				<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [settings]="settings" [selected]="baselineSelected"
 				[inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-mass>
-				<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [selected]="baselineSelected" [settings]="settings"
+				<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [inTreasureHunt]="inTreasureHunt" [selected]="baselineSelected" [settings]="settings"
 				[inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-volume>
 				
 			 <!-- Results -->
-			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
+			<div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
+				<ng-container *ngIf="method === 'By Volume'">
+					<div class="form-group m-0">
+						<label class="bold">Oxygen In Flue Gas</label>
+						<div *ngIf="output.baseline.calculatedFlueGasO2" class="text-center bold small">
+							{{output.baseline.calculatedFlueGasO2 | number:'0.1-2'}} %
+						</div>
+						<div *ngIf="!output.baseline.calculatedFlueGasO2" class="text-center bold small">
+							&mdash; &mdash;
+						</div>
+					</div>
+					<div class="form-group m-0">
+						<label class="bold">Excess Air </label>
+						<div *ngIf="output.baseline.calculatedExcessAir" class="text-center bold small">
+							{{output.baseline.calculatedExcessAir | number:'0.1-2'}} %
+						</div>
+						<div *ngIf="!output.baseline.calculatedExcessAir" class="text-center bold small">
+							&mdash; &mdash;
+						</div>
+					</div>
+				</ng-container>
 				<div class="form-group m-0">
 				  <label class="bold">Available Heat</label>
 				  <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
@@ -74,7 +94,7 @@
 			  </div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
-				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+				<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
 				  (click)="btnResetData()">
 				  Reset Data
 				</button>
@@ -106,10 +126,30 @@
 				</div>
 			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [selected]="!baselineSelected" [settings]="settings"
 			  [inModal]="inModal" [isBaseline]="false"></app-flue-gas-form-mass>
-			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="!baselineSelected" [settings]="settings"
+			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="!baselineSelected" [inTreasureHunt]="inTreasureHunt" [settings]="settings"
 			  [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
 			 <!-- Mod results -->
 				<div class="d-flex flex-column mt-3 mb-2">
+					<ng-container *ngIf="method === 'By Volume'">
+						<div class="form-group m-0">
+							<label class="bold">Oxygen In Flue Gas</label>
+							<div *ngIf="output.modification.calculatedFlueGasO2" class="text-center bold small">
+								{{output.modification.calculatedFlueGasO2 | number:'0.1-2'}} %
+							</div>
+							<div *ngIf="!output.modification.calculatedFlueGasO2" class="text-center bold small">
+								&mdash; &mdash;
+							</div>
+						</div>
+						<div class="form-group m-0">
+							<label class="bold">Excess Air </label>
+							<div *ngIf="output.modification.calculatedExcessAir" class="text-center bold small">
+								{{output.modification.calculatedExcessAir | number:'0.1-2'}} %
+							</div>
+							<div *ngIf="!output.modification.calculatedExcessAir" class="text-center bold small">
+								&mdash; &mdash;
+							</div>
+						</div>
+					</ng-container>
 					<div class="form-group m-0">
 					  <label class="bold">Available Heat</label>
 					  <div *ngIf="output.modification.availableHeat" class="text-center bold small">

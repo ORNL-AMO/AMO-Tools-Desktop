@@ -2,25 +2,34 @@
     <div class="row no-gutters">
         <div class="col-12">
             <ul>
-                <li *ngIf="reportRollupService.numPsats != 0" [hidden]="showSummary == 'closed'" class="pump-summary"
+                <li *ngIf="showPsatSummary" [hidden]="showSummary == 'closed'" class="pump-summary"
                     (click)="showAssessmentModal('psat')">
-                    <app-psat-summary></app-psat-summary>
+                    <app-psat-summary [settings]="settings"></app-psat-summary>
                 </li>
-                <li *ngIf="reportRollupService.numPhasts != 0" [hidden]="showSummary == 'closed'"
-                    class="furnace-summary" (click)="showAssessmentModal('phast')">
-                    <app-phast-summary [settings]="settings"></app-phast-summary>
+                <li *ngIf="showPhastSummary" [hidden]="showSummary == 'closed'" class="furnace-summary"
+                    (click)="showAssessmentModal('phast')">
+                    <app-phast-summary></app-phast-summary>
                 </li>
-                <li *ngIf="reportRollupService.numFsats != 0" [hidden]="showSummary == 'closed'" class="fan-summary"
+                <li *ngIf="showFsatSummary" [hidden]="showSummary == 'closed'" class="fan-summary"
                     (click)="showAssessmentModal('fsat')">
-                    <app-fsat-summary></app-fsat-summary>
+                    <app-fsat-summary [settings]="settings"></app-fsat-summary>
                 </li>
-                <li *ngIf="reportRollupService.numSsmt != 0" [hidden]="showSummary == 'closed'" class="ssmt-summary"
+                <li *ngIf="showSsmtSummary" [hidden]="showSummary == 'closed'" class="ssmt-summary"
                     (click)="showAssessmentModal('ssmt')">
-                    <app-ssmt-summary [settings]="settings"></app-ssmt-summary>
+                    <app-ssmt-summary></app-ssmt-summary>
                 </li>
-                <li *ngIf="reportRollupService.numTreasureHunt != 0" [hidden]="showSummary == 'closed'"
-                    class="treasure-hunt-summary" (click)="showAssessmentModal('treasureHunt')">
-                    <app-treasure-hunt-summary></app-treasure-hunt-summary>
+                <li *ngIf="showTreasureHuntSummary" [hidden]="showSummary == 'closed'" class="treasure-hunt-summary"
+                    (click)="showAssessmentModal('treasureHunt')">
+                    <app-treasure-hunt-summary [settings]="settings"></app-treasure-hunt-summary>
+                </li>
+
+                <li *ngIf="showWasteWater" [hidden]="showSummary == 'closed'" class="waste-water-summary"
+                    (click)="showAssessmentModal('waste-water')">
+                    <app-waste-water-summary [settings]="settings"></app-waste-water-summary>
+                </li>
+                <li *ngIf="showCompressedAir" [hidden]="showSummary == 'closed'" class="compressed-air-summary"
+                    (click)="showAssessmentModal('compressed-air')">
+                    <app-compressed-air-summary [settings]="settings"></app-compressed-air-summary>
                 </li>
             </ul>
         </div>

@@ -3,7 +3,7 @@
   <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
     <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
     <span>{{openingLossesForm.controls.name.value}}</span>
-    <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
+    <a *ngIf="isBaseline && index > 0" class="click-link pull-right add-loss text-danger small pl-2"
       (click)="removeLoss(index)">+Remove Loss</a>
   </label>
   <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
@@ -14,12 +14,21 @@
     </span>
   </label>
     <div *ngIf="index == 0" class="form-section">
-      <div class="d-flex flex-column w-100 justify-content-center pb-3">
+      <div *ngIf="!inTreasureHunt" class="d-flex flex-column w-100 justify-content-center pb-3">
         <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  openingLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Fuel')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Electricity')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySourceFromToggle('Steam')" [ngClass]="{'active':  openingLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
         </div>
+      </div>
+
+      <div *ngIf="inTreasureHunt" class="form-group">
+        <label class="small" for="{{'energySourceType'+idString}}"> Energy Source Type
+        </label>
+        <select name="{{'energySourceType'+idString}}" class="form-control" id="{{'energySourceType'+idString}}"
+          formControlName="energySourceType" (change)="setEnergyData()" (focus)="focusField('energySourceType')">
+          <option *ngFor="let option of treasureHuntUtilityOptions" [ngValue]="option">{{option}}</option>
+        </select>
       </div>
  
       <div class="form-group">
@@ -67,7 +76,7 @@
 
       <div class="form-group">
         <label class="small" for="{{'availableHeat'+idString}}">
-           <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Fuel'">
+           <span *ngIf="openingLossesForm.controls.energySourceType.value !== 'Steam' && openingLossesForm.controls.energySourceType.value !== 'Electricity'">
             Available Heat
           </span>
           <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Steam'">
@@ -311,7 +320,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+        <app-flue-gas-modal *ngIf="showFlueGasModal" 
+        [treasureHuntEnergySource]="defaultFlueGasModalEnergySource" [inTreasureHunt]="inTreasureHunt" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
           [settings]="settings"></app-flue-gas-modal>
       </div>
     </div>

@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOperations } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -17,6 +17,7 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { SettingsService } from '../settings/settings.service';
+import { ConvertFsatService } from './convert-fsat.service';
 
 @Component({
   selector: 'app-fsat',
@@ -33,6 +34,10 @@ export class FsatComponent implements OnInit {
 
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   containerHeight: number;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -41,7 +46,6 @@ export class FsatComponent implements OnInit {
 
   stepTabs: Array<string> = [
     'system-basics',
-    'fsat-fluid',
     'fan-setup',
     'fan-motor',
     'fan-field-data'
@@ -91,7 +95,8 @@ export class FsatComponent implements OnInit {
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private convertFsatService: ConvertFsatService) {
   }
 
   ngOnInit() {
@@ -154,11 +159,9 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     });
-
-    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
     });
-
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -288,6 +291,11 @@ export class FsatComponent implements OnInit {
     this.saveFsat(this._fsat);
   }
 
+  saveFsatOperations(newFsatOperations: FsatOperations) {
+    this._fsat.fsatOperations = newFsatOperations;
+    this.saveFsat(this._fsat);
+  }
+
   saveFsat(newFsat: FSAT) {
     this._fsat = newFsat;
     this.save();
@@ -388,6 +396,7 @@ export class FsatComponent implements OnInit {
 
   addNewMod() {
     let tmpModification: Modification = this.fsatService.getNewMod(this._fsat, this.settings);
+    tmpModification.exploreOpportunities = (this.assessmentTab == 'explore-opportunities');
     this.saveNewMod(tmpModification);
   }
 
@@ -426,5 +435,36 @@ export class FsatComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.fsatService.mainTab.next('system-setup');
+      this.fsatService.stepTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.save();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    this._fsat = this.convertFsatService.convertExistingData(this._fsat, this.oldSettings, this.settings);
+    this._fsat.existingDataUnits = this.settings.unitsOfMeasure;
+    this.save();
+    this.getSettings();
   }
 }

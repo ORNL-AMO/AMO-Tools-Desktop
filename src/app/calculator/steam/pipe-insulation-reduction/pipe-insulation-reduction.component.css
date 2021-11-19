@@ -56,10 +56,27 @@
     margin-bottom: 0px;
 }
 
-.pipe-insulation-reduction-icon {
-    height: 55px;
+.pipe-insulation-reduction-icon {    
+    height: auto;
+    width: 45px;
+    margin-top: 14px;
+    margin-bottom: 14px;
 }
 
 .opp-sheet-icon {
     width: 35px;
+}
+
+.icon-background{
+    height: 55px;
+    width: 55px;
+    background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+
+}
+
+.inTreasureHunt-icon{
+    border-radius: 50%;
 }

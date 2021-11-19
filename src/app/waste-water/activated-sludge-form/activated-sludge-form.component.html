@@ -1,0 +1,339 @@
+<form #formRef [formGroup]="form">
+    <div *ngIf="inSetup" class="d-flex flex-column">
+        <div class="header mr-2 ml-2">
+            <h3>Activated Sludge Data</h3>
+        </div>
+    </div>
+
+    <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+        <!--FIELD DATA GROUP-->
+        <label class="group-label">Field Data</label>
+        <!--Temperature-->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Temperature, 'invalid': form.controls.Temperature.invalid}">
+            <label for="{{'Temperature_'+idString}}">Temperature</label>
+            <div class="input-group">
+                <input type="number" name="Temperature" class="form-control number-input-field"
+                    id="{{'Temperature_'+idString}}" (focus)="focusField('Temperature')" (input)="save()"
+                    formControlName="Temperature" [readonly]="!selected">
+                <span class="input-group-addon units">&#8451;</span>
+            </div>
+            <span *ngIf="form.controls.Temperature.invalid && !form.controls.Temperature.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Temperature.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Temperature.errors.min">Value can't be
+                    less than {{form.controls.Temperature.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+        <!-- So -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.So, 'invalid': form.controls.So.invalid}">
+            <label for="{{'So_'+idString}}">Influent CBOD<sub>5</sub> (S<sub>o</sub>)</label>
+            <div class="input-group">
+                <input type="number" name="So" class="form-control number-input-field" id="{{'So_'+idString}}"
+                    (focus)="focusField('So')" (input)="save()" formControlName="So" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.So.invalid && !form.controls.So.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.So.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.So.errors.min">Value can't be
+                    less than {{form.controls.So.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- Volume -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Volume, 'invalid': form.controls.Volume.invalid}">
+            <label for="{{'Volume_'+idString}}">Volume</label>
+            <div class="input-group">
+                <input type="number" name="Volume" class="form-control number-input-field" id="{{'Volume_'+idString}}"
+                    (focus)="focusField('Volume')" (input)="save()" formControlName="Volume" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup></span>
+            </div>
+            <span *ngIf="form.controls.Volume.invalid && !form.controls.Volume.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Volume.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Volume.errors.min">Value can't be
+                    less than {{form.controls.Volume.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- FlowRate -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.FlowRate, 'invalid': form.controls.FlowRate.invalid}">
+            <label for="{{'FlowRate_'+idString}}">Flow Rate</label>
+            <div class="input-group">
+                <input type="number" name="FlowRate" class="form-control number-input-field"
+                    id="{{'FlowRate_'+idString}}" (focus)="focusField('FlowRate')" (input)="save()"
+                    formControlName="FlowRate" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MGD</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                    class="input-group-addon units">m<sup>3</sup>/day</span>
+            </div>
+            <span *ngIf="form.controls.FlowRate.invalid && !form.controls.FlowRate.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FlowRate.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FlowRate.errors.min">Value can't be
+                    less than {{form.controls.FlowRate.errors.min.min}} Mgal</span>
+            </span>
+        </div>
+        <!--CONCENTRATIONS GROUP-->
+        <label class="group-label">Concentrations</label>
+        <!-- InertVSS -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InertVSS, 'invalid': form.controls.InertVSS.invalid}">
+            <label for="{{'InertVSS_'+idString}}">Inert VSS</label>
+            <div class="input-group">
+                <input type="number" name="InertVSS" class="form-control number-input-field"
+                    id="{{'InertVSS_'+idString}}" (focus)="focusField('InertVSS')" (input)="save()"
+                    formControlName="InertVSS" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.InertVSS.invalid && !form.controls.InertVSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InertVSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InertVSS.errors.min">Value can't be
+                    less than {{form.controls.InertVSS.errors.min.min}} MGD</span>
+            </span>
+        </div>
+        <!-- OxidizableN -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.OxidizableN, 'invalid': form.controls.OxidizableN.invalid}">
+            <label for="{{'OxidizableN_'+idString}}">Oxidizable N</label>
+            <div class="input-group">
+                <input type="number" name="OxidizableN" class="form-control number-input-field"
+                    id="{{'OxidizableN_'+idString}}" (focus)="focusField('OxidizableN')" (input)="save()"
+                    formControlName="OxidizableN" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.OxidizableN.invalid && !form.controls.OxidizableN.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OxidizableN.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OxidizableN.errors.min">Value can't be
+                    less than {{form.controls.OxidizableN.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- Biomass -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Biomass, 'invalid': form.controls.Biomass.invalid}">
+            <label for="{{'Biomass_'+idString}}">VSS/TSS Ratio of Biomass</label>
+            <div class="input-group">
+                <input type="number" name="Biomass" class="form-control number-input-field" id="{{'Biomass_'+idString}}"
+                    (focus)="focusField('Biomass')" (input)="save()" formControlName="Biomass" [readonly]="!selected">
+            </div>
+            <span *ngIf="form.controls.Biomass.invalid && !form.controls.Biomass.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Biomass.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Biomass.errors.min">Value can't be
+                    less than {{form.controls.Biomass.errors.min.min}}</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Biomass.errors.max">Value can't be
+                    greater than {{form.controls.Biomass.errors.max.max}}</span>
+            </span>
+        </div>
+        <!-- InfluentTSS -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InfluentTSS, 'invalid': form.controls.InfluentTSS.invalid}">
+            <label for="{{'InfluentTSS_'+idString}}">Influent TSS</label>
+            <div class="input-group">
+                <input type="number" name="InfluentTSS" class="form-control number-input-field"
+                    id="{{'InfluentTSS_'+idString}}" (focus)="focusField('InfluentTSS')" (input)="save()"
+                    formControlName="InfluentTSS" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.InfluentTSS.invalid && !form.controls.InfluentTSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InfluentTSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InfluentTSS.errors.min">Value can't be
+                    less than {{form.controls.InfluentTSS.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- InertInOrgTSS -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InertInOrgTSS, 'invalid': form.controls.InertInOrgTSS.invalid}">
+            <label for="{{'InertInOrgTSS_'+idString}}">Inert Inorganic TSS</label>
+            <div class="input-group">
+                <input type="number" name="InertInOrgTSS" class="form-control number-input-field"
+                    id="{{'InertInOrgTSS_'+idString}}" (focus)="focusField('InertInOrgTSS')" (input)="save()"
+                    formControlName="InertInOrgTSS" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.InertInOrgTSS.invalid && !form.controls.InertInOrgTSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InfluentTSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.InertInOrgTSS.errors.min">Value can't
+                    be
+                    less than {{form.controls.InertInOrgTSS.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- EffluentTSS -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.EffluentTSS, 'invalid': form.controls.EffluentTSS.invalid}">
+            <label for="{{'EffluentTSS_'+idString}}">Effluent TSS</label>
+            <div class="input-group">
+                <input type="number" name="EffluentTSS" class="form-control number-input-field"
+                    id="{{'EffluentTSS_'+idString}}" (focus)="focusField('EffluentTSS')" (input)="save()"
+                    formControlName="EffluentTSS" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.EffluentTSS.invalid && !form.controls.EffluentTSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.EffluentTSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.EffluentTSS.errors.min">Value can't
+                    be less than {{form.controls.EffluentTSS.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- RASTSS -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.RASTSS, 'invalid': form.controls.RASTSS.invalid}">
+            <label for="{{'RASTSS_'+idString}}">RAS TSS</label>
+            <div class="input-group">
+                <input type="number" name="RASTSS" class="form-control number-input-field" id="{{'RASTSS_'+idString}}"
+                    (focus)="focusField('RASTSS')" (input)="save()" formControlName="RASTSS" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.RASTSS.invalid && !form.controls.RASTSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.RASTSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.RASTSS.errors.min">Value can't
+                    be less than {{form.controls.RASTSS.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- CalculateGivenSRT -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.CalculateGivenSRT, 'invalid': form.controls.CalculateGivenSRT.invalid}">
+            <label for="{{'CalculateGivenSRT_'+idString}}">Plant Control Point</label>
+            <select class="form-control" formControlName="CalculateGivenSRT" (change)="changePlantControlPoint()"
+                (focus)="focusField('CalculateGivenSRT')">
+                <option [ngValue]="false">MLSS </option>
+                <option [ngValue]="true">SRT Days</option>
+            </select>
+        </div>
+        <!-- MLSSpar -->
+        <div *ngIf="form.controls.CalculateGivenSRT.value == false" class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MLSSpar, 'invalid': form.controls.MLSSpar.invalid}">
+            <label for="{{'MLSSpar_'+idString}}">MLSS</label>
+            <div class="input-group">
+                <input type="number" name="MLSSpar" class="form-control number-input-field" id="{{'MLSSpar_'+idString}}"
+                    (focus)="focusField('MLSSpar')" (input)="save()" formControlName="MLSSpar" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span *ngIf="form.controls.MLSSpar.invalid && !form.controls.MLSSpar.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MLSSpar.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MLSSpar.errors.min">Value can't
+                    be less than {{form.controls.MLSSpar.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- DefinedSRT -->
+        <div *ngIf="form.controls.CalculateGivenSRT.value == true" class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.DefinedSRT, 'invalid': form.controls.DefinedSRT.invalid}">
+            <label for="{{'MLSSpar_'+idString}}">SRT</label>
+            <div class="input-group">
+                <input type="number" name="DefinedSRT" class="form-control number-input-field"
+                    id="{{'DefinedSRT_'+idString}}" (focus)="focusField('DefinedSRT')" (input)="save()"
+                    formControlName="DefinedSRT" [readonly]="!selected">
+                <span class="input-group-addon units">days</span>
+            </div>
+            <span *ngIf="form.controls.DefinedSRT.invalid && !form.controls.DefinedSRT.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.DefinedSRT.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.DefinedSRT.errors.min">Value can't
+                    be less than {{form.controls.DefinedSRT.errors.min.min}} days</span>
+            </span>
+        </div>
+        <!--SYSTEM CONSTANTS-->
+        <label class="group-label">System Constants</label>
+        <!-- FractionBiomass -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
+            <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction (f<sub>d</sub>)</label>
+            <div class="input-group">
+                <input type="number" name="FractionBiomass" class="form-control number-input-field"
+                    id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
+                    formControlName="FractionBiomass" [readonly]="!selected">
+                <span class="input-group-addon units">mg VSS/mg</span>
+            </div>
+            <span *ngIf="form.controls.FractionBiomass.invalid && !form.controls.FractionBiomass.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.min">Value can't
+                    be less than {{form.controls.FractionBiomass.errors.min.min}} mg VSS/mg</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.max">Value can't
+                    be greater than {{form.controls.FractionBiomass.errors.max.max}} mg VSS/mg</span>
+            </span>
+        </div>
+        <!-- BiomassYeild -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.BiomassYeild, 'invalid': form.controls.BiomassYeild.invalid}">
+            <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant (Y)</label>
+            <div class="input-group">
+                <input type="number" name="BiomassYeild" class="form-control number-input-field"
+                    id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
+                    formControlName="BiomassYeild" [readonly]="!selected">
+                <span class="input-group-addon units">mg VSS/mg</span>
+            </div>
+            <span *ngIf="form.controls.BiomassYeild.invalid && !form.controls.BiomassYeild.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.min">Value can't
+                    be less than {{form.controls.BiomassYeild.errors.min.min}} mg VSS/mg</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.max">Value can't be
+                    greater than {{form.controls.BiomassYeild.errors.max.max}} mg VSS/mg</span>
+            </span>
+        </div>
+        <!-- HalfSaturation -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.HalfSaturation, 'invalid': form.controls.HalfSaturation.invalid}">
+            <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant (K<sub>s</sub>)</label>
+            <div class="input-group">
+                <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
+                    id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
+                    formControlName="HalfSaturation" [readonly]="!selected">
+                <span class="input-group-addon units">mg/L BOD</span>
+            </div>
+            <span *ngIf="form.controls.HalfSaturation.invalid && !form.controls.HalfSaturation.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.min">Value can't
+                    be less than {{form.controls.HalfSaturation.errors.min.min}} mg/L BOD</span>
+            </span>
+        </div>
+        <!-- MicrobialDecay -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MicrobialDecay, 'invalid': form.controls.MicrobialDecay.invalid}">
+            <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient (K<sub>d</sub>)</label>
+            <div class="input-group">
+                <input type="number" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
+                    id="{{'MicrobialDecay_'+idString}}" (focus)="focusField('MicrobialDecay')" (input)="save()"
+                    formControlName="MicrobialDecay" [readonly]="!selected">
+                <span class="input-group-addon units">1/day</span>
+            </div>
+            <span *ngIf="form.controls.MicrobialDecay.invalid && !form.controls.MicrobialDecay.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MicrobialDecay.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MicrobialDecay.errors.min">Value can't
+                    be less than {{form.controls.MicrobialDecay.errors.min.min}} 1/day</span>
+            </span>
+        </div>
+        <!-- MaxUtilizationRate -->
+        <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MaxUtilizationRate, 'invalid': form.controls.MaxUtilizationRate.invalid}">
+            <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate (k)</label>
+            <div class="input-group">
+                <input type="number" name="MaxUtilizationRate" class="form-control HalfSaturation-input-field"
+                    id="{{'MaxUtilizationRate_'+idString}}" (focus)="focusField('MaxUtilizationRate')" (input)="save()"
+                    formControlName="MaxUtilizationRate" [readonly]="!selected">
+                <span class="input-group-addon units">1/day</span>
+            </div>
+            <span *ngIf="form.controls.MaxUtilizationRate.invalid && !form.controls.MaxUtilizationRate.pristine">
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.MaxUtilizationRate.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MaxUtilizationRate.errors.min">Value
+                    can't be less than {{form.controls.MaxUtilizationRate.errors.min.min}} 1/day</span>
+            </span>
+        </div>
+
+
+    </div>
+</form>

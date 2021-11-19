@@ -15,3 +15,7 @@ tr > td:not(:first-child),
 tr > th:not(:first-child){
     text-align: center;
 }
+
+tfoot{
+    font-weight: bold;
+}

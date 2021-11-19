@@ -191,6 +191,134 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.openingLosses">
+                        <label>Opening Losses</label>
+                        <ul>
+                            <li
+                                *ngFor="let openingLoss of exportOpportunities.openingLosses; let index = index;">
+                                <span
+                                    *ngIf="!openingLoss.opportunitySheet || !openingLoss.opportunitySheet.name">
+                                    Opening Loss #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="openingLoss.opportunitySheet && openingLoss.opportunitySheet.name">
+                                    {{openingLoss.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.wallLosses">
+                        <label>Wall Losses</label>
+                        <ul>
+                            <li
+                                *ngFor="let wallLoss of exportOpportunities.wallLosses; let index = index;">
+                                <span
+                                    *ngIf="!wallLoss.opportunitySheet || !wallLoss.opportunitySheet.name">
+                                    Wall Loss #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="wallLoss.opportunitySheet && wallLoss.opportunitySheet.name">
+                                    {{wallLoss.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.leakageLosses">
+                        <label>Leakage Losses</label>
+                        <ul>
+                            <li
+                                *ngFor="let leakageLoss of exportOpportunities.leakageLosses; let index = index;">
+                                <span
+                                    *ngIf="!leakageLoss.opportunitySheet || !leakageLoss.opportunitySheet.name">
+                                    Leakage Loss #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="leakageLoss.opportunitySheet && leakageLoss.opportunitySheet.name">
+                                    {{leakageLoss.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.airHeatingOpportunities">
+                        <label>Air Heating Opportunities</label>
+                        <ul>
+                            <li
+                                *ngFor="let airHeating of exportOpportunities.airHeatingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!airHeating.opportunitySheet || !airHeating.opportunitySheet.name">
+                                    Air Heating #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="airHeating.opportunitySheet && airHeating.opportunitySheet.name">
+                                    {{airHeating.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.flueGasLosses">
+                        <label>Flue Gas Losses</label>
+                        <ul>
+                            <li
+                                *ngFor="let flueGasLoss of exportOpportunities.flueGasLosses; let index = index;">
+                                <span
+                                    *ngIf="!flueGasLoss.opportunitySheet || !flueGasLoss.opportunitySheet.name">
+                                    Flue Gas Loss #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="flueGasLoss.opportunitySheet && flueGasLoss.opportunitySheet.name">
+                                    {{flueGasLoss.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.wasteHeatReductions">
+                        <label>Waste Heat</label>
+                        <ul>
+                            <li
+                                *ngFor="let wasteHeat of exportOpportunities.wasteHeatReductions; let index = index;">
+                                <span
+                                    *ngIf="!wasteHeat.opportunitySheet || !wasteHeat.opportunitySheet.name">
+                                    Waste Heat Reduction #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="wasteHeat.opportunitySheet && wasteHeat.opportunitySheet.name">
+                                    {{wasteHeat.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.heatCascadingOpportunities">
+                        <label>Heat Cascading</label>
+                        <ul>
+                            <li
+                                *ngFor="let heatCascading of exportOpportunities.heatCascadingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!heatCascading.opportunitySheet || !heatCascading.opportunitySheet.name">
+                                    Heat Cascading #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="heatCascading.opportunitySheet && heatCascading.opportunitySheet.name">
+                                    {{heatCascading.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.waterHeatingOpportunities">
+                        <label>Water Heating </label>
+                        <ul>
+                            <li
+                                *ngFor="let waterHeating of exportOpportunities.waterHeatingOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!waterHeating.opportunitySheet || !waterHeating.opportunitySheet.name">
+                                    Water Heating #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="waterHeating.opportunitySheet && waterHeating.opportunitySheet.name">
+                                    {{waterHeating.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

@@ -33,7 +33,8 @@ export class DirectoryDashboardService {
       showPreAssessments: true,
       showPhast: true,
       showAll: true,
-      showMotorInventory: true
+      showMotorInventory: true,
+      showWasteWater: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
@@ -103,6 +104,8 @@ export class DirectoryDashboardService {
       } else if (item.assessment.type == 'TreasureHunt' && filterDashboardBy.showTreasureHunt == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
       } else if (item.assessment.type == 'PHAST' && filterDashboardBy.showPhast == false && filterDashboardBy.showAll == false) {
+        item.isShown = false;
+      } else if (item.assessment.type == 'WasteWater' && filterDashboardBy.showWasteWater == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
       } else if (item.isShown == false) {
         item.isShown = true;

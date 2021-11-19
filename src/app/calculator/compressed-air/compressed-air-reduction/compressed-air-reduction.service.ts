@@ -6,14 +6,18 @@ import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, BagMethod
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertCompressedAirReductionService } from './convert-compressed-air-reduction.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class CompressedAirReductionService {
 
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
+  compressedAirResults: BehaviorSubject<CompressedAirReductionResults>;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) { }
+  constructor(private formBuilder: FormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) {
+    this.compressedAirResults = new BehaviorSubject<CompressedAirReductionResults>(undefined);
+   }
 
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType?: number): CompressedAirReductionData {
@@ -150,6 +154,7 @@ export class CompressedAirReductionService {
     if(!isBaseline){
       form.controls.compressorControl.disable();
       form.controls.compressorControlAdjustment.disable();
+      form.controls.compressorSpecificPowerControl.disable();
     }
     return form;
   }
@@ -232,47 +237,70 @@ export class CompressedAirReductionService {
     return obj;
   }
 
-  getResults(settings: Settings, baseline: Array<CompressedAirReductionData>, modification?: Array<CompressedAirReductionData>): CompressedAirReductionResults {
-    let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
-    let baselineResults: CompressedAirReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: CompressedAirReductionResult = {
-      energyUse: 0,
-      energyCost: 0,
-      flowRate: 0,
-      singleNozzeFlowRate: 0,
-      consumption: 0
-    };
-    if (modification) {
-      let modificationInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(modification));
-      modificationResults = this.calculate(modificationInpCpy, settings);
-    } else {
-      modificationResults = baselineResults;
-    }
-    let compressedAirReductionResults: CompressedAirReductionResults = {
-      baselineResults: baselineResults,
-      modificationResults: modificationResults,
+  calculateResults(settings: Settings, baseline: Array<CompressedAirReductionData>, modification?: Array<CompressedAirReductionData>) {
+    let results: CompressedAirReductionResults = {
+      baselineResults: [],
+      modificationResults: [],
+      baselineAggregateResults: undefined,
+      modificationAggregateResults: undefined,
       annualCostSavings: 0,
       annualEnergySavings: 0,
       annualFlowRateReduction: 0,
       annualConsumptionReduction: 0
     }
-    if (modificationResults) {
-      if (baselineInpCpy.length != 0 && baselineInpCpy[0].utilityType == 0) {
-        //use consumption reduction to energy use..
-        compressedAirReductionResults.baselineResults.energyUse = compressedAirReductionResults.baselineResults.consumption;
-        compressedAirReductionResults.modificationResults.energyUse = compressedAirReductionResults.modificationResults.consumption;
+    let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
+    let modificationInpCpy: Array<CompressedAirReductionData>;
+
+    results.baselineAggregateResults = this.calculate(baselineInpCpy, settings);
+    if (modification) {
+      modificationInpCpy = JSON.parse(JSON.stringify(modification));
+      results.modificationAggregateResults = this.calculate(modificationInpCpy, settings);
+    } else {
+      results.modificationAggregateResults = results.baselineAggregateResults;
+    }
+
+    results = this.buildIndividualResults(baselineInpCpy, modificationInpCpy, results, settings);
+
+    if (baselineInpCpy.length != 0 && baselineInpCpy[0].utilityType == 0) {
+      results.baselineAggregateResults.energyUse = results.baselineAggregateResults.consumption;
+      results.modificationAggregateResults.energyUse = results.modificationAggregateResults.consumption;
+    }
+    results.annualCostSavings = (results.baselineAggregateResults.energyCost - results.modificationAggregateResults.energyCost) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
+    results.annualFlowRateReduction = results.baselineAggregateResults.flowRate - results.modificationAggregateResults.flowRate;
+    results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
+    // overwrite estimated energyUse value originally set in suite results
+    results.modificationAggregateResults.energyUse = results.baselineAggregateResults.energyUse - results.annualEnergySavings;
+    results.modificationAggregateResults.energyCost = results.baselineAggregateResults.energyCost - results.annualCostSavings;
+    this.compressedAirResults.next(results);
+  }
+
+  buildIndividualResults(baselineInpCpy: Array<CompressedAirReductionData>, modificationInpCpy: Array<CompressedAirReductionData>, results: CompressedAirReductionResults, settings: Settings) {
+    baselineInpCpy.forEach((input, index) => {
+      let baselineResult: CompressedAirReductionResult = this.calculateIndividualEquipment(input, settings);
+      let modResult: CompressedAirReductionResult;
+      if (modificationInpCpy && modificationInpCpy[index]) {
+        modResult = this.calculateIndividualEquipment(modificationInpCpy[index], settings);
+      } else {
+        modResult = baselineResult;
+      }
+      if (input.utilityType == 0) {
+        baselineResult.energyUse = baselineResult.consumption;
+        modResult.energyUse = modResult.consumption;
       }
 
-      compressedAirReductionResults.annualEnergySavings = (baselineResults.energyUse - modificationResults.energyUse) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
-      compressedAirReductionResults.annualCostSavings = (baselineResults.energyCost - modificationResults.energyCost) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
-      compressedAirReductionResults.annualFlowRateReduction = baselineResults.flowRate - modificationResults.flowRate;
-      compressedAirReductionResults.annualConsumptionReduction = baselineResults.consumption - modificationResults.consumption;
-    }
-    return compressedAirReductionResults;
+      let controlAdjustedSavings: number = (baselineResult.energyUse - modResult.energyUse) * (input.compressorElectricityData.compressorControlAdjustment / 100);
+      modResult.energyUse = baselineResult.energyUse - controlAdjustedSavings;
+      results.baselineResults.push(baselineResult);
+      results.modificationResults.push(modResult);
+      results.annualEnergySavings += controlAdjustedSavings;
+    });
+
+    return results;
   }
 
   calculate(input: Array<CompressedAirReductionData>, settings: Settings): CompressedAirReductionResult {
-    let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(input, settings);
+    let inputCopy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(input));
+    let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(inputCopy, settings);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray
     };

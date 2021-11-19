@@ -47,7 +47,8 @@ export class CompareService {
         this.isGasDensityDifferent(baseline, modification) ||
         this.isGasTypeDifferent(baseline, modification) ||
         // this.isConditionLocationDifferent(baseline, modification) ||
-        this.isSpecificGravityDifferent(baseline, modification) ||
+        //removed issue 4332, coming back eventually.
+        // this.isSpecificGravityDifferent(baseline, modification) ||
         this.isInputTypeDifferent(baseline, modification) ||
         this.isDewPointDifferent(baseline, modification) ||
         this.isRelativeHumidityDifferent(baseline, modification) ||
@@ -364,6 +365,23 @@ export class CompareService {
     }
   }
 
+  checkFanOperationsDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isOperatingHoursDifferent(baseline, modification) ||
+        this.isCostDifferent(baseline, modification)
+      );
+    } else {
+      return false;
+    }
+  }
+
 
   //Fan Field Data
   checkFanFieldDataDifferent(baseline?: FSAT, modification?: FSAT) {
@@ -375,8 +393,6 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingHoursDifferent(baseline, modification) ||
-        this.isCostDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isInletPressureDifferent(baseline, modification) ||
         this.isOutletPressureDifferent(baseline, modification) ||
@@ -396,7 +412,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.operatingHours !== modification.fieldData.operatingHours) {
+      if (baseline.fsatOperations.operatingHours !== modification.fsatOperations.operatingHours) {
         return true;
       } else {
         return false;
@@ -413,7 +429,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.cost !== modification.fieldData.cost) {
+      if (baseline.fsatOperations.cost !== modification.fsatOperations.cost) {
         return true;
       } else {
         return false;
@@ -456,6 +472,41 @@ export class CompareService {
       return false;
     }
   }
+  isInletVelocityPressureDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.inletVelocityPressure !== modification.fieldData.inletVelocityPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isDuctAreaDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.ductArea !== modification.fieldData.ductArea) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   isOutletPressureDifferent(baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;
@@ -516,7 +567,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.specificHeatRatio !== modification.fieldData.specificHeatRatio) {
+      if (baseline.baseGasDensity.specificHeatRatio !== modification.baseGasDensity.specificHeatRatio) {
         return true;
       } else {
         return false;
@@ -542,23 +593,23 @@ export class CompareService {
       return false;
     }
   }
-  // isMeasuredVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
-  //   if (!baseline) {
-  //     baseline = this.baselineFSAT;
-  //   }
-  //   if (!modification) {
-  //     modification = this.modifiedFSAT;
-  //   }
-  //   if (baseline && modification) {
-  //     if (baseline.fieldData.measuredVoltage != modification.fieldData.measuredVoltage) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  isMeasuredVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.measuredVoltage != modification.fieldData.measuredVoltage) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   //Fan Motor
   checkFanMotorDifferent(baseline?: FSAT, modification?: FSAT) {
@@ -711,6 +762,9 @@ export class CompareService {
   getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
+      if (this.checkFanOperationsDifferent(baseline, modification)) {
+        badges.push({ badge: 'Operations', componentStr: 'fsat-operations' });
+      }
       if (this.checkFluidDifferent(baseline, modification)) {
         badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' });
       }

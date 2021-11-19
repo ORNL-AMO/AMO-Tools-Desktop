@@ -1,0 +1,130 @@
+<div class="assessment-report report-in-compressed-air compressed-air"
+    [ngClass]="{'assessment-report-padding': inAssessment, 'report-in-rollup': inRollup}">
+    <div *ngIf="inAssessment" class="report-cover">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+
+        <div class="report-title">
+            <h4>Compressed Air Efficiency Report:</h4>
+            <h4>{{assessment.name}}</h4>
+            <h5>{{createdDate| date:'short'}}</h5>
+        </div>
+
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+
+    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inAssessment}">
+
+        <div *ngIf="inAssessment && !quickReport" class="btn-group hide-print">
+            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <!-- <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button> -->
+        </div>
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        <div *ngIf="assessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <div class="d-flex">
+                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                            {{directory.name}} /
+                        </span>
+                    </div>
+                    {{assessment.name}}
+
+                </h2>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                </h2>
+            </div>
+        </div>
+    </div>
+    <!-- End .report-header -->
+
+    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+        <div class="col-12 print-col">
+            <h4>Building Print View</h4>
+            <h5>One Moment Please</h5>
+            <span class="fa fa-print"></span>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-data" *ngIf="assessment.compressedAirAssessment && assessment.compressedAirAssessment.setupDone">
+
+        <ul #reportBtns class="tabs primary hide-print">
+            <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
+                <a>Executive Summary</a>
+            </li>
+            <li (click)="setTab('paybackPeriod')" [ngClass]="{'active': currentTab == 'paybackPeriod'}">
+                <a>Payback Details</a>
+            </li>
+            <li (click)="setTab('systemProfiles')" [ngClass]="{'active': currentTab == 'systemProfiles'}">
+                <a>System Profiles</a>
+            </li>
+            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                <a>Report Graphs</a>
+            </li>
+            <!-- <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+                <a>Sankey</a>
+            </li> -->
+            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                <a>Input Summary</a>
+            </li>
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Facility Info</a>
+            </li>
+        </ul>
+
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'facilityInfo' || showPrintView" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+        <div class="input-data results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-input-summary [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings"
+                [printView]="showPrintView">
+            </app-input-summary>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printExecutiveSummary)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"
+                [modifications]="assessment.compressedAirAssessment.modifications" [inRollup]="inRollup"
+                [assessment]="assessment" [settings]="settings"></app-executive-summary>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-report-graphs [assessmentResults]="assessmentResults"
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
+            </app-report-graphs>
+        </div>
+        <div class="results scroll-item print-height page-break-before" *ngIf="currentTab == 'systemProfiles'"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-system-profiles [compressedAirAssessment]="assessment.compressedAirAssessment"
+                [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
+                [settings]="settings">
+            </app-system-profiles>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printReportOpportunityPayback)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
+        </div>
+    </div>
+    <!-- End .report-data -->
+
+    <div *ngIf="!assessment.compressedAirAssessment.setupDone">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
+            see the resulting data.</p>
+    </div>
+
+
+</div>
+
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

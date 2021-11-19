@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
-import { StepTab, LossTab } from './tabs';
+import { StepTab, LossTab, stepTabs } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
@@ -17,6 +17,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
+import { ConvertPhastService } from './convert-phast.service';
 
 @Component({
   selector: 'app-phast',
@@ -24,6 +25,7 @@ import { SavingsOpportunity } from '../shared/models/explore-opps';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   //elementRefs used for getting container height for scrolling
@@ -34,6 +36,9 @@ export class PhastComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
   showSankeyLabelOptions: boolean;
+
+  showUpdateUnitsModal: boolean;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -72,6 +77,7 @@ export class PhastComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
+    private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -170,6 +176,7 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
   }
 
   setExploreOppsDefaults(modification: Modification) {  
@@ -243,6 +250,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSubscription.unsubscribe();
+
     //reset services
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
@@ -535,4 +543,40 @@ export class PhastComponent implements OnInit {
       });
     });
   }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.phastService.mainTab.next('system-setup');
+      this.phastService.stepTab.next(stepTabs[0]);
+    }
+    this.showUpdateUnitsModal = false;
+    this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if (shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.saveDb();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  updateData() {
+    if (this._phast.losses) {
+      this._phast = this.convertPhastService.convertExistingData(this._phast, this.oldSettings, this.settings);
+      this.saveDb();
+      // Get updated settings passed down to system-basics
+      this.getSettings();
+      this._phast.lossDataUnits = this.settings.unitsOfMeasure;
+    }
+
+  }
+
 }

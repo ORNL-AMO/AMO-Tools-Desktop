@@ -81,24 +81,6 @@
       </small>
     </h6>
   </div>
-
-  <div class="my-2" *ngIf="currentField == 'specificHeatRatio'">	
-    <h6>	
-      Specific Heat Ratio	
-      <br>	
-      <small class="text-muted">	
-        The ratio of the specific heat capacity at constant pressure to that at constant volume. Also known as the heat capacity	
-        ratio, adiabatic index, the isentropic expansion factor and &gamma;. For all diatomic gases (N	
-        <sub>2</sub>, O	
-        <sub>2</sub>) this is 1.4. The Specific Heat Ratio for a mixture is ratio of the weighted averages of the heat capacity	
-        at constant pressure to constant volume.	
-        <hr> For flue gases this would be calculated as such:	
-        <br>	
-        <img class="w-100 p-1" src="assets/images/specific-heat-ratio-calc.png">	
-        <br> And can be approximated as 1.37.	
-      </small>	
-    </h6>	
-  </div>
   
   <div class="my-2" *ngIf="currentField == 'cost'">
     <h6>
@@ -113,20 +95,6 @@
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="w-50 text-center">Minimum</th>
-            <th class="w-50 text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="w-50 text-center">0 $/kWh</td>
-            <td class="w-50 text-center">1 $/kWh</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'loadEstimatedMethod'">
@@ -161,6 +129,36 @@
     <h6>
       Measured Voltage
       <br>
+      <small class="text-muted">
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the specified
+        Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">1 V</td>
+            <td class="w-50 text-center">13800 V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'modMeasuredVoltage'">
+    <h6>
+      Measured Voltage
+      <br>
+      <div class="text-muted small alert-warning text-left p-1">
+        For what-if modifications that change the motor, this value can not be measured. If the rated voltage of the motor stays the 
+        same, the baseline's measured voltage is a valid estimate, if the rated voltage changes, use the rated voltage as a first estimate
+      </div>
       <small class="text-muted">
         The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the specified
         Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.

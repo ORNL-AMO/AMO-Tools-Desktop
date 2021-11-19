@@ -3,8 +3,8 @@
 	  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
-		  <div class="col-md-auto">
-			<img src="assets/images/calculator-icons/furnace-icons/opening.png" class="ico-size2 py-2">
+		  <div class="align-items-center icon-background" [ngClass]="{'inTreasureHunt-icon': inTreasureHunt, 'calc-list-icon': !inTreasureHunt}">
+			<img src="assets/images/calculator-icons/furnace-icons/opening.png" class="open-icon">
 		  </div>
 		  <div class="pl-2">
 			<h3>Opening Loss</h3>
@@ -27,7 +27,7 @@
 	  </div>
 	  <!-- baseline -->
 	  <div class="d-flex">
-		<div class="p-0 col-8 d-flex scroll-item bg-white" [ngStyle]="{'height.px': containerHeight}">
+		<div class="p-0 col-8 h-100 d-flex scroll-item bg-white" [ngStyle]="{'height.px': containerHeight}">
 		  <div class="baseline w-50 panel-column" (click)="setBaselineSelected()" 
 			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
@@ -36,10 +36,11 @@
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of baselineData; let i = index;">
-					<app-opening-form [index]="i" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-opening-form>
+					<app-opening-form [index]="i" [settings]="settings" [selected]="baselineSelected"
+					[inTreasureHunt]="inTreasureHunt" [isBaseline]="true"></app-opening-form>
 				</div>
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
-				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+				<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
 				  (click)="btnResetData()">
 				  Reset Data
 				</button>
@@ -59,7 +60,8 @@
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of modificationData; let i = index;">
-					<app-opening-form [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-opening-form>
+					<app-opening-form [index]="i" [settings]="settings" [selected]="!baselineSelected" 
+					[inTreasureHunt]="inTreasureHunt" [isBaseline]="false"></app-opening-form>
 				</div>
 			</div>
 		  </div>

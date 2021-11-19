@@ -66,26 +66,26 @@
         </td>
       </tr>
       <tr>
-        <td>Annual Cost</td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td>Annual Cost ({{settings.currency}})</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualCost | number:'1.0-0'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.annualCost">{{mod.annualCost | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="mod.annualCost">{{mod.annualCost | number:'1.0-0'}}</span>
           <span *ngIf="!mod.annualCost">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr class="bold-row">
-        <td>Annual Cost Savings</td>
+        <td>Annual Cost Savings ({{settings.currency}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.annualCostSavings">{{mod.annualCostSavings | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="mod.annualCostSavings">{{mod.annualCostSavings | number:'1.0-0'}}</span>
           <span *ngIf="!mod.annualCostSavings">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
-        <td>Implementation Costs</td>
+        <td>Implementation Costs ({{settings.currency}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.implementationCosts">{{mod.implementationCosts | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="mod.implementationCosts">{{mod.implementationCosts | number:'1.0-0'}}</span>
           <span *ngIf="!mod.implementationCosts">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -99,8 +99,8 @@
       </tr>
       <tr class="bold">
         <td>Selected Energy Projects</td>
-        <td class="text-muted">&mdash;</td>
-        <td *ngFor="let modification of phast.modifications; let index = index;">
+        <td class="text-muted" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span class="d-block"
             *ngIf="modification.exploreOppsShowFlueGas && modification.exploreOppsShowFlueGas.hasOpportunity"
             [innerHTML]="modification.exploreOppsShowFlueGas.display"></span>
@@ -135,8 +135,8 @@
       </tr>
       <tr class="bold">
         <td>Modifications</td>
-        <td class="text-muted">&mdash;</td>
-        <td *ngFor="let modification of phast.modifications; let index = index;">
+        <td class="text-muted" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div *ngFor="let modificationMade of getModificationsMadeList(modification.phast)">
             {{modificationMade}}<br>
           </div>

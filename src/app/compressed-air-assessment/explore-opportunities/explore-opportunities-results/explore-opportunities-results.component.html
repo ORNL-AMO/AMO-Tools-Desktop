@@ -1,0 +1,388 @@
+<div class="d-flex flex-column my-table" *ngIf="dayTypeModificationResult && dayTypeBaselineResult">
+    <div class="d-flex stripe my-table-bg border-top-0">
+        <div class="col-4">
+        </div>
+        <div class="bold table-text d-flex align-items-center pl-1 pr-1 col-4">
+            Baseline
+        </div>
+        <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+            {{modification.name}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item stripe energy-savings">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Percent <span *ngIf="selectedDayType">Energy</span> Savings (%)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4">
+            <app-percent-graph *ngIf="dayTypeModificationResult.allSavingsResults.savings.percentSavings"
+                [value]="dayTypeModificationResult.allSavingsResults.savings.percentSavings">
+            </app-percent-graph>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.auxiliaryPowerUsage.energyUse != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Auxiliary Power Energy Use</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            {{dayTypeModificationResult.auxiliaryPowerUsage.energyUse | number:'1.0-0'}} kWh
+        </div>
+    </div>
+
+    <!--energy savings-->
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.flowReallocationSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Flow Reallocation Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            {{dayTypeModificationResult.flowReallocationSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !addReceiverVolumeValid}">
+            <span class="table-text">Additional Receiver Volume Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !addReceiverVolumeValid}">
+            {{dayTypeModificationResult.addReceiverVolumeSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !adjustCascadingSetPointsValid}">
+            <span class="table-text">Adjust Cascading Points Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !adjustCascadingSetPointsValid}">
+            {{dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.improveEndUseEfficiencySavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !improveEndUseEfficiencyValid}">
+            <span class="table-text">Improve End Use Efficiency Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !improveEndUseEfficiencyValid}">
+            {{dayTypeModificationResult.improveEndUseEfficiencySavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.reduceAirLeaksSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceAirLeaksValid}">
+            <span class="table-text">Reduce Air Leaks Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceAirLeaksValid}">
+            {{dayTypeModificationResult.reduceAirLeaksSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.reduceRunTimeSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceRuntimeValid}">
+            <span class="table-text">Reduce Run Time Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceRuntimeValid}">
+            {{dayTypeModificationResult.reduceRunTimeSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.reduceSystemAirPressureSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceSystemAirPressureValid}">
+            <span class="table-text">Reduce System Air Pressure Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceSystemAirPressureValid}">
+            {{dayTypeModificationResult.reduceSystemAirPressureSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.useAutomaticSequencerSavings.savings.power != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !useAutomaticSequencerValid}">
+            <span class="table-text">Use Automatic Sequencer Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !useAutomaticSequencerValid}">
+            {{dayTypeModificationResult.useAutomaticSequencerSavings.savings.power | number:'1.0-0'}} kWh
+        </div>
+    </div>
+    <!--ENERGY NUMBERS-->
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Peak Demand</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.peakDemand | number:'1.0-2'}} kW</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text">{{dayTypeModificationResult.peakDemand | number:'1.0-2'}} kW</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold  table-text">{{dayTypeBaselineResult.energyUse |
+                number:'1.0-0'}} kWh</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.adjustedResults.power
+                | number:'1.0-0'}} kWh</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Peak Demand Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeBaselineResult.peakDemand
+                - dayTypeModificationResult.peakDemand |
+                number:'1.0-2'}} kW</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-bg stripe my-table-item energy-savings">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeModificationResult.allSavingsResults.savings.power
+                | number:'1.0-0'}} kWh</span>
+        </div>
+    </div>
+
+
+
+    <!--cost savings-->
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.auxiliaryPowerUsage.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Auxiliary Power Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            {{dayTypeModificationResult.auxiliaryPowerUsage.cost * -1 | currency}}
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.flowReallocationSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text">Flow Reallocation Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            {{dayTypeModificationResult.flowReallocationSavings.savings.cost | currency}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !addReceiverVolumeValid}">
+            <span class="table-text">Additional Receiver Volume Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !addReceiverVolumeValid}">
+            {{dayTypeModificationResult.addReceiverVolumeSavings.savings.cost | currency}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !adjustCascadingSetPointsValid}">
+            <span class="table-text">Adjust Cascading Points Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !adjustCascadingSetPointsValid}">
+            {{dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost | currency}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !improveEndUseEfficiencyValid}">
+            <span class="table-text">Improve End Use Efficiency Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !improveEndUseEfficiencyValid}">
+            {{dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost | currency}}
+        </div>
+    </div>
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.reduceAirLeaksSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceAirLeaksValid}">
+            <span class="table-text">Reduce Air Leaks Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceAirLeaksValid}">
+            {{dayTypeModificationResult.reduceAirLeaksSavings.savings.cost | currency}}
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.reduceRunTimeSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceRuntimeValid}">
+            <span class="table-text">Reduce Run Time Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceRuntimeValid}">
+            {{dayTypeModificationResult.reduceRunTimeSavings.savings.cost | currency}}
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item"
+        *ngIf="dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !reduceSystemAirPressureValid}">
+            <span class="table-text">Reduce System Air Pressure Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !reduceSystemAirPressureValid}">
+            {{dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost | currency}}
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item" *ngIf="dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost != 0">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4" [ngClass]="{'invalid': !useAutomaticSequencerValid}">
+            <span class="table-text">Use Automatic Sequencer Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text" [ngClass]="{'invalid': !useAutomaticSequencerValid}">
+            {{dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost | currency}}
+        </div>
+    </div>
+
+
+
+    <!--cost-->
+    <div class="d-flex my-table-item" *ngIf="selectedDayType == undefined">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Peak Demand Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.demandCost | currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text">{{dayTypeModificationResult.peakDemandCost | currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.cost |
+                currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.adjustedResults.cost
+                | currency}}</span>
+        </div>
+    </div>
+    <div class="d-flex my-table-item" *ngIf="selectedDayType == undefined">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.totalAnnualOperatingCost |
+                currency}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text">{{dayTypeModificationResult.totalAnnualOperatingCost
+                | currency}}</span>
+        </div>
+    </div>
+    <!--Cost savings-->
+    <div class="d-flex my-table-bg my-table-item" *ngIf="selectedDayType == undefined">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Peak Demand Cost Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">{{dayTypeBaselineResult.demandCost
+                - dayTypeModificationResult.peakDemandCost |
+                currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex my-table-bg my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Energy Cost Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">
+                {{dayTypeModificationResult.allSavingsResults.savings.cost | currency}}</span>
+        </div>
+    </div>
+
+    <div class="d-flex stripe my-table-bg my-table-item" *ngIf="selectedDayType == undefined">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Annual Cost Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">&mdash; &mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1">
+            <span class="bold table-text"
+                [ngClass]="{'positive-savings': dayTypeModificationResult.allSavingsResults.savings.percentSavings > 10}">
+                {{dayTypeBaselineResult.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost |
+                currency}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="hasInvalidData" class="alert alert-danger">
+        One or more of the savings opportunities have errors. Results may not be accurate
+    </div>
+</div>

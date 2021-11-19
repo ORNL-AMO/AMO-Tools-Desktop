@@ -1,0 +1,46 @@
+
+<table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>
+          Waste Water Name
+        </th>
+        <th>
+          Modification Name
+        </th>
+        <th>
+          Baseline TSS Removal<br>(%)
+        </th>
+        <th>
+          Modification TSS Removal<br>(%)
+        </th>
+        <th>
+           Baseline BOD Removal<br>(%)
+         </th>
+         <th>
+           Modification BOD Removal<br>(%)
+         </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of tableData">
+        <td *ngIf="data.assessmentName">{{data.assessmentName}}</td>
+        <td *ngIf="!data.assessmentName">&mdash;</td>
+
+        <td *ngIf="data.modificationName">{{data.modificationName}}</td>
+        <td *ngIf="!data.modificationName">&mdash;</td>
+        
+        <td *ngIf="data.baselineTSSRemoval">{{data.baselineTSSRemoval | sigFigs:'3' }}</td>
+        <td *ngIf="!data.baselineTSSRemoval">&mdash;</td>
+
+        <td *ngIf="data.modificationTSSRemoval">{{data.modificationTSSRemoval | sigFigs:'3' }}</td>
+        <td *ngIf="!data.modificationTSSRemoval">&mdash;</td>
+
+        <td *ngIf="data.baselineBODRemoval">{{data.baselineBODRemoval | sigFigs:'3' }}</td>
+        <td *ngIf="!data.baselineBODRemoval">&mdash;</td>
+
+        <td *ngIf="data.modificationBODRemoval">{{data.modificationBODRemoval | sigFigs:'3' }}</td>
+        <td *ngIf="!data.modificationBODRemoval">&mdash;</td>
+      </tr>
+    </tbody>
+  </table>

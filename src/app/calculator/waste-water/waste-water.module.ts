@@ -4,6 +4,7 @@ import { WasteWaterListComponent } from './waste-water-list/waste-water-list.com
 import { RouterModule } from '@angular/router';
 import { O2UtilizationRateModule } from './o2-utilization-rate/o2-utilization-rate.module';
 import { StatePointAnalysisModule } from './state-point-analysis/state-point-analysis.module';
+import { WaterReductionModule } from './water-reduction/water-reduction.module';
 
 @NgModule({
   declarations: [WasteWaterListComponent],
@@ -12,7 +13,8 @@ import { StatePointAnalysisModule } from './state-point-analysis/state-point-ana
     CommonModule,
     RouterModule,
     O2UtilizationRateModule,
-    StatePointAnalysisModule
+    StatePointAnalysisModule,
+    WaterReductionModule
   ]
 })
 export class WasteWaterModule { }

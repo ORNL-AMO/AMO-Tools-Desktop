@@ -13,7 +13,6 @@ import { TreasureChestComponent } from './treasure-chest/treasure-chest.componen
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
-import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
 import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
 import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { CalculatorsModule } from './calculators/calculators.module';
@@ -28,6 +27,29 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
 import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { AirLeakTreasureHuntService } from './treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
+import { CaPressureReductionTreasureHuntService } from './treasure-hunt-calculator-services/ca-pressure-reduction-treasure-hunt.service';
+import { WaterReductionTreasureHuntService } from './treasure-hunt-calculator-services/water-reduction-treasure-hunt.service';
+import { StandaloneOpportunitySheetService } from './treasure-hunt-calculator-services/standalone-opportunity-sheet.service';
+import { CaReductionTreasureHuntService } from './treasure-hunt-calculator-services/ca-reduction-treasure-hunt.service';
+import { ElectricityReductionTreasureHuntService } from './treasure-hunt-calculator-services/electricity-reduction-treasure-hunt.service';
+import { LightingReplacementTreasureHuntService } from './treasure-hunt-calculator-services/lighting-replacement-treasure-hunt.service';
+import { MotorDriveTreasureHuntService } from './treasure-hunt-calculator-services/motor-drive-treasure-hunt.service';
+import { NaturalGasReductionTreasureHuntService } from './treasure-hunt-calculator-services/natural-gas-reduction-treasure-hunt.service';
+import { PipeInsulationTreasureHuntService } from './treasure-hunt-calculator-services/pipe-insulation-treasure-hunt.service';
+import { ReplaceExistingTreasureHuntService } from './treasure-hunt-calculator-services/replace-existing-treasure-hunt.service';
+import { SteamReductionTreasureHuntService } from './treasure-hunt-calculator-services/steam-reduction-treasure-hunt.service';
+import { TankInsulationTreasureHuntService } from './treasure-hunt-calculator-services/tank-insulation-treasure-hunt.service';
+import { TreasureHuntOpportunityService } from './treasure-hunt-calculator-services/treasure-hunt-opportunity.service';
+import { FlueGasTreasureHuntService } from './treasure-hunt-calculator-services/flue-gas-treasure-hunt.service';
+import { WallTreasureHuntService } from './treasure-hunt-calculator-services/wall-treasure-hunt.service';
+import { LeakageTreasureHuntService } from './treasure-hunt-calculator-services/leakage-treasure-hunt.service';
+import { WasteHeatTreasureHuntService } from './treasure-hunt-calculator-services/waste-heat-treasure-hunt.service';
+import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/opening-treasure-hunt.service';
+import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
+import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
+import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -41,7 +63,8 @@ import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/tr
     OperatingHoursModalModule,
     ToastModule,
     RouterModule,
-    TreasureChestMenuModule
+    TreasureChestMenuModule,
+    UpdateUnitsModalModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -62,7 +85,29 @@ import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/tr
     TreasureHuntReportService,
     OpportunityCardsService, 
     SortCardsService,
-    ConvertInputDataService
+    ConvertInputDataService,
+    AirLeakTreasureHuntService,
+    TankInsulationTreasureHuntService,
+    StandaloneOpportunitySheetService,
+    LightingReplacementTreasureHuntService,
+    ReplaceExistingTreasureHuntService,
+    MotorDriveTreasureHuntService,
+    NaturalGasReductionTreasureHuntService,
+    ElectricityReductionTreasureHuntService,
+    CaReductionTreasureHuntService,
+    CaPressureReductionTreasureHuntService,
+    WaterReductionTreasureHuntService,
+    SteamReductionTreasureHuntService,
+    PipeInsulationTreasureHuntService,
+    TreasureHuntOpportunityService,
+    WasteHeatTreasureHuntService,
+    AirHeatingTreasureHuntService,
+    WallTreasureHuntService,
+    LeakageTreasureHuntService,
+    FlueGasTreasureHuntService,
+    OpeningTreasureHuntService,
+    HeatCascadingTreasureHuntService,
+    WaterHeatingTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

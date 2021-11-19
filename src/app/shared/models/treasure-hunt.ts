@@ -2,6 +2,18 @@ import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { WallLoss } from "./phast/losses/wallLoss";
+import { FlueGas } from "./phast/losses/flueGas";
+import { EnergyData } from "./phast/losses/chargeMaterial";
+import { LeakageLoss } from "./phast/losses/leakageLoss";
+import { WasteHeatInput } from "./phast/wasteHeat";
+import { OpeningLoss } from "./phast/losses/openingLoss";
+import { AirHeatingInput } from "./phast/airHeating";
+import { HeatCascadingInput } from "./phast/heatCascading";
+import { WaterHeatingInput } from "./steam/waterHeating";
+import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
+import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
+import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
 
 export interface TreasureHunt {
     name: string,
@@ -18,9 +30,45 @@ export interface TreasureHunt {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
+    wallLosses?: Array<WallLossTreasureHunt>;
+    leakageLosses?: Array<LeakageLossTreasureHunt>;
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
+    openingLosses?: Array<OpeningLossTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
+    condensingEconomizerOpportunities?: Array<CondensingEconTreasureHunt>;
+    waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
+    existingDataUnits?: string;
     setupDone: boolean;
+}
+
+export enum Treasure {
+    lightingReplacement = 'lighting-replacement',
+    opportunitySheet = 'opportunity-sheet',
+    replaceExisting = 'replace-existing',
+    motorDrive = 'motor-drive',
+    naturalGasReduction = 'natural-gas-reduction',
+    electricityReduction = 'electricity-reduction',
+    compressedAir = 'compressed-air-reduction',
+    compressedAirPressure = 'compressed-air-pressure-reduction',
+    waterReduction = 'water-reduction',
+    steamReduction = 'steam-reduction',
+    pipeInsulation = 'pipe-insulation-reduction',
+    tankInsulation = 'tank-insulation-reduction',
+    airLeak = 'air-leak-survey',
+    wallLoss = 'wall-loss',
+    airHeating = 'air-heating',
+    flueGas = 'flue-gas',
+    leakageLoss = 'leakage-loss',
+    wasteHeat = 'waste-heat',
+    openingLoss = 'opening-loss',
+    heatCascading = 'heat-cascading',
+    waterHeating = 'water-heating',
+    feedwaterEconomizer = 'feedWaterEconomizer',
+    condensingEconomizer = 'condensing-economizer',
 }
 
 export interface FilterOption {
@@ -54,7 +102,7 @@ export interface EnergyUsage {
     steamUsed: boolean,
 }
 
-export interface OpportunitySheet {
+export interface OpportunitySheet extends TreasureHuntOpportunity {
     name: string,
     equipment: string,
     description: string,
@@ -89,21 +137,22 @@ export interface OtherCostItem {
     description?: string
 }
 
-export interface SteamReductionTreasureHunt {
+
+export interface SteamReductionTreasureHunt extends TreasureHuntOpportunity {
     baseline: Array<SteamReductionData>;
     modification: Array<SteamReductionData>;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
 }
 
-export interface ReplaceExistingMotorTreasureHunt {
+export interface ReplaceExistingMotorTreasureHunt extends TreasureHuntOpportunity {
     replaceExistingData?: ReplaceExistingData;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
 }
 
 
-export interface LightingReplacementTreasureHunt {
+export interface LightingReplacementTreasureHunt extends TreasureHuntOpportunity {
     baseline: Array<LightingReplacementData>;
     modifications?: Array<LightingReplacementData>;
     opportunitySheet?: OpportunitySheet
@@ -113,67 +162,165 @@ export interface LightingReplacementTreasureHunt {
 }
 
 
-export interface NaturalGasReductionTreasureHunt {
+export interface NaturalGasReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<NaturalGasReductionData>;
     modification: Array<NaturalGasReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface ElectricityReductionTreasureHunt {
+export interface ElectricityReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<ElectricityReductionData>;
     modification: Array<ElectricityReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface CompressedAirReductionTreasureHunt {
+export interface CompressedAirReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<CompressedAirReductionData>;
     modification: Array<CompressedAirReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface CompressedAirPressureReductionTreasureHunt {
+export interface CompressedAirPressureReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<CompressedAirPressureReductionData>;
     modification: Array<CompressedAirPressureReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface PipeInsulationReductionTreasureHunt {
+export interface PipeInsulationReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: PipeInsulationReductionInput;
     modification: PipeInsulationReductionInput;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface TankInsulationReductionTreasureHunt {
+export interface TankInsulationReductionTreasureHunt extends TreasureHuntOpportunity {
     baseline: TankInsulationReductionInput;
     modification: TankInsulationReductionInput;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface WaterReductionTreasureHunt {
+export interface WaterReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<WaterReductionData>;
     modification: Array<WaterReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface WastewaterReductionTreasureHunt {
+export interface WastewaterReductionTreasureHunt extends TreasureHuntOpportunity{
     baseline: Array<WaterReductionData>;
     modification: Array<WaterReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
-export interface AirLeakSurveyTreasureHunt {
+export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
-    opportunitySheet?: OpportunitySheet,
-    selected?: boolean
 }
+
+export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
+    inputData: WasteHeatInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface AirHeatingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: AirHeatingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface WallLossTreasureHunt extends TreasureHuntOpportunity {
+    baseline: Array<WallLoss>;
+    modification: Array<WallLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface LeakageLossTreasureHunt extends TreasureHuntOpportunity {
+    baseline: Array<LeakageLoss>;
+    modification: Array<LeakageLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface FlueGasTreasureHunt extends TreasureHuntOpportunity {
+    baseline: FlueGas;
+    modification: FlueGas;
+    baselineEnergyData: FlueGasEnergyData;
+    modificationEnergyData: FlueGasEnergyData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface OpeningLossTreasureHunt extends TreasureHuntOpportunity {
+    baseline: Array<OpeningLoss>;
+    modification: Array<OpeningLoss>;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface HeatCascadingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: HeatCascadingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface WaterHeatingTreasureHunt extends TreasureHuntOpportunity {
+    inputData: WaterHeatingInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface FeedwaterEconomizerTreasureHunt extends TreasureHuntOpportunity {
+    inputData: FeedwaterEconomizerInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CondensingEconTreasureHunt extends TreasureHuntOpportunity {
+    inputData: CondensingEconomizerInput;
+    energySourceData: EnergySourceData;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+
+export interface EnergySourceData {
+    energySourceType: string,
+    fuelCost?: {
+        baseline: number,
+        modification: number
+    }
+    unit: string
+}
+
+export interface TreasureHuntOpportunity {
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+    // opportunityType == calculator selector/name
+    opportunityType: string;
+    opportunityIndex?: number;
+}
+
+export interface TreasureHuntOpportunityResults {
+    costSavings: number,
+    energySavings: number,
+    baselineCost: number,
+    modificationCost: number,
+    utilityType: string,
+  }
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
@@ -199,7 +346,7 @@ export interface OpportunitySheetResult {
     energyCostSavings: number,
 }
 
-export interface MotorDriveInputsTreasureHunt{
+export interface MotorDriveInputsTreasureHunt extends TreasureHuntOpportunity{
     motorDriveInputs?: MotorDriveInputs;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
@@ -288,4 +435,12 @@ export interface ImportExportOpportunities {
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
     airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
+    openingLosses?: Array<OpeningLossTreasureHunt>;
+    airHeatingOpportunities?: Array<AirHeatingTreasureHunt>;
+    wallLosses?: Array<WallLossTreasureHunt>;
+    leakageLosses?: Array<LeakageLossTreasureHunt>;
+    flueGasLosses?: Array<FlueGasTreasureHunt>;
+    wasteHeatReductions?: Array<WasteHeatTreasureHunt>;
+    heatCascadingOpportunities?: Array<HeatCascadingTreasureHunt>;
+    waterHeatingOpportunities?: Array<WaterHeatingTreasureHunt>;
 }

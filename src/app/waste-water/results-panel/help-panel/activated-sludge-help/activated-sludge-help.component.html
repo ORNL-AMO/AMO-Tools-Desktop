@@ -1,0 +1,366 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Activated Sludge Help
+        <br>
+    </h5>
+    <label class="p-1" (click)="toggleSuggestions()">
+        <span class="fa fa-chevron-down" *ngIf="displaySuggestions"></span>
+        <span class="fa fa-chevron-right" *ngIf="!displaySuggestions"></span>
+        <span class="h6 pl-1">
+            Savings Suggestions
+        </span>
+    </label>
+    <div class="my-2" *ngIf="displaySuggestions">
+        <h6>
+            <small class="text-muted">
+                <ul>
+                    <li>
+                        Try to avoid operating activated sludge processes at Solids Retention Times (SRTs) above 40 days
+                        because oxygen demand will be maximized and process performance may deteriorate.
+                    </li>
+                </ul>
+            </small>
+        </h6>
+    </div>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="focusedField == 'Temperature'">
+        <h6>
+            Temperature
+            <br>
+            <small class="text-muted">
+                Temperature of the mixed liquor. The mixed liquor consists of the mixture of the influent of primary
+                clarifier effluent and return sludge.
+                <hr class="my-1">
+                Temperature impacts the rate of microbial reactions and the
+                biokinetic constants (kd and k) are adjusted by model calculations according to the input temperature.
+                <hr>
+            </small>
+        </h6>
+        <!-- <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0 <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                        <td class="w-50 text-center">{{ranges.steamFlowMax}} <span
+                                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+    <!-- So -->
+    <div class="my-2" *ngIf="focusedField == 'So'">
+        <h6>
+            S<sub>o</sub>
+            <br>
+            <small class="text-muted">
+                Influent CBOD<sub>5</sub> concentration (S<sub>o</sub>) is the concentration of CBOD<sub>5</sub> that
+                enters the activated sludge
+                reactor. The growth limiting substrate in the Bio-Tiger model is CBOD<sub>5</sub>. While the influent
+                CBOD<sub>5</sub>
+                concentration changes during the day and throughout the week, this should be the average
+                CBOD<sub>5</sub>
+                concentration for the particular activated sludge process being evaluated at steady-state.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- Volume -->
+    <div class="my-2" *ngIf="focusedField == 'Volume'">
+        <h6>
+            Volume
+            <br>
+            <small class="text-muted">
+                The volume of the reactor(s).
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- FlowRate -->
+    <div class="my-2" *ngIf="focusedField == 'FlowRate'">
+        <h6>
+            Flow Rate
+            <br>
+            <small class="text-muted">
+                The flow rate (Q) to the reactor is the influent flow rate. This does not include the return activated
+                sludge (RAS) flow rate. Detention time calculations for the reactor(s) are based only on activated
+                sludge influent flow rate.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- InertVSS -->
+    <div class="my-2" *ngIf="focusedField == 'InertVSS'">
+        <h6>
+            Inert VSS
+            <br>
+            <small class="text-muted">
+                Inert VSS Concentration is the concentration of non-biodegradable volatile suspended solids in the
+                activated sludge influent. This will typically have a significant impact on total sludge production in
+                the activated sludge process. The influent inert VSS will not be degraded in the process and, thus, will
+                eventually end up in the solids leaving the process. The concentrations of inert VSS and inert inorganic
+                TSS of the influent are related to the influent TSS concentration.
+                <hr>
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Influent TSS concentration, mg/L</th>
+                        <th class="text-center">Inert VSS, mg/L</th>
+                        <th class="text-center">Inert Inorg. TSS, mg/L</th>
+                    </tr>
+                    <tr *ngFor="let concentrationRow of concentrationRows">
+                        <td class="text-center">{{concentrationRow.influent}}</td>
+                        <td class="text-center">{{concentrationRow.inert}}</td>
+                        <td class="text-center">{{concentrationRow.inertInorg}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- OxidizableN -->
+    <div class="my-2" *ngIf="focusedField == 'OxidizableN'">
+        <h6>
+            Oxidizable N
+            <br>
+            <small class="text-muted">
+                Oxidizable nitrogen (N) concentration is for the activated sludge influent. In most cases, the
+                oxidizable N will be the Total Kjeldahl Nitrogen (TKN) concentration of the activated sludge influent.
+                The model assumes that most of the organic N in the activated sludge influent will be mineralized to
+                ammonia-N in the process. The model will calculate the concentration of influent nitrogen that is
+                incorporated in biomass production. Most of the remaining influent nitrogen will become effluent
+                ammonia-N and effluent nitrate-N if the process has a sufficiently long SRT and is not operated to
+                achieve significant denitrification. Typically, effluent dissolved organic N will be relatively low
+                (often 1 mg/L or less), unless the activated sludge process receives significant loadings of inert
+                dissolved organic N (e.g. certain amine groups from pulp, paper, paperboard, and cellulose production
+                processes).
+                <hr>
+                Biological nitrification converts ammonia-N to nitrite-N and then to nitrate-N. In the model, nearly all
+                of the ammonia-N that is converted to nitrite-N will be subsequently converted to nitrate-N. In
+                activated sludge processes, a problem with the buildup of significant concentrations of nitrite-N
+                (nitrite lock) can occur under some circumstances. In the Bio-Tiger model, the buildup of significant
+                concentrations of nitrite-N is not considered.
+                <hr>
+                The oxidation of ammonia-N to nitrate-N (nitrification) is handled relatively simply in the Bio-Tiger
+                model. Biokinetic equations <b>are not used</b> to predict the degree of nitrification in the process.
+                Instead,
+                empirically derived curves are used to determine the degree of nitrification based on the solids
+                retention time (SRT) of the activated sludge process.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- Biomass -->
+    <div class="my-2" *ngIf="focusedField == 'Biomass'">
+        <h6>
+            VSS/TSS Ratio of Biomass
+            <br>
+            <small class="text-muted">
+                The ratio of biomass in the Volatile Suspended Solids (VSS) to the Total Suspended Solids (TSS). A
+                default value of 0.85 is suggested by Metcalf & Eddy, but should normally be in the range of 0.80 to
+                0.90. This should not be confused with the ratio of MLVSS to MLSS, which decreases as SRT increases, due
+                to oxidation of the biomass during endogenous respiration.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- InfluentTSS -->
+    <div class="my-2" *ngIf="focusedField == 'InfluentTSS'">
+        <h6>
+            Influent TSS
+            <br>
+            <small class="text-muted">
+                The Total Suspended Solids (TSS) concentration within the Influent to the activated sludge process. This
+                is primarily used to calculate the mass loading of TSS on the activated sludge process.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- InertInOrgTSS -->
+    <div class="my-2" *ngIf="focusedField == 'InertInOrgTSS'">
+        <h6>
+            Inert Inorganic TSS
+            <br>
+            <small class="text-muted">
+                Inert inorganic TSS concentration entering the activated sludge, which has a significant impact on
+                solids production. A significant portion of inorganic TSS is inert and will eventually end up in the
+                solids leaving the process. The concentrations of inert VSS and inert inorganic TSS of the influent are
+                related to the influent TSS concentration.
+                <hr>
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Influent TSS concentration, mg/L</th>
+                        <th class="text-center">Inert VSS, mg/L</th>
+                        <th class="text-center">Inert Inorg. TSS, mg/L</th>
+                    </tr>
+                    <tr *ngFor="let concentrationRow of concentrationRows">
+                        <td class="text-center">{{concentrationRow.influent}}</td>
+                        <td class="text-center">{{concentrationRow.inert}}</td>
+                        <td class="text-center">{{concentrationRow.inertInorg}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- EffluentTSS -->
+    <div class="my-2" *ngIf="focusedField == 'EffluentTSS'">
+        <h6>
+            Effluent TSS
+            <br>
+            <small class="text-muted">
+                The Total Suspended Solids (TSS) concentration within the effluent from the activated sludge process or
+                the “unintentional solids wasted” and is used to calculate the
+                suspended or “chunky” CBOD<sub>5</sub> of the effluent. The fraction of the effluent TSS that is
+                biodegradable will
+                decrease with increasing SRT and the suspended CBOD<sub>5</sub> will decrease with increasing SRT for
+                the same
+                effluent TSS concentration. The total CBOD<sub>5</sub> of the effluent is the “chunky” effluent
+                CBOD<sub>5</sub> plus the
+                soluble effluent CBOD<sub>5</sub>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- RASTSS -->
+    <div class="my-2" *ngIf="focusedField == 'RASTSS'">
+        <h6>
+            RAS TSS
+            <br>
+            <small class="text-muted">
+                Total Suspended Solids concentration in the return activated sludge (RAS). This is used to determine the
+                RAS flow rate and the WAS flow rate for activated sludge. Typically, 40 to 50% of influent TSS, in the
+                range of 4,000 to 15,000 mg/L, but it can be outside this range in some plants.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- MLSSpar -->
+    <div class="my-2" *ngIf="focusedField == 'MLSSpar'">
+        <h6>
+            MLSS
+            <br>
+            <small class="text-muted">
+                The average Total suspended solids concentration in the mixed liquor (MLSS) for the activated sludge
+                process. Calculated based on estimation of heterotrophic biomass growth, cell debris, and inert VSS.
+                Typically, MLSS concentration will be in the range of 1,000 mg/L to 5,000 mg/L. This can be used as a
+                control point for the facility and in this tool is used to calculate the Solids Retention Time (SRT).
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- FractionBiomass -->
+    <div class="my-2" *ngIf="focusedField == 'FractionBiomass'">
+        <h6>
+            Cell Debris Biomass Fraction
+            <br>
+            <small class="text-muted">
+                Cell debris biomass fraction (f<sub>d</sub>) is the fraction of biomass that remains as cell debris. The
+                typical
+                range for “f<sub>d</sub>” is 0.10 to 0.15. Cell debris is a small component of biomass production, but
+                it is
+                included because it impacts biomass production and oxygen requirements.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- BiomassYeild -->
+    <div class="my-2" *ngIf="focusedField == 'BiomassYeild'">
+        <h6>
+            Biomass Yield Constant
+            <br>
+            <small class="text-muted">
+                Biomass Yield Constant (Y) is the theoretical (gross) yield of biomass per unit BOD5 consumed. The “net”
+                yield of biomass depends on kd and SRT; the net yield decreases as kd increases and as SRT increases. It
+                impacts biomass production, substrate utilization, and oxygen requirements. The typical range for this
+                parameter is 0.4 to 0.8.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- HalfSaturation -->
+    <div class="my-2" *ngIf="focusedField == 'HalfSaturation'">
+        <h6>
+            Half-saturation Constant
+            <br>
+            <small class="text-muted">
+                Half-saturation coefficient (K<sub>s</sub>) or half-velocity constant is the value of soluble substrate
+                concentration at one-half the maximum specific substrate utilization rate. The typical range for this
+                parameter is 25 to 100 mg/L. It impacts substrate (BOD<sub>5</sub>) utilization and biomass growth.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- MicrobialDecay -->
+    <div class="my-2" *ngIf="focusedField == 'MicrobialDecay'">
+        <h6>
+            Endogenous Decay Coefficient
+            <br>
+            <small class="text-muted">
+                Endogenous decay coefficient (k<sub>d</sub>) determines the rate that the microbes oxidize their own
+                protoplasm to
+                generate energy. While this value is dependent on temperature, this field is for standard conditions (20
+                &#8451;) and the tool with adjust it based on the provided temperature. The typical range for this
+                parameter
+                at 20 &#8451; is 0.06 to 0.15 day<sup>-1</sup>. It impacts biomass production, substrate utilization,
+                and oxygen
+                requirements.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!-- MaxUtilizationRate -->
+    <div class="my-2" *ngIf="focusedField == 'MaxUtilizationRate'">
+        <h6>
+            Max. Specific Substrate Utilization Rate
+            <br>
+            <small class="text-muted">
+                Max. specific substrate utilization rate (k) determines the rate at which the heterotrophic bacteria use
+                biodegradable organic matter. Organic matter is used primarily for two purposes by bacteria – synthesis
+                (growth) reactions and energy (oxidation) reactions. Synthesis reactions create bacterial cell mass,
+                primarily through binary fission. While this value is dependent on temperature, this field is for
+                standard conditions (20 &#8451;) and the tool with adjust it based on the provided temperature. The
+                typical
+                range for this parameter at 20 &#8451; is 3 to 16 day<sup>-1</sup>. It impacts biomass production,
+                substrate
+                utilization, and oxygen requirements.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!--CalculateGivenSRT-->
+    <div class="my-2" *ngIf="focusedField == 'CalculateGivenSRT'">
+        <h6>
+            Plant Control Point
+            <br>
+            <small class="text-muted">
+                This allows the user to choose between specifying the average Mixed Liquor Suspended Solids (MLSS)
+                concentration for the process and the total Solids Retention Time (SRT) used for calculations.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <!--DefinedSRT-->
+    <div class="my-2" *ngIf="focusedField == 'CalculateGivenSRT'">
+        <h6>
+            Solids Retention Rime
+            <br>
+            <small class="text-muted">
+                The Solids Retention Time (SRT) is the average time the activated sludge solids are in the system. This
+                is an important design and operating parameter for the activated-sludge process.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

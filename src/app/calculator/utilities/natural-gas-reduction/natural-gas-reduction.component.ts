@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
-import { NaturalGasReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { NaturalGasReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
@@ -188,7 +188,7 @@ export class NaturalGasReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.naturalGasReduction });
   }
 
   cancel() {

@@ -5,6 +5,7 @@ import { CompressedAirReductionService } from '../compressed-air-reduction.servi
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { ConvertCompressedAirReductionService } from '../convert-compressed-air-reduction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-compressed-air-reduction-form',
@@ -34,6 +35,10 @@ export class CompressedAirReductionFormComponent implements OnInit {
   compressorControl: number;
   @Input()
   compressorControlAdjustment: number;
+  @Input()
+  compressorSpecificPowerControl: number;
+  @Input()
+  compressorSpecificPower: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -95,7 +100,9 @@ export class CompressedAirReductionFormComponent implements OnInit {
   form: FormGroup;
   idString: string;
   individualResults: CompressedAirReductionResult;
+  compressedAirResultsSub: Subscription;
   isEditingName: boolean = false;
+  
   constructor(private compressedAirReductionService: CompressedAirReductionService, private convertCompressedAirReductionService: ConvertCompressedAirReductionService) { }
 
   ngOnInit() {
@@ -117,7 +124,20 @@ export class CompressedAirReductionFormComponent implements OnInit {
     if (this.selected == false) {
       this.form.disable();
     }
-    this.calculateIndividualResult();
+
+    this.compressedAirResultsSub = this.compressedAirReductionService.compressedAirResults.subscribe(results => {
+      if (results) {
+        if (this.isBaseline) {
+          this.individualResults = results.baselineResults[this.index];
+        } else {
+          this.individualResults = results.modificationResults[this.index];
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.compressedAirResultsSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -134,15 +154,27 @@ export class CompressedAirReductionFormComponent implements OnInit {
       this.compressorCustomControl = (this.compressorControl == 8);
     }
 
+    if (changes.compressorSpecificPowerControl && !changes.compressorSpecificPowerControl.firstChange) {
+      this.form.controls.compressorSpecificPowerControl.patchValue(this.compressorSpecificPowerControl);
+    }
+
+    if (changes.compressorSpecificPower && !changes.compressorSpecificPower.firstChange) {
+      this.form.controls.compressorSpecificPower.patchValue(this.compressorSpecificPower);
+    }
+
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
       } else {
         this.form.enable();
-        if (this.index != 0 || !this.isBaseline) {
+        if (this.index != 0) {
           this.form.controls.utilityType.disable();
+        }
+        if (!this.isBaseline) {
           this.form.controls.compressorControl.disable();
           this.form.controls.compressorControlAdjustment.disable();
+          // Compressor type
+          this.form.controls.compressorSpecificPowerControl.disable();
         }
       }
     }
@@ -227,17 +259,11 @@ export class CompressedAirReductionFormComponent implements OnInit {
 
   calculate() {
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
-    this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
 
   removeEquipment() {
     this.emitRemoveEquipment.emit(this.index);
-  }
-
-  calculateIndividualResult() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
-    this.individualResults = this.compressedAirReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
   editEquipmentName() {

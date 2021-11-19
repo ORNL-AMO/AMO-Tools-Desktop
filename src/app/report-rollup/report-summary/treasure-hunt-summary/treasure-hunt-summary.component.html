@@ -2,7 +2,7 @@
   <div class="card-header">
     <h3>Treasure Hunt</h3>
     <span>
-      <span>{{reportRollupService.numTreasureHunt}}</span>
+      <span>{{numTreasureHunt}}</span>
     </span>
   </div>
   <div class="card-body">
@@ -10,21 +10,28 @@
       <div class="col-lg-6 col-md-8 col-sm-12">
         <dl class="summary-list mx-auto">
           <dt>Annual Cost Savings</dt>
-          <dd>{{totalSavings | currency:'USD'}}</dd>
-          <!-- <dt>Annual Cost</dt>
-          <dd>{{totalCost | currency: 'USD'}}</dd> -->
+          <dd>
+            <span *ngIf="settings.currency !== '$'">
+              {{totalSavings| currencyThousands }}
+          </span>
+          <span *ngIf="settings.currency === '$'">
+            {{totalSavings| currency:'USD':'symbol':'2.0-0'}}
+        </span>
+          </dd>
         </dl>
+        
       </div>
       <div class="col-lg-6 col-md-8 col-sm-12">
         <dl class="summary-list mx-auto">
           <dt>Annual Cost</dt>
-          <dd>{{totalCost | currency: 'USD'}}</dd>
-
-          <!-- <dt>Maximum Annual
-            <br />Energy Savings</dt>
-          <dd>---- MWh</dd>
-          <dt>Annual Energy</dt>
-          <dd>---- MWh</dd> -->
+          <dd>
+            <span *ngIf="settings.currency !== '$'">
+              {{totalCost| currencyThousands }}
+          </span>
+          <span *ngIf="settings.currency === '$'">
+            {{totalCost| currency:'USD':'symbol':'2.0-0'}}
+        </span>
+          </dd>
         </dl>
       </div>
     </div>

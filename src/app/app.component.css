@@ -358,6 +358,10 @@ select.form-control:not([size]):not([multiple]) {
   color: #F39C12  !important;
 }
 
+.waste-water .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
 
 .input-error{
   color: red;
@@ -567,8 +571,6 @@ Reports
 .output-summary .table th {
     border: none;
     padding: 0px;
-    text-align: left;
-    font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px;
@@ -646,6 +648,24 @@ Reports
     background-size: 60px;
     padding: 0px 0 0px 55px;
 }
+
+.assessment-report.report-in-waste-water .assessment-name,
+.assessment-report.report-in-rollup.report-in-waste-water .assessment-name {
+  background-image: url('../assets/images/waste-water-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+.assessment-report.report-in-compressed-air .assessment-name,
+.assessment-report.report-in-rollup.report-in-compressed-air .assessment-name {
+  background-image: url('../assets/images/ca-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
 
 
 .assessment-report .report-header:after {
@@ -1069,6 +1089,14 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
+
+.waste-water-icon-landing {
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
 .ico-size4.general {
   height: 55px;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;
@@ -1203,123 +1231,7 @@ Footer
 
 
 
-/*
-Banner
-=============================================== */
-.banner{
-  font-size: 28px;
-  background: #2c2c2c;
-  color: #fff;
-}
-  .banner h1 {
-    font-size: 22px;
-    margin-bottom: -14px;
-    color: rgba(255,255,255,1);
-  }
-  .banner small {
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-  }
-  .banner.psat {
-    background: #2980b9;
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-  .banner.phast {
-    background: #BF3D00;
-  }
-  .banner.fsat{
-    background: #FFE400;
-  }
 
-  .banner.ssmt{
-    background:#F39C12;
-    color: black;
-  }
-
-  .banner.treasure-hunt{
-    background: #2E4053;
-    color: white;
-  }
-
-  .banner.log-tool{
-    background: #117A65;
-    color: white;
-  }
-
-  .banner.motor-inventory{
-    background: #84b641;
-  }
-
-
-  .banner.fsat .btn-dashboard, .banner.fsat .title, 
-  .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
-    color: #000;
-  }
-  .banner.ssmt .btn-dashboard, .banner.ssmt .title, 
-  .banner.ssmt .settings, .banner.ssmt h1, .banner.ssmt small{
-    color: #000;
-  }
-.banner:after {
-  display: table;
-  content: "";
-  clear: both;
-}
-
-.banner .btn-dashboard, .banner .title, .banner .settings {
-  display: inline-block;
-  padding: 7px 10px;
-  color: #fff;
-}
-.banner .btn-dashboard {
-  float: right;
-  font-size: 13px;
-  padding: 12px 20px;
-}
-  .banner .btn-dashboard span {
-    font-size: 23px;
-    font-weight: bold;
-  }
-
-  .banner.psat .btn-dashboard:hover {
-     background-color: #0063a4;
-  }
-  .banner.phast .btn-dashboard:hover {
-    background-color: #a83600;
-  }
-
-.banner .btn-dashboard:hover {
-  text-decoration: none;
-  cursor: pointer;
-}
-.banner .title {
-  padding: 0 10px;
-}
-.banner .title, .banner .pills-nav {
-
-}
-.banner .pills-nav {
-margin-bottom: 0px;
-}
-.banner.psat .title {
-  color: #fff;
-  padding-left: 58px;
-  background: url('../assets/images/ico-psat-diagram.png') no-repeat 14px;
-  background-size: 31px;
-}
-/* .banner.phast .title {
-  color: #fff;
-  padding-left: 75px;
-  background: url('../assets/images/phast-logo.png') no-repeat 10px;
-  background-size: 60px;
-  /*background-color: #000B13;
-} */
-
-.banner-border{
-  border-bottom: solid;
-  border-width: 1px;
-  border-color: slategray;
-}
 
 /*.tab-content {
   min-height: 100%;

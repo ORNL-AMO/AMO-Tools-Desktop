@@ -35,7 +35,7 @@
     <label for="variationInBarometricPressure">Variation in Planar Barometric Pressure</label>
     <div class="input-group">
       <select formControlName="variationInBarometricPressure" name="variationInBarometricPressure"
-        id="variationInBarometricPressure" (change)="save()" (focus)="focusField('variationInBarometricPressure')"
+        id="variationInBarometricPressure" (change)="updateBarometricPressure()" (focus)="focusField('variationInBarometricPressure')"
         class="form-control">
         <option [ngValue]="true">Yes</option>
         <option [ngValue]="false">No</option>

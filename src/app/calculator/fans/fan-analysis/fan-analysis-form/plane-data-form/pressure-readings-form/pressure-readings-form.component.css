@@ -7,6 +7,9 @@
     font-size: small;
 }
 
+.imports {
+    font-size: small;
+}
 
 .vert-text{
     writing-mode: vertical-rl;
@@ -48,6 +51,4 @@ label{
     padding-top: 15px;
 }
 
-.group-label{
-    font-size: medium;
-}
+

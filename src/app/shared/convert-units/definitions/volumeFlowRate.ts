@@ -286,9 +286,9 @@ export const volumeFlowRate = {
         }
         , 'ft3/min': {
             name: {
-                singular: 'Cubic foot per minute'
-                , plural: 'Cubic feet per minute' ,
-                 display:  '(ft&#x00B3;/min)'
+                singular: 'Actual cubic foot per minute'
+                , plural: 'Actual cubic feet per minute' ,
+                 display:  '(ACFM)'
             }
             , to_anchor: 957.506 / 60
         }

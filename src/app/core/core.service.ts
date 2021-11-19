@@ -9,6 +9,8 @@ import { MockSsmt, MockSsmtSettings } from '../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTreasureHunt';
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
 import { BehaviorSubject } from 'rxjs';
+import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
+import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
 @Injectable()
 export class CoreService {
 
@@ -19,8 +21,10 @@ export class CoreService {
   examplePsatId: number;
   exampleFsatId: number;
   exampleSsmtId: number;
+  exampleWasteWaterId: number;
   exampleTreasureHuntId: number;
   exampleMotorInventoryId: number;
+  exampleCompressedAirAssessmentId: number;
   constructor(private indexedDbService: IndexedDbService) {
     this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
@@ -53,12 +57,22 @@ export class CoreService {
                   MockTreasureHunt.directoryId = this.exampleDirectoryId;
                   this.indexedDbService.addAssessment(MockTreasureHunt).then(tHuntId => {
                     this.exampleTreasureHuntId = tHuntId;
+
                     MockMotorInventory.directoryId = this.exampleDirectoryId;
                     this.indexedDbService.addInventoryItem(MockMotorInventory).then(inventoryId => {
                       this.exampleMotorInventoryId = inventoryId;
-                      resolve(true);
-                    })
-                  })
+
+                      MockWasteWater.directoryId = this.exampleDirectoryId;
+                      this.indexedDbService.addAssessment(MockWasteWater).then(wwId => {
+                        this.exampleWasteWaterId = wwId;
+                        MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
+                        this.indexedDbService.addAssessment(MockCompressedAirAssessment).then(compressedAirAssessmentId => {
+                          this.exampleCompressedAirAssessmentId = compressedAirAssessmentId;
+                          resolve(true);
+                        })
+                      });
+                    });
+                  });
                 });
               });
             });
@@ -93,7 +107,6 @@ export class CoreService {
 
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
-
                 MockSsmtSettings.assessmentId = this.exampleSsmtId;
 
                 this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
@@ -104,9 +117,16 @@ export class CoreService {
                     delete MockPsatSettings.assessmentId;
                     MockPsatSettings.inventoryId = this.exampleMotorInventoryId;
                     this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-                      resolve(true);
-                    })
-                  })
+
+                      MockWasteWaterSettings.assessmentId = this.exampleWasteWaterId;
+                      this.indexedDbService.addSettings(MockWasteWaterSettings).then(() => {
+                        MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
+                        this.indexedDbService.addSettings(MockCompressedAirAssessmentSettings).then(() => {
+                          resolve(true);
+                        })
+                      });
+                    });
+                  });
                 });
               });
             });

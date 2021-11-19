@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
@@ -8,39 +8,55 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ConvertInputDataService } from '../convert-input-data.service';
+import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+
 
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit {
+export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
+  @Output('openUpdateUnitsModal') 
+  openUpdateUnitsModal = new EventEmitter<Settings>();
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   formWidth: number;
   showOperatingHoursModal: boolean = false;
-
+  
   settingsForm: FormGroup;
   oldSettings: Settings;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService,
-    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService) { }
+    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    if (this.assessment.treasureHunt.existingDataUnits && this.assessment.treasureHunt.existingDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings = this.getExistingDataSettings();
+      this.showUpdateDataReminder = true;
+    }
+  }
+
+  ngOnDestroy() {
+    if(this.showUpdateDataReminder && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
   }
 
   ngAfterViewInit() {
@@ -55,12 +71,13 @@ export class SystemBasicsComponent implements OnInit {
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
     if (this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
-      this.showUpdateData = true;
-      if (this.dataUpdated === true) {
-        this.dataUpdated = false;
-      }
-    } else {
-      this.showUpdateData = false;
+      this.assessment.treasureHunt.existingDataUnits = this.oldSettings.unitsOfMeasure;
+      this.saveTreasureHunt();
+      this.showUpdateDataReminder = true;
+    }
+
+    if (this.showSuccessMessage === true) {
+      this.showSuccessMessage = false;
     }
 
     this.indexedDbService.putSettings(this.settings).then(
@@ -99,17 +116,36 @@ export class SystemBasicsComponent implements OnInit {
     }
   }
 
+  getExistingDataSettings(): Settings {
+    let existingSettingsForm: FormGroup = _.cloneDeep(this.settingsForm);
+    existingSettingsForm.patchValue({unitsOfMeasure: this.assessment.treasureHunt.existingDataUnits});
+    let existingSettings = this.settingsService.setUnits(existingSettingsForm);
+    return this.settingsService.getSettingsFromForm(existingSettings);
+  }
 
-  updateData() {
-    console.log('convert before');
+  updateData(showSuccess?: boolean) {
+    if(showSuccess) {
+      this.initSuccessMessage();
+    }
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
-    this.settings = this.convertInputDataService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    console.log('converted');
     this.saveSettings();
+
+    this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
     this.saveTreasureHunt();
-    this.dataUpdated = true;
-    this.showUpdateData = false;
+    this.showUpdateDataReminder = false;
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+  }
+
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
   }
 }

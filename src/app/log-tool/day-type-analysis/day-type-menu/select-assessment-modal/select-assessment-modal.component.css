@@ -1,0 +1,21 @@
+  .btn{
+      padding-top: 6px;
+      padding-bottom: 6px;
+      font-size: small;
+      color: white;
+      background: #117A65;
+  }
+
+.header{
+      padding: .5rem;
+  }
+
+
+ table th, table td{
+    padding: .35rem;
+  }
+
+
+  table{
+    font-size: small;
+  }

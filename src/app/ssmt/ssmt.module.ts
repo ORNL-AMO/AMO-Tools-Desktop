@@ -46,6 +46,7 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { RouterModule } from '@angular/router';
     SharedPipesModule,
     RouterModule,
     SsmtSankeyModule,
+    UpdateUnitsModalModule
   ],
   declarations: [
     SsmtComponent,

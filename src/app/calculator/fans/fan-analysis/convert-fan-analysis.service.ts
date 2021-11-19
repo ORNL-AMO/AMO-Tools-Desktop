@@ -23,8 +23,13 @@ export class ConvertFanAnalysisService {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy = this.updateInputDataForCalcs(inputCpy);
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertPlaneResults(results, settings);
+    let results: PlaneResults = {};
+    try {
+      results = fanAddon.getPlaneResults(inputCpy);
+      results = this.convertPlaneResults(results, settings);
+    } catch(err) {
+      results.error = true;
+    }
     return results;
   }
 
@@ -225,22 +230,25 @@ export class ConvertFanAnalysisService {
     }
     input.dryBulbTemp = this.convertNum(input.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
     input.staticPressure = this.convertNum(input.staticPressure, 'inH2o', settings.fanPressureMeasurement);
+    if (input.userDefinedStaticPressure) {
+      input.userDefinedStaticPressure = this.convertNum(input.userDefinedStaticPressure, 'inH2o', settings.fanPressureMeasurement);
+    }
     return input;
   }
 
   convertPsychrometricResults(input: PsychrometricResults, settings: Settings): PsychrometricResults {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
-    input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
     input.relativeHumidity = input.relativeHumidity * 100;
     //metric/imperial
     if(settings.unitsOfMeasure == 'Metric'){
+      input.absolutePressure = this.convertNum(input.absolutePressure, 'inHg', 'Pa');
+      input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', 'Pa')
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
       input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
       input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
     }
     
     input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);
-    input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', settings.fanBarometricPressure);
     return input;
   }
 

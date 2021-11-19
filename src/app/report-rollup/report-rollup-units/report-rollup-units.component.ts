@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ReportRollupService } from '../report-rollup.service';
-import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
   selector: 'app-report-rollup-units',
@@ -11,8 +11,7 @@ import { ReportItem } from '../report-rollup-models';
   styleUrls: ['./report-rollup-units.component.css']
 })
 export class ReportRollupUnitsComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   @Output('closeUnitModal')
   closeUnitModal = new EventEmitter<boolean>();
   energyOptions: Array<string> = [
@@ -25,18 +24,20 @@ export class ReportRollupUnitsComponent implements OnInit {
     'kgoe',
     'kWh'
   ];
+  currencies: Array<string> = [
+    '$',
+    // '$k'
+  ];
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
   tmpSettings: Settings;
-  assessmentsSub: Subscription;
-  constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
+  settings: Settings;
+  constructor(private convertUnitsService: ConvertUnitsService, private phastReportRollupService: PhastReportRollupService,
+    private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.tmpSettings = JSON.parse(JSON.stringify(this.settings));
-    this.assessmentsSub = this.reportRollupService.phastAssessments.subscribe(val => {
-      this.phastAssessments = val;
-    });
-
     this.energyResultOptions = new Array();
 
     this.energyOptions.forEach(val => {
@@ -49,16 +50,12 @@ export class ReportRollupUnitsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    this.assessmentsSub.unsubscribe();
-  }
-
   getUnitName(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
-  
+
   getUnitDisplay(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
@@ -70,11 +67,14 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.settings.phastRollupElectricityUnit = this.tmpSettings.phastRollupElectricityUnit;
     this.settings.phastRollupFuelUnit = this.tmpSettings.phastRollupFuelUnit;
     this.settings.phastRollupSteamUnit = this.tmpSettings.phastRollupSteamUnit;
+    this.settings.currency = this.tmpSettings.currency;
+    this.reportRollupService.settings.next(this.settings);
     this.newUnit();
     this.closeUnitModal.emit(true);
   }
 
   newUnit() {
-    this.reportRollupService.phastAssessments.next(this.phastAssessments);
+    let assessments = this.phastReportRollupService.phastAssessments.getValue();
+    this.phastReportRollupService.phastAssessments.next(assessments);
   }
 }

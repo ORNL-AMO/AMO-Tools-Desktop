@@ -14,7 +14,8 @@
         <input name="barometricPressure" type="number" step="any" class="form-control"
           formControlName="barometricPressure" id="{{'barometricPressure_'+idString}}" (input)="getResults()"
           (focus)="focusField('barometricPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">Pa</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">in Hg</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="gasDensityForm.controls.barometricPressure.invalid && !gasDensityForm.controls.barometricPressure.pristine">
@@ -28,6 +29,21 @@
           {{gasDensityForm.controls.barometricPressure.errors.max.max}} <span
             [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
           .</span>
+      </span>
+    </div>
+
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':gasDensityForm.controls.specificHeatRatio.invalid}">
+      <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
+        formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
+        (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
+      <span class="alert-danger pull-right small"
+        *ngIf="gasDensityForm.controls.specificHeatRatio.invalid && !gasDensityForm.controls.specificHeatRatio.pristine">
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.required">Value Required</span>
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.max">Value can't be greater than
+          {{gasDensityForm.controls.specificHeatRatio.errors.max.max}}.</span>
+        <span *ngIf="gasDensityForm.controls.specificHeatRatio.errors.greaterThan">Value must be greater than 1.</span>
       </span>
     </div>
 
@@ -120,8 +136,7 @@
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="gasDensityForm.controls.relativeHumidity.invalid && !gasDensityForm.controls.relativeHumidity.pristine">
-          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.greaterThan == 0">
-            Value must be greater than 0 %.</span>
+          <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than 0</span>
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value
             Required</span>
           <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than
@@ -153,8 +168,8 @@
 
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.gasType.value == 'OTHER'"
-      [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
+    <!--HIDDEN per issue 4332-->
+    <!-- <div class="form-group"  [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
       <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
       <div class="input-group">
         <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
@@ -166,7 +181,7 @@
         <span *ngIf="gasDensityForm.controls.specificGravity.errors.required">Value
           Required</span>
       </span>
-    </div>
+    </div> -->
 
     <div class="form-group"
       [ngClass]="{'indicate-different': isGasDensityDifferent(), 'invalid':gasDensityForm.controls.gasDensity.invalid}">

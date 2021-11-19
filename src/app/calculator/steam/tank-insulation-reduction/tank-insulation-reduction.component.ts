@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { TankInsulationReductionService } from './tank-insulation-reduction.service';
 import { TankInsulationReductionResults } from '../../../shared/models/standalone';
-import { TankInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TankInsulationReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-tank-insulation-reduction',
@@ -165,7 +165,7 @@ export class TankInsulationReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.tankInsulationReductionService.baselineData, modification: this.tankInsulationReductionService.modificationData });
+    this.emitSave.emit({ baseline: this.tankInsulationReductionService.baselineData, modification: this.tankInsulationReductionService.modificationData, opportunityType: Treasure.tankInsulation });
   }
 
   cancel() {

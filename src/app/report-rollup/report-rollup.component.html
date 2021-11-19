@@ -1,5 +1,6 @@
+
 <!--PRINT TITLE PAGE-->
-<div class="report-cover" *ngIf="printView && settings">
+<div class="report-cover" *ngIf="printView">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
     <div class="report-title">
@@ -13,13 +14,13 @@
 <!--END PRINT-->
 
 <!--CONTENT-->
-<div *ngIf="settings && !gatheringAssessments">
+<div *ngIf="!gatheringAssessments">
     <!--TOP BANNER (NOT PRINT)-->
     <div #reportHeader class="row sticky-top no-gutters" id="reportHeader" *ngIf="!printView">
         <div class="col-12">
             <div class="report-header hide-print">
                 <app-report-banner></app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" (hideSummary)="setSidebarHeight()">
+                <app-report-summary id="reportSummary" (hideSummary)="setSidebarHeight()">
                 </app-report-summary>
             </div>
         </div>
@@ -66,4 +67,4 @@
 </div>
 
 <!--MODALS-->
-<app-report-rollup-modals [settings]="settings"></app-report-rollup-modals>
+<app-report-rollup-modals></app-report-rollup-modals>
