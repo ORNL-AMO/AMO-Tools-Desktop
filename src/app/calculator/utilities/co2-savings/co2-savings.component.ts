@@ -124,7 +124,7 @@ export class Co2SavingsComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeField(str) {
+  changeField(str: string) {
     this.currentField = str;
   }
 
