@@ -25,7 +25,7 @@
                             <ul>
                                 <li *ngFor="let assessmentItem of noDirectoryAssessments">
                                     <div class="d-flex align-items-center"
-                                        [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT', 'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT' }">
+                                        [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT', 'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 'compressedAirAssessment': assessmentItem.assessment.type == 'CompressedAirAssessment'}">
                                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                                             <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
                                                 src="assets/images/ico-psat-diagram.png">
@@ -37,6 +37,8 @@
                                                 src="assets/images/ico-ssmt-diagram.png">
                                             <img *ngIf="assessmentItem.assessment.type == 'TreasureHunt'" class="icon"
                                                 src="assets/images/treasure-hunt.png">
+                                            <img *ngIf="assessmentItem.assessment.type == 'CompressedAirAssessment'" class="icon"
+                                                src="assets/images/ca-icon.png">
                                         </span>
                                         <span class="p-1">
                                             <a>{{assessmentItem.assessment.name}}</a>
@@ -53,7 +55,7 @@
                                     <ul>
                                         <li *ngFor="let assessmentItem of dirItem.directory.assessments">
                                             <div class="d-flex align-items-center"
-                                                [ngClass]="{ 'phast' : assessmentItem.type == 'PHAST', 'psat': assessmentItem.type == 'PSAT', 'fsat': assessmentItem.type == 'FSAT', 'treasure-hunt': assessmentItem.type == 'TreasureHunt', 'ssmt': assessmentItem.type == 'SSMT' }">
+                                                [ngClass]="{ 'phast' : assessmentItem.type == 'PHAST', 'psat': assessmentItem.type == 'PSAT', 'fsat': assessmentItem.type == 'FSAT', 'treasure-hunt': assessmentItem.type == 'TreasureHunt', 'ssmt': assessmentItem.type == 'SSMT', 'compressedAirAssessment': assessmentItem.type == 'CompressedAirAssessment' }">
                                                 <span
                                                     class="p-1 d-flex align-items-center justify-content-center icon-image">
                                                     <img *ngIf="assessmentItem.type == 'PSAT'" class="icon"
@@ -66,6 +68,8 @@
                                                         src="assets/images/ico-ssmt-diagram.png">
                                                     <img *ngIf="assessmentItem.type == 'TreasureHunt'" class="icon"
                                                         src="assets/images/treasure-hunt.png">
+                                                    <img *ngIf="assessmentItem.type == 'CompressedAirAssessment'" class="icon"
+                                                        src="assets/images/ca-icon.png">
                                                 </span>
                                                 <span class="p-1">
                                                     <a>{{assessmentItem.name}}</a>
