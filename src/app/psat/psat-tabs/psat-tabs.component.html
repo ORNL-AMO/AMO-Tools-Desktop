@@ -33,7 +33,7 @@
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="d-flex tabs subtabs psat mr-auto">
-    <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities' && selectedModification.inputs.whatIfScenario == true}">
+    <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
       <a (click)="changeTab('explore-opportunities')">Explore Opportunities
         <br>
         <span class="help-text psat-view">Novice View</span>

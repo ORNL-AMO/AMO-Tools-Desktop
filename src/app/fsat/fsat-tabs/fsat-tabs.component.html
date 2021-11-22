@@ -30,7 +30,7 @@
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="d-flex tabs subtabs fsat mr-auto">
-    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities' && selectedModification.whatIfScenario == true}">
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
       <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
         <br>
         <span class="help-text fsat-view">Novice View</span>
