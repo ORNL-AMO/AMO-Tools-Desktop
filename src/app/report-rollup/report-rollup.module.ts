@@ -65,6 +65,7 @@ import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed
 import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compressed-air-rollup-print/compressed-air-rollup-print.component';
 import { ReportSummaryGraphsComponent } from './report-summary/report-summary-graphs/report-summary-graphs.component';
 import { ReportSummaryGraphsService } from './report-summary/report-summary-graphs/report-summary-graphs.service';
+import { ReportSummaryPieChartComponent } from './report-summary/report-summary-graphs/report-summary-pie-chart/report-summary-pie-chart.component';
 
 @NgModule({
   imports: [
@@ -126,6 +127,7 @@ import { ReportSummaryGraphsService } from './report-summary/report-summary-grap
     CompressedAirRollupComponent,
     CompressedAirRollupPrintComponent,
     ReportSummaryGraphsComponent,
+    ReportSummaryPieChartComponent,
 
   ],
   providers: [

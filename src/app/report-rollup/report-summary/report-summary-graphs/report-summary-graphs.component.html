@@ -1,22 +1,20 @@
-
-<div class="report-summary">
-        <div class="row no-gutters">
-                <div class="col-12">
-                        <ul>
-                                <li>
-                                        <p>Assessment Energy Usage Summary</p>
-                                        <app-rollup-summary-pie-chart class="energy-pie-chart" [pieChartData]="pieChartData"
-                                                [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit">
-                                        </app-rollup-summary-pie-chart>
-                                </li>
-                                <li>
-                                        <p>Fuel vs Electricity Energy Usage </p>
-                                        <app-rollup-summary-pie-chart class="energy-pie-chart"
-                                                [pieChartData]="energyChartData" [dataOption]="pieChartDataOption"
-                                                [energyUnit]="reportSummaryEnergyUnit">
-                                        </app-rollup-summary-pie-chart>
-                                </li>
-                        </ul>
+<div class="row no-gutters">
+        <div class="col-12 d-flex justify-content-center">
+                <div class="energy-pie-chart" *ngIf="pieChartData">
+                        <app-report-summary-pie-chart class="chart" [pieChartData]="pieChartData"
+                                [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit"
+                                [titleStr]="'Assessment Energy Usage Summary'">
+                        </app-report-summary-pie-chart>
                 </div>
+
+
+                <div class="energy-pie-chart" *ngIf="energyChartData">
+                        <app-report-summary-pie-chart class="chart" [pieChartData]="energyChartData"
+                                [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit"
+                                [titleStr]="'Fuel vs Electricity Energy Usage'">
+                        </app-report-summary-pie-chart>
+                </div>
+
+
         </div>
 </div>
