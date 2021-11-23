@@ -43,6 +43,8 @@ import { specificVolume } from './definitions/specificVolume';
 import { thermalConductivity } from './definitions/thermalConductivity';
 import { powerPerVolume } from './definitions/powerPerVolume';
 import { massPerPower } from './definitions/massPerPower';
+import { massFlux } from './definitions/massFlux';
+import { volumeFlux } from './definitions/volumeFlux';
 import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 
 
@@ -56,6 +58,7 @@ export class ConvertUnitsService {
     length: length,
     area: area,
     mass: mass,
+    massFlux: massFlux,
     volume: volume,
     each: each,
     temperature: temperature,
@@ -80,6 +83,7 @@ export class ConvertUnitsService {
     specificHeat: specificHeat,
     hourlyHeatCapacity: hourlyHeatCapacity,
     volumetricHeat: volumetricHeat,
+    volumeFlux: volumeFlux,
     specificEnergy: specificEnergy,
     density: density,
     volumetricEnergy: volumetricEnergy,
