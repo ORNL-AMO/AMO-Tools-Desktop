@@ -53,8 +53,7 @@
 
           <div class="col-3 border-right text-center">
             <div class="align-self-center small text-left">
-              <form [ngClass]="{'disabled-link': assessmentTab == 'explore-opportunities'}">
-
+              <form>
                 <span [ngClass]="{'disabled-link': getBadges(modification.fsat).length > 0}">
                   <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
                     <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"

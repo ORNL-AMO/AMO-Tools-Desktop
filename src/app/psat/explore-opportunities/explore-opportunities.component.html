@@ -1,14 +1,29 @@
 <div class="d-flex psat modify-conditions panel-container">
 	<div *ngIf="modificationExists" class="w-50 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
-		<div class="header mr-2 ml-2">
-			<h3>Select Potential Adjustment Projects</h3>
+		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == true">
+			<div class="header mr-2 ml-2">
+				<h3>Select Potential Adjustment Projects</h3>
+			</div>
+			<p>Select potential adjustment projects to explore opportunities to increase efficiency and the
+				effectiveness of
+				your system.</p>
+			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings"
+				(emitSave)="save()" [exploreModIndex]="modificationIndex" (changeField)="focusField($event)"
+				(emitAddNewMod)="addNewMod()" [assessmentId]="assessment.id">
+			</app-explore-opportunities-form>
 		</div>
-		<p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
-			your system.</p>
-		<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings"
-			(emitSave)="save()" [exploreModIndex]="modificationIndex" (changeField)="focusField($event)"
-			(emitAddNewMod)="addNewMod()" [assessmentId]="assessment.id">
-		</app-explore-opportunities-form>
+		<div *ngIf="psat.modifications[modificationIndex].psat.inputs.whatIfScenario == false">
+			<div class="header mr-2 ml-2">
+				<h3>
+					"COMPARE TWO PUMPS"<br> 
+					
+					This form is unavailable while Compare Two Pumps is selected. <br>
+					
+					If you wish to access this form please click 'View / Add
+					Scenarios', and select 'Modify Pump'.
+				</h3>
+			</div>
+		</div>
 
 	</div>
 	<div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
