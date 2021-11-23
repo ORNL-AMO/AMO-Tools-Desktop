@@ -131,7 +131,7 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeAssessmentTab(str: string) {
-    if (this.selectedModification.whatIfScenario == false) {
+    if (this.selectedModification && this.selectedModification.whatIfScenario == false) {
       if (str === 'explore-opportunities') {
         this.fsatService.assessmentTab.next('modify-conditions');
       } else {

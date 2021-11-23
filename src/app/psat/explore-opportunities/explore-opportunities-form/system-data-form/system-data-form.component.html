@@ -57,7 +57,8 @@
 <div *ngIf="!isVFD" class="checkbox">
     <label class="group-label" for="modifyHead">
         <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
-            [(ngModel)]="currentModification.exploreOppsShowHead.hasOpportunity" /> {{ currentModification.exploreOppsShowHead.display}}
+            [(ngModel)]="currentModification.exploreOppsShowHead.hasOpportunity"
+            [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{ currentModification.exploreOppsShowHead.display}}
     </label>
 </div>
 
@@ -107,7 +108,8 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="general">
         <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')"
-            (change)="toggleSystemData()" [(ngModel)]="currentModification.exploreOppsShowSystemData.hasOpportunity" /> {{currentModification.exploreOppsShowSystemData.display}}
+            (change)="toggleSystemData()" [(ngModel)]="currentModification.exploreOppsShowSystemData.hasOpportunity"
+            [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{currentModification.exploreOppsShowSystemData.display}}
     </label>
 </div>
 
