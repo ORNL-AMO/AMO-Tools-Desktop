@@ -25,7 +25,9 @@
                             <ul>
                                 <li *ngFor="let assessmentItem of noDirectoryAssessments">
                                     <div class="d-flex align-items-center"
-                                        [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT', 'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 'compressedAirAssessment': assessmentItem.assessment.type == 'CompressedAirAssessment'}">
+                                        [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
+                                         'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 
+                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessments.type == 'WasteWater'}">
                                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                                             <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
                                                 src="assets/images/ico-psat-diagram.png">
@@ -37,17 +39,10 @@
                                                 src="assets/images/ico-ssmt-diagram.png">
                                             <img *ngIf="assessmentItem.assessment.type == 'TreasureHunt'" class="icon"
                                                 src="assets/images/treasure-hunt.png">
-<<<<<<< HEAD
                                             <img *ngIf="assessmentItem.assessment.type == 'CompressedAir'" class="icon"
                                                 src="assets/images/ca-icon.png">
                                             <img *ngIf="assessmentItem.assessment.type == 'WasteWater'" class="icon"
                                                 src="assets/images/waste-water-icon.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'ToyFactory'" class="icon"
-                                                src="assets/images/motor-inventory-icon.png">
-=======
-                                            <img *ngIf="assessmentItem.assessment.type == 'CompressedAirAssessment'" class="icon"
-                                                src="assets/images/ca-icon.png">
->>>>>>> 5388c417acd64afab3b5f544bf9c20886dc601cc
                                         </span>
                                         <span class="p-1">
                                             <a>{{assessmentItem.assessment.name}}</a>
@@ -64,7 +59,9 @@
                                     <ul>
                                         <li *ngFor="let assessmentItem of dirItem.directory.assessments">
                                             <div class="d-flex align-items-center"
-                                                [ngClass]="{ 'phast' : assessmentItem.type == 'PHAST', 'psat': assessmentItem.type == 'PSAT', 'fsat': assessmentItem.type == 'FSAT', 'treasure-hunt': assessmentItem.type == 'TreasureHunt', 'ssmt': assessmentItem.type == 'SSMT', 'compressedAirAssessment': assessmentItem.type == 'CompressedAirAssessment' }">
+                                                [ngClass]="{ 'phast' : assessmentItem.type == 'PHAST', 'psat': assessmentItem.type == 'PSAT', 'fsat': assessmentItem.type == 'FSAT', 
+                                                'treasure-hunt': assessmentItem.type == 'TreasureHunt', 'ssmt': assessmentItem.type == 'SSMT', 'compressedAir': assessmentItem.type == 'CompressedAir',
+                                                'wasteWater': assessmentItem.type == 'WasteWater'}">
                                                 <span
                                                     class="p-1 d-flex align-items-center justify-content-center icon-image">
                                                     <img *ngIf="assessmentItem.type == 'PSAT'" class="icon"
