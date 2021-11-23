@@ -19,7 +19,7 @@ export class CondensingEconomizerService {
   currentField: BehaviorSubject<string>;
 
   operatingHours: OperatingHours;
-  constructor(private convertUnitsService: ConvertUnitsService, private condensingEconomizerFormService: CondensingEconomizerFormService) { 
+  constructor(private convertUnitsService: ConvertUnitsService, private condensingEconomizerFormService: CondensingEconomizerFormService) {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.condensingEconomizerInput = new BehaviorSubject<CondensingEconomizerInput>(undefined);
     this.condensingEconomizerOutput = new BehaviorSubject<CondensingEconomizerOutput>(undefined);
@@ -29,7 +29,7 @@ export class CondensingEconomizerService {
   }
 
   initDefaultEmptyInputs(settings: Settings) {
-    let fuelCost: number = settings.fuelCost? settings.fuelCost : 0;
+    let fuelCost: number = settings.fuelCost ? settings.fuelCost : 0;
     let fuelTemp: number = 65;
 
     if (settings.unitsOfMeasure != 'Imperial') {
@@ -79,7 +79,7 @@ export class CondensingEconomizerService {
       heatRecovery: undefined,
       sensibleHeatRecovery: undefined,
       heatRecoveryAnnual: undefined,
-      sensibleHeatRecoveryAnnual: undefined, 
+      sensibleHeatRecoveryAnnual: undefined,
     };
     this.condensingEconomizerOutput.next(emptyOutput);
   }
@@ -91,7 +91,7 @@ export class CondensingEconomizerService {
 
     validInput = this.condensingEconomizerFormService.getCondensingEconomizerForm(inputCopy, settings).valid;
 
-    if(!validInput) {
+    if (!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
@@ -99,11 +99,11 @@ export class CondensingEconomizerService {
 
       let condensingEconomizerOutput: CondensingEconomizerOutput = processHeatAddon.airWaterCoolingUsingFlue(suiteInputInterface);
       condensingEconomizerOutput = this.convertResultUnits(condensingEconomizerOutput, settings);
-      condensingEconomizerOutput.sensibleHeatRecoveryAnnual = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours; 
-      condensingEconomizerOutput.heatRecoveryAnnual = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours; 
-      condensingEconomizerOutput.annualHeatRecovery = condensingEconomizerOutput.heatRecoveryAnnual + condensingEconomizerOutput.sensibleHeatRecoveryAnnual; 
-      condensingEconomizerOutput.costSavings = condensingEconomizerOutput.annualHeatRecovery * inputCopy.fuelCost; 
-
+      condensingEconomizerOutput.sensibleHeatRecoveryAnnual = condensingEconomizerOutput.sensibleHeatRecovery * inputCopy.operatingHours;
+      condensingEconomizerOutput.heatRecoveryAnnual = condensingEconomizerOutput.heatRecovery * inputCopy.operatingHours;
+      condensingEconomizerOutput.annualHeatRecovery = condensingEconomizerOutput.heatRecoveryAnnual + condensingEconomizerOutput.sensibleHeatRecoveryAnnual;
+      condensingEconomizerOutput.costSavings = condensingEconomizerOutput.annualHeatRecovery * inputCopy.fuelCost;
+      condensingEconomizerOutput.totalHeatRecovery = condensingEconomizerOutput.heatRecovery + condensingEconomizerOutput.sensibleHeatRecovery;
       this.condensingEconomizerOutput.next(condensingEconomizerOutput);
     }
   }
@@ -148,14 +148,14 @@ export class CondensingEconomizerService {
 
   getSuiteInputInterface(inputs: CondensingEconomizerInput) {
     return {
-      heatInput: inputs.heatInput, 
-      tempFlueGasInF: inputs.flueGasTemperature, 
-      tempFlueGasOutF: inputs.modifiedFlueGasTemperature, 
-      tempCombAirF: inputs.combustionAirTemperature, 
-      fuelTempF: inputs.fuelTemp, 
-      percO2: inputs.flueGasO2, 
+      heatInput: inputs.heatInput,
+      tempFlueGasInF: inputs.flueGasTemperature,
+      tempFlueGasOutF: inputs.modifiedFlueGasTemperature,
+      tempCombAirF: inputs.combustionAirTemperature,
+      fuelTempF: inputs.fuelTemp,
+      percO2: inputs.flueGasO2,
       ambientAirTempF: inputs.ambientAirTemperature,
-      moistCombAir: inputs.moistureInCombustionAir, 
+      moistCombAir: inputs.moistureInCombustionAir,
       substance: inputs.substance,
       CH4: inputs.CH4,
       C2H6: inputs.C2H6,
@@ -172,7 +172,7 @@ export class CondensingEconomizerService {
   }
 
   convertPercentToFraction(percentInput: number): number {
-    if(percentInput > 0) {
+    if (percentInput > 0) {
       return percentInput / 100;
     } else {
       return percentInput;
@@ -180,7 +180,7 @@ export class CondensingEconomizerService {
   }
 
   convertFractionToPercent(value: number): number {
-    if(value > 0) {
+    if (value > 0) {
       return value * 100;
     } else {
       return value;
@@ -229,7 +229,7 @@ export class CondensingEconomizerService {
 
       output.effThermalLH = this.convertUnitsService.value(output.effThermalLH).from('MMBtu').to('MJ');
       output.effThermalLH = this.roundVal(output.effThermalLH, 2);
-    
+
       output.heatRecovery = this.convertUnitsService.value(output.heatRecovery).from('MMBtu').to('MJ');
       output.heatRecovery = this.roundVal(output.heatRecovery, 2);
     }

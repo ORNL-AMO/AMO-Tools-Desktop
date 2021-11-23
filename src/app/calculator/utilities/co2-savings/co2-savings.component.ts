@@ -17,7 +17,7 @@ export class Co2SavingsComponent implements OnInit {
     this.resizeTabs();
   }
   headerHeight: number;
-  currentField: string;
+  currentField: string = 'default';
   tabSelect: string = 'results';
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{

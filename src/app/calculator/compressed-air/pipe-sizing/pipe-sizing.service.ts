@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PipeSizingInput } from '../../../shared/models/standalone';
+import { PipeSizingInputs } from '../../../shared/models/calculators';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 
@@ -7,7 +9,7 @@ import { Settings } from '../../../shared/models/settings';
 export class PipeSizingService {
 
   inputs: PipeSizingInput;
-  constructor(private convertUnitsService: ConvertUnitsService) {
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.inputs = this.getDefaultData();
   }
 
@@ -39,5 +41,6 @@ export class PipeSizingService {
     }
     return tmpInputs;
   }
+
 }
 

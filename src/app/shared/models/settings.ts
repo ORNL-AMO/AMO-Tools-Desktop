@@ -99,7 +99,21 @@ export interface Settings {
     printWasteWaterRollup?: boolean,
     printDetailedResults?: boolean,
     printReportDiagram?: boolean,
-    printAll?: boolean
+    printAll?: boolean,
+    printCompressedAirRollup?: boolean
+
+    // Co2SavingsData
+    co2SavingsEnergyType?: string,
+    co2SavingsEnergySource?: string,
+    co2SavingsFuelType?: string,
+    totalEmissionOutputRate?: number,
+    electricityUse?: number,
+    eGridRegion?: string,
+    eGridSubregion?: string,
+    totalEmissionOutput?: number,
+    userEnteredBaselineEmissions?: boolean,
+    userEnteredModificationEmissions?: boolean,
+    zipcode?: string
 }
 
 

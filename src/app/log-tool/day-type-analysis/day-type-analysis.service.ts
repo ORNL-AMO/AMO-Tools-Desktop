@@ -58,6 +58,7 @@ export class DayTypeAnalysisService {
 
     if (excludedDates.length != 0) {
       dayTypesArr.push({
+        dayTypeId: Math.random().toString(36).substr(2, 9),
         color: 'red',
         label: 'Excluded',
         useDayType: true,
@@ -67,6 +68,7 @@ export class DayTypeAnalysisService {
 
     if (weekendDates.length != 0) {
       dayTypesArr.unshift({
+        dayTypeId: Math.random().toString(36).substr(2, 9),
         color: 'blue',
         label: 'Weekend',
         useDayType: true,
@@ -76,6 +78,7 @@ export class DayTypeAnalysisService {
 
     if (weekdayDates.length != 0) {
       dayTypesArr.unshift({
+        dayTypeId: Math.random().toString(36).substr(2, 9),
         color: 'green',
         label: 'Weekday',
         useDayType: true,
@@ -183,6 +186,7 @@ export class DayTypeAnalysisService {
     });
 
     dayTypes.push({
+      dayTypeId: Math.random().toString(36).substr(2, 9),
       color: newDayTypeColor,
       label: newDayTypeName,
       useDayType: true,

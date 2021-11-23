@@ -1,0 +1,34 @@
+<ul class="tabs subtabs compressed-air">
+    <li [ngClass]="{'active': calcTab == 'air-flow-conversion'}">
+      <a (click)="changeCalcTab('air-flow-conversion')">Air-Flow Conversion</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'receiver-tank'}">
+      <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
+    </li>
+    <!-- Altitude correction -->
+    <!-- <li [ngClass]="{'active': calcTab == 'receiver-tank'}">
+        <a (click)="changeCalcTab('receiver-tank')">Receiver Tank Sizing</a>
+      </li> -->
+    <li [ngClass]="{'active': calcTab == 'system-capacity'}">
+      <a (click)="changeCalcTab('system-capacity')">System Capacity</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'pipe-sizing'}">
+      <a (click)="changeCalcTab('pipe-sizing')">Pipe Sizing</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'air-velocity'}">
+      <a (click)="changeCalcTab('air-velocity')">Velocity in the Piping</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'air-leak-survey'}">
+      <a (click)="changeCalcTab('air-leak-survey')">Air Leak Survey</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'compressed-air-pressure-reduction'}">
+      <a (click)="changeCalcTab('compressed-air-pressure-reduction')">Compressed Air Pressure Reduction</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'full-load-amps'}">
+      <a (click)="changeCalcTab('full-load-amps')">Full-Load Amps</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'altitude-correction'}">
+      <a (click)="changeCalcTab('altitude-correction')">Altitude Correction</a>
+    </li>
+ 
+  </ul>

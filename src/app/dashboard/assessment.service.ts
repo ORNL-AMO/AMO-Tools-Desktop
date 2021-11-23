@@ -8,6 +8,7 @@ import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 
 declare const packageJson;
 @Injectable()
@@ -62,10 +63,15 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     } else if (assessment.type == 'WasteWater') {
-      if(assessment.wasteWater.setupDone && !str && !assessment.isExample){
+      if (assessment.wasteWater.setupDone && !str && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
+    } else if (assessment.type == 'CompressedAir') {
+      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
 
@@ -325,17 +331,59 @@ export class AssessmentService {
           OperatingTime: 24,
           TypeAerators: 2,
           Speed: 100,
-          EnergyCostUnit: settings.electricityCost,
           AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: settings.electricityCost
         }
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: 100,
-        TimeIncrement: .5,
-        equipmentNotes: '',
-        operatingMonths: 12
+        equipmentNotes: ''
       }
+    }
+  }
+
+  getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
+    let initDayTypeId: string = Math.random().toString(36).substr(2, 9);
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        demandCost: 5.00,
+        notes: undefined
+      },
+      systemInformation: {
+        systemElevation: undefined,
+        totalAirStorage: undefined,
+        isSequencerUsed: false,
+        targetPressure: undefined,
+        variance: undefined,
+        atmosphericPressure: 14.7,
+        atmosphericPressureKnown: true
+      },
+      compressorInventoryItems: new Array(),
+      systemProfile: {
+        systemProfileSetup: {
+          dayTypeId: undefined,
+          numberOfHours: 24,
+          dataInterval: 1,
+          profileDataType: undefined,
+        },
+        profileSummary: new Array()
+      },
+      compressedAirDayTypes: [{
+        dayTypeId: initDayTypeId,
+        name: 'Standard Day Type',
+        numberOfDays: 365,
+        profileDataType: "percentCapacity"
+      }]
     }
   }
 

@@ -7,6 +7,7 @@ import { PhastResultsService } from '../phast-results.service';
 import { LossTab, defaultTabs } from '../tabs';
 import * as _ from 'lodash';
 import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { FlueGasByVolumeSuiteResults } from '../../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class LossesService {
@@ -234,8 +235,8 @@ export class LossesService {
         } else if (flueGas.flueGasType === 'By Volume') {
           let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(flueGas);
           if (tmpForm.status === 'VALID') {
-            let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
-            if (test !== 0) {
+            let flueGasResults: FlueGasByVolumeSuiteResults = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
+            if (flueGasResults.availableHeat !== 0) {
               this.flueGasDone = true;
             } else {
               this.flueGasDone = false;

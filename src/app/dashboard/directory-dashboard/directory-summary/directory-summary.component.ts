@@ -24,6 +24,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
+import { BaselineResults, CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-directory-summary',
@@ -43,6 +44,7 @@ export class DirectorySummaryComponent implements OnInit {
   fsatSummary: AssessmentTypeSummary;
   ssmtSummary: AssessmentTypeSummary;
   wasteWaterSummary: AssessmentTypeSummary;
+  compressedAirSummary: AssessmentTypeSummary;
 
   settingsForm: FormGroup;
   updateDashboardDataSub: Subscription;
@@ -52,7 +54,7 @@ export class DirectorySummaryComponent implements OnInit {
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
     private ssmtService: SsmtService, private settingsService: SettingsService, private indexedDbService: IndexedDbService,
-    private wasteWaterService: WasteWaterService
+    private wasteWaterService: WasteWaterService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService
   ) { }
 
   ngOnInit() {
@@ -83,13 +85,15 @@ export class DirectorySummaryComponent implements OnInit {
       this.calculateFsatSummary();
       this.calculateSsmtSummary();
       this.calculateWasteWaterSummary();
-      let convertedFsatEnergy: number = this.convertUnitsService.value(this.fsatSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
-      let convertedPsatEnergy: number = this.convertUnitsService.value(this.psatSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
-      let convertedWasteWaterEnergy: number = this.convertUnitsService.value(this.wasteWaterSummary.totalEnergyUsed).from('mWh').to(this.directorySettings.energyResultUnit);
+      this.calculateCompressedAirSummary();
+      let convertedFsatEnergy: number = this.convertUnitsService.value(this.fsatSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
+      let convertedPsatEnergy: number = this.convertUnitsService.value(this.psatSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
+      let convertedWasteWaterEnergy: number = this.convertUnitsService.value(this.wasteWaterSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
+      let convertedCompressedAirEnergy: number =this.convertUnitsService.value(this.compressedAirSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
       this.totalSummary = {
-        totalAssessments: this.psatSummary.totalAssessments + this.phastSummary.totalAssessments + this.fsatSummary.totalAssessments + this.ssmtSummary.totalAssessments + this.wasteWaterSummary.totalAssessments,
-        totalCost: this.psatSummary.totalCost + this.phastSummary.totalCost + this.fsatSummary.totalCost + this.ssmtSummary.totalCost + this.wasteWaterSummary.totalCost,
-        totalEnergyUsed: convertedPsatEnergy + this.phastSummary.totalEnergyUsed + convertedFsatEnergy + this.ssmtSummary.totalEnergyUsed + convertedWasteWaterEnergy
+        totalAssessments: this.psatSummary.totalAssessments + this.phastSummary.totalAssessments + this.fsatSummary.totalAssessments + this.ssmtSummary.totalAssessments + this.wasteWaterSummary.totalAssessments + this.compressedAirSummary.totalAssessments,
+        totalCost: this.psatSummary.totalCost + this.phastSummary.totalCost + this.fsatSummary.totalCost + this.ssmtSummary.totalCost + this.wasteWaterSummary.totalCost + this.compressedAirSummary.totalCost,
+        totalEnergyUsed: convertedPsatEnergy + this.phastSummary.totalEnergyUsed + convertedFsatEnergy + this.ssmtSummary.totalEnergyUsed + convertedWasteWaterEnergy + convertedCompressedAirEnergy
       }
     }, 150);
   }
@@ -181,7 +185,7 @@ export class DirectorySummaryComponent implements OnInit {
     wasteWaterAssessments.forEach(assessment => {
       if (assessment.wasteWater.setupDone) {
         let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.systemBasics, settings, false);
+        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.baselineData.operations, settings, false);
         if (results.AeEnergyAnnual != undefined) {
           totalEnergyUsed = results.AeEnergyAnnual + totalEnergyUsed;
           totalCost = results.AeCost + totalCost;
@@ -193,7 +197,25 @@ export class DirectorySummaryComponent implements OnInit {
       totalCost: totalCost,
       totalEnergyUsed: totalEnergyUsed
     }
+  }
 
+  calculateCompressedAirSummary(){
+    let compressedAirAssessments: Array<Assessment> = _.filter(this.directory.assessments, (assessment) => { return assessment.type == 'CompressedAir' });
+    let totalEnergyUsed: number = 0;
+    let totalCost: number = 0;
+    compressedAirAssessments.forEach(assessment => {
+      if(assessment.compressedAirAssessment.setupDone){
+        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment, assessmentSettings);
+        totalCost += baselineResults.total.totalAnnualOperatingCost;
+        totalEnergyUsed += (baselineResults.total.energyUse / 1000);
+      }
+    });
+    this.compressedAirSummary = {
+      totalAssessments: compressedAirAssessments.length,
+      totalEnergyUsed: totalEnergyUsed,
+      totalCost: totalCost
+    }
   }
 
 

@@ -145,48 +145,16 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   calcExcessAir() {
-    let input: MaterialInputProperties = {
-      CH4: this.byVolumeForm.controls.CH4.value,
-      C2H6: this.byVolumeForm.controls.C2H6.value,
-      N2: this.byVolumeForm.controls.N2.value,
-      H2: this.byVolumeForm.controls.H2.value,
-      C3H8: this.byVolumeForm.controls.C3H8.value,
-      C4H10_CnH2n: this.byVolumeForm.controls.C4H10_CnH2n.value,
-      H2O: this.byVolumeForm.controls.H2O.value,
-      CO: this.byVolumeForm.controls.CO.value,
-      CO2: this.byVolumeForm.controls.CO2.value,
-      SO2: this.byVolumeForm.controls.SO2.value,
-      O2: this.byVolumeForm.controls.O2.value,
-      o2InFlueGas: this.byVolumeForm.controls.o2InFlueGas.value,
-      excessAir: this.byVolumeForm.controls.excessAirPercentage.value
-    };
-
     if (!this.calcMethodExcessAir) {
-      if (this.byVolumeForm.controls.o2InFlueGas.status !== 'INVALID') {
-        this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
-        this.byVolumeForm.patchValue({
-          excessAirPercentage: this.calculationExcessAir,
-        });
-      } else {
-        this.calculationExcessAir = 0;
-        this.byVolumeForm.patchValue({
-          excessAirPercentage: this.calculationExcessAir,
-        });
-      }
+      this.byVolumeForm.patchValue({
+        excessAirPercentage: 0
+      });
     }
 
     if (this.calcMethodExcessAir) {
-      if (this.byVolumeForm.controls.excessAirPercentage.status !== 'INVALID') {
-        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
-        this.byVolumeForm.patchValue({
-          o2InFlueGas: this.calculationFlueGasO2,
-        });
-      } else {
-        this.calculationFlueGasO2 = 0;
-        this.byVolumeForm.patchValue({
-          o2InFlueGas: this.calculationFlueGasO2,
-        });
-      }
+      this.byVolumeForm.patchValue({
+        o2InFlueGas: 0
+      });
     }
     this.calculate();
   }

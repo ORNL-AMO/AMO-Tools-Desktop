@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { StackLossInput } from '../../../shared/models/steam/steam-inputs';
@@ -179,15 +179,16 @@ export class StackLossService {
     return flueGasByVolume;
   }
 
-  flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
+  flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
     let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
     inputs.ambientAirTempF = inputs.ambientAirTemp;
-    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion;
+    inputs.combAirMoisturePerc = inputs.moistureInAirCombustion / 100;
+    inputs.flueGasO2Percentage = inputs.o2InFlueGas;
     inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
     inputs.ambientAirTempF = this.convertUnitsService.value(inputs.ambientAirTempF).from(settings.temperatureMeasurement).to('F');
     inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-    let results = phastAddon.flueGasLossesByVolume(inputs);
+    let results: FlueGasByVolumeSuiteResults = phastAddon.flueGasLossesByVolume(inputs);
     return results;
   }
 

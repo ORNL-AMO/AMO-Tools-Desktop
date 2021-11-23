@@ -70,6 +70,16 @@
                         Treasure Hunt Rollup Summary
                     </div>
                 </div>
+                <div class="row toggle-btn pad-top-10" *ngIf="showCompressedAirOptions && showRollupReportOptions"
+                    (click)="togglePrint('compressedAirRollup')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printCompressedAirRollup">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Compressed Air Rollup Summary
+                    </div>
+                </div>
 
 
                 <div class="row toggle-btn pad-top-10" *ngIf="showWasteWaterOptions && showRollupReportOptions"
@@ -112,7 +122,7 @@
                     </div>
                 </div>    
 
-                <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions"
+                <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions || showCompressedAirOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printExecutiveSummary"></app-animated-checkmark>
@@ -174,7 +184,7 @@
                     </div>
                 </div>
                 
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunityPayback')">
+                <div *ngIf="showTHReportOptions || showCompressedAirOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunityPayback')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
                         </app-animated-checkmark>

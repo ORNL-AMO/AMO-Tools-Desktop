@@ -33,8 +33,9 @@ export class UpdateDataService {
                 return this.updateSSMT(assessment);
             } else if (assessment.type === 'TreasureHunt') {
                 return this.updateTreasureHunt(assessment);
-            }
-            else {
+            } else if (assessment.type === 'WasteWater') {
+                return this.updateWasteWater(assessment);
+            } else {
                 return assessment;
             }
         }
@@ -48,11 +49,36 @@ export class UpdateDataService {
         }
     }
 
+    updateWasteWater(assessment: Assessment): Assessment {
+        //logic for updating wastewater data
+        assessment.appVersion = packageJson.version;
+        if (!assessment.wasteWater.baselineData.operations) {
+            assessment.wasteWater.baselineData.operations = {
+                MaxDays: 100,
+                TimeIncrement: .5,
+                operatingMonths: 12,
+                EnergyCostUnit: 0.09
+            };
+        };
+
+        if (assessment.wasteWater.modifications) {
+            assessment.wasteWater.modifications.forEach(mod => {
+                mod.operations = {
+                    MaxDays: 100,
+                    TimeIncrement: .5,
+                    operatingMonths: 12,
+                    EnergyCostUnit: 0.09
+                };
+            })
+        }
+
+        return assessment;
+    }
+
 
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
-
         if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
         }         

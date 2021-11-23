@@ -3,11 +3,11 @@ import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData, WasteWaterValid } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, WasteWater, WasteWaterData, WasteWaterOperations, WasteWaterResults, WasteWaterTreatmentInputData, WasteWaterValid } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
-import { SystemBasicsService } from './system-basics/system-basics.service';
+import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 
 declare var wasteWaterAddon: any;
 @Injectable()
@@ -24,8 +24,8 @@ export class WasteWaterService {
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
-  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private systemBasicsService: SystemBasicsService,
-    private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService) {
+  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
+    private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService, private operationsService: WasteWaterOperationsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
@@ -40,26 +40,27 @@ export class WasteWaterService {
   }
 
   updateWasteWater(wasteWater: WasteWater) {
-    wasteWater.baselineData.valid = this.checkWasteWaterValid(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics);
+    wasteWater.baselineData.valid = this.checkWasteWaterValid(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.baselineData.operations);
     wasteWater.setupDone = wasteWater.baselineData.valid.isValid;
     wasteWater.modifications.forEach(mod => {
-      mod.valid = this.checkWasteWaterValid(mod.activatedSludgeData, mod.aeratorPerformanceData, wasteWater.systemBasics);
+      mod.valid = this.checkWasteWaterValid(mod.activatedSludgeData, mod.aeratorPerformanceData, mod.operations);
     });
     this.wasteWater.next(wasteWater);
   }
 
-  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, needCalculationsTable: boolean, baselineResults?: WasteWaterResults): WasteWaterResults {
-    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics).isValid;
+  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, operations: WasteWaterOperations, settings: Settings, needCalculationsTable: boolean, baselineResults?: WasteWaterResults): WasteWaterResults {
+    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, operations).isValid;
     if (isDataValid) {
       let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
       let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
+      let operationsCopy: WasteWaterOperations = JSON.parse(JSON.stringify(operations));
       if (settings.unitsOfMeasure != 'Imperial') {
         let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
         settingsCopy.unitsOfMeasure = 'Imperial';
         activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
         aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
       }
-      let inputData: WasteWaterTreatmentInputData = this.mapWasteWaterTreatementInputData(activatedSludgeCopy, aeratorPerformanceCopy, systemBasics);
+      let inputData: WasteWaterTreatmentInputData = this.mapWasteWaterTreatementInputData(activatedSludgeCopy, aeratorPerformanceCopy, operationsCopy);
       let wasteWaterResults: WasteWaterResults;
       if (activatedSludgeCopy.CalculateGivenSRT == true) {
         wasteWaterResults = this.calculateResultsDefinedSRT(inputData);
@@ -71,8 +72,8 @@ export class WasteWaterService {
         wasteWaterResults = this.calculateResultsDefinedMLSS(inputData);
       }
       //return per month, convert to years
-      wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
-      wasteWaterResults.AeCost = wasteWaterResults.AeCost * systemBasics.operatingMonths;
+      wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * operations.operatingMonths;
+      wasteWaterResults.AeCost = wasteWaterResults.AeCost * operations.operatingMonths;
       wasteWaterResults.AeEnergyAnnual = this.convertUnitsService.value(wasteWaterResults.AeEnergyAnnual).from('kWh').to('MWh');
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
@@ -109,7 +110,7 @@ export class WasteWaterService {
     return wasteWaterResults;
   }
 
-  mapWasteWaterTreatementInputData(activatedSludge: ActivatedSludgeData, aeratorPerformance: AeratorPerformanceData, systemBasics: SystemBasics): WasteWaterTreatmentInputData {
+  mapWasteWaterTreatementInputData(activatedSludge: ActivatedSludgeData, aeratorPerformance: AeratorPerformanceData, operations: WasteWaterOperations): WasteWaterTreatmentInputData {
     let inputData: WasteWaterTreatmentInputData = {
       Temperature: activatedSludge.Temperature,
       So: activatedSludge.So,
@@ -128,8 +129,8 @@ export class WasteWaterService {
       HalfSaturation: activatedSludge.HalfSaturation,
       MicrobialDecay: activatedSludge.MicrobialDecay,
       MaxUtilizationRate: activatedSludge.MaxUtilizationRate,
-      MaxDays: systemBasics.MaxDays,
-      TimeIncrement: systemBasics.TimeIncrement,
+      MaxDays: operations.MaxDays,
+      TimeIncrement: operations.TimeIncrement,
       OperatingDO: aeratorPerformance.OperatingDO,
       Alpha: aeratorPerformance.Alpha,
       Beta: aeratorPerformance.Beta,
@@ -139,7 +140,7 @@ export class WasteWaterService {
       OperatingTime: aeratorPerformance.OperatingTime,
       TypeAerators: aeratorPerformance.TypeAerators,
       Speed: aeratorPerformance.Speed,
-      EnergyCostUnit: aeratorPerformance.EnergyCostUnit,
+      EnergyCostUnit: operations.EnergyCostUnit,
       DefinedSRT: activatedSludge.DefinedSRT
     }
     return inputData;
@@ -190,22 +191,21 @@ export class WasteWaterService {
 
 
   setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
-
     modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
     modificationResults.energySavings = baselineResults.AeEnergyAnnual - modificationResults.AeEnergyAnnual;
     modificationResults.percentCostSavings = (modificationResults.costSavings / baselineResults.AeCost) * 100;
     return modificationResults;
   }
 
-  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics): WasteWaterValid {
+  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, operations: WasteWaterOperations): WasteWaterValid {
     let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
     let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
-    let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
+    let operationsForm: FormGroup = this.operationsService.getFormFromObj(operations);
     return {
       activatedSludgeValid: activatedSludgeForm.valid,
       aeratorPerformanceValid: aeratorPerformanceForm.valid,
-      systemBasicsValid: systemBasicsForm.valid,
-      isValid: activatedSludgeForm.valid && aeratorPerformanceForm.valid && systemBasicsForm.valid
+      isValid: activatedSludgeForm.valid && aeratorPerformanceForm.valid && operationsForm.valid,
+      operationsValid: operationsForm.valid
     };
   }
 
@@ -271,7 +271,7 @@ export class WasteWaterService {
     if (!modification.aeratorPerformanceData.OperatingDO || modification.aeratorPerformanceData.OperatingDO < 0) {
       modification.aeratorPerformanceData.OperatingDO = 1;
     }
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let optimalDo: number = modification.aeratorPerformanceData.OperatingDO;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -291,7 +291,7 @@ export class WasteWaterService {
       modification.aeratorPerformanceData.OperatingDO = optimalDo;
       modification.activatedSludgeData.DefinedSRT = definedSRT;
       modification.activatedSludgeData.CalculateGivenSRT = true;
-      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
@@ -312,7 +312,7 @@ export class WasteWaterService {
       modification.aeratorPerformanceData.OperatingTime = 24;
     }
 
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let operatingTime: number = modification.aeratorPerformanceData.OperatingTime;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -337,7 +337,7 @@ export class WasteWaterService {
       modification.aeratorPerformanceData.OperatingTime = operatingTime;
       modification.activatedSludgeData.DefinedSRT = definedSRT;
       modification.activatedSludgeData.CalculateGivenSRT = true;
-      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
@@ -372,7 +372,7 @@ export class WasteWaterService {
       || modification.aeratorPerformanceData.Speed < 0) {
       modification.aeratorPerformanceData.Speed = 100;
     }
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let speed: number = modification.aeratorPerformanceData.Speed;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -394,7 +394,7 @@ export class WasteWaterService {
       modification.aeratorPerformanceData.Speed = speed;
       modification.activatedSludgeData.DefinedSRT = definedSRT;
       modification.activatedSludgeData.CalculateGivenSRT = true;
-      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }

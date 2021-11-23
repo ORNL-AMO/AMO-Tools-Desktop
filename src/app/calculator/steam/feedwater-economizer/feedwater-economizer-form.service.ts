@@ -5,33 +5,38 @@ import { FlueGasByVolume, MaterialInputProperties } from '../../../shared/models
 import { Settings } from '../../../shared/models/settings';
 import { FeedwaterEconomizerInput } from '../../../shared/models/steam/feedwaterEconomizer';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { SteamService } from '../steam.service';
 
 @Injectable()
 export class FeedwaterEconomizerFormService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService,
+    private steamService: SteamService) { }
 
   getFeedwaterEconomizerForm(inputObj: FeedwaterEconomizerInput, settings: Settings): FormGroup {
+    let steamTemperatureValidators: Array<ValidatorFn> = this.getSteamTemperatureValidators(inputObj.steamCondition, settings);
+
+
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [inputObj.fuelCost, [Validators.required, Validators.min(0)]],
-      flueGasTemperature:[inputObj.flueGasTemperature, Validators.required],
-      fuelTemp:[inputObj.fuelTemp, Validators.required],
+      flueGasTemperature: [inputObj.flueGasTemperature, Validators.required],
+      fuelTemp: [inputObj.fuelTemp, Validators.required],
       materialTypeId: [inputObj.materialTypeId],
       oxygenCalculationMethod: [inputObj.oxygenCalculationMethod, Validators.required],
-      flueGasO2:[inputObj.flueGasO2, Validators.required],
-      excessAir:[inputObj.excessAir, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      combustionAirTemperature:[inputObj.combustionAirTemperature, Validators.required],
-      ambientAirTemperature:[inputObj.ambientAirTemperature, Validators.required],
-      moistureInCombustionAir:[inputObj.moistureInCombustionAir, [Validators.required, Validators.min(0), Validators.max(100)]],
-      energyRateInput:[inputObj.energyRateInput, [Validators.required, Validators.min(0)]],
-      steamPressure:[inputObj.steamPressure, [Validators.required, Validators.min(0)]],
-      steamCondition:[inputObj.steamCondition],
-      steamTemperature:[inputObj.steamTemperature, [Validators.required, Validators.min(0)]],
-      feedWaterTemperature:[inputObj.feedWaterTemperature, this.getTemperatureValidators(32, settings)],
-      percBlowdown:[inputObj.percBlowdown, [Validators.required, Validators.min(0)]],
-      hxEfficiency:[inputObj.hxEfficiency, [Validators.required, Validators.min(0)]],
-      higherHeatingVal:[inputObj.higherHeatingVal, Validators.required],
+      flueGasO2: [inputObj.flueGasO2, Validators.required],
+      excessAir: [inputObj.excessAir, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      combustionAirTemperature: [inputObj.combustionAirTemperature, Validators.required],
+      ambientAirTemperature: [inputObj.ambientAirTemperature, Validators.required],
+      moistureInCombustionAir: [inputObj.moistureInCombustionAir, [Validators.required, Validators.min(0), Validators.max(100)]],
+      energyRateInput: [inputObj.energyRateInput, [Validators.required, Validators.min(0)]],
+      steamPressure: [inputObj.steamPressure, [Validators.required, Validators.min(0)]],
+      steamCondition: [inputObj.steamCondition],
+      steamTemperature: [inputObj.steamTemperature, steamTemperatureValidators],
+      feedWaterTemperature: [inputObj.feedWaterTemperature, this.getTemperatureValidators(32, settings)],
+      percBlowdown: [inputObj.percBlowdown, [Validators.required, Validators.min(0)]],
+      hxEfficiency: [inputObj.hxEfficiency, [Validators.required, Validators.min(0)]],
+      higherHeatingVal: [inputObj.higherHeatingVal, Validators.required],
       CH4: [inputObj.CH4, Validators.required],
       C2H6: [inputObj.C2H6, Validators.required],
       N2: [inputObj.N2, Validators.required],
@@ -43,20 +48,35 @@ export class FeedwaterEconomizerFormService {
       CO2: [inputObj.CO2, Validators.required],
       SO2: [inputObj.SO2, Validators.required],
       O2: [inputObj.O2, Validators.required],
-      
+
     });
 
     return form;
   }
 
-  getTemperatureValidators(tempMin: number, settings: Settings): Array<ValidatorFn> {
-      let minTempConverted: number;
-      if (settings.unitsOfMeasure != 'Imperial') {
-        tempMin = this.convertUnitsService.value(tempMin).from('F').to('C');
-        tempMin = Math.round(tempMin);
+  getSteamTemperatureValidators(steamCondition: number, settings: Settings): Array<ValidatorFn> {
+    let steamTemperatureValidators: Array<ValidatorFn> = [];
+    if (steamCondition == 0) {
+      //TODO: CONVERT CALCULATOR TO USE STEAM UNITS..
+      if (settings.unitsOfMeasure == 'Metric') {
+        settings.steamTemperatureMeasurement = 'C';
+      } else {
+        settings.steamTemperatureMeasurement = 'F';
       }
-      minTempConverted = tempMin;
-      return [Validators.required, Validators.min(minTempConverted)];
+      let tempRanges: { min: number, max: number } = this.steamService.getQuantityRange(settings, 0);
+      steamTemperatureValidators = [Validators.min(tempRanges.min), Validators.max(tempRanges.max), Validators.required];
+    }
+    return steamTemperatureValidators;
+  }
+
+  getTemperatureValidators(tempMin: number, settings: Settings): Array<ValidatorFn> {
+    let minTempConverted: number;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      tempMin = this.convertUnitsService.value(tempMin).from('F').to('C');
+      tempMin = Math.round(tempMin);
+    }
+    minTempConverted = tempMin;
+    return [Validators.required, Validators.min(minTempConverted)];
   }
 
   getFeedwaterEconomizerInput(form: FormGroup): FeedwaterEconomizerInput {
@@ -97,21 +117,21 @@ export class FeedwaterEconomizerFormService {
 
   getMaterialInputProperties(form: FormGroup): MaterialInputProperties {
     let input: MaterialInputProperties;
-      input = {
-        CH4: form.controls.CH4.value,
-        C2H6: form.controls.C2H6.value,
-        N2: form.controls.N2.value,
-        H2: form.controls.H2.value,
-        C3H8: form.controls.C3H8.value,
-        C4H10_CnH2n: form.controls.C4H10_CnH2n.value,
-        H2O: form.controls.H2O.value,
-        CO: form.controls.CO.value,
-        CO2: form.controls.CO2.value,
-        SO2: form.controls.SO2.value,
-        O2: form.controls.O2.value,
-        o2InFlueGas: form.controls.flueGasO2.value,
-        excessAir: form.controls.excessAir.value
-      };
+    input = {
+      CH4: form.controls.CH4.value,
+      C2H6: form.controls.C2H6.value,
+      N2: form.controls.N2.value,
+      H2: form.controls.H2.value,
+      C3H8: form.controls.C3H8.value,
+      C4H10_CnH2n: form.controls.C4H10_CnH2n.value,
+      H2O: form.controls.H2O.value,
+      CO: form.controls.CO.value,
+      CO2: form.controls.CO2.value,
+      SO2: form.controls.SO2.value,
+      O2: form.controls.O2.value,
+      o2InFlueGas: form.controls.flueGasO2.value,
+      excessAir: form.controls.excessAir.value
+    };
 
     return input;
   }

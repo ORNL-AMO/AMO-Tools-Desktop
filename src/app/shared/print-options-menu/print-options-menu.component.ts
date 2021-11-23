@@ -12,6 +12,7 @@ import { SsmtReportRollupService } from '../../report-rollup/ssmt-report-rollup.
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../../report-rollup/waste-water-report-rollup.service';
 import { Settings } from '../models/settings';
+import { CompressedAirReportRollupService } from '../../report-rollup/compressed-air-report-rollup.service';
 
 @Component({
   selector: 'app-print-options-menu',
@@ -32,17 +33,19 @@ export class PrintOptionsMenuComponent implements OnInit {
   showSsmtReportOptions: boolean = false;
   showTHReportOptions: boolean = false;
   showWasteWaterOptions: boolean = false;
+  showCompressedAirOptions: boolean = false;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
-    private ssmtReportRollupService: SsmtReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+    private ssmtReportRollupService: SsmtReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService,
+    private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit() {
-      this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
-          this.printOptions = val;
-        });
-      this.setContext();
-      this.printOptions = this.printOptionsMenuService.setPrintOptionsFromSettings();
-    }
+    this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
+      this.printOptions = val;
+    });
+    this.setContext();
+    this.printOptions = this.printOptionsMenuService.setPrintOptionsFromSettings();
+  }
 
   ngAfterViewInit() {
     this.showPrintModal();
@@ -66,6 +69,8 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showTHReportOptions = true;
     } else if (printContext == 'wasteWater') {
       this.showWasteWaterOptions = true;
+    } else if (printContext == 'compressedAir') {
+      this.showCompressedAirOptions = true;
     } else if (printContext == 'reportRollup') {
       this.showRollupReportOptions = true;
       this.showPsatReportOptions = (this.psatReportRollupService.psatAssessments.getValue().length != 0);
@@ -74,6 +79,8 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showSsmtReportOptions = (this.ssmtReportRollupService.ssmtAssessments.getValue().length != 0);
       this.showTHReportOptions = (this.treasureHuntReportRollupService.treasureHuntAssessments.getValue().length != 0);
       this.showWasteWaterOptions = (this.wasteWaterReportRollupService.wasteWaterAssessments.getValue().length != 0);
+      this.showCompressedAirOptions = (this.compressedAirReportRollupService.compressedAirAssessments.getValue().length != 0)
+
     }
   }
 

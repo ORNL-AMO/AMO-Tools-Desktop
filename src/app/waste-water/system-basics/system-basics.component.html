@@ -19,64 +19,6 @@
         [inTreasureHunt]="true">
     </app-application-settings>
     <form class="pl-3 pr-3" #formRef [formGroup]="systemBasicsForm">
-        <label class="group-label">Modeling Conditions</label>
-        <!-- MaxDays -->
-        <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.MaxDays.invalid}">
-            <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
-            <div class="input-group">
-                <input type="number" name="MaxDays" class="form-control number-input-field" id="MaxDays"
-                    (focus)="focusField('MaxDays')" (input)="saveSystemBasics()" formControlName="MaxDays">
-                <span class="input-group-addon units">days</span>
-            </div>
-            <span *ngIf="systemBasicsForm.controls.MaxDays.invalid && !systemBasicsForm.controls.MaxDays.pristine">
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.MaxDays.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small" *ngIf="systemBasicsForm.controls.MaxDays.errors.min">Value
-                    can't be
-                    less than {{systemBasicsForm.controls.MaxDays.errors.min.min}} days</span>
-            </span>
-        </div>
-        <!--TimeIncrement-->
-        <!-- <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.TimeIncrement.invalid}">
-            <label for="TimeIncrement">Time Step for SRT Modeling</label>
-            <div class="input-group">
-                <input type="number" name="TimeIncrement" class="form-control number-input-field" id="TimeIncrement"
-                    (focus)="focusField('TimeIncrement')" (input)="saveSystemBasics()" formControlName="TimeIncrement">
-                <span class="input-group-addon units">days</span>
-            </div>
-            <span
-                *ngIf="systemBasicsForm.controls.TimeIncrement.invalid && !systemBasicsForm.controls.TimeIncrement.pristine">
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.TimeIncrement.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.TimeIncrement.errors.min">Value can't
-                    be less than {{systemBasicsForm.controls.TimeIncrement.errors.min.min}} days</span>
-            </span>
-        </div> -->
-        <!--operatingMonths-->
-        <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.operatingMonths.invalid}">
-            <label for="operatingMonths">Operating Months</label>
-            <div class="input-group">
-                <input type="number" name="operatingMonths" class="form-control number-input-field" id="operatingMonths"
-                    (focus)="focusField('operatingMonths')" (input)="saveSystemBasics()"
-                    formControlName="operatingMonths">
-                <span class="input-group-addon units">months</span>
-            </div>
-            <span
-                *ngIf="systemBasicsForm.controls.operatingMonths.invalid && !systemBasicsForm.controls.operatingMonths.pristine">
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.operatingMonths.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.operatingMonths.errors.min">Value can't
-                    be less than {{systemBasicsForm.controls.operatingMonths.errors.min.min}} months</span>
-                <span class="alert-danger pull-right small"
-                    *ngIf="systemBasicsForm.controls.operatingMonths.errors.max">Value can't
-                    be greater than {{systemBasicsForm.controls.operatingMonths.errors.max.max}} months</span>
-            </span>
-        </div>
         <!--Equipment Notes-->
         <div class="form-group pt-4">
             <label class="group-label w-100">Equipment Notes</label>

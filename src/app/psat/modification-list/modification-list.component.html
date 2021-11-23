@@ -7,7 +7,7 @@
             <span class="bold">Name</span>
           </div>
           <div class="col-3 border-right">
-            <span class="bold">Compare two existing pumps or what-if scenario?</span>
+            <span class="bold small">Compare two existing pumps or explore pump modifications?</span>
           </div>
           <div class="col-1 border-right">
 
@@ -57,17 +57,13 @@
 
                 <span [ngClass]="{'disabled-link': getBadges(modification.psat).length > 0}">
                   <div class="form-check" [ngClass]="{'disabled-link': index != modificationIndex}">
-                    <span>
+                    <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
+                      [(ngModel)]="modification.psat.inputs.whatIfScenario" (input)="saveScenarioChange(true, index)">
+                    <label for="{{'whatIf_'+index}}">Modify Pump</label><br>
 
-                      <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
-                        (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.psat.inputs.whatIfScenario">
-                      <label for="{{'twoExisting_'+index}}">Two Existing Pumps</label><br>
-
-                      <input type="radio" id="{{'whatIf_'+index}}" name="{{'whatIf_'+index}}" [value]="true"
-                        [(ngModel)]="modification.psat.inputs.whatIfScenario" (input)="saveScenarioChange(true, index)">
-                      <label for="{{'whatIf_'+index}}">What If Scenario</label><br>
-                    </span>
-
+                    <input type="radio" id="{{'twoExisting_'+index}}" name="{{'twoExisting_'+index}}" [value]="false"
+                      (input)="saveScenarioChange(false, index)" [(ngModel)]="modification.psat.inputs.whatIfScenario">
+                    <label for="{{'twoExisting_'+index}}">Compare Two Pumps</label><br>
                   </div>
                 </span>
               </form>

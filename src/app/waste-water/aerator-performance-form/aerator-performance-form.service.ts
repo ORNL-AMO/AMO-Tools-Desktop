@@ -19,7 +19,6 @@ export class AeratorPerformanceFormService {
       TypeAerators: [obj.TypeAerators, [Validators.required, Validators.min(0)]],
       Aerator: [obj.Aerator],
       Speed: [obj.Speed, [Validators.required, Validators.min(0), Validators.max(100)]],
-      EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]],
       AnoxicZoneCondition: [obj.AnoxicZoneCondition]
     });
     for (let key in form.controls) {
@@ -42,7 +41,6 @@ export class AeratorPerformanceFormService {
       TypeAerators: form.controls.TypeAerators.value,
       Aerator: form.controls.Aerator.value,
       Speed: form.controls.Speed.value,
-      EnergyCostUnit: form.controls.EnergyCostUnit.value,
       AnoxicZoneCondition: form.controls.AnoxicZoneCondition.value
     }
   }

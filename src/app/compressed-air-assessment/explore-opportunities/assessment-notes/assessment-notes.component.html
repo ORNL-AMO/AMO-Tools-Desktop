@@ -1,0 +1,5 @@
+<div class="note-form" *ngIf="selectedModificationIndex != undefined">
+    <textarea rows="6" id="notes" (input)="save()"
+        [(ngModel)]="compressedAirAssessment.modifications[selectedModificationIndex].notes"
+        placeholder="Add notes for modifications"></textarea>
+</div>

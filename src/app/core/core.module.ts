@@ -35,6 +35,7 @@ import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
+import { CompressedAirAssessmentModule } from '../compressed-air-assessment/compressed-air-assessment.module';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { WasteWaterModule } from '../waste-water/waste-water.module';
     DashboardModule,
     LogToolModule,
     MotorInventoryModule,
-    WasteWaterModule
+    WasteWaterModule,
+    CompressedAirAssessmentModule
   ],
   providers: [
     AssessmentService,

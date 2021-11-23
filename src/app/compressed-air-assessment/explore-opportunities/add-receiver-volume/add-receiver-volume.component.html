@@ -1,0 +1,62 @@
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="addPrimaryReceiverVolume">
+            Add Primary Receiver Volume
+            <span *ngIf="form.invalid && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="addPrimaryReceiverVolumeOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
+    <div *ngIf="form.controls.order.value != 100" class="mb-2 pt-1">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="receiverVolumeImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="receiverVolumeImplementationCost" id="receiverVolumeImplementationCost" (input)="save(false)"
+                    (focus)="helpTextField('implementationCost')" min="0">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label>Existing air storage capacity</label>
+            <div class="text-center small">
+                {{existingCapacity | number}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </div>
+        </div>
+        <div class="form-group" [ngClass]="{'invalid': form.controls.increasedVolume.invalid}">
+            <label for="increasedVolume">Increased Volume</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="increasedVolume" name="increasedVolume"
+                    id="increasedVolume" (input)="save(false)" (focus)="helpTextField('increasedVolume')" min="0">
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.increasedVolume.invalid && !form.controls.increasedVolume.pristine">
+                <span *ngIf="form.controls.increasedVolume.errors.required">Value Required</span>
+                <span *ngIf="form.controls.increasedVolume.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label>Proposed air storage capacity</label>
+            <div class="text-center small">
+                {{existingCapacity + form.controls.increasedVolume.value | number}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </div>
+        </div>
+    </div>
+</form>

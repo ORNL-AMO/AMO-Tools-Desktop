@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume, FlueGasHeatingValue, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults, FlueGasHeatingValue, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -356,12 +356,14 @@ export class PhastService {
     results = this.convertResult(results, conversionUnit);
     return results;
   }
-
-  flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
-    let inputCopy = this.createInputCopy(input);
-    let results = 0;
+  
+  flueGasByVolume(input: FlueGasByVolume, settings: Settings): FlueGasByVolumeSuiteResults {
+    let inputCopy: FlueGasByVolume = this.createInputCopy(input);
+    let results: FlueGasByVolumeSuiteResults;
+    // Suite named inputs
     inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
-    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion;
+    inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion / 100;
+    inputCopy.flueGasO2Percentage = inputCopy.o2InFlueGas;
     if (settings.unitsOfMeasure === 'Metric') {
       inputCopy.combustionAirTemperature = this.convertUnitsService.value(inputCopy.combustionAirTemperature).from('C').to('F');
       inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');
@@ -535,7 +537,8 @@ export class PhastService {
       results.newEnergyInput = this.convertUnitsService.value(results.newEnergyInput).from('MMBtu').to('GJ');
       return results;
     } else {
-      return phastAddon.efficiencyImprovement(inputs);
+      let results = phastAddon.efficiencyImprovement(inputs);
+      return results;
     }
   }
 
@@ -591,7 +594,8 @@ export class PhastService {
       results.fuelConsumptionEnriched = this.convertUnitsService.value(results.fuelConsumptionEnriched).from('MMBtu').to('GJ');
       return results;
     } else {
-      return phastAddon.o2Enrichment(inputs);
+      let results = phastAddon.o2Enrichment(inputs);
+      return results;
     }
   }
 

@@ -8,6 +8,7 @@ import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
 import { MotorDriveTypePipe } from './motor-drive-type.pipe';
 import { WasteWaterOptionsDisplayPipe } from './waste-water-options-display.pipe';
 import { RemoveCommasPipe } from './remove-commas.pipe';
+import { SortByPipe } from './sort-by.pipe';
 import { CurrencyThousandsPipe } from './currency-thousands.pipe';
 
 
@@ -22,6 +23,7 @@ import { CurrencyThousandsPipe } from './currency-thousands.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
+    SortByPipe,
     CurrencyThousandsPipe,
   ],
   imports: [
@@ -36,6 +38,7 @@ import { CurrencyThousandsPipe } from './currency-thousands.pipe';
     MotorDriveTypePipe,
     WasteWaterOptionsDisplayPipe,
     RemoveCommasPipe,
+    SortByPipe,
     CurrencyThousandsPipe
   ]
 })
