@@ -101,6 +101,25 @@ export class DepartmentCatalogTableComponent implements OnInit {
     return tableDataItem;
   }
 
+  createCopy(motorItem: MotorItem){
+    let motorItemCopy: MotorItem = JSON.parse(JSON.stringify(motorItem));
+    motorItemCopy.name = motorItem.name + ' (copy)';
+    motorItemCopy.id = Math.random().toString(36).substr(2, 9);
+    
+    this.motorInventoryData.departments.forEach(department => {
+      if (department.id == this.selectedDepartmentId) {
+        department.catalog.push(motorItemCopy);
+      }
+    });
+    this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
+    this.motorCatalogService.selectedMotorItem.next(motorItemCopy);
+
+  }
+
+  openConfirmDeleteModal(motorItem: MotorItem){
+    this.motorInventoryService.deleteMotorItem(motorItem);
+  }
+
 }
 
 export interface DepartmentCatalogTableDataItem {
