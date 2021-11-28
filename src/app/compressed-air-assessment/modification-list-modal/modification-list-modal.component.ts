@@ -117,6 +117,7 @@ export class ModificationListModalComponent implements OnInit {
   addNewModification() {
     let modification: Modification = this.exploreOpportunitiesServce.getNewModification(this.compressedAirAssessment);
     modification.name = this.newModificationName ? this.newModificationName : modification.name;
+    // Race conditions between selectedModificationId and compressedAirAssessmentSub
     this.compressedAirAssessment.modifications.push(modification);
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.compressedAirAssessmentService.selectedModificationId.next(modification.modificationId);
