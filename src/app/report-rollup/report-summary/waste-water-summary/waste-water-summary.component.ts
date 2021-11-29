@@ -4,7 +4,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.service';
-import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-waste-water-summary',

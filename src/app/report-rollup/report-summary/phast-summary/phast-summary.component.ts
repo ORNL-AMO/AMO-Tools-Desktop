@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
-import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 import * as _ from 'lodash';
 
 @Component({

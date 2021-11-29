@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit {
   onWindowScroll() {
     this.checkActiveAssessment();
   }
-  
+
   focusedAssessment: Assessment;
 
   sidebarCollapsed: boolean = false;
@@ -96,18 +96,19 @@ export class SidebarComponent implements OnInit {
     });
 
     this.wasteWaterAssessmentsSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(items => {
-      if(items){
+      if (items) {
         this._wasteWaterAssessments = items;
       }
     });
 
     this.compressedAirAssessmentsSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(items => {
-      if(items){
+      if (items) {
         this._compressedAirAssessments = items;
       }
     })
 
-    this.initFocusedAssessment();
+    // this.initFocusedAssessment();
+    this.setFocusGraphs();
   }
 
   ngOnDestroy() {
@@ -125,41 +126,56 @@ export class SidebarComponent implements OnInit {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
-  initFocusedAssessment() {
-    if (!this.focusedAssessment) {
-      if (this._psatAssessments.length != 0) {
-        this.focusedAssessment = this._psatAssessments[0].assessment;
-      } else if (this._phastAssessments.length != 0) {
-        this.focusedAssessment = this._phastAssessments[0].assessment;
-      } else if (this._fsatAssessments.length != 0) {
-        this.focusedAssessment = this._fsatAssessments[0].assessment;
-      } else if (this._ssmtAssessments.length != 0) {
-        this.focusedAssessment = this._ssmtAssessments[0].assessment;
-      } else if (this._treasureHuntAssessments.length != 0) {
-        this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
-      } else if(this._wasteWaterAssessments.length != 0){
-        this.focusedAssessment = this._wasteWaterAssessments[0].assessment;
-      } else if(this._compressedAirAssessments.length != 0){
-        this.focusedAssessment = this._compressedAirAssessments[0].assessment;
-      }
-    }
-  }
+  // initFocusedAssessment() {
+  //   if (!this.focusedAssessment) {
+  //     if (this._psatAssessments.length != 0) {
+  //       this.focusedAssessment = this._psatAssessments[0].assessment;
+  //     } else if (this._phastAssessments.length != 0) {
+  //       this.focusedAssessment = this._phastAssessments[0].assessment;
+  //     } else if (this._fsatAssessments.length != 0) {
+  //       this.focusedAssessment = this._fsatAssessments[0].assessment;
+  //     } else if (this._ssmtAssessments.length != 0) {
+  //       this.focusedAssessment = this._ssmtAssessments[0].assessment;
+  //     } else if (this._treasureHuntAssessments.length != 0) {
+  //       this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
+  //     } else if(this._wasteWaterAssessments.length != 0){
+  //       this.focusedAssessment = this._wasteWaterAssessments[0].assessment;
+  //     } else if(this._compressedAirAssessments.length != 0){
+  //       this.focusedAssessment = this._compressedAirAssessments[0].assessment;
+  //     }
+  //   }
+  // }
 
   setFocused(assessment: Assessment) {
     this.focusedAssessment = assessment;
   }
 
+  setFocusGraphs() {
+    this.focusedAssessment = {
+      id: undefined,
+      type: undefined,
+      name: undefined
+    }
+  }
+
   checkActiveAssessment() {
     let scrollAmount = this.windowRefService.nativeWindow.pageYOffset;
     if (scrollAmount) {
-      this._reportAssessments.forEach(item => {
-        let doc = this.windowRefService.getDoc();
-        let element = doc.getElementById('assessment_' + item.assessment.id);
-        let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
-        if (diff > 0 && diff < 50) {
-          this.focusedAssessment = item.assessment;
-        }
-      });
+      let doc = this.windowRefService.getDoc();
+      let element = doc.getElementById('rollup_graphs');
+      let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
+      if (diff > 0 && diff < 50) {
+        this.setFocusGraphs();
+      } else {
+        this._reportAssessments.forEach(item => {
+          let doc = this.windowRefService.getDoc();
+          let element = doc.getElementById('assessment_' + item.assessment.id);
+          let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
+          if (diff > 0 && diff < 50) {
+            this.focusedAssessment = item.assessment;
+          }
+        });
+      }
     }
   }
 }

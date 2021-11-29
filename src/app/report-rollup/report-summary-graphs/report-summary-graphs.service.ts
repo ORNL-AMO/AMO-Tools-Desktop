@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Settings } from '../../../shared/models/settings';
-import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { Settings } from '../../shared/models/settings';
+import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 
 @Injectable()
 export class ReportSummaryGraphsService {

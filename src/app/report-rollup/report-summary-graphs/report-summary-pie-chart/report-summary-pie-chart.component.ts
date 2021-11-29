@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import * as Plotly from 'plotly.js';
-import { PieChartDataItem } from '../../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 
 @Component({
   selector: 'app-report-summary-pie-chart',
@@ -75,7 +75,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      automargin: true,
+      // automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: textTemplate,
@@ -90,8 +90,8 @@ export class ReportSummaryPieChartComponent implements OnInit {
         size: 14,
       },
       showlegend: false,
-      margin: { autoexpand: true },
-      autosize: true
+      // margin: { autoexpand: true },
+      // autosize: true
     };
 
     var modebarBtns = {

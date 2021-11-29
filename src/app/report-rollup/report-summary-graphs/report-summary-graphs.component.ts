@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService } from '../../report-rollup.service';
-import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { Settings } from '../../shared/models/settings';
+import { ReportRollupService } from '../report-rollup.service';
+import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { ReportSummaryGraphsService } from './report-summary-graphs.service';
 
 @Component({
