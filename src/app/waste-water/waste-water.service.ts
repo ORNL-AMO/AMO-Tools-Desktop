@@ -93,7 +93,6 @@ export class WasteWaterService {
         }
         
       }
-      console.log(wasteWaterResults.costSavings);
       wasteWaterResults = this.convertWasteWaterService.convertResultsCosts(wasteWaterResults, settings);
       return wasteWaterResults;
     }
