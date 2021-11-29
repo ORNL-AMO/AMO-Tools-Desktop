@@ -28,6 +28,8 @@ export class OperationsFormComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;

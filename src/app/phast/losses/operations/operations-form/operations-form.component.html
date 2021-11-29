@@ -57,6 +57,11 @@
     </div>
   </div>
 </form>
+<div *ngIf="inSetup" class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>Carbon Emissions</h3>
+  </div>
+</div>
 
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
