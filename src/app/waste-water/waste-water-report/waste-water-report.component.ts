@@ -51,9 +51,12 @@ export class WasteWaterReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
+    this.assessment.wasteWater.baselineData.valid = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.baselineData.operations);
+    this.assessment.wasteWater.setupDone = this.assessment.wasteWater.baselineData.valid.isValid;
     if (this.assessment.wasteWater.setupDone) {
       this.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.baselineData.operations, this.settings, true);
       this.assessment.wasteWater.modifications.forEach(mod => {
+        mod.valid = this.wasteWaterService.checkWasteWaterValid(mod.activatedSludgeData, mod.aeratorPerformanceData, mod.operations);
         mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, mod.operations, this.settings, true, this.assessment.wasteWater.baselineData.outputs);
       });
       this.wasteWaterAnalysisService.setResults(this.assessment.wasteWater, this.settings);
