@@ -3,18 +3,18 @@ import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
+import { SteamService } from '../../calculator/steam/steam.service';
 
 
 @Injectable()
 export class BoilerService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
-
-    // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
+       // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
     // defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
 
     return this.formBuilder.group({
@@ -40,6 +40,7 @@ export class BoilerService {
     if (obj.preheatMakeupWater) {
       approachTempValidators = [Validators.min(0.000005), Validators.required];
     }
+    
     let form: FormGroup = this.formBuilder.group({
       'fuelType': [obj.fuelType, Validators.required],
       'fuel': [obj.fuel, Validators.required],
@@ -100,9 +101,9 @@ export class BoilerService {
   }
 
 
-  isBoilerValid(obj: BoilerInput, settings: Settings): boolean {
-    if (obj) {
-      let form: FormGroup = this.initFormFromObj(obj, settings);
+  isBoilerValid(boilerInput: BoilerInput, settings: Settings): boolean {
+    if (boilerInput) {
+      let form: FormGroup = this.initFormFromObj(boilerInput, settings);
       if (form.status === 'VALID') {
         return true;
       } else {
@@ -113,77 +114,50 @@ export class BoilerService {
     }
   }
 
-//   setApporachTempValidators(formGroup: FormGroup, ssmt: SSMT) {
-//     //method to check for valid input
-//     let pressure: number;
-//     let approachTemp = formGroup.controls.approachTemperature.value;
-//     let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
-    
-//     if(formGroup.controls.blowdownFlashed.value == false){
-//       // Double check if highPressureHeader or high pressure
-//     if(ssmt.headerInput.highPressureHeader){
-//      pressure = ssmt.headerInput.highPressureHeader.pressure;
-//       }else if(ssmt.headerInput.highPressure){
-//       pressure = ssmt.headerInput.highPressure.pressure;
-//     }
-//    }else if(formGroup.controls.blowdownFlashed.value == true){
-//      if(ssmt.headerInput.lowPressureHeader){
-//      pressure = ssmt.headerInput.lowPressureHeader.pressure;
-//       }else if(ssmt.headerInput.lowPressure){
-//    pressure = ssmt.headerInput.lowPressure.pressure;
-//  }
-// }
-
-//     if (approachTemp && pressure != undefined) { 
-//       let tempValue = pressure - makeUpWaterTemperature;   
-//       formGroup.controls.approachTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
-//       formGroup.controls.approachTemperature.markAsDirty();
-//       formGroup.controls.approachTemperature.updateValueAndValidity();
-//     }
-//     return formGroup;
-//   }
-
-  // For yellow warning 
-  checkBoilerWarnings(boilerInput: BoilerInput, ssmt: SSMT): BoilerWarnings {
+  checkBoilerWarnings(boilerForm: FormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
     return {
-      approachTemperature: this.checkApproachTempWarning(boilerInput, ssmt)
+      approachTemperature: this.checkApproachTempWarning(boilerForm, ssmt, settings)
     };
   }
 
-  // For yellow warning 
-  checkApproachTempWarning(boilerInput: BoilerInput, ssmt: SSMT): string {
-    let pressure: number;
-    if (boilerInput.blowdownFlashed == false) {
-      // Double check if highPressureHeader or high pressure
-      if (ssmt.headerInput.highPressureHeader) {
-        pressure = ssmt.headerInput.highPressureHeader.pressure;
-      } else if (ssmt.headerInput.highPressure) {
-        pressure = ssmt.headerInput.highPressure.pressure;
+
+  checkApproachTempWarning(boilerForm: FormGroup, ssmt: SSMT, settings: Settings) {
+    let warning = null;
+    if (boilerForm.controls.preheatMakeupWater.value == true) {
+      let pressure: number;
+      let saturatedTemperature: number;
+      let headerType: string;
+
+      if (boilerForm.controls.blowdownFlashed.value == false) {
+        headerType = 'high';
+        if (ssmt.headerInput.highPressureHeader) {
+          pressure = ssmt.headerInput.highPressureHeader.pressure;
+        } else if (ssmt.headerInput.highPressure) {
+          pressure = ssmt.headerInput.highPressure.pressure;
+        }
+      } else if (boilerForm.controls.blowdownFlashed.value == true) {
+        headerType = 'low';
+        if (ssmt.headerInput.lowPressureHeader) {
+          pressure = ssmt.headerInput.lowPressureHeader.pressure;
+        } else if (ssmt.headerInput.lowPressure) {
+          pressure = ssmt.headerInput.lowPressure.pressure;
+        }
       }
-    } else if (boilerInput.blowdownFlashed == true) {
-      if (ssmt.headerInput.lowPressureHeader) {
-        pressure = ssmt.headerInput.lowPressureHeader.pressure;
-      } else if (ssmt.headerInput.lowPressure) {
-        pressure = ssmt.headerInput.lowPressure.pressure;
+      
+      if (pressure) {
+        saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
+        saturatedTemperature = this.convertUnitsService.value(saturatedTemperature).from('K').to(settings.steamTemperatureMeasurement);
+        saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);
+        let maxValue = saturatedTemperature - ssmt.generalSteamOperations.makeUpWaterTemperature;
+        if (boilerForm.controls.approachTemperature.value > maxValue) {
+          warning = `Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of ${headerType} pressure header) and the makeup water temperature (${maxValue})`;
+        }
       }
     }
-    let approachTemp = boilerInput.approachTemperature;
-    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
-    let approachTempWarning = true;
-    let tempValue = pressure - makeUpWaterTemperature;
-    debugger;
-    if (approachTemp >= tempValue) {
-      return 'Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of low pressure header) and the makeup water temperature ' + tempValue;
-    } else {
-      return null
-    }
+    return warning;
   }
 
- }
-
- 
-
-
+}
 
 export interface BoilerRanges {
   steamTemperatureMin: number;
@@ -195,4 +169,6 @@ export interface BoilerRanges {
 
 export interface BoilerWarnings {
   approachTemperature?: string;
+  makeUpWaterTemperature?: string;
+  headerPressure?: string;
 }

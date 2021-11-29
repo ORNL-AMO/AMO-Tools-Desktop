@@ -100,22 +100,19 @@
         <div class="input-group">
           <input name="approachTemperature" type="number" step="any" class="form-control"
             id="{{idString+'approachTemperature'}}" (input)="save()" [readonly]="!selected"
-            formControlName="approachTemperature" (focus)="focusField('approachTemperature')" 
+            formControlName="approachTemperature" (focus)="focusField('approachTemperature')"
             [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
-          <span class="units input-group-addon"
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
           <span *ngIf="boilerForm.controls.approachTemperature.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value must be greater than 0 <span
-              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-          </span>
-
-      <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}}
-        <span
-              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-      </span>           
+              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>.
+        </span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </span>         
       </div>
 
 
@@ -140,11 +137,11 @@
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
         <span class="alert-warning pull-right small"
-          *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid">
-          <span *ngIf="highPressureHeaderForm.controls.pressure.errors.boilerTemp">Temperature must be greater than the
+          *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid 
+          && highPressureHeaderForm.controls.pressure.errors.boilerTemp">
+          Temperature must be greater than the
             saturation temperature at the highest pressure header.
-            ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span
-              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
+            ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
         </span>
       </div>
 

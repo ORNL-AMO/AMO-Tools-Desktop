@@ -11,12 +11,12 @@
         (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
-      <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [headerInput]="_ssmt.headerInput">
+      <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true">
       </app-boiler>
-      <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
+      <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
-        [isBaseline]="true" [boilerInput]="_ssmt.boilerInput"></app-header>
+        [isBaseline]="true"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput"
         [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true" [settings]="settings"
         (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>

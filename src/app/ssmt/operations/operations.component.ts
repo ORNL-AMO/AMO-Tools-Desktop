@@ -68,8 +68,6 @@ export class OperationsComponent implements OnInit {
   }
 
   save() {
-    // Reset validators to check values on every form change
-    this.operationsForm = this.operationsService.setMakeUpTempValidators(this.operationsForm, this.ssmt)
     let newData: {
       operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations
     } = this.operationsService.getOperationsDataFromForm(this.operationsForm);

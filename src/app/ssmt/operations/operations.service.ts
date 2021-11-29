@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { SteamService } from '../../calculator/steam/steam.service';
+import { BoilerWarnings } from '../boiler/boiler.service';
 
 @Injectable()
 export class OperationsService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getForm(ssmt: SSMT, settings: Settings): FormGroup {
     let makeupWaterTempMin: number = this.convertUnitsService.value(40).from('F').to(settings.steamTemperatureMeasurement);
@@ -25,7 +27,6 @@ export class OperationsService {
       hoursPerYear: [ssmt.operatingHours.hoursPerYear, [Validators.required, Validators.min(1), Validators.max(8760)]],
       implementationCosts: [ssmt.operatingCosts.implementationCosts, Validators.min(0)]
     })
-    form = this.setMakeUpTempValidators(form, ssmt);
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -55,35 +56,43 @@ export class OperationsService {
     }
   }
 
-  setMakeUpTempValidators(formGroup: FormGroup, ssmt: SSMT) {
-    // method to check for valid input
-    let pressure: number;
-    let approachTemp = ssmt.boilerInput.approachTemperature;
-    let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
+  checkOperationsWarnings(operationsForm: FormGroup, ssmt: SSMT, settings: Settings): BoilerWarnings {
+    return {
+      makeUpWaterTemperature: this.checkMakeupWaterTemperatureWarnings(operationsForm, ssmt, settings)
+    };
+  }
 
+  checkMakeupWaterTemperatureWarnings(formGroup: FormGroup, ssmt: SSMT, settings: Settings) {
+    let warning = null;
+    if (ssmt.boilerInput.preheatMakeupWater == true) {
+      let pressure: number;
+      let saturatedTemperature: number;
 
-    if (ssmt.boilerInput.blowdownFlashed == false) {
-      // Double check if highPressureHeader or high pressure
-      if (ssmt.headerInput.highPressureHeader) {
-        pressure = ssmt.headerInput.highPressureHeader.pressure;
-      } else if (ssmt.headerInput.highPressure) {
-        pressure = ssmt.headerInput.highPressure.pressure;
+      if (ssmt.boilerInput.blowdownFlashed == false) {
+        if (ssmt.headerInput.highPressureHeader) {
+          pressure = ssmt.headerInput.highPressureHeader.pressure;
+        } else if (ssmt.headerInput.highPressure) {
+          pressure = ssmt.headerInput.highPressure.pressure;
+        }
+      } else if (ssmt.boilerInput.blowdownFlashed == true) {
+        if (ssmt.headerInput.lowPressureHeader) {
+          pressure = ssmt.headerInput.lowPressureHeader.pressure;
+        } else if (ssmt.headerInput.lowPressure) {
+          pressure = ssmt.headerInput.lowPressure.pressure;
+        }
       }
-    } else if (ssmt.boilerInput.blowdownFlashed == true) {
-      if (ssmt.headerInput.lowPressureHeader) {
-        pressure = ssmt.headerInput.lowPressureHeader.pressure;
-      } else if (ssmt.headerInput.lowPressure) {
-        pressure = ssmt.headerInput.lowPressure.pressure;
+      
+      if (pressure) {
+        saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
+        saturatedTemperature = this.convertUnitsService.value(saturatedTemperature).from('K').to(settings.steamTemperatureMeasurement);
+        saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);
+        let maxValue = saturatedTemperature - formGroup.controls.makeUpWaterTemperature.value;
+        if (ssmt.boilerInput.approachTemperature > maxValue) {
+          warning = `This value may need to be adjusted to be able to use a heat exchanger to pre-heat makeup water.`;
+        }
       }
     }
-
-    if (approachTemp && pressure != undefined) { 
-      let tempValue = pressure - makeUpWaterTemperature;   
-      formGroup.controls.makeUpWaterTemperature.setValidators([Validators.required, Validators.max(tempValue),Validators.min(0.000005)]);
-      formGroup.controls.makeUpWaterTemperature.markAsDirty();
-      formGroup.controls.makeUpWaterTemperature.updateValueAndValidity();
-    }
-    return formGroup;
+    return warning;
   }
 
 }

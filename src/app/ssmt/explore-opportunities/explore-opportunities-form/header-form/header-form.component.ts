@@ -75,9 +75,9 @@ export class HeaderFormComponent implements OnInit {
       } else {
         pressureMax = this.ssmt.headerInput.highPressureHeader.pressure;
       }
-      this.baselineLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressureHeader, this.ssmt, this.settings, undefined, pressureMax);
+      this.baselineLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressureHeader, this.ssmt, this.settings, undefined, pressureMax, 'lowPressure');
     } else {
-      this.baselineLowPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, false);
+      this.baselineLowPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, false, undefined, undefined, 'lowPressure');
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader) {
       let pressureMax: number;
@@ -86,9 +86,9 @@ export class HeaderFormComponent implements OnInit {
       } else {
         pressureMax = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressureHeader.pressure;
       }
-      this.modificationLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader, this.ssmt, this.settings, undefined, pressureMax);
+      this.modificationLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader, this.ssmt, this.settings, undefined, pressureMax, 'lowPressure');
     } else {
-      this.modificationLowPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, true);
+      this.modificationLowPressureForm = this.headerService.initHeaderForm(this.settings, this.ssmt, true, undefined, undefined, 'lowPressure');
     }
 
     if (this.ssmt.headerInput.mediumPressureHeader) {

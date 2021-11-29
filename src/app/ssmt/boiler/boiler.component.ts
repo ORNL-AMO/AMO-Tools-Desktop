@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChil
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -23,8 +23,6 @@ export class BoilerComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Input()
-  boilerInput: BoilerInput;
   @Output('emitSave')
   emitSave = new EventEmitter<BoilerInput>();
   @Input()
@@ -32,17 +30,17 @@ export class BoilerComponent implements OnInit {
   @Input()
   modificationIndex: number;
   @Input()
-  headerInput: HeaderInput;
-  @Input()
   ssmt: SSMT;
-
+  
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setBlowdownRateModalWidth();
   }
-
+  
+  headerInput: HeaderInput;
+  boilerInput: BoilerInput;
   warnings: BoilerWarnings;
   formWidth: number;
   showBlowdownRateModal: boolean = false;
@@ -58,6 +56,8 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
+    this.boilerInput = this.ssmt.boilerInput;
+    this.headerInput = this.ssmt.headerInput;
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -90,10 +90,10 @@ export class BoilerComponent implements OnInit {
   initForm() {
     if (this.boilerInput) {
       this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
-      this.warnings = this.boilerService.checkBoilerWarnings(this.boilerInput, this.ssmt);
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
+    this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     this.setPressureForms(this.boilerInput);
   }
 
@@ -135,14 +135,19 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
+    this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
-    //where the validation is being checked
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }    
-    this.warnings = this.boilerService.checkBoilerWarnings(tmpBoiler, this.ssmt);
     this.emitSave.emit(tmpBoiler);
+  }
+
+  setPreheatMakeupWater() {
+    let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    this.boilerForm = this.boilerService.initFormFromObj(tmpBoiler, this.settings);
+    this.save();
   }
 
   focusField(str: string) {

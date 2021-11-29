@@ -5,6 +5,7 @@ import { HeaderService, HeaderRanges} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
+import { BoilerWarnings } from '../../boiler/boiler.service';
 
 @Component({
   selector: 'app-header-form',
@@ -35,6 +36,7 @@ export class HeaderFormComponent implements OnInit {
   @Input()
   ssmt: SSMT;
 
+  warnings: BoilerWarnings;
   headerLabel: string;
   minPressureErrorMsg: string;
   maxPressureErrorMsg: string;
@@ -42,6 +44,7 @@ export class HeaderFormComponent implements OnInit {
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
+    this.warnings = this.headerService.checkHeaderWarnings(this.ssmt, this.pressureLevel, this.settings);
     if (this.selected === false) {
       this.disableForm();
     } else {
@@ -51,7 +54,6 @@ export class HeaderFormComponent implements OnInit {
     if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
       this.showProcessSteamUsage = false;
     }
-    console.log(this.headerForm);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -118,8 +120,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.ssmt);
-      this.headerForm = this.headerService.setHeaderValidators(this.headerForm, this.ssmt, this.pressureLevel)
+    this.warnings = this.headerService.checkHeaderWarnings(this.ssmt, this.pressureLevel, this.settings);
     if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);

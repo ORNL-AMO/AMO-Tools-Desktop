@@ -7,6 +7,7 @@ import { SteamService } from '../../calculator/steam/steam.service';
 import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
 import { LessThanValidator } from '../../shared/validators/less-than';
+import { BoilerWarnings } from '../boiler/boiler.service';
 
 @Injectable()
 export class HeaderService {
@@ -31,7 +32,6 @@ export class HeaderService {
       condensateReturnTemperature: [undefined, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
       flashCondensateReturn: [false, Validators.required],
     });
-      form = this.setHeaderValidators(form, ssmt, 'highPressure')
       return form;
       
   }
@@ -46,7 +46,6 @@ export class HeaderService {
       condensateReturnTemperature: [obj.condensateReturnTemperature, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
       flashCondensateReturn: [obj.flashCondensateReturn, Validators.required]
     });
-    form = this.setHeaderValidators(form, ssmt, 'highPressure');
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -76,7 +75,6 @@ export class HeaderService {
       desuperheatSteamTemperature: [undefined, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
       useBaselineProcessSteamUsage: [useBaselineProcessSteamUsage]
     });
-    form = this.setHeaderValidators(form, ssmt, pressureLevel);
     return form;
   }
 
@@ -88,6 +86,7 @@ export class HeaderService {
     } else {
       tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
+
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
@@ -98,8 +97,7 @@ export class HeaderService {
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
       useBaselineProcessSteamUsage: [obj.useBaselineProcessSteamUsage]
     });
-
-    form = this.setHeaderValidators(form, ssmt, pressureLevel);
+    
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -278,36 +276,55 @@ export class HeaderService {
     };
   }
 
-  setHeaderValidators(formGroup: FormGroup, ssmt: SSMT, pressureLevel: string) {
-    let pressure: number;
+  checkHeaderWarnings(ssmt: SSMT, pressureLevel: string, settings: Settings): BoilerWarnings {
+    return {
+      headerPressure: this.checkHeaderPressure(ssmt, pressureLevel, settings)
+    };
+  }
 
-    if (ssmt.boilerInput.blowdownFlashed != undefined) {
-      if (ssmt.boilerInput.blowdownFlashed == false && pressureLevel === 'highPressure') {
-        if (ssmt.headerInput.highPressureHeader.pressure) {
-          pressure = ssmt.headerInput.highPressureHeader.pressure;
-        } else if (ssmt.headerInput.highPressure) {
-          pressure = ssmt.headerInput.highPressure.pressure;
+
+  checkHeaderPressure(ssmt: SSMT, pressureLevel: string, settings: Settings) {
+    let warning = null;
+    if (pressureLevel && pressureLevel !== 'mediumPressure'
+      && ssmt && ssmt.boilerInput.blowdownFlashed != undefined) {
+
+      if (ssmt.boilerInput.preheatMakeupWater == true) {
+        let pressure: number;
+        let saturatedTemperature: number;
+        let headerType: string;
+
+        if (ssmt.boilerInput.blowdownFlashed == false && pressureLevel === 'highPressure') {
+          headerType = 'high';
+          if (ssmt.headerInput.highPressureHeader.pressure) {
+            pressure = ssmt.headerInput.highPressureHeader.pressure;
+          } else if (ssmt.headerInput.highPressure) {
+            pressure = ssmt.headerInput.highPressure.pressure;
+          }
+        } else if (ssmt.boilerInput.blowdownFlashed == true && pressureLevel == 'lowPressure') {
+          headerType = 'low';
+          if (ssmt.headerInput.lowPressureHeader) {
+            pressure = ssmt.headerInput.lowPressureHeader.pressure;
+          } else if (ssmt.headerInput.lowPressure) {
+            pressure = ssmt.headerInput.lowPressure.pressure;
+          }
         }
-      } else if (ssmt.boilerInput.blowdownFlashed == true && pressureLevel !== 'highPressure') {
-        // in lowpressure form
-        if (formGroup.controls.pressure.value) {
-          pressure = ssmt.headerInput.lowPressureHeader.pressure;
-        } else if (ssmt.headerInput.lowPressure) {
-          pressure = ssmt.headerInput.lowPressure.pressure;
+
+        if (pressure) {
+          saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
+          saturatedTemperature = this.convertUnitsService.value(saturatedTemperature).from('K').to(settings.steamTemperatureMeasurement);
+          saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);
+          let maxValue = saturatedTemperature - ssmt.generalSteamOperations.makeUpWaterTemperature;
+          if (ssmt.boilerInput.approachTemperature > maxValue) {
+            warning = `Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of ${headerType} pressure header) and the makeup water temperature (${maxValue})`;
+          } 
         }
       }
-    }
-  let approachTemp = ssmt.boilerInput.approachTemperature;
-  let makeUpWaterTemperature = ssmt.generalSteamOperations.makeUpWaterTemperature;
-  let approachTempWarning = true;
-  let tempValue = pressure - makeUpWaterTemperature;
-    if (approachTemp >= tempValue) {
-      formGroup.controls.pressure.setValidators([Validators.required, Validators.max(tempValue), Validators.min(0.000005)]);
-      formGroup.controls.pressure.markAsDirty();
-      formGroup.controls.pressure.updateValueAndValidity();
-    }
-    return formGroup;
+    } 
+    return warning;
   }
+
+
+
 }
 
 
