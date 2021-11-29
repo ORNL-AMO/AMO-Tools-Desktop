@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory';
 import { Settings } from '../../../shared/models/settings';
 import { BatchAnalysisService } from '../../batch-analysis/batch-analysis.service';
+import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 
 @Component({
   selector: 'app-department-catalog-table',
@@ -23,6 +24,11 @@ export class DepartmentCatalogTableComponent implements OnInit {
   settings: Settings;
   settingsSub: Subscription;
   tableDataItems: Array<DepartmentCatalogTableDataItem>;
+
+  confirmDeleteMotorInventoryData: ConfirmDeleteData;
+  showConfirmDeleteModal: boolean = false;
+  deleteSelectedId: string;
+  motorItemToDelete: MotorItem;
 
   selectedMotorItem: MotorItem;
   selectedMotorItemSub: Subscription;
@@ -117,7 +123,28 @@ export class DepartmentCatalogTableComponent implements OnInit {
   }
 
   openConfirmDeleteModal(motorItem: MotorItem){
-    this.motorInventoryService.deleteMotorItem(motorItem);
+    this.confirmDeleteMotorInventoryData = {
+      modalTitle: 'Delete Compressor Inventory Item',
+      confirmMessage: `Are you sure you want to delete '${motorItem.name}'?`
+    }
+    this.showConfirmDeleteModal = true;
+    this.deleteSelectedId = motorItem.id;
+    this.motorItemToDelete = motorItem;
+    this.motorInventoryService.modalOpen.next(true);
+  }
+
+  onConfirmDeleteClose(deleteInventoryItem: boolean) {
+    if (deleteInventoryItem) {
+      this.deleteItem();
+    }
+    this.showConfirmDeleteModal = false;
+    this.motorInventoryService.modalOpen.next(false);
+  }
+
+  deleteItem() {
+
+    this.motorInventoryService.deleteMotorItem(this.motorItemToDelete);
+    
   }
 
 }

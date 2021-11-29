@@ -97,3 +97,6 @@
 <div class="p-2 w-100 text-center">
     <img src="assets/images/energy-use-equation.PNG" class="w-100">
 </div>
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteMotorInventoryData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>
