@@ -122,7 +122,12 @@
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
-          {{baselineTurbine.operationValue}}
+          <span *ngIf="baselineTurbine.operationType == 0">
+            {{baselineTurbine.operationValue}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          </span>
+          <span *ngIf="baselineTurbine.operationType == 1">
+            {{baselineTurbine.operationValue}} <span >kW</span>
+          </span>
         </span>
         <span *ngIf="baselineTurbine.useTurbine == false">
           &mdash;
@@ -130,7 +135,12 @@
       </td>
       <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue, mod.turbine.operationValue, 'operationValue1Diff', 0)}">
         <span *ngIf="mod.turbine.useTurbine == true">
-          {{mod.turbine.operationValue}}
+          <span *ngIf="mod.turbine.operationType == 0">
+            {{mod.turbine.operationValue}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          </span>
+          <span *ngIf="mod.turbine.operationType == 1">
+            {{mod.turbine.operationValue}} <span >kW</span>
+          </span>
         </span>
         <span *ngIf="mod.turbine.useTurbine == false">
           &mdash;
@@ -146,7 +156,14 @@
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
-          <span *ngIf="baselineTurbine.operationValue1">{{baselineTurbine.operationValue1}}</span>
+          <span *ngIf="baselineTurbine.operationValue1">
+            <span *ngIf="baselineTurbine.operationType == 0 || baselineTurbine.operationType == 4">
+              {{baselineTurbine.operationValue1}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            </span>
+            <span *ngIf="baselineTurbine.operationType == 1 || baselineTurbine.operationType == 3">
+              {{baselineTurbine.operationValue1}} <span >kW</span>
+            </span>
+          </span>
           <span *ngIf="!baselineTurbine.operationValue1">&mdash;</span>
         </span>
         <span *ngIf="baselineTurbine.useTurbine == false">
@@ -155,7 +172,14 @@
       </td>
       <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue1, mod.turbine.operationValue1, 'operationValue1Diff', 0)}">
         <span *ngIf="mod.turbine.useTurbine == true">
-          <span *ngIf="mod.turbine.operationValue1">{{mod.turbine.operationValue1}}</span>
+          <span *ngIf="mod.turbine.operationValue1">
+            <span *ngIf="mod.turbine.operationType == 0 || mod.turbine.operationType == 4">
+              {{mod.turbine.operationValue1}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            </span>
+            <span *ngIf="mod.turbine.operationType == 1 || mod.turbine.operationType == 3">
+              {{mod.turbine.operationValue1}} <span >kW</span>
+            </span>
+          </span>
           <span *ngIf="!mod.turbine.operationValue1">&mdash;</span>
         </span>
         <span *ngIf="mod.turbine.useTurbine == false">
@@ -172,7 +196,14 @@
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue2Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
-          <span *ngIf="baselineTurbine.operationValue2">{{baselineTurbine.operationValue2}}</span>
+          <span *ngIf="baselineTurbine.operationValue2">
+            <span *ngIf="baselineTurbine.operationType == 0 || baselineTurbine.operationType == 4">
+              {{baselineTurbine.operationValue2}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            </span>
+            <span *ngIf="baselineTurbine.operationType == 1 || baselineTurbine.operationType == 3">
+              {{baselineTurbine.operationValue2}} <span >kW</span>
+            </span>
+          </span>
           <span *ngIf="!baselineTurbine.operationValue2">&mdash;</span>
         </span>
         <span *ngIf="baselineTurbine.useTurbine == false">
@@ -181,7 +212,14 @@
       </td>
       <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue2, mod.turbine.operationValue2, 'operationValue2Diff', 0)}">
         <span *ngIf="mod.turbine.useTurbine == true">
-          <span *ngIf="mod.turbine.operationValue2">{{mod.turbine.operationValue2}}</span>
+          <span *ngIf="mod.turbine.operationValue2">
+            <span *ngIf="mod.turbine.operationType == 0 || mod.turbine.operationType == 4">
+              {{mod.turbine.operationValue2}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            </span>
+            <span *ngIf="mod.turbine.operationType == 1 || mod.turbine.operationType == 3">
+              {{mod.turbine.operationValue2}} <span >kW</span>
+            </span>
+          </span>
           <span *ngIf="!mod.turbine.operationValue2">&mdash;</span>
         </span>
         <span *ngIf="mod.turbine.useTurbine == false">

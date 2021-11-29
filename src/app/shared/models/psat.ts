@@ -1,5 +1,6 @@
 import { OperatingHours } from "./operations";
 import { SavingsOpportunity } from "./explore-opps";
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
 export interface PSAT {
   inputs?: PsatInputs;
@@ -59,6 +60,7 @@ export interface PsatInputs {
   fluidTemperature: number;
   useCustomEfficiency?: boolean;  
   whatIfScenario?: boolean;
+  co2SavingsData?: Co2SavingsData;
 }
 
 export interface PsatOutputs {
@@ -77,6 +79,7 @@ export interface PsatOutputs {
   annual_savings_potential?: number;
   optimization_rating?: number;
   percent_annual_savings?: number;
+  co2EmissionsOutput?: number;
 }
 
 export interface PsatOutputsExistingOptimal {
@@ -129,4 +132,13 @@ export interface FluidProperties {
   kinViscosity: number;
   boiling: number;
   melting: number;
+}
+
+
+export interface ExploreOpportunitiesResults {
+  baselineResults: PsatOutputs, 
+  modificationResults: PsatOutputs, 
+  annualSavings: number, 
+  co2EmissionsSavings: number,
+  percentSavings: number 
 }

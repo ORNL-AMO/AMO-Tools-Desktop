@@ -10,8 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
   export class FlueGasMoisturePanelComponent implements OnInit {
     @Input()
     settings: Settings;
-    @Input()
-    containerHeight: number;
+    
     tabSelect: string = "results";
     
     constructor() {

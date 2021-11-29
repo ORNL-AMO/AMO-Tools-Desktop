@@ -40,7 +40,7 @@
           Operating Months
         </td>
         <td>
-          {{wasteWater.systemBasics.operatingMonths}}
+          {{wasteWater.baselineData.operations.operatingMonths}}
         </td>
         <td *ngFor="let mod of wasteWater.modifications">
           &mdash;
@@ -471,11 +471,11 @@
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('EnergyCostUnit') == true}">
-          {{wasteWater.baselineData.aeratorPerformanceData.EnergyCostUnit}}
+          {{wasteWater.baselineData.operations.EnergyCostUnit}}
         </td>
         <td *ngFor="let mod of wasteWater.modifications; let index = index;"
           [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.EnergyCostUnit == true}">
-          {{mod.aeratorPerformanceData.EnergyCostUnit}}
+          {{mod.operations.EnergyCostUnit}}
         </td>
       </tr>
       <tr>

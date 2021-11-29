@@ -20,6 +20,10 @@ export class Co2SavingsFormComponent implements OnInit {
   index: number;
   @Input()
   settings: Settings;
+  @Input()
+  currentField: string;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   otherFuels: Array<OtherFuel>;
   eGridRegions: Array<eGridRegion>;
@@ -80,6 +84,9 @@ export class Co2SavingsFormComponent implements OnInit {
     let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion === val.subregion; });
     this.data.totalEmissionOutputRate = tmpSubRegion.outputRate;
     this.calculate();
+  }
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
   calculate() {
     this.emitCalculate.emit();

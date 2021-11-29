@@ -62,13 +62,13 @@ export class WasteWaterReportRollupService {
     wasteWaterArr.forEach(val => {
       if (val.assessment.wasteWater.setupDone) {
         //get results
-        val.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(val.assessment.wasteWater.baselineData.activatedSludgeData, val.assessment.wasteWater.baselineData.aeratorPerformanceData, val.assessment.wasteWater.systemBasics, val.settings, true);
+        val.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(val.assessment.wasteWater.baselineData.activatedSludgeData, val.assessment.wasteWater.baselineData.aeratorPerformanceData, val.assessment.wasteWater.baselineData.operations, val.settings, true);
         let baselineResults: WasteWaterResults = val.assessment.wasteWater.baselineData.outputs;
         if (val.assessment.wasteWater.modifications) {
           if (val.assessment.wasteWater.modifications.length !== 0) {
             let modResultsArr = new Array<WasteWaterResults>();
             val.assessment.wasteWater.modifications.forEach(mod => {
-              mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, val.assessment.wasteWater.systemBasics, val.settings, true, baselineResults);
+              mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, mod.operations, val.settings, true, baselineResults);
               let tmpResults: WasteWaterResults = mod.outputs;
               modResultsArr.push(tmpResults);
             });
@@ -109,8 +109,8 @@ export class WasteWaterReportRollupService {
       this.nutrientRemovalResults.push(this.getNutrientRemovalResults(wwc)); 
 
       let effluentEnergyResults: EffluentEnergyResults = {
-        baseline: this.getEffluentEnergyResults(wwc.name, wwc.assessment.wasteWater.systemBasics.operatingMonths, wwc.baseline),
-        modification: this.getEffluentEnergyResults(wwc.name, wwc.assessment.wasteWater.systemBasics.operatingMonths, wwc.modification),
+        baseline: this.getEffluentEnergyResults(wwc.name, wwc.assessment.wasteWater.baselineData.operations.operatingMonths, wwc.baseline),
+        modification: this.getEffluentEnergyResults(wwc.name, wwc.modification.operations.operatingMonths, wwc.modification),
         // energyUnit: 
       };
       this.effluentEnergyResults.push(effluentEnergyResults); 

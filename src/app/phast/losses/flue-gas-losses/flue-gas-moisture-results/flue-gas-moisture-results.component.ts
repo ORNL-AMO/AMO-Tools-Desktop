@@ -11,16 +11,11 @@ import { FlueGasCompareService } from '../flue-gas-compare.service';
   styleUrls: ['./flue-gas-moisture-results.component.css']
 })
 export class FlueGasMoistureResultsComponent implements OnInit {
-  @Input() inSetup: boolean;
-  @Input() settings: Settings;
+  @Input() 
+  settings: Settings;
 
   psychrometricSubscription: Subscription;
-
-
   psychrometricResults: PsychrometricResults;
-
-
-  modificationName: string;
   constructor(private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit(): void {

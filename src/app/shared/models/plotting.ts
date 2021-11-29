@@ -97,6 +97,7 @@ export interface TraceData {
     name?: string,
     id?: string,
     showlegend?: boolean,
+    legendGroup?: string,
     hovertemplate?: string,
     textposition?: string,
     customdata?: Array<number | string>,

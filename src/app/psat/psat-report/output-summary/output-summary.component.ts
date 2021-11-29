@@ -38,6 +38,10 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+
+    if(this.psat.modifications){
+      this.notes = this.buildSummaryNotes(this.psat);
+    }
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {

@@ -67,10 +67,10 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
-    } else if (assessment.type == "CompressedAir") {
-      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
-      //   this.tab = 'assessment';
-      // }
+    } else if (assessment.type == 'CompressedAir') {
+      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
@@ -331,16 +331,18 @@ export class AssessmentService {
           OperatingTime: 24,
           TypeAerators: 2,
           Speed: 100,
-          EnergyCostUnit: settings.electricityCost,
           AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: settings.electricityCost
         }
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: 100,
-        TimeIncrement: .5,
-        equipmentNotes: '',
-        operatingMonths: 12
+        equipmentNotes: ''
       }
     }
   }

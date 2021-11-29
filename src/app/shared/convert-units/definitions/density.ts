@@ -16,6 +16,22 @@ export const density = {
       }
       , to_anchor: 1000
     }
+    , 'g/L': {
+      name: {
+        singular: 'Gram per liter'
+        , plural: 'Grams per liter',
+        display: '(g/L)'
+      }
+      , to_anchor: 1
+    },
+    'mg/L': {
+      name: {
+        singular: 'Milligram per liter'
+        , plural: 'Milligrams per liter',
+        display: '(mg/L)'
+      }
+      , to_anchor: 1000
+    }
   },
   imperial: {
     lbscf: {
@@ -54,3 +70,5 @@ export const density = {
     }
   }
 };
+
+

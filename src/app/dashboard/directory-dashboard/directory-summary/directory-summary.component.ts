@@ -185,7 +185,7 @@ export class DirectorySummaryComponent implements OnInit {
     wasteWaterAssessments.forEach(assessment => {
       if (assessment.wasteWater.setupDone) {
         let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.systemBasics, settings, false);
+        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.baselineData.operations, settings, false);
         if (results.AeEnergyAnnual != undefined) {
           totalEnergyUsed = results.AeEnergyAnnual + totalEnergyUsed;
           totalCost = results.AeCost + totalCost;
