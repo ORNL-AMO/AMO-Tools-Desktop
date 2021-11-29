@@ -74,6 +74,7 @@ export class ReduceRunTimeComponent implements OnInit {
       if (this.modificationResults) {
         // Do this because the other two subs don't pick up on the new modification change
         // Do we also need to setDayTypes when modchanges?
+        // should be fine setData call will set daytypes - Mark
         this.setSelectedModificationIndex(this.modificationResults.modification.modificationId);
       }
       if (!this.isFormChange) {
@@ -113,8 +114,8 @@ export class ReduceRunTimeComponent implements OnInit {
     }
   }
 
-  setSelectedModificationIndex(selectedIndex: string) {
-    this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedIndex });
+  setSelectedModificationIndex(selectedModificationId: string) {
+    this.selectedModificationIndex = this.compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == selectedModificationId });
   }
 
   setOrderOptions() {
