@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FieldData, FSAT, FsatOperations } from '../../shared/models/fans';
+import { FieldData, FSAT, FsatOperations, FsatInput} from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 
 @Injectable({
@@ -39,6 +39,11 @@ export class OperationsService {
   isOperationsDataValid(obj: FsatOperations): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
     return form.valid;
+  }
+  
+  getFsatInputsFromForm(form: FormGroup, fsatInputs: FsatInput): FsatInput {
+     fsatInputs.operatingHours = form.controls.operatingHours.value;
+    return fsatInputs;
   }
 
 }

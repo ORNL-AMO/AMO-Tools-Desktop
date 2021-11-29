@@ -48,13 +48,25 @@
         *ngIf="warnings.costError !== null && !operationsForm.controls.cost.pristine && !operationsForm.controls.cost.invalid">{{warnings.costError}}
         $/kWh.</span>
     </div>
-
-
-
-
-
   </div>
 </form>
+
+<div *ngIf="inSetup" class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>Carbon Emissions</h3>
+  </div>
+</div>
+
+<div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }"
+*ngIf="co2SavingsData">
+  <app-assessment-co2-savings 
+  [co2SavingsData]="co2SavingsData"
+  [isFormDisabled]="co2SavingsFormDisabled"
+  [inBaseline]="baseline"
+  (emitCurrentField)="focusField($event)"
+  (emitUpdateCo2SavingsData)="updateFsatCo2SavingsData($event)"
+  ></app-assessment-co2-savings>
+</div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"

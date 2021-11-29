@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FSAT, FsatOperations } from '../../shared/models/fans';
+import { FSAT, FsatInput, FsatOperations } from '../../shared/models/fans';
 import { OperatingHours } from '../../shared/models/operations';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
@@ -8,6 +8,8 @@ import { FanOperationsWarnings, FsatWarningService } from '../fsat-warning.servi
 import { FsatService } from '../fsat.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { OperationsService } from './operations.service';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
   selector: 'app-operations',
@@ -37,6 +39,11 @@ export class OperationsComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
+  co2SavingsFormDisabled: boolean;
+
+  co2SavingsData: Co2SavingsData;
+
+  fsatInputs: FsatInput;
 
   warnings: FanOperationsWarnings;
   
@@ -48,7 +55,7 @@ export class OperationsComponent implements OnInit {
 
   operationsForm: FormGroup;
 
-  constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private operationsService: OperationsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
+  constructor(private fsatWarningService: FsatWarningService, private assessmentCo2SavingsService: AssessmentCo2SavingsService, private compareService: CompareService, private operationsService: OperationsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -78,6 +85,7 @@ export class OperationsComponent implements OnInit {
 
 
   init() {
+    this.setCo2SavingsData();
     if (this.fsatOperations) {
       if (!this.fsatOperations.cost) {
         this.fsatOperations.cost = this.settings.electricityCost;
@@ -90,17 +98,37 @@ export class OperationsComponent implements OnInit {
   disableForm() {
     this.operationsForm.controls.cost.disable();
     this.operationsForm.controls.operatingHours.disable();
+    this.co2SavingsFormDisabled = true;
   }
 
   enableForm() {
     this.operationsForm.controls.cost.enable();
     this.operationsForm.controls.operatingHours.enable();
+    this.co2SavingsFormDisabled = false;
   }
 
   save(){  
     this.fsatOperations = this.operationsService.getObjFromForm(this.operationsForm);
+    this.fsat.inputs = this.operationsService.getFsatInputsFromForm(this.operationsForm, this.fsat.inputs)
     this.emitSave.emit(this.fsatOperations);
     this.checkForWarnings();
+  }
+
+  updateFsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.fsat.inputs.cO2SavingsData = co2SavingsData;
+    this.save();
+  }
+
+  setCo2SavingsData() {
+    console.log(this.fsatInputs);
+    console.log(this.fsat.inputs);
+    debugger;
+    if (this.fsat.inputs.cO2SavingsData) {
+      this.co2SavingsData = this.fsat.inputs.cO2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
+    }
   }
 
   checkForWarnings() {

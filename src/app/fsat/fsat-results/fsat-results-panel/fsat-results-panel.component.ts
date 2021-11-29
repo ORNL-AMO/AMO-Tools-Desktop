@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, SimpleChanges } from '@angular/core';
-import { FSAT, FsatOutput } from '../../../shared/models/fans';
+import { FSAT, FsatOutput, ExploreOpportunitiesResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';
 import { Subscription } from 'rxjs';
@@ -24,6 +24,7 @@ export class FsatResultsPanelComponent implements OnInit {
     this.hideResults();
   }
 
+  co2EmissionsSavings: number = 0;
   isWhatIfScenario: boolean;
 
   baselineResults: FsatOutput;
@@ -53,6 +54,7 @@ export class FsatResultsPanelComponent implements OnInit {
   }
 
   getResults() {
+    let fsatResults: ExploreOpportunitiesResults;
     this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
     if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
@@ -66,6 +68,7 @@ export class FsatResultsPanelComponent implements OnInit {
     } else {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
+    this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
   }
 
 
