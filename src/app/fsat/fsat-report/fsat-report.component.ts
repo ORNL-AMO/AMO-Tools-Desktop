@@ -39,6 +39,7 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
+  co2EmissionsSavings: number = 0;
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
   showPrintMenu: boolean = false;
@@ -156,6 +157,7 @@ export class FsatReportComponent implements OnInit {
   }
 
   setOutputs() {
+    // let fsatResults: ExploreOpportunitiesResults;
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
@@ -164,6 +166,7 @@ export class FsatReportComponent implements OnInit {
       modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
       modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
+      // this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
     });
   }
 

@@ -175,6 +175,7 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
+    let fsatInputs: FsatInput;
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
