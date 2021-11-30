@@ -18,6 +18,7 @@ import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-fsat',
@@ -96,10 +97,12 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
+    private egridService: EGridService,
     private convertFsatService: ConvertFsatService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));

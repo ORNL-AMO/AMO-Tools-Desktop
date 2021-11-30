@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
+import { Fan203Inputs, ExploreOpportunitiesResults, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults, FsatOperations } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -12,14 +12,16 @@ import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-effic
 import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService } from './operations/operations.service';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service'
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 
 declare var fanAddon: any;
 
 @Injectable()
 export class FsatService {
-
-
+  fsatOperations: FsatOperations;
+  fsatInputs: FsatInput;
   mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
@@ -28,7 +30,7 @@ export class FsatService {
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
   calculatorTab: BehaviorSubject<string>;
-  constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
+  constructor(private convertFsatService: ConvertFsatService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
   }
 
@@ -202,29 +204,31 @@ export class FsatService {
         operatingHours: fsat.fsatOperations.operatingHours,
         unitCost: fsat.fsatOperations.cost,
         airDensity: fsat.baseGasDensity.gasDensity,
-        sizeMargin: 1
+        sizeMargin: 1,
+        cO2SavingsData: fsat.fsatOperations.cO2SavingsData
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
-      let results: FsatOutput;
+      let fsatOutputs: FsatOutput;
       if (isBaseline || !fsat.whatIfScenario) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
-        results = this.fanResultsExisting(input);
+        fsatOutputs = this.fanResultsExisting(input);
       } else {
         input.fanType = fsat.fanSetup.fanType;
-        results = this.fanResultsModified(input);
+        fsatOutputs = this.fanResultsModified(input);
       }
-      results = this.convertFsatService.convertFsatOutput(results, settings);
-      results.annualCost = results.annualCost * 1000;
+      fsatOutputs = this.setCo2SavingsEmissionsResult(input.cO2SavingsData, fsatOutputs, settings);
+      fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
+      fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
 
-      results.psychrometricResults = this.getPsychrometricResults(fsat, settings);
+      fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
       if (fan203InputsForPlaneResults) {
         fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;
-        results.planeResults = this.getPlaneResults(fan203InputsForPlaneResults, settings);
+        fsatOutputs.planeResults = this.getPlaneResults(fan203InputsForPlaneResults, settings);
       }
-      return results;
+      return fsatOutputs;
     } else {
       return this.getEmptyResults();
     }
@@ -282,6 +286,16 @@ export class FsatService {
     inputs.inletPressure = this.convertUnitsService.value(inputs.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputs.outletPressure = this.convertUnitsService.value(inputs.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     return fanAddon.optimalFanEfficiency(inputs);
+  }
+
+  setCo2SavingsEmissionsResult(cO2SavingsData: Co2SavingsData, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
+    if (cO2SavingsData) {
+      cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
+      fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(cO2SavingsData, settings);
+    } else {
+      fsatOutputs.co2EmissionsOutput = 0;
+    }
+    return fsatOutputs;
   }
 
   getEmptyResults(): FsatOutput {
