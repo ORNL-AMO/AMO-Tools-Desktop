@@ -12,15 +12,17 @@
 			</app-explore-opportunities-form>
 		</div>
 		<div *ngIf="fsat.modifications[modificationIndex].fsat.whatIfScenario == false">
-			<div class="header mr-2 ml-2">
+			<div class="alert-warning header mr-2 ml-2">
 				<h3>
-					"COMPARE TWO FANS"<br>
-					
+					"COMPARE TWO FANS"
+				</h3>
+				<br>		
+				<small>
 					This form is unavailable while Compare Two Fans is selected. <br>
-					
+		
 					If you wish to access this form please click 'View / Add
 					Scenarios', and select 'Modify Fan'.
-				</h3>
+				</small>		
 			</div>
 		</div>
 
