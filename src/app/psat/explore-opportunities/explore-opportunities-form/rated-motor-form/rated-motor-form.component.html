@@ -1,5 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="general2"><input type="checkbox" id="general2" value="true" (focus)="focusField('motorRatedData')"
+      [disabled]="currentModification.psat.inputs.whatIfScenario == false"
       (change)="toggleRatedMotorData()" [(ngModel)]="currentModification.exploreOppsShowRatedMotorData.hasOpportunity" /> {{currentModification.exploreOppsShowRatedMotorData.display}}
   </label>
 </div>
