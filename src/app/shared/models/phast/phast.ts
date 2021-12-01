@@ -37,6 +37,7 @@ export interface PHAST {
   dataUpdated?: boolean;
   lossDataUnits?: string;
   valid?: PhastValid;
+  //co2SavingsData?: Co2SavingsData;
 }
 
 
