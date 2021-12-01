@@ -64,7 +64,7 @@ export class OperationsService {
 
   checkMakeupWaterTemperatureWarnings(formGroup: FormGroup, ssmt: SSMT, settings: Settings) {
     let warning = null;
-    if (ssmt.boilerInput.preheatMakeupWater == true) {
+    if (ssmt.boilerInput && ssmt.boilerInput.preheatMakeupWater == true) {
       let pressure: number;
       let saturatedTemperature: number;
 
