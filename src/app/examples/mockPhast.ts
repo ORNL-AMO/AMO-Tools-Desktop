@@ -21,6 +21,19 @@ export const MockPhast: Assessment = {
             steamCost: 8,
             electricityCost: 0.05
         },
+        co2SavingsData: {
+            energyType: "electricity",
+            energySource: '',
+            fuelType: '',
+            totalEmissionOutputRate: 0,
+            electricityUse: 0,
+            eGridRegion: '',
+            eGridSubregion: "SRT",
+            totalEmissionOutput: 0,
+            userEnteredBaselineEmissions: false,
+            userEnteredModificationEmissions: false,
+            zipcode: "37830"
+        },
         modifications: [
             {
                 phast: {

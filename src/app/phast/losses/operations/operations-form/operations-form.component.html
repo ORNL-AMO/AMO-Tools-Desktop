@@ -62,7 +62,12 @@
     <h3>Carbon Emissions</h3>
   </div>
 </div>
-
+<div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }" *ngIf="co2SavingsData">
+  <app-co2-savings-phast [co2SavingsData]="co2SavingsData" [isFormDisabled]="co2SavingsFormDisabled"
+    [isBaseline]="isBaseline" (emitCurrentField)="focusField($event)"
+    (emitUpdateCo2SavingsData)="updatePsatCo2SavingsData($event)">
+  </app-co2-savings-phast>
+</div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"

@@ -18,6 +18,7 @@ import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
 import { SavingsOpportunity } from '../explore-opps';
+import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
 
 export interface PHAST {
   name?: string;
@@ -37,7 +38,7 @@ export interface PHAST {
   dataUpdated?: boolean;
   lossDataUnits?: string;
   valid?: PhastValid;
-  //co2SavingsData?: Co2SavingsData;
+  co2SavingsData?: Co2SavingsData;
 }
 
 
