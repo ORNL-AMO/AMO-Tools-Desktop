@@ -98,7 +98,7 @@ export class SsmtTabsComponent implements OnInit {
 
   changeStepTab(str: string) {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.ssmt, this.settings, this.ssmt.boilerInput);
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
     if (str === 'system-basics' || str === 'operations') {
       this.ssmtService.stepTab.next(str);
@@ -167,7 +167,7 @@ export class SsmtTabsComponent implements OnInit {
 
   checkHeaderStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.ssmt, this.settings, this.ssmt.boilerInput);
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
     if (!boilerValid || !operationsValid) {
       this.headerTabStatus = ['disabled'];
@@ -184,7 +184,7 @@ export class SsmtTabsComponent implements OnInit {
 
   checkTurbineStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.ssmt, this.settings, this.ssmt.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.ssmt.headerInput, this.settings);
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
 

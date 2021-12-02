@@ -20,7 +20,7 @@
         Modifications to Adjust Number of Headers</span>
     </form>
     <!--high pressure header-->
-    <app-header-form [headerForm]="highPressureForm" [settings]="settings" [selected]="selected"
+    <app-header-form [headerForm]="highPressureForm" [ssmt]="ssmt" [settings]="settings" [selected]="selected"
       [numberOfHeaders]="headerInput.numberOfHeaders" (emitSave)="saveHighPressure($event)"
       [pressureLevel]="'highPressure'" [inSetup]="inSetup" [idString]="idString" [isBaseline]="isBaseline"
       [headerInput]="headerInput.highPressureHeader"></app-header-form>
@@ -31,7 +31,7 @@
       [headerInput]="headerInput.mediumPressureHeader">
     </app-header-form>
     <!--low pressure header-->
-    <app-header-form [headerForm]="lowPressureForm" [settings]="settings" [selected]="selected"
+    <app-header-form [headerForm]="lowPressureForm" [ssmt]="ssmt" [settings]="settings" [selected]="selected"
       [numberOfHeaders]="headerInput.numberOfHeaders" (emitSave)="saveLowPressure($event)"
       [pressureLevel]="'lowPressure'" *ngIf="headerInput.numberOfHeaders > 1" [inSetup]="inSetup" [idString]="idString"
       [isBaseline]="isBaseline" [headerInput]="headerInput.lowPressureHeader"></app-header-form>

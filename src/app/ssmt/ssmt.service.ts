@@ -334,7 +334,7 @@ export class SsmtService {
     let isBoilerValid: boolean = this.boilerService.isBoilerValid(ssmt.boilerInput, settings);
     let isHeaderValid;
     if (ssmt.boilerInput) {
-      isHeaderValid = this.headerService.isHeaderValid(ssmt.headerInput, settings, ssmt.boilerInput);
+      isHeaderValid = this.headerService.isHeaderValid(ssmt.headerInput, ssmt, settings, ssmt.boilerInput);
     }
     let isTurbineValid: boolean = this.turbineService.isTurbineValid(ssmt.turbineInput, ssmt.headerInput, settings);
     let isOperationsValid: boolean = this.operationsService.getForm(ssmt, settings).valid;
