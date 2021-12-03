@@ -139,11 +139,16 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.disableForm()
     };
 
-    this.setSubRegionData();
+    if(this.co2SavingsData.energyType == 'fuel'){
+      this.setFuel();
+    } else {
+      this.setSubRegionData();
+    }    
+    
   }
 
   focusField(str: string) {
-    this.emitCurrentField.emit('co2Savings');
+    this.emitCurrentField.emit(str);
   }
 
   setUserEmissionsOutput() {
