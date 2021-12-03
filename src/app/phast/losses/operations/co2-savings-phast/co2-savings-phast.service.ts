@@ -89,8 +89,14 @@ export class Co2SavingsPhastService {
   }
 
   getCo2SavingsDataFromSettingsObject(settings: Settings): Co2SavingsData {
+    let energyTypeFromAssessment: string;
+    if (settings.energySourceType == 'Fuel' || settings.energySourceType == 'Steam') {
+      energyTypeFromAssessment = 'fuel';
+    } else if (settings.energySourceType == 'Electricity') {
+      energyTypeFromAssessment = 'electricity';
+    } 
     let obj: Co2SavingsData = {
-      energyType: settings.co2SavingsEnergyType,
+      energyType: energyTypeFromAssessment,
       energySource: settings.co2SavingsEnergySource,
       fuelType: settings.co2SavingsFuelType,
       totalEmissionOutputRate: settings.totalEmissionOutputRate,

@@ -1,5 +1,7 @@
 <form #formElement [formGroup]="form">
-    <div class="form-group">
+
+    <!-- Electricity -->
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'electricity'">
         <label class="small" for="zipcode">
             Zip Code
         </label>
@@ -13,7 +15,7 @@
     </div>
 
 
-    <div *ngIf="zipCodeSubRegionData" class="form-group">
+    <div *ngIf="zipCodeSubRegionData && co2SavingsData.energyType == 'electricity'" class="form-group">
         <label class="small" for="eGridSubregion">eGRID Subregion</label>
         <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
             <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
@@ -28,6 +30,30 @@
             <strong>&mdash; &mdash;</strong>
         </div>
     </div>
+
+    <!-- Fuel -->
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+        <label class="small" for="energySource">Energy Source</label>
+        <div class="input-group">
+            <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
+                [(ngModel)]="co2SavingsData.energySource" (change)="setFuelOptions()" [required]="true" 
+                (focus)="focusField('energySource')">
+                <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+        <label class="small" for="fuelType">Fuel Type</label>
+        <div class="input-group">
+            <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType"
+                 [(ngModel)]="co2SavingsData.fuelType" 
+                 (change)="setFuel()" [required]="true" (focus)="focusField('fuelType')">
+                <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+            </select>
+        </div>
+    </div>
+
 
     <div class="form-group">
         <label class="small" for="totalEmissionOutputRate">

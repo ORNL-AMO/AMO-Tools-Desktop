@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, Simp
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
 import { Co2SavingsPhastService } from './co2-savings-phast.service';
@@ -33,9 +34,20 @@ export class Co2SavingsPhastComponent implements OnInit {
   zipCodeSubRegionData: Array<string>;
   co2SavingsDataSub: Subscription;
 
+  otherFuels: Array<OtherFuel>;
+  fuelOptions: Array<{
+    fuelType: string,
+    outputRate: number
+  }>;
+
   constructor(private phastCO2SavingsService: Co2SavingsPhastService, private egridService: EGridService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.otherFuels = otherFuels;
+    if (this.co2SavingsData.fuelType) {
+      let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
+      this.fuelOptions = tmpOtherFuel.fuelTypes;
+    }
     this.initCo2SavingsSubscription();
   }
 
@@ -75,6 +87,28 @@ export class Co2SavingsPhastComponent implements OnInit {
         }
       });
     }
+  }
+
+  setFuelOptions() {
+    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    this.form.patchValue({
+      fuelType: this.fuelOptions[0].fuelType
+    });
+    this.form.patchValue({
+      totalEmissionOutputRate: this.fuelOptions[0].outputRate
+    });
+    this.calculate();
+  }
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
+    this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+    this.form.patchValue({
+      totalEmissionOutputRate: tmpFuel.outputRate
+    });
+    this.calculate();
   }
 
   disableForm() {

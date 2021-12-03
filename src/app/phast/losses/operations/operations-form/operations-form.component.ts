@@ -184,6 +184,13 @@ export class OperationsFormComponent implements OnInit {
   setCo2SavingsData() {
     if (this.phast.co2SavingsData) {
       this.co2SavingsData = this.phast.co2SavingsData;
+      if (this.settings.energySourceType == 'Fuel') {
+        this.co2SavingsData.energyType = 'fuel';
+      } else if (this.settings.energySourceType == 'Electricity') {
+        this.co2SavingsData.energyType = 'electricity';
+      } else if (this.settings.energySourceType == 'Steam') {
+        this.co2SavingsData.energyType = 'fuel';
+      }
     } else {
       let co2SavingsData: Co2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
       this.co2SavingsData = co2SavingsData;

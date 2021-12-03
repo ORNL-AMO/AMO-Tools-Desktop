@@ -138,6 +138,7 @@ export interface PhastResults {
   calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
+  co2EmissionsOutput?: number;
 }
 
 export interface ShowResultsCategories {
@@ -159,6 +160,7 @@ export interface ExecutiveSummary {
   annualCostSavings?: number;
   implementationCosts?: number;
   paybackPeriod?: number;
+  co2EmissionsOutput?: number;
 }
 
 
