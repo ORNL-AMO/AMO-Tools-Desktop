@@ -90,7 +90,8 @@ app.on('ready', function () {
   var template = [{
     label: "Application",
     submenu: [
-      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
+      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } },
+      { label: "Dev Tools", accelerator: "CmdOrCtrl+I", click: function () { win.toggleDevTools(); } }
     ]
   }, {
     label: "Edit",
@@ -106,7 +107,7 @@ app.on('ready', function () {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  win.setAutoHideMenuBar(true)
+  win.setMenuBarVisibility(false)
 });
 
 // Listen for message from core.component to either download updates or not
