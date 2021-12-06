@@ -105,7 +105,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.disableForm()
     };
 
-    this.setSubRegionData();
+    this.setSubRegionData(true);
   }
 
   focusField(str: string) {
@@ -135,7 +135,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     }
   }
 
-  setSubRegionData() {
+  setSubRegionData(isFormInit: boolean = false) {
     this.zipCodeSubRegionData = [];
 
     let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.form.controls.zipcode.value === val.zip);
@@ -156,7 +156,9 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.form.controls.totalEmissionOutputRate.patchValue(null);
       this.form.controls.eGridSubregion.patchValue(null);
     }
-    this.calculate();
+    if (!isFormInit) {
+      this.calculate();
+    }
   }
 
   setBaselineSubregionForm() {
