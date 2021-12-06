@@ -14,7 +14,7 @@
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
-      <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+      <app-pump-operations *ngIf="stepTab == 'operations'" (emitChangeField)="changeField($event)" [currentField]="currentField" [(psat)]="_psat" (saved)="save()" [selected]="true"
       [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
@@ -28,7 +28,7 @@
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex" [currentTab]="stepTab" [inSetup]="true"
+      <app-help-panel [psat]="_psat" [settings]="settings" [currentField]="currentField" [modificationIndex]="modificationIndex" [currentTab]="stepTab" [inSetup]="true"
         [containerHeight]="containerHeight" [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>

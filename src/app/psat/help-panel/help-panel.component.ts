@@ -14,8 +14,8 @@ import { PsatTabService } from '../psat-tab.service';
 export class HelpPanelComponent implements OnInit {
   @Input()
   currentTab: string;
-  // @Input()
-  // currentField: string;
+  @Input()
+  currentField: string;
   @Input()
   settings: Settings;
   @Input()
@@ -36,7 +36,7 @@ export class HelpPanelComponent implements OnInit {
   showResults: boolean;
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
-
+  // currentField: string = 'default';
   tabSelect: string = 'results';
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
