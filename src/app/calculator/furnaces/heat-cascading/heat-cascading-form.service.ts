@@ -17,15 +17,17 @@ export class HeatCascadingFormService {
       priExhaustO2: [inputObj.priExhaustO2, [Validators.required, Validators.min(0), Validators.max(100)]],
       priCombAirTemperature: [inputObj.priCombAirTemperature, Validators.required],
       priOpHours: [inputObj.priOpHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      priFuelHV: [inputObj.priFuelHV, Validators.required],
-     
+      fuelHV: [inputObj.fuelHV, Validators.required],
+      fuelTempF: [inputObj.fuelTempF, Validators.required], 
+      ambientAirTempF: [inputObj.ambientAirTempF, Validators.required], 
+      combAirMoisturePerc: [inputObj.combAirMoisturePerc, [Validators.required, Validators.min(0), Validators.max(100)]],
       secFiringRate: [inputObj.secFiringRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       secExhaustTemperature: [inputObj.secExhaustTemperature, Validators.required],
       secExhaustO2: [inputObj.secExhaustO2, [Validators.required, Validators.min(0), Validators.max(100)]],
       secCombAirTemperature: [inputObj.secCombAirTemperature, Validators.required],
       secAvailableHeat: [inputObj.secAvailableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       secOpHours: [inputObj.secOpHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      secFuelCost: [inputObj.secFuelCost, Validators.required],
+      fuelCost: [inputObj.fuelCost, Validators.required],
 
       // Gas Material
       materialTypeId: [inputObj.materialTypeId],
@@ -55,7 +57,10 @@ export class HeatCascadingFormService {
       priExhaustO2: form.controls.priExhaustO2.value,
       priCombAirTemperature: form.controls.priCombAirTemperature.value,
       priOpHours: form.controls.priOpHours.value,
-      priFuelHV: form.controls.priFuelHV.value,
+      fuelHV: form.controls.fuelHV.value,
+      fuelTempF: form.controls.fuelTempF.value,
+      ambientAirTempF: form.controls.ambientAirTempF.value,
+      combAirMoisturePerc: form.controls.combAirMoisturePerc.value,
 
       secFiringRate: form.controls.secFiringRate.value,
       secExhaustTemperature: form.controls.secExhaustTemperature.value,
@@ -63,7 +68,7 @@ export class HeatCascadingFormService {
       secCombAirTemperature: form.controls.secCombAirTemperature.value,
       secAvailableHeat: form.controls.secAvailableHeat.value,
       secOpHours: form.controls.secOpHours.value,
-      secFuelCost: form.controls.secFuelCost.value,
+      fuelCost: form.controls.fuelCost.value,
       
       // Gas Material element properties
       materialTypeId: form.controls.materialTypeId.value,

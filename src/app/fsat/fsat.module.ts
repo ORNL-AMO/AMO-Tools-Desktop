@@ -43,6 +43,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { OperationsComponent } from './operations/operations.component';
+import { OperationsService } from './operations/operations.service';
 
 @NgModule({
   imports: [
@@ -68,7 +70,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
     FsatSankeyModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
   ],
   declarations: [
     FsatComponent,
@@ -84,7 +86,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AddModificationComponent,
     ModificationListComponent,
     ModifyFieldDataFormComponent,
-    FsatDiagramComponent
+    FsatDiagramComponent,
+    OperationsComponent
   ],
   providers: [
     FsatService,
@@ -96,7 +99,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ModifyConditionsService,
     CompareService,
     ConvertFsatService,
-    FsatWarningService
+    FsatWarningService,
+    OperationsService
   ]
 })
 export class FsatModule { }

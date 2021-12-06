@@ -1,0 +1,60 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+
+.btn-sm{
+	padding: 6px;
+}
+
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: nowrap;
+	text-align: center;
+  }
+  table {
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
+  }
+  
+  .form-control.min-width{
+	  min-width: 35px;
+  }
+
+  
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+  background-color: #7030A0;
+  color: white;
+}
+
+form{
+  margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: #bbb dashed 1px;
+}
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+.item-border{
+  margin-top: .5rem;
+    border-top: groove 2px;
+}

@@ -1,0 +1,149 @@
+<div class="d-flex flex-column panel-container">
+    <div class="header mr-2 ml-2">
+        <h3>System Information</h3>
+        <br>
+    </div>
+    <form class="pl-3 pr-3" [formGroup]="form">
+        <!--System Elevation-->
+        <div class="form-group" *ngIf="form.controls.atmosphericPressureKnown.value == false"
+            [ngClass]="{'invalid': form.controls.systemElevation.invalid}">
+            <label for="systemElevation">System Elevation</label>
+            <div class="input-group">
+                <input name="systemElevation" type="number" step="any" class="form-control" id="systemElevation"
+                    formControlName="systemElevation" (input)="setAtmosphericPressure()"
+                    (focus)="focusField('systemElevation')" min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.systemElevation.invalid && !form.controls.systemElevation.pristine">
+                <span *ngIf="form.controls.systemElevation.errors.required">Value Required</span>
+                <span *ngIf="form.controls.systemElevation.errors.min">Value can't be less than
+                    {{form.controls.systemElevation.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>
+                    .</span>
+                <span *ngIf="form.controls.systemElevation.errors.max">Value can't
+                    be greater than {{form.controls.systemElevation.errors.max.max}} ft.</span>
+            </span>
+        </div>
+        <!--atmospheric Pressure-->
+        <div class="form-group" [ngClass]="{'invalid': form.controls.atmosphericPressure.invalid}">
+            <label for="atmosphericPressure">Atmospheric Pressure
+                <a *ngIf="form.controls.atmosphericPressureKnown.value == false" class="form-text small click-link"
+                    (click)="toggleAtmosphericPressureKnown()">Pressure Known</a>
+                <a *ngIf="form.controls.atmosphericPressureKnown.value == true" class="form-text small click-link"
+                    (click)="toggleAtmosphericPressureKnown()">Calculate from Elevation</a>
+            </label>
+            <div class="input-group" *ngIf="form.controls.atmosphericPressureKnown.value == true">
+                <input name="atmosphericPressure" type="number" step="any" class="form-control" id="atmosphericPressure"
+                    formControlName="atmosphericPressure" (input)="save()" (focus)="focusField('atmosphericPressure')"
+                    min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kpaa</span>
+            </div>
+            <div class="input-group d-flex justify-content-center small bold"
+                *ngIf="form.controls.atmosphericPressureKnown.value == false">
+                {{form.controls.atmosphericPressure.value | number:'1.0-2'}}
+                <span class="pl-2" *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                <span class="pl-2" *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.atmosphericPressure.invalid && !form.controls.atmosphericPressure.pristine">
+                <span *ngIf="form.controls.atmosphericPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
+                    {{form.controls.atmosphericPressure.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+                </span>
+                <span *ngIf="form.controls.atmosphericPressure.errors.max">Value can't be greater than
+                    {{form.controls.atmosphericPressure.errors.max.max}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+                </span>
+            </span>
+        </div>
+        <!--Total Air Storage-->
+        <div class="form-group" [ngClass]="{'invalid': form.controls.totalAirStorage.invalid}">
+            <label for="totalAirStorage">Total Air Storage
+                <a class="form-text small click-link" (click)="openSystemCapacityModal()">Calculate Air Storage
+                    Capacity</a>
+            </label>
+            <div class="input-group">
+                <input name="totalAirStorage" type="number" step="any" class="form-control" id="totalAirStorage"
+                    formControlName="totalAirStorage" (input)="save()" (focus)="focusField('totalAirStorage')" min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup></span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.totalAirStorage.invalid && !form.controls.totalAirStorage.pristine">
+                <span *ngIf="form.controls.totalAirStorage.errors.required">Value Required</span>
+                <span *ngIf="form.controls.totalAirStorage.errors.greaterThan !== undefined">Value must be greater than
+                    0
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>.
+                </span>
+            </span>
+        </div>
+        <!--Is a target pressure sequencer used?-->
+        <div class="form-group">
+            <label for="isSequencerUsed">Is a target pressure sequencer used?</label>
+            <select class="form-control" name="isSequencerUsed" formControlName="isSequencerUsed"
+                (change)="changeIsSequencerUsed()" (focus)="focusField('isSequencerUsed')">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+        <!--Target Pressure-->
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
+            [ngClass]="{'invalid': form.controls.targetPressure.invalid}">
+            <label for="targetPressure">Target Pressure
+            </label>
+            <div class="input-group">
+                <input name="targetPressure" type="number" step="any" class="form-control" id="targetPressure"
+                    formControlName="targetPressure" (input)="changeTargetPressure()"
+                    (focus)="focusField('targetPressure')" min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.targetPressure.invalid && !form.controls.targetPressure.pristine">
+                <span *ngIf="form.controls.targetPressure.errors.required">Value Required</span>
+                <span *ngIf="form.controls.targetPressure.errors.min">Value can't be less than
+                    {{form.controls.targetPressure.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                </span>
+            </span>
+        </div>
+        <!--Variance (+/-)-->
+        <div class="form-group" *ngIf="form.controls.isSequencerUsed.value == true"
+            [ngClass]="{'invalid': form.controls.variance.invalid}">
+            <label for="variance">Variance (+/-)
+            </label>
+            <div class="input-group">
+                <input name="variance" type="number" step="any" class="form-control" id="variance"
+                    formControlName="variance" (input)="save()" (focus)="focusField('variance')" min="0">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">bara</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.variance.invalid && !form.controls.variance.pristine">
+                <span *ngIf="form.controls.variance.errors.required">Value Required</span>
+                <span *ngIf="form.controls.variance.errors.min">Value can't be less than
+                    {{form.controls.variance.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>.
+                </span>
+                <span *ngIf="form.controls.variance.errors.max">Value can't be greater than 50% of target pressure
+                    ({{form.controls.variance.errors.max.max | number:'1.0-0'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">bara</span>).
+                </span>
+            </span>
+        </div>
+    </form>
+</div>
+
+<app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings"
+    (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>

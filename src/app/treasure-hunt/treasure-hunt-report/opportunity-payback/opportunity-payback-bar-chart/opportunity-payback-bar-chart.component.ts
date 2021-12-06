@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from "@angular/core";
 import { OpportunitiesPaybackDetails } from "../../../../shared/models/treasure-hunt";
 import * as Plotly from 'plotly.js';
 import { graphColors } from "../../../../phast/phast-report/report-graphs/graphColors";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: "app-opportunity-payback-bar-chart",
@@ -13,6 +14,8 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   @Input()
   showPrint: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild("paybackBarChart", { static: false }) paybackBarChart: ElementRef;
   constructor() { }
@@ -50,7 +53,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         marker: {
           color: graphColors[tracesIndex]
         },
-        texttemplate: '%{y:$,.0f}'
+        texttemplate: '%{y:,.0f}'
       });
       tracesIndex++;
     })
@@ -62,8 +65,8 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         size: 14,
       },
       yaxis: {
-        hoverformat: '$.2s',
-        tickformat: '$.2s',
+        hoverformat: '.2s',
+        tickformat: '.2s',
         title: {
           // text: this.yAxisLabel,
           font: {
@@ -104,7 +107,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         marker: {
           color: graphColors[tracesIndex]
         },
-        texttemplate: '%{y:$,.0f}'
+        texttemplate: '%{y:,.0f}'
       });
       tracesIndex++;
     })
@@ -116,8 +119,8 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         size: 14,
       },
       yaxis: {
-        hoverformat: '$.2s',
-        tickformat: '$.2s',
+        hoverformat: '.2s',
+        tickformat: '.2s',
         title: {
           // text: this.yAxisLabel,
           font: {
@@ -144,19 +147,19 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   getLabelsAndData(): Array<{ label: string, data: number }> {
     return [
       {
-        label: "Less than 1 Year",
+        label: "Less than 1 Year (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings
       },
       {
-        label: "1 to 2 Years",
+        label: "1 to 2 Years (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings
       },
       {
-        label: "2 to 3 Years",
+        label: "2 to 3 Years (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings
       },
       {
-        label: "More than 3 Years",
+        label: "More than 3 Years (" + this.settings.currency + ")",
         data: this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
       }
     ]

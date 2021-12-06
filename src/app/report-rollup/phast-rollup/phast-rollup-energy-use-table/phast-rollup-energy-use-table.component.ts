@@ -26,12 +26,15 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
   showFuel: boolean;
   showElectricity: boolean;
   showTotal: boolean;
+  currencyUnit: string;
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     //pie chart data comes in converted to phastRollupUnit
     //use copy to convert to individual type settings
     this.tableData = JSON.parse(JSON.stringify(this.pieChartData));
+    this.currencyUnit = this.tableData[0].currencyUnit;
     this.tableData.forEach(dataItem => {
       if (dataItem.furnaceType == 'electricity') {
         dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);

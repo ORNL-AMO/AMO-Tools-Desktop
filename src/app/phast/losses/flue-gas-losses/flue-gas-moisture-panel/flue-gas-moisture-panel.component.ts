@@ -10,13 +10,13 @@ import { Settings } from '../../../../shared/models/settings';
   export class FlueGasMoisturePanelComponent implements OnInit {
     @Input()
     settings: Settings;
-    tabSelect: string;
+    
+    tabSelect: string = "results";
+    
     constructor() {
-       this.tabSelect = "results";
     }
     
     ngOnInit() {
-      
     }
 
     setTab(tab: string) {

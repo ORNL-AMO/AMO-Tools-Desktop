@@ -27,7 +27,7 @@
 	  </div>
 	  <!-- baseline -->
 	  <div class="d-flex">
-		<div class="p-0 col-8 d-flex scroll-item bg-white" [ngStyle]="{'height.px': containerHeight}">
+		<div class="p-0 h-100 col-8 d-flex scroll-item bg-white" [ngStyle]="{'height.px': containerHeight}">
 		  <div class="w-50 baseline panel-column" (click)="setBaselineSelected()" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
@@ -63,7 +63,7 @@
 				</div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
-				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+				<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
 				  (click)="btnResetData()">
 				  Reset Data
 				</button>

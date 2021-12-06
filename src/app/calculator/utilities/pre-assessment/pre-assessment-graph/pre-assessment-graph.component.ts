@@ -77,7 +77,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         type: 'pie',
         textposition: 'auto',
         insidetextorientation: "horizontal",
-        // automargin: true,
+        automargin: true,
         // textinfo: 'label+value',
         hoverformat: '.2r',
         texttemplate: textTemplate,

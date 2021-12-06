@@ -44,7 +44,7 @@
       <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm" [index]="index+1"
         [settings]="settings" (emitChangeField)="changeField($event, index)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+        <button type="button" class="btn btn-secondary pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>
         <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->

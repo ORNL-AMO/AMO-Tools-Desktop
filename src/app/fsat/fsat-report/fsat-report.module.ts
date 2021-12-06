@@ -20,6 +20,7 @@ import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { DetailedResultsComponent } from './detailed-results/detailed-results.component';
 import { TraverseResultsComponent } from './detailed-results/traverse-results/traverse-results.component';
+import { FanOperationsSummaryComponent } from './input-summary/fan-operations-summary/fan-operations-summary.component';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import { TraverseResultsComponent } from './detailed-results/traverse-results/tr
     PieChartModule,
     SharedPipesModule,
   ],
-  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent, TraverseResultsComponent],
+  declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent, TraverseResultsComponent, FanOperationsSummaryComponent],
   exports: [FsatReportComponent]
 })
 export class FsatReportModule { }

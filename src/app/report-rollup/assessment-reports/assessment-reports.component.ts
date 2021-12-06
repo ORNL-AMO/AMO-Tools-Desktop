@@ -12,6 +12,7 @@ import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
+import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -26,12 +27,14 @@ export class AssessmentReportsComponent implements OnInit {
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
   _wasteWaterAssessments: Array<ReportItem>;
+  _compressedAirAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   wasteWaterAssessmentsSub: Subscription;
+  compressedAirAssessmentsSub: Subscription;
   printView: boolean;
   printViewSub: Subscription;
   rollupPrintOptions: PrintOptions;
@@ -45,7 +48,7 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();
@@ -94,6 +97,11 @@ export class AssessmentReportsComponent implements OnInit {
       if (val) {
         this._wasteWaterAssessments = val;
       }
+    });
+    this.compressedAirAssessmentsSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
+      if(val){
+        this._compressedAirAssessments = val;
+      }
     })
   }
 
@@ -107,6 +115,7 @@ export class AssessmentReportsComponent implements OnInit {
     this.printViewSub.unsubscribe();
     this.selectedCalcsSub.unsubscribe();
     this.wasteWaterAssessmentsSub.unsubscribe();
+    this.compressedAirAssessmentsSub.unsubscribe();
   }
 
   setSelectedCalcsArrays(selectedCalcs: Array<Calculator>) {

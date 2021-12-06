@@ -132,12 +132,17 @@ export class LogToolDataService {
           csvData.csvImportData.data.map(dataItem => { 
                       if (dataItem[csvData.dateField.fieldName]) {
                         dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[csvData.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); 
+                        delete dataItem[csvData.timeField.fieldName];
                       }
                       else {
                         dataItem[csvData.dateField.fieldName] = 'Invalid date';
                       }
                     });
+          csvData.hasTimeField = false;
+          let timeIndex = csvData.fields.indexOf(csvData.timeField);
+          csvData.fields.splice(timeIndex, 1);
         }
+
         else {
           csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
         }
@@ -157,6 +162,7 @@ export class LogToolDataService {
         csvData.dataPointsPerColumn = csvData.csvImportData.data.length;
       }
     });
+    this.logToolService.setFields(individualDataFromCsv);
   }
 
   divideDataIntoDays(data: Array<any>, dateField: string): Array<{ date: Date, data: Array<any> }> {

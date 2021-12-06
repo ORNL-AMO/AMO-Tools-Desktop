@@ -1,0 +1,31 @@
+<form [formGroup]="form">
+    <div class="p-1">
+        <div class="form-group">
+            <label for="altitude">Altitude</label>
+            <div class="input-group">
+                <input class="form-control number-input-field" name="altitude" id="altitude" formControlName="altitude"
+                    type="number" (input)="save()" (focus)="focusField('altitude')" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.altitude.invalid && !form.controls.altitude.pristine">
+                    <span *ngIf="form.controls.altitude.errors.required">Value required
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="barometricPressure">Barometric Pressure (P<sub>atm</sub>)
+            </label>
+            <div class="input-group d-flex justify-content-center small bold pt-1">
+                <span class="mr-2" *ngIf="barometricPressure">
+                    {{barometricPressure | number:'1.2-2'}}
+                </span>
+                <span class="mr-2" *ngIf="!barometricPressure">&mdash; &mdash;</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kpaa</span>
+            </div>
+        </div>
+    </div>
+
+</form>

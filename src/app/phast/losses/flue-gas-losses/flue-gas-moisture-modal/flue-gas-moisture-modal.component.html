@@ -1,10 +1,23 @@
-
-<div class = "d-flex h-100">
-    <div class = "w-50 h-100" [ngStyle] = "{'height.px': containerHeight}">
+<div class="card h-100">
+  <div class="card-body custom-card-body card-container col">
+    <div class="row h-100">
+      <div class="col-sm-6 col-md-6 card-column scroll-item">
+        <div class="row phast align-items-top">
+          <div class="col-12">
+            <div class="header card-header">
+              <h3>Calculate Moisture in Combustion Air</h3>
+            </div>
+          </div>
+        </div>
         <app-flue-gas-losses-moisture (closeModal)="hideMoistureModal($event)" (hideModal)="hideMoistureModal($event)"
-        [settings]="settings"></app-flue-gas-losses-moisture>
+          [settings]="settings"></app-flue-gas-losses-moisture>
+      </div>
+
+      <div class="col-sm-6 col-md-6 card-help-column pb-5 scroll-item">
+        <app-flue-gas-moisture-panel [settings]="settings">
+        </app-flue-gas-moisture-panel>
+      </div>
+
     </div>
-    <div class = "w-50 h-100" [ngStyle] = "{'height.px': containerHeight}">
-        <app-flue-gas-moisture-panel [settings]="settings"></app-flue-gas-moisture-panel>
-    </div>
+  </div>
 </div>

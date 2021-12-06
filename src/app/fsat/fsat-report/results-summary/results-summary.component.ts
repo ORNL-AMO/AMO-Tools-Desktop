@@ -50,6 +50,10 @@ export class ResultsSummaryComponent implements OnInit {
 
   getModificationsMadeList(modifiedFsat: FSAT): Array<string> {
     let modificationsMadeList: Array<string> = new Array();
+    let isOperationsDifferent: boolean = this.compareService.checkFanOperationsDifferent(this.fsat, modifiedFsat);
+    if(isOperationsDifferent == true){
+      modificationsMadeList.push('Operations');
+    }
     let isFluidDifferent: boolean = this.compareService.checkFluidDifferent(this.fsat, modifiedFsat);
     if(isFluidDifferent == true){
       modificationsMadeList.push('Fluid');
@@ -107,6 +111,16 @@ export class ResultsSummaryComponent implements OnInit {
       modNote: modNote
     };
     return summaryNote;
+  }
+
+  getModificationScenario(modifiedFsat: FSAT): Array<string> {
+    let modificationScenario: Array<string> = new Array();
+    if (modifiedFsat.whatIfScenario == true) {
+      modificationScenario.push('Modify Fan');
+    } else if (modifiedFsat.whatIfScenario == false) {
+      modificationScenario.push('Compare Two Fans');
+    }
+    return modificationScenario;
   }
 
 }

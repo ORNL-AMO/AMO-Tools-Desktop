@@ -97,6 +97,7 @@ export interface TraceData {
     name?: string,
     id?: string,
     showlegend?: boolean,
+    legendGroup?: string,
     hovertemplate?: string,
     textposition?: string,
     customdata?: Array<number | string>,
@@ -129,7 +130,7 @@ export interface TraceData {
         sizemode?: string,
     },
     line?: {
-        shape: string,
+        shape?: string,
         color?: string,
         dash?: string,
         smoothing?: number

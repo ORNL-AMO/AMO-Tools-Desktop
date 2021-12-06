@@ -129,7 +129,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   checkWarnings() {
     let tmpMaterial: LiquidChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm).liquidChargeMaterial;
     this.warnings = this.liquidMaterialFormService.checkLiquidWarnings(tmpMaterial);
-    let hasWarning: boolean = this.warnings.dischargeTempWarning !== undefined || this.warnings.inletOverVaporizingWarning !== undefined || this.warnings.outletOverVaporizingWarning !== undefined;
+    let hasWarning: boolean = this.warnings.dischargeTempWarning !== null || this.warnings.inletOverVaporizingWarning !== null || this.warnings.outletOverVaporizingWarning !== null;
     this.inputError.emit(hasWarning);
   }
 

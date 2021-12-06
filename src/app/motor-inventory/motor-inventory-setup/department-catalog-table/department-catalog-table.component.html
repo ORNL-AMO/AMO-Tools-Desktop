@@ -79,6 +79,13 @@
                         $ &mdash;
                     </span>
                 </td>
+                <td>
+                    <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(tableDataItem.motorItem)"></a>
+                    
+                </td>
+                <td>
+                    <a class="fa fa-copy" (click)="createCopy(tableDataItem.motorItem)"></a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -90,3 +97,6 @@
 <div class="p-2 w-100 text-center">
     <img src="assets/images/energy-use-equation.PNG" class="w-100">
 </div>
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteMotorInventoryData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

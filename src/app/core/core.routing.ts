@@ -92,6 +92,7 @@ import { OpeningComponent } from '../calculator/furnaces/opening/opening.compone
 import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { StatePointAnalysisComponent } from '../calculator/waste-water/state-point-analysis/state-point-analysis.component';
 import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
 import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
 import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
@@ -103,7 +104,13 @@ import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
 import { ChillerStagingComponent } from '../calculator/process-cooling/chiller-staging/chiller-staging.component';
 import { WaterHeatingComponent } from '../calculator/steam/water-heating/water-heating.component';
+import { CompressedAirAssessmentComponent } from '../compressed-air-assessment/compressed-air-assessment.component';
 import { FanSystemChecklistComponent } from '../calculator/fans/fan-system-checklist/fan-system-checklist.component';
+import { FullLoadAmpsComponent } from '../calculator/motors/full-load-amps/full-load-amps.component';
+
+import { AltitudeCorrectionComponent } from '../calculator/utilities/altitude-correction/altitude-correction.component';
+import { FeedwaterEconomizerComponent } from '../calculator/steam/feedwater-economizer/feedwater-economizer.component';
+import { CondensingEconomizerComponent } from '../calculator/steam/condensing-economizer/condensing-economizer.component';
 
 export const coreRoutes: Routes = [
   {
@@ -273,6 +280,10 @@ export const coreRoutes: Routes = [
             component: CompressedAirReductionComponent
           },
           {
+            path: 'altitude-correction',
+            component: AltitudeCorrectionComponent
+          },
+          {
             path: 'electricity-reduction',
             component: ElectricityReductionComponent
           },
@@ -305,6 +316,10 @@ export const coreRoutes: Routes = [
             component: WaterHeatingComponent
           },
           {
+            path: 'feedwater-economizer',
+            component: FeedwaterEconomizerComponent
+          },
+          {
             path: 'steam-reduction',
             component: SteamReductionComponent
           },
@@ -331,6 +346,10 @@ export const coreRoutes: Routes = [
           {
             path: 'replace-existing',
             component: ReplaceExistingComponent
+          },
+          {
+            path: 'full-load-amps',
+            component: FullLoadAmpsComponent
           },
           {
             path: 'efficiency-improvement',
@@ -449,6 +468,10 @@ export const coreRoutes: Routes = [
             component: SteamPropertiesComponent
           },
           {
+            path: 'condensing-economizer',
+            component: CondensingEconomizerComponent
+          },
+          {
             path: 'turbine',
             component: TurbineComponent
           },
@@ -487,6 +510,10 @@ export const coreRoutes: Routes = [
           {
             path: 'o2-utilization-rate',
             component: O2UtilizationRateComponent
+          },
+          {
+            path: 'state-point-analysis',
+            component: StatePointAnalysisComponent
           }
         ]
       }
@@ -516,6 +543,10 @@ export const coreRoutes: Routes = [
   {
     path: 'treasure-hunt/:id',
     component: TreasureHuntComponent
+  },
+  {
+    path: 'compressed-air/:id',
+    component: CompressedAirAssessmentComponent
   },
   {
     path: 'report-rollup',

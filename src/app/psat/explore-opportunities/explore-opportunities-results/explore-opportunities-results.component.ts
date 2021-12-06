@@ -40,11 +40,12 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.psat.modifications && this.psat.modifications.length > 0) {
-      this.isWhatIfScenario = this.psat.modifications[this.exploreModIndex].psat.inputs.whatIfScenario;
-    }    
+    if (!this.inSetup) {
+      if (this.psat.modifications && this.psat.modifications.length > 0) {
+        this.isWhatIfScenario = this.psat.modifications[this.exploreModIndex].psat.inputs.whatIfScenario;
+      }
+    }
   }
-
 
   getDiff(num1: number, num2: number) {
     let diff = num1 - num2;

@@ -31,7 +31,23 @@ export const specificVolume = {
                 display: '(gal/lb)'
             },
             to_anchor: 1 / 119.826
-        }
+        },
+        'L/g': {
+            name: {
+                singular: 'Liter per gram',
+                plural: 'Liters per gram',
+                display: '(L/g)'
+            },
+            to_anchor: 1
+        },
+        'mL/g': {
+            name: {
+                singular: 'Milliliter per gram',
+                plural: 'Milliliters per gram',
+                display: '(mL/g)'
+            },
+            to_anchor: 1 / 1000
+        },
     },
     // imperial: {
     //     ft3lb: {
@@ -45,8 +61,8 @@ export const specificVolume = {
     // },
     _anchors: {
         metric: {
-            unit: 'm3kg'
-            , ratio: 1
+            unit: 'm3kg', 
+            ratio: 1
         }
         // , imperial: {
         //     unit: 'ft3lb'

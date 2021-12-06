@@ -27,21 +27,56 @@ export const otherFuels: Array<OtherFuel> = [
         ]
     },
     {
-        energySource: 'Liquified petroleum gases (LPG)',
+        energySource: 'Petroleum-based fuels',
         fuelTypes: [
+            {
+                fuelType: 'Diesel (Distillate Fuel #2',
+                outputRate: 73.96
+            },
+            {
+                fuelType: 'Motor Gasoline',
+                outputRate: 70.22
+            },
             {
                 fuelType: 'Liquified petroleum gases (LPG)',
                 outputRate: 61.71
-            }
-        ]
-
-    },
-    {
-        energySource: 'Distillate (Light) Fuel Oil',
-        fuelTypes: [
+            },
             {
-                fuelType: 'Distillate Fuel #2',
-                outputRate: 73.96
+                fuelType: 'Kerosene',
+                outputRate: 75.2
+            },
+            {
+                fuelType: 'Crude Oil',
+                outputRate: 74.54
+            },
+            {
+                fuelType: 'Ethane',
+                outputRate: 59.6
+            },
+            {
+                fuelType: 'Ethylene',
+                outputRate: 65.96
+            },
+            {
+                fuelType: 'Propane',
+                outputRate: 62.87
+            },
+            {
+                fuelType: 'Propylene',
+                outputRate: 67.77
+            },
+                      
+            {
+                fuelType: 'Isobutane',
+                outputRate: 64.94
+            },
+            {
+                fuelType: 'Butane',
+                outputRate: 64.77
+            },
+            {
+                fuelType: 'Pentanes Plus',
+                outputRate: 70.02
             },
             {
                 fuelType: 'Distillate Fuel #1',
@@ -52,16 +87,44 @@ export const otherFuels: Array<OtherFuel> = [
                 outputRate: 75.04
             },
             {
-                fuelType: 'Residual Fuel #6',
-                outputRate: 75.1
-            },
-            {
                 fuelType: 'Residual Fuel #5',
                 outputRate: 72.93
             },
-
+            {
+                fuelType: 'Residual Fuel #6',
+                outputRate: 75.1
+            },
         ]
 
+    },
+    {
+        energySource: 'Biomass fuels',
+        fuelTypes: [
+            {
+                fuelType: 'Biodiesel',
+                outputRate: 73.84
+            },
+            {
+                fuelType: 'Ethanol',
+                outputRate: 68.44
+            },
+            {
+                fuelType: 'Wood',
+                outputRate: 93.8
+            },
+            {
+                fuelType: 'Bagasse Pulping Liquor',
+                outputRate: 95.5
+            },
+            {
+                fuelType: 'Agricultural Byproduct',
+                outputRate: 118.17
+            },
+            {
+                fuelType: 'Landfill Gas',
+                outputRate: 52.07,
+            }
+        ]
     },
     {
         energySource: 'Coal',
@@ -118,47 +181,7 @@ export const otherFuels: Array<OtherFuel> = [
             {
                 fuelType: 'Coke Oven Gas',
                 outputRate: 46.85
-            },
-            {
-                fuelType: 'Crude Oil',
-                outputRate: 74.54
-            },
-            {
-                fuelType: 'Motor Gasoline',
-                outputRate: 70.22
-            },
-            {
-                fuelType: 'Propane',
-                outputRate: 62.87
-            },
-            {
-                fuelType: 'Propylene',
-                outputRate: 67.77
-            },
-            {
-                fuelType: 'Ethane',
-                outputRate: 59.6
-            },
-            {
-                fuelType: 'Ethylene',
-                outputRate: 65.96
-            },
-            {
-                fuelType: 'Isobutane',
-                outputRate: 64.94
-            },
-            {
-                fuelType: 'Butane',
-                outputRate: 64.77
-            },
-            {
-                fuelType: 'Pentanes Plus',
-                outputRate: 70.02
-            },
-            {
-                fuelType: 'Kerosene',
-                outputRate: 75.2
-            }
+            },          
 
         ]
     }

@@ -24,6 +24,10 @@ export class ReportRollupUnitsComponent implements OnInit {
     'kgoe',
     'kWh'
   ];
+  currencies: Array<string> = [
+    '$',
+    // '$k'
+  ];
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
   tmpSettings: Settings;
@@ -63,6 +67,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.settings.phastRollupElectricityUnit = this.tmpSettings.phastRollupElectricityUnit;
     this.settings.phastRollupFuelUnit = this.tmpSettings.phastRollupFuelUnit;
     this.settings.phastRollupSteamUnit = this.tmpSettings.phastRollupSteamUnit;
+    this.settings.currency = this.tmpSettings.currency;
     this.reportRollupService.settings.next(this.settings);
     this.newUnit();
     this.closeUnitModal.emit(true);

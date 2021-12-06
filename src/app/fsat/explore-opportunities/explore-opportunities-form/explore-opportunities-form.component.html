@@ -11,7 +11,8 @@
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
-          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" />
+          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"
+          [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false" />
         {{ fsat.modifications[exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>
@@ -33,9 +34,10 @@
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
 
     <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (emitCalculate)="save()"
-      [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
-      [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
-      [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"
+      [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm" [baselineOperationsForm]="baselineOperationsForm"
+      [modificationForm]="modificationFieldDataForm" [modificationOperationsForm]="modificationOperationsForm" [baselineWarnings]="baselineFanFieldDataWarnings"
+      [modificationWarnings]="modificationFanFieldDataWarnings" [baselineOperationsWarnings]="baselineOperationsWarnings"
+      [modificationOperationsWarnings]="modificationOperationsWarnings" (showPressureModal)="openPressureModal($event)"
       [fsat]="fsat"></app-system-data-form>
   </div>
 </div>

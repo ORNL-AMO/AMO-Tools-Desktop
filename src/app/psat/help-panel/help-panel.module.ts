@@ -10,6 +10,7 @@ import { ModifyConditionsNotesComponent } from '../modify-conditions/modify-cond
 import { HelpPanelService } from './help-panel.service';
 import { FormsModule } from '@angular/forms';
 import { ExploreOpportunitiesModule } from '../explore-opportunities/explore-opportunities.module';
+import { PumpOperationsHelpComponent } from './pump-operations-help/pump-operations-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +23,8 @@ import { ExploreOpportunitiesModule } from '../explore-opportunities/explore-opp
     PumpFluidHelpComponent,
     MotorHelpComponent,
     FieldDataHelpComponent,
-    ModifyConditionsNotesComponent
+    ModifyConditionsNotesComponent,
+    PumpOperationsHelpComponent
   ],
   providers: [
     HelpPanelService

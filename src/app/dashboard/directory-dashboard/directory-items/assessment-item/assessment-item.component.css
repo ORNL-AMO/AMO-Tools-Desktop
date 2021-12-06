@@ -34,6 +34,11 @@
     border-bottom: #2E4053 groove 2px;
     border-image: linear-gradient(to right, #F0F3F4, #003087) 50 / 2;
   }
+
+  .compressed-air .summary-card-header{
+    border-bottom: #2E4053 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #7030A0) 50 / 2;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;
@@ -245,6 +250,11 @@ i{
     background-color: #003087;
   }
   
+  .compressed-air .dropdown-toggle,
+  .compressed-air .btn-primary{
+    background-color: #7030A0;
+  }
+
   .dropdown-menu.shown{
   left: -160px;
   background-color: #ececec;

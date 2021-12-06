@@ -90,7 +90,7 @@
         <div class="results print-height scroll-item"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-energy-analysis [printView]="showPrintView"></app-energy-analysis>
+            <app-energy-analysis [printView]="showPrintView" [settings]="settings"></app-energy-analysis>
             <app-srt-graphs [printView]="showPrintView" [settings]="settings"></app-srt-graphs>
         </div>
     </div>

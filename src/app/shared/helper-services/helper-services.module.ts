@@ -6,6 +6,7 @@ import { SvgToPngService } from './svg-to-png.service';
 import { UpdateDataService } from './update-data.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { CsvToJsonService } from './csv-to-json.service';
+import { EGridService } from './e-grid.service';
 
 @NgModule({
   declarations: [],
@@ -18,7 +19,8 @@ import { CsvToJsonService } from './csv-to-json.service';
     SvgToPngService,
     UpdateDataService,
     ConvertUnitsService,
-    CsvToJsonService
+    CsvToJsonService,
+    EGridService
   ]
 })
 export class HelperServicesModule { }

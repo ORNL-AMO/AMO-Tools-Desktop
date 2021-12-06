@@ -1,6 +1,7 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
         {{ fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.display}}
     </label>
@@ -48,6 +49,7 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
         {{fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.display}}
     </label>
@@ -140,30 +142,31 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="showSystemData">
         <input type="checkbox" id="showSystemData" (focus)="focusField('cost')" (change)="toggleSystemData()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
         Adjust Operational Data
     </label>
 </div>
 <li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
-    <form [formGroup]="baselineForm" class="explore-opps-form">
+    <form [formGroup]="baselineOperationsForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
-            [ngClass]="{'error': baselineWarnings.costError !== null, 'invalid':baselineForm.controls.cost.invalid}">
+            [ngClass]="{'error': baselineOperationsWarnings.costError !== null, 'invalid':baselineOperationsForm.controls.cost.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.cost.value }}</div>
+            <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.cost.value }}</div>
             <span class="alert-danger pull-right small"
-                *ngIf="baselineForm.controls.cost.invalid && !baselineForm.controls.cost.pristine">
-                <span *ngIf="baselineForm.controls.cost.errors.required">Value Required</span>
-                <span *ngIf="baselineForm.controls.cost.errors.min">Value can't be less than
-                    {{baselineForm.controls.cost.errors.min.min}} $/kWh.</span>
+                *ngIf="baselineOperationsForm.controls.cost.invalid && !baselineOperationsForm.controls.cost.pristine">
+                <span *ngIf="baselineOperationsForm.controls.cost.errors.required">Value Required</span>
+                <span *ngIf="baselineOperationsForm.controls.cost.errors.min">Value can't be less than
+                    {{baselineOperationsForm.controls.cost.errors.min.min}} $/kWh.</span>
             </span>
             <span class="alert-warning pull-right small"
-                *ngIf="baselineWarnings.costError !== null && !baselineForm.controls.cost.pristine && !baselineForm.controls.cost.invalid">
-                {{baselineWarnings.costError}} $/kWh.</span>
+                *ngIf="baselineOperationsWarnings.costError !== null && !baselineOperationsForm.controls.cost.pristine && !baselineOperationsForm.controls.cost.invalid">
+                {{baselineOperationsWarnings.costError}} $/kWh.</span>
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="explore-opps-form">
+    <form [formGroup]="modificationOperationsForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
-            [ngClass]="{'error': modificationWarnings.costError !== null, 'invalid':modificationForm.controls.cost.invalid }">
+            [ngClass]="{'error': modificationOperationsWarnings.costError !== null, 'invalid':modificationOperationsForm.controls.cost.invalid }">
             <label for="modificationCost" class="mod-value-label">Modification Cost</label>
             <div class="input-group mod-max-width">
                 <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost"
@@ -171,34 +174,34 @@
                 <span class="input-group-addon units">$/kWh</span>
             </div>
             <span class="alert-danger pull-right small"
-                *ngIf="modificationForm.controls.cost.invalid && !modificationForm.controls.cost.pristine">
-                <span *ngIf="modificationForm.controls.cost.errors.required">Value Required</span>
-                <span *ngIf="modificationForm.controls.cost.errors.min">Value can't be less than
-                    {{modificationForm.controls.cost.errors.min.min}} $/kWh.</span>
+                *ngIf="modificationOperationsForm.controls.cost.invalid && !modificationOperationsForm.controls.cost.pristine">
+                <span *ngIf="modificationOperationsForm.controls.cost.errors.required">Value Required</span>
+                <span *ngIf="modificationOperationsForm.controls.cost.errors.min">Value can't be less than
+                    {{modificationOperationsForm.controls.cost.errors.min.min}} $/kWh.</span>
             </span>
             <span class="alert-warning pull-right small"
-                *ngIf="modificationWarnings.costError !== null && !modificationForm.controls.cost.pristine && !modificationForm.controls.cost.invalid">
-                {{modificationWarnings.costError}} $/kWh.</span>
+                *ngIf="modificationOperationsWarnings.costError !== null && !modificationOperationsForm.controls.cost.pristine && !modificationOperationsForm.controls.cost.invalid">
+                {{modificationOperationsWarnings.costError}} $/kWh.</span>
         </div>
     </form>
 </li>
 <li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
-    <form [formGroup]="baselineForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
+    <form [formGroup]="baselineOperationsForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineOperationsForm.controls.operatingHours.invalid}">
             <label for="baselineOperatingHours" class="baseline-value-label">Baseline Operating Hours</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value | number: '1.0-0' }} hrs/yr</div>
+            <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.operatingHours.value | number: '1.0-0' }} hrs/yr</div>
             <span class="alert-danger pull-right small"
-                *ngIf="baselineForm.controls.operatingHours.invalid && !baselineForm.controls.operatingHours.pristine">
-                <span *ngIf="baselineForm.controls.operatingHours.errors.required">Value Required</span>
-                <span *ngIf="baselineForm.controls.operatingHours.errors.max">Value can't be greater than
-                    {{baselineForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
-                <span *ngIf="baselineForm.controls.operatingHours.errors.min">Value can't be less than
-                    {{baselineForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
+                *ngIf="baselineOperationsForm.controls.operatingHours.invalid && !baselineOperationsForm.controls.operatingHours.pristine">
+                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.required">Value Required</span>
+                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.max">Value can't be greater than
+                    {{baselineOperationsForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.min">Value can't be less than
+                    {{baselineOperationsForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
+    <form [formGroup]="modificationOperationsForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationOperationsForm.controls.operatingHours.invalid}">
             <label for="modificationOperatingHours" class="mod-value-label">Modification Operating Hours</label>
             <div class="input-group mod-max-width">
                 <span class="input-group-addon op-hour-addon units">
@@ -210,12 +213,12 @@
                 <span class="input-group-addon units">hrs/yr</span>
             </div>
             <span class="alert-danger pull-right small"
-                *ngIf="modificationForm.controls.operatingHours.invalid && !modificationForm.controls.operatingHours.pristine">
-                <span *ngIf="modificationForm.controls.operatingHours.errors.required">Value Required</span>
-                <span *ngIf="modificationForm.controls.operatingHours.errors.max">Value can't be greater than
-                    {{modificationForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
-                <span *ngIf="modificationForm.controls.operatingHours.errors.min">Value can't be less than
-                    {{modificationForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
+                *ngIf="modificationOperationsForm.controls.operatingHours.invalid && !modificationOperationsForm.controls.operatingHours.pristine">
+                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.required">Value Required</span>
+                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.max">Value can't be greater than
+                    {{modificationOperationsForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.min">Value can't be less than
+                    {{modificationOperationsForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
             </span>
         </div>
     </form>

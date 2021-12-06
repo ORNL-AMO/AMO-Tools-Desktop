@@ -213,7 +213,7 @@ export class ExploreAeratorFormComponent implements OnInit {
   setDisableOptimize() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
-    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[modificationIndex].activatedSludgeData, wasteWater.modifications[modificationIndex].aeratorPerformanceData, wasteWater.systemBasics);
+    let modificationValid: WasteWaterValid = this.wasteWaterService.checkWasteWaterValid(wasteWater.modifications[modificationIndex].activatedSludgeData, wasteWater.modifications[modificationIndex].aeratorPerformanceData, wasteWater.modifications[modificationIndex].operations);
     this.disableOptimize = modificationValid.isValid == false;
   }
 

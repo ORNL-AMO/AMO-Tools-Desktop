@@ -4,6 +4,7 @@ import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import * as Plotly from 'plotly.js';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from "../../../../shared/models/settings";
 
 export interface ChartOpportunity {
   curveNumber: number, 
@@ -27,6 +28,8 @@ export class EffortSavingsChartComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   showPrint: boolean;
+  @Input()
+  settings: Settings;
 
   hoverBtnLabels: boolean = false;
   displayLabelsTooltip: boolean = false;

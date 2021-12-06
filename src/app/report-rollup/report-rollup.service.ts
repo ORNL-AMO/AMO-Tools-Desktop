@@ -17,6 +17,7 @@ import { FsatReportRollupService } from './fsat-report-rollup.service';
 import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
+import { CompressedAirReportRollupService } from './compressed-air-report-rollup.service';
 
 @Injectable()
 export class ReportRollupService {
@@ -39,7 +40,8 @@ export class ReportRollupService {
     private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService,
     private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService
+    private wasteWaterReportRollupService: WasteWaterReportRollupService,
+    private compressedAirReportRollupService: CompressedAirReportRollupService
 
   ) {
     this.initSummary();
@@ -52,6 +54,7 @@ export class ReportRollupService {
     this.ssmtReportRollupService.initSummary();
     this.treasureHuntReportRollupService.initSummary();
     this.wasteWaterReportRollupService.initSummary();
+    this.compressedAirReportRollupService.initSummary();
     this.reportAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
@@ -98,6 +101,8 @@ export class ReportRollupService {
     this.treasureHuntReportRollupService.treasureHuntAssessments.next(treasureHuntArray);
     let wasteWaterArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'WasteWater' });
     this.wasteWaterReportRollupService.wasteWaterAssessments.next(wasteWaterArray);
+    let compressedAirArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'CompressedAir' });
+    this.compressedAirReportRollupService.compressedAirAssessments.next(compressedAirArray);
     this.reportAssessments.next(this.assessmentsArray);
   }
 

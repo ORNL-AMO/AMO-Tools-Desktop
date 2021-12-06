@@ -6,10 +6,10 @@
           Payback Length
         </td>
         <td>
-          Number of Opportunites
+          Number of Opportunities
         </td>
         <td>
-          Total Savings
+          Total Savings ({{settings.currency}})
         </td>
       </tr>
       <tr>
@@ -22,7 +22,7 @@
         <td>
           {{
             opportunitiesPaybackDetails.lessThanOneYear.totalSavings
-              | currency: "USD":"symbol":"1.0-0"
+              | number:"1.0-0"
           }}
         </td>
       </tr>
@@ -36,7 +36,7 @@
         <td>
           {{
             opportunitiesPaybackDetails.oneToTwoYears.totalSavings
-              | currency: "USD":"symbol":"1.0-0"
+              | number:"1.0-0"
           }}
         </td>
       </tr>
@@ -50,7 +50,7 @@
         <td>
           {{
             opportunitiesPaybackDetails.twoToThreeYears.totalSavings
-              | currency: "USD":"symbol":"1.0-0"
+              | number:"1.0-0"
           }}
         </td>
       </tr>
@@ -64,7 +64,7 @@
         <td>
           {{
             opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
-              | currency: "USD":"symbol":"1.0-0"
+              | number:"1.0-0"
           }}
         </td>
       </tr>
@@ -78,7 +78,7 @@
         <td>
           {{
             opportunitiesPaybackDetails.totals.totalSavings
-              | currency: "USD":"symbol":"1.0-0"
+              | number:"1.0-0"
           }}
         </td>
       </tr>

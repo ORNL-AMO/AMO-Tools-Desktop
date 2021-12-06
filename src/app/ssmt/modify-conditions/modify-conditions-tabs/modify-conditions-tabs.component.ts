@@ -127,11 +127,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setHeaderBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.headerService.isHeaderValid(baseline.headerInput, this.settings, baseline.boilerInput);
+    let validBaselineTest = this.headerService.isHeaderValid(baseline.headerInput, baseline, this.settings, baseline.boilerInput);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.headerService.isHeaderValid(modification.headerInput, this.settings, modification.boilerInput);
+      validModTest = this.headerService.isHeaderValid(modification.headerInput, baseline, this.settings, modification.boilerInput);
       isDifferent = this.compareService.checkHeaderDifferent();
     }
     let inputError: boolean;

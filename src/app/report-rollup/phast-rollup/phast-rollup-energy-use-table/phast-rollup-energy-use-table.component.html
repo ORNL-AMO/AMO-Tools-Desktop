@@ -10,7 +10,7 @@
       </th>
       <th *ngIf="showFuel">
         Annual Cost
-        <br> ($/yr)
+        <br> ({{currencyUnit}}/yr)
       </th>
       <th *ngIf="showElectricity">
         Electrical Energy Use
@@ -18,7 +18,7 @@
       </th>
       <th *ngIf="showElectricity">
         Annual Cost
-        <br> ($/yr)
+        <br> ({{currencyUnit}}/yr)
       </th>
       <th *ngIf="showSteam">
         Steam Energy Use
@@ -26,11 +26,11 @@
       </th>
       <th *ngIf="showSteam">
         Annual Cost
-        <br> ($/yr)
+        <br> ({{currencyUnit}}/yr)
       </th>
       <th *ngIf="showTotal">
         Total Annual Cost
-        <br> ($/yr)
+        <br> ({{currencyUnit}}/yr)
       </th>
       <th>
         % of Total Cost

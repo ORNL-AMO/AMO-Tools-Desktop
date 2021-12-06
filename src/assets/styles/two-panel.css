@@ -117,6 +117,9 @@
     border-bottom: #003087 solid 2px;
 }
 
+.compressed-air .header{
+    border-bottom: #7030A0 solid 2px;
+}
 
 .psat .disabled .header{
     border-bottom-color: gray;
@@ -124,10 +127,6 @@
 
 .log-tool .header{
     border-bottom: #117A65 solid 2px;
-}
-
-.compressed-air .header{
-    border-bottom: #A569BD groove 2px;
 }
 
 .process-cooling .header{
@@ -188,6 +187,11 @@
     background-origin: #003087;
     transition: all .5s ease-in-out;
     color: white;
+}
+
+.compressed-air .btn-secondary:not([disabled]):not(.disabled).active{
+    background-origin: #7030A0;
+    transition: all .5s ease-in-out;
 }
 
 .panel-column.disabled .form-card{
@@ -293,7 +297,7 @@
 }
 
 .compressed-air .group-label{
-    border-bottom: #A569BD groove 2px;
+    border-bottom: #7030A0 groove 2px;
 }
 
 .process-cooling .group-label{
@@ -498,3 +502,10 @@
         background-color: #003087;
         outline: 1px solid slategrey;
     }
+
+    .compressed-air .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #7030A0;
+        outline: 1px solid slategrey;
+    }
+
+    

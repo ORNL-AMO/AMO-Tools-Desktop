@@ -49,9 +49,6 @@ export class HelpPanelComponent implements OnInit {
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
-
-
-
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       if (val) {
         this.getResults();
@@ -87,6 +84,11 @@ export class HelpPanelComponent implements OnInit {
         this.getContainerHeight();
       }
     }
+    if (changes.settings) {
+      if (!changes.settings.firstChange) {
+        this.getResults();
+      }
+    }
   }
 
   getContainerHeight() {
@@ -102,18 +104,10 @@ export class HelpPanelComponent implements OnInit {
   getResults() {
     let psatResults: {baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number};
     if(this.modification){
-      if (this.modification.psat.inputs.whatIfScenario == true) {
-        this.modificationName = this.modification.psat.name;
-        this.modification.psat.valid = this.psatService.isPsatValid(this.modification.psat.inputs, false);
-        psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.modification.psat.inputs)
-      } else if (this.modification.psat.inputs.whatIfScenario == false) {
-        // Pass scenario as baseline
-        this.modificationName = this.modification.psat.name;
-        this.modification.psat.valid = this.psatService.isPsatValid(this.modification.psat.inputs, true);
-        psatResults = this.psatService.getPsatResults(this.modification.psat.inputs, this.settings)
-        psatResults.modificationResults = psatResults.baselineResults;
-      }
-    } else{
+      this.modificationName = this.modification.psat.name;
+      this.modification.psat.valid = this.psatService.isPsatValid(this.modification.psat.inputs, false);
+      psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.modification.psat.inputs)
+    }else{
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
     }
     this.baselineResults = psatResults.baselineResults;

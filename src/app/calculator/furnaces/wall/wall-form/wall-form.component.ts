@@ -4,6 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { WallLoss, WallLossOutput, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -274,13 +275,12 @@ export class WallFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.wallLossesForm.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
-      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

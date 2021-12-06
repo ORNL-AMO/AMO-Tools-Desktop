@@ -64,8 +64,8 @@
       <div class="form-group">
         <label class="small" for="{{'type_'+lossIndex+idString}}">Select Type</label>
         <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="material.chargeMaterialType"
-          [disabled]="(!baselineSelected || lossesLocked) && !inSetup" (focus)="changeField('chargeMaterialType')"
-          >
+          (change)="saveLosses()" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
+          (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
           <option>Solid</option>
           <option>Liquid</option>
           <option>Gas</option>

@@ -2,10 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
-import { OperatingHours } from '../../../../shared/models/operations';
+import { OperatingHours, OperatingCosts } from '../../../../shared/models/operations';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-operations-form',
@@ -29,13 +30,15 @@ export class OperationsFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
+  @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   formWidth: number;
   showOperatingHoursModal: boolean = false;
+  showOperatingCostsModal: boolean = false;
 
   warnings: OperationsWarnings;
   idString: string;
@@ -90,6 +93,24 @@ export class OperationsFormComponent implements OnInit {
     this.operationsForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.save();
     this.closeOperatingHoursModal();
+  }
+
+  initOperatingCostsModal() {
+    this.showOperatingCostsModal = true;
+    // modalOpen enables a style onthe parent component to keep the modal zindex in front of all UI
+    this.lossesService.modalOpen.next(true);
+    this.operatingCostsModal.show();
+  }
+
+  hideOperatingCostsModal(mixedFuelCosts: number) {
+    // mixedFuelCosts is our $event that is emitted up to THIS component from operating-costs-modal setMixedFuelCosts()
+    if (mixedFuelCosts) {
+      this.operationsForm.controls.fuelCost.patchValue(mixedFuelCosts);
+      this.save();
+    }
+    this.operatingCostsModal.hide();
+    this.showOperatingCostsModal = false;
+    this.lossesService.modalOpen.next(false);
   }
 
   setOpHoursModalWidth() {

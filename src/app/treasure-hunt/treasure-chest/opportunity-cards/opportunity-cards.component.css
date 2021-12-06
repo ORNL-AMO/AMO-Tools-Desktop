@@ -94,3 +94,33 @@ tr.active{
   align-items: center;
   padding-right: 5px;
 }
+
+.steam-icon{
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  background-image: linear-gradient(to bottom right, #ffffff, #FC5B00);
+}
+
+.ca-icon{
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  background-image: linear-gradient(to bottom right, #ffffff, #6f42c1);
+}
+
+.heat-icon{
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  background-image: linear-gradient(to bottom right, #ffffff, #BF3D00);
+}
+
+.circle-icon-img{
+  height: auto;
+  width: 20px;
+  margin-top: 7px;
+  margin-bottom: 6px;
+  margin-left: 7px;
+  margin-right: 7px;
+}

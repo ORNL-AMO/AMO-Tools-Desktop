@@ -29,6 +29,10 @@
     opacity: 1;
 }
 
+.flash-tank-img-holder:hover {
+    transform: scale(1.2);
+}
+
 
 .fa-arrow-circle-left{
     font-size: 18px;

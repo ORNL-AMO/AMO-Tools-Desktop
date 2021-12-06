@@ -20,8 +20,6 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  
-
   notes: Array<SummaryNote>;
 
   constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
@@ -44,24 +42,27 @@ export class OutputSummaryComponent implements OnInit {
     if(this.psat.modifications){
       this.notes = this.buildSummaryNotes(this.psat);
     }
-
   }
 
   getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
+    
     let modificationsMadeList: Array<string> = new Array();
 
     let isPumpAndFluidDifferent: boolean = this.compareService.checkPumpDifferent(this.settings, this.psat, modifiedPsat);
     if(isPumpAndFluidDifferent == true){
       modificationsMadeList.push('Pump and Fluid');
     }
+
     let isMotorDifferent: boolean = this.compareService.checkMotorDifferent(this.psat, modifiedPsat);
     if(isMotorDifferent == true){
       modificationsMadeList.push('Motor');
     }
+    
     let isFieldDataDifferent: boolean = this.compareService.checkFieldDataDifferent(this.psat, modifiedPsat);
     if(isFieldDataDifferent == true){
       modificationsMadeList.push('Field Data');
     }
+    
     return modificationsMadeList;
   }
 
@@ -117,6 +118,16 @@ export class OutputSummaryComponent implements OnInit {
       modNote: modNote
     };
     return summaryNote;
+  }
+
+  getModificationScenario(modifiedPsat: PSAT): Array<string> {
+    let modificationScenario: Array<string> = new Array();
+    if (modifiedPsat.inputs.whatIfScenario == true) {
+      modificationScenario.push('Modify Pump');
+    } else if (modifiedPsat.inputs.whatIfScenario == false) {
+      modificationScenario.push('Compare Two Pumps');
+    }
+    return modificationScenario;
   }
 
 }

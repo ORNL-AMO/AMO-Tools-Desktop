@@ -1,0 +1,155 @@
+<div class="output-summary">
+    <h4 class="show-print print-section-header">Payback Period Details</h4>
+    <div class="d-flex flex-column" *ngIf="combinedDayTypeResults.length != 0">
+        <div class="p-2" *ngFor="let result of combinedDayTypeResults">
+            <label class="group-label">{{result.modification.name}}</label>
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <td class="w-25 bold">
+                            <!-- {{combinedResult.dayTypeName}} -->
+                        </td>
+                        <td class="w-25 bold">
+                            Cost Savings <br> ($)
+                        </td>
+                        <td class="w-25 bold">
+                            Implementation Cost <br> ($)
+                        </td>
+                        <td class="w-25 bold">
+                            Payback <br> (months)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold">
+                            Flow Reallocation
+                        </td>
+                        <td>
+                            {{result.combinedResults.flowReallocationSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.cost">
+                        <td class="bold">
+                            Add Receiver Volume
+                        </td>
+                        <td>
+                            {{result.combinedResults.addReceiverVolumeSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.addReceiverVolumeSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.addReceiverVolumeSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.adjustCascadingSetPointsSavings.savings.cost">
+                        <td class="bold">
+                            Adjust Cascading Points
+                        </td>
+                        <td>
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.improveEndUseEfficiencySavings.savings.cost">
+                        <td class="bold">
+                            Improve End Use Efficiency
+                        </td>
+                        <td>
+                            {{result.combinedResults.improveEndUseEfficiencySavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.improveEndUseEfficiencySavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.improveEndUseEfficiencySavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.reduceAirLeaksSavings.savings.cost">
+                        <td class="bold">
+                            Reduce Air Leaks
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceAirLeaksSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceAirLeaksSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceAirLeaksSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.reduceRunTimeSavings.savings.cost">
+                        <td class="bold">
+                            Reduce Runtime
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceRunTimeSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceRunTimeSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceRunTimeSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.reduceSystemAirPressureSavings.savings.cost">
+                        <td class="bold">
+                            Reduce System Air Pressure
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceSystemAirPressureSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceSystemAirPressureSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.reduceSystemAirPressureSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.useAutomaticSequencerSavings.savings.cost">
+                        <td class="bold">
+                            Use Automatic Sequencer
+                        </td>
+                        <td>
+                            {{result.combinedResults.useAutomaticSequencerSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.useAutomaticSequencerSavings.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr class="total">
+                        <td class="bold">
+                            Total
+                        </td>
+                        <td>
+                            {{result.combinedResults.allSavingsResults.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.allSavingsResults.implementationCost}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.allSavingsResults.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="alert alert-warning p-2" *ngIf="combinedDayTypeResults && combinedDayTypeResults.length == 0">
+    No modifications found. Create a modification to see payback details.
+</div>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { FlueGas, FlueGasOutput } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
@@ -13,7 +14,7 @@ import { FlueGasService } from '../flue-gas.service';
 export class FlueGasModalComponent implements OnInit {
 
   @Output('closeModal')
-  closeModal = new EventEmitter<number>();
+  closeModal = new EventEmitter<FlueGasModalData>();
   @Output('hideModal')
   hideModal = new EventEmitter();
   @Input()
@@ -82,8 +83,25 @@ export class FlueGasModalComponent implements OnInit {
     this.flueGasService.currentField.next(str);
   }
 
-  setAvailableHeat() {
-    this.closeModal.emit(this.output.baseline.availableHeat);
+  setFlueGasData() {
+    let input: FlueGas = this.flueGasService.baselineData.getValue();
+    let flueGasModalData: FlueGasModalData;
+    if (input.flueGasType === 'By Mass') {
+      flueGasModalData = {
+        calculatedAvailableHeat: this.output.baseline.availableHeat,
+        fuelTempF: input.flueGasByMass.fuelTemperature,
+        ambientAirTempF: input.flueGasByMass.ambientAirTemp,
+        combAirMoisturePerc: input.flueGasByMass.moistureInAirCombustion,
+      };
+    } else {
+      flueGasModalData = {
+        calculatedAvailableHeat: this.output.baseline.availableHeat,
+        fuelTempF: input.flueGasByVolume.fuelTemperature,
+        ambientAirTempF: input.flueGasByVolume.ambientAirTemp,
+        combAirMoisturePerc: input.flueGasByVolume.moistureInAirCombustion,
+      };
+    }
+    this.closeModal.emit(flueGasModalData);
   }
 
   hideMaterialModal() {

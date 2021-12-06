@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -10,6 +10,8 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 })
 export class MotorInventorySetupComponent implements OnInit {
 
+  @Input()
+  containerHeight: number;
   setupTab: string;
   setupTabSubscription: Subscription;
   tabSelect: string;

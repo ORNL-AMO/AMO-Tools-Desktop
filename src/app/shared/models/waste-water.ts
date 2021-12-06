@@ -8,11 +8,15 @@ export interface WasteWater {
     existingDataUnits?: string
 }
 
-export interface SystemBasics {
+export interface WasteWaterOperations {
     MaxDays: number,
-    TimeIncrement: number,
-    equipmentNotes: string,
-    operatingMonths: number
+    TimeIncrement?: number,
+    operatingMonths: number,
+    EnergyCostUnit: number
+}
+
+export interface SystemBasics {
+    equipmentNotes?: string
 }
 
 export interface WasteWaterData {
@@ -28,7 +32,8 @@ export interface WasteWaterData {
     exploreReduceOxygen?: SavingsOpportunity,
     exploreMLSS?: SavingsOpportunity,
     exploreVOLR?: SavingsOpportunity,
-    exploreRAS?: SavingsOpportunity
+    exploreRAS?: SavingsOpportunity,
+    operations?: WasteWaterOperations
 }
 
 export interface ActivatedSludgeData {
@@ -64,7 +69,6 @@ export interface AeratorPerformanceData {
     TypeAerators: number,
     Aerator: string,
     Speed: number,
-    EnergyCostUnit: number,
     AnoxicZoneCondition: boolean
 }
 
@@ -178,5 +182,36 @@ export interface WasteWaterValid {
     isValid: boolean,
     activatedSludgeValid: boolean,
     aeratorPerformanceValid: boolean,
-    systemBasicsValid: boolean,
+    operationsValid: boolean
+}
+
+export interface StatePointAnalysisInput {
+    sviValue: number;
+    sviParameter: number;
+    numberOfClarifiers: number;
+    areaOfClarifier: number;
+    MLSS: number;
+    influentFlow: number;
+    rasFlow: number;
+    sludgeSettlingVelocity: number;
+}
+
+export interface StatePointAnalysisOutput {
+    baseline: StatePointAnalysisResults,
+    modification: StatePointAnalysisResults,
+    sviParameterName?: string
+}
+
+export interface StatePointAnalysisResults {
+    SurfaceOverflow: number;
+    AppliedSolidsLoading: number;
+    TotalAreaClarifier: number;
+    RasConcentration: number;
+    UnderFlowRateX2: number;
+    UnderFlowRateY1: number;
+    OverFlowRateX2: number;
+    OverFlowRateY2: number;
+    StatePointX: number;
+    StatePointY: number;
+    graphData?: Array<Array<number>>;
 }

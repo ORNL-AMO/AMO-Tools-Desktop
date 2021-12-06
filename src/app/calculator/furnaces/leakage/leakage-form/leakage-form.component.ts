@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { LeakageLoss, LeakageLossOutput, LeakageLossResults } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
@@ -242,13 +243,12 @@ export class LeakageFormComponent implements OnInit {
     this.flueGasModal.show();
   }
 
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.leakageForm.patchValue({
-        availableHeat: calculatedAvailableHeat
+        availableHeat: flueGasModalData.calculatedAvailableHeat
       });
-      this.defaultFlueGasModalEnergySource = undefined;
     }
     this.calculate();
     this.flueGasModal.hide();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PsatInputs, PsatOutputs, PsatValid } from '../shared/models/psat';
+import { ExploreOpportunitiesResults, PsatInputs, PsatOutputs, PsatValid } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 declare var psatAddon: any;
@@ -11,6 +11,7 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import * as _ from 'lodash';
 import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from './psatConstants';
 import { PSAT } from '../shared/models/psat';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class PsatService {
@@ -21,7 +22,9 @@ export class PsatService {
 
   getResults: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService,
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private assessmentCo2Service: AssessmentCo2SavingsService, 
+    private pumpFluidService: PumpFluidService,
     private motorService: MotorService, private fieldDataService: FieldDataService) {
     this.getResults = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(true);
@@ -66,6 +69,10 @@ export class PsatService {
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
     }
+    if (settings.currency !== "$") {
+      psatOutputs.annual_cost = this.convertUnitsService.value(psatOutputs.annual_cost).from('$').to(settings.currency);
+      psatOutputs.annual_savings_potential = this.convertUnitsService.value(psatOutputs.annual_savings_potential).from('$').to(settings.currency);
+    }
     return psatOutputs;
   }
 
@@ -75,12 +82,11 @@ export class PsatService {
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       //call results existing
-      let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
-      if (settings.powerMeasurement != 'hp') {
-        tmpResults = this.convertOutputs(tmpResults, settings);
-      }
-      tmpResults = this.roundResults(tmpResults);
-      return tmpResults;
+      let psatOutputs: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+      psatOutputs = this.setCo2SavingsEmissionsResult(psatInputs, psatOutputs, settings);
+      psatOutputs = this.convertOutputs(psatOutputs, settings);
+      psatOutputs = this.roundResults(psatOutputs);
+      return psatOutputs;
     } else {
       return this.emptyResults();
     }
@@ -89,17 +95,26 @@ export class PsatService {
   resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     let valid: PsatValid = this.isPsatValid(psatInputs, false)
     if (valid.isValid) {
-      let tmpInputs: any = this.convertInputs(psatInputs, settings);
+      let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       tmpInputs.margin = 1;
-      let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
-      if (settings.powerMeasurement != 'hp') {
-        tmpResults = this.convertOutputs(tmpResults, settings);
-      }
-      tmpResults = this.roundResults(tmpResults);
-      return tmpResults;
+      let psatOutputs: PsatOutputs = psatAddon.resultsModified(tmpInputs);
+      psatOutputs = this.setCo2SavingsEmissionsResult(psatInputs, psatOutputs, settings);
+      psatOutputs = this.convertOutputs(psatOutputs, settings);
+      psatOutputs = this.roundResults(psatOutputs);
+      return psatOutputs;
     } else {
       return this.emptyResults();
     }
+  }
+
+  setCo2SavingsEmissionsResult(psatInputs: PsatInputs, psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
+    if (psatInputs.co2SavingsData) {
+      psatInputs.co2SavingsData.electricityUse = psatOutputs.annual_energy;
+      psatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(psatInputs.co2SavingsData, settings);
+    } else {
+      psatOutputs.co2EmissionsOutput = 0;
+    }
+    return psatOutputs;
   }
 
   emptyResults(): PsatOutputs {
@@ -137,7 +152,8 @@ export class PsatService {
       annual_energy: this.roundVal(psatResults.annual_energy, 2),
       annual_cost: this.roundVal(psatResults.annual_cost, 2),
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
-      optimization_rating: this.roundVal(psatResults.optimization_rating, 2)
+      optimization_rating: this.roundVal(psatResults.optimization_rating, 2),
+      co2EmissionsOutput: this.roundVal(psatResults.co2EmissionsOutput, 2),
     }
     return roundResults;
   }
@@ -570,10 +586,11 @@ export class PsatService {
     return method;
   }
 
-  getPsatResults(baselinePsatInputs: PsatInputs, settings: Settings, modificationPsatInputs?: PsatInputs): { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number } {
+  getPsatResults(baselinePsatInputs: PsatInputs, settings: Settings, modificationPsatInputs?: PsatInputs): ExploreOpportunitiesResults {
     let baselineResults: PsatOutputs = this.emptyResults();
     let modificationResults: PsatOutputs = this.emptyResults();
     let annualSavings: number;
+    let co2EmissionsSavings: number;
     let percentSavings: number;
 
     //create copies of inputs to use for calcs
@@ -586,15 +603,21 @@ export class PsatService {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
       if (isPsatValid.isValid) {
-        modificationResults = this.resultsModified(modInputs, settings);
+        if (modInputs.whatIfScenario == true) {
+          modificationResults = this.resultsModified(modInputs, settings);
+        } else {
+          modificationResults = this.resultsExisting(modInputs, settings);
+        }
       }
     }
     annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;
+    co2EmissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
     percentSavings = Number(Math.round((((annualSavings * 100) / baselineResults.annual_cost) * 100) / 100).toFixed(0));
     return {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualSavings: annualSavings,
+      co2EmissionsSavings: co2EmissionsSavings,
       percentSavings: percentSavings
     }
   }

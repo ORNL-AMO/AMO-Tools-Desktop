@@ -1,0 +1,59 @@
+<ul class="tabs subtabs progress-tabs compressed-air">
+    <li [ngClass]="systemBasicsClassStatus">
+        <a (click)="changeSetupTab('system-basics')">
+            <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
+                class="step-number">1</span>Assessment Basics</a>
+        <!-- <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
+            [display]="systemBasicsBadge.hover"></app-tabs-tooltip> -->
+    </li>
+    <li [ngClass]="systemInformationClassStatus">
+        <a (click)="changeSetupTab('system-information')">
+            <span (mouseenter)="showTooltip(systemInformationBadge)" (mouseleave)="hideTooltip(systemInformationBadge)"
+                class="step-number">2</span>System Information</a>
+        <!-- <app-tabs-tooltip [badgeClass]="activatedSludgeClassStatus[0]" [reveal]="activatedSludgeBadge.display"
+            [display]="activatedSludgeBadge.hover"></app-tabs-tooltip> -->
+    </li>
+    <li [ngClass]="inventoryStatus">
+        <a (click)="changeSetupTab('inventory')">
+            <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
+                class="step-number">3</span>Inventory</a>
+        <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
+            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
+    </li>
+    <li [ngClass]="dayTypesClassStatus">
+        <a (click)="changeSetupTab('day-types')">
+            <span (mouseenter)="showTooltip(dayTypesBadge)" (mouseleave)="hideTooltip(dayTypesBadge)"
+                class="step-number">4</span>Day Types</a>
+        <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
+            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
+    </li>
+    <li [ngClass]="systemProfileStatus">
+        <a (click)="changeSetupTab('system-profile')">
+            <span (mouseenter)="showTooltip(systemProfileBadge)" (mouseleave)="hideTooltip(systemProfileBadge)"
+                class="step-number">5</span>System Profile</a>
+        <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
+            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
+    </li>
+    <!-- <li [ngClass]="endUsesStatus">
+        <a (click)="changeSetupTab('end-uses')">
+            <span (mouseenter)="showTooltip(endUsesBadge)" (mouseleave)="hideTooltip(endUsesBadge)"
+                class="step-number">4</span>End Uses</a>
+        <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
+            [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> --
+    </li> -->
+</ul>
+
+<ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air">
+    <li [ngClass]="{'active': profileTab == 'setup'}">
+        <a (click)="changeProfileTab('setup')">Setup Profile</a>
+    </li>
+    <li [ngClass]="{'active': profileTab == 'summary'}">
+        <a (click)="changeProfileTab('summary')">Profile Summary</a>
+    </li>
+    <li [ngClass]="{'active': profileTab == 'graphs'}">
+        <a (click)="changeProfileTab('graphs')">Graphs</a>
+    </li>
+    <li [ngClass]="{'active': profileTab == 'annual-summary'}">
+        <a (click)="changeProfileTab('annual-summary')">Annual Summary</a>
+    </li>
+</ul>

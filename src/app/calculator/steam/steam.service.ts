@@ -313,7 +313,13 @@ export class SteamService {
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
-    let outputData: SSMTOutput = steamAddon.steamModeler(convertedInputData);
+    let outputData: SSMTOutput;
+    try {
+      outputData = steamAddon.steamModeler(convertedInputData);
+    } catch (err) {
+      // Rare/wildy unrealistic cases will crash modeler
+      console.log(err);
+    }
     outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
     return outputData;
   }
