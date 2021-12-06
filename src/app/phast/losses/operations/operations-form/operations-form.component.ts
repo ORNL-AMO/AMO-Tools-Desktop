@@ -32,6 +32,8 @@ export class OperationsFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  selected: boolean;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;

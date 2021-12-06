@@ -26,6 +26,8 @@ export class OperationsComponent implements OnInit {
   modificationIndex: number;
   @Input()
   inSetup: boolean;
+  @Input()
+  selected: boolean;
 
   operationsForm: FormGroup;
   isFirstChange: boolean = true;

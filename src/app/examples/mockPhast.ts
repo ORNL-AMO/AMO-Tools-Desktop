@@ -1288,8 +1288,8 @@ export const MockPhastSettings: Settings = {
         }
     },
     co2SavingsEnergyType: "electricity",
-    co2SavingsEnergySource: "",
-    co2SavingsFuelType: '',
+    co2SavingsEnergySource: "Natural Gas",
+    co2SavingsFuelType: "Natural Gas",
     totalEmissionOutputRate: 0,
     electricityUse: 0,
     eGridRegion: '',
@@ -1297,5 +1297,5 @@ export const MockPhastSettings: Settings = {
     totalEmissionOutput: 0,
     userEnteredBaselineEmissions: false,
     userEnteredModificationEmissions: false,
-    zipcode: '',
+    zipcode: '37830',
 };

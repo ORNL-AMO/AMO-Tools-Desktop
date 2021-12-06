@@ -96,7 +96,7 @@
 
         <app-operations *ngIf="selectedTab.componentStr == 'operations'" [(phast)]="phast" [isBaseline]="true"
           (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-          [settings]="settings" [inSetup]="inSetup"></app-operations>
+          [settings]="settings" [inSetup]="inSetup" [selected]="baselineSelected"></app-operations>
       </div>
     </div>
     <div class="flex-column w-50 modification" *ngIf="phast.modifications.length != 0 && !inSetup"
@@ -196,7 +196,8 @@
         <app-operations *ngIf="selectedTab.componentStr == 'operations'"
           [(phast)]="phast.modifications[modificationIndex].phast" [isBaseline]="false"
           (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected"
-          (savedLoss)="saveModifications()" [settings]="settings" [modificationIndex]="modificationIndex">
+          (savedLoss)="saveModifications()" [settings]="settings" 
+          [modificationIndex]="modificationIndex" [selected]="modificationSelected">
         </app-operations>
 
       </div>

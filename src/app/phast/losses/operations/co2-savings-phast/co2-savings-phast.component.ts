@@ -112,17 +112,20 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
 
   disableForm() {
-    this.form.controls.eGridSubregion.disable();
-    this.form.controls.zipcode.disable();
-    this.form.controls.totalEmissionOutputRate.disable();
+    this.form.disable();
   }
 
   enableForm() {
-    if (this.isBaseline) {
-      this.form.controls.eGridSubregion.enable();
-      this.form.controls.zipcode.enable();
+    if (this.co2SavingsData.energyType == 'electricity') {
+      if (this.isBaseline) {
+        this.form.controls.eGridSubregion.enable();
+        this.form.controls.zipcode.enable();
+      }
+      this.form.controls.totalEmissionOutputRate.enable();
+    } else {
+      this.form.enable();
     }
-    this.form.controls.totalEmissionOutputRate.enable();
+
   }
 
   initForm() {
@@ -139,12 +142,13 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.disableForm()
     };
 
-    if(this.co2SavingsData.energyType == 'fuel'){
-      this.setFuel();
-    } else {
+    if (this.co2SavingsData.energyType == 'electricity') {
       this.setSubRegionData();
-    }    
-    
+    } else {
+      this.setFuelOptions();
+      this.setFuel();
+    }
+
   }
 
   focusField(str: string) {
