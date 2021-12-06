@@ -102,6 +102,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     });
     this.calculate();
   }
+  
   setFuel() {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
     this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
@@ -125,7 +126,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     } else {
       this.form.enable();
     }
-
   }
 
   initForm() {
