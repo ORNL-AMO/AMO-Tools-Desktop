@@ -10,6 +10,7 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { FsatService } from '../fsat.service';
+import { ExploreOpportunitiesResults } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-fsat-report',
@@ -157,7 +158,7 @@ export class FsatReportComponent implements OnInit {
   }
 
   setOutputs() {
-    // let fsatResults: ExploreOpportunitiesResults;
+    //  let fsatResults: ExploreOpportunitiesResults;
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
@@ -166,8 +167,8 @@ export class FsatReportComponent implements OnInit {
       modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
       modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
-      // this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
     });
+    // this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
   }
 
   getSavingsPercentage(baseline: FSAT, modification: FSAT): number {

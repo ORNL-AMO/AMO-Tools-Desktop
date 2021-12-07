@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, ExploreOpportunitiesResults, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults, FsatOperations } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults, FsatOperations } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -175,7 +175,9 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    let fsatInputs: FsatInput;
+    let baselineResults: FsatOutput = this.getEmptyResults();
+    let modificationResults: FsatOutput = this.getEmptyResults();
+    let co2EmissionsSavings: number;
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
@@ -206,7 +208,7 @@ export class FsatService {
         unitCost: fsat.fsatOperations.cost,
         airDensity: fsat.baseGasDensity.gasDensity,
         sizeMargin: 1,
-        cO2SavingsData: fsat.fsatOperations.cO2SavingsData
+        cO2SavingsData: fsat.cO2SavingsData
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let fsatOutputs: FsatOutput;
@@ -218,10 +220,11 @@ export class FsatService {
         input.fanType = fsat.fanSetup.fanType;
         fsatOutputs = this.fanResultsModified(input);
       }
-      fsatOutputs = this.setCo2SavingsEmissionsResult(input.cO2SavingsData, fsatOutputs, settings);
+      fsatOutputs = this.setCo2SavingsEmissionsResult(input, fsatOutputs, settings);
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
-
+      co2EmissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
+      debugger;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
@@ -229,7 +232,7 @@ export class FsatService {
         fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;
         fsatOutputs.planeResults = this.getPlaneResults(fan203InputsForPlaneResults, settings);
       }
-      return fsatOutputs;
+      return  fsatOutputs;
     } else {
       return this.getEmptyResults();
     }
@@ -289,10 +292,10 @@ export class FsatService {
     return fanAddon.optimalFanEfficiency(inputs);
   }
 
-  setCo2SavingsEmissionsResult(cO2SavingsData: Co2SavingsData, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
-    if (cO2SavingsData) {
-      cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
-      fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(cO2SavingsData, settings);
+  setCo2SavingsEmissionsResult(fsatInputs: FsatInput, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
+    if (fsatInputs.cO2SavingsData) {
+      fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
+      fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
     } else {
       fsatOutputs.co2EmissionsOutput = 0;
     }
@@ -318,7 +321,8 @@ export class FsatService {
       estimatedFLA: 0,
       percentSavings: 0,
       energySavings: 0,
-      annualSavings: 0
+      annualSavings: 0,
+      co2EmissionsOutput: 0
     };
     return emptyResults;
   }
@@ -375,6 +379,7 @@ export class FsatService {
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
     tmpModification.fsat.whatIfScenario = true;
     tmpModification.fsat.fsatOperations = fsatCopy.fsatOperations;
+    tmpModification.fsat.cO2SavingsData = fsatCopy.cO2SavingsData;
     return tmpModification;
   }
 }

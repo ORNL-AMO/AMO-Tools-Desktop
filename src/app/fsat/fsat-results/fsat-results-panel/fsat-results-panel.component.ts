@@ -18,13 +18,16 @@ export class FsatResultsPanelComponent implements OnInit {
   modificationIndex: number;
   @Input()
   inSetup: boolean;
+  
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.hideResults();
   }
-
+  fsatResults: ExploreOpportunitiesResults;
   co2EmissionsSavings: number = 0;
+  annualSavings: number = 0;
+  percentSavings: number = 0;
   isWhatIfScenario: boolean;
 
   baselineResults: FsatOutput;
@@ -52,16 +55,26 @@ export class FsatResultsPanelComponent implements OnInit {
       this.getResults();
     }
   }
+  getDiff(num1: number, num2: number) {
+    let diff = num1 - num2;
+    if ((diff < .005) && (diff > -.005)) {
+      return null;
+    } else {
+      return diff;
+    }
+  }
 
   getResults() {
     let fsatResults: ExploreOpportunitiesResults;
     this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
+    debugger;
+       if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       this.fsat.modifications[this.modificationIndex].fsat.valid = this.fsatService.checkValid(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
+      debugger;
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
       this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;
       this.modificationResults.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, this.modificationResults.annualCost);
@@ -69,7 +82,12 @@ export class FsatResultsPanelComponent implements OnInit {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
     this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
-  }
+    this.baselineResults = fsatResults.baselineResults;
+    this.modificationResults = fsatResults.modificationResults;
+    this.annualSavings = fsatResults.annualSavings;
+    this.percentSavings = fsatResults.percentSavings;
+}
+
 
 
   hideResults() {

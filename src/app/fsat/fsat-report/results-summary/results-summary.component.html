@@ -144,7 +144,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.fsat.outputs.co2EmissionsOutput">{{modification.fsat.outputs.co2EmissionsOutput |
             number:'1.1-1'}}</span>
-          <span *ngIf="!modification.fsat.Outputs.co2EmissionsOutput">&mdash;</span>
+          <span *ngIf="!modification.fsat.outputs.co2EmissionsOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="callout">

@@ -22,6 +22,7 @@ export interface FSAT {
   modalFieldData?: FieldData;
   existingDataUnits?: string;
   whatIfScenario?: boolean;
+  cO2SavingsData?: Co2SavingsData;
 }
 
 export interface FsatOperations {
@@ -378,7 +379,7 @@ export interface FsatOutput {
   annualSavings?: number;
   planeResults?: PlaneResults;
   psychrometricResults?: PsychrometricResults;
-  co2EmissionsOutput?: number;
+  co2EmissionsOutput: number;
 }
 
 export interface InletPressureData {
@@ -506,6 +507,7 @@ export interface ExploreOpportunitiesResults {
   modificationResults: FsatOutput, 
   annualSavings: number, 
   co2EmissionsSavings: number,
-  percentSavings: number 
+  percentSavings: number, 
+  co2SavingsData: Co2SavingsData
 } 
 
