@@ -65,6 +65,10 @@ export class Co2SavingsPhastComponent implements OnInit {
         this.enableForm();
       }
       this.cd.detectChanges();
+      if (this.co2SavingsData.fuelType) {
+        let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
+        this.fuelOptions = tmpOtherFuel.fuelTypes;
+      }
     }
   }
 
@@ -93,22 +97,31 @@ export class Co2SavingsPhastComponent implements OnInit {
     let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
-    this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
     this.form.patchValue({
       fuelType: this.fuelOptions[0].fuelType
     });
-    this.form.patchValue({
-      totalEmissionOutputRate: this.fuelOptions[0].outputRate
-    });
+    if (this.isBaseline) {      
+      this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+      this.form.patchValue({
+        totalEmissionOutputRate: this.fuelOptions[0].outputRate
+      });
+    }
     this.calculate();
   }
   
   setFuel() {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
-    this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+    this.co2SavingsData.fuelType = tmpFuel.fuelType;
     this.form.patchValue({
-      totalEmissionOutputRate: tmpFuel.outputRate
-    });
+      fuelType: tmpFuel.fuelType
+    });    
+    if(this.isBaseline){      
+      this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+      this.form.patchValue({
+        totalEmissionOutputRate: tmpFuel.outputRate
+      });
+    }
+    
     this.calculate();
   }
 
@@ -117,15 +130,13 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
 
   enableForm() {
-    if (this.co2SavingsData.energyType == 'electricity') {
-      if (this.isBaseline) {
-        this.form.controls.eGridSubregion.enable();
-        this.form.controls.zipcode.enable();
-      }
-      this.form.controls.totalEmissionOutputRate.enable();
-    } else {
+    if (this.isBaseline) {
       this.form.enable();
+      // this.form.controls.eGridSubregion.enable();
+      // this.form.controls.zipcode.enable();
     }
+    this.form.controls.totalEmissionOutputRate.enable();
+
   }
 
   initForm() {
@@ -136,6 +147,8 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (!this.isBaseline) {
       this.form.controls.zipcode.disable();
       this.form.controls.eGridSubregion.disable();
+      this.form.controls.energySource.disable();
+      this.form.controls.fuelType.disable();
     }
 
     if (this.isFormDisabled) {
@@ -145,9 +158,17 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (this.co2SavingsData.energyType == 'electricity') {
       this.setSubRegionData();
     } else {
-      this.setFuelOptions();
-      this.setFuel();
+      this.setCO2FuelData();
     }
+
+  }
+
+  setCO2FuelData(){
+    this.form.patchValue({
+      energySource: this.co2SavingsData.energySource,
+      fuelType: this.co2SavingsData.fuelType,
+      totalEmissionOutputRate: this.co2SavingsData.totalEmissionOutputRate
+    });
 
   }
 
