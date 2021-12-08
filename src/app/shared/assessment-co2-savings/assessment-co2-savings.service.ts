@@ -117,12 +117,10 @@ export class AssessmentCo2SavingsService {
       dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');
     }
     if (dataCpy.totalEmissionOutputRate && dataCpy.electricityUse) {
-      debugger;
       //set results on original obj
       totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
     } else {
-      debugger;
-      totalEmissionsResult = 0;
+       totalEmissionsResult = 0;
     }
     return totalEmissionsResult;
   }
