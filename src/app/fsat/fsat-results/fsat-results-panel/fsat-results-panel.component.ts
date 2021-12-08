@@ -65,28 +65,22 @@ export class FsatResultsPanelComponent implements OnInit {
   }
 
   getResults() {
-    let fsatResults: ExploreOpportunitiesResults;
+    // let fsatResults: ExploreOpportunitiesResults;
     this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    debugger;
        if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       this.fsat.modifications[this.modificationIndex].fsat.valid = this.fsatService.checkValid(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
-      debugger;
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
       this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;
       this.modificationResults.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, this.modificationResults.annualCost);
+      // fsatResults = this.fsatService.getResults(this.fsat, false, this.settings)
     } else {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
-    this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
-    this.baselineResults = fsatResults.baselineResults;
-    this.modificationResults = fsatResults.modificationResults;
-    this.annualSavings = fsatResults.annualSavings;
-    this.percentSavings = fsatResults.percentSavings;
-}
+  }
 
 
 

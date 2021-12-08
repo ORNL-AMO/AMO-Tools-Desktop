@@ -177,7 +177,7 @@ export class FsatService {
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let baselineResults: FsatOutput = this.getEmptyResults();
     let modificationResults: FsatOutput = this.getEmptyResults();
-    let co2EmissionsSavings: number;
+    let co2EmissionsOutput: number;
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
@@ -208,7 +208,7 @@ export class FsatService {
         unitCost: fsat.fsatOperations.cost,
         airDensity: fsat.baseGasDensity.gasDensity,
         sizeMargin: 1,
-        cO2SavingsData: fsat.cO2SavingsData
+        cO2SavingsData: fsat.fsatOperations.cO2SavingsData
       };
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let fsatOutputs: FsatOutput;
@@ -223,8 +223,7 @@ export class FsatService {
       fsatOutputs = this.setCo2SavingsEmissionsResult(input, fsatOutputs, settings);
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
-      co2EmissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
-      debugger;
+      co2EmissionsOutput = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
