@@ -55,14 +55,6 @@ export class FsatResultsPanelComponent implements OnInit {
       this.getResults();
     }
   }
-  getDiff(num1: number, num2: number) {
-    let diff = num1 - num2;
-    if ((diff < .005) && (diff > -.005)) {
-      return null;
-    } else {
-      return diff;
-    }
-  }
 
   getResults() {
     // let fsatResults: ExploreOpportunitiesResults;

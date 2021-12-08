@@ -137,28 +137,28 @@
           | number:'1.0-1'}}</td>
       </tr>      
       <tr class="callout">
-        <td>Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
-          number:'1.1-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
+        <th>Annual CO2 Emissions (tonne CO<sub>2</sub>)</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
+          number:'1.1-1'}}</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.fsat.outputs.co2EmissionsOutput">{{modification.fsat.outputs.co2EmissionsOutput |
             number:'1.1-1'}}</span>
           <span *ngIf="!modification.fsat.outputs.co2EmissionsOutput">&mdash;</span>
-        </td>
+        </th>
       </tr>
       <tr class="callout">
-        <td>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
+        <th>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.fsat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span
-            *ngIf="getDiff(fsat.outputs.co2EmissionsOutput, modification.fsat.outputs.co2EmissionsOutput) && modification.fsats.input.whatIfScenario == true">
-            {{getDiff(psat.outputs.co2EmissionsOutput, modification.psat.outputs.co2EmissionsOutput) | sigFigs:'3'}}</span>
+            *ngIf="modification.fsats.input.whatIfScenario == true">
+            {{modification.fsat.outputs.annualSavings | sigFigs:'3'}}</span>
           <span
-            *ngIf="!getDiff(fsat.outputs.co2EmissionsOutput, modification.fsat.outputs.co2EmissionsOutput) || modification.fsat.inputfwhatIfScenario == false">
+            *ngIf="modification.fsat.inputfwhatIfScenario == false">
             &mdash;</span>
-        </td>
+        </th>
       </tr>
       <tr>
         <th>Annual Energy (MWh)</th>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { FSAT} from '../../shared/models/fans';
+import { FSAT, FsatOutput} from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
@@ -40,6 +40,8 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
+  baselineResults: FsatOutput;
+  modificationResults: FsatOutput;
   co2EmissionsSavings: number = 0;
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
@@ -159,6 +161,7 @@ export class FsatReportComponent implements OnInit {
 
   setOutputs() {
     //  let fsatResults: ExploreOpportunitiesResults;
+    let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
@@ -168,7 +171,7 @@ export class FsatReportComponent implements OnInit {
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
       modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
     });
-    // this.co2EmissionsSavings = fsatResults.co2EmissionsSavings;
+    co2EmissionsSavings = this.assessment.fsat.outputs.annualSavings;
   }
 
   getSavingsPercentage(baseline: FSAT, modification: FSAT): number {

@@ -41,8 +41,8 @@ export class OperationsService {
     return form.valid;
   }
   
-  getFsatInputsFromForm(form: FormGroup, fsatInputs: FsatInput): FsatInput {
-    return fsatInputs;
-  }
+  // getFsatInputsFromForm(form: FormGroup, fsatInputs: FsatInput): FsatInput {
+  //   return fsatInputs;
+  // }
 
 }

@@ -175,8 +175,6 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    let baselineResults: FsatOutput = this.getEmptyResults();
-    let modificationResults: FsatOutput = this.getEmptyResults();
     let co2EmissionsOutput: number;
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
@@ -223,7 +221,6 @@ export class FsatService {
       fsatOutputs = this.setCo2SavingsEmissionsResult(input, fsatOutputs, settings);
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
-      co2EmissionsOutput = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
