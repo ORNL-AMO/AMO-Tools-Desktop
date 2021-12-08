@@ -219,6 +219,7 @@ export class FsatService {
         fsatOutputs = this.fanResultsModified(input);
       }
       fsatOutputs = this.setCo2SavingsEmissionsResult(input, fsatOutputs, settings);
+      debugger;
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
@@ -290,11 +291,13 @@ export class FsatService {
 
   setCo2SavingsEmissionsResult(fsatInputs: FsatInput, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
     if (fsatInputs.cO2SavingsData) {
+      debugger;
       fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
       fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
     } else {
       fsatOutputs.co2EmissionsOutput = 0;
     }
+    debugger;
     return fsatOutputs;
   }
 

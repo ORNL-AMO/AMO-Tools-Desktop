@@ -160,6 +160,7 @@ export class FsatReportComponent implements OnInit {
   }
 
   setOutputs() {
+    // ^^^ set your Co2 savings value (diff of bl vs mod) here and it will cascade down to results-summary
     //  let fsatResults: ExploreOpportunitiesResults;
     let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
