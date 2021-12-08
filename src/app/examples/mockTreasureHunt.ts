@@ -26,15 +26,19 @@ export const MockTreasureHunt: Assessment = {
             "waterUsage": 40000000,
             "waterCosts": 100000,
             "waterUsed": true,
+            "waterCO2OutputRate": 0,
             "wasteWaterUsage": 0,
             "wasteWaterCosts": 0,
             "wasteWaterUsed": false,
+            "wasteWaterCO2OutputRate": 0,
             "compressedAirUsage": 0,
             "compressedAirCosts": 0,
             "compressedAirUsed": false,
+            "compressedAirCO2OutputRate": 0,
             "steamUsage": 0,
             "steamCosts": 0,
-            "steamUsed": false
+            "steamUsed": false,
+            "steamCO2OutputRate": 0
         },
         "naturalGasReductions": [{
             "baseline": [{
