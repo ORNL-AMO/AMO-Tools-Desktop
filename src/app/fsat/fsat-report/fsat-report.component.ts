@@ -36,10 +36,10 @@ export class FsatReportComponent implements OnInit {
   quickReport: boolean;
   @Input()
   containerHeight: number;
-  @Input() 
-  baselineResults: FsatOutput;
-  @Input()
-  modificationResults: FsatOutput;
+  // @Input() 
+  // baselineResults: FsatOutput;
+  // @Input()
+  // modificationResults: FsatOutput;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
@@ -172,13 +172,14 @@ export class FsatReportComponent implements OnInit {
       modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
       modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
+
     }}
     );
-    debugger;
-    let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
-    console.log(this.baselineResults);
-    console.log(this.modificationResults);
-    co2EmissionsSavings = this.assessment.fsat.outputs.annualSavings;
+    // debugger;
+    // let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
+    // console.log(this.baselineResults);
+    // console.log(this.modificationResults);
+    // co2EmissionsSavings = this.assessment.fsat.outputs.annualSavings;
   }
 
   getSavingsPercentage(baseline: FSAT, modification: FSAT): number {

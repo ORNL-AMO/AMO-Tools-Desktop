@@ -110,7 +110,7 @@ export class OperationsComponent implements OnInit {
 
   save(){  
     this.fsatOperations = this.operationsService.getObjFromForm(this.operationsForm);
-    debugger;
+    // debugger;
     this.emitSave.emit(this.fsatOperations);
     this.checkForWarnings();
   }

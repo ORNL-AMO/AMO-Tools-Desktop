@@ -295,7 +295,7 @@ export class FsatComponent implements OnInit {
   }
 
   saveFsatOperations(newFsatOperations: FsatOperations) {
-    debugger;
+    // debugger;
     this._fsat.fsatOperations = newFsatOperations;
     this.saveFsat(this._fsat);
   }
