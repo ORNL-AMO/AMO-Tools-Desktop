@@ -36,12 +36,15 @@ export class FsatReportComponent implements OnInit {
   quickReport: boolean;
   @Input()
   containerHeight: number;
+  @Input() 
+  baselineResults: FsatOutput;
+  @Input()
+  modificationResults: FsatOutput;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
-  baselineResults: FsatOutput;
-  modificationResults: FsatOutput;
+ 
   co2EmissionsSavings: number = 0;
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
@@ -160,18 +163,21 @@ export class FsatReportComponent implements OnInit {
   }
 
   setOutputs() {
-    // ^^^ set your Co2 savings value (diff of bl vs mod) here and it will cascade down to results-summary
-    //  let fsatResults: ExploreOpportunitiesResults;
-    let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
+      if(modification.fsat){
       modification.fsat.valid = this.fsatService.checkValid(modification.fsat, false, this.settings);
       modification.fsat.outputs = this.fsatService.getResults(modification.fsat, false, this.settings);
       modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
       modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
-    });
+    }}
+    );
+    debugger;
+    let co2EmissionsSavings: number = this.baselineResults.co2EmissionsOutput - this.modificationResults.co2EmissionsOutput;
+    console.log(this.baselineResults);
+    console.log(this.modificationResults);
     co2EmissionsSavings = this.assessment.fsat.outputs.annualSavings;
   }
 

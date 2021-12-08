@@ -264,6 +264,7 @@ export class FsatService {
   }
 
   checkValid(fsat: FSAT, isBaseline: boolean, settings): FsatValid {
+    debugger;
     let fsatOperationsValid: boolean = this.fanOperationsService.isOperationsDataValid(fsat.fsatOperations);
     let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);
     let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
@@ -290,14 +291,14 @@ export class FsatService {
   }
 
   setCo2SavingsEmissionsResult(fsatInputs: FsatInput, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
-    if (fsatInputs.cO2SavingsData) {
-      debugger;
+    if (fsatInputs.cO2SavingsData != undefined) {
       fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
       fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
+      debugger;
     } else {
       fsatOutputs.co2EmissionsOutput = 0;
+      debugger;
     }
-    debugger;
     return fsatOutputs;
   }
 
