@@ -63,7 +63,7 @@
             <input name="totalEmissionOutputRate" type="number" class="form-control"
                 formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
                 (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
-            <span class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>
+            <span class="input-group-addon units small">kg CO<sub>2</sub>/{{settings.energyResultUnit}}
             </span>
         </div>
     </div>

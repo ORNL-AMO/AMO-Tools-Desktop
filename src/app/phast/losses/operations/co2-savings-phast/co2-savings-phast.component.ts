@@ -4,7 +4,9 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
+import { Settings } from '../../../../shared/models/settings';
 import { Co2SavingsPhastService } from './co2-savings-phast.service';
 
 @Component({
@@ -20,6 +22,8 @@ export class Co2SavingsPhastComponent implements OnInit {
   isFormDisabled: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
   @Output('emitUpdateCo2SavingsData')
   emitUpdateCo2SavingsData = new EventEmitter<Co2SavingsData>();
   @Output('emitCurrentField')
@@ -40,7 +44,10 @@ export class Co2SavingsPhastComponent implements OnInit {
     outputRate: number
   }>;
 
-  constructor(private phastCO2SavingsService: Co2SavingsPhastService, private egridService: EGridService, private cd: ChangeDetectorRef) { }
+  constructor(private phastCO2SavingsService: Co2SavingsPhastService, 
+    private egridService: EGridService, 
+    private cd: ChangeDetectorRef,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.otherFuels = otherFuels;
@@ -100,10 +107,11 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.form.patchValue({
       fuelType: this.fuelOptions[0].fuelType
     });
-    if (this.isBaseline) {      
+    if (this.isBaseline) {    
+      let outputRateValue: number = this.convertOutputRate(this.fuelOptions[0].outputRate);  
       this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
       this.form.patchValue({
-        totalEmissionOutputRate: this.fuelOptions[0].outputRate
+        totalEmissionOutputRate: outputRateValue
       });
     }
     this.calculate();
@@ -115,14 +123,22 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.form.patchValue({
       fuelType: tmpFuel.fuelType
     });    
-    if(this.isBaseline){      
+    if(this.isBaseline){     
+      let outputRateValue: number = this.convertOutputRate(tmpFuel.outputRate);
       this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
       this.form.patchValue({
-        totalEmissionOutputRate: tmpFuel.outputRate
+        totalEmissionOutputRate: outputRateValue
       });
     }
     
     this.calculate();
+  }
+
+  convertOutputRate(outputRate: number) {
+    if (outputRate) {
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to(this.settings.energyResultUnit);
+    }
+    return outputRate;
   }
 
   disableForm() {
@@ -167,7 +183,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.form.patchValue({
       energySource: this.co2SavingsData.energySource,
       fuelType: this.co2SavingsData.fuelType,
-      totalEmissionOutputRate: this.co2SavingsData.totalEmissionOutputRate
+      totalEmissionOutputRate: this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to(this.settings.energyResultUnit)
     });
 
   }
@@ -289,6 +305,11 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   calculate() {
     this.co2SavingsData = this.phastCO2SavingsService.getCo2SavingsData(this.form);
+    if (this.settings.unitsOfMeasure == 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
+      this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('MMBtu');
+    } else if (this.settings.unitsOfMeasure != 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
+      this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('GJ');
+    }
     if (this.isBaseline) {
       this.setLockedModificationValues();
     }
