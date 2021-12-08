@@ -175,8 +175,9 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    let baselineResults: FsatOutput = this.getEmptyResults();
-    let modificationResults: FsatOutput = this.getEmptyResults();
+    // ^^^ when this method is called a baseline or a mod FSAT is passed in, so the below 2 lines won't be needed
+    // let baselineResults: FsatOutput = this.getEmptyResults();
+    // let modificationResults: FsatOutput = this.getEmptyResults();
     let co2EmissionsOutput: number;
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
@@ -221,9 +222,11 @@ export class FsatService {
         fsatOutputs = this.fanResultsModified(input);
       }
       fsatOutputs = this.setCo2SavingsEmissionsResult(input, fsatOutputs, settings);
+      debugger;
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
-      co2EmissionsOutput = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
+      //^^^ Unused
+      // co2EmissionsOutput = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
@@ -293,11 +296,13 @@ export class FsatService {
 
   setCo2SavingsEmissionsResult(fsatInputs: FsatInput, fsatOutputs: FsatOutput, settings: Settings): FsatOutput {
     if (fsatInputs.cO2SavingsData) {
+      debugger;
       fsatInputs.cO2SavingsData.electricityUse = fsatOutputs.annualEnergy;
       fsatOutputs.co2EmissionsOutput = this.assessmentCo2Service.getCo2EmissionsResult(fsatInputs.cO2SavingsData, settings);
     } else {
       fsatOutputs.co2EmissionsOutput = 0;
     }
+    debugger;
     return fsatOutputs;
   }
 
