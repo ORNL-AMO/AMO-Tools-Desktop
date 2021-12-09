@@ -194,6 +194,8 @@ export class OperationsFormComponent implements OnInit {
         this.co2SavingsData.energyType = 'fuel';
       }
     } else {
+      // getCo2SavingsDataFromSettingsObject() breaks older assessments.. only populates fuelType. 
+      // Create a method that returns a default co2Savings object with all the necessary properties, until we actually implement settings for co2SavingsData
       let co2SavingsData: Co2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
       this.co2SavingsData = co2SavingsData;
     }
