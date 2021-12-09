@@ -24,10 +24,6 @@ export class FsatResultsPanelComponent implements OnInit {
   onResize(event) {
     this.hideResults();
   }
-  fsatResults: ExploreOpportunitiesResults;
-  co2EmissionsSavings: number = 0;
-  annualSavings: number = 0;
-  percentSavings: number = 0;
   isWhatIfScenario: boolean;
 
   baselineResults: FsatOutput;

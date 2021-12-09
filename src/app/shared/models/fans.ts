@@ -24,7 +24,6 @@ export interface FSAT {
   existingDataUnits?: string;
   whatIfScenario?: boolean;
   cO2SavingsData?: Co2SavingsData;
-  input?: FsatInput;
 }
 
 export interface FsatOperations {
@@ -382,6 +381,7 @@ export interface FsatOutput {
   planeResults?: PlaneResults;
   psychrometricResults?: PsychrometricResults;
   co2EmissionsOutput: number;
+  emissionsSavings: number;
 }
 
 export interface InletPressureData {

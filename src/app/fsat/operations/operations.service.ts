@@ -40,9 +40,4 @@ export class OperationsService {
     let form: FormGroup = this.getFormFromObj(obj);
     return form.valid;
   }
-  
-  // getFsatInputsFromForm(form: FormGroup, fsatInputs: FsatInput): FsatInput {
-  //   return fsatInputs;
-  // }
-
 }

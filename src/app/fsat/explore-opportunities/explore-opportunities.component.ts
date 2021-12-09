@@ -31,7 +31,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
-  co2EmissionsSavings: number = 0;
   tabSelect: string = 'results';
   currentField: string;
   helpHeight: number;

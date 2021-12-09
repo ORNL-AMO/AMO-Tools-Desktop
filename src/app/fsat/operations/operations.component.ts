@@ -43,8 +43,6 @@ export class OperationsComponent implements OnInit {
 
   cO2SavingsData: Co2SavingsData;
 
-  fsatInputs: FsatInput;
-
   warnings: FanOperationsWarnings;
   
   formWidth: number;

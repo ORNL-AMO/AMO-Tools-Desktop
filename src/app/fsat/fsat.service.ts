@@ -20,8 +20,6 @@ declare var fanAddon: any;
 
 @Injectable()
 export class FsatService {
-  fsatOperations: FsatOperations;
-  fsatInputs: FsatInput;
   mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
@@ -176,6 +174,8 @@ export class FsatService {
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let co2EmissionsOutput: number;
+    // let baselineResults: FsatOutput = this.getEmptyResults();
+    // let modificationResults: FsatOutput = this.getEmptyResults();
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
@@ -222,6 +222,7 @@ export class FsatService {
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
+      // fsatOutputs.emissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
 
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
       if (fan203InputsForPlaneResults) {
@@ -318,7 +319,8 @@ export class FsatService {
       percentSavings: 0,
       energySavings: 0,
       annualSavings: 0,
-      co2EmissionsOutput: 0
+      co2EmissionsOutput: 0,
+      emissionsSavings: 0
     };
     return emptyResults;
   }

@@ -10,7 +10,7 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { FsatService } from '../fsat.service';
-import { ExploreOpportunitiesResults } from '../../shared/models/psat';
+
 
 @Component({
   selector: 'app-fsat-report',
@@ -41,7 +41,6 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
  
-  co2EmissionsSavings: number = 0;
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
   showPrintMenu: boolean = false;
