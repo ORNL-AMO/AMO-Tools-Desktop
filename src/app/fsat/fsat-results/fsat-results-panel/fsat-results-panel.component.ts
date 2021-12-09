@@ -18,7 +18,6 @@ export class FsatResultsPanelComponent implements OnInit {
   modificationIndex: number;
   @Input()
   inSetup: boolean;
-  
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -53,7 +52,6 @@ export class FsatResultsPanelComponent implements OnInit {
   }
 
   getResults() {
-    // let fsatResults: ExploreOpportunitiesResults;
     this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
        if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
@@ -64,13 +62,10 @@ export class FsatResultsPanelComponent implements OnInit {
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
       this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;
       this.modificationResults.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, this.modificationResults.annualCost);
-      // fsatResults = this.fsatService.getResults(this.fsat, false, this.settings)
     } else {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
   }
-
-
 
   hideResults() {
     this.showResults = false;

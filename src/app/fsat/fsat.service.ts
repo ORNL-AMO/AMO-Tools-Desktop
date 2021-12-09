@@ -13,8 +13,6 @@ import { ConvertFanAnalysisService } from '../calculator/fans/fan-analysis/conve
 import { FormGroup } from '@angular/forms';
 import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service'
-import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
-
 
 declare var fanAddon: any;
 
@@ -174,8 +172,6 @@ export class FsatService {
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     let co2EmissionsOutput: number;
-    // let baselineResults: FsatOutput = this.getEmptyResults();
-    // let modificationResults: FsatOutput = this.getEmptyResults();
     let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fsatOperations.operatingHours && fsat.fsatOperations.operatingFraction) {
@@ -222,8 +218,6 @@ export class FsatService {
       fsatOutputs = this.convertFsatService.convertFsatOutput(fsatOutputs, settings);
       fsatOutputs.annualCost = fsatOutputs.annualCost * 1000;
       fsatOutputs.psychrometricResults = this.getPsychrometricResults(fsat, settings);
-      // fsatOutputs.emissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
-
       let fan203InputsForPlaneResults: Fan203Inputs = this.getFan203InputForPlaneResults(fsat);
       if (fan203InputsForPlaneResults) {
         fsat.fan203InputsForPlaneResults = fan203InputsForPlaneResults;

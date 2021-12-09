@@ -120,7 +120,7 @@ export class AssessmentCo2SavingsService {
       //set results on original obj
       totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
     } else {
-       totalEmissionsResult = 0;
+      totalEmissionsResult = 0;
     }
     return totalEmissionsResult;
   }
