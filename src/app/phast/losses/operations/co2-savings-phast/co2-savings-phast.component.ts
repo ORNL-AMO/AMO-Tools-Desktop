@@ -72,10 +72,6 @@ export class Co2SavingsPhastComponent implements OnInit {
         this.enableForm();
       }
       this.cd.detectChanges();
-      // if (this.co2SavingsData.fuelType) {
-      //   let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
-      //   this.fuelOptions = tmpOtherFuel.fuelTypes;
-      // }
     }
   }
 
@@ -107,11 +103,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     return outputRate;
   }
 
-  // disableForm() {
-  //   // ^^^ this should disable only the field we want disabled. everything but emissions output rate I believe
-  //   this.form.disable();
-  // }
-
   disableForm() {
     this.form.controls.eGridSubregion.disable();
     this.form.controls.energySource.disable();
@@ -119,17 +110,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.form.controls.zipcode.disable();
     this.form.controls.totalEmissionOutputRate.disable();
   }
-
-
-  // enableForm() {
-  //   if (this.isBaseline) {
-  //     this.form.enable();
-  //     // this.form.controls.eGridSubregion.enable();
-  //     // this.form.controls.zipcode.enable();
-  //   }
-  //   this.form.controls.totalEmissionOutputRate.enable();
-
-  // }
 
   enableForm() {
     if (this.co2SavingsData.energyType == 'electricity') {
@@ -179,15 +159,6 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   }
 
-  // setCO2FuelData(){
-  //   this.form.patchValue({
-  //     energySource: this.co2SavingsData.energySource,
-  //     fuelType: this.co2SavingsData.fuelType,
-  //     totalEmissionOutputRate: this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to(this.settings.energyResultUnit)
-  //   });
-
-  // }
-
   focusField(str: string) {
     this.emitCurrentField.emit(str);
   }
@@ -228,29 +199,8 @@ export class Co2SavingsPhastComponent implements OnInit {
       fuelType: fuelType
     });
     this.setFuelTypeOutputRate(isUserFormChange);
-
-  
-    // this.form.patchValue({
-    //   totalEmissionOutputRate: this.fuelOptions[0].outputRate
-    // });
-    // if (this.isBaseline) {    
-    //   let outputRateValue: number = this.convertOutputRate(this.fuelOptions[0].outputRate);  
-    //   this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
-    //   this.form.patchValue({
-    //     totalEmissionOutputRate: outputRateValue
-    //   });
-    // }
-    // this.calculate();
   }
 
-  // setFuelTypeOutputRate() {
-  //   let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
-  //   // convert selectedFuel.outputRate
-  //   this.form.patchValue({
-  //     totalEmissionOutputRate: selectedFuelOutputRate
-  //   });
-  //   this.calculate();
-  // }
 
   setFuelTypeOutputRate(isUserFormChange = false) {
     if (this.isBaseline) {
@@ -267,7 +217,10 @@ export class Co2SavingsPhastComponent implements OnInit {
 
     if (isUserFormChange || !this.form.controls.userEnteredBaselineEmissions.value) {
       let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
-      // convert selectedFuel.outputRate
+      if(this.settings.energyResultUnit != 'MMBtu'){
+        selectedFuelOutputRate = this.convertUnitsService.value(selectedFuelOutputRate).from('MMBtu').to(this.settings.energyResultUnit);
+      }
+      
       this.form.patchValue({
         totalEmissionOutputRate: selectedFuelOutputRate
       });
@@ -278,7 +231,9 @@ export class Co2SavingsPhastComponent implements OnInit {
   setModificationFuelTypeOutputRate() {
     if (!this.form.controls.userEnteredModificationEmissions.value) {
       let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
-      // convert selectedFuel.outputRate
+      if(this.settings.energyResultUnit != 'MMBtu'){
+        selectedFuelOutputRate = this.convertUnitsService.value(selectedFuelOutputRate).from('MMBtu').to(this.settings.energyResultUnit);
+      }
       this.form.patchValue({
         totalEmissionOutputRate: selectedFuelOutputRate
       });
@@ -287,6 +242,7 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
   
   setSubRegionData() {
+    this.egridService.getAllSubRegions();
     this.zipCodeSubRegionData = [];
 
     let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.form.controls.zipcode.value === val.zip);
@@ -378,13 +334,23 @@ export class Co2SavingsPhastComponent implements OnInit {
     }
   }
 
+  convertCO2SavingsData(co2SavingsData: Co2SavingsData): Co2SavingsData{
+    if(co2SavingsData.energyType == 'fuel'){
+      if(this.settings.unitsOfMeasure == 'Imperial'){
+        if(this.settings.energyResultUnit != 'MMBtu'){
+          co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('MMBtu');
+        }
+      } else if (this.settings.unitsOfMeasure == 'Metric'){
+        if(this.settings.energyResultUnit != 'GJ'){
+          co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('GJ');
+        }
+      }
+    }
+    return co2SavingsData;
+  }
+
   calculate() {
-    this.co2SavingsData = this.phastCO2SavingsService.getCo2SavingsData(this.form);
-    // if (this.settings.unitsOfMeasure == 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
-    //   this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('MMBtu');
-    // } else if (this.settings.unitsOfMeasure != 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
-    //   this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('GJ');
-    // }
+    this.co2SavingsData = this.convertCO2SavingsData(this.phastCO2SavingsService.getCo2SavingsData(this.form));
     if (this.isBaseline) {
       this.setLockedModificationValues();
     }

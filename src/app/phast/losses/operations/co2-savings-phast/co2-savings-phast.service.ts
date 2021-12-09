@@ -95,6 +95,15 @@ export class Co2SavingsPhastService {
     } else if (settings.energySourceType == 'Electricity') {
       energyTypeFromAssessment = 'electricity';
     } 
+    if (!settings.co2SavingsEnergySource){
+      settings.co2SavingsEnergySource = 'Natural Gas';
+    }
+    if (!settings.co2SavingsFuelType){
+      settings.co2SavingsFuelType = 'Natural Gas';
+    }
+    if (!settings.zipcode){
+      settings.zipcode = '37830';
+    }
     let obj: Co2SavingsData = {
       energyType: energyTypeFromAssessment,
       energySource: settings.co2SavingsEnergySource,
