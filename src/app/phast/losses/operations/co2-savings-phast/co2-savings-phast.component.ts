@@ -4,7 +4,9 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
+import { Settings } from '../../../../shared/models/settings';
 import { Co2SavingsPhastService } from './co2-savings-phast.service';
 
 @Component({
@@ -20,6 +22,8 @@ export class Co2SavingsPhastComponent implements OnInit {
   isFormDisabled: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
   @Output('emitUpdateCo2SavingsData')
   emitUpdateCo2SavingsData = new EventEmitter<Co2SavingsData>();
   @Output('emitCurrentField')
@@ -40,7 +44,10 @@ export class Co2SavingsPhastComponent implements OnInit {
     outputRate: number
   }>;
 
-  constructor(private phastCO2SavingsService: Co2SavingsPhastService, private egridService: EGridService, private cd: ChangeDetectorRef) { }
+  constructor(private phastCO2SavingsService: Co2SavingsPhastService, 
+    private egridService: EGridService, 
+    private cd: ChangeDetectorRef,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.otherFuels = otherFuels;
@@ -65,6 +72,10 @@ export class Co2SavingsPhastComponent implements OnInit {
         this.enableForm();
       }
       this.cd.detectChanges();
+      // if (this.co2SavingsData.fuelType) {
+      //   let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
+      //   this.fuelOptions = tmpOtherFuel.fuelTypes;
+      // }
     }
   }
 
@@ -89,32 +100,36 @@ export class Co2SavingsPhastComponent implements OnInit {
     }
   }
 
-  setFuelOptions() {
-    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.co2SavingsData.energySource === val.energySource; });
-    this.fuelOptions = tmpOtherFuel.fuelTypes;
-    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
-    this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
-    this.form.patchValue({
-      fuelType: this.fuelOptions[0].fuelType
-    });
-    this.form.patchValue({
-      totalEmissionOutputRate: this.fuelOptions[0].outputRate
-    });
-    this.calculate();
-  }
-  
-  setFuel() {
-    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
-    this.co2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
-    this.form.patchValue({
-      totalEmissionOutputRate: tmpFuel.outputRate
-    });
-    this.calculate();
+  convertOutputRate(outputRate: number) {
+    if (outputRate) {
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to(this.settings.energyResultUnit);
+    }
+    return outputRate;
   }
 
+  // disableForm() {
+  //   // ^^^ this should disable only the field we want disabled. everything but emissions output rate I believe
+  //   this.form.disable();
+  // }
+
   disableForm() {
-    this.form.disable();
+    this.form.controls.eGridSubregion.disable();
+    this.form.controls.energySource.disable();
+    this.form.controls.fuelType.disable();
+    this.form.controls.zipcode.disable();
+    this.form.controls.totalEmissionOutputRate.disable();
   }
+
+
+  // enableForm() {
+  //   if (this.isBaseline) {
+  //     this.form.enable();
+  //     // this.form.controls.eGridSubregion.enable();
+  //     // this.form.controls.zipcode.enable();
+  //   }
+  //   this.form.controls.totalEmissionOutputRate.enable();
+
+  // }
 
   enableForm() {
     if (this.co2SavingsData.energyType == 'electricity') {
@@ -124,32 +139,52 @@ export class Co2SavingsPhastComponent implements OnInit {
       }
       this.form.controls.totalEmissionOutputRate.enable();
     } else {
-      this.form.enable();
+      // this.form.enable();
+      if (this.isBaseline) {
+        this.form.controls.energySource.enable();
+        this.form.controls.fuelType.enable();
+      }
+      this.form.controls.totalEmissionOutputRate.enable();
     }
   }
 
   initForm() {
     this.form = this.phastCO2SavingsService.getEmissionsForm(this.co2SavingsData);
+    console.log('init form', this.form);
     this.form.controls.energyType.disable();
 
     // Regions are the same for Mod
     if (!this.isBaseline) {
       this.form.controls.zipcode.disable();
       this.form.controls.eGridSubregion.disable();
+      this.form.controls.energySource.disable();
+      this.form.controls.fuelType.disable();
     }
 
     if (this.isFormDisabled) {
-      this.disableForm()
+      this.disableForm();
     };
 
     if (this.co2SavingsData.energyType == 'electricity') {
       this.setSubRegionData();
     } else {
       this.setFuelOptions();
-      this.setFuel();
+      if (!this.isBaseline) {
+        this.form.controls.energySource.disable();
+        this.form.controls.fuelType.disable();
+      }
     }
 
   }
+
+  // setCO2FuelData(){
+  //   this.form.patchValue({
+  //     energySource: this.co2SavingsData.energySource,
+  //     fuelType: this.co2SavingsData.fuelType,
+  //     totalEmissionOutputRate: this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to(this.settings.energyResultUnit)
+  //   });
+
+  // }
 
   focusField(str: string) {
     this.emitCurrentField.emit(str);
@@ -178,6 +213,77 @@ export class Co2SavingsPhastComponent implements OnInit {
     }
   }
 
+  setFuelOptions(isUserFormChange = false) {
+    let otherFuelOptions: OtherFuel = _.find(this.otherFuels, (val) => { return this.form.controls.energySource.value === val.energySource; });
+    this.fuelOptions = otherFuelOptions.fuelTypes;
+    let fuelType: string = this.fuelOptions[0].fuelType;
+    if (!isUserFormChange && this.co2SavingsData.fuelType) {
+      // take existing selection
+      fuelType = this.co2SavingsData.fuelType;
+    }
+
+    this.form.patchValue({
+      fuelType: fuelType
+    });
+    this.setFuelTypeOutputRate(isUserFormChange);
+
+  
+    // this.form.patchValue({
+    //   totalEmissionOutputRate: this.fuelOptions[0].outputRate
+    // });
+    // if (this.isBaseline) {    
+    //   let outputRateValue: number = this.convertOutputRate(this.fuelOptions[0].outputRate);  
+    //   this.co2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    //   this.form.patchValue({
+    //     totalEmissionOutputRate: outputRateValue
+    //   });
+    // }
+    // this.calculate();
+  }
+
+  // setFuelTypeOutputRate() {
+  //   let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
+  //   // convert selectedFuel.outputRate
+  //   this.form.patchValue({
+  //     totalEmissionOutputRate: selectedFuelOutputRate
+  //   });
+  //   this.calculate();
+  // }
+
+  setFuelTypeOutputRate(isUserFormChange = false) {
+    if (this.isBaseline) {
+      this.setBaselineFuelTypeOutputRate(isUserFormChange);
+    } else {
+      this.setModificationFuelTypeOutputRate()
+    }
+    this.calculate();
+  }
+
+  setBaselineFuelTypeOutputRate(isUserFormChange: boolean) {
+    console.log('isUserFuelTypeChange', isUserFormChange)
+    console.log('userEntered baseline', this.form.controls.userEnteredBaselineEmissions.value)
+
+    if (isUserFormChange || !this.form.controls.userEnteredBaselineEmissions.value) {
+      let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
+      // convert selectedFuel.outputRate
+      this.form.patchValue({
+        totalEmissionOutputRate: selectedFuelOutputRate
+      });
+      this.setUserEnteredModificationEmissions(false);
+    } 
+  }
+
+  setModificationFuelTypeOutputRate() {
+    if (!this.form.controls.userEnteredModificationEmissions.value) {
+      let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
+      // convert selectedFuel.outputRate
+      this.form.patchValue({
+        totalEmissionOutputRate: selectedFuelOutputRate
+      });
+      this.form.controls.userEnteredModificationEmissions.patchValue(false);
+    }
+  }
+  
   setSubRegionData() {
     this.zipCodeSubRegionData = [];
 
@@ -262,12 +368,21 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (modificationCo2SavingsData) {
       modificationCo2SavingsData.eGridSubregion = this.co2SavingsData.eGridSubregion;
       modificationCo2SavingsData.zipcode = this.co2SavingsData.zipcode;
+      // IMPORTANT - the below vales were missing so bl values were not copied over to mod
+      modificationCo2SavingsData.energyType = this.co2SavingsData.energyType;
+      modificationCo2SavingsData.fuelType = this.co2SavingsData.fuelType;
+      modificationCo2SavingsData.energySource = this.co2SavingsData.energySource;
       this.phastCO2SavingsService.modificationCo2SavingsData.next(modificationCo2SavingsData);
     }
   }
 
   calculate() {
     this.co2SavingsData = this.phastCO2SavingsService.getCo2SavingsData(this.form);
+    // if (this.settings.unitsOfMeasure == 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
+    //   this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('MMBtu');
+    // } else if (this.settings.unitsOfMeasure != 'Imperial' && this.co2SavingsData.energyType == 'fuel') {
+    //   this.co2SavingsData.totalEmissionOutputRate = this.convertUnitsService.value(this.co2SavingsData.totalEmissionOutputRate).from(this.settings.energyResultUnit).to('GJ');
+    // }
     if (this.isBaseline) {
       this.setLockedModificationValues();
     }

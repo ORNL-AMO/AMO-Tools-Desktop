@@ -501,6 +501,7 @@ export class PhastComponent implements OnInit {
       exploreOppsShowAllTemp: exploreOppsDefault,
       exploreOppsShowFixtures: exploreOppsDefault,
     };
+    tmpModification.phast.co2SavingsData = (JSON.parse(JSON.stringify(this._phast.co2SavingsData)));
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this._phast.operatingHours)));
