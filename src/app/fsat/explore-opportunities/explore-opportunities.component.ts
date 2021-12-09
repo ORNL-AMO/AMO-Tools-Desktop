@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, 
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
-import { FSAT} from '../../shared/models/fans';
+import { FSAT } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-explore-opportunities',
