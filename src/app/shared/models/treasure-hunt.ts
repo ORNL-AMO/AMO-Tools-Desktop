@@ -82,6 +82,7 @@ export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
     electricityUsed: boolean,
+    electricityCO2OutputRate?: number,
     naturalGasUsage: number,
     naturalGasCosts: number,
     naturalGasUsed: boolean,

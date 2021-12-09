@@ -17,6 +17,7 @@ export const MockTreasureHunt: Assessment = {
             "electricityUsage": 32000000,
             "electricityCosts": 1600000,
             "electricityUsed": true,
+            "electricityCO2OutputRate": 955.587,
             "naturalGasUsage": 125000,
             "naturalGasCosts": 500000,
             "naturalGasUsed": true,

@@ -73,6 +73,7 @@ export class OperationCostsComponent implements OnInit {
       electricityUsage: 0,
       electricityCosts: 0,
       electricityUsed: false,
+      electricityCO2OutputRate: 0,
       naturalGasUsage: 0,
       naturalGasCosts: 0,
       naturalGasUsed: false,
