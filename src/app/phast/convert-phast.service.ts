@@ -20,7 +20,6 @@ import { DesignedEnergy } from '../shared/models/phast/designedEnergy';
 import { MeteredEnergy } from '../shared/models/phast/meteredEnergy';
 import { OperatingCosts } from '../shared/models/operations';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
-import { settings } from 'cluster';
 
 @Injectable()
 export class ConvertPhastService {
