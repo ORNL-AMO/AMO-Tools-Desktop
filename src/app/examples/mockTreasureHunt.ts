@@ -17,7 +17,6 @@ export const MockTreasureHunt: Assessment = {
             "electricityUsage": 32000000,
             "electricityCosts": 1600000,
             "electricityUsed": true,
-            "electricityCO2OutputRate": 955.587,
             "naturalGasUsage": 125000,
             "naturalGasCosts": 500000,
             "naturalGasUsed": true,
@@ -1400,5 +1399,6 @@ export const MockTreasureHuntSettings: Settings = {
     "compressedAirCost": 0.0005,
     "otherFuelCost": 0,
     "waterCost": 0.0025,
-    "waterWasteCost": 0.005
+    "waterWasteCost": 0.005,
+    "totalEmissionOutputRate": 955.587
 }
