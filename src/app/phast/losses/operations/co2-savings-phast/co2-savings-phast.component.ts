@@ -242,7 +242,6 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
   
   setSubRegionData() {
-    this.egridService.getAllSubRegions();
     this.zipCodeSubRegionData = [];
 
     let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.form.controls.zipcode.value === val.zip);
