@@ -19,14 +19,10 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   isFormDisabled: boolean;
   @Input()
   inBaseline: boolean;
-  @Input()
-  currentField: string;
   @Output('emitUpdateCo2SavingsData')
   emitUpdateCo2SavingsData = new EventEmitter<Co2SavingsData>();
   @Output('emitCurrentField')
   emitCurrentField = new EventEmitter<string>();
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
 
   form: FormGroup;
@@ -112,12 +108,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     this.setSubRegionData();
   }
 
-  // focusField(str: string = 'co2Savings') {
-  //   this.emitCurrentField.emit(str);
-  // }
   focusField(str: string) {
     this.emitCurrentField.emit(str);
-    // this.emitChangeField.emit(str);
   }
 
   setUserEmissionsOutput() {

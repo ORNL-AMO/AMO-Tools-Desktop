@@ -34,10 +34,6 @@ export class PumpOperationsComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
-  @Input()
-  currentField: string;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
