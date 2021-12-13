@@ -503,13 +503,3 @@ export const fanChecklistQuestions =  {
   weldingDuctwork: 'Need to weld ductwork cracks regularly',
   radialFanCleanAir: 'Radial fan handling clean air',
 };
-
-export interface ExploreOpportunitiesResults {
-  baselineResults: FsatOutput, 
-  modificationResults: FsatOutput, 
-  annualSavings: number, 
-  co2EmissionsSavings: number,
-  percentSavings: number, 
-  co2SavingsData: Co2SavingsData
-} 
-

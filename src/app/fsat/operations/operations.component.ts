@@ -83,7 +83,6 @@ export class OperationsComponent implements OnInit {
 
 
   init() {
-    this.setCo2SavingsData();
     if (this.fsatOperations) {
       if (!this.fsatOperations.cost) {
         this.fsatOperations.cost = this.settings.electricityCost;
