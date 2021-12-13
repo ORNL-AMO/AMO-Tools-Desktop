@@ -285,9 +285,10 @@
 
 <div bsModal #zipCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="zipCodeModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title">Carbon Emissions by Zip Code</h4>
         <button class="close" aria-label="Close" (click)="hideZipCodeModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -297,15 +298,13 @@
           [co2SavingsData]="co2SavingsData"
           [isFormDisabled]="false"
           [inBaseline]="true"
-          (emitUpdateCo2SavingsData)="updatePsatCo2SavingsData($event)">
+          (emitUpdateCo2SavingsData)="updateElectricityCo2SavingsData($event)">
         </app-assessment-co2-savings>
       </div>
       <div class="modal-footer fsat justify-content-between">
         <button class="btn btn-default pull-left" (click)="hideZipCodeModal()">Cancel</button>
         <span>
-          <button class="btn btn-primary" (click)="hideZipCodeModal()">Save and
-            Exit</button>
-          <button [disabled]="disableApplyData == true" class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
+          <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
             Data</button>
         </span>
       </div>

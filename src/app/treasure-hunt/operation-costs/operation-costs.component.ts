@@ -34,6 +34,8 @@ export class OperationCostsComponent implements OnInit {
   bodyHeight: number;
   co2SavingsData: Co2SavingsData;
 
+  globalSettings: Settings;
+
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
@@ -42,6 +44,7 @@ export class OperationCostsComponent implements OnInit {
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.globalSettings = this.settingsDbService.globalSettings;
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
       this.initData();
@@ -241,7 +244,7 @@ export class OperationCostsComponent implements OnInit {
     this.zipCodeModal.hide();
   }
 
-  updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+  updateElectricityCo2SavingsData(co2SavingsData?: Co2SavingsData) {
     this.co2SavingsData = co2SavingsData;
   }
 
@@ -253,14 +256,14 @@ export class OperationCostsComponent implements OnInit {
         energyType: 'electricity',
         energySource: '',
         fuelType: '',
-        totalEmissionOutputRate: 0,
+        totalEmissionOutputRate: this.globalSettings.totalEmissionOutputRate,
         electricityUse: 0,
         eGridRegion: '',
-        eGridSubregion: 'SRTV',
+        eGridSubregion: this.globalSettings.eGridSubregion,
         totalEmissionOutput: 0,
         userEnteredBaselineEmissions: false,
         userEnteredModificationEmissions: false,
-        zipcode: '37830'
+        zipcode: this.globalSettings.zipcode
       }
       this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = co2SavingsData;
       this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
