@@ -187,6 +187,7 @@ export class AssessmentService {
       fsatOperations: {
         operatingHours: 8760,
         cost: null,
+        cO2SavingsData: null
       },
       fanMotor: {
         lineFrequency: 60,
