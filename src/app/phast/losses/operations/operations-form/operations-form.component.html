@@ -57,7 +57,17 @@
     </div>
   </div>
 </form>
-
+<div *ngIf="inSetup" class="d-flex flex-column w-100">
+  <div class="header justify-content-between align-items-center mb-2 mt-2">
+    <h3>Carbon Emissions</h3>
+  </div>
+</div>
+<div *ngIf="co2SavingsData">
+  <app-co2-savings-phast [co2SavingsData]="co2SavingsData" [isFormDisabled]="!selected"
+    [isBaseline]="isBaseline" [settings]="settings" (emitCurrentField)="focusField($event)"
+    (emitUpdateCo2SavingsData)="updatePsatCo2SavingsData($event)">
+  </app-co2-savings-phast>
+</div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
