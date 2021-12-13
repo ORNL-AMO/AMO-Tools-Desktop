@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 })
 export class PumpOperationsHelpComponent implements OnInit {
  
-  @Input()
   currentField: string;
 
   currentFieldSub: Subscription;

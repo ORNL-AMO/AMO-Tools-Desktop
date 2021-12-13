@@ -15,8 +15,6 @@ export class HelpPanelComponent implements OnInit {
   @Input()
   currentTab: string;
   @Input()
-  currentField: string;
-  @Input()
   settings: Settings;
   @Input()
   psat: PSAT;
@@ -35,7 +33,8 @@ export class HelpPanelComponent implements OnInit {
   @Input()
   showResults: boolean;
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
-
+  
+  currentField: string;
   tabSelect: string = 'results';
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
