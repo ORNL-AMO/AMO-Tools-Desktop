@@ -6,6 +6,7 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 
 @Component({
   selector: 'app-operation-costs',
@@ -43,6 +44,7 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHunt.currentEnergyUsage == undefined) {
       this.initCurrentEnergyUse();
     }
+    this.setNaturalGasCO2SavingsData();
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
@@ -191,5 +193,25 @@ export class OperationCostsComponent implements OnInit {
         })
       }
     )
+  }
+
+  setNaturalGasCO2SavingsData(){
+    if(!this.treasureHunt.currentEnergyUsage.naturalCO2SavingsData){
+      let co2SavingsData: Co2SavingsData = {
+        energyType: 'fuel',
+        energySource: 'Natural Gas',
+        fuelType: 'Natural Gas',
+        totalEmissionOutputRate: 53.06,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: '',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: ''
+      }
+      this.treasureHunt.currentEnergyUsage.naturalCO2SavingsData = co2SavingsData;
+    }
+
   }
 }

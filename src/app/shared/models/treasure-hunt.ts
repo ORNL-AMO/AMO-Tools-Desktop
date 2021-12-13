@@ -14,6 +14,7 @@ import { WaterHeatingInput } from "./steam/waterHeating";
 import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
 export interface TreasureHunt {
     name: string,
@@ -85,6 +86,7 @@ export interface EnergyUsage {
     naturalGasUsage: number,
     naturalGasCosts: number,
     naturalGasUsed: boolean,
+    naturalCO2SavingsData?: Co2SavingsData,
     otherFuelUsage: number,
     otherFuelCosts: number,
     otherFuelUsed: boolean,
