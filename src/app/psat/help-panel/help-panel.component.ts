@@ -34,7 +34,6 @@ export class HelpPanelComponent implements OnInit {
   showResults: boolean;
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
   
-  currentField: string;
   tabSelect: string = 'results';
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
