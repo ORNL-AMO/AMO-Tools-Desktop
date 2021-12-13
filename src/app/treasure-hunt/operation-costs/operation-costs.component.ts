@@ -82,15 +82,19 @@ export class OperationCostsComponent implements OnInit {
       waterUsage: 0,
       waterCosts: 0,
       waterUsed: false,
+      waterCO2OutputRate: 0,
       wasteWaterUsage: 0,
       wasteWaterCosts: 0,
       wasteWaterUsed: false,
+      wasteWaterCO2OutputRate: 0,
       compressedAirUsage: 0,
       compressedAirCosts: 0,
       compressedAirUsed: false,
+      compressedAirCO2OutputRate: 0,
       steamUsage: 0,
       steamCosts: 0,
-      steamUsed: false
+      steamUsed: false,
+      steamCO2OutputRate: 0,
     }
     this.treasureHunt.currentEnergyUsage = defaultUsage;
     this.save();
@@ -141,6 +145,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.waterUsed = false;
       this.treasureHunt.currentEnergyUsage.waterUsage = 0;
       this.treasureHunt.currentEnergyUsage.waterCosts = 0;
+      this.treasureHunt.currentEnergyUsage.waterCO2OutputRate = 0;
     }
     this.save();
   }
@@ -152,6 +157,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = false;
       this.treasureHunt.currentEnergyUsage.wasteWaterUsage = 0;
       this.treasureHunt.currentEnergyUsage.wasteWaterCosts = 0;
+      this.treasureHunt.currentEnergyUsage.wasteWaterCO2OutputRate = 0;
     }
     this.save();
   }
@@ -163,6 +169,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = false;
       this.treasureHunt.currentEnergyUsage.compressedAirUsage = 0;
       this.treasureHunt.currentEnergyUsage.compressedAirCosts = 0;
+      this.treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate = 0;
     }
     this.save();
   }
@@ -174,6 +181,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.steamUsed = false;
       this.treasureHunt.currentEnergyUsage.steamUsage = 0;
       this.treasureHunt.currentEnergyUsage.steamCosts = 0;
+      this.treasureHunt.currentEnergyUsage.steamCO2OutputRate = 0;
     }
     this.save();
   }

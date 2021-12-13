@@ -91,15 +91,19 @@ export interface EnergyUsage {
     waterUsage: number,
     waterCosts: number,
     waterUsed: boolean,
+    waterCO2OutputRate?: number,
     wasteWaterUsage: number,
     wasteWaterCosts: number,
     wasteWaterUsed: boolean,
+    wasteWaterCO2OutputRate?: number,
     compressedAirUsage: number,
     compressedAirCosts: number,
     compressedAirUsed: boolean,
+    compressedAirCO2OutputRate?: number,
     steamUsage: number,
     steamCosts: number
     steamUsed: boolean,
+    steamCO2OutputRate?: number,
 }
 
 export interface OpportunitySheet extends TreasureHuntOpportunity {

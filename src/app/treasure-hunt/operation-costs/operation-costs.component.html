@@ -150,6 +150,16 @@
               <span class="input-group-addon units">$/yr</span>
             </div>
           </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <div class="input-group">
+              <input name="totalEmissionOutputRate" type="number" class="form-control"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.waterCO2OutputRate"
+                id="totalEmissionOutputRate" (input)="save()">
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/gal</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/L</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -186,6 +196,16 @@
               <input class="form-control" name="annualWasteWaterCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCosts" (input)="save()">
               <span class="input-group-addon units">$/yr</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <div class="input-group">
+              <input name="totalEmissionOutputRate" type="number" class="form-control"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCO2OutputRate"
+                id="totalEmissionOutputRate" (input)="save()">
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/gal</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/L</span>
             </div>
           </div>
         </div>
@@ -227,6 +247,16 @@
               <span class="input-group-addon units">$/yr</span>
             </div>
           </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <div class="input-group">
+              <input name="totalEmissionOutputRate" type="number" class="form-control" 
+                [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate"
+                id="totalEmissionOutputRate" (input)="save()">
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/SCF</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/m<sup>3</sup></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -263,6 +293,16 @@
               <input class="form-control" name="annualSteamCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.steamCosts" (input)="save()">
               <span class="input-group-addon units">$/yr</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <div class="input-group">
+              <input name="totalEmissionOutputRate" type="number" class="form-control" 
+                [(ngModel)]="treasureHunt.currentEnergyUsage.steamCO2OutputRate"
+                id="totalEmissionOutputRate" (input)="save()">
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/klb</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/tonne</span>
             </div>
           </div>
         </div>
