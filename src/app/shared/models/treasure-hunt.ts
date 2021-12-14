@@ -90,6 +90,7 @@ export interface EnergyUsage {
     otherFuelUsage: number,
     otherFuelCosts: number,
     otherFuelUsed: boolean,
+    otherFuelCO2SavingsData?: Co2SavingsData,
     waterUsage: number,
     waterCosts: number,
     waterUsed: boolean,

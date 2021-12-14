@@ -8,6 +8,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-operation-costs',
@@ -36,6 +38,12 @@ export class OperationCostsComponent implements OnInit {
 
   globalSettings: Settings;
 
+  otherFuels: Array<OtherFuel>;
+  fuelOptions: Array<{
+    fuelType: string,
+    outputRate: number
+  }>;
+
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
@@ -45,6 +53,7 @@ export class OperationCostsComponent implements OnInit {
 
   ngOnInit() {
     this.globalSettings = this.settingsDbService.globalSettings;
+    this.otherFuels = otherFuels;
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
       this.initData();
@@ -77,7 +86,8 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHunt.currentEnergyUsage == undefined) {
       this.initCurrentEnergyUse();
     }
-    this.setCo2SavingsData();    
+    this.setCo2SavingsData(); 
+    this.setOtherFuelCo2SavingsData();   
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
@@ -276,6 +286,47 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = co2SavingsData;
       this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
     }
+  }
+
+  setOtherFuelCo2SavingsData() {
+    if (!this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData) {
+      let co2SavingsData: Co2SavingsData = {
+        energyType: 'fuel',
+        energySource: 'Petroleum-based fuels',
+        fuelType: 'Motor Gasoline',
+        totalEmissionOutputRate: 70.22,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: '',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: ''
+      }
+      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData;
+    }
+    this.getOtherFuelOptions();
+  }
+
+  getOtherFuelOptions(){
+    if (this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType) {
+      let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
+      this.fuelOptions = tmpOtherFuel.fuelTypes;
+    }
+  }
+
+  setFuelOptions() {
+    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = undefined;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = undefined;
+    this.save();
+  }
+
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType === val.fuelType; });
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+    this.save();
   }
 
 

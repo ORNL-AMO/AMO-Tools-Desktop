@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
-          <label for="totalEmissionOutputRate">Total Emission Output Rate
+          <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate
             <a class="form-text small click-link" (click)="showZipCodeModal()">
               Calculate Emission Output Rate from Zip Code</a>
           </label>
@@ -122,6 +122,33 @@
               <input class="form-control" name="annualOtherFuelCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCosts" (input)="save()">
               <span class="input-group-addon units">$/yr</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="energySource">Energy Source</label>
+            <div class="input-group">
+              <select name="energySource" class="form-control" id="energySource"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource" (change)="setFuelOptions()">
+                <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fuelType">Fuel Type</label>
+            <div class="input-group">
+              <select name="fuelType" class="form-control" id="fuelType"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType" (change)="setFuel()">
+                <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <div class="input-group">
+              <input class="form-control" name="totalEmissionOutputRate" type="number"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate" (input)="save()">
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/MMBtu</span>
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/GJ</span>
             </div>
           </div>
         </div>
