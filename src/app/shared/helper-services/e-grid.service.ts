@@ -73,7 +73,7 @@ export class EGridService {
 }
 
 export interface SubRegionData {
-  zip: number,
+  zip: string,
   state: string,
   co2Emissions?: number,
   subregions?: Array<string>

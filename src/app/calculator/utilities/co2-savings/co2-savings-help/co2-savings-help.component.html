@@ -88,96 +88,27 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'eGridRegion'">
-    <h6>
-      eGrid Region
-      <small class="text-muted">
-        <br>
-        eGrid Region where electricity is generated. Areas near state boarders may
-         be in an unexpected eGrid region. 
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100">
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="text-center">eGrid Region</th>
-              <th class="text-center">States included in region</th>
-              <th class="text-center">eGrid SubRegions</th>
-            </tr>
-            <tr>
-              <td class="text-center">U.S.</td>
-              <td class="text-center">U.S. Average</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="text-center">ASCC</td>
-              <td class="text-center">AK</td>
-              <td class="text-center">AKGD: Alaska Grid <br>AKMS: Alaska Misc.</td>
-            </tr>
-            <tr>
-              <td class="text-center">ERCOT</td>
-              <td class="text-center">TX</td>
-              <td class="text-center">Ercot</td>
-            </tr>
-            <tr>
-              <td class="text-center">FRCC</td>
-              <td class="text-center">FL</td>
-              <td class="text-center">FRCC</td>
-            </tr>
-            <tr>
-              <td class="text-center">HICC</td>
-              <td class="text-center">HI</td>
-              <td class="text-center">HIMS: HI Misc. <br>HIOA: HI Oahu</td>
-            </tr>
-            <tr>
-              <td class="text-center">MRO</td>
-              <td class="text-center">ND, SD, NE, MS, IA, WI</td>
-              <td class="text-center">MROE: MRO East <br>MROW: MRO West</td>
-            </tr>
-            <tr>
-              <td class="text-center">NPCC</td>
-              <td class="text-center">ME, VT, NH, MA, CN, RI, NY</td>
-              <td class="text-center">NEWE: New England <br>NYCW: NYC & Winchester <br>NYLI: Long Island <br>NYUP: NY Upstate</td>
-            </tr>
-            <tr>
-              <td class="text-center">RFC</td>
-              <td class="text-center">PN, NG, DE, MI, IL, IN, OH, WV, <br>VA, KY</td>
-              <td class="text-center">RFCE: RFC East<br>RFCM: Michigan<br>FRCW: RFC West</td>
-            </tr>
-            <tr>
-              <td class="text-center">SERC</td>
-              <td class="text-center">AR, LA, MO, IL, TX, LA, MS, AL,<br>GA, TN, KY, VA, NC, SC</td>
-              <td class="text-center">SRMV: MS Valley<br>SRMW: Midwest<br>SRSO: South<br>SRTN: TN Valley<br>SRVC: VA/Carolina</td>
-            </tr>
-            <tr>
-              <td class="text-center">SPP</td>
-              <td class="text-center">KS, OK, TX, NM, LA</td>
-              <td class="text-center">SPNO: SP North<br>SPSO: SP South</td>
-            </tr>
-            <tr>
-              <td class="text-center">WECC</td>
-              <td class="text-center">WA, OR, ID, MT, WY, NE, CA<br>NV, UT, CO, AZ, NM</td>
-              <td class="text-center">AZNM: Arizona, New Mexico<br>CAMX: California<br>NQPP: Northwest<br>RMPA: Rockies</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <img src="https://www.epa.gov/sites/default/files/2021-02/2019_egrid_subregions.png" alt="eGridSubRegions">
-    </div>
-  </div>
+
   <div class="my-2" *ngIf="currentField == 'eGridSubregion'">
     <h6>
       eGrid Sub-Region
       <small class="text-muted">
         <br>
-        eGrid sub-region where electricity is generated. 
+        eGrid sub-region where electricity is generated.
         <hr>
       </small>
     </h6>
-    <img src="https://www.epa.gov/sites/default/files/2021-02/2019_egrid_subregions.png" alt="eGridSubRegions">
+    <img src="assets/images/egrid-subregions.png" alt="eGridSubRegions">
+  </div>
+  <div class="my-2" *ngIf="currentField == 'zipcode'">
+    <h6>
+      Zipcode
+      <small class="text-muted">
+        <br>
+        Enter a vaild Zip Code to find the eGrid Subregion where electricity is generated.
+        <hr>
+      </small>
+    </h6>
   </div>
   
 
