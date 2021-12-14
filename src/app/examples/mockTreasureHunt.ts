@@ -1403,5 +1403,6 @@ export const MockTreasureHuntSettings: Settings = {
     "compressedAirCost": 0.0005,
     "otherFuelCost": 0,
     "waterCost": 0.0025,
-    "waterWasteCost": 0.005
+    "waterWasteCost": 0.005,
+    "totalEmissionOutputRate": 955.587
 }

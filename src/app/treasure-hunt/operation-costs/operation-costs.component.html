@@ -1,4 +1,4 @@
-<div class="d-flex flex-column mb-3">
+<div class="d-flex flex-column mb-3" #formElement>
   <div class="header mr-2 ml-2">
     <h3>Annual Utility Usage and Costs</h3>
   </div>
@@ -35,6 +35,18 @@
             <input class="form-control" name="annualElectricityCosts" type="number"
               [(ngModel)]="treasureHunt.currentEnergyUsage.electricityCosts" (input)="save()">
             <span class="input-group-addon units">$/yr</span>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
+          <label for="totalEmissionOutputRate">Total Emission Output Rate
+            <a class="form-text small click-link" (click)="showZipCodeModal()">
+              Calculate Emission Output Rate from Zip Code</a>
+          </label>
+          <div class="input-group">
+            <input name="totalEmissionOutputRate" type="number" step="any" class="form-control"
+              id="totalEmissionOutputRate" (input)="save()" 
+              [(ngModel)]="treasureHunt.currentEnergyUsage.electricityCO2SavingsData.totalEmissionOutputRate">
+            <span class="input-group-addon units small">kg CO<sub>2</sub>/kWh</span>
           </div>
         </div>
       </div>
@@ -306,6 +318,35 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #zipCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="zipCodeModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Carbon Emissions by Zip Code</h4>
+        <button class="close" aria-label="Close" (click)="hideZipCodeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-5">
+        <app-assessment-co2-savings
+          [co2SavingsData]="co2SavingsData"
+          [isFormDisabled]="false"
+          [inBaseline]="true"
+          (emitUpdateCo2SavingsData)="updateElectricityCo2SavingsData($event)">
+        </app-assessment-co2-savings>
+      </div>
+      <div class="modal-footer fsat justify-content-between">
+        <button class="btn btn-default pull-left" (click)="hideZipCodeModal()">Cancel</button>
+        <span>
+          <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
+            Data</button>
+        </span>
       </div>
     </div>
   </div>

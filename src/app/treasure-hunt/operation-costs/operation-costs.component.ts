@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
@@ -6,6 +6,8 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 
 @Component({
   selector: 'app-operation-costs',
@@ -18,6 +20,22 @@ export class OperationCostsComponent implements OnInit {
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
 
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('zipCodeModal', { static: false }) public zipCodeModal: ModalDirective;
+
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getBodyHeight();
+  }
+  zipCodeModalSub: Subscription;
+
+  formWidth: number;
+  bodyHeight: number;
+  co2SavingsData: Co2SavingsData;
+
+  globalSettings: Settings;
+
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
@@ -26,6 +44,7 @@ export class OperationCostsComponent implements OnInit {
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.globalSettings = this.settingsDbService.globalSettings;
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
       this.initData();
@@ -37,12 +56,28 @@ export class OperationCostsComponent implements OnInit {
       this.saveSettings();
     }
     this.treasureHuntSub.unsubscribe();
+    this.zipCodeModalSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.zipCodeModalSub = this.zipCodeModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
+  }
+
+  getBodyHeight() {
+    if (this.modalBody) {
+      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
+    } else {
+      this.bodyHeight = 0;
+    }
   }
 
   initData() {
     if (this.treasureHunt.currentEnergyUsage == undefined) {
       this.initCurrentEnergyUse();
     }
+    this.setCo2SavingsData();    
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
@@ -111,7 +146,6 @@ export class OperationCostsComponent implements OnInit {
     } else if (this.treasureHuntResults.electricity.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = false;
       this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
-      this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
     }
     this.save();
   }
@@ -200,4 +234,49 @@ export class OperationCostsComponent implements OnInit {
       }
     )
   }
+
+  showZipCodeModal() {
+    this.treasureHuntService.modalOpen.next(true);
+    this.zipCodeModal.show();
+  }
+
+  hideZipCodeModal() {
+    this.treasureHuntService.modalOpen.next(false);
+    this.zipCodeModal.hide();
+  }
+
+  applyModalData() {
+    this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = this.co2SavingsData;
+    this.save();
+    this.treasureHuntService.modalOpen.next(false);
+    this.zipCodeModal.hide();
+  }
+
+  updateElectricityCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.co2SavingsData = co2SavingsData;
+  }
+
+  setCo2SavingsData() {
+    if (this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
+      this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = {
+        energyType: 'electricity',
+        energySource: '',
+        fuelType: '',
+        totalEmissionOutputRate: this.globalSettings.totalEmissionOutputRate,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: this.globalSettings.eGridSubregion,
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: this.globalSettings.zipcode
+      }
+      this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = co2SavingsData;
+      this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
+    }
+  }
+
+
 }
