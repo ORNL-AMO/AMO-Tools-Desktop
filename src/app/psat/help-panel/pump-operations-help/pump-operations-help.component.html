@@ -1,93 +1,123 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
+  <div class="my-2" *ngIf="currentField == 'operatingHours'|| currentField == 'costKwHr'">
     <h5>
-        Operations Help
-        <br>
-        <small class="text-muted">
-            Enter measured data to calculate your system's annual savings potential.
-        </small>
+      Operations Help
+      <br>
+      <small class="text-muted">
+        Enter measured data to calculate your system's annual savings potential.
+      </small>
     </h5>
     <hr class="my-1 hr-spacer">
+  </div>
 
-
-    <div class="my-2" *ngIf="currentField == 'operatingHours'">
-        <h6>
-            Operating Hours
-            <br>
-            <small class="text-muted">
-                Annual operating hours of the pump.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="text-center">Minimum</th>
-                        <th class="text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="text-center">0 hrs/yr</td>
-                        <td class="text-center">8760 hrs/yr</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="my-2" *ngIf="currentField == 'operatingHours'">
+    <h6>
+      Operating Hours
+      <br>
+      <small class="text-muted">
+        Annual operating hours of the pump.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
 
-    <div class="my-2" *ngIf="currentField == 'costKwHr'">
+  <div class="my-2" *ngIf="currentField == 'costKwHr'">
+    <h6>
+      Cost
+      <br>
+      <small class="text-muted">
+        Per unit cost of electricity in ($/kWh).
+        <br> The simplest approach is to simply divide the monthly (or annual) electric energy cost by the
+        corresponding
+        period's
+        energy consumption, both of which are normally included in electric bills. It is recommended to include
+        demand
+        charges,
+        power factor-related penalties, and other issues because they can have a significant impact on the the
+        average
+        per
+        unit energy cost.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2"
+    *ngIf="currentField == 'totalEmissionOutputRate' || currentField == 'eGridSubregion' || currentField == 'zipcode'">
+    <h5>
+      CO<sub>2</sub> Savings
+    </h5>
+    <small class="text-muted">
+      This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given
+      electricity and fuel uses. Enter the facility’s region for electricity or the fuel type and the electricity use
+      or fuel energy. The emission output rate can be edited, but will return to the default value when the
+      electricity/fuel options are changed.
+      Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
+      <hr>
+      <div class="my-2">
         <h6>
-            Cost
+          <small class="text-muted">
+            <a href="https://www.epa.gov/energy/emissions-generation-resource-integrated-database-egrid"
+              target="_blank">
+              US EPA Emissions & Generation Resource Integrate Database (eGRID)</a>
             <br>
-            <small class="text-muted">
-                Per unit cost of electricity in ($/kWh).
-                <br> The simplest approach is to simply divide the monthly (or annual) electric energy cost by the
-                corresponding
-                period's
-                energy consumption, both of which are normally included in electric bills. It is recommended to include
-                demand
-                charges,
-                power factor-related penalties, and other issues because they can have a significant impact on the the
-                average
-                per
-                unit energy cost.
-                <hr>
-            </small>
+            <hr>
+            <a href="https://www.epa.gov/sites/production/files/2015-07/documents/emission-factors_2014.pdf"
+              target="_blank">
+              US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
+              <hr>
+          </small>
         </h6>
-    </div>
+      </div>
+    </small>
+  </div>
 
-    <div class="my-2" *ngIf="currentField == 'co2Savings'">
-        <h6>
-            CO<sub>2</sub> Savings 
-            <br>
-            <small class="text-muted">
-                This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given
-                electricity and fuel uses. Enter the facility’s region for electricity or the fuel type and the electricity use
-                or fuel energy. The emission output rate can be edited, but will return to the default value when the
-                electricity/fuel options are changed.
-                Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
-                <hr>
-                <div class="my-2">
-                    <h6>
-                      <small class="text-muted">
-                        <a href="https://www.epa.gov/energy/emissions-generation-resource-integrated-database-egrid" target="_blank">
-                          US EPA Emissions & Generation Resource Integrate Database (eGRID)</a>
-                        <br>
-                        <hr>
-                        <a href="https://www.epa.gov/sites/production/files/2015-07/documents/emission-factors_2014.pdf" target="_blank">
-                          US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
-                        <br>
-                        <hr>
-                        <a href="https://www.ecfr.gov/cgi-bin/text-idx?SID=5918762f070a5581dfde66942e2e91e6&mc=true&node=ap40.23.98_138.1&rgn=div9"
-                          target="_blank">
-                          e-CFR Default CO<sub>2</sub> Emission Factors for Various Types of Fuel</a>
-                      </small>
-                    </h6>
-                  </div>
-            </small>
-            
-        </h6>
-    </div>
-
-
+  <div class="my-2" *ngIf="currentField == 'eGridSubregion'">
+    <h6>
+      eGrid Sub-Region
+      <small class="text-muted">
+        <br>
+        eGrid sub-region where electricity is generated.
+        <hr>
+      </small>
+    </h6>
+    <img src="assets/images/egrid-subregions.png" alt="eGridSubRegions">
+  </div>
+  <div class="my-2" *ngIf="currentField == 'totalEmissionOutputRate'">
+    <h6>
+      Total Emission Output Rate
+      <small class="text-muted">
+        <br>
+        The total emissions per unit of energy use. By default, this is set by the
+        dropdown options, but is changeable. The default values are only kg of
+        carbon dioxide (not carbon dioxide equivalent).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'zipcode'">
+    <h6>
+      Zipcode
+      <small class="text-muted">
+        <br>
+        Enter a vaild Zip Code to find the eGrid Subregion where electricity is generated.
+        <hr>
+      </small>
+    </h6>
+  </div>
 </div>
