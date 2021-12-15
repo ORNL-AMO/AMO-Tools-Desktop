@@ -67,38 +67,27 @@
     </h6>
   </div>
 
-  <div class="my-2">
-    <h6>
-        CO<sub>2</sub> Savings 
-        <br>
+  <div class="my-2"
+    *ngIf="currentField == 'totalEmissionOutputRate' || currentField == 'eGridSubregion' || currentField == 'zipcode'">
+    <h5>
+      CO<sub>2</sub> Savings Help
+      <br>
+      <small class="text-muted small">This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
+        It also helps to calculate the emissions fuel use for transportation. Select the emission source type to select the emission from combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
+        Next select the emission source and corresponding fuel type. For calculating emission from purchased electricity from the grid select Electricity under Emission Source Type.
+        Enter the facility’s eGrid region for electricity. The emission output rate can be edited but will return to the default value when the electricity/fuel options are changed. 
+        Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
+      </small>
+      <hr>
+    </h5>
+    <div>
+      <h6>
         <small class="text-muted">
-            This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given
-            electricity and fuel uses. Enter the facility’s region for electricity or the fuel type and the electricity use
-            or fuel energy. The emission output rate can be edited, but will return to the default value when the
-            electricity/fuel options are changed.
-            Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
-            <hr>
-            <div class="my-2">
-                <h6>
-                  <small class="text-muted">
-                    <a href="https://www.epa.gov/energy/emissions-generation-resource-integrated-database-egrid" target="_blank">
-                      US EPA Emissions & Generation Resource Integrate Database (eGRID)</a>
-                    <br>
-                    <hr>
-                    <a href="https://www.epa.gov/sites/production/files/2015-07/documents/emission-factors_2014.pdf" target="_blank">
-                      US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
-                    <br>
-                    <hr>
-                    <a href="https://www.ecfr.gov/cgi-bin/text-idx?SID=5918762f070a5581dfde66942e2e91e6&mc=true&node=ap40.23.98_138.1&rgn=div9"
-                      target="_blank">
-                      e-CFR Default CO<sub>2</sub> Emission Factors for Various Types of Fuel</a>
-                  </small>
-                </h6>
-              </div>
+          <a href="https://www.epa.gov/sites/production/files/2020-04/documents/ghg-emission-factors-hub.pdf" target="_blank">
+            US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
         </small>
-        
-    </h6>
-</div>
+      </h6>
+    </div>
 
   <div class="my-2" *ngIf="currentField == 'zipcode'">
     <h6>
@@ -159,6 +148,8 @@
         <hr>
       </small>
     </h6>
+  </div>
+  
   </div>
 
 </div>
