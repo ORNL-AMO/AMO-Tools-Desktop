@@ -1,0 +1,69 @@
+<div class="tab-content">
+
+    <form>
+        <div *ngFor="let fuel of fuelList; let index = index;">
+            <form>
+                <div class="row align-items-end">
+                    <div class="form-group col-3">
+                        <label class="section-label" *ngIf="index == 0" for="source">Energy Source</label>
+                        <div class="input-group">
+                            <select name="{{index+'_source'}}" class="form-control" [(ngModel)]="fuel.energySource"
+                                id="source" (change)="setFuelOptions(index)">
+                                <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">
+                                    {{option.energySource}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="section-label" *ngIf="index == 0" for="fuel">Fuel Type</label>
+                        <div class="input-group">
+                            <select name="{{index+'_fuel'}}" class="form-control" id="fuel" [(ngModel)]="fuel.fuelType"
+                                (change)="setFuel(index)">
+                                <option *ngFor="let option of fuelOptionsList[index]" [ngValue]="option.fuelType">
+                                    {{option.fuelType}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="section-label" *ngIf="index == 0" for="fraction">Percent Used</label>
+                        <div class="input-group">
+                            <input name="{{index+'_usage'}}" class="form-control" type="number"
+                                [(ngModel)]="fuel.usage" id="fraction" (input)="calculateMixedFuelCosts()"
+                                onfocus="this.select();">
+                            <span class="input-group-addon units">%</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="section-label" *ngIf="index == 0" for="outputRate">Emission Output Rate</label>
+                        <div class="input-group">
+                            <input name="{{index+'_outputRate'}}" class="form-control" type="number" step="any"
+                                [(ngModel)]="fuel.totalEmissionOutputRate" id="outputRate"
+                                (input)="calculateMixedFuelCosts()" onfocus="this.select();">
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">kg
+                                CO<sub>2</sub>/MMBtu</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg
+                                CO<sub>2</sub>/GJ</span>
+
+                            <i class="fa fa-times btn-delete-field" (click)="deleteFuel(index)"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="pt-1">
+            <a class="click-link pull-left small" (click)="addFuel()">Add New Source</a>
+        </div>
+        <br>
+        <div class="form-group pt-1 row justify-content-end">
+            <div class="small bold text-center">
+                <label class="bold" for="fuelCost">Total Carbon Emissions:</label>
+                {{mixedOutputRateResult | number:'1.2-2'}}
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">kg
+                    CO<sub>2</sub>/MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg
+                    CO<sub>2</sub>/GJ</span>
+            </div>
+        </div>
+    </form>
+</div>

@@ -143,7 +143,10 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate</label>
+            <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate
+              <a class="form-text small click-link" (click)="showMixedCO2EmissionsModal()">
+                Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
+            </label>            
             <div class="input-group">
               <input class="form-control" name="totalEmissionOutputRate" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate" (input)="save()">
@@ -372,6 +375,36 @@
         <button class="btn btn-default pull-left" (click)="hideZipCodeModal()">Cancel</button>
         <span>
           <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
+            Data</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #mixedCO2EmissionsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mixedCO2EmissionsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Carbon Emissions - Net Carbon Emissions Rate from Fuel</h4>
+        <button class="close" aria-label="Close" (click)="hideMixedCO2EmissionsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-5">
+        <app-mixed-co2-emissions
+          [fuelList]="treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData"
+          [settings]="settings"
+          (emitUpdateOtherFuelsOutputRate)="applyMixedCO2EmissionsModalData($event)"
+          (emitUpdateOtherFuelsMixedList)="saveOtherFuelsMixedList($event)">
+
+        </app-mixed-co2-emissions>        
+      </div>
+      <div class="modal-footer fsat justify-content-between">
+        <button class="btn btn-default pull-left" (click)="hideMixedCO2EmissionsModal()">Cancel</button>
+        <span>
+          <button class="ml-2 btn btn-primary" (click)="applyMixedCO2EmissionsModal()">Apply
             Data</button>
         </span>
       </div>
