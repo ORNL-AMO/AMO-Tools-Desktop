@@ -109,7 +109,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.emitCurrentField.emit('co2Savings');
+    this.emitCurrentField.emit(str);
   }
 
   setUserEmissionsOutput() {
@@ -207,7 +207,9 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.setUserEnteredModificationEmissions(false);
     }
 
-    let subregionEmissions: SubregionEmissions = _.find(this.egridService.co2Emissions, (val) => { return this.form.controls.eGridSubregion.value === val.subregion; });
+
+    let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
+
     if (subregionEmissions) {
       this.form.patchValue({
         totalEmissionOutputRate: subregionEmissions.co2Emissions
