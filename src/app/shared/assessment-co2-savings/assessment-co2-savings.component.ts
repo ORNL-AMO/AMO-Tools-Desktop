@@ -109,7 +109,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.emitCurrentField.emit('co2Savings');
+    this.emitCurrentField.emit(str);
   }
 
   setUserEmissionsOutput() {
