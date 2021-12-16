@@ -23,6 +23,19 @@ export const MockFsat: Assessment = {
             operatingHours: 8760,
             cost: 0.06,
         },
+        cO2SavingsData: {
+            energyType: "fuel",
+            energySource: "Natural Gas",
+            fuelType: "Natural Gas",
+            totalEmissionOutputRate: 53.06,
+            electricityUse: 0,
+            eGridRegion: '',
+            eGridSubregion: "SRT",
+            totalEmissionOutput: 0,
+            userEnteredBaselineEmissions: false,
+            userEnteredModificationEmissions: false,
+            zipcode: "37830"
+        },
         fanMotor: {
             lineFrequency: 60,
             motorRatedPower: 600,
@@ -105,6 +118,19 @@ export const MockFsat: Assessment = {
                         operatingHours: 8760,
                         cost: 0.06,
                     },
+                    cO2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "SRT",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "37830"
+                    },                    
                     fieldData: {
                         flowRate: 129691,
                         inletPressure: -16.36,
@@ -162,6 +188,19 @@ export const MockFsat: Assessment = {
                     fsatOperations: {
                         operatingHours: 8760,
                         cost: 0.06,
+                    },
+                    cO2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "SRT",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "37830"
                     },
                     fieldData: {
                         flowRate: 86461,

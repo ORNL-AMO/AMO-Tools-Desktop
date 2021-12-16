@@ -23,7 +23,7 @@ export class FsatResultsPanelComponent implements OnInit {
   onResize(event) {
     this.hideResults();
   }
-
+  
   isWhatIfScenario: boolean;
 
   baselineResults: FsatOutput;
@@ -58,7 +58,7 @@ export class FsatResultsPanelComponent implements OnInit {
   getResults() {
     this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
+      if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       this.fsat.modifications[this.modificationIndex].fsat.valid = this.fsatService.checkValid(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
@@ -70,7 +70,7 @@ export class FsatResultsPanelComponent implements OnInit {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
   }
-
+  
 
   hideResults() {
     this.showResults = false;

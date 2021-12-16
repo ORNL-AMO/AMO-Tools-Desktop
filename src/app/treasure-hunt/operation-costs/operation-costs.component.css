@@ -1,3 +1,20 @@
 .group-label{
     font-size: 20px;
 }
+
+.btn{
+    padding: 6px;
+    font-size: small;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+.btn-primary{
+    color: white;
+}

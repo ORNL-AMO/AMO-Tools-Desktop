@@ -15,7 +15,7 @@ export class EGridService {
   constructor() {}
   
   getAllSubRegions() {
-    Papa.parse("assets/eGrid_co2.csv", {
+    Papa.parse("assets/eGRID-co2-emissions.csv", {
       header: true,
       download: true,
       complete: results => {
@@ -50,19 +50,24 @@ export class EGridService {
 
     this.subRegionsByZipcode = subRegionsByZipcode;
   }
+  
 
   setCo2Emissions(csvResults: Array<any>) {
     let co2Emissions = new Array<SubregionEmissions>();
     csvResults.forEach(result => {
-      if (result['SUBRGN']) {
+      if (result['eGRID Subregion']) {
         co2Emissions.push({
-            subregion: result['SUBRGN'],
-            co2Emissions: Number(result['CO2e']),
+            subregion: result['eGRID Subregion'],
+            co2Emissions: Number(result['CO2 Factor']),
           })
       }
     });
 
     this.co2Emissions = co2Emissions;
+  }
+
+  findEGRIDCO2Emissions(eGridSubregion: string): SubregionEmissions {
+    return  _.find(this.co2Emissions, (val) => val.subregion.includes(eGridSubregion));
   }
 
 }

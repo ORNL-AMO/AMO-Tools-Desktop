@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
@@ -7,6 +7,8 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
+import { Co2SavingsPhastService } from '../co2-savings-phast/co2-savings-phast.service';
 
 @Component({
   selector: 'app-operations-form',
@@ -28,6 +30,10 @@ export class OperationsFormComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  selected: boolean;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;
@@ -40,9 +46,13 @@ export class OperationsFormComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   showOperatingCostsModal: boolean = false;
 
+  co2SavingsFormDisabled: boolean;
+  co2SavingsData: Co2SavingsData;
+
   warnings: OperationsWarnings;
   idString: string;
-  constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService, private lossesService: LossesService) { }
+  constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService, private lossesService: LossesService,
+    private phastCO2SavingService: Co2SavingsPhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -51,13 +61,25 @@ export class OperationsFormComponent implements OnInit {
     else {
       this.idString = '_baseline';
     }
-    this.checkWarnings();
+    this.init();
+    
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
+  }
+
+  init(){
+    this.setCo2SavingsData();
+    this.checkWarnings();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
+    }
   }
 
   focusField(str: string) {
@@ -153,6 +175,27 @@ export class OperationsFormComponent implements OnInit {
       return this.operationsCompareService.compareElectricityCost();
     } else {
       return false;
+    }
+  }
+
+  updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.phast.co2SavingsData = co2SavingsData;
+    this.save();
+  }
+
+  setCo2SavingsData() {
+    if (this.phast.co2SavingsData) {
+      this.co2SavingsData = this.phast.co2SavingsData;
+      if (this.settings.energySourceType == 'Fuel') {
+        this.co2SavingsData.energyType = 'fuel';
+      } else if (this.settings.energySourceType == 'Electricity') {
+        this.co2SavingsData.energyType = 'electricity';
+      } else if (this.settings.energySourceType == 'Steam') {
+        this.co2SavingsData.energyType = 'fuel';
+      }
+    } else {
+      let co2SavingsData: Co2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
     }
   }
 }

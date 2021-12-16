@@ -83,6 +83,7 @@ export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
     electricityUsed: boolean,
+    electricityCO2SavingsData?: Co2SavingsData,
     naturalGasUsage: number,
     naturalGasCosts: number,
     naturalGasUsed: boolean,
@@ -93,15 +94,19 @@ export interface EnergyUsage {
     waterUsage: number,
     waterCosts: number,
     waterUsed: boolean,
+    waterCO2OutputRate?: number,
     wasteWaterUsage: number,
     wasteWaterCosts: number,
     wasteWaterUsed: boolean,
+    wasteWaterCO2OutputRate?: number,
     compressedAirUsage: number,
     compressedAirCosts: number,
     compressedAirUsed: boolean,
+    compressedAirCO2OutputRate?: number,
     steamUsage: number,
     steamCosts: number
     steamUsed: boolean,
+    steamCO2OutputRate?: number,
 }
 
 export interface OpportunitySheet extends TreasureHuntOpportunity {
