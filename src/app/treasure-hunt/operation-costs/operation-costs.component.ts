@@ -319,7 +319,7 @@ export class OperationCostsComponent implements OnInit {
   }
 
   getOtherFuelOptions(){
-    if (this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType) {
+    if (this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData) {
       let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
       this.fuelOptions = tmpOtherFuel.fuelTypes;
     }
@@ -328,8 +328,8 @@ export class OperationCostsComponent implements OnInit {
   setFuelOptions() {
     let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = undefined;
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = undefined;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
     this.save();
   }
 
@@ -350,7 +350,7 @@ export class OperationCostsComponent implements OnInit {
     this.mixedCO2EmissionsModal.hide();
   }
 
-  applyMixedCO2EmissionsModalData(mixedOutputRate: number) {
+  updateMixedCO2EmissionsModalData(mixedOutputRate: number) {
     this.mixedCO2Emissions = mixedOutputRate;
   }
 

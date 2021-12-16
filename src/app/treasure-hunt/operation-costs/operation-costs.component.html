@@ -353,28 +353,30 @@
   </div>
 </div>
 
-<div bsModal #zipCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="zipCodeModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+<div bsModal #zipCodeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zipCodeModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Carbon Emissions by Zip Code</h4>
-        <button class="close" aria-label="Close" (click)="hideZipCodeModal()">
+    <div class="modal-content"> 
+      <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
+        <div class="col-md-auto ico-col">
+        </div>
+        <div>
+          <h3>Carbon Emissions by Zip Code</h3>
+        </div>
+        <button class="close pull-right" aria-label="Close" (click)="hideZipCodeModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
       <div #modalBody class="modal-body p-5">
-        <app-assessment-co2-savings
-          [co2SavingsData]="co2SavingsData"
-          [isFormDisabled]="false"
-          [inBaseline]="true"
+        <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
           (emitUpdateCo2SavingsData)="updateElectricityCo2SavingsData($event)">
         </app-assessment-co2-savings>
       </div>
-      <div class="modal-footer fsat justify-content-between">
-        <button class="btn btn-default pull-left" (click)="hideZipCodeModal()">Cancel</button>
+      <div class="modal-footer justify-content-end">
+        <button class="btn btn-danger btn-sm pull-right mr-2" (click)="hideZipCodeModal()">Cancel</button>
         <span>
-          <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply
+          <button class="btn btn-primary btn-sm pull-right" (click)="applyModalData()">Apply
             Data</button>
         </span>
       </div>
@@ -386,25 +388,27 @@
   aria-labelledby="mixedCO2EmissionsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Carbon Emissions - Net Carbon Emissions Rate from Fuel</h4>
-        <button class="close" aria-label="Close" (click)="hideMixedCO2EmissionsModal()">
+      <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
+        <div class="col-md-auto ico-col">
+        </div>
+        <div>
+          <h3>Carbon Emissions - Net Carbon Emissions Rate from Fuel</h3>
+        </div>
+        <button class="close pull-right" aria-label="Close" (click)="hideMixedCO2EmissionsModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div #modalBody class="modal-body p-5">
-        <app-mixed-co2-emissions
-          [fuelList]="treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData"
-          [settings]="settings"
-          (emitUpdateOtherFuelsOutputRate)="applyMixedCO2EmissionsModalData($event)"
+      <div #modalBody class="modal-body p-2">
+        <app-mixed-co2-emissions [fuelList]="treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData"
+          [settings]="settings" (emitUpdateOtherFuelsOutputRate)="updateMixedCO2EmissionsModalData($event)"
           (emitUpdateOtherFuelsMixedList)="saveOtherFuelsMixedList($event)">
 
-        </app-mixed-co2-emissions>        
+        </app-mixed-co2-emissions>
       </div>
-      <div class="modal-footer fsat justify-content-between">
-        <button class="btn btn-default pull-left" (click)="hideMixedCO2EmissionsModal()">Cancel</button>
+      <div class="modal-footer justify-content-end">
+        <button class="btn btn-danger btn-sm pull-right mr-2" (click)="hideMixedCO2EmissionsModal()">Cancel</button>
         <span>
-          <button class="ml-2 btn btn-primary" (click)="applyMixedCO2EmissionsModal()">Apply
+          <button class="btn btn-primary btn-sm pull-right" (click)="applyMixedCO2EmissionsModal()">Apply
             Data</button>
         </span>
       </div>

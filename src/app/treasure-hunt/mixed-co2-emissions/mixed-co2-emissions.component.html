@@ -1,5 +1,4 @@
 <div class="tab-content">
-
     <form>
         <div *ngFor="let fuel of fuelList; let index = index;">
             <form>
@@ -25,10 +24,10 @@
                         </div>
                     </div>
                     <div class="form-group col-3">
-                        <label class="section-label" *ngIf="index == 0" for="fraction">Percent Used</label>
+                        <label class="section-label" *ngIf="index == 0" for="percentFuelUsage">Percent Used</label>
                         <div class="input-group">
-                            <input name="{{index+'_usage'}}" class="form-control" type="number"
-                                [(ngModel)]="fuel.usage" id="fraction" (input)="calculateMixedFuelCosts()"
+                            <input name="{{index+'_percentFuelUsage'}}" class="form-control" type="number"
+                                [(ngModel)]="fuel.percentFuelUsage" id="percentFuelUsage" (input)="calculateMixedFuelCosts()"
                                 onfocus="this.select();">
                             <span class="input-group-addon units">%</span>
                         </div>

@@ -59,9 +59,9 @@ export class MixedCo2EmissionsComponent implements OnInit {
     let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.fuelList[index].energySource === val.energySource; });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     this.fuelOptionsList[index] = this.fuelOptions;
-    this.fuelList[index].fuelType = undefined;
-    this.fuelList[index].totalEmissionOutputRate = undefined;
-
+    this.fuelList[index].fuelType = this.fuelOptions[0].fuelType;
+    this.fuelList[index].totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    this.calculateMixedFuelCosts();
   }
 
   setFuel(index: number) {
@@ -83,7 +83,7 @@ export class MixedCo2EmissionsComponent implements OnInit {
       userEnteredBaselineEmissions: false,
       userEnteredModificationEmissions: false,
       zipcode: '',
-      usage: 0
+      percentFuelUsage: 0
     }
     this.fuelList.push(co2SavingsData);
   }
@@ -99,8 +99,8 @@ export class MixedCo2EmissionsComponent implements OnInit {
     let sum: number = 0;
     let summedUse: number = 0;
     for (let i = 0; i < length; i++) {
-      summedUse += this.fuelList[i].usage;
-      sum += (this.fuelList[i].usage * this.fuelList[i].totalEmissionOutputRate);
+      summedUse += this.fuelList[i].percentFuelUsage;
+      sum += (this.fuelList[i].percentFuelUsage * this.fuelList[i].totalEmissionOutputRate);
     }
     sum = sum / (summedUse);
     this.mixedOutputRateResult = this.roundVal(sum);
