@@ -34,6 +34,7 @@ export class OperationCostsComponent implements OnInit {
   zipCodeModalSub: Subscription;
   mixedCO2EmissionsModalSub: Subscription;
   mixedCO2Emissions: number;
+  usingMixedCO2: boolean;
 
   formWidth: number;
   bodyHeight: number;
@@ -310,11 +311,17 @@ export class OperationCostsComponent implements OnInit {
         userEnteredModificationEmissions: false,
         zipcode: ''
       }
-      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData;     
+      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData; 
     }
-    if(!this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData){
-        this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
-      }
+    if (!this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData) {
+      this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+    }
+    if(this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource == 'Mixed Fuels'){
+      this.usingMixedCO2 = true;
+    } else{
+      this.usingMixedCO2 = false;
+    }
+
     this.getOtherFuelOptions();
   }
 
@@ -330,6 +337,11 @@ export class OperationCostsComponent implements OnInit {
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    if(this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource == 'Mixed Fuels'){
+      this.usingMixedCO2 = true;
+    } else{
+      this.usingMixedCO2 = false;
+    }
     this.save();
   }
 
@@ -355,9 +367,10 @@ export class OperationCostsComponent implements OnInit {
   }
 
   applyMixedCO2EmissionsModal() {
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource = 'Other fuels';
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource = 'Mixed Fuels';
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = undefined;
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.mixedCO2Emissions;
+    this.usingMixedCO2 = true;
     this.save();
     this.treasureHuntService.modalOpen.next(false);
     this.mixedCO2EmissionsModal.hide();

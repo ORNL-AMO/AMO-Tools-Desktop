@@ -133,7 +133,7 @@
               </select>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="!usingMixedCO2">
             <label for="fuelType">Fuel Type</label>
             <div class="input-group">
               <select name="fuelType" class="form-control" id="fuelType"
