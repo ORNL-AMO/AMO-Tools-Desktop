@@ -96,6 +96,7 @@ export class OperationCostsComponent implements OnInit {
     }
     this.setCo2SavingsData(); 
     this.setOtherFuelCo2SavingsData();   
+    this.setNaturalGasCO2SavingsData(); 
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
@@ -253,6 +254,25 @@ export class OperationCostsComponent implements OnInit {
     )
   }
 
+  setNaturalGasCO2SavingsData(){
+    if(!this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData){
+      let co2SavingsData: Co2SavingsData = {
+        energyType: 'fuel',
+        energySource: 'Natural Gas',
+        fuelType: 'Natural Gas',
+        totalEmissionOutputRate: 53.06,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: '',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: ''
+      }
+      this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData = co2SavingsData;
+    }
+
+  }
   showZipCodeModal() {
     this.treasureHuntService.modalOpen.next(true);
     this.zipCodeModal.show();

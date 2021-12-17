@@ -86,6 +86,15 @@
               <span class="input-group-addon units">$/yr</span>
             </div>
           </div>
+          <div class="form-group">
+            <label for="totalEmissionOutputRate">Total Emission Output Rate</label>
+            <div class="input-group">
+              <input class="form-control" name="totalEmissionOutputRate" type="number"
+                [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate" (input)="save()">
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg CO<sub>2</sub>/MMBtu</span>
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/GJ</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
