@@ -128,7 +128,7 @@
             <label for="energySource">Energy Source</label>
             <div class="input-group">
               <select name="energySource" class="form-control" id="energySource"
-                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource" (change)="setFuelOptions()">
+                [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource" (change)="setEnergySource()">
                 <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
               </select>
             </div>
