@@ -43,6 +43,7 @@ export class PsatRollupComponent implements OnInit {
 
   ngOnInit() {
     this.settings = this.reportRollupSettings.settings.getValue();
+    this.rollupEnergyUnit = this.settings.pumpsRollupUnit;
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');
@@ -56,7 +57,7 @@ export class PsatRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
     if (this.barChartDataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (MWh)';
+      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.pumpsRollupUnit +')';
       this.tickFormat = '.2s'
       this.barChartData = this.energyBarChartData;
     } else {
@@ -75,7 +76,7 @@ export class PsatRollupComponent implements OnInit {
     let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$'? 'k': ''}`;
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> ' + 'MWh';
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.pumpsRollupUnit;
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -126,8 +127,14 @@ export class PsatRollupComponent implements OnInit {
     } else if (dataOption == 'energy' || dataOption == 'energySavings') {
       this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.annual_energy - result.modificationResults.annual_energy);
-        projectedCosts.push(result.modificationResults.annual_energy);
+        let savings: number = result.baselineResults.annual_energy - result.modificationResults.annual_energy;
+        let modCost: number = result.modificationResults.annual_energy;
+        if (this.settings.pumpsRollupUnit !== 'MWh') {
+          savings = this.convertUnitsService.value(savings).from('MWh').to(this.settings.pumpsRollupUnit);
+          modCost = this.convertUnitsService.value(modCost).from('MWh').to(this.settings.pumpsRollupUnit);          
+        }
+        costSavings.push(savings);
+        projectedCosts.push(modCost);
       })
     }
     return {
@@ -140,6 +147,9 @@ export class PsatRollupComponent implements OnInit {
   setPieChartData() {
     this.pieChartData = new Array();
     let totalEnergyUse: number = _.sumBy(this.psatReportRollupService.selectedPsatResults, (result) => { return result.baselineResults.annual_energy; });
+    if (this.settings.pumpsRollupUnit !== 'MWh') {
+      totalEnergyUse = this.convertUnitsService.value(totalEnergyUse).from('MWh').to(this.settings.pumpsRollupUnit);        
+    }
     let totalCost: number = _.sumBy(this.psatReportRollupService.selectedPsatResults, (result) => { return result.baselineResults.annual_cost; });
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
@@ -153,14 +163,21 @@ export class PsatRollupComponent implements OnInit {
         total = this.convertUnitsService.value(total).from('$').to(this.settings.currency);
       }
 
+      let energyUsedBl: number = result.baselineResults.annual_energy;
+      let energyUsedMod: number = result.modificationResults.annual_energy;
+      if (this.settings.pumpsRollupUnit !== 'MWh') {
+        energyUsedBl = this.convertUnitsService.value(energyUsedBl).from('MWh').to(this.settings.pumpsRollupUnit);
+        energyUsedMod = this.convertUnitsService.value(energyUsedMod).from('MWh').to(this.settings.pumpsRollupUnit);        
+      }
+
       this.pieChartData.push({
         equipmentName: result.name,
-        energyUsed: result.baselineResults.annual_energy,
+        energyUsed: energyUsedBl,
         annualCost: annualCost,
-        energySavings: result.baselineResults.annual_energy - result.modificationResults.annual_energy,
+        energySavings: energyUsedBl - energyUsedMod,
         costSavings: costSavings,
         percentCost: annualCost / total * 100,
-        percentEnergy: result.baselineResults.annual_energy / totalEnergyUse * 100,
+        percentEnergy: energyUsedBl / totalEnergyUse * 100,
         color: graphColors[colorIndex],
         currencyUnit:  this.settings.currency
       });
@@ -182,12 +199,18 @@ export class PsatRollupComponent implements OnInit {
         savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
         implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
       }
+      let energyUsedBl: number = dataItem.baselineResults.annual_energy;
+      let energyUsedMod: number = dataItem.modificationResults.annual_energy;
+      if (this.settings.pumpsRollupUnit !== 'MWh') {
+        energyUsedBl = this.convertUnitsService.value(energyUsedBl).from('MWh').to(this.settings.pumpsRollupUnit);
+        energyUsedMod = this.convertUnitsService.value(energyUsedMod).from('MWh').to(this.settings.pumpsRollupUnit);        
+      }
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
-        baselineEnergyUse: dataItem.baselineResults.annual_energy,
+        baselineEnergyUse: energyUsedBl,
         modificationCost: modificationCost,
-        modificationEnergyUse: dataItem.modificationResults.annual_energy,
+        modificationEnergyUse: energyUsedMod,
         baselineCost: baselineCost,
         costSavings: savings,
         currencyUnit: currencyUnit,

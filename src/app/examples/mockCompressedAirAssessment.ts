@@ -1525,5 +1525,11 @@ export const MockCompressedAirAssessmentSettings: Settings = {
         date: "Tue Dec 04 2018"
     },
     steamPowerMeasurement: "kW",
-    steamEnergyMeasurement: "MMBtu"
+    steamEnergyMeasurement: "MMBtu",
+    commonRollupUnit: "MMBtu",
+    pumpsRollupUnit: "MWh",
+    fansRollupUnit: "MWh",
+    steamRollupUnit: "MMBtu",
+    wasteWaterRollupUnit: "kWh",
+    compressedAirRollupUnit: "kWh"
 };

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { FsatReportRollupService } from '../../fsat-report-rollup.service';
 
@@ -19,7 +20,7 @@ export class FsatSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numFsats: number;
-  constructor(public fsatReportRollupService: FsatReportRollupService) { }
+  constructor(public fsatReportRollupService: FsatReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.fsatReportRollupService.fsatAssessments.subscribe(val => {
@@ -56,10 +57,15 @@ export class FsatSummaryComponent implements OnInit {
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annualEnergy;
     })
+    if(this.settings.pumpsRollupUnit !== 'MWh'){
+      this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.fansRollupUnit);
+      this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.fansRollupUnit);
+    } else {
+      this.energySavingsPotential = sumEnergySavings;
+      this.totalEnergy = sumEnergy;
+    }
     this.fanSavingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.service';
 
@@ -18,7 +19,7 @@ export class WasteWaterSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numWasteWater: number;
-  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
@@ -55,8 +56,8 @@ export class WasteWaterSummaryComponent implements OnInit {
       sumEnergy += result.modificationResults.AeEnergyAnnual;
     })
     this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.wasteWaterRollupUnit);
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
+    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.wasteWaterRollupUnit);
   }
 }

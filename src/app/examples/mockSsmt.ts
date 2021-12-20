@@ -442,4 +442,10 @@ export const MockSsmtSettings: Settings = {
     "disableFsatSetupTutorial": true,
     "disableFsatAssessmentTutorial": true,
     "disableFsatReportTutorial": true,
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "kWh",
+    "compressedAirRollupUnit": "kWh"
 }

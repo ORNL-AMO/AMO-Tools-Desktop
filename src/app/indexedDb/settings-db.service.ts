@@ -134,6 +134,24 @@ export class SettingsDbService {
     if (settings.compressedAirCost == undefined) {
       settings.compressedAirCost = 0.022;
     }
+    if (!settings.commonRollupUnit) {
+      settings.commonRollupUnit = settings.energyResultUnit;
+    }
+    if (!settings.pumpsRollupUnit) {
+      settings.pumpsRollupUnit = 'MWh';
+    }
+    if (!settings.fansRollupUnit) {
+      settings.fansRollupUnit = 'MWh';
+    }
+    if (!settings.steamRollupUnit) {
+      settings.steamRollupUnit = 'MMBtu';
+    }
+    if (!settings.wasteWaterRollupUnit) {
+      settings.wasteWaterRollupUnit = 'kWh';
+    }
+    if (!settings.compressedAirRollupUnit) {
+      settings.compressedAirRollupUnit = 'kWh';
+    }
     return settings;
   }
 

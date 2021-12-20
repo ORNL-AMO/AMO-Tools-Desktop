@@ -1404,5 +1404,11 @@ export const MockTreasureHuntSettings: Settings = {
     "otherFuelCost": 0,
     "waterCost": 0.0025,
     "waterWasteCost": 0.005,
-    "totalEmissionOutputRate": 955.587
+    "totalEmissionOutputRate": 955.587,
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "kWh",
+    "compressedAirRollupUnit": "kWh"
 }

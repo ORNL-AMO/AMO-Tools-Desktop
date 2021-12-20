@@ -33,10 +33,10 @@
                     [ngClass]="{'active': pieChartDataOption == 'costSavings'}">Energy Cost Savings</button>
             </div>
             <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
-                [energyUnit]="'MWh'"></app-rollup-summary-pie-chart>
+                [energyUnit]="energyUnits"></app-rollup-summary-pie-chart>
         </div>
         <div class="col-7">
-            <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="'MWh'"
+            <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="energyUnits"
                 [equipmentType]="'Waste Water'"></app-rollup-summary-energy-table>
         </div>
     </div>
@@ -60,7 +60,7 @@
     <div class="row pt-2">
         <div class="col-12">
             <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Waste Water'"
-                [energyUnit]="'MWh'">
+                [energyUnit]="energyUnits">
             </app-rollup-summary-table>
         </div>
     </div>
