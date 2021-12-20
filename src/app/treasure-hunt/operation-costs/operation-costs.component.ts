@@ -8,6 +8,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-operation-costs',
@@ -22,6 +24,7 @@ export class OperationCostsComponent implements OnInit {
 
   @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('zipCodeModal', { static: false }) public zipCodeModal: ModalDirective;
+  @ViewChild('mixedCO2EmissionsModal', { static: false }) public mixedCO2EmissionsModal: ModalDirective;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -29,12 +32,21 @@ export class OperationCostsComponent implements OnInit {
     this.getBodyHeight();
   }
   zipCodeModalSub: Subscription;
+  mixedCO2EmissionsModalSub: Subscription;
+  mixedCO2Emissions: number;
+  usingMixedCO2: boolean;
 
   formWidth: number;
   bodyHeight: number;
   co2SavingsData: Co2SavingsData;
 
   globalSettings: Settings;
+
+  otherFuels: Array<OtherFuel>;
+  fuelOptions: Array<{
+    fuelType: string,
+    outputRate: number
+  }>;
 
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
@@ -45,6 +57,7 @@ export class OperationCostsComponent implements OnInit {
 
   ngOnInit() {
     this.globalSettings = this.settingsDbService.globalSettings;
+    this.otherFuels = otherFuels;
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
       this.initData();
@@ -57,10 +70,14 @@ export class OperationCostsComponent implements OnInit {
     }
     this.treasureHuntSub.unsubscribe();
     this.zipCodeModalSub.unsubscribe();
+    this.mixedCO2EmissionsModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.zipCodeModalSub = this.zipCodeModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
+    this.mixedCO2EmissionsModalSub = this.mixedCO2EmissionsModal.onShown.subscribe(() => {
       this.getBodyHeight();
     });
   }
@@ -77,8 +94,9 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHunt.currentEnergyUsage == undefined) {
       this.initCurrentEnergyUse();
     }
-    this.setNaturalGasCO2SavingsData();
-    this.setCo2SavingsData();    
+    this.setCo2SavingsData(); 
+    this.setOtherFuelCo2SavingsData();   
+    this.setNaturalGasCO2SavingsData(); 
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
@@ -237,7 +255,7 @@ export class OperationCostsComponent implements OnInit {
   }
 
   setNaturalGasCO2SavingsData(){
-    if(!this.treasureHunt.currentEnergyUsage.naturalCO2SavingsData){
+    if(!this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData){
       let co2SavingsData: Co2SavingsData = {
         energyType: 'fuel',
         energySource: 'Natural Gas',
@@ -251,7 +269,7 @@ export class OperationCostsComponent implements OnInit {
         userEnteredModificationEmissions: false,
         zipcode: ''
       }
-      this.treasureHunt.currentEnergyUsage.naturalCO2SavingsData = co2SavingsData;
+      this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData = co2SavingsData;
     }
 
   }
@@ -298,5 +316,87 @@ export class OperationCostsComponent implements OnInit {
     }
   }
 
+  setOtherFuelCo2SavingsData() {
+    if (!this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData) {
+      let co2SavingsData: Co2SavingsData = {
+        energyType: 'fuel',
+        energySource: 'Petroleum-based fuels',
+        fuelType: 'Motor Gasoline',
+        totalEmissionOutputRate: 70.22,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: '',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: ''
+      }
+      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData; 
+      this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+      
+    }
+    
+    this.checkIsUsingMixedFuel();
+
+    this.setFuelOptions();
+  }
+
+  checkIsUsingMixedFuel(){
+    if(this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource == 'Mixed Fuels'){
+      this.usingMixedCO2 = true;
+    } else{
+      this.usingMixedCO2 = false;
+    }
+  }
+
+  setFuelOptions(){    
+    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+    
+  }
+
+  setEnergySource() {
+    this.setFuelOptions();
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    this.checkIsUsingMixedFuel();
+    this.save();
+  }
+
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType === val.fuelType; });
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+    this.save();
+  }
+
+  
+  showMixedCO2EmissionsModal() {
+    this.treasureHuntService.modalOpen.next(true);
+    this.mixedCO2EmissionsModal.show();
+  }
+
+  hideMixedCO2EmissionsModal() {
+    this.treasureHuntService.modalOpen.next(false);
+    this.mixedCO2EmissionsModal.hide();
+  }
+
+  updateMixedCO2EmissionsModalData(mixedOutputRate: number) {
+    this.mixedCO2Emissions = mixedOutputRate;
+  }
+
+  applyMixedCO2EmissionsModal() {
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource = 'Mixed Fuels';
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = undefined;
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.mixedCO2Emissions;
+    this.usingMixedCO2 = true;
+    this.save();
+    this.treasureHuntService.modalOpen.next(false);
+    this.mixedCO2EmissionsModal.hide();
+  }
+  
+  saveOtherFuelsMixedList(mixedFuelsList: Array<Co2SavingsData>) {
+    this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = mixedFuelsList;
+    this.save();
+  }
 
 }
