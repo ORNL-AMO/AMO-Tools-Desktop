@@ -12,6 +12,7 @@ export class TreasureHuntService {
   getResults: BehaviorSubject<boolean>;
   updateMenuOptions: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
+  currentField: BehaviorSubject<string>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('system-basics');
     this.subTab = new BehaviorSubject<string>('settings');
@@ -19,6 +20,8 @@ export class TreasureHuntService {
     this.updateMenuOptions = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.treasureHunt = new BehaviorSubject<TreasureHunt>(undefined);
+    this.currentField = new BehaviorSubject<string>('operatingCosts');
+
   }
 
 }

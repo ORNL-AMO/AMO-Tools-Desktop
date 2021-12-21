@@ -90,6 +90,10 @@ export class OperationCostsComponent implements OnInit {
     }
   }
 
+  focusField(inputName: string) {
+    this.treasureHuntService.currentField.next(inputName);
+  }
+
   initData() {
     if (this.treasureHunt.currentEnergyUsage == undefined) {
       this.initCurrentEnergyUse();

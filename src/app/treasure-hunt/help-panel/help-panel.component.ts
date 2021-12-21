@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TreasureHuntService } from '../treasure-hunt.service';
+
 
 @Component({
   selector: 'app-help-panel',
@@ -8,9 +11,21 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HelpPanelComponent implements OnInit {
   @Input()
   currentTab: string;
-  constructor() { }
+
+  currentField: string;
+
+  currentFieldSub: Subscription;
+
+  constructor(private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
+    this.currentFieldSub = this.treasureHuntService.currentField.subscribe((val) => {
+      this.currentField = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
   }
 
 }
