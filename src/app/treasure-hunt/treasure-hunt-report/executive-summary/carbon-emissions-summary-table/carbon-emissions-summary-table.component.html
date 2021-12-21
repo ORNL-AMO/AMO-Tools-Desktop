@@ -1,0 +1,177 @@
+<label class="group-label">CO<sub>2</sub> Emission Results</label>
+<table #copyTable class="table table-striped table-hover">
+    <tbody>
+        <tr class="bold">
+            <td>
+                Utility
+            </td>
+            <td>
+                <!-- unit column -->
+            </td>
+            <td>
+                Current CO<sub>2</sub> Emissions
+            </td>
+            <td>
+                Projected CO<sub>2</sub> Emissions
+            </td>
+            <td>
+                CO<sub>2</sub> Emission Savings 
+            </td>
+        </tr>
+        <!--Electricity-->
+        <tr>
+            <td class="bold">
+                Electricity
+            </td>
+            <td>
+                kWh
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Natural Gas-->
+        <tr>
+            <td class="bold">
+                Natural Gas
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Water-->
+        <tr>
+            <td class="bold">
+                Water
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Waste Water-->
+        <tr>
+            <td class="bold">
+                Waste Water
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Other Fuel-->
+        <tr>
+            <td class="bold">
+                Other Fuel
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Compressed Air-->
+        <tr>
+            <td class="bold">
+                Compressed Air
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <!--Steam-->
+        <tr>
+            <td class="bold">
+                Steam
+            </td>
+            <td>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+        </tr>        
+        <!--Total-->
+        <tr>
+            <td class="bold">
+                Total 
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<app-exportable-results-table class="hide-print" [tableString]="tableString"
+    (updateTableString)="updateTableString()">
+</app-exportable-results-table>
