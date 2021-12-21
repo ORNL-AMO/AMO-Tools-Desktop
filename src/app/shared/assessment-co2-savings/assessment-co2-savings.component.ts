@@ -6,6 +6,7 @@ import { AssessmentCo2SavingsService } from './assessment-co2-savings.service';
 import { FormGroup } from '@angular/forms';
 import { EGridService, SubRegionData, SubregionEmissions } from '../helper-services/e-grid.service';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../convert-units/convert-units.service';
 
 @Component({
   selector: 'app-assessment-co2-savings',
@@ -19,6 +20,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   isFormDisabled: boolean;
   @Input()
   inBaseline: boolean;
+  @Input()
+  inTreasureHunt: boolean;
   @Output('emitUpdateCo2SavingsData')
   emitUpdateCo2SavingsData = new EventEmitter<Co2SavingsData>();
   @Output('emitCurrentField')
@@ -33,7 +36,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }>;
   zipCodeSubRegionData: Array<string>;
   co2SavingsDataSub: Subscription;
-  constructor(private assessmentCo2Service: AssessmentCo2SavingsService, private egridService: EGridService, private cd: ChangeDetectorRef) { }
+  constructor(private assessmentCo2Service: AssessmentCo2SavingsService, private egridService: EGridService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.initCo2SavingsSubscription();
@@ -211,6 +214,9 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
 
     if (subregionEmissions) {
+      if(this.inTreasureHunt){
+        subregionEmissions.co2Emissions = this.convertUnitsService.value(subregionEmissions.co2Emissions).from('MWh').to('kWh');
+      }
       this.form.patchValue({
         totalEmissionOutputRate: subregionEmissions.co2Emissions
       });

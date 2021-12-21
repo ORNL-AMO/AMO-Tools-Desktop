@@ -379,7 +379,7 @@
       
       <div #modalBody class="modal-body p-5">
         <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
-          (emitUpdateCo2SavingsData)="updateElectricityCo2SavingsData($event)">
+          [inTreasureHunt]="true" (emitUpdateCo2SavingsData)="updateElectricityCo2SavingsData($event)">
         </app-assessment-co2-savings>
       </div>
       <div class="modal-footer justify-content-end">
