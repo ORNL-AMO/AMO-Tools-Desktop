@@ -6,172 +6,139 @@
                 Utility
             </td>
             <td>
-                <!-- unit column -->
+                Current CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)
             </td>
             <td>
-                Current CO<sub>2</sub> Emissions
+                Projected CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)
             </td>
             <td>
-                Projected CO<sub>2</sub> Emissions
-            </td>
-            <td>
-                CO<sub>2</sub> Emission Savings 
+                CO<sub>2</sub> Emission Savings (tonne CO<sub>2</sub>)
             </td>
         </tr>
         <!--Electricity-->
-        <tr>
+        <tr *ngIf="energyUsage.electricityUsed">
             <td class="bold">
                 Electricity
             </td>
             <td>
-                kWh
+                {{carbonResults.electricityCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.electricityCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.electricityCO2CurrentUse - carbonResults.electricityCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
         <!--Natural Gas-->
-        <tr>
+        <tr *ngIf="energyUsage.naturalGasUsed">
             <td class="bold">
                 Natural Gas
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+                {{carbonResults.naturalGasCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.naturalGasCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.naturalGasCO2CurrentUse - carbonResults.naturalGasCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
         <!--Water-->
-        <tr>
+        <tr *ngIf="energyUsage.waterUsed">
             <td class="bold">
                 Water
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+                {{carbonResults.waterCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.waterCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.waterCO2CurrentUse - carbonResults.waterCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
         <!--Waste Water-->
-        <tr>
+        <tr *ngIf="energyUsage.wasteWaterUsed">
             <td class="bold">
                 Waste Water
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+                {{carbonResults.wasteWaterCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.wasteWaterCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.wasteWaterCO2CurrentUse - carbonResults.wasteWaterCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
         <!--Other Fuel-->
-        <tr>
+        <tr *ngIf="energyUsage.otherFuelUsed">
             <td class="bold">
                 Other Fuel
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+                {{carbonResults.otherFuelCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.otherFuelCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.otherFuelCO2CurrentUse - carbonResults.otherFuelCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
         <!--Compressed Air-->
-        <tr>
+        <tr *ngIf="energyUsage.compressedAirUsed">
             <td class="bold">
                 Compressed Air
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                {{carbonResults.compressedAirCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.compressedAirCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+                {{carbonResults.compressedAirCO2CurrentUse - carbonResults.compressedAirCO2ProjectedUse |
+                number:'1.0-0'}}
             </td>
         </tr>
         <!--Steam-->
-        <tr>
+        <tr *ngIf="energyUsage.steamUsed">
             <td class="bold">
                 Steam
             </td>
             <td>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                {{carbonResults.steamCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.steamCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-                
+                {{carbonResults.steamCO2CurrentUse - carbonResults.steamCO2ProjectedUse | number:'1.0-0'}}
             </td>
-            <td>
-                
-            </td>
-        </tr>        
+        </tr>
         <!--Total-->
         <tr>
             <td class="bold">
-                Total 
+                Total
             </td>
             <td>
-
+                {{carbonResults.totalCO2CurrentUse | number:'1.0-0'}}
             </td>
             <td>
-
+                {{carbonResults.totalCO2ProjectedUse | number:'1.0-0'}}
             </td>
             <td>
-
-            </td>
-            <td>
-
+                {{carbonResults.totalCO2CurrentUse - carbonResults.totalCO2ProjectedUse | number:'1.0-0'}}
             </td>
         </tr>
     </tbody>
 </table>
 
 
-<app-exportable-results-table class="hide-print" [tableString]="tableString"
-    (updateTableString)="updateTableString()">
+<app-exportable-results-table class="hide-print" [tableString]="tableString" (updateTableString)="updateTableString()">
 </app-exportable-results-table>

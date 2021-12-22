@@ -156,11 +156,18 @@ export class OperationCostsComponent implements OnInit {
       steamCO2OutputRate: 0,
     }
     this.treasureHunt.currentEnergyUsage = defaultUsage;
+    this.setCo2SavingsData(); 
+    this.setOtherFuelCo2SavingsData();   
+    this.setNaturalGasCO2SavingsData();
     this.save();
   }
 
 
   save() {
+    if (this.treasureHuntResults){
+      this.treasureHunt.currentEnergyUsage.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
+    }   
+
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
@@ -337,7 +344,10 @@ export class OperationCostsComponent implements OnInit {
         zipcode: ''
       }
       this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData; 
-      this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+      if (!this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData) {
+        this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+      }
+  
       
     }
     

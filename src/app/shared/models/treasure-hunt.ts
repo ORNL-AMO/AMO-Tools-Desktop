@@ -109,7 +109,35 @@ export interface EnergyUsage {
     steamCosts: number
     steamUsed: boolean,
     steamCO2OutputRate?: number,
+    co2EmissionsResults?: TreasureHuntCo2EmissionsResults
 }
+
+export interface TreasureHuntCo2EmissionsResults {
+    electricityCO2CurrentUse?: number,
+    electricityCO2ProjectedUse?: number,
+    
+    naturalGasCO2CurrentUse?: number,
+    naturalGasCO2ProjectedUse?: number,
+    
+    otherFuelCO2CurrentUse?: number,
+    otherFuelCO2ProjectedUse?: number,
+    
+    waterCO2CurrentUse?: number,
+    waterCO2ProjectedUse?: number,
+    
+    wasteWaterCO2CurrentUse?: number,
+    wasteWaterCO2ProjectedUse?: number,
+    
+    compressedAirCO2CurrentUse?: number,
+    compressedAirCO2ProjectedUse?: number,
+    
+    steamCO2CurrentUse?: number,
+    steamCO2ProjectedUse?: number,
+  
+    totalCO2CurrentUse?: number,
+    totalCO2ProjectedUse?: number
+    
+  }
 
 export interface OpportunitySheet extends TreasureHuntOpportunity {
     name: string,
