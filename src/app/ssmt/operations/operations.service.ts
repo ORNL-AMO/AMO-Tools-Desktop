@@ -84,7 +84,6 @@ export class OperationsService {
       
       if (pressure) {
         saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
-        saturatedTemperature = this.convertUnitsService.value(saturatedTemperature).from('K').to(settings.steamTemperatureMeasurement);
         saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);
         let maxValue = saturatedTemperature - formGroup.controls.makeUpWaterTemperature.value;
         if (ssmt.boilerInput.approachTemperature > maxValue) {

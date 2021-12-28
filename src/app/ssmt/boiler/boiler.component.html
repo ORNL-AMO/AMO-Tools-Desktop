@@ -110,8 +110,7 @@
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value must be greater than 0 <span
               [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>.
         </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}}
-          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
         </span>         
       </div>
 
