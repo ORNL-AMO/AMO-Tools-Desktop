@@ -146,11 +146,10 @@ export class BoilerService {
       
       if (pressure) {
         saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
-        saturatedTemperature = this.convertUnitsService.value(saturatedTemperature).from('K').to(settings.steamTemperatureMeasurement);
         saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);
         let maxValue = saturatedTemperature - ssmt.generalSteamOperations.makeUpWaterTemperature;
         if (boilerForm.controls.approachTemperature.value > maxValue) {
-          warning = `Approach temperature must less than the difference between the temperature into the heat exchanger (Saturation temperature of ${headerType} pressure header) and the makeup water temperature (${maxValue})`;
+          warning = `Approach temperature must be less than the difference between the temperature into the heat exchanger (Saturation temperature of ${headerType} pressure header) and the makeup water temperature (${maxValue}`;
         }
       }
     }
