@@ -185,7 +185,7 @@ export class PhastResultsService {
     }
 
     if (phast.co2SavingsData) {
-      phast.co2SavingsData.electricityUse = results.grossHeatInput * phast.operatingHours.hoursPerYear;
+      phast.co2SavingsData.electricityUse = results.grossHeatInput;
       results.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);   
     } else {
       results.co2EmissionsOutput = 0;

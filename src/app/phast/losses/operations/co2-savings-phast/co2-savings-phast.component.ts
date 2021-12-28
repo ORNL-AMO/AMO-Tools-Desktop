@@ -98,7 +98,9 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   convertOutputRate(outputRate: number) {
     if (outputRate) {
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to(this.settings.energyResultUnit);
+      let conversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(this.settings.energyResultUnit);
+      outputRate = outputRate / conversionHelper;
+      outputRate = Number(outputRate.toFixed(2));
     }
     return outputRate;
   }
@@ -213,7 +215,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (isUserFormChange || !this.form.controls.userEnteredBaselineEmissions.value) {
       let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
       if(this.settings.energyResultUnit != 'MMBtu'){
-        selectedFuelOutputRate = this.convertUnitsService.value(selectedFuelOutputRate).from('MMBtu').to(this.settings.energyResultUnit);
+        selectedFuelOutputRate = this.convertOutputRate(selectedFuelOutputRate);
       }
       
       this.form.patchValue({
@@ -227,7 +229,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (!this.form.controls.userEnteredModificationEmissions.value) {
       let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
       if(this.settings.energyResultUnit != 'MMBtu'){
-        selectedFuelOutputRate = this.convertUnitsService.value(selectedFuelOutputRate).from('MMBtu').to(this.settings.energyResultUnit);
+        selectedFuelOutputRate = this.convertOutputRate(selectedFuelOutputRate);
       }
       this.form.patchValue({
         totalEmissionOutputRate: selectedFuelOutputRate
