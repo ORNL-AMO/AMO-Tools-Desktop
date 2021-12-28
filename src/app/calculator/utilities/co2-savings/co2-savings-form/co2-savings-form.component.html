@@ -36,28 +36,33 @@
     </div>
   </div>
 
-  <div class="form-section" *ngIf="data.energyType == 'electricity'">
-    <div class="form-group">
-      <label for="{{'eGridRegion'+modId+index}}">eGrid Region</label>
-      <div class="input-group">
-        <select name="{{'eGridRegion'+modId+index}}" class="form-control" id="{{'eGridRegion'+modId+index}}"
-          [(ngModel)]="data.eGridRegion" (change)="setRegion()" [required]="true" (focus)="focusField('eGridRegion')">
-          <option *ngFor="let option of eGridRegions" [ngValue]="option.region">{{option.region}}</option>
-        </select>
-      </div>
-    </div>
-  </div>
 
   <div class="form-section" *ngIf="data.energyType == 'electricity'">
     <div class="form-group">
-      <label for="{{'eGridSubregion'+modId+index}}">eGrid Subregion</label>
+      <label for="{{'zipcode'+modId+index}}">Zipcode</label>
       <div class="input-group">
-        <select name="{{'eGridSubregion'+modId+index}}" class="form-control" id="{{'eGridSubregion'+modId+index}}"
-          [(ngModel)]="data.eGridSubregion" (change)="setSubRegion()" [required]="true" (focus)="focusField('eGridSubregion')">
-          <option *ngFor="let option of subregions" [ngValue]="option.subregion">{{option.subregion}}</option>
-        </select>
+        <input name="{{'zipcode'+modId+index}}" type="text" class="form-control" id="{{'zipcode'+modId+index}}"
+          (input)="setZipcode()" [(ngModel)]="data.zipcode" [required]="true" (focus)="focusField('zipcode')">
       </div>
     </div>
+  
+    <div *ngIf="zipCodeSubRegionData" class="form-group">
+      <label for="{{'eGridSubregion'+modId+index}}">eGRID Subregion</label>
+      <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
+        <select name="{{'eGridSubregion'+modId+index}}" class="form-control" id="{{'eGridSubregion'+modId+index}}"
+          [(ngModel)]="data.eGridSubregion" (change)="setSubRegionEmissionsOutput()" [required]="true"
+           (focus)="focusField('eGridSubregion')">
+          <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
+        </select>
+      </div>
+      <div *ngIf="hasValidSubRegion && zipCodeSubRegionData.length < 2" class="text-center small">
+        {{data.eGridSubregion}}
+      </div>
+      <div *ngIf="!hasValidSubRegion || !data.eGridSubregion" class="text-center small">
+        <strong>&mdash; &mdash;</strong>
+      </div>
+    </div>
+  
   </div>
 
   <div class="form-group">
