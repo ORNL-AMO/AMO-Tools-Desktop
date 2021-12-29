@@ -20,7 +20,7 @@ export class TreasureHuntService {
     this.updateMenuOptions = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.treasureHunt = new BehaviorSubject<TreasureHunt>(undefined);
-    this.currentField = new BehaviorSubject<string>('operatingCosts');
+    this.currentField = new BehaviorSubject<string>('operation-costs');
 
   }
 

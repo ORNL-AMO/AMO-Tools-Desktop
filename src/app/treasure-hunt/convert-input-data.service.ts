@@ -155,19 +155,13 @@ export class ConvertInputDataService {
     currentEnergyUsage.compressedAirUsage = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirUsage, oldSettings, newSettings);
     //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamUsage = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamUsage, oldSettings, newSettings);
-
-    //CO2 conversions
-    //imperial: MMBtu/yr, metric: GJ/yr
+    
     currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
     currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
     currentEnergyUsage.otherFuelMixedCO2SavingsData = this.convertOtherFuelMixedCO2SavingsData(currentEnergyUsage.otherFuelMixedCO2SavingsData, oldSettings, newSettings);
-    //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.waterCO2OutputRate, oldSettings, newSettings);
-    //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.wasteWaterCO2OutputRate, oldSettings, newSettings);
-    //imperial: kSCF/yr , metric: m3/yr
     currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirCO2OutputRate, oldSettings, newSettings);
-    //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamCO2OutputRate, oldSettings, newSettings);
 
     return currentEnergyUsage;

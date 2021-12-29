@@ -203,28 +203,47 @@ export class TreasureHuntReportService {
     carbonResults = this.calculateCO2Results(energyUsage, treasureHuntResults, settings);
     carbonResults.totalCO2CurrentUse = this.calculateTotalCurrentCarbonEmissions(energyUsage, carbonResults);
     carbonResults.totalCO2ProjectedUse = this.calculateTotalProjectedCarbonEmissions(energyUsage, carbonResults);
-
-
+    carbonResults.totalCO2Savings = carbonResults.totalCO2CurrentUse - carbonResults.totalCO2ProjectedUse;
     return carbonResults;
-
   }
 
   calculateCO2Results(energyUsage: EnergyUsage, treasureHuntResults: TreasureHuntResults, settings: Settings): TreasureHuntCo2EmissionsResults  {
+    let electricityCO2CurrentUse: number =  this.getCo2EmissionsResultFromObj(energyUsage.electricityCO2SavingsData, treasureHuntResults.electricity.baselineEnergyUsage, settings);
+    let electricityCO2ProjectedUse: number = this.getCo2EmissionsResultFromObj(energyUsage.electricityCO2SavingsData, treasureHuntResults.electricity.modifiedEnergyUsage, settings);
+    let naturalGasCO2CurrentUse: number = this.getCo2EmissionsResultFromObj(energyUsage.naturalGasCO2SavingsData, treasureHuntResults.naturalGas.baselineEnergyUsage, settings);
+    let naturalGasCO2ProjectedUse: number = this.getCo2EmissionsResultFromObj(energyUsage.naturalGasCO2SavingsData, treasureHuntResults.naturalGas.modifiedEnergyUsage, settings);
+    let otherFuelCO2CurrentUse: number = this.getCo2EmissionsResultFromObj(energyUsage.otherFuelCO2SavingsData, treasureHuntResults.otherFuel.baselineEnergyUsage, settings);
+    let otherFuelCO2ProjectedUse: number = this.getCo2EmissionsResultFromObj(energyUsage.otherFuelCO2SavingsData, treasureHuntResults.otherFuel.modifiedEnergyUsage, settings);
+    let waterCO2CurrentUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.waterCO2OutputRate, treasureHuntResults.water.baselineEnergyUsage);
+    let waterCO2ProjectedUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.waterCO2OutputRate, treasureHuntResults.water.modifiedEnergyUsage);
+    let wasteWaterCO2CurrentUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.wasteWaterCO2OutputRate, treasureHuntResults.wasteWater.baselineEnergyUsage);
+    let wasteWaterCO2ProjectedUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.wasteWaterCO2OutputRate, treasureHuntResults.wasteWater.modifiedEnergyUsage);
+    let compressedAirCO2CurrentUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.compressedAirCO2OutputRate, treasureHuntResults.compressedAir.baselineEnergyUsage);
+    let compressedAirCO2ProjectedUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.compressedAirCO2OutputRate, treasureHuntResults.compressedAir.modifiedEnergyUsage);
+    let steamCO2CurrentUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.steamCO2OutputRate, treasureHuntResults.steam.baselineEnergyUsage);
+    let steamCO2ProjectedUse: number = this.getCo2EmissionsResultFromNumber(energyUsage.steamCO2OutputRate, treasureHuntResults.steam.modifiedEnergyUsage);
     let carbonResults: TreasureHuntCo2EmissionsResults = {
-      electricityCO2CurrentUse: this.getCo2EmissionsResultFromObj(energyUsage.electricityCO2SavingsData, treasureHuntResults.electricity.baselineEnergyUsage, settings),
-      electricityCO2ProjectedUse: this.getCo2EmissionsResultFromObj(energyUsage.electricityCO2SavingsData, treasureHuntResults.electricity.modifiedEnergyUsage, settings),
-      naturalGasCO2CurrentUse: this.getCo2EmissionsResultFromObj(energyUsage.naturalGasCO2SavingsData, treasureHuntResults.naturalGas.baselineEnergyUsage, settings),
-      naturalGasCO2ProjectedUse: this.getCo2EmissionsResultFromObj(energyUsage.naturalGasCO2SavingsData, treasureHuntResults.naturalGas.modifiedEnergyUsage, settings),
-      otherFuelCO2CurrentUse: this.getCo2EmissionsResultFromObj(energyUsage.otherFuelCO2SavingsData, treasureHuntResults.otherFuel.baselineEnergyUsage, settings),
-      otherFuelCO2ProjectedUse: this.getCo2EmissionsResultFromObj(energyUsage.otherFuelCO2SavingsData, treasureHuntResults.otherFuel.modifiedEnergyUsage, settings),
-      waterCO2CurrentUse: this.getCo2EmissionsResultFromNumber(energyUsage.waterCO2OutputRate, treasureHuntResults.water.baselineEnergyUsage),
-      waterCO2ProjectedUse: this.getCo2EmissionsResultFromNumber(energyUsage.waterCO2OutputRate, treasureHuntResults.water.modifiedEnergyUsage),
-      wasteWaterCO2CurrentUse: this.getCo2EmissionsResultFromNumber(energyUsage.wasteWaterCO2OutputRate, treasureHuntResults.wasteWater.baselineEnergyUsage),
-      wasteWaterCO2ProjectedUse: this.getCo2EmissionsResultFromNumber(energyUsage.wasteWaterCO2OutputRate, treasureHuntResults.wasteWater.modifiedEnergyUsage),      
-      compressedAirCO2CurrentUse: this.getCo2EmissionsResultFromNumber(energyUsage.compressedAirCO2OutputRate, treasureHuntResults.compressedAir.baselineEnergyUsage),
-      compressedAirCO2ProjectedUse: this.getCo2EmissionsResultFromNumber(energyUsage.compressedAirCO2OutputRate, treasureHuntResults.compressedAir.modifiedEnergyUsage),      
-      steamCO2CurrentUse: this.getCo2EmissionsResultFromNumber(energyUsage.steamCO2OutputRate, treasureHuntResults.steam.baselineEnergyUsage),
-      steamCO2ProjectedUse: this.getCo2EmissionsResultFromNumber(energyUsage.steamCO2OutputRate, treasureHuntResults.steam.modifiedEnergyUsage)
+      electricityCO2CurrentUse: electricityCO2CurrentUse,
+      electricityCO2ProjectedUse: electricityCO2ProjectedUse,
+      electricityCO2Savings: electricityCO2CurrentUse - electricityCO2ProjectedUse,
+      naturalGasCO2CurrentUse: naturalGasCO2CurrentUse,
+      naturalGasCO2ProjectedUse: naturalGasCO2ProjectedUse,
+      naturalGasCO2Savings: naturalGasCO2CurrentUse - naturalGasCO2ProjectedUse,
+      otherFuelCO2CurrentUse: otherFuelCO2CurrentUse,
+      otherFuelCO2ProjectedUse: otherFuelCO2ProjectedUse,
+      otherFuelCO2Savings: otherFuelCO2CurrentUse - otherFuelCO2ProjectedUse,
+      waterCO2CurrentUse: waterCO2CurrentUse,
+      waterCO2ProjectedUse: waterCO2ProjectedUse,
+      waterCO2Savings: waterCO2CurrentUse - waterCO2ProjectedUse,
+      wasteWaterCO2CurrentUse: wasteWaterCO2CurrentUse,
+      wasteWaterCO2ProjectedUse: wasteWaterCO2ProjectedUse,
+      wasteWaterCO2Savings: wasteWaterCO2CurrentUse - wasteWaterCO2ProjectedUse,
+      compressedAirCO2CurrentUse: compressedAirCO2CurrentUse,
+      compressedAirCO2ProjectedUse: compressedAirCO2ProjectedUse,      
+      compressedAirCO2Savings: compressedAirCO2CurrentUse - compressedAirCO2ProjectedUse,
+      steamCO2CurrentUse: steamCO2CurrentUse,
+      steamCO2ProjectedUse: steamCO2ProjectedUse,
+      steamCO2Savings: steamCO2CurrentUse - steamCO2ProjectedUse
     }
     return carbonResults;
   }
@@ -232,7 +251,7 @@ export class TreasureHuntReportService {
   getCo2EmissionsResultFromObj(data: Co2SavingsData, electricityUsed: number, settings: Settings): number {
     //use copy for conversion data
     let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
-    let totalEmissionsResult: number;
+    let totalEmissionsResult: number = 0;
     if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
       dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
@@ -240,20 +259,16 @@ export class TreasureHuntReportService {
     }
     if (dataCpy.totalEmissionOutputRate && electricityUsed) {
       totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (electricityUsed / 1000);
-    } else {
-      totalEmissionsResult = 0;
-    }
+    } 
     return totalEmissionsResult;
   }
 
 
   getCo2EmissionsResultFromNumber(outputRate: number, electricityUsed: number): number {
-    let totalEmissionsResult: number;
+    let totalEmissionsResult: number = 0;
     if (outputRate && electricityUsed) {
       totalEmissionsResult = (outputRate) * (electricityUsed / 1000);
-    } else {
-      totalEmissionsResult = 0;
-    }
+    } 
     return totalEmissionsResult;
   }
 
