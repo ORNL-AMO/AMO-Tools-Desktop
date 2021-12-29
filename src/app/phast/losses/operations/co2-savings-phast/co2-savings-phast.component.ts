@@ -97,7 +97,7 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
 
   convertOutputRate(outputRate: number) {
-    if (outputRate) {
+    if (outputRate && this.settings.energyResultUnit != 'MMBtu') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(this.settings.energyResultUnit);
       outputRate = outputRate / conversionHelper;
       outputRate = Number(outputRate.toFixed(2));
@@ -211,29 +211,24 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.calculate();
   }
 
+  findFuelOutputRate() {
+    let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;      
+    selectedFuelOutputRate = this.convertOutputRate(selectedFuelOutputRate);
+    this.form.patchValue({
+      totalEmissionOutputRate: selectedFuelOutputRate
+    });
+  }
+
   setBaselineFuelTypeOutputRate(isUserFormChange: boolean) {
     if (isUserFormChange || !this.form.controls.userEnteredBaselineEmissions.value) {
-      let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
-      if(this.settings.energyResultUnit != 'MMBtu'){
-        selectedFuelOutputRate = this.convertOutputRate(selectedFuelOutputRate);
-      }
-      
-      this.form.patchValue({
-        totalEmissionOutputRate: selectedFuelOutputRate
-      });
+      this.findFuelOutputRate();
       this.setUserEnteredModificationEmissions(false);
     } 
   }
 
   setModificationFuelTypeOutputRate() {
     if (!this.form.controls.userEnteredModificationEmissions.value) {
-      let selectedFuelOutputRate: number = _.find(this.fuelOptions, (val) => { return this.form.controls.fuelType.value === val.fuelType; }).outputRate;
-      if(this.settings.energyResultUnit != 'MMBtu'){
-        selectedFuelOutputRate = this.convertOutputRate(selectedFuelOutputRate);
-      }
-      this.form.patchValue({
-        totalEmissionOutputRate: selectedFuelOutputRate
-      });
+      this.findFuelOutputRate();
       this.form.controls.userEnteredModificationEmissions.patchValue(false);
     }
   }
