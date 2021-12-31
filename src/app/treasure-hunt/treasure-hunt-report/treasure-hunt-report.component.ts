@@ -14,6 +14,7 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PrintOptions } from '../../shared/models/printing';
 import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
+import { TreasureHuntService } from '../treasure-hunt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -57,7 +58,7 @@ export class TreasureHuntReportComponent implements OnInit {
     private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
     private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService) { }
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -68,6 +69,8 @@ export class TreasureHuntReportComponent implements OnInit {
         if (this.assessment.treasureHunt.setupDone == true) {
           let filteredTreasureHunt: TreasureHunt = this.sortCardsService.sortTreasureHunt(this.assessment.treasureHunt, val, this.settings);
           this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(filteredTreasureHunt, this.settings);
+          this.assessment.treasureHunt.currentEnergyUsage.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.assessment.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
+          this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
           this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(filteredTreasureHunt, this.settings);
           let oppCards = this.opportunityCardsService.opportunityCards.getValue();
           if (oppCards.length != this.opportunityCardsData.length) {

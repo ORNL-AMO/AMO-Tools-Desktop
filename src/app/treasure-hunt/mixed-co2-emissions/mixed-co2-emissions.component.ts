@@ -3,6 +3,7 @@ import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-mixed-co2-emissions',
@@ -30,7 +31,7 @@ export class MixedCo2EmissionsComponent implements OnInit {
 
   fuelOptionsList: Array<any> = new Array<any>();
 
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.otherFuels = otherFuels;
@@ -60,13 +61,21 @@ export class MixedCo2EmissionsComponent implements OnInit {
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     this.fuelOptionsList[index] = this.fuelOptions;
     this.fuelList[index].fuelType = this.fuelOptions[0].fuelType;
-    this.fuelList[index].totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    let outputRate: number = this.fuelOptions[0].outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.fuelList[index].totalEmissionOutputRate = outputRate;
     this.calculateMixedFuelCosts();
   }
 
   setFuel(index: number) {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptionsList[index], (val) => { return this.fuelList[index].fuelType === val.fuelType; });
-    this.fuelList[index].totalEmissionOutputRate = tmpFuel.outputRate;
+    let outputRate: number = tmpFuel.outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.fuelList[index].totalEmissionOutputRate = outputRate;
     this.calculateMixedFuelCosts();
   }
 

@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-operation-costs',
@@ -53,7 +54,7 @@ export class OperationCostsComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   saveSettingsOnDestroy: boolean = false;
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.globalSettings = this.settingsDbService.globalSettings;
@@ -88,6 +89,10 @@ export class OperationCostsComponent implements OnInit {
     } else {
       this.bodyHeight = 0;
     }
+  }
+
+  focusField(inputName: string) {
+    this.treasureHuntService.currentField.next(inputName);
   }
 
   initData() {
@@ -151,11 +156,18 @@ export class OperationCostsComponent implements OnInit {
       steamCO2OutputRate: 0,
     }
     this.treasureHunt.currentEnergyUsage = defaultUsage;
+    this.setCo2SavingsData(); 
+    this.setOtherFuelCo2SavingsData();   
+    this.setNaturalGasCO2SavingsData();
     this.save();
   }
 
 
   save() {
+    if (this.treasureHuntResults){
+      this.treasureHunt.currentEnergyUsage.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
+    }   
+
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
@@ -302,7 +314,7 @@ export class OperationCostsComponent implements OnInit {
         energyType: 'electricity',
         energySource: '',
         fuelType: '',
-        totalEmissionOutputRate: this.globalSettings.totalEmissionOutputRate,
+        totalEmissionOutputRate: this.convertUnitsService.value(this.globalSettings.totalEmissionOutputRate).from('MWh').to('kWh'),
         electricityUse: 0,
         eGridRegion: '',
         eGridSubregion: this.globalSettings.eGridSubregion,
@@ -332,7 +344,10 @@ export class OperationCostsComponent implements OnInit {
         zipcode: ''
       }
       this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData; 
-      this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+      if (!this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData) {
+        this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
+      }
+  
       
     }
     
@@ -358,14 +373,22 @@ export class OperationCostsComponent implements OnInit {
   setEnergySource() {
     this.setFuelOptions();
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.fuelOptions[0].outputRate;
+    let outputRate: number = this.fuelOptions[0].outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
     this.checkIsUsingMixedFuel();
     this.save();
   }
 
   setFuel() {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType === val.fuelType; });
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = tmpFuel.outputRate;
+    let outputRate: number = tmpFuel.outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
     this.save();
   }
 
