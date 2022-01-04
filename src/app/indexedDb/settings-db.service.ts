@@ -147,10 +147,10 @@ export class SettingsDbService {
       settings.steamRollupUnit = 'MMBtu';
     }
     if (!settings.wasteWaterRollupUnit) {
-      settings.wasteWaterRollupUnit = 'kWh';
+      settings.wasteWaterRollupUnit = 'MWh';
     }
     if (!settings.compressedAirRollupUnit) {
-      settings.compressedAirRollupUnit = 'kWh';
+      settings.compressedAirRollupUnit = 'MWh';
     }
     return settings;
   }

@@ -255,8 +255,8 @@ export const MockPsatSettings: Settings = {
     "pumpsRollupUnit": "MWh",
     "fansRollupUnit": "MWh",
     "steamRollupUnit": "MMBtu",
-    "wasteWaterRollupUnit": "kWh",
-    "compressedAirRollupUnit": "kWh"
+    "wasteWaterRollupUnit": "MWh",
+    "compressedAirRollupUnit": "MWh"
 }
 
 

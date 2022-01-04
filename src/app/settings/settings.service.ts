@@ -400,8 +400,8 @@ export class SettingsService {
         pumpsRollupUnit: 'MWh',
         fansRollupUnit: 'MWh',
         steamRollupUnit: 'MMBtu',
-        wasteWaterRollupUnit: 'kWh',
-        compressedAirRollupUnit: 'kWh'
+        wasteWaterRollupUnit: 'MWh',
+        compressedAirRollupUnit: 'MWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -441,8 +441,8 @@ export class SettingsService {
         pumpsRollupUnit: 'MWh',
         fansRollupUnit: 'MWh',
         steamRollupUnit: 'GJ',
-        wasteWaterRollupUnit: 'kWh',
-        compressedAirRollupUnit: 'kWh'
+        wasteWaterRollupUnit: 'MWh',
+        compressedAirRollupUnit: 'MWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

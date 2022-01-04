@@ -122,10 +122,10 @@ export class ReportRollupUnitsComponent implements OnInit {
         this.tmpSettings.steamRollupUnit = 'MMBtu';
       }
       if (!this.tmpSettings.wasteWaterRollupUnit) {
-        this.tmpSettings.wasteWaterRollupUnit = 'kWh';
+        this.tmpSettings.wasteWaterRollupUnit = 'MWh';
       }
       if (!this.tmpSettings.compressedAirRollupUnit) {
-        this.tmpSettings.compressedAirRollupUnit = 'kWh';
+        this.tmpSettings.compressedAirRollupUnit = 'MWh';
       }
     }
     if (this.settings.unitsOfMeasure === 'Metric') {
@@ -139,10 +139,10 @@ export class ReportRollupUnitsComponent implements OnInit {
         this.tmpSettings.steamRollupUnit = 'GJ';
       }
       if (!this.tmpSettings.wasteWaterRollupUnit) {
-        this.tmpSettings.wasteWaterRollupUnit = 'kWh';
+        this.tmpSettings.wasteWaterRollupUnit = 'MWh';
       }
       if (!this.tmpSettings.compressedAirRollupUnit) {
-        this.tmpSettings.compressedAirRollupUnit = 'kWh';
+        this.tmpSettings.compressedAirRollupUnit = 'MWh';
       }
     }
 
