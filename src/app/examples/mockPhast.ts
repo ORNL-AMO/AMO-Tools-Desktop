@@ -1298,4 +1298,10 @@ export const MockPhastSettings: Settings = {
     userEnteredBaselineEmissions: false,
     userEnteredModificationEmissions: false,
     zipcode: '37830',
+    commonRollupUnit: "MMBtu",
+    pumpsRollupUnit: "MWh",
+    fansRollupUnit: "MWh",
+    steamRollupUnit: "MMBtu",
+    wasteWaterRollupUnit: "MWh",
+    compressedAirRollupUnit: "MWh"
 };
