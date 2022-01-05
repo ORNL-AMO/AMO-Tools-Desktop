@@ -107,13 +107,15 @@ export class OperationsComponent implements OnInit {
 
   save(){  
     this.fsatOperations = this.operationsService.getObjFromForm(this.operationsForm);
+    this.fsatOperations.cO2SavingsData = this.cO2SavingsData;
+
     this.emitSave.emit(this.fsatOperations);
     this.checkForWarnings();
   }
 
   updateFsatCo2SavingsData(cO2SavingsData?: Co2SavingsData) {
-    this.fsatOperations.cO2SavingsData = cO2SavingsData;
-    this.emitSave.emit(this.fsatOperations);
+    this.cO2SavingsData = cO2SavingsData;
+    this.save();
   }
 
   setCo2SavingsData() {

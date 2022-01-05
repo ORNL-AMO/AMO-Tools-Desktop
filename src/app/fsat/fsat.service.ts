@@ -370,7 +370,7 @@ export class FsatService {
     tmpModification.fsat.fieldData = fsatCopy.fieldData;
     tmpModification.fsat.whatIfScenario = true;
     tmpModification.fsat.fsatOperations = fsatCopy.fsatOperations;
-    tmpModification.fsat.cO2SavingsData = fsatCopy.cO2SavingsData;
+    tmpModification.fsat.fsatOperations.cO2SavingsData = fsatCopy.fsatOperations.cO2SavingsData;
     return tmpModification;
   }
 }
