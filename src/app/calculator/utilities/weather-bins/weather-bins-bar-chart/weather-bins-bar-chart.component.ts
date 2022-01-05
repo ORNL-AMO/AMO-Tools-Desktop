@@ -72,7 +72,7 @@ export class WeatherBinsBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.weatherBinsBarChart.nativeElement, traces, layout, configOptions);
+      Plotly.newPlot(this.weatherBinsBarChart.nativeElement, traces, layout, configOptions);
     } else if (this.weatherBinsBarChart) {
       Plotly.purge(this.weatherBinsBarChart.nativeElement);
     }
