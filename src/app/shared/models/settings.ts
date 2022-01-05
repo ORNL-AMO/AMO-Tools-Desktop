@@ -114,6 +114,14 @@ export interface Settings {
     userEnteredBaselineEmissions?: boolean,
     userEnteredModificationEmissions?: boolean,
     zipcode?: string
+
+    //Rollup Units (phast listed above)
+    commonRollupUnit?: string,
+    pumpsRollupUnit?: string,
+    fansRollupUnit?: string,
+    steamRollupUnit?: string,
+    wasteWaterRollupUnit?: string,
+    compressedAirRollupUnit?: string,
 }
 
 

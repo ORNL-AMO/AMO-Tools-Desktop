@@ -19,10 +19,25 @@
               </select>
             </div>
           </div>
+
         <div class="form-group">
-            <label for="pumpResults">Pumps Result Unit:</label>
-            <div class="small">kWh</div>
+            <label for="commonRollupUnit">Common Report Energy Result Unit</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.commonRollupUnit" id="commonRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
         </div>
+
+        <div class="form-group">
+            <label for="pumpsRollupUnit">Pumps Common Result Unit:</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.pumpsRollupUnit" id="pumpsRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+
         <div class="form-group">
             <label for="phastRollupUnit">Process Heating Common Result Unit:</label>
             <select class="form-control" name="phastRollupUnit" [(ngModel)]="tmpSettings.phastRollupUnit" id="phastRollupUnit">
@@ -34,30 +49,68 @@
                     </option> -->
             </select>
         </div>
+
         <div class="form-group">
+            <label for="fansRollupUnit">Fans Common Result Unit:</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.fansRollupUnit" id="fansRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="steamRollupUnit">Steam Common Result Unit:</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.steamRollupUnit" id="steamRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="wasteWaterRollupUnit">Waste Water Common Result Unit:</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.wasteWaterRollupUnit" id="wasteWaterRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="compressedAirRollupUnit">Compressed Air Common Result Unit:</label>
+            <select class="form-control" [(ngModel)]="tmpSettings.compressedAirRollupUnit" id="compressedAirRollupUnit">
+                <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                    <span [innerHTML]="option.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+
+        
+        <!-- <div class="form-group">
             <label for="phastRollupFuelUnit">Process Heating Common Fuel Unit</label>
             <select class="form-control" [(ngModel)]="tmpSettings.phastRollupFuelUnit" id="phastRollupFuelUnit">
                 <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
                     <span [innerHTML]="option.displayUnit"></span>
                 </option>
             </select>
-        </div>
-        <div class="form-group">
+        </div> -->
+        <!-- <div class="form-group">
             <label for="phastRollupElectricityUnit">Process Heating Common Electricity Unit</label>
             <select class="form-control" [(ngModel)]="tmpSettings.phastRollupElectricityUnit" id="phastRollupElectricityUnit">
                 <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
                     <span [innerHTML]="option.displayUnit"></span>
                 </option>
             </select>
-        </div>
-        <div class="form-group">
+        </div> -->
+        <!-- <div class="form-group">
             <label for="phastRollupSteamUnit">Process Heating Common Steam Unit</label>
             <select class="form-control" [(ngModel)]="tmpSettings.phastRollupSteamUnit" id="phastRollupSteamUnit">
                 <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
                     <span [innerHTML]="option.displayUnit"></span>
                 </option>
             </select>
-        </div>
+        </div> -->
     </div>
     <div class="col-12">
         <button class="btn-sm btn-primary pull-right" (click)="saveUnits()">Save</button>

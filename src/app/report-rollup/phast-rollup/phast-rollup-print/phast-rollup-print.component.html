@@ -11,7 +11,7 @@
     <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
   </div>
   <div class="col-12">
-    <app-pre-assessment-print [settings]="settings" [calculator]="calculator">
+    <app-pre-assessment-print [settings]="settings" [calculator]="calculator" [resultUnit]="settings.phastRollupUnit">
     </app-pre-assessment-print>
   </div>
 </div>
@@ -29,7 +29,7 @@
     </app-rollup-summary-pie-chart>
   </div>
   <div class="col-12">
-    <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
+    <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.phastRollupUnit"
       [equipmentType]="'Fan'"></app-rollup-summary-energy-table>
   </div>
 </div>
