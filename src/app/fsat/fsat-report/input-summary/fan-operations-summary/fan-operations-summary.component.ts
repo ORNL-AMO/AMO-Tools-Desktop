@@ -42,12 +42,7 @@ export class FanOperationsSummaryComponent implements OnInit {
         this.numMods = this.fsat.modifications.length;
         for (let i = 0; i < this.fsat.modifications.length; i++) {
           if (this.fsat.modifications[i].fsat.fsatOperations) {
-            let operationsInputs: FsatOperations = {
-              cost: this.fsat.modifications[i].fsat.fsatOperations.cost,
-              operatingHours: this.fsat.modifications[i].fsat.fsatOperations.operatingHours,
-              cO2SavingsData: this.fsat.modifications[i].fsat.cO2SavingsData,
-            }
-            mods.push(operationsInputs);
+            mods.push(this.fsat.modifications[i].fsat.fsatOperations);
           }
           this.operatingHoursDiff.push(false);
           this.costDiff.push(false);
