@@ -310,6 +310,9 @@ export class FsatComponent implements OnInit {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
+        this._fsat.modifications.forEach(mod => {
+          mod.fsat = this.updateModificationCO2Savings(mod.fsat);
+        });
       }
     } else {
       this.modificationExists = false;
@@ -323,6 +326,22 @@ export class FsatComponent implements OnInit {
       });
     });
   }
+
+  updateModificationCO2Savings(modFsat: FSAT) {
+    if (this._fsat.fsatOperations.cO2SavingsData) {
+      if (!modFsat.fsatOperations.cO2SavingsData) {
+        modFsat.fsatOperations.cO2SavingsData = this._fsat.fsatOperations.cO2SavingsData;
+      } else {
+        modFsat.fsatOperations.cO2SavingsData.zipcode = this._fsat.fsatOperations.cO2SavingsData.zipcode;
+        modFsat.fsatOperations.cO2SavingsData.eGridSubregion = this._fsat.fsatOperations.cO2SavingsData.eGridSubregion;
+        if (!modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate) {
+          modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate = this._fsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate;
+        }
+      }
+    }
+    return modFsat;
+  }
+
 
   checkSetupDone(fsat: FSAT): boolean {
     return this.fsatService.checkValid(fsat, true, this.settings).isValid;

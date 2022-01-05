@@ -179,20 +179,6 @@ export class BoilerComponent implements OnInit {
       return false;
     }
   }
-  isFuelTypeDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelTypeDifferent();
-    } else {
-      return false;
-    }
-  }
-  isFuelDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelDifferent();
-    } else {
-      return false;
-    }
-  }
   isBlowdownRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isBlowdownRateDifferent();
@@ -274,27 +260,6 @@ export class BoilerComponent implements OnInit {
   openBoilerEfficiencyModal() {
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
-    } else if (this.boilerForm.controls.fuelType.value == 0) {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByVolume: undefined,
-        flueGasByMass: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
-
-    } else {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByMass: undefined,
-        flueGasByVolume: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
     }
     this.showBoilerEfficiencyModal = true;
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
