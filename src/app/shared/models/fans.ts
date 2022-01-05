@@ -1,7 +1,6 @@
 import { OperatingHours } from "./operations";
 import { SavingsOpportunity } from "./explore-opps";
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { Input } from "@angular/core";
 
 export interface FSAT {
   name?: string;
@@ -23,7 +22,6 @@ export interface FSAT {
   modalFieldData?: FieldData;
   existingDataUnits?: string;
   whatIfScenario?: boolean;
-  cO2SavingsData?: Co2SavingsData;
 }
 
 export interface FsatOperations {

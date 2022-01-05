@@ -148,7 +148,20 @@ export class UpdateDataService {
             }
             fsat.fsatOperations = {
                 operatingHours: operatingHours,
-                cost: cost
+                cost: cost,
+                cO2SavingsData: {
+                    energyType: 'electricity',
+                    energySource: '',
+                    fuelType: '',
+                    totalEmissionOutputRate: 0,
+                    electricityUse: 0,
+                    eGridRegion: '',
+                    eGridSubregion: 'SRTV',
+                    totalEmissionOutput: 0,
+                    userEnteredBaselineEmissions: false,
+                    userEnteredModificationEmissions: true,
+                    zipcode: '37830',
+                }, 
             }
         }
         return fsat;
