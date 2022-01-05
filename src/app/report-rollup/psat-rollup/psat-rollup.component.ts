@@ -20,6 +20,8 @@ export class PsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
+  @Input()
+  settings: Settings;
 
   showPreAssessment: boolean = true;
   pieChartDataOption: string = 'energy';
@@ -31,7 +33,6 @@ export class PsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  settings: Settings;
 
   rollupEnergyUnit: string = 'MWh';
 
@@ -42,7 +43,9 @@ export class PsatRollupComponent implements OnInit {
 
 
   ngOnInit() {
-    this.settings = this.reportRollupSettings.settings.getValue();
+    if(!this.settings){
+      this.settings = this.reportRollupSettings.settings.getValue();
+    } 
     this.rollupEnergyUnit = this.settings.pumpsRollupUnit;
     this.setTableData();
     this.setBarChartData();

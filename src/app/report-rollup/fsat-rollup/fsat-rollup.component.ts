@@ -20,6 +20,8 @@ export class FsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
+  @Input()
+  settings: Settings;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;
@@ -30,14 +32,16 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  settings: Settings;
+  
 
   rollupEnergyUnit: string = 'MWh';
   
   constructor(private fsatReportRollupService: FsatReportRollupService, private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    this.settings = this.reportRollupService.settings.getValue();
+    if(!this.settings){
+      this.settings = this.reportRollupService.settings.getValue();
+    }    
     this.rollupEnergyUnit = this.settings.fansRollupUnit;
     this.setTableData();
     this.setBarChartData();
