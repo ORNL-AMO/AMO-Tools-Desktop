@@ -108,8 +108,7 @@ export interface EnergyUsage {
     steamUsage: number,
     steamCosts: number
     steamUsed: boolean,
-    steamCO2OutputRate?: number,
-    co2EmissionsResults?: TreasureHuntCo2EmissionsResults
+    steamCO2OutputRate?: number
 }
 
 export interface TreasureHuntCo2EmissionsResults {
@@ -417,6 +416,7 @@ export interface TreasureHuntResults {
     other: UtilityUsageData,
     opportunitySummaries: Array<OpportunitySummary>,
     hasMixed?: boolean,
+    co2EmissionsResults?: TreasureHuntCo2EmissionsResults
 }
 
 export interface OpportunitySummary {
