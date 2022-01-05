@@ -46,7 +46,7 @@
         </td>
       </tr>
       <tr>
-        <td>Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
+        <td>Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.co2EmissionsOutput | sigFigs:'3'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput | sigFigs:'3'}}</span>
@@ -54,7 +54,7 @@
         </td>
       </tr>
       <tr>
-        <td>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</td>
+        <td>Annual CO<sub>2</sub> Emissions Savings (tonne CO<sub>2</sub>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;"
           [ngClass]="{'positive-savings': mod.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">

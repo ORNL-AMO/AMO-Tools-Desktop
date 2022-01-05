@@ -516,7 +516,9 @@ export class ConvertPhastService {
   }
 
   convertCO2SavingsData(co2SavingsData: Co2SavingsData, oldSettings: Settings, newSettings: Settings): Co2SavingsData{
-    co2SavingsData.totalEmissionOutputRate = this.convertVal(co2SavingsData.totalEmissionOutputRate, oldSettings.energyResultUnit, newSettings.energyResultUnit);
+    let conversionHelper: number = this.convertUnitsService.value(1).from(oldSettings.energyResultUnit).to(newSettings.energyResultUnit);
+    co2SavingsData.totalEmissionOutputRate = co2SavingsData.totalEmissionOutputRate / conversionHelper;
+    co2SavingsData.totalEmissionOutputRate = this.roundVal(co2SavingsData.totalEmissionOutputRate, 2);
     return co2SavingsData;
   }
 
@@ -542,7 +544,7 @@ export class ConvertPhastService {
           mod.phast.designedEnergy = this.convertDesignedEnergy(mod.phast.designedEnergy, oldSettings, settings);
         }
         mod.phast.operatingCosts = this.convertOperatingCosts(mod.phast.operatingCosts, oldSettings, settings);
-        mod.phast.co2SavingsData = this.convertCO2SavingsData(phast.co2SavingsData, oldSettings, settings);
+        mod.phast.co2SavingsData = this.convertCO2SavingsData(mod.phast.co2SavingsData, oldSettings, settings);
       });
     }
     
