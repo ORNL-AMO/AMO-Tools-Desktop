@@ -171,6 +171,8 @@ export class FlueGasLossesComponent implements OnInit {
         loss.systemLosses = null;
       }
     } else if (loss.measurementType === "By Mass") {
+      loss.calculatedExcessAir = null;
+      loss.calculatedFlueGasO2 = null;
       if (loss.formByMass.status === 'VALID') {
         let tmpLoss: FlueGas = this.flueGasFormService.buildByMassLossFromForm(loss.formByMass);
         const availableHeat = this.phastService.flueGasByMass(tmpLoss.flueGasByMass, this.settings);

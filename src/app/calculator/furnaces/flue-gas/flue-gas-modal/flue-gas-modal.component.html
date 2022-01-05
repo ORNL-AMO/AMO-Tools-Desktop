@@ -29,8 +29,6 @@
 
             <!-- Calculations -->
             <div class="d-flex flex-column mt-3 mb-2 p-2">
-              <ng-container *ngIf="method === 'By Volume'">
-
                 <div class="form-group m-0">
                   <label class="bold">Oxygen In Flue Gas</label>
                   <div *ngIf="output.baseline.calculatedFlueGasO2" class="text-center bold small">
@@ -49,7 +47,6 @@
                   &mdash; &mdash;
                 </div>
               </div>
-            </ng-container>
                 <div class="form-group m-0">
                   <label class="bold">Available Heat</label>
                   <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
