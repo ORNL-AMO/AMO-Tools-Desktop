@@ -56,15 +56,15 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   getResults() {
     //baseline
-    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
-
-    this.baselineInputs = resultData.inputData;
-    this.baselineOutput = resultData.outputData;
+    let baselineResultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
+    this.baselineInputs = baselineResultData.inputData;
+    this.baselineOutput = baselineResultData.outputData;
     //modification
-    resultData = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
-    this.modificationInputs = resultData.inputData;
-    this.modificationOutput = resultData.outputData;
+    let modificationResultData = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
+    this.modificationInputs = modificationResultData.inputData;
+    this.modificationOutput = modificationResultData.outputData;
     this.checkValid();
+
     if (this.modValid) {
       this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
     }

@@ -3,13 +3,15 @@ import { BehaviorSubject } from 'rxjs';
 import { SSMT, SSMTInputs, TurbineInput, PressureTurbine, HeaderInput, SsmtValid } from '../shared/models/steam/ssmt';
 import { SteamService } from '../calculator/steam/steam.service';
 import { Settings } from '../shared/models/settings';
-import { SSMTOutput } from '../shared/models/steam/steam-outputs';
+import { SSMTOutput, SteamCo2EmissionsOutput } from '../shared/models/steam/steam-outputs';
 import { BoilerService } from './boiler/boiler.service';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { OperationsService } from './operations/operations.service';
 import { ConvertSteamService } from '../calculator/steam/convert-steam.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class SsmtService {
@@ -32,7 +34,8 @@ export class SsmtService {
   currCurrency: string = "$";
 
   iterationCount: number;
-  constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
+  constructor(private steamService: SteamService, 
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
@@ -58,15 +61,13 @@ export class SsmtService {
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (ssmtValid.isValid) {
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
+      outputData = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings); 
       return { inputData: setupInputData, outputData: outputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
       return { inputData: setupInputData, outputData: outputData };
     }
   }
-
-  
-
   
   calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
@@ -89,7 +90,8 @@ export class SsmtService {
         setupInputData = updatedResults.inputData;
         modificationOutputData = updatedResults.outputData;
       }
-      
+      modificationOutputData = this.setCo2SavingsEmissionsResult(setupInputData, modificationOutputData, settings);
+      modificationOutputData.co2EmissionsOutput.emissionsSavings = baselineResults.co2EmissionsOutput.totalEmissionOutput - modificationOutputData.co2EmissionsOutput.totalEmissionOutput;
       return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
@@ -97,6 +99,29 @@ export class SsmtService {
     }
   }
 
+  setCo2SavingsEmissionsResult(ssmtInputs: SSMTInputs, ssmtOutput: SSMTOutput, settings: Settings): SSMTOutput {
+    let co2EmissionsOutput: SteamCo2EmissionsOutput = {
+      totalEmissionOutput: undefined,
+      fuelEmissionOutput: undefined,
+      electricityEmissionOutput: undefined,
+      emissionsSavings: undefined,
+    };
+    if (ssmtInputs.co2SavingsData) {
+      let electricityUse: number = ssmtOutput.operationsOutput.sitePowerImport * ssmtInputs.operationsInput.operatingHoursPerYear;
+      electricityUse = this.convertUnitsService.value(electricityUse).from('kWh').to('MWh');
+      ssmtInputs.co2SavingsData.electricityUse = electricityUse;
+      co2EmissionsOutput.electricityEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputs.co2SavingsData, settings);
+      
+      let fuelUse: number = ssmtOutput.boilerOutput.fuelEnergy * ssmtInputs.operationsInput.operatingHoursPerYear;
+      ssmtInputs.co2SavingsData.electricityUse = fuelUse;
+      co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputs.co2SavingsData, settings);
+
+      co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput;
+    } 
+
+    ssmtOutput.co2EmissionsOutput = co2EmissionsOutput;
+    return ssmtOutput;
+  }
 
   updateProcessSteamAndCalculate(ssmtCopy: SSMT, settings: Settings, setupInputData: SSMTInputs, baselineResultsCpy: SSMTOutput, modificationOutputData: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let recalculate: boolean = false;
@@ -148,6 +173,7 @@ export class SsmtService {
         electricityCosts: ssmt.operatingCosts.electricityCost,
         makeUpWaterCosts: ssmt.operatingCosts.makeUpWaterCost,
       },
+      co2SavingsData: ssmt.co2SavingsData,
       boilerInput: ssmt.boilerInput,
       headerInput: ssmt.headerInput,
       turbineInput: ssmt.turbineInput,
@@ -246,7 +272,8 @@ export class SsmtService {
       lowPressureProcessSteamUsage: undefined,
       lowPressureVentedSteam: undefined,
       heatExchanger: undefined,
-      operationsOutput: undefined
+      operationsOutput: undefined,
+      co2EmissionsOutput: undefined,
     }
   }
 

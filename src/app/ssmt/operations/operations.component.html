@@ -9,5 +9,58 @@
       <app-operating-costs [(form)]="operationsForm" [selected]="selected" [settings]="settings" (emitSave)="save()"
         [inSetup]="inSetup" [idString]="idString" [isBaseline]="isBaseline"></app-operating-costs>
     </div>
+
+  <div class="pt-2 ml-2 mr-2">
+    
+  <label class="group-label w-100">Carbon Emissions From Fuel</label>
+  <div class="form-group">
+    <label for="{{'energyType'+idString}}">Energy Type</label>
+    <div class="input-group">
+      <select name="{{'energyType'+idString}}" class="form-control" id="{{'energyType'+idString}}"
+        [(ngModel)]="co2SavingsData.energyType" (change)="setFuel()" [required]="true"
+        (focus)="focusField('energyType')">
+        <option [ngValue]="'fuel'">Fuel</option>
+        <option [ngValue]="'electricity'">Electricity</option>
+      </select>
+    </div>
+  </div>
+
+    <div class="form-group">
+      <label for="energySource">Energy Source</label>
+      <div class="input-group">
+        <select name="energySource" class="form-control" id="energySource" (focus)="focusField('energySource')"
+          [(ngModel)]="co2SavingsData.energySource" (change)="setEnergySource()">
+          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fuelType">Fuel Type</label>
+      <div class="input-group">
+        <select name="fuelType" class="form-control" id="fuelType" (focus)="focusField('fuelType')"
+          [(ngModel)]="co2SavingsData.fuelType" (change)="setFuel()">
+          <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate</label>
+      <div class="input-group">
+        <input class="form-control" name="totalFuelEmissionOutputRate" type="number"
+          (focus)="focusField('totalEmissionOutputRate')" [(ngModel)]="co2SavingsData.totalFuelEmissionOutputRate"
+          (input)="save()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+          CO<sub>2</sub>/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg CO<sub>2</sub>/GJ</span>
+      </div>
+    </div>
+
+  <label class="group-label w-100 mt-2">Carbon Emissions From Electricity</label>
+    <app-assessment-co2-savings *ngIf="co2SavingsData" [co2SavingsData]="co2SavingsData"
+      [isFormDisabled]="co2SavingsFormDisabled" [inBaseline]="isBaseline" (emitCurrentField)="focusField($event)"
+      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"></app-assessment-co2-savings>
+</div>
+  
   </div>
 </div>

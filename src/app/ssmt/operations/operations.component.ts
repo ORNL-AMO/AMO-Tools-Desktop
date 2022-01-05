@@ -4,6 +4,13 @@ import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { OperationsService } from './operations.service';
 import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { SsmtService } from '../ssmt.service';
+import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
+import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+
 
 @Component({
   selector: 'app-operations',
@@ -28,12 +35,24 @@ export class OperationsComponent implements OnInit {
 
   idString: string = 'baseline_';
 
+  co2SavingsFormDisabled: boolean = false;
+  co2SavingsData: Co2SavingsData;
   operationsForm: FormGroup;
 
-  constructor(private operationsService: OperationsService) { }
+  otherFuels: Array<OtherFuel>;
+  fuelOptions: Array<{
+    fuelType: string,
+    outputRate: number
+  }>;
+
+  constructor(private operationsService: OperationsService,
+    private ssmtService: SsmtService,
+    private convertUnitsService: ConvertUnitsService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit() {
     this.initForm();
+    this.setCo2SavingsData();
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -46,8 +65,10 @@ export class OperationsComponent implements OnInit {
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (this.selected === true) {
         this.enableForm();
+        this.co2SavingsFormDisabled = false;
       } else if (this.selected === false) {
         this.disableForm();
+        this.co2SavingsFormDisabled = true;
       }
     }
     if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
@@ -55,8 +76,61 @@ export class OperationsComponent implements OnInit {
     }
   }
 
+  updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.co2SavingsData = co2SavingsData;
+    this.save();
+  }
+
+  setCo2SavingsData() {
+    let co2SavingsData: Co2SavingsData = this.ssmt.co2SavingsData;
+    if (this.ssmt.co2SavingsData) {
+      this.co2SavingsData = co2SavingsData;
+    } else {
+      co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+    }
+    this.otherFuels = otherFuels;
+    if (!co2SavingsData.energySource) {
+      co2SavingsData.energyType = 'fuel';
+      co2SavingsData.energySource = 'Natural Gas';
+    }
+    this.co2SavingsData = co2SavingsData;
+    this.setEnergySource();
+  }
+
+  setFuelOptions(){
+    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return val.energySource === this.co2SavingsData.energySource });
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+  }
+
+  setEnergySource() {
+    this.setFuelOptions();
+    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    let outputRate: number = this.fuelOptions[0].outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
+    this.save();
+  }
+
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
+    let outputRate: number = tmpFuel.outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+    }
+    this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
+    this.save();
+  }
+
+
+  focusField(str: string) {
+    this.ssmtService.currentField.next(str);
+  }
+
   initForm(){
     this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
+    
   }
 
   disableForm() {
@@ -74,6 +148,7 @@ export class OperationsComponent implements OnInit {
     this.ssmt.operatingCosts = newData.operatingCosts;
     this.ssmt.operatingHours.hoursPerYear = newData.operatingHours.hoursPerYear;
     this.ssmt.generalSteamOperations = newData.generalSteamOperations;
+    this.ssmt.co2SavingsData = this.co2SavingsData;
     this.emitSave.emit(this.ssmt);
   }
 }
