@@ -19,17 +19,19 @@ export class TreasureHuntRollupComponent implements OnInit {
 
   @Input()
   printView: boolean;
+  
+  settings: Settings;
 
   combinedTreasureHuntResults: TreasureHuntResults;
   allOpportunityCardsData: Array<OpportunityCardData>
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
-  settings: Settings;
+  
   allTeamsData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   constructor(private treasureHuntReportRollupService: TreasureHuntReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService, private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
-  ngOnInit(): void {
-    this.settings = this.reportRollupService.settings.getValue();
+  ngOnInit(): void {    
+    this.settings = this.reportRollupService.settings.getValue();      
     let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.treasureHuntReportRollupService.allTreasureHuntResults.getValue();
     this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
     this.convertCurrencyForDisplay();

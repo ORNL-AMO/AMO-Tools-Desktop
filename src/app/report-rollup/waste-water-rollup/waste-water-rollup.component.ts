@@ -18,7 +18,7 @@ import { ReportRollupService } from '../report-rollup.service';
 export class WasteWaterRollupComponent implements OnInit {
   @Input()
   printView: boolean;
-  @Input()
+  
   settings: Settings;
 
   pieChartDataOption: string = 'energy';

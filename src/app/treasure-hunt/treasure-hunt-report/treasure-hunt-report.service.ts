@@ -125,6 +125,7 @@ export class TreasureHuntReportService {
         element.modificationCost = this.convertUnitsService.value(element.modificationCost).from("$").to(settings.currency);
       });
     }
+    thuntResults.co2EmissionsResults = this.getCO2EmissionsResults(currentEnergyUsage, thuntResults, settings);
     return thuntResults;
   }
 
@@ -250,16 +251,18 @@ export class TreasureHuntReportService {
 
   getCo2EmissionsResultFromObj(data: Co2SavingsData, electricityUsed: number, settings: Settings): number {
     //use copy for conversion data
-    let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
     let totalEmissionsResult: number = 0;
-    if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
-      let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
-      dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
-      electricityUsed = this.convertUnitsService.value(electricityUsed).from('GJ').to('MMBtu');
-    }
-    if (dataCpy.totalEmissionOutputRate && electricityUsed) {
-      totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (electricityUsed / 1000);
-    } 
+    if (data){
+      let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));      
+      if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
+        let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
+        dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
+        electricityUsed = this.convertUnitsService.value(electricityUsed).from('GJ').to('MMBtu');
+      }
+      if (dataCpy.totalEmissionOutputRate && electricityUsed) {
+        totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (electricityUsed / 1000);
+      } 
+    }    
     return totalEmissionsResult;
   }
 

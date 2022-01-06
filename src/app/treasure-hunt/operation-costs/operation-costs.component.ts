@@ -165,9 +165,8 @@ export class OperationCostsComponent implements OnInit {
 
   save() {
     if (this.treasureHuntResults){
-      this.treasureHunt.currentEnergyUsage.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
+      this.treasureHuntResults.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
     }   
-
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 

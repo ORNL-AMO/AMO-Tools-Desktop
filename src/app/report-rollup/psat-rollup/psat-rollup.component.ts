@@ -20,6 +20,8 @@ export class PsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
+ 
+  settings: Settings;
 
   showPreAssessment: boolean = true;
   pieChartDataOption: string = 'energy';
@@ -31,7 +33,6 @@ export class PsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  settings: Settings;
 
   rollupEnergyUnit: string = 'MWh';
 
