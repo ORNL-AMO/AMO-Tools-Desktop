@@ -4,6 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -20,7 +22,8 @@ export class SsmtSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numSsmt: number;
-  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -35,6 +38,9 @@ export class SsmtSummaryComponent implements OnInit {
       if (val.length != 0) {
         this.ssmtReportRollupService.setSsmtResultsFromSelected(val);
         this.calcSsmtSums();
+        this.getSteamPieChartData();
+        this.getTotalEnergy();
+        this.getTotalFuel();
       }
     });
   }
@@ -61,6 +67,35 @@ export class SsmtSummaryComponent implements OnInit {
     this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MMBtu').to(this.settings.steamRollupUnit);
     this.totalCost = sumCost;
     this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MMBtu').to(this.settings.steamRollupUnit);
+  }
+
+  getSteamPieChartData(){
+    let steamArray: Array<PieChartDataItem>;
+    steamArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
+    let pieChartData: PieChartDataItem = {
+      equipmentName: 'Steam',
+      energyUsed: this.totalEnergy + this.energySavingsPotential,
+      annualCost: this.totalCost,
+      energySavings: this.energySavingsPotential,
+      costSavings: this.ssmtSavingPotential,
+      percentCost: this.ssmtSavingPotential / this.totalCost * 100,
+      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
+      color: '#F39C12',
+      currencyUnit: this.settings.currency
+    }
+
+    steamArray.push(pieChartData);
+    this.reportSummaryGraphService.reportSummaryGraphData.next(steamArray);
+  }
+
+  getTotalEnergy(){
+    let steamTotalEnergy = this.totalEnergy + this.energySavingsPotential;
+    this.reportSummaryGraphService.calculateTotalEnergyUsed(steamTotalEnergy);
+  }
+
+  getTotalFuel(){
+    let steamTotalFuel = this.totalEnergy + this.energySavingsPotential;
+    this.reportSummaryGraphService.calculateTotalFuelUsed(steamTotalFuel);
   }
 
 }

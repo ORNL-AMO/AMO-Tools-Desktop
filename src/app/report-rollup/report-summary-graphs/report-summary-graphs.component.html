@@ -1,0 +1,14 @@
+<div class="d-flex no-gutters w-100">
+        <div class="w-50" *ngIf="pieChartData">
+                <app-report-summary-pie-chart [pieChartData]="pieChartData"
+                        [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit"
+                        [titleStr]="'Assessment Energy Usage Summary'">
+                </app-report-summary-pie-chart>
+        </div>
+        <div class="w-50" *ngIf="energyChartData">
+                <app-report-summary-pie-chart [pieChartData]="energyChartData"
+                        [dataOption]="pieChartDataOption" [energyUnit]="reportSummaryEnergyUnit"
+                        [titleStr]="'Fuel vs Electricity Energy Usage'">
+                </app-report-summary-pie-chart>
+        </div>
+</div>

@@ -12,6 +12,16 @@
                 </div>
             </div>
         </li>
+        <li [ngClass]="{'active': focusedAssessment.id == undefined, 'collapse': sidebarCollapsed}">
+            <div class="d-flex align-items-center psat">
+                <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                    <span class="fa fa-pie-chart"></span>
+                </span>
+                <span class="p-1">
+                    <a class="click-link" [routerLink]='"."' [fragment]="'rollup_graphs'">Energy Usage Summary</a>
+                </span>
+            </div>
+        </li>
         <li *ngFor="let item of _psatAssessments"
             [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
             <div class="d-flex align-items-center psat">
