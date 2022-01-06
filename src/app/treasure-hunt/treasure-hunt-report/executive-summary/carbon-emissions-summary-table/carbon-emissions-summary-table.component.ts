@@ -29,9 +29,11 @@ export class CarbonEmissionsSummaryTableComponent implements OnInit {
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
+      if (this.treasureHunt) {
+        this.energyUsage = this.treasureHunt.currentEnergyUsage;
+        this.carbonResults = this.treasureHunt.currentEnergyUsage.co2EmissionsResults;
+      }
     });
-    this.energyUsage = this.treasureHunt.currentEnergyUsage;
-    this.carbonResults = this.treasureHunt.currentEnergyUsage.co2EmissionsResults;
   }
 
   ngOnDestroy() {
