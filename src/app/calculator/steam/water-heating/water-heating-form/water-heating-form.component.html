@@ -101,16 +101,19 @@
         <div class="input-group">
           <input name="waterCost" type="number" class="form-control" formControlName="waterCost" id="waterCost"
             onfocus="this.select();" (input)="calculate()" (focus)="focusField('waterCost')">
-          <span class="input-group-addon units">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
+          <span class="input-group-addon units">$/<span
+            [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
           </span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.waterCost.invalid && !form.controls.waterCost.pristine">
           <span *ngIf="form.controls.waterCost.errors.required">Value Required</span>
           <span *ngIf="form.controls.waterCost.errors.min">Value can't be less than
-            {{form.controls.waterCost.errors.min.min}}.</span>
+            {{form.controls.waterCost.errors.min.min}}
+            <span>$/<span
+              [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+            </span>
+            .</span>
         </span>
       </div>
 
@@ -173,14 +176,15 @@
           <input name="pressureSteamIn" type="number" step="10" class="form-control"
             formControlName="pressureSteamIn" id="pressureSteamIn" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('pressureSteamIn')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+        <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.pressureSteamIn.invalid && !form.controls.pressureSteamIn.pristine">
           <span *ngIf="form.controls.pressureSteamIn.errors.required">Value Required</span>
           <span *ngIf="form.controls.pressureSteamIn.errors.min">Value can't be less than
-            {{form.controls.pressureSteamIn.errors.min.min}}.</span>
+            {{form.controls.pressureSteamIn.errors.min.min}} 
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       </div>
   
@@ -190,14 +194,15 @@
           <input name="flowSteamRate" type="number" step="10" class="form-control"
             formControlName="flowSteamRate" id="flowSteamRate" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('flowSteamRate')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+        <span class="input-group-addon units" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.flowSteamRate.invalid && !form.controls.flowSteamRate.pristine">
           <span *ngIf="form.controls.flowSteamRate.errors.required">Value Required</span>
           <span *ngIf="form.controls.flowSteamRate.errors.min">Value can't be less than
-            {{form.controls.flowSteamRate.errors.min.min}}.</span>
+            {{form.controls.flowSteamRate.errors.min.min}}
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       </div>
 
@@ -209,14 +214,16 @@
           <input name="flowWaterRate" type="number" step="10" class="form-control"
             formControlName="flowWaterRate" id="flowWaterRate" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('flowWaterRate')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
+            <span class="input-group-addon units" [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
+
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.flowWaterRate.invalid && !form.controls.flowWaterRate.pristine">
           <span *ngIf="form.controls.flowWaterRate.errors.required">Value Required</span>
           <span *ngIf="form.controls.flowWaterRate.errors.min">Value can't be less than
-            {{form.controls.flowWaterRate.errors.min.min}}.</span>
+            {{form.controls.flowWaterRate.errors.min.min}}
+            <span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       </div>
 
@@ -232,8 +239,9 @@
           <input name="temperatureWaterIn" type="number" step="10" class="form-control"
             formControlName="temperatureWaterIn" id="temperatureWaterIn" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('temperatureWaterIn')" >
-          <span class="input-group-addon units"><span
-              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
+          <span class="input-group-addon units">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.temperatureWaterIn.invalid && !form.controls.temperatureWaterIn.pristine">
@@ -249,14 +257,15 @@
           <input name="pressureWaterOut" type="number" step="10" class="form-control"
             formControlName="pressureWaterOut" id="pressureWaterOut" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('pressureWaterOut')" >
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+        <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.pressureWaterOut.invalid && !form.controls.pressureWaterOut.pristine">
           <span *ngIf="form.controls.pressureWaterOut.errors.required">Value Required</span>
           <span *ngIf="form.controls.pressureWaterOut.errors.min">Value can't be less than
-            {{form.controls.pressureWaterOut.errors.min.min}}.</span>
+            {{form.controls.pressureWaterOut.errors.min.min}}
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       </div>
 
@@ -268,16 +277,19 @@
           <input name="tempMakeupWater" type="number" step="10" class="form-control"
             formControlName="tempMakeupWater" id="tempMakeupWater" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('tempMakeupWater')" >
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        <span class="input-group-addon units" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.tempMakeupWater.invalid && !form.controls.tempMakeupWater.pristine">
           <span *ngIf="form.controls.tempMakeupWater.errors.required">Value Required</span>
           <span *ngIf="form.controls.tempMakeupWater.errors.min">Value can't be less than
-            {{form.controls.tempMakeupWater.errors.min.min}}.</span>
+            {{form.controls.tempMakeupWater.errors.min.min}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+            .</span>
           <span *ngIf="form.controls.tempMakeupWater.errors.max">Value can't be greater than
-            {{form.controls.tempMakeupWater.errors.max.max}}.</span>
+            {{form.controls.tempMakeupWater.errors.max.max}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.tempMakeupWater !== null">{{warnings.tempMakeupWater}}</span>
       </div>
@@ -288,14 +300,15 @@
           <input name="presMakeupWater" type="number" step="10" class="form-control"
             formControlName="presMakeupWater" id="presMakeupWater" onfocus="this.select();"
             (input)="calculate()" (focus)="focusField('presMakeupWater')" >
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+            <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.presMakeupWater.invalid && !form.controls.presMakeupWater.pristine">
           <span *ngIf="form.controls.presMakeupWater.errors.required">Value Required</span>
           <span *ngIf="form.controls.presMakeupWater.errors.min">Value can't be less than
-            {{form.controls.presMakeupWater.errors.min.min}}.</span>
+            {{form.controls.presMakeupWater.errors.min.min}}
+            <span  [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+            .</span>
         </span>
       </div>
 

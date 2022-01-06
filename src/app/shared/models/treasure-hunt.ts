@@ -14,6 +14,7 @@ import { WaterHeatingInput } from "./steam/waterHeating";
 import { FlueGasEnergyData } from "../../calculator/furnaces/flue-gas/energy-form.service";
 import { FeedwaterEconomizerInput } from "./steam/feedwaterEconomizer";
 import { CondensingEconomizerInput } from "./steam/condensingEconomizer";
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
 export interface TreasureHunt {
     name: string,
@@ -82,25 +83,69 @@ export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
     electricityUsed: boolean,
+    electricityCO2SavingsData?: Co2SavingsData,
     naturalGasUsage: number,
     naturalGasCosts: number,
     naturalGasUsed: boolean,
+    naturalGasCO2SavingsData?: Co2SavingsData,
     otherFuelUsage: number,
     otherFuelCosts: number,
     otherFuelUsed: boolean,
+    otherFuelCO2SavingsData?: Co2SavingsData,
+    otherFuelMixedCO2SavingsData?: Array<Co2SavingsData>,
     waterUsage: number,
     waterCosts: number,
     waterUsed: boolean,
+    waterCO2OutputRate?: number,
     wasteWaterUsage: number,
     wasteWaterCosts: number,
     wasteWaterUsed: boolean,
+    wasteWaterCO2OutputRate?: number,
     compressedAirUsage: number,
     compressedAirCosts: number,
     compressedAirUsed: boolean,
+    compressedAirCO2OutputRate?: number,
     steamUsage: number,
     steamCosts: number
     steamUsed: boolean,
+    steamCO2OutputRate?: number,
+    co2EmissionsResults?: TreasureHuntCo2EmissionsResults
 }
+
+export interface TreasureHuntCo2EmissionsResults {
+    electricityCO2CurrentUse?: number,
+    electricityCO2ProjectedUse?: number,
+    electricityCO2Savings?: number,
+    
+    naturalGasCO2CurrentUse?: number,
+    naturalGasCO2ProjectedUse?: number,
+    naturalGasCO2Savings?: number,
+    
+    otherFuelCO2CurrentUse?: number,
+    otherFuelCO2ProjectedUse?: number,
+    otherFuelCO2Savings?: number,
+    
+    waterCO2CurrentUse?: number,
+    waterCO2ProjectedUse?: number,
+    waterCO2Savings?: number,
+    
+    wasteWaterCO2CurrentUse?: number,
+    wasteWaterCO2ProjectedUse?: number,
+    wasteWaterCO2Savings?: number,
+    
+    compressedAirCO2CurrentUse?: number,
+    compressedAirCO2ProjectedUse?: number,
+    compressedAirCO2Savings?: number,
+    
+    steamCO2CurrentUse?: number,
+    steamCO2ProjectedUse?: number,
+    steamCO2Savings?: number,
+  
+    totalCO2CurrentUse?: number,
+    totalCO2ProjectedUse?: number,
+    totalCO2Savings?: number,
+    
+  }
 
 export interface OpportunitySheet extends TreasureHuntOpportunity {
     name: string,

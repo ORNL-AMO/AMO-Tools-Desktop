@@ -174,6 +174,37 @@
           <span *ngIf="!mod.totalOtherLoss">&mdash; &mdash;</span>
         </td>
       </tr>
+
+      <tr *ngIf="!inReport" class="tr-underline">
+        <td>Annual CO<sub>2</sub> Emissions (kg CO<sub>2</sub>/hr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.co2EmissionsOutput | sigFigs:'3'}}</td>
+        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput | sigFigs:'3'}}</span>
+          <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="inReport">
+        <td>Annual CO<sub>2</sub> Emissions (kg CO<sub>2</sub>/hr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.co2EmissionsOutput | sigFigs:'3'}}</td>
+        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput | sigFigs:'3'}}</span>
+          <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr *ngIf="inReport" class="tr-underline">
+        <td>Annual CO<sub>2</sub> Emissions Savings (kg CO<sub>2</sub>/hr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span>
+            {{baseLineResults.co2EmissionsOutput - mod.co2EmissionsOutput | sigFigs:'3'}}
+          </span>
+      
+        </td>
+
+      </tr>
+
       <tr>
         <td>Total Net Heat Required</td>
         <td *ngIf="baseLineResults.totalInput" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

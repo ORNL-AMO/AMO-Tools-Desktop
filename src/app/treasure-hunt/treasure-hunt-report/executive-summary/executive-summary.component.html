@@ -25,6 +25,11 @@
       [settings]="settings" [title]="'Detailed Summary'">
     </app-executive-summary-table>
   </div>
+  <div class="col-12">
+    <app-carbon-emissions-summary-table
+      [settings]="settings">
+    </app-carbon-emissions-summary-table>
+  </div>
 </div>
 <div class="row no-gutters mb-4 print-avoid-break" *ngIf="teamData.length > 0">
   <div class="col-lg-6 col-sm-12">

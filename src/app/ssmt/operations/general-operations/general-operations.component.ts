@@ -5,6 +5,8 @@ import { SsmtService } from '../../ssmt.service';
 import { FormGroup } from '@angular/forms';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { OperationsService } from '../operations.service';
+import { BoilerWarnings } from '../../boiler/boiler.service';
 
 @Component({
   selector: 'app-general-operations',
@@ -35,11 +37,13 @@ export class GeneralOperationsComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
 
+  warnings: BoilerWarnings;
   formWidth: number;
   showOperatingHoursModal: boolean = false;
-  constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
+  constructor(private operationsService: OperationsService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
+    this.warnings = this.operationsService.checkOperationsWarnings(this.form, this.ssmt, this.settings);
   }
 
   ngAfterViewInit(){
@@ -49,6 +53,7 @@ export class GeneralOperationsComponent implements OnInit {
   }
 
   save() {
+    this.warnings = this.operationsService.checkOperationsWarnings(this.form, this.ssmt, this.settings);
     this.emitSave.emit(true);
   }
 

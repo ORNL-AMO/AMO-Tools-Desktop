@@ -1,0 +1,143 @@
+<label class="group-label">CO<sub>2</sub> Emission Results</label>
+<table #copyTable class="table table-striped table-hover">
+    <tbody>
+        <tr class="bold">
+            <td>
+                Utility
+            </td>
+            <td>
+                Current CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)
+            </td>
+            <td>
+                Projected CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)
+            </td>
+            <td>
+                CO<sub>2</sub> Emission Savings (tonne CO<sub>2</sub>)
+            </td>
+        </tr>
+        <!--Electricity-->
+        <tr *ngIf="energyUsage.electricityUsed">
+            <td class="bold">
+                Electricity
+            </td>
+            <td>
+                {{carbonResults.electricityCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.electricityCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.electricityCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Natural Gas-->
+        <tr *ngIf="energyUsage.naturalGasUsed">
+            <td class="bold">
+                Natural Gas
+            </td>
+            <td>
+                {{carbonResults.naturalGasCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.naturalGasCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.naturalGasCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Water-->
+        <tr *ngIf="energyUsage.waterUsed">
+            <td class="bold">
+                Water
+            </td>
+            <td>
+                {{carbonResults.waterCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.waterCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.waterCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Waste Water-->
+        <tr *ngIf="energyUsage.wasteWaterUsed">
+            <td class="bold">
+                Waste Water
+            </td>
+            <td>
+                {{carbonResults.wasteWaterCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.wasteWaterCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.wasteWaterCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Other Fuel-->
+        <tr *ngIf="energyUsage.otherFuelUsed">
+            <td class="bold">
+                Other Fuel
+            </td>
+            <td>
+                {{carbonResults.otherFuelCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.otherFuelCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.otherFuelCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Compressed Air-->
+        <tr *ngIf="energyUsage.compressedAirUsed">
+            <td class="bold">
+                Compressed Air
+            </td>
+            <td>
+                {{carbonResults.compressedAirCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.compressedAirCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.compressedAirCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Steam-->
+        <tr *ngIf="energyUsage.steamUsed">
+            <td class="bold">
+                Steam
+            </td>
+            <td>
+                {{carbonResults.steamCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.steamCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.steamCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+        <!--Total-->
+        <tr>
+            <td class="bold">
+                Total
+            </td>
+            <td>
+                {{carbonResults.totalCO2CurrentUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.totalCO2ProjectedUse | number:'1.0-0'}}
+            </td>
+            <td>
+                {{carbonResults.totalCO2Savings | number:'1.0-0'}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<app-exportable-results-table class="hide-print" [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

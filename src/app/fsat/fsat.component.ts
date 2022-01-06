@@ -18,6 +18,7 @@ import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-fsat',
@@ -96,10 +97,12 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
+    private egridService: EGridService,
     private convertFsatService: ConvertFsatService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
@@ -307,6 +310,9 @@ export class FsatComponent implements OnInit {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
+        this._fsat.modifications.forEach(mod => {
+          mod.fsat = this.updateModificationCO2Savings(mod.fsat);
+        });
       }
     } else {
       this.modificationExists = false;
@@ -320,6 +326,22 @@ export class FsatComponent implements OnInit {
       });
     });
   }
+
+  updateModificationCO2Savings(modFsat: FSAT) {
+    if (this._fsat.fsatOperations.cO2SavingsData) {
+      if (!modFsat.fsatOperations.cO2SavingsData) {
+        modFsat.fsatOperations.cO2SavingsData = this._fsat.fsatOperations.cO2SavingsData;
+      } else {
+        modFsat.fsatOperations.cO2SavingsData.zipcode = this._fsat.fsatOperations.cO2SavingsData.zipcode;
+        modFsat.fsatOperations.cO2SavingsData.eGridSubregion = this._fsat.fsatOperations.cO2SavingsData.eGridSubregion;
+        if (!modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate) {
+          modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate = this._fsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate;
+        }
+      }
+    }
+    return modFsat;
+  }
+
 
   checkSetupDone(fsat: FSAT): boolean {
     return this.fsatService.checkValid(fsat, true, this.settings).isValid;

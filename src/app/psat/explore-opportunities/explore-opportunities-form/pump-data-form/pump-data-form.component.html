@@ -6,6 +6,7 @@
       (focus)="focusField('drive')"
       (change)="toggleMotorDrive()"
       [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity"
+      [disabled]="psat.modifications[exploreModIndex].psat.inputs.whatIfScenario == false"
     />
     {{psat.modifications[exploreModIndex].exploreOppsShowMotorDrive.display}}
   </label>
@@ -161,6 +162,7 @@
       (focus)="focusField('pumpType')"
       (change)="togglePumpType()"
       [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowPumpType.hasOpportunity"
+      [disabled]="psat.modifications[exploreModIndex].psat.inputs.whatIfScenario == false"
     />
     {{psat.modifications[exploreModIndex].exploreOppsShowPumpType.display}}
   </label>

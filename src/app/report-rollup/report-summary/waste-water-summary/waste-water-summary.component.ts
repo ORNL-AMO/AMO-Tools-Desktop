@@ -61,9 +61,9 @@ export class WasteWaterSummaryComponent implements OnInit {
       sumEnergy += result.modificationResults.AeEnergyAnnual;
     })
     this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.wasteWaterRollupUnit);
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
+    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.wasteWaterRollupUnit);
   }
 
   getWasteWaterPieChartData(){

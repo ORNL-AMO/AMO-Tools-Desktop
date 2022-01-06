@@ -174,21 +174,25 @@ export class FlueGasFormService {
 
   setCombustionAirTempValidators(formGroup: FormGroup) {
     let flueGasTemp = formGroup.controls.flueGasTemperature.value;
-    if (flueGasTemp) {
-      formGroup.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(flueGasTemp)]);
-      formGroup.controls.combustionAirTemperature.markAsDirty();
-      formGroup.controls.combustionAirTemperature.updateValueAndValidity();
+    let validators = [Validators.required];
+    if (flueGasTemp !== undefined) {
+      validators.push(Validators.max(flueGasTemp));
     }
+    formGroup.controls.combustionAirTemperature.setValidators(validators);
+    formGroup.controls.combustionAirTemperature.markAsDirty();
+    formGroup.controls.combustionAirTemperature.updateValueAndValidity();
     return formGroup;
   }
 
   setFlueGasTempValidators(formGroup: FormGroup) {
     let combustionAirTemperature = formGroup.controls.combustionAirTemperature.value;
-    if (combustionAirTemperature) {
-      formGroup.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(combustionAirTemperature)]);
-      formGroup.controls.flueGasTemperature.markAsDirty();
-      formGroup.controls.flueGasTemperature.updateValueAndValidity();
+    let validators = [Validators.required];
+    if (combustionAirTemperature !== undefined) {
+      validators.push(Validators.min(combustionAirTemperature));
     }
+    formGroup.controls.flueGasTemperature.setValidators(validators);
+    formGroup.controls.flueGasTemperature.markAsDirty();
+    formGroup.controls.flueGasTemperature.updateValueAndValidity();
     return formGroup;
   }
 

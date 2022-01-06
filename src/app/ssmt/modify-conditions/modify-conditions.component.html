@@ -8,11 +8,11 @@
       <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt" [settings]="settings"
         (emitSave)="saveBaselineSsmt($event)" [selected]="baselineSelected" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
-        [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"
-        [headerInput]="ssmt.headerInput"></app-boiler>
+         (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true" [ssmt]="ssmt"
+        ></app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
-        [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
-        [boilerInput]="ssmt.boilerInput"></app-header>
+        (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
+        [ssmt]="ssmt"></app-header>
       <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings"
         [turbineInput]="ssmt.turbineInput" [numberOfHeaders]="ssmt.headerInput.numberOfHeaders"
         (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
@@ -29,13 +29,13 @@
         [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
         [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
       <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
-        [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
-        [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
+        [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModBoiler($event)"
+        [modificationIndex]="modificationIndex"
         [isBaseline]="false">
       </app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
-        [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
-        [modificationIndex]="modificationIndex" [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput"
+        [ssmt]="ssmt.modifications[modificationIndex].ssmt" (emitSave)="saveModHeader($event)"
+        [modificationIndex]="modificationIndex"
         [isBaseline]="false">
       </app-header>
       <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"

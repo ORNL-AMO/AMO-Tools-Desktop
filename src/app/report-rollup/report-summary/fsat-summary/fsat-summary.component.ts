@@ -62,10 +62,15 @@ export class FsatSummaryComponent implements OnInit {
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annualEnergy;
     })
+    if(this.settings.pumpsRollupUnit !== 'MWh'){
+      this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.fansRollupUnit);
+      this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.fansRollupUnit);
+    } else {
+      this.energySavingsPotential = sumEnergySavings;
+      this.totalEnergy = sumEnergy;
+    }
     this.fanSavingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 
   getFsatPieChartData(){

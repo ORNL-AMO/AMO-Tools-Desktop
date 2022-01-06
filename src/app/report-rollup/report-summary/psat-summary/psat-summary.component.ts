@@ -62,9 +62,14 @@ export class PsatSummaryComponent implements OnInit {
       sumEnergy += result.modificationResults.annual_energy;
     });
     this.pumpSavingsPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    if(this.settings.pumpsRollupUnit !== 'MWh'){
+      this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.pumpsRollupUnit);
+      this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.pumpsRollupUnit);
+    } else {
+      this.energySavingsPotential = sumEnergySavings;
+      this.totalEnergy = sumEnergy;
+    }    
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 
   getPsatPieChartData(){

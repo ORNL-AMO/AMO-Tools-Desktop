@@ -120,6 +120,16 @@ export class OutputSummaryComponent implements OnInit {
     return summaryNote;
   }
 
+  getModificationScenario(modifiedPsat: PSAT): Array<string> {
+    let modificationScenario: Array<string> = new Array();
+    if (modifiedPsat.inputs.whatIfScenario == true) {
+      modificationScenario.push('Modify Pump');
+    } else if (modifiedPsat.inputs.whatIfScenario == false) {
+      modificationScenario.push('Compare Two Pumps');
+    }
+    return modificationScenario;
+  }
+
 }
 
 export interface SummaryNote {

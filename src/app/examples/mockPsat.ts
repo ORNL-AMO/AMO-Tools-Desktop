@@ -251,6 +251,12 @@ export const MockPsatSettings: Settings = {
         },
         "date": "Tue Dec 04 2018"
     },
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "MWh",
+    "compressedAirRollupUnit": "MWh"
 }
 
 

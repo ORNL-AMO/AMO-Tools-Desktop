@@ -11,6 +11,7 @@
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"
+          [disabled]="psat.modifications[exploreModIndex].psat.inputs.whatIfScenario == false"
           (change)="setVFD()" /> {{ psat.modifications[exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>

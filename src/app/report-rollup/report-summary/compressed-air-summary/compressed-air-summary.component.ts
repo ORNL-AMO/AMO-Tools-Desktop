@@ -69,9 +69,9 @@ export class CompressedAirSummaryComponent implements OnInit {
       sumEnergySavings += diffEnergy;
     })
     this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('kWh').to(this.settings.compressedAirRollupUnit);
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
+    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('kWh').to(this.settings.compressedAirRollupUnit)
   }
 
   getCompressedAirPieChartData(){

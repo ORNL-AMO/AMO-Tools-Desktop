@@ -107,6 +107,51 @@
               {{mod.phast.operatingCosts.electricityCost}}
             </td>
           </tr>
+
+          <tr>
+          <td class="bold">
+            Carbon Emissions
+          </td>
+          <td>
+          </td>
+          <td *ngFor="let mod of phast.modifications">
+          </td>
+          </tr>
+
+          <tr>
+            <td>
+              Energy Source
+            </td>
+            <td>
+              {{phast.co2SavingsData.energySource}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.co2SavingsData.energySource}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Fuel Type
+            </td>
+            <td>
+              {{phast.co2SavingsData.fuelType}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.co2SavingsData.fuelType}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total Emission Output Rate
+              <span>(kg CO<sub>2</sub>/{{settings.energyResultUnit}})</span>
+            </td>
+            <td>
+              {{phast.co2SavingsData.totalEmissionOutputRate}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.co2SavingsData.totalEmissionOutputRate}}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

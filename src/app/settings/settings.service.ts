@@ -147,6 +147,12 @@ export class SettingsService {
       'userEnteredBaselineEmissions': settings.userEnteredBaselineEmissions,
       'userEnteredModificationEmissions': settings.userEnteredModificationEmissions,
       'zipcode': settings.zipcode,
+      'commonRollupUnit': settings.commonRollupUnit,
+      'pumpsRollupUnit': settings.pumpsRollupUnit,
+      'fansRollupUnit': settings.fansRollupUnit,
+      'steamRollupUnit': settings.steamRollupUnit,
+      'wasteWaterRollupUnit': settings.wasteWaterRollupUnit,
+      'compressedAirRollupUnit': settings.compressedAirRollupUnit
     
     });
   }
@@ -241,6 +247,12 @@ export class SettingsService {
       userEnteredBaselineEmissions: form.controls.userEnteredBaselineEmissions.value,
       userEnteredModificationEmissions: form.controls.userEnteredModificationEmissions.value,
       zipcode: form.controls.zipcode.value,
+      commonRollupUnit: form.controls.commonRollupUnit.value,
+      pumpsRollupUnit: form.controls.pumpsRollupUnit.value,
+      fansRollupUnit: form.controls.fansRollupUnit.value,
+      steamRollupUnit: form.controls.steamRollupUnit.value,
+      wasteWaterRollupUnit: form.controls.wasteWaterRollupUnit.value,
+      compressedAirRollupUnit: form.controls.compressedAirRollupUnit.value
     };
     return tmpSettings;
   }
@@ -334,6 +346,12 @@ export class SettingsService {
       userEnteredBaselineEmissions: settings.userEnteredBaselineEmissions,
       userEnteredModificationEmissions: settings.userEnteredModificationEmissions,
       zipcode: settings.zipcode,
+      commonRollupUnit: settings.commonRollupUnit,
+      pumpsRollupUnit: settings.pumpsRollupUnit,
+      fansRollupUnit: settings.fansRollupUnit,
+      steamRollupUnit: settings.steamRollupUnit,
+      wasteWaterRollupUnit: settings.wasteWaterRollupUnit,
+      compressedAirRollupUnit: settings.compressedAirRollupUnit
     }
     return newSettings;
   }
@@ -377,7 +395,13 @@ export class SettingsService {
         fanSpecificHeatGas: 'btulbF',
         fanTemperatureMeasurement: 'F',
         steamEnergyMeasurement: 'MMBtu',
-        steamPowerMeasurement: 'kW'
+        steamPowerMeasurement: 'kW',
+        commonRollupUnit: 'MMBtu',
+        pumpsRollupUnit: 'MWh',
+        fansRollupUnit: 'MWh',
+        steamRollupUnit: 'MMBtu',
+        wasteWaterRollupUnit: 'MWh',
+        compressedAirRollupUnit: 'MWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -412,7 +436,13 @@ export class SettingsService {
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
         steamEnergyMeasurement: 'GJ',
-        steamPowerMeasurement: 'kW'
+        steamPowerMeasurement: 'kW',
+        commonRollupUnit: 'GJ',
+        pumpsRollupUnit: 'MWh',
+        fansRollupUnit: 'MWh',
+        steamRollupUnit: 'GJ',
+        wasteWaterRollupUnit: 'MWh',
+        compressedAirRollupUnit: 'MWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

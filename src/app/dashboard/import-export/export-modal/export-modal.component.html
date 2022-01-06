@@ -27,7 +27,7 @@
                                     <div class="d-flex align-items-center"
                                         [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
                                          'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 
-                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessments.type == 'WasteWater'}">
+                                         'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}">
                                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                                             <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
                                                 src="assets/images/ico-psat-diagram.png">
