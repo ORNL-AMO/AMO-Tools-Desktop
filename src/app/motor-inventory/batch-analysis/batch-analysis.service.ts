@@ -5,6 +5,7 @@ import { MotorInventoryData, FilterInventorySummary, MotorItem } from '../motor-
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../shared/models/calculators';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class BatchAnalysisService {
@@ -43,7 +44,8 @@ export class BatchAnalysisService {
 
   getDataAndResultsFromMotorItem(motorItem: MotorItem, settings: Settings): { data: ReplaceExistingData, results: ReplaceExistingResults } {
     let replaceExistingData: ReplaceExistingData = this.getReplaceExistingInputsFromMotorItem(motorItem, settings);
-    let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings);
+    let co2SavingsData: Co2SavingsData = this.motorInventoryService.motorInventoryData.getValue().co2SavingsData;
+    let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings, co2SavingsData);
     return { data: replaceExistingData, results: replaceExistingResults };
   }
 
@@ -95,7 +97,7 @@ export class BatchAnalysisService {
       newEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
       purchaseCost: motorItem.batchAnalysisData.modifiedCost,
       rewindEfficiencyLoss: motorItem.batchAnalysisData.rewindEfficiencyLoss,
-      rewindCost: motorItem.batchAnalysisData.rewindCost
+      rewindCost: motorItem.batchAnalysisData.rewindCost,
     }
     return data;
   }

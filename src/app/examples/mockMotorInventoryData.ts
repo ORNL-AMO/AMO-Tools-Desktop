@@ -4,6 +4,19 @@ import { InventoryItem } from "../shared/models/inventory/inventory";
 
 export const MockMotorInventory: InventoryItem = {
     "motorInventoryData": {
+        "co2SavingsData": {
+            "energyType": 'electricity',
+            "energySource": '',
+            "fuelType": '',
+            "totalEmissionOutputRate": 0,
+            "electricityUse": 0,
+            "eGridRegion": '',
+            "eGridSubregion": 'SRTV',
+            "totalEmissionOutput": 0,
+            "userEnteredBaselineEmissions": false,
+            "userEnteredModificationEmissions": false,
+            "zipcode": '37830',
+        },
         "departments": [
             {
                 "name": "Design and Paint",

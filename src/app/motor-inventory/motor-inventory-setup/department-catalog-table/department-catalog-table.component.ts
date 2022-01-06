@@ -102,6 +102,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
       ratedPower: motorItem.nameplateData.ratedMotorPower,
       energyUsage: batchAnalysisDataAndResults.results.existingEnergyUse,
       energyCost: batchAnalysisDataAndResults.results.existingEnergyCost,
+      co2EmissionOutput: batchAnalysisDataAndResults.results.co2EmissionOutput,
       motorItem: motorItem
     }
     return tableDataItem;
@@ -157,5 +158,6 @@ export interface DepartmentCatalogTableDataItem {
   ratedPower: number,
   energyUsage: number,
   energyCost: number,
+  co2EmissionOutput: number,
   motorItem: MotorItem
 }

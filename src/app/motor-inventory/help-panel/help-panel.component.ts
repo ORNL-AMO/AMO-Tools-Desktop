@@ -15,12 +15,17 @@ export class HelpPanelComponent implements OnInit {
   setupTab: string;
   focusedDataGroup: string;
   focusedDataGroupSub: Subscription;
+  focusedFieldSub: Subscription;
+  focusedField: string;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.setupTabSubscription = this.motorInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
       this.displayHeader = this.setupTab != 'motor-catalog';
+    });
+    this.focusedFieldSub = this.motorInventoryService.focusedField.subscribe(val => {
+      this.focusedField = val;
     });
     this.focusedDataGroupSub = this.motorInventoryService.focusedDataGroup.subscribe(val => {
       this.focusedDataGroup = val;
