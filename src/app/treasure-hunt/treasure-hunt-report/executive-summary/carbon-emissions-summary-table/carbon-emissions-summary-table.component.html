@@ -16,7 +16,7 @@
             </td>
         </tr>
         <!--Electricity-->
-        <tr *ngIf="energyUsage.electricityUsed">
+        <tr *ngIf="carbonResults.electricityCO2CurrentUse != 0">
             <td class="bold">
                 Electricity
             </td>
@@ -31,7 +31,7 @@
             </td>
         </tr>
         <!--Natural Gas-->
-        <tr *ngIf="energyUsage.naturalGasUsed">
+        <tr *ngIf="carbonResults.naturalGasCO2CurrentUse != 0">
             <td class="bold">
                 Natural Gas
             </td>
@@ -46,7 +46,7 @@
             </td>
         </tr>
         <!--Water-->
-        <tr *ngIf="energyUsage.waterUsed">
+        <tr *ngIf="carbonResults.waterCO2CurrentUse != 0">
             <td class="bold">
                 Water
             </td>
@@ -61,7 +61,7 @@
             </td>
         </tr>
         <!--Waste Water-->
-        <tr *ngIf="energyUsage.wasteWaterUsed">
+        <tr *ngIf="carbonResults.wasteWaterCO2CurrentUse != 0">
             <td class="bold">
                 Waste Water
             </td>
@@ -76,7 +76,7 @@
             </td>
         </tr>
         <!--Other Fuel-->
-        <tr *ngIf="energyUsage.otherFuelUsed">
+        <tr *ngIf="carbonResults.otherFuelCO2CurrentUse != 0">
             <td class="bold">
                 Other Fuel
             </td>
@@ -91,7 +91,7 @@
             </td>
         </tr>
         <!--Compressed Air-->
-        <tr *ngIf="energyUsage.compressedAirUsed">
+        <tr *ngIf="carbonResults.compressedAirCO2CurrentUse != 0">
             <td class="bold">
                 Compressed Air
             </td>
@@ -106,7 +106,7 @@
             </td>
         </tr>
         <!--Steam-->
-        <tr *ngIf="energyUsage.steamUsed">
+        <tr *ngIf="carbonResults.steamCO2CurrentUse != 0">
             <td class="bold">
                 Steam
             </td>
