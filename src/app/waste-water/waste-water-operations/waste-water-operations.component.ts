@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { WasteWater, WasteWaterData, WasteWaterOperations } from '../../shared/models/waste-water';
@@ -24,7 +26,8 @@ export class WasteWaterOperationsComponent implements OnInit {
   selected: boolean;
 
 
-
+  co2SavingsFormDisabled: boolean = false;
+  co2SavingsData: Co2SavingsData;
   operationsForm: FormGroup;
   oldSettings: WasteWaterOperations;
   
@@ -42,12 +45,12 @@ export class WasteWaterOperationsComponent implements OnInit {
     private operationsService: WasteWaterOperationsService,
     private wasteWaterService: WasteWaterService,
     private compareService: CompareService, 
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private cd: ChangeDetectorRef) { }
 
 
   ngOnInit() {
     this.settings = this.wasteWaterService.settings.getValue();
-
     if (this.isModification) {
       this.idString = 'modification';
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
@@ -56,11 +59,13 @@ export class WasteWaterOperationsComponent implements OnInit {
           this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
           let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
           this.operationsForm = this.operationsService.getFormFromObj(modificationData.operations);
+          this.initRenderCO2DataForm(modificationData.co2SavingsData);
         }
       });
     } else {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.operationsForm = this.operationsService.getFormFromObj(wasteWater.baselineData.operations);
+      this.setCo2SavingsData(wasteWater.baselineData.co2SavingsData);
     }
 
     if(!this.inSetup){
@@ -76,15 +81,39 @@ export class WasteWaterOperationsComponent implements OnInit {
 
   }
 
+  updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.co2SavingsData = co2SavingsData;
+    this.saveOperations();
+  }
+
+  initRenderCO2DataForm(modificationCo2SavingsData: Co2SavingsData) {
+    // ensure component destroyed before resetting co2SavingsData
+    this.co2SavingsData = undefined;
+    setTimeout(() => {
+      this.setCo2SavingsData(modificationCo2SavingsData);
+    }, 10);
+  }
+
+  setCo2SavingsData(co2SavingsData: Co2SavingsData) {
+    if (co2SavingsData) {
+      this.co2SavingsData = co2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
+    }
+  }
+
   saveOperations() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
       let operations: WasteWaterOperations = this.operationsService.getObjFromForm(this.operationsForm);
       wasteWater.modifications[this.modificationIndex].operations = operations;
+      wasteWater.modifications[this.modificationIndex].co2SavingsData = this.co2SavingsData;
       wasteWater.modifications[this.modificationIndex].exploreOpportunities = false;
     } else {
       let operations: WasteWaterOperations = this.operationsService.getObjFromForm(this.operationsForm);
       wasteWater.baselineData.operations = operations;
+      wasteWater.baselineData.co2SavingsData = this.co2SavingsData;
     }
     this.wasteWaterService.updateWasteWater(wasteWater);
     
@@ -103,8 +132,10 @@ export class WasteWaterOperationsComponent implements OnInit {
   setFormControlStatus() {
     if (this.selected === true) {
       this.operationsForm.controls.EnergyCostUnit.enable();
+      this.co2SavingsFormDisabled = false;
     } else if (this.selected === false) {
       this.operationsForm.controls.EnergyCostUnit.disable();
+      this.co2SavingsFormDisabled = true;
     }
   }
 

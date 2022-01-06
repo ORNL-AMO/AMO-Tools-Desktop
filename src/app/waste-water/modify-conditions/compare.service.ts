@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AeratorPerformanceData, WasteWaterData, ActivatedSludgeData, WasteWaterOperations } from '../../shared/models/waste-water';
 
 @Injectable()
@@ -17,14 +18,16 @@ export class CompareService {
 
   compareBaselineModification(baselineData: WasteWaterData, modificationData?: WasteWaterData): WasteWaterDifferent {
     let operationsDifferent: OperationsDifferent;
+    let co2DataDifferent: CO2DataDifferent;
     let activatedSludgeDifferent: ActivatedSludgeDifferent;
     let aeratorPerformanceDifferent: AeratorPerformanceDifferent;
     let isDifferent: boolean = false;
     if (modificationData) {
       operationsDifferent = this.compareOperations(baselineData.operations, modificationData.operations);
+      co2DataDifferent = this.compareCo2SavingsData(baselineData.co2SavingsData, modificationData.co2SavingsData);
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, modificationData.activatedSludgeData);
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, modificationData.aeratorPerformanceData);
-      isDifferent = this.checkHasDifferent(activatedSludgeDifferent) || this.checkHasDifferent(aeratorPerformanceDifferent);
+      isDifferent = this.checkHasDifferent(activatedSludgeDifferent) || this.checkHasDifferent(aeratorPerformanceDifferent) || this.checkHasDifferent(co2DataDifferent);
     } else {
       //compare baseline with baseline, all will come back false
       operationsDifferent = this.compareOperations(baselineData.operations, baselineData.operations);
@@ -33,6 +36,7 @@ export class CompareService {
     }
     return {
       operationsDifferent: operationsDifferent,
+      co2DataDifferent: co2DataDifferent,
       activatedSludgeDifferent: activatedSludgeDifferent,
       aeratorPerformanceDifferent: aeratorPerformanceDifferent,
       isDifferent: isDifferent
@@ -44,6 +48,12 @@ export class CompareService {
       MaxDays: baselineData.MaxDays != modificationData.MaxDays, 
       operatingMonths: baselineData.operatingMonths != modificationData.operatingMonths,
       EnergyCostUnit: baselineData.EnergyCostUnit != modificationData.EnergyCostUnit
+    }
+  }
+
+  compareCo2SavingsData(baselineCo2Data: Co2SavingsData, modificationCo2Data: Co2SavingsData): CO2DataDifferent {
+    return {
+      totalEmissionOutputRate: baselineCo2Data.totalEmissionOutputRate != modificationCo2Data.totalEmissionOutputRate, 
     }
   }
 
@@ -96,7 +106,7 @@ export class CompareService {
     if (this.checkHasDifferent(wasteWaterDifferent.aeratorPerformanceDifferent)) {
       badges.push({ badge: 'Aerator Performance', componentStr: 'aerator-performance' });
     }
-    if (this.checkHasDifferent(wasteWaterDifferent.operationsDifferent)) {
+    if (this.checkHasDifferent(wasteWaterDifferent.operationsDifferent) || this.checkHasDifferent(wasteWaterDifferent.co2DataDifferent)) {
       badges.push({ badge: 'Operations', componentStr: 'operations' });
     }
     return badges;
@@ -117,6 +127,7 @@ export class CompareService {
 
 export interface WasteWaterDifferent {
   operationsDifferent: OperationsDifferent,
+  co2DataDifferent: CO2DataDifferent,
   activatedSludgeDifferent: ActivatedSludgeDifferent,
   aeratorPerformanceDifferent: AeratorPerformanceDifferent,
   isDifferent: boolean
@@ -163,5 +174,9 @@ export interface OperationsDifferent {
   MaxDays: boolean, 
   operatingMonths: boolean,
   EnergyCostUnit: boolean
+}
+
+export interface CO2DataDifferent {
+  totalEmissionOutputRate: boolean,
 }
 
