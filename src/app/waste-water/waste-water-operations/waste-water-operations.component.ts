@@ -69,6 +69,9 @@ export class WasteWaterOperationsComponent implements OnInit {
     }
 
     if(!this.inSetup){
+      if (!this.selected) {
+        this.co2SavingsFormDisabled = true;
+      }
       this.operationsForm.controls.MaxDays.disable();
       this.operationsForm.controls.operatingMonths.disable();
     }
