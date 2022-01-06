@@ -22,7 +22,7 @@ export class PhastRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
-  @Input()
+ 
   settings: Settings;
 
   pieChartDataOption: string = 'energy';
@@ -40,9 +40,7 @@ export class PhastRollupComponent implements OnInit {
     private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    if(!this.settings){
-      this.settings = this.reportRollupService.settings.getValue();
-    }  
+    this.settings = this.reportRollupService.settings.getValue();
     this.setBarChartData();
     this.setBarChartOption('energy');
     this.setPieChartData();

@@ -20,7 +20,7 @@ export class FsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
-  @Input()
+  
   settings: Settings;
 
   pieChartDataOption: string = 'energy';
@@ -39,9 +39,7 @@ export class FsatRollupComponent implements OnInit {
   constructor(private fsatReportRollupService: FsatReportRollupService, private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    if(!this.settings){
-      this.settings = this.reportRollupService.settings.getValue();
-    }    
+    this.settings = this.reportRollupService.settings.getValue();
     this.rollupEnergyUnit = this.settings.fansRollupUnit;
     this.setTableData();
     this.setBarChartData();

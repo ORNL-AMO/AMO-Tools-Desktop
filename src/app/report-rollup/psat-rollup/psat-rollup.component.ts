@@ -20,7 +20,7 @@ export class PsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
-  @Input()
+ 
   settings: Settings;
 
   showPreAssessment: boolean = true;
@@ -43,9 +43,7 @@ export class PsatRollupComponent implements OnInit {
 
 
   ngOnInit() {
-    if(!this.settings){
-      this.settings = this.reportRollupSettings.settings.getValue();
-    } 
+    this.settings = this.reportRollupSettings.settings.getValue();
     this.rollupEnergyUnit = this.settings.pumpsRollupUnit;
     this.setTableData();
     this.setBarChartData();

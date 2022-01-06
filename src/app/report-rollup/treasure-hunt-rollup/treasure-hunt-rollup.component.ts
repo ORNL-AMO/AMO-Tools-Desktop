@@ -19,7 +19,7 @@ export class TreasureHuntRollupComponent implements OnInit {
 
   @Input()
   printView: boolean;
-  @Input()
+  
   settings: Settings;
 
   combinedTreasureHuntResults: TreasureHuntResults;
@@ -30,10 +30,8 @@ export class TreasureHuntRollupComponent implements OnInit {
   constructor(private treasureHuntReportRollupService: TreasureHuntReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService, private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
-  ngOnInit(): void {
-    if(!this.settings){
-      this.settings = this.reportRollupService.settings.getValue();
-    }   
+  ngOnInit(): void {    
+    this.settings = this.reportRollupService.settings.getValue();      
     let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.treasureHuntReportRollupService.allTreasureHuntResults.getValue();
     this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
     this.convertCurrencyForDisplay();
