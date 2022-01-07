@@ -55,7 +55,15 @@ export class OperationsComponent implements OnInit {
     this.setCo2SavingsData();
     if (!this.isBaseline) {
       this.idString = 'modification_';
+      if (!this.inSetup && !this.selected) {
+        this.co2SavingsFormDisabled = true;
+      }
+    } else {
+      if (!this.inSetup && !this.selected) {
+        this.co2SavingsFormDisabled = true;
+      }
     }
+
     if (this.selected === false) {
       this.disableForm();
     }
