@@ -35,6 +35,7 @@ export class HelpPanelComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSubscription.unsubscribe();
     this.focusedDataGroupSub.unsubscribe();
+    this.focusedFieldSub.unsubscribe();
   }
 
 }
