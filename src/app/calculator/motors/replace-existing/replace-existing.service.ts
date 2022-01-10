@@ -86,15 +86,17 @@ export class ReplaceExistingService {
     let inputCpy: ReplaceExistingData = JSON.parse(JSON.stringify(inputs));
     let results: ReplaceExistingResults = {
       existingEnergyUse: 0,
-      co2EmissionOutput: 0,
+      existingEmissionOutput: 0,
       newEnergyUse: 0,
-      existingEnergyCost: 0,
       newEnergyCost: 0,
+      existingEnergyCost: 0,
+      newEmissionOutput: 0,
       annualEnergySavings: 0,
       costSavings: 0,
       simplePayback: 0,
       percentSavings: 0,
       rewoundEnergyUse: 0,
+      rewoundEmissionOutput: 0,
       rewoundEnergyCost: 0,
       incrementalSunkCost: inputCpy.rewindCost,
       incrementalAnnualEnergySavings: 0,
@@ -106,7 +108,6 @@ export class ReplaceExistingService {
       inputCpy.motorSize = this.convertUnitsService.value(inputCpy.motorSize).from('kW').to('hp');
     }
     results.existingEnergyUse = this.getExistingEnergyUse(inputCpy);
-    results = this.setCo2SavingsEmissionsResult(co2SavingsData, results, settings);
     results.newEnergyUse = this.getNewEnergyUse(inputCpy);
     results.existingEnergyCost = this.getExistingEnergyCost(inputCpy, results);
     results.newEnergyCost = this.getNewEnergyCost(inputCpy, results);
@@ -120,15 +121,23 @@ export class ReplaceExistingService {
     results.incrementalCostDifference = this.getIncrementalCostDifference(inputCpy);
     results.incrementalEnergyCostSavings = this.getIncrementalEnergyCostSavings(results, inputCpy);
     results.incrementalSimplePayback = this.getIncrementalSimplePayback(results);
+    results = this.setCo2SavingsEmissionsResult(co2SavingsData, results, settings);
     return results;
   }
 
   setCo2SavingsEmissionsResult(co2SavingsData: Co2SavingsData, results: ReplaceExistingResults, settings: Settings): ReplaceExistingResults {
+    results.existingEmissionOutput = undefined;
+    results.rewoundEmissionOutput = undefined;
+    results.newEmissionOutput = undefined;
     if (co2SavingsData) {
       co2SavingsData.electricityUse = results.existingEnergyUse;
-      results.co2EmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
-    } else {
-      results.co2EmissionOutput = 0;
+      results.existingEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+
+      co2SavingsData.electricityUse = results.rewoundEnergyUse;
+      results.rewoundEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+
+      co2SavingsData.electricityUse = results.newEnergyUse;
+      results.newEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
     }
     return results;
   }

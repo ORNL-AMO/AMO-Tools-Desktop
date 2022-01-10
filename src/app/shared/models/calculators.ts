@@ -160,8 +160,9 @@ export interface ReplaceExistingData {
 }
 export interface ReplaceExistingResults {
     existingEnergyUse: number;
-    co2EmissionOutput?: number;
+    existingEmissionOutput?: number;
     newEnergyUse: number;
+    newEmissionOutput?: number;
     existingEnergyCost: number;
     newEnergyCost: number;
     annualEnergySavings: number;
@@ -169,6 +170,7 @@ export interface ReplaceExistingResults {
     simplePayback: number;
     percentSavings: number;
     rewoundEnergyUse: number;
+    rewoundEmissionOutput?: number;
     rewoundEnergyCost: number;
     incrementalSunkCost: number;
     incrementalAnnualEnergySavings: number;

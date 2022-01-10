@@ -102,7 +102,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
       ratedPower: motorItem.nameplateData.ratedMotorPower,
       energyUsage: batchAnalysisDataAndResults.results.existingEnergyUse,
       energyCost: batchAnalysisDataAndResults.results.existingEnergyCost,
-      co2EmissionOutput: batchAnalysisDataAndResults.results.co2EmissionOutput,
+      co2EmissionOutput: batchAnalysisDataAndResults.results.existingEmissionOutput,
       motorItem: motorItem
     }
     return tableDataItem;
