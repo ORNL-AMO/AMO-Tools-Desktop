@@ -14,6 +14,9 @@
                 <th>
                     Annual Energy Cost
                 </th>
+                <th>
+                    Emissions Output
+                </th>
             </tr>
 
         </thead>
@@ -43,6 +46,14 @@
                         $ &mdash;
                     </span>
                 </td>
+                <td>
+                    <span *ngIf="departmentSummaryItem.co2EmissionOutput">
+                        {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}} tonne CO<sub>2</sub>
+                    </span>
+                    <span *ngIf="!departmentSummaryItem.co2EmissionOutput">
+                        &mdash; tonne CO<sub>2</sub>
+                    </span>
+                </td>
             </tr>
         </tbody>
         <tfoot>
@@ -67,6 +78,14 @@
                     </span>
                     <span *ngIf="!inventorySummary.totalEnergyCost">
                         $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEmissions">
+                        {{inventorySummary.totalEmissions | number :'1.0-0'}} tonne CO<sub>2</sub>
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEmissions">
+                        &mdash; tonne CO<sub>2</sub>
                     </span>
                 </td>
             </tr>
