@@ -39,7 +39,9 @@ export class PipeInsulationReductionFormComponent implements OnInit {
 
   utilityOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Natural Gas' },
-    { value: 1, name: 'Other' }
+    { value: 1, name: 'Other Fuel' },
+    { value: 2, name: 'Electricity' },
+    { value: 3, name: 'Steam' }
   ];
 
   pipeBaseMaterials: Array<{ value: number, name: string }> = [

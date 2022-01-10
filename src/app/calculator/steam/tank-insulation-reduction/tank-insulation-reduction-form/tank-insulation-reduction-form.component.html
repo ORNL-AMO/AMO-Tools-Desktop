@@ -26,7 +26,7 @@
 
         <!-- Utility Type -->
         <div class="form-group">
-            <label class="small" for="{{'utilityType_'+idString}}">Fuel Type</label>
+            <label class="small" for="{{'utilityType_'+idString}}">Energy Source Type</label>
             <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}"
                 formControlName="utilityType" (change)="changeUtilityType()" (focus)="focusField('utilityType')"
                 (blur)="focusOut()">
@@ -41,14 +41,12 @@
                 <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}"
                     formControlName="utilityCost" type="number" (input)="calculate()"
                     (focus)="focusField('utilityCost')" (blur)="focusOut()" onfocus="this.select();">
-                <span class="units input-group-addon">$/<span
-                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                    <span
-                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
+                <span class="units input-group-addon">$/
+                    <!-- <span *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span> -->
+                    <span *ngIf="form.controls.utilityType.value != 2 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span *ngIf="form.controls.utilityType.value != 2 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
+                    <span *ngIf="form.controls.utilityType.value == 2">kWh</span>
                 </span>
             </div>
             <span class="alert-danger pull-right small"
