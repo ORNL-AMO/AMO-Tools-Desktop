@@ -308,69 +308,10 @@
     </div>
   </div>
 
-  <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Fuel Emissions (<span>kg CO<sub>2</sub>/MWh</span>)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="bold table-text">
-        {{ baselineOutput.co2EmissionsOutput.fuelEmissionOutput | number: "1.0-2" }}
-      </span>
-      <span *ngIf="!baselineValid">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1">
-      <span
-        class="bold table-text"
-        *ngIf="
-          modValid && modificationOutput.co2EmissionsOutput.fuelEmissionOutput
-        ">{{
-          modificationOutput.co2EmissionsOutput.fuelEmissionOutput 
-            | number: "1.0-2"
-        }}</span
-      >
-      <span
-        class="bold table-text"
-        *ngIf="
-          !modValid || !modificationOutput.co2EmissionsOutput.fuelEmissionOutput
-        "
-        >&mdash;</span
-      >
-    </div>
-  </div>
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Electricity Emissions (<span>kg CO<sub>2</sub>/MWh</span>)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span *ngIf="baselineValid" class="bold table-text">
-        {{ baselineOutput.co2EmissionsOutput.electricityEmissionOutput | number: "1.0-2" }}
-      </span>
-      <span *ngIf="!baselineValid">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1">
-      <span
-        class="bold table-text"
-        *ngIf="
-          modValid && modificationOutput.co2EmissionsOutput.electricityEmissionOutput
-        ">{{
-          modificationOutput.co2EmissionsOutput.electricityEmissionOutput 
-            | number: "1.0-2"
-        }}</span
-      >
-      <span
-        class="bold table-text"
-        *ngIf="
-          !modValid || !modificationOutput.co2EmissionsOutput.electricityEmissionOutput
-        "
-        >&mdash;</span
-      >
-    </div>
-  </div>
-
-  <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Total Emissions (<span>kg CO<sub>2</sub>/MWh</span>)</span>
+      <span class="bold table-text">Annual Emissions (<span>kg CO<sub>2</sub>/MWh</span>)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="bold table-text">
@@ -400,7 +341,7 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Total Emissions Savings (<span>kg CO<sub>2</sub>/MWh</span>)</span>
+      <span class="bold table-text">Annual Emissions Savings (<span>kg CO<sub>2</sub>/MWh</span>)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>
@@ -425,30 +366,6 @@
       >
     </div>
   </div>
-
-  <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Savings ({{settings.currency}}/yr)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1">
-      <span
-        class="bold table-text"
-        *ngIf="annualSavings && modValid"
-        [ngClass]="{ 'positive-savings': percentSavings > 10 }"
-      >
-        {{ annualSavings  | number: "2.0-0" }}</span
-      >
-      <span class="bold table-text" *ngIf="!annualSavings || !modValid"
-        >&mdash;</span
-      >
-    </div>
-  </div>
-
-
-
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
