@@ -443,7 +443,7 @@ export class SettingsService {
         totalEmissionOutputRate: 401.07,
         electricityUse: 0,
         eGridRegion: '',
-        eGridSubregion: 'US Avergae',
+        eGridSubregion: 'US Average',
         totalEmissionOutput: 0,
         userEnteredBaselineEmissions: false,
         userEnteredModificationEmissions: false,
