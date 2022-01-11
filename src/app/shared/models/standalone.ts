@@ -630,7 +630,8 @@ export interface PipeInsulationReductionInput {
   pipeBaseMaterialSelection: number,
   pipeMaterialCoefficients: Array<number>,
   insulationMaterialSelection: number,
-  insulationMaterialCoefficients: Array<number>
+  insulationMaterialCoefficients: Array<number>,
+  heatedOrChilled: number
 };
 
 export interface PipeInsulationReductionResults {
@@ -643,7 +644,9 @@ export interface PipeInsulationReductionResults {
 export interface PipeInsulationReductionResult {
   heatLength: number,
   annualHeatLoss: number,
-  energyCost: number
+  energyCost: number,
+  energySourceType: number,
+  heatedOrChilled: number
 };
 
 //===== END pipe insulation reduction objects =====

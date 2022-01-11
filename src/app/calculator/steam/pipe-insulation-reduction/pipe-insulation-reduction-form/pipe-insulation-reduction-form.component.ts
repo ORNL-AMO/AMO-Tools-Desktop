@@ -26,6 +26,8 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
+  heatedOrChilled: number;
+  @Input()
   form: FormGroup;
 
   formWidth: number;
@@ -81,6 +83,11 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     { value: 8, name: 'Flexible Aerogel' }
   ];
 
+  heatedOrChilledOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Heated' },
+    { value: 1, name: 'Chilled' }
+  ];
+
   npsList: Array<{ value: number, name: string }>;
 
   idString: string;
@@ -111,6 +118,9 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     }
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
+    }
+    if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
+      this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
     }
   }
 

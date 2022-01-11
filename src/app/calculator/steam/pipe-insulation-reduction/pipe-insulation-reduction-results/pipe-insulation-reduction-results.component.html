@@ -6,25 +6,32 @@
             <td class="bold text-center">Modification</td>
         </tr>
         <tr>
-            <td class="bold">Heat Loss</td>
+            <td *ngIf="results.baselineResults.heatedOrChilled == 0" class="bold">Heat Loss</td>
+            <td *ngIf="results.baselineResults.heatedOrChilled != 0" class="bold">Heat Gain</td>
             <td class="text-center">
                 {{results.baselineResults.annualHeatLoss | number:'1.0-0'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                     MMBtu
                 </span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                     MJ
+                </span>
+                <span *ngIf="results.baselineResults.energySourceType == 2">
+                    kWh
                 </span>
             </td>
             <td class="text-center">
                 <span *ngIf="!results.modificationResults">&mdash;</span>
                 <span *ngIf="results.modificationResults">
                     {{results.modificationResults.annualHeatLoss | number:'1.0-0'}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                         MMBtu
                     </span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                         MJ
+                    </span>
+                    <span *ngIf="results.baselineResults.energySourceType == 2">
+                        kWh
                     </span>
                 </span>
             </td>
@@ -47,11 +54,14 @@
                 <span *ngIf="!results.modificationResults">&mdash;</span>
                 <span *ngIf="results.modificationResults">
                     {{results.annualHeatSavings | number:'1.0-0'}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                         MMBtu
                     </span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                         MJ
+                    </span>
+                    <span *ngIf="results.baselineResults.energySourceType == 2">
+                        kWh
                     </span>
                 </span>
             </td>
