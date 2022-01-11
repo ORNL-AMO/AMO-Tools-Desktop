@@ -68,12 +68,11 @@ export class WasteWaterOperationsComponent implements OnInit {
       this.setCo2SavingsData(wasteWater.baselineData.co2SavingsData);
     }
 
-    if(!this.inSetup){
-      if (!this.selected) {
-        this.co2SavingsFormDisabled = true;
-      }
+    if(!this.inSetup && !this.selected){
+      this.co2SavingsFormDisabled = true;
       this.operationsForm.controls.MaxDays.disable();
       this.operationsForm.controls.operatingMonths.disable();
+      this.operationsForm.controls.EnergyCostUnit.disable();
     }
 
     this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
@@ -134,9 +133,13 @@ export class WasteWaterOperationsComponent implements OnInit {
 
   setFormControlStatus() {
     if (this.selected === true) {
+      this.operationsForm.controls.MaxDays.enable();
+      this.operationsForm.controls.operatingMonths.enable();
       this.operationsForm.controls.EnergyCostUnit.enable();
       this.co2SavingsFormDisabled = false;
     } else if (this.selected === false) {
+      this.operationsForm.controls.MaxDays.disable();
+      this.operationsForm.controls.operatingMonths.disable();
       this.operationsForm.controls.EnergyCostUnit.disable();
       this.co2SavingsFormDisabled = true;
     }
