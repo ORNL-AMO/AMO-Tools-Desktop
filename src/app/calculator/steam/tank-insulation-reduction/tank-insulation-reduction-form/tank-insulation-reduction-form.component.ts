@@ -26,6 +26,8 @@ export class TankInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
+  heatedOrChilled: number;
+  @Input()
   form: FormGroup;
 
   formWidth: number;
@@ -116,6 +118,11 @@ export class TankInsulationReductionFormComponent implements OnInit {
     { value: 15, name: 'Steel' }
   ];
 
+  heatedOrChilledOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Heated' },
+    { value: 1, name: 'Chilled' }
+  ];
+
   idString: string;
   isEditingName: boolean = false;
 
@@ -143,6 +150,9 @@ export class TankInsulationReductionFormComponent implements OnInit {
     }
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
+    }
+    if (changes.heatedOrChilled && !changes.heatedOrChilled.firstChange) {
+      this.form.patchValue({ heatedOrChilled: this.heatedOrChilled });
     }
   }
 
@@ -177,7 +187,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    this.checkWarnings();
+    //this.checkWarnings();
     if (this.form.valid) {
       if (this.isBaseline == true) {
         this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.baselineData, this.settings);

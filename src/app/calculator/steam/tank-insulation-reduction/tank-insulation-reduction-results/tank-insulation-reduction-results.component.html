@@ -9,22 +9,28 @@
             <td class="bold">Heat Loss</td>
             <td class="text-center">
                 {{results.baselineResults.annualHeatLoss | number:'.0-3'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                     MMBtu
                 </span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                     MJ
+                </span>
+                <span *ngIf="results.baselineResults.energySourceType == 2">
+                    kWh
                 </span>
             </td>
             <td class="text-center">
                 <span *ngIf="!results.modificationResults">&mdash;</span>
                 <span *ngIf="results.modificationResults">
                     {{results.modificationResults.annualHeatLoss | number:'.0-3'}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                         MMBtu
                     </span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                         MJ
+                    </span>
+                    <span *ngIf="results.baselineResults.energySourceType == 2">
+                        kWh
                     </span>
                 </span>
             </td>
@@ -47,11 +53,14 @@
                 <span *ngIf="!results.modificationResults">&mdash;</span>
                 <span *ngIf="results.modificationResults">
                     {{results.annualHeatSavings | number:'.0-3'}}
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial'">
                         MMBtu
                     </span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    <span *ngIf="results.baselineResults.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'">
                         MJ
+                    </span>
+                    <span *ngIf="results.baselineResults.energySourceType == 2">
+                        kWh
                     </span>
                 </span>
             </td>

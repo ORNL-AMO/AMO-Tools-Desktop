@@ -674,7 +674,8 @@ export interface TankInsulationReductionInput {
   jacketEmissivity: number,
   tankMaterialSelection: number,
   insulationMaterialSelection: number,
-  jacketMaterialSelection: number
+  jacketMaterialSelection: number,
+  heatedOrChilled: number
 };
 
 export interface TankInsulationReductionResults {
@@ -687,7 +688,9 @@ export interface TankInsulationReductionResults {
 export interface TankInsulationReductionResult {
   heatLoss: number,
   annualHeatLoss: number,
-  energyCost: number
+  energyCost: number,
+  energySourceType: number,
+  heatedOrChilled: number
 };
 
 //===== END tank insulation reduction objects =====

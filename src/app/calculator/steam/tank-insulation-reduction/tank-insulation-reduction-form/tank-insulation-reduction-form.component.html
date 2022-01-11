@@ -34,6 +34,16 @@
             </select>
         </div>
 
+        <!-- Heated or Chilled -->
+        <div class="form-group">
+            <label class="small" for="{{'heatedOrChilled_'+idString}}">Heated or Chilled</label>
+            <select class="form-control" name="heatedOrChilled" id="{{'heatedOrChilled_'+idString}}"
+                formControlName="heatedOrChilled" (change)="calculate()" (focus)="focusField('heatedOrChilled')"
+                (blur)="focusOut()">
+                <option *ngFor="let option of heatedOrChilledOptions" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
         <!-- Utility Cost -->
         <div class="form-group">
             <label class="small" for="{{'utilityCost_'+idString}}">Utility Cost</label>
