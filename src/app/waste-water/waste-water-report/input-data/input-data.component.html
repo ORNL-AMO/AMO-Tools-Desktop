@@ -47,6 +47,18 @@
         </td>
       </tr>
       <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkCo2DataItemDifferent('totalEmissionOutputRate') == true}">
+          Total Emission Output Rate
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkCo2DataItemDifferent('totalEmissionOutputRate') == true}">
+          {{wasteWater.baselineData.co2SavingsData.totalEmissionOutputRate}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].co2SavingsData.totalEmissionOutputRate == true}">
+          {{mod.co2SavingsData.totalEmissionOutputRate}}
+        </td>
+      </tr>
+      <tr>
         <th class="section-header">Activated Sludge Data</th>
         <th></th>
         <th *ngFor="let modification of wasteWater.modifications">

@@ -42,6 +42,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { WasteWaterOperationsComponent } from './waste-water-operations/waste-water-operations.component';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import { OperationsHelpComponent } from './results-panel/help-panel/operations-h
     TabsTooltipModule,
     SharedPipesModule,
     ToastModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule
   ],
   providers: [
     WasteWaterService,

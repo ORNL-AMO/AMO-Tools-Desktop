@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater } from '../../../shared/models/waste-water';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
@@ -42,4 +41,8 @@ export class InputDataComponent implements OnInit {
     return differentExists != undefined;
   }
 
+  checkCo2DataItemDifferent(itemStr: string): boolean {
+    let differentExists: WasteWaterDifferent = this.compareModifications.find(modDifferent => { return modDifferent.co2DataDifferent[itemStr] });
+    return differentExists != undefined;
+  }
 }
