@@ -10,7 +10,7 @@
                 onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
         </div>
         <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
-            <span>Enter a valid zip code to find your eGRID subregion</span>
+            <span>Enter a valid zip code to find your eGRID subregion <br> OR Enter 00000 for US Average</span>
         </span>
     </div>
 

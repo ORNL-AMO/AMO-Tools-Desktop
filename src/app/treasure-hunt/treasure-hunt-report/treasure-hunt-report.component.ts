@@ -69,8 +69,6 @@ export class TreasureHuntReportComponent implements OnInit {
         if (this.assessment.treasureHunt.setupDone == true) {
           let filteredTreasureHunt: TreasureHunt = this.sortCardsService.sortTreasureHunt(this.assessment.treasureHunt, val, this.settings);
           this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(filteredTreasureHunt, this.settings);
-          this.assessment.treasureHunt.currentEnergyUsage.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.assessment.treasureHunt.currentEnergyUsage, this.treasureHuntResults, this.settings);
-          this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
           this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(filteredTreasureHunt, this.settings);
           let oppCards = this.opportunityCardsService.opportunityCards.getValue();
           if (oppCards.length != this.opportunityCardsData.length) {

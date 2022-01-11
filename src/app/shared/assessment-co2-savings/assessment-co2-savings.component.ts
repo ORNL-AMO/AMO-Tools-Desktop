@@ -215,7 +215,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
 
     if (subregionEmissions) {
       if(this.inTreasureHunt){
-        subregionEmissions.co2Emissions = this.convertUnitsService.value(subregionEmissions.co2Emissions).from('MWh').to('kWh');
+        let conversionHelper = this.convertUnitsService.value(1).from('MWh').to('kWh');
+        subregionEmissions.co2Emissions = subregionEmissions.co2Emissions/conversionHelper;
       }
       this.form.patchValue({
         totalEmissionOutputRate: subregionEmissions.co2Emissions

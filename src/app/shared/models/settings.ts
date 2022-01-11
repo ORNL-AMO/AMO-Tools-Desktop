@@ -111,6 +111,7 @@ export interface Settings {
     eGridRegion?: string,
     eGridSubregion?: string,
     totalEmissionOutput?: number,
+    totalFuelEmissionOutput?: number,
     userEnteredBaselineEmissions?: boolean,
     userEnteredModificationEmissions?: boolean,
     zipcode?: string

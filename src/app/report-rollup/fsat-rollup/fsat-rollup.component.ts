@@ -20,6 +20,8 @@ export class FsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
+  
+  settings: Settings;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;
@@ -30,7 +32,7 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  settings: Settings;
+  
 
   rollupEnergyUnit: string = 'MWh';
   

@@ -25,6 +25,20 @@ export const MockSsmt: Assessment = {
             "sitePowerImport": 5000,
             "makeUpWaterTemperature": 50
         },
+        "co2SavingsData": {
+            "energyType": 'electricity',
+            "energySource": '',
+            "fuelType": '',
+            "totalEmissionOutputRate": 0,
+            "totalFuelEmissionOutputRate": 0,
+            "electricityUse": 0,
+            "eGridRegion": '',
+            "eGridSubregion": 'SRTV',
+            "totalEmissionOutput": 0,
+            "userEnteredBaselineEmissions": false,
+            "userEnteredModificationEmissions": false,
+            "zipcode": '37830',
+          },
         "equipmentNotes": "",
         "turbineInput": {
             "condensingTurbine": {
@@ -74,6 +88,20 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 0,
+                        "totalFuelEmissionOutputRate": 0,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": false,
+                        "zipcode": '37830',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -169,6 +197,20 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 0,
+                        "totalFuelEmissionOutputRate": 0,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": false,
+                        "zipcode": '37830',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -264,6 +306,20 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 0,
+                        "totalFuelEmissionOutputRate": 0,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'SRTV',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": false,
+                        "zipcode": '37830',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {

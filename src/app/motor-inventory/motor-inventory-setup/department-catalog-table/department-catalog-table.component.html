@@ -6,22 +6,27 @@
                     Name
                 </th>
                 <th>
-                    Op. Hours
+                    Op. Hours (hrs/yr)
                 </th>
                 <th>
                     Eff. Class
                 </th>
                 <th>
-                    Est. Efficiency
+                    Est. Efficiency (%)
                 </th>
                 <th>
-                    Rated Power
+                    Rated Power 
+                    (<span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>)
                 </th>
                 <th>
-                    Energy Usage
+                    Energy Usage (kWh/yr)
                 </th>
                 <th>
-                    Energy Cost
+                    Energy Cost ($)
+                </th>
+                <th>
+                    Emissions Output (tonne CO<sub>2</sub>)
                 </th>
             </tr>
         </thead>
@@ -34,10 +39,10 @@
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.operatingHours">
-                        {{tableDataItem.operatingHours}} hrs/yr
+                        {{tableDataItem.operatingHours}}
                     </span>
                     <span *ngIf="!tableDataItem.operatingHours">
-                        &mdash; hrs/yr
+                        &mdash; 
                     </span>
                 </td>
                 <td>
@@ -45,38 +50,42 @@
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.estimatedEfficiency">
-                        {{tableDataItem.estimatedEfficiency}} %
+                        {{tableDataItem.estimatedEfficiency}} 
                     </span>
                     <span *ngIf="!tableDataItem.estimatedEfficiency">
-                        &mdash; %
+                        &mdash; 
                     </span>
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.ratedPower">
                         {{tableDataItem.ratedPower}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
                     </span>
                     <span *ngIf="!tableDataItem.ratedPower">
                         &mdash;
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
                     </span>
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.energyUsage">
-                        {{tableDataItem.energyUsage | number:'1.0-0'}} kWh/yr
+                        {{tableDataItem.energyUsage | number:'1.0-0'}}
                     </span>
                     <span *ngIf="!tableDataItem.energyUsage">
-                        &mdash; kWh/yr
+                        &mdash;
                     </span>
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.energyCost">
-                        {{tableDataItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                        {{tableDataItem.energyCost | number :'2.0-0'}}
                     </span>
                     <span *ngIf="!tableDataItem.energyCost">
-                        $ &mdash;
+                        &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.co2EmissionOutput">
+                        {{tableDataItem.co2EmissionOutput | number :'1.0-2'}}
+                    </span>
+                    <span *ngIf="!tableDataItem.co2EmissionOutput">
+                        &mdash;
                     </span>
                 </td>
                 <td>
