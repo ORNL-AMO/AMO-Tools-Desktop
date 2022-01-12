@@ -77,7 +77,7 @@ export class PsatSummaryComponent implements OnInit {
     psatArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Pumps',
-      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit),
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.pumpsRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.pumpSavingsPotential,
@@ -91,12 +91,12 @@ export class PsatSummaryComponent implements OnInit {
   }
 
   getTotalEnergy(){
-    let psatTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let psatTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.pumpsRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(psatTotalEnergy);
   }
 
   getTotalElectricity(){
-    let psatTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let psatTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.pumpsRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalElectricityUsed(psatTotalElectricity);
   }
   

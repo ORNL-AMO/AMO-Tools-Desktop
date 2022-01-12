@@ -62,7 +62,7 @@ export class FsatSummaryComponent implements OnInit {
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annualEnergy;
     })
-    if(this.settings.pumpsRollupUnit !== 'MWh'){
+    if(this.settings.fansRollupUnit !== 'MWh'){
       this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.fansRollupUnit);
       this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.fansRollupUnit);
     } else {
@@ -78,7 +78,7 @@ export class FsatSummaryComponent implements OnInit {
     fsatArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Fans',
-      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit),
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.fansRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.fanSavingPotential,
@@ -93,12 +93,12 @@ export class FsatSummaryComponent implements OnInit {
   }
 
   getTotalEnergy(){
-    let fsatTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let fsatTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.fansRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(fsatTotalEnergy);
   }
 
   getTotalElectricity(){
-    let fsatTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let fsatTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.fansRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalElectricityUsed(fsatTotalElectricity);
   }
 

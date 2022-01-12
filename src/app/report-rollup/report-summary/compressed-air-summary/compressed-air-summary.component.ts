@@ -79,7 +79,7 @@ export class CompressedAirSummaryComponent implements OnInit {
     airArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Compressed Air',
-      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit),
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.compressedAirRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.savingPotential,
@@ -93,12 +93,12 @@ export class CompressedAirSummaryComponent implements OnInit {
     this.reportSummaryGraphService.reportSummaryGraphData.next(airArray);
   }
   getTotalEnergy(){
-    let airTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit);
+    let airTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.compressedAirRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(airTotalEnergy);
   }
 
   getTotalElectricity(){
-    let airTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('kWh').to(this.settings.energyResultUnit);
+    let airTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.compressedAirRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalElectricityUsed(airTotalElectricity);
   }
 }

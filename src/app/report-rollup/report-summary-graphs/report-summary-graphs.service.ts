@@ -47,7 +47,8 @@ export class ReportSummaryGraphsService {
     this.energyChartData.next(new Array<PieChartDataItem>());
   }
 
-  getEnergyGraphData(settings: Settings): Array<PieChartDataItem> {
+  getEnergyGraphData(settings: Settings) {
+    this.energyChartData.next(new Array<PieChartDataItem>());
     let energyChartData: Array<PieChartDataItem> = new Array<PieChartDataItem>();
     let totalEnergy = this.totalEnergyUsed.getValue();
     let totalFuel = this.totalFuel.getValue();
@@ -78,7 +79,5 @@ export class ReportSummaryGraphsService {
     });
 
     this.energyChartData.next(energyChartData);
-
-    return this.energyChartData.getValue();
   }
 }

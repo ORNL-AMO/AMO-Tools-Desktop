@@ -74,7 +74,7 @@ export class SsmtSummaryComponent implements OnInit {
     steamArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Steam',
-      energyUsed: this.totalEnergy + this.energySavingsPotential,
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.ssmtSavingPotential,
@@ -89,12 +89,12 @@ export class SsmtSummaryComponent implements OnInit {
   }
 
   getTotalEnergy(){
-    let steamTotalEnergy = this.totalEnergy + this.energySavingsPotential;
+    let steamTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(steamTotalEnergy);
   }
 
   getTotalFuel(){
-    let steamTotalFuel = this.totalEnergy + this.energySavingsPotential;
+    let steamTotalFuel = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalFuelUsed(steamTotalFuel);
   }
 

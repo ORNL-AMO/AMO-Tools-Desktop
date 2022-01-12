@@ -29,7 +29,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
     this.drawPlot();   
   }
 
-  gOnChanges() {
+  ngOnChanges() {
     if(this.reportSummaryPieChart){
       Plotly.purge(this.reportSummaryPieChart.nativeElement);
     }

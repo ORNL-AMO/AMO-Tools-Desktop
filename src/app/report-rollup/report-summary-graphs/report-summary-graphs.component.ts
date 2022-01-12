@@ -18,40 +18,33 @@ export class ReportSummaryGraphsComponent implements OnInit {
   pieChartDataSub: Subscription;
   pieChartData: Array<PieChartDataItem>;
 
+  energyChartDataSub: Subscription;
   energyChartData: Array<PieChartDataItem>;
 
   settings: Settings;
   settingsSub: Subscription;
-
-  constructor(public reportRollupService: ReportRollupService,
+  
+  constructor(private reportRollupService: ReportRollupService,
     private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
-  ngOnInit(): void {
-    this.initSubscriptions();
+  ngOnInit() {
+    this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
+      this.settings = settings;
+      this.reportSummaryEnergyUnit = settings.commonRollupUnit;
+    });
+    this.pieChartDataSub = this.reportSummaryGraphService.reportSummaryGraphData.subscribe(val => {
+      this.pieChartData = val;
+    });
+    this.energyChartDataSub = this.reportSummaryGraphService.energyChartData.subscribe(val => {
+      this.energyChartData = val;
+    });
   }
 
   ngOnDestroy() {
     this.reportSummaryGraphService.clearData();
     this.settingsSub.unsubscribe();
     this.pieChartDataSub.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    this.energyChartData = this.reportSummaryGraphService.getEnergyGraphData(this.settings);
-  }
-
-  initSubscriptions() {
-    this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
-      this.settings = settings;
-    });
-    this.reportSummaryEnergyUnit = this.settings.energyResultUnit;
-
-    this.energyChartData = this.reportSummaryGraphService.getEnergyGraphData(this.settings);
-
-    this.pieChartDataSub = this.reportSummaryGraphService.reportSummaryGraphData.subscribe(val => {
-      this.pieChartData = val;
-    });
-
+    this.energyChartDataSub.unsubscribe();
   }
 
 }

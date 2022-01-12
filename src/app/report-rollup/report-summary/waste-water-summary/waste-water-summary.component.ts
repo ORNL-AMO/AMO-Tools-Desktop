@@ -71,7 +71,7 @@ export class WasteWaterSummaryComponent implements OnInit {
     waterArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Waste Water',
-      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit),
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.wasteWaterRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.savingPotential,
@@ -85,12 +85,12 @@ export class WasteWaterSummaryComponent implements OnInit {
     this.reportSummaryGraphService.reportSummaryGraphData.next(waterArray);
   }
   getTotalEnergy(){
-    let waterTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let waterTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.wasteWaterRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(waterTotalEnergy);
   }
 
   getTotalElectricity(){
-    let waterTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from('MWh').to(this.settings.energyResultUnit);
+    let waterTotalElectricity = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.wasteWaterRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalElectricityUsed(waterTotalElectricity);
   }
 }

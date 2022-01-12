@@ -74,7 +74,7 @@ export class PhastSummaryComponent implements OnInit {
     phastArray = this.reportSummaryGraphService.reportSummaryGraphData.value;
     let pieChartData: PieChartDataItem = {
       equipmentName: 'Furnaces',
-      energyUsed: this.totalEnergy + this.energySavingsPotential,
+      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.phastRollupUnit).to(this.settings.commonRollupUnit),
       annualCost: this.totalCost,
       energySavings: this.energySavingsPotential,
       costSavings: this.furnaceSavingsPotential,
@@ -90,9 +90,9 @@ export class PhastSummaryComponent implements OnInit {
 
   getPhastEnergyData(){      
     this.phastReportRollupService.selectedPhastResults.forEach(result => {
-      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(this.settings.phastRollupUnit).to(this.settings.commonRollupUnit);
       let sumEnergySavings = diffEnergy;
-      let sumEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      let sumEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.commonRollupUnit);
 
       if(result.settings.energySourceType === 'Steam'){
         let phastFuelEnergy = sumEnergy + sumEnergySavings;
@@ -112,7 +112,7 @@ export class PhastSummaryComponent implements OnInit {
   }
 
   getTotalEnergy(){
-    let phastTotalEnergy = this.totalEnergy + this.energySavingsPotential;
+    let phastTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.phastRollupUnit).to(this.settings.commonRollupUnit);
     this.reportSummaryGraphService.calculateTotalEnergyUsed(phastTotalEnergy);
   }
 
