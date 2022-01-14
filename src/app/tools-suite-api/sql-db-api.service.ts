@@ -4,21 +4,13 @@ import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidL
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
+declare var dbInstance: any;
 @Injectable()
 export class SqlDbApiService {
 
   hasStarted: boolean = false;
-  dbInstance: any;
   constructor(private suiteApiHelperService: SuiteApiHelperService, private indexedDbService: IndexedDbService) { }
 
-  startup() {
-    this.hasStarted = true;
-    if (Module) {
-        this.dbInstance = new Module.SQLite(":memory:", true);
-    } else {
-      console.log("NO MODULE FOUND")
-    }
-  }
 
   initCustomDbMaterials() {
     // this.test();
@@ -70,7 +62,7 @@ export class SqlDbApiService {
   selectGasFlueGasMaterials(): Array<FlueGasMaterial> {
     try {
       let flueGasMaterials: Array<FlueGasMaterial> = new Array();
-      let items = this.dbInstance.getGasFlueGasMaterials();
+      let items = dbInstance.getGasFlueGasMaterials();
       for (let index = 0; index < items.size(); index++) {
         let flueGasComposition = items.get(index);
         let flueGasItem: FlueGasMaterial = this.getFlueGasItemFromGasComposition(flueGasComposition)
@@ -111,7 +103,7 @@ export class SqlDbApiService {
   selectGasFlueGasMaterialById(id: number): FlueGasMaterial {
     try {
       //get composition and create flue gas material
-      let flueGasComposition = this.dbInstance.getGasFlueGasMaterialById(id);
+      let flueGasComposition = dbInstance.getGasFlueGasMaterialById(id);
       let flueGasItem: FlueGasMaterial = this.getFlueGasItemFromGasComposition(flueGasComposition);
       return flueGasItem;
     }
@@ -126,7 +118,7 @@ export class SqlDbApiService {
       //create material
       let gasComposition = this.getGasCompositionFromMaterial(material);
       //insert
-      this.dbInstance.insertGasFlueGasMaterial(gasComposition);
+      dbInstance.insertGasFlueGasMaterial(gasComposition);
       gasComposition.delete();
       return true;
     }
@@ -143,7 +135,7 @@ export class SqlDbApiService {
       //set id
       gasComposition.setID(material.id);
       //update
-      this.dbInstance.updateGasFlueGasMaterial(gasComposition);
+      dbInstance.updateGasFlueGasMaterial(gasComposition);
       gasComposition.delete();
       return true;
     } catch (err) {
@@ -162,7 +154,7 @@ export class SqlDbApiService {
 
   deleteGasFlueGasMaterial(id: number): boolean {
     try {
-      return this.dbInstance.deleteGasFlueGasMaterial(id);
+      return dbInstance.deleteGasFlueGasMaterial(id);
     } catch (err) {
       console.log(err);
       return false;
@@ -173,7 +165,7 @@ export class SqlDbApiService {
   selectAtmosphereSpecificHeat(): Array<AtmosphereSpecificHeat> {
     try {
       let atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat> = new Array();
-      let items = this.dbInstance.getAtmosphereSpecificHeat();
+      let items = dbInstance.getAtmosphereSpecificHeat();
       for (let index = 0; index < items.size(); index++) {
         let atmosphereSpecificHeatPointer = items.get(index);
         let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
@@ -199,7 +191,7 @@ export class SqlDbApiService {
 
   selectAtmosphereSpecificHeatById(id: number): AtmosphereSpecificHeat {
     try {
-      let atmosphereSpecificHeatPointer = this.dbInstance.getAtmosphereSpecificHeatById(id);
+      let atmosphereSpecificHeatPointer = dbInstance.getAtmosphereSpecificHeatById(id);
       let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
       return atmosphereSpecificHeat;
     }
@@ -212,7 +204,7 @@ export class SqlDbApiService {
   insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): boolean {
     try {
       let Atmosphere = this.getAtmosphere(material);
-      this.dbInstance.insertAtmosphereSpecificHeat(Atmosphere);
+      dbInstance.insertAtmosphereSpecificHeat(Atmosphere);
       Atmosphere.delete();
       return true;
     }
@@ -225,7 +217,7 @@ export class SqlDbApiService {
   updateAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): boolean {
     try {
       let Atmosphere = this.getAtmosphere(material);
-      this.dbInstance.updateAtmosphereSpecificHeat(Atmosphere);
+      dbInstance.updateAtmosphereSpecificHeat(Atmosphere);
       Atmosphere.delete();
       return true;
     } catch (err) {
@@ -246,7 +238,7 @@ export class SqlDbApiService {
 
   deleteAtmosphereSpecificHeat(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteAtmosphereSpecificHeat(id);
+      let success = dbInstance.deleteAtmosphereSpecificHeat(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -257,7 +249,7 @@ export class SqlDbApiService {
   selectWallLossesSurface(): Array<WallLossesSurface> {
     try {
       let wallLossesSurfaces: Array<WallLossesSurface> = new Array();
-      let items = this.dbInstance.getWallLossesSurface();
+      let items = dbInstance.getWallLossesSurface();
       for (let index = 0; index < items.size(); index++) {
         let wallLossesSurfacePointer = items.get(index);
         let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
@@ -283,7 +275,7 @@ export class SqlDbApiService {
 
   selectWallLossesSurfaceById(id: number): WallLossesSurface {
     try {
-      let wallLossesSurfacePointer = this.dbInstance.getWallLossesSurfaceById(id);
+      let wallLossesSurfacePointer = dbInstance.getWallLossesSurfaceById(id);
       let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
       return wallLossesSurface;
     }
@@ -296,7 +288,7 @@ export class SqlDbApiService {
   insertWallLossesSurface(surface: WallLossesSurface): boolean {
     try {
       let WallLoss = this.getWallLoss(surface);
-      this.dbInstance.insertWallLossesSurface(WallLoss);
+      dbInstance.insertWallLossesSurface(WallLoss);
       WallLoss.delete();
       return true;
     }
@@ -309,7 +301,7 @@ export class SqlDbApiService {
   updateWallLossesSurface(material: WallLossesSurface): boolean {
     try {
       let WallLoss = this.getWallLoss(material);
-      this.dbInstance.updateWallLossesSurface(WallLoss);
+      dbInstance.updateWallLossesSurface(WallLoss);
       WallLoss.delete();
       return true;
     } catch (err) {
@@ -330,7 +322,7 @@ export class SqlDbApiService {
 
   deleteWallLossesSurface(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteWallLossesSurface(id);
+      let success = dbInstance.deleteWallLossesSurface(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -342,7 +334,7 @@ export class SqlDbApiService {
   selectSolidLiquidFlueGasMaterials(): Array<SolidLiquidFlueGasMaterial> {
     try {
       let solidLiquidFlueGasMaterials: Array<SolidLiquidFlueGasMaterial> = new Array();
-      let items = this.dbInstance.getSolidLiquidFlueGasMaterials();
+      let items = dbInstance.getSolidLiquidFlueGasMaterials();
       for (let index = 0; index < items.size(); index++) {
         let solidLiquidFlueGasMaterialPointer = items.get(index);
         let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer);
@@ -376,7 +368,7 @@ export class SqlDbApiService {
 
   selectSolidLiquidFlueGasMaterialById(id: number): SolidLiquidFlueGasMaterial {
     try {
-      let solidLiquidFlueGasMaterialPointer = this.dbInstance.getSolidLiquidFlueGasMaterialById(id);
+      let solidLiquidFlueGasMaterialPointer = dbInstance.getSolidLiquidFlueGasMaterialById(id);
       let solidLiquidFlueGasMaterial: SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterialFromWASM(solidLiquidFlueGasMaterialPointer);
       return solidLiquidFlueGasMaterial;
     }
@@ -389,7 +381,7 @@ export class SqlDbApiService {
   insertSolidLiquidFlueGasMaterial(surface: SolidLiquidFlueGasMaterial): boolean {
     try {
       let SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterial(surface);
-      this.dbInstance.insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial);
+      dbInstance.insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial);
       SolidLiquidFlueGasMaterial.delete();
       return true;
     }
@@ -402,7 +394,7 @@ export class SqlDbApiService {
   updateSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial): boolean {
     try {
       let SolidLiquidFlueGasMaterial = this.getSolidLiquidFlueGasMaterial(material);
-      this.dbInstance.updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial);
+      dbInstance.updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial);
       SolidLiquidFlueGasMaterial.delete();
       return true;
     } catch (err) {
@@ -427,7 +419,7 @@ export class SqlDbApiService {
 
   deleteSolidLiquidFlueGasMaterial(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteSolidLiquidFlueGasMaterial(id);
+      let success = dbInstance.deleteSolidLiquidFlueGasMaterial(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -439,7 +431,7 @@ export class SqlDbApiService {
   selectGasLoadChargeMaterials(): Array<GasLoadChargeMaterial> {
     try {
       let gasLoadChargeMaterials: Array<GasLoadChargeMaterial> = new Array();
-      let items = this.dbInstance.getGasLoadChargeMaterials();
+      let items = dbInstance.getGasLoadChargeMaterials();
       for (let index = 0; index < items.size(); index++) {
         let gasLoadChargeMaterialPointer = items.get(index);
         let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
@@ -465,7 +457,7 @@ export class SqlDbApiService {
 
   selectGasLoadChargeMaterialById(id: number): GasLoadChargeMaterial {
     try {
-      let gasLoadChargeMaterialPointer = this.dbInstance.getGasLoadChargeMaterialById(id);
+      let gasLoadChargeMaterialPointer = dbInstance.getGasLoadChargeMaterialById(id);
       let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
       return gasLoadChargeMaterial;
     }
@@ -478,7 +470,7 @@ export class SqlDbApiService {
   insertGasLoadChargeMaterial(surface: GasLoadChargeMaterial): boolean {
     try {
       let GasLoadChargeMaterial = this.getGasLoadChargeMaterial(surface);
-      this.dbInstance.insertGasLoadChargeMaterials(GasLoadChargeMaterial);
+      dbInstance.insertGasLoadChargeMaterials(GasLoadChargeMaterial);
       GasLoadChargeMaterial.delete();
       return true;
     }
@@ -491,7 +483,7 @@ export class SqlDbApiService {
   updateGasLoadChargeMaterial(material: GasLoadChargeMaterial): boolean {
     try {
       let GasLoadChargeMaterial = this.getGasLoadChargeMaterial(material);
-      this.dbInstance.updateGasLoadChargeMaterial(GasLoadChargeMaterial);
+      dbInstance.updateGasLoadChargeMaterial(GasLoadChargeMaterial);
       GasLoadChargeMaterial.delete();
       return true;
     } catch (err) {
@@ -512,7 +504,7 @@ export class SqlDbApiService {
 
   deleteGasLoadChargeMaterial(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteGasLoadChargeMaterial(id);
+      let success = dbInstance.deleteGasLoadChargeMaterial(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -525,7 +517,7 @@ export class SqlDbApiService {
   selectLiquidLoadChargeMaterials(): Array<LiquidLoadChargeMaterial> {
     try {
       let liquidLoadChargeMaterials: Array<LiquidLoadChargeMaterial> = new Array();
-      let items = this.dbInstance.getLiquidLoadChargeMaterials();
+      let items = dbInstance.getLiquidLoadChargeMaterials();
       for (let index = 0; index < items.size(); index++) {
         let liquidLoadChargeMaterialPointer = items.get(index);
         let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
@@ -554,7 +546,7 @@ export class SqlDbApiService {
 
   selectLiquidLoadChargeMaterialById(id: number): LiquidLoadChargeMaterial {
     try {
-      let liquidLoadChargeMaterialPointer = this.dbInstance.getLiquidLoadChargeMaterialById(id);
+      let liquidLoadChargeMaterialPointer = dbInstance.getLiquidLoadChargeMaterialById(id);
       let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
       return liquidLoadChargeMaterial;
     }
@@ -567,7 +559,7 @@ export class SqlDbApiService {
   insertLiquidLoadChargeMaterial(surface: LiquidLoadChargeMaterial): boolean {
     try {
       let LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterial(surface);
-      this.dbInstance.insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial);
+      dbInstance.insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial);
       LiquidLoadChargeMaterial.delete();
       return true;
     }
@@ -580,7 +572,7 @@ export class SqlDbApiService {
   updateLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial): boolean {
     try {
       let LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterial(material);
-      this.dbInstance.updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial);
+      dbInstance.updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial);
       LiquidLoadChargeMaterial.delete();
       return true;
     } catch (err) {
@@ -604,7 +596,7 @@ export class SqlDbApiService {
 
   deleteLiquidLoadChargeMaterial(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteLiquidLoadChargeMaterial(id);
+      let success = dbInstance.deleteLiquidLoadChargeMaterial(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -617,7 +609,7 @@ export class SqlDbApiService {
   selectSolidLoadChargeMaterials(): Array<SolidLoadChargeMaterial> {
     try {
       let solidLoadChargeMaterials: Array<SolidLoadChargeMaterial> = new Array();
-      let items = this.dbInstance.getSolidLoadChargeMaterials();
+      let items = dbInstance.getSolidLoadChargeMaterials();
       for (let index = 0; index < items.size(); index++) {
         let solidLoadChargeMaterialPointer = items.get(index);
         let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
@@ -646,7 +638,7 @@ export class SqlDbApiService {
 
   selectSolidLoadChargeMaterialById(id: number): SolidLoadChargeMaterial {
     try {
-      let solidLoadChargeMaterialPointer = this.dbInstance.getSolidLoadChargeMaterialById(id);
+      let solidLoadChargeMaterialPointer = dbInstance.getSolidLoadChargeMaterialById(id);
       let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
       return solidLoadChargeMaterial;
     }
@@ -659,7 +651,7 @@ export class SqlDbApiService {
   insertSolidLoadChargeMaterial(surface: SolidLoadChargeMaterial): boolean {
     try {
       let SolidLoadChargeMaterial = this.getSolidLoadChargeMaterial(surface);
-      this.dbInstance.insertSolidLoadChargeMaterials(SolidLoadChargeMaterial);
+      dbInstance.insertSolidLoadChargeMaterials(SolidLoadChargeMaterial);
       SolidLoadChargeMaterial.delete();
       return true;
     }
@@ -672,7 +664,7 @@ export class SqlDbApiService {
   updateSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): boolean {
     try {
       let SolidLoadChargeMaterial = this.getSolidLoadChargeMaterial(material);
-      this.dbInstance.updateSolidLoadChargeMaterial(SolidLoadChargeMaterial);
+      dbInstance.updateSolidLoadChargeMaterial(SolidLoadChargeMaterial);
       SolidLoadChargeMaterial.delete();
       return true;
     } catch (err) {
@@ -698,7 +690,7 @@ export class SqlDbApiService {
 
   deleteSolidLoadChargeMaterial(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteSolidLoadChargeMaterial(id);
+      let success = dbInstance.deleteSolidLoadChargeMaterial(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -709,7 +701,7 @@ export class SqlDbApiService {
   selectMotors(): Array<SuiteDbMotor> {
     try {
       let suiteDbMotors: Array<SuiteDbMotor> = new Array();
-      let items = this.dbInstance.getMotorData();
+      let items = dbInstance.getMotorData();
       for (let index = 0; index < items.size(); index++) {
         let suiteDbMotorPointer = items.get(index);
         let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
@@ -747,7 +739,7 @@ export class SqlDbApiService {
 
   selectMotorById(id: number): SuiteDbMotor {
     try {
-      let suiteDbMotorPointer = this.dbInstance.getMotorDataById(id);
+      let suiteDbMotorPointer = dbInstance.getMotorDataById(id);
       let suiteDbMotor: SuiteDbMotor = this.getSuiteDbMotorFromWASM(suiteDbMotorPointer);
       return suiteDbMotor;
     }
@@ -760,7 +752,7 @@ export class SqlDbApiService {
   insertMotor(motor: SuiteDbMotor): boolean {
     try {
       let MotorData = this.getMotorData(motor);
-      this.dbInstance.insertMotorData(MotorData);
+      dbInstance.insertMotorData(MotorData);
       MotorData.delete();
       return true;
     }
@@ -773,7 +765,7 @@ export class SqlDbApiService {
   updateMotor(motor: SuiteDbMotor): boolean {
     try {
       let MotorData = this.getMotorData(motor);
-      this.dbInstance.updateMotorData(MotorData);
+      dbInstance.updateMotorData(MotorData);
       MotorData.delete();
       return true;
     } catch (err) {
@@ -806,7 +798,7 @@ export class SqlDbApiService {
 
   deleteMotor(id: number): boolean {
     try {
-      let success = this.dbInstance.deleteMotorData(id);
+      let success = dbInstance.deleteMotorData(id);
       return success;
     } catch (err) {
       console.log(err);
@@ -818,7 +810,7 @@ export class SqlDbApiService {
   selectPumps(): Array<SuiteDbPump> {
     try {
       let suiteDbPumps: Array<SuiteDbPump> = new Array();
-      let items = this.dbInstance.getPumpData();
+      let items = dbInstance.getPumpData();
       for (let index = 0; index < items.size(); index++) {
         let suiteDbPumpPointer = items.get(index);
         let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
@@ -886,7 +878,7 @@ export class SqlDbApiService {
 
   selectPumpById(id: number): SuiteDbPump {
     try {
-      let suiteDbPumpPointer = this.dbInstance.getPumpDataById(id);
+      let suiteDbPumpPointer = dbInstance.getPumpDataById(id);
       let suiteDbPump: SuiteDbPump = this.getSuiteDbPumpFromWASM(suiteDbPumpPointer);
       return suiteDbPump;
     }
@@ -899,7 +891,7 @@ export class SqlDbApiService {
   insertPump(pump: SuiteDbPump): boolean {
     try {
       let PumpData = this.getPumpData(pump);
-      this.dbInstance.insertPumpData(PumpData);
+      dbInstance.insertPumpData(PumpData);
       PumpData.delete();
       return true;
     }
@@ -912,7 +904,7 @@ export class SqlDbApiService {
   updatePump(pump: SuiteDbPump): boolean {
     try {
       let PumpData = this.getPumpData(pump);
-      this.dbInstance.updatePumpData(PumpData);
+      dbInstance.updatePumpData(PumpData);
       PumpData.delete();
       return true;
     } catch (err) {
@@ -978,7 +970,7 @@ export class SqlDbApiService {
 
   deletePump(id: number): boolean {
     try {
-      let success = this.dbInstance.deletePumpData(id);
+      let success = dbInstance.deletePumpData(id);
       return success;
     } catch (err) {
       console.log(err);

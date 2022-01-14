@@ -88,11 +88,6 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    //TODO: has started flag move to api service
-    if (this.sqlDbApiService.hasStarted === false) {
-      if (this.sqlDbApiService.dbInstance === undefined)
-      this.sqlDbApiService.startup();
-    }
     if (this.indexedDbService.db === undefined) {
       this.initData();
     }
