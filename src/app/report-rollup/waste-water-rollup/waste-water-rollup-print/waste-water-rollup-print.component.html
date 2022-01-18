@@ -1,19 +1,19 @@
 <div class="row">
     <div class="col-12">
         <div class="print-page-title">
-            Waste Water Systems Rollup Summary
+            Wastewater Systems Rollup Summary
         </div>
     </div>
 </div>
 <!--energy use pie and table-->
 <div class="row print-avoid-break">
     <div class="print-pie-width">
-        <label class="group-label">Waste Water Systems Energy Use</label>
+        <label class="group-label">Wastewater Systems Energy Use</label>
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'energy'" [energyUnit]="'MWh'"
             [printView]="true"></app-rollup-summary-pie-chart>
     </div>
     <div class="print-pie-width">
-        <label class="group-label">Waste Water Systems Energy Costs</label>
+        <label class="group-label">Wastewater Systems Energy Costs</label>
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'" [energyUnit]="'MWh'"
             [printView]="true"></app-rollup-summary-pie-chart>
     </div>
@@ -25,13 +25,13 @@
 <!--system summary bar chart-->
 <div class="row print-avoid-break">
     <div class="col-12 pt-2">
-        <label class="group-label">Waste Water System Energy Modification Summary</label>
+        <label class="group-label">Wastewater System Energy Modification Summary</label>
         <app-rollup-summary-bar-chart [barChartData]="energyBarChartData" [yAxisLabel]="energyYAxisLabel"
             [tickFormat]="energyTickFormat" [printView]="true">
         </app-rollup-summary-bar-chart>
     </div>
     <div class="col-12 pt-2">
-        <label class="group-label">Waste Water System Cost Modification Summary</label>
+        <label class="group-label">Wastewater System Cost Modification Summary</label>
         <app-rollup-summary-bar-chart [barChartData]="costBarChartData" [yAxisLabel]="costYAxisLabel"
             [tickFormat]="costTickFormat" [printView]="true">
         </app-rollup-summary-bar-chart>
