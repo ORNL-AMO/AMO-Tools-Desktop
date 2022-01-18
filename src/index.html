@@ -4,9 +4,11 @@
 <head>
 	<base href="/">
 	<script>
+		var dbInstance;
 		var Module = {
 			onRuntimeInitialized: function () {
 				console.log('Tools Suite Module Initialized');
+				dbInstance = new Module.SQLite(":memory:", true);
 			}
 		}
 	</script>
@@ -107,13 +109,15 @@
 	</style>
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-EEHE8GEBH4"></script>
+	<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EEHE8GEBH4"></script>
 	<script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
 	gtag('js', new Date());
 	</script>
 
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#1976d2">
 </head>
 
 <body>

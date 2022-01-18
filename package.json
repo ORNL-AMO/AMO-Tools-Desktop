@@ -43,6 +43,7 @@
     "@angular/platform-browser-dynamic": "11.2.3",
     "@angular/platform-server": "11.2.3",
     "@angular/router": "11.2.3",
+    "@angular/service-worker": "11.2.3",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "ajv": "6.12.5",
     "amo-tools-suite": "../AMO-Tools-Suite",
