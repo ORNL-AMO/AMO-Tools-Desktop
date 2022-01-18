@@ -313,7 +313,7 @@ export class OperationCostsComponent implements OnInit {
         energyType: 'electricity',
         energySource: '',
         fuelType: '',
-        totalEmissionOutputRate: this.convertUnitsService.value(this.globalSettings.totalEmissionOutputRate).from('MWh').to('kWh'),
+        totalEmissionOutputRate: this.globalSettings.totalEmissionOutputRate/1000,
         electricityUse: 0,
         eGridRegion: '',
         eGridSubregion: this.globalSettings.eGridSubregion,
