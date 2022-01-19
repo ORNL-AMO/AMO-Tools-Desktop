@@ -43,49 +43,55 @@ export class DirectoryDashboardService {
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {
     let directoryItems = new Array<DirectoryItem>();
     let calculatorIndex: number = 0;
-    directory.calculators.forEach(calculator => {
-      directoryItems.push({
-        type: 'calculator',
-        calculator: calculator,
-        calculatorIndex: calculatorIndex,
-        isShown: true,
-        createdDate: calculator.createdDate,
-        modifiedDate: calculator.modifiedDate,
-        name: calculator.name
+    if(directory){
+        directory.calculators.forEach(calculator => {
+        directoryItems.push({
+          type: 'calculator',
+          calculator: calculator,
+          calculatorIndex: calculatorIndex,
+          isShown: true,
+          createdDate: calculator.createdDate,
+          modifiedDate: calculator.modifiedDate,
+          name: calculator.name
+        });
+        calculatorIndex++;
       });
-      calculatorIndex++;
-    })
-    directory.assessments.forEach(assessment => {
-      directoryItems.push({
-        type: 'assessment',
-        assessment: assessment,
-        isShown: true,
-        createdDate: assessment.createdDate,
-        modifiedDate: assessment.modifiedDate,
-        name: assessment.name,
-        assessmentType: assessment.type
-      })
-    });
-    directory.subDirectory.forEach(subDirectory => {
-      directoryItems.push({
-        type: 'directory',
-        subDirectory: subDirectory,
-        isShown: true,
-        createdDate: subDirectory.createdDate,
-        modifiedDate: subDirectory.modifiedDate,
-        name: subDirectory.name
+      
+      directory.assessments.forEach(assessment => {
+        directoryItems.push({
+          type: 'assessment',
+          assessment: assessment,
+          isShown: true,
+          createdDate: assessment.createdDate,
+          modifiedDate: assessment.modifiedDate,
+          name: assessment.name,
+          assessmentType: assessment.type
+        })
       });
-    });
-    directory.inventories.forEach(inventoryItem => {
-      directoryItems.push({
-        type: 'inventory',
-        inventoryItem: inventoryItem,
-        isShown: true,
-        createdDate: inventoryItem.createdDate,
-        modifiedDate: inventoryItem.modifiedDate,
-        name: inventoryItem.name
+      
+      directory.subDirectory.forEach(subDirectory => {
+        directoryItems.push({
+          type: 'directory',
+          subDirectory: subDirectory,
+          isShown: true,
+          createdDate: subDirectory.createdDate,
+          modifiedDate: subDirectory.modifiedDate,
+          name: subDirectory.name
+        });
       });
-    });
+      
+      directory.inventories.forEach(inventoryItem => {
+        directoryItems.push({
+          type: 'inventory',
+          inventoryItem: inventoryItem,
+          isShown: true,
+          createdDate: inventoryItem.createdDate,
+          modifiedDate: inventoryItem.modifiedDate,
+          name: inventoryItem.name
+        });
+      });
+    }
+    
     return directoryItems;
   }
 
