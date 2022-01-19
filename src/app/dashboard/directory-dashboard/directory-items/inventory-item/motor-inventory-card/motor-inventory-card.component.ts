@@ -30,6 +30,7 @@ export class MotorInventoryCardComponent implements OnInit {
     this.inventoryItem.motorInventoryData.departments.forEach(department => {
       this.numberOfMotors = this.numberOfMotors + department.catalog.length;
     });
+    this.inventoryItem.batchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
 
     if (this.inventoryItem.batchAnalysisSettings) {
       this.paybackThreshold = this.inventoryItem.batchAnalysisSettings.paybackThreshold;
