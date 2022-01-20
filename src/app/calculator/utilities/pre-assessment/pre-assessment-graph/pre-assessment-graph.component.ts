@@ -60,23 +60,24 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
       let values: Array<number> = new Array();
       let textTemplate: string;
       if (this.resultType == 'value') {
-        if(this.inRollup){
+        if (this.inRollup) {
           if (this.settings.unitsOfMeasure != 'Metric') {
             values = valuesAndLabels.map(val => { return this.convertUnitsService.value(val.value).from('MMBtu').to(this.resultUnit) });
           } else {
             values = valuesAndLabels.map(val => { return this.convertUnitsService.value(val.value).from('GJ').to(this.resultUnit) });
           }
-        }
-        textTemplate = '<b>%{label}: </b>%{value:,.0f}';
-        if(this.inRollup){
+          textTemplate = '<b>%{label}: </b>%{value:,.0f}';
           textTemplate = textTemplate + ' ' + this.resultUnit;
-        } else{
+        }
+        if (!this.inRollup) {
+          values = valuesAndLabels.map(val => { return val.value });
+          textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
           if (this.settings.unitsOfMeasure != 'Metric') {
             textTemplate = textTemplate + ' MMBtu';
           } else {
             textTemplate = textTemplate + ' GJ';
           }
-        }        
+        }
       } else {
         values = valuesAndLabels.map(val => { return val.energyCost });
         textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
