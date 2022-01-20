@@ -306,12 +306,11 @@ export class Co2SavingsPhastComponent implements OnInit {
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
     
     if (subregionEmissions) {
-      let outputRate: number =  subregionEmissions.co2Emissions;
       let conversionHelper = this.convertUnitsService.value(1).from('MWh').to('kWh');
-      outputRate =  outputRate/conversionHelper;
+      subregionEmissions.co2Emissions =  subregionEmissions.co2Emissions/conversionHelper;
 
       this.form.patchValue({
-        totalEmissionOutputRate: outputRate
+        totalEmissionOutputRate: subregionEmissions.co2Emissions
       });
       this.calculate();
     }

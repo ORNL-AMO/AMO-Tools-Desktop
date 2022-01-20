@@ -309,11 +309,12 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
       this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
     } else {
+      let convertOutputRate: number = this.globalSettings.totalEmissionOutputRate/1000;
       let co2SavingsData: Co2SavingsData = {
         energyType: 'electricity',
         energySource: '',
         fuelType: '',
-        totalEmissionOutputRate: this.globalSettings.totalEmissionOutputRate/1000,
+        totalEmissionOutputRate: convertOutputRate,
         electricityUse: 0,
         eGridRegion: '',
         eGridSubregion: this.globalSettings.eGridSubregion,
