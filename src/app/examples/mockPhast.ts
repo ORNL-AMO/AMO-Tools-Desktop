@@ -1295,6 +1295,7 @@ export const MockPhastSettings: Settings = {
     eGridRegion: '',
     eGridSubregion: 'US Average',
     totalEmissionOutput: 0,
+    totalFuelEmissionOutput: 0,
     userEnteredBaselineEmissions: false,
     userEnteredModificationEmissions: false,
     zipcode: '00000',
