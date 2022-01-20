@@ -1291,6 +1291,7 @@ export const MockPhastSettings: Settings = {
     co2SavingsEnergySource: "Natural Gas",
     co2SavingsFuelType: "Natural Gas",
     totalEmissionOutputRate: 401.07,
+    totalFuelEmissionOutputRate: 0,
     electricityUse: 0,
     eGridRegion: '',
     eGridSubregion: 'US Average',

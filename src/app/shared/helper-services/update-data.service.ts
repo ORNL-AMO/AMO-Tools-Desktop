@@ -248,7 +248,7 @@ export class UpdateDataService {
     }
 
     updateMoistureInAirCombustion(phast: PHAST): PHAST {
-        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+        if (phast.losses && phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
             phast.losses.flueGasLosses.forEach(fg => {
                 if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
                     fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
@@ -263,7 +263,7 @@ export class UpdateDataService {
     }
 
     updateFlueGas(phast: PHAST): PHAST {
-        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+        if (phast.losses && phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
             phast.losses.flueGasLosses.forEach(fg => {
                 if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
                     fg.flueGasByMass = this.setAmbientAirTemp(phast, fg.flueGasByMass);
