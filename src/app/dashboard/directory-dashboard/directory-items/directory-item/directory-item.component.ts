@@ -39,10 +39,7 @@ export class DirectoryItemComponent implements OnInit {
   ngOnInit() {    
     this.directory.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.directory = this.directoryDbService.getById(this.directory.id);
-      if(this.directory){
-        this.directory.selected = false;
-      }
+      this.directory = this.directoryDbService.getById(this.directory.id);      
       this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
     });
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {

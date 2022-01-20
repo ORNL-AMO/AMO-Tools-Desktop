@@ -71,9 +71,7 @@ export class PreAssessmentItemComponent implements OnInit {
       let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu', false);
       this.energyUsed = _.sumBy(tmpResults, 'value');
       this.energyCost = _.sumBy(tmpResults, 'energyCost');
-    } else {
-      this.calculator.type = 'pump';
-    }
+    } 
   }
 
   deletePreAssessment() {
