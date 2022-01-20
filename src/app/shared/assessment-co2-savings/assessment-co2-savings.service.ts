@@ -103,7 +103,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: settings.eGridRegion,
       eGridSubregion: settings.eGridSubregion,
       totalEmissionOutput: settings.totalEmissionOutput,
-      totalFuelEmissionOutputRate: settings.totalFuelEmissionOutput,
+      totalFuelEmissionOutputRate: settings.totalFuelEmissionOutputRate,
       userEnteredBaselineEmissions: settings.userEnteredBaselineEmissions,
       userEnteredModificationEmissions: settings.userEnteredModificationEmissions,
       zipcode: settings.zipcode,

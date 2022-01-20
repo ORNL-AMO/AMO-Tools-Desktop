@@ -26,6 +26,7 @@ export const MockSsmt: Assessment = {
             "makeUpWaterTemperature": 50
         },
         "co2SavingsData": {
+            "otherFuelMixedCO2SavingsData": [],
             "energyType": 'electricity',
             "energySource": '',
             "fuelType": '',
@@ -89,6 +90,7 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
@@ -198,6 +200,7 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
@@ -307,6 +310,7 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',

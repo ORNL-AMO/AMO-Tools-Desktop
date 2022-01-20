@@ -62,5 +62,6 @@ export interface Co2SavingsData {
   userEnteredBaselineEmissions?: boolean;
   userEnteredModificationEmissions?: boolean;
   zipcode?: string,
-  percentFuelUsage?: number
+  percentFuelUsage?: number,
+  otherFuelMixedCO2SavingsData?: Array<Co2SavingsData>
 }
