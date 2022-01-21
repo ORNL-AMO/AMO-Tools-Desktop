@@ -80,6 +80,8 @@ export class WasteWaterSuiteApiService {
 
   getWasteWaterResultsFromOutputObject(output) {
     let wasteWaterResults: WasteWaterResults = {
+      co2EmissionsOutput: undefined,
+      co2EmissionsSavings: undefined,
       TotalAverageDailyFlowRate: output.TotalAverageDailyFlowRate,
       VolumeInService: output.VolumeInService,
       InfluentBOD5Concentration: output.InfluentBOD5Concentration,
