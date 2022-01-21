@@ -3,9 +3,8 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -23,7 +22,7 @@ export class SsmtSummaryComponent implements OnInit {
   selectedSub: Subscription;
   numSsmt: number;
 
-  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -37,10 +36,13 @@ export class SsmtSummaryComponent implements OnInit {
     this.selectedSub = this.ssmtReportRollupService.selectedSsmt.subscribe(val => {
       if (val.length != 0) {
         this.ssmtReportRollupService.setSsmtResultsFromSelected(val);
-        this.calcSsmtSums();
-        this.getSteamPieChartData();
-        this.getTotalEnergy();
-        this.getTotalFuel();
+        this.ssmtReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.ssmtReportRollupService.totals;
+        this.ssmtSavingPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -48,54 +50,6 @@ export class SsmtSummaryComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
-  }
-
-  calcSsmtSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
-      let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
-      let diffEnergy = result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.operationsOutput.boilerFuelUsage;
-    })
-    this.ssmtSavingPotential = sumSavings;
-    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MMBtu').to(this.settings.steamRollupUnit);
-    this.totalCost = sumCost;
-    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MMBtu').to(this.settings.steamRollupUnit);
-  }
-
-  getSteamPieChartData(){
-    let steamArray: Array<PieChartDataItem>;
-    steamArray = this.reportSummaryGraphService.reportSummaryGraphData.getValue();
-    let pieChartData: PieChartDataItem = {
-      equipmentName: 'Steam',
-      energyUsed: this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit),
-      annualCost: this.totalCost,
-      energySavings: this.energySavingsPotential,
-      costSavings: this.ssmtSavingPotential,
-      percentCost: this.ssmtSavingPotential / this.totalCost * 100,
-      percentEnergy: this.energySavingsPotential / this.totalEnergy * 100,
-      color: '#F39C12',
-      currencyUnit: this.settings.currency
-    }
-
-    steamArray.push(pieChartData);
-    this.reportSummaryGraphService.reportSummaryGraphData.next(steamArray);
-  }
-
-  getTotalEnergy(){
-    let steamTotalEnergy = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit);
-    this.reportSummaryGraphService.calculateTotalEnergyUsed(steamTotalEnergy);
-  }
-
-  getTotalFuel(){
-    let steamTotalFuel = this.convertUnitsService.value((this.totalEnergy + this.energySavingsPotential)).from(this.settings.steamRollupUnit).to(this.settings.commonRollupUnit);
-    this.reportSummaryGraphService.calculateTotalFuelUsed(steamTotalFuel);
   }
 
 }

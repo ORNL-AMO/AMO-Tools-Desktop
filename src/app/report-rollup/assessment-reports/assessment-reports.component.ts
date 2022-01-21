@@ -104,8 +104,6 @@ export class AssessmentReportsComponent implements OnInit {
         this._compressedAirAssessments = val;
       }
     })
-
-    this.reportSummaryGraphService.getEnergyGraphData(this.settings);
   }
 
   ngOnDestroy() {

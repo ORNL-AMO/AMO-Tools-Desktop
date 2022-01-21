@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastResultsService } from '../phast/phast-results.service';
-import { AllPhastResultsData, PhastCompare, PhastResultsData, ReportItem } from './report-rollup-models';
+import { AllPhastResultsData, PhastCompare, PhastResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
 import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import { ExecutiveSummary } from '../shared/models/phast/phast';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class PhastReportRollupService {
@@ -13,9 +15,11 @@ export class PhastReportRollupService {
   selectedPhasts: BehaviorSubject<Array<PhastCompare>>;
   selectedPhastResults: Array<PhastResultsData>;
   allPhastResults: Array<AllPhastResultsData>;
+  totals: ReportUtilityTotal;
   constructor(
     private executiveSummaryService: ExecutiveSummaryService,
-    private phastResultsService: PhastResultsService) {
+    private phastResultsService: PhastResultsService,
+    private convertUnitsService: ConvertUnitsService) {
     this.initSummary();
   }
 
@@ -24,6 +28,14 @@ export class PhastReportRollupService {
     this.selectedPhasts = new BehaviorSubject<Array<PhastCompare>>(new Array<PhastCompare>());
     this.selectedPhastResults = new Array<PhastResultsData>();
     this.allPhastResults = new Array<AllPhastResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0
+    }
 
   }
 
@@ -110,6 +122,39 @@ export class PhastReportRollupService {
         modificationResultData: modificationResultData
       });
     });
+  }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    let fuelEnergy = 0;
+    let electricityEnergy = 0
+    this.selectedPhastResults.forEach(result => {
+      //use copy for conversions
+      let resultCopy: PhastResultsData = JSON.parse(JSON.stringify(result))
+      let diffCost = result.modificationResults.annualCostSavings;
+      sumSavings += diffCost;
+      sumCost += result.modificationResults.annualCost;
+      let convertedEnergySavings = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+      sumEnergySavings += convertedEnergySavings;
+      let convertedSumEnergy = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+      sumEnergy += convertedSumEnergy
+      if (result.settings.energySourceType == 'Steam' || result.settings.energySourceType == 'Fuel') {
+        fuelEnergy += (convertedSumEnergy + convertedEnergySavings);
+      } else {
+        electricityEnergy += (convertedSumEnergy + convertedEnergySavings);
+      }
+    });
+    this.totals = {
+      savingPotential: sumSavings,
+      energySavingsPotential: sumEnergySavings,
+      totalCost: sumCost,
+      totalEnergy: sumEnergy,
+      electricityEnergy: electricityEnergy,
+      fuelEnergy: fuelEnergy
+    }
   }
 
 }
