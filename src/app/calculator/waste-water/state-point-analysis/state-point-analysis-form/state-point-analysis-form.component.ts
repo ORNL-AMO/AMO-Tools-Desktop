@@ -86,6 +86,8 @@ export class StatePointAnalysisFormComponent implements OnInit {
       this.form.controls.sludgeSettlingVelocity.disable();
       this.form.controls.numberOfClarifiers.disable();
       this.form.controls.areaOfClarifier.disable();
+      this.form.controls.diameter.disable();
+      this.form.controls.userDefinedArea.disable();
       this.form.controls.MLSS.disable();
     }
     this.cd.detectChanges();
@@ -122,6 +124,26 @@ export class StatePointAnalysisFormComponent implements OnInit {
       str = 'kValue';
     }
     this.statePointAnalysisService.currentField.next(str);
+  }
+
+  showHideInputField() {
+    this.form.patchValue({
+      userDefinedArea: !this.form.controls.userDefinedArea.value
+    });
+    if (!this.form.controls.userDefinedArea.value) {
+      this.save();
+    }
+    this.calculate();
+  }
+
+  save() {
+    if (!this.form.controls.userDefinedArea.value) {
+      let calculatedArea: number = this.statePointAnalysisService.calculateArea(this.form.controls.diameter.value);
+      this.form.patchValue({
+        areaOfClarifier: calculatedArea
+      })
+      this.calculate();
+    }
   }
 
 }
