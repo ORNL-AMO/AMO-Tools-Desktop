@@ -29,7 +29,8 @@ export class CompressedAirReportRollupService {
       savingPotential: 0,
       energySavingsPotential: 0,
       fuelEnergy: 0,
-      electricityEnergy: 0
+      electricityEnergy: 0,
+      carbonEmissions: 0
     }
   }
 
@@ -133,7 +134,8 @@ export class CompressedAirReportRollupService {
       totalCost: sumCost,
       totalEnergy: sumEnergy,
       electricityEnergy: sumEnergy + sumEnergySavings,
-      fuelEnergy: 0
+      fuelEnergy: 0,
+      carbonEmissions: 0
     }
   }
 }

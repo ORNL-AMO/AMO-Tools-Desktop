@@ -244,5 +244,6 @@ export interface ReportUtilityTotal {
     savingPotential: number,
     energySavingsPotential: number,
     fuelEnergy: number,
-    electricityEnergy: number
+    electricityEnergy: number,
+    carbonEmissions: number
 }

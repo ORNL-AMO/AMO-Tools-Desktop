@@ -29,7 +29,8 @@ export class WasteWaterReportRollupService {
       savingPotential: 0,
       energySavingsPotential: 0,
       fuelEnergy: 0,
-      electricityEnergy: 0
+      electricityEnergy: 0,
+      carbonEmissions: 0
     }
   }
 
@@ -175,6 +176,7 @@ export class WasteWaterReportRollupService {
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
     this.selectedWasteWaterResults.forEach(result => {
       let diffCost = result.baselineResults.AeCost - result.modificationResults.AeCost;
       sumSavings += diffCost;
@@ -182,6 +184,7 @@ export class WasteWaterReportRollupService {
       let diffEnergy = result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual;
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.AeEnergyAnnual;
+      sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
     })
     sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(settings.wasteWaterRollupUnit);
     sumEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(settings.wasteWaterRollupUnit);
@@ -191,7 +194,8 @@ export class WasteWaterReportRollupService {
       savingPotential: sumSavings,
       energySavingsPotential: sumEnergySavings,
       fuelEnergy: 0,
-      electricityEnergy: sumEnergy + sumEnergySavings
+      electricityEnergy: sumEnergy + sumEnergySavings,
+      carbonEmissions: sumCo2Emissions
     }
   }
 

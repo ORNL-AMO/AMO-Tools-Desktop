@@ -132,7 +132,8 @@ export class ReportSummaryGraphsService {
       percentCost: totals.savingPotential / totals.totalCost * 100,
       percentEnergy: totals.savingPotential / totals.totalEnergy * 100,
       color: color,
-      currencyUnit: currency
+      currencyUnit: currency,
+      carbonEmissions: totals.carbonEmissions
     }
   }
 }

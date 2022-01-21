@@ -12,3 +12,17 @@
                 </app-report-summary-pie-chart>
         </div>
 </div>
+<div class="d-flex no-gutters w-100">
+        <div class="w-50" *ngIf="pieChartData">
+                <app-report-summary-pie-chart [pieChartData]="pieChartData"
+                        [dataOption]="'cost'" [energyUnit]="reportSummaryEnergyUnit"
+                        [titleStr]="'Assessment Annual Cost Summary'">
+                </app-report-summary-pie-chart>
+        </div>
+        <div class="w-50" *ngIf="energyChartData">
+                <app-report-summary-pie-chart [pieChartData]="pieChartData"
+                        [dataOption]="'carbon'" [energyUnit]="reportSummaryEnergyUnit"
+                        [titleStr]="'Assessment Carbon Emissions Summary'">
+                </app-report-summary-pie-chart>
+        </div>
+</div>

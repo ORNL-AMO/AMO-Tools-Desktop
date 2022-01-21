@@ -28,7 +28,8 @@ export class SsmtReportRollupService {
       savingPotential: 0,
       energySavingsPotential: 0,
       fuelEnergy: 0,
-      electricityEnergy: 0
+      electricityEnergy: 0,
+      carbonEmissions: 0
     }
   }
 
@@ -110,6 +111,7 @@ export class SsmtReportRollupService {
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
     this.selectedSsmtResults.forEach(result => {
       //need to convert fuel usage from result setting to common unit
       let resultsCopy: SsmtResultsData = JSON.parse(JSON.stringify(result));
@@ -122,6 +124,7 @@ export class SsmtReportRollupService {
       let diffEnergy = resultsCopy.baselineResults.operationsOutput.boilerFuelUsage - resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
       sumEnergySavings += diffEnergy;
       sumEnergy += resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
+      sumCo2Emissions += resultsCopy.modificationResults.co2EmissionsOutput.totalEmissionOutput;
     });
     this.totals = {
       totalCost: sumCost,
@@ -129,7 +132,8 @@ export class SsmtReportRollupService {
       energySavingsPotential: sumEnergySavings,
       savingPotential: sumSavings,
       fuelEnergy: sumEnergy + sumEnergySavings,
-      electricityEnergy: 0
+      electricityEnergy: 0,
+      carbonEmissions: sumCo2Emissions
     }
   }
 

@@ -66,6 +66,12 @@ export class ReportSummaryPieChartComponent implements OnInit {
       });
       textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
     }
+    else if (this.dataOption == 'carbon') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.carbonEmissions
+      });
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
+    }
     var data = [{
       values: valuesArr,
       labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),

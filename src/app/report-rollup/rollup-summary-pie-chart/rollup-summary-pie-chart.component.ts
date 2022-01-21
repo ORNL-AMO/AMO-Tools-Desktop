@@ -174,5 +174,6 @@ export interface PieChartDataItem {
   percentEnergy: number,
   color: string,
   furnaceType?: string
-  currencyUnit?: string
+  currencyUnit?: string,
+  carbonEmissions?: number
 }
