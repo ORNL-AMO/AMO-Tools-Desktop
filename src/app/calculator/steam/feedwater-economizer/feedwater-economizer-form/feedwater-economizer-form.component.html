@@ -71,10 +71,9 @@
     <div class="input-group">
       <input name="fuelTemp" type="number" step="10" class="form-control" formControlName="fuelTemp" id="fuelTemp"
         onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelTemp')">
-      <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-      </span>
+        <span class="input-group-addon units">
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.fuelTemp.invalid && !form.controls.fuelTemp.pristine">
@@ -89,8 +88,7 @@
         id="flueGasTemperature" onfocus="this.select();" (input)="calculate()"
         (focus)="focusField('flueGasTemperature')">
       <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </span>
     </div>
     <span class="alert-danger pull-right small"
@@ -98,8 +96,7 @@
       <span *ngIf="form.controls.flueGasTemperature.errors.required">Value Required</span>
       <span *ngIf="form.controls.flueGasTemperature.errors.min">Value can't be less than Combustion Temperature
         ({{form.controls.flueGasTemperature.errors.min.min}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         ).</span>
       <span class="alert-warning pull-right small" *ngIf="warnings.flueGasTemp !== null">{{warnings.flueGasTemp}}</span>
     </span>
@@ -166,8 +163,7 @@
         formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();"
         (input)="calculate()" (focus)="focusField('combustionAirTemperature')">
       <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </span>
     </div>
     <span class="alert-danger pull-right small"
@@ -187,8 +183,7 @@
         formControlName="ambientAirTemperature" id="ambientAirTemperature" onfocus="this.select();"
         (input)="calculate()" (focus)="focusField('ambientAirTemperature')">
       <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </span>
     </div>
     <span class="alert-danger pull-right small"
@@ -267,10 +262,8 @@
     <div class="input-group">
       <input class="form-control" name="steamPressure" id="steamPressure" formControlName="steamPressure" type="number"
         (input)="calculate()" (focus)="focusField('steamPressure')" onfocus="this.select();">
-      <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Psig</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-      </span>
+      <span class="input-group-addon units" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+    
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.steamPressure.invalid && !form.controls.steamPressure.pristine">
@@ -311,8 +304,7 @@
         formControlName="feedWaterTemperature" id="feedWaterTemperature" onfocus="this.select();" (input)="calculate()"
         (focus)="focusField('feedWaterTemperature')">
       <span class="input-group-addon units">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </span>
     </div>
     <span class="alert-danger pull-right small"

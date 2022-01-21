@@ -18,6 +18,7 @@ import { SettingsService } from '../settings/settings.service';
 import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-phast',
@@ -87,10 +88,12 @@ export class PhastComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private egridService: EGridService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.tab1Status = '';
     this.tab2Status = '';
 
@@ -132,7 +135,6 @@ export class PhastComponent implements OnInit {
       this.mainTab = val;
       //on tab change get container height
       this.getContainerHeight();
-      this.checkTutorials();
     });
     //subscription for stepTab
     this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
@@ -182,6 +184,10 @@ export class PhastComponent implements OnInit {
       }
     });
 
+  }
+
+  ngAfterContentInit(){
+    this.checkTutorials();
   }
 
   setExploreOppsDefaults(modification: Modification) {  
@@ -503,6 +509,7 @@ export class PhastComponent implements OnInit {
       exploreOppsShowAllTemp: exploreOppsDefault,
       exploreOppsShowFixtures: exploreOppsDefault,
     };
+    tmpModification.phast.co2SavingsData = (JSON.parse(JSON.stringify(this._phast.co2SavingsData)));
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this._phast.operatingHours)));

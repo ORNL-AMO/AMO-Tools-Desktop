@@ -286,6 +286,16 @@
         </th>
       </tr>
       <tr>
+        <th>Modification Scenario</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <div *ngFor="let modificationScenario of getModificationScenario(modification.psat)">
+            {{modificationScenario}}<br>
+          </div>
+        </th>
+      </tr>
+      <tr>
         <th>Modifications</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
         <th *ngFor="let modification of psat.modifications; let index = index;"

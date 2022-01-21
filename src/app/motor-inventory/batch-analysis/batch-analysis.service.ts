@@ -5,6 +5,7 @@ import { MotorInventoryData, FilterInventorySummary, MotorItem } from '../motor-
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../shared/models/calculators';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class BatchAnalysisService {
@@ -43,7 +44,8 @@ export class BatchAnalysisService {
 
   getDataAndResultsFromMotorItem(motorItem: MotorItem, settings: Settings): { data: ReplaceExistingData, results: ReplaceExistingResults } {
     let replaceExistingData: ReplaceExistingData = this.getReplaceExistingInputsFromMotorItem(motorItem, settings);
-    let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings);
+    let co2SavingsData: Co2SavingsData = this.motorInventoryService.motorInventoryData.getValue().co2SavingsData;
+    let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings, co2SavingsData);
     return { data: replaceExistingData, results: replaceExistingResults };
   }
 
@@ -95,7 +97,7 @@ export class BatchAnalysisService {
       newEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
       purchaseCost: motorItem.batchAnalysisData.modifiedCost,
       rewindEfficiencyLoss: motorItem.batchAnalysisData.rewindEfficiencyLoss,
-      rewindCost: motorItem.batchAnalysisData.rewindCost
+      rewindCost: motorItem.batchAnalysisData.rewindCost,
     }
     return data;
   }
@@ -133,10 +135,13 @@ export class BatchAnalysisService {
       isBatchAnalysisValid: missingData.length == 0,
       missingData: missingData,
       currentEnergyUse: this.checkInfinity(replaceExistingResults.existingEnergyUse),
+      currentEmissionOutput: this.checkInfinity(replaceExistingResults.existingEmissionOutput),
       currentEnergyCost: this.checkInfinity(replaceExistingResults.existingEnergyCost),
       rewindEnergyUse: this.checkInfinity(replaceExistingResults.rewoundEnergyUse),
+      rewindEmissionOutput: this.checkInfinity(replaceExistingResults.rewoundEmissionOutput),
       rewindEnergyCost: this.checkInfinity(replaceExistingResults.rewoundEnergyCost),
       replacementEnergyUse: this.checkInfinity(replaceExistingResults.newEnergyUse),
+      replacementEmissionOutput: this.checkInfinity(replaceExistingResults.newEmissionOutput),
       replacementEnergyCost: this.checkInfinity(replaceExistingResults.newEnergyCost),
       replacementNowPayback: this.checkInfinity(replaceExistingResults.simplePayback),
       replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback),
@@ -195,10 +200,13 @@ export interface BatchAnalysisResults {
   isBatchAnalysisValid: boolean,
   missingData?: Array<string>,
   currentEnergyUse: number,
+  currentEmissionOutput: number
   currentEnergyCost: number,
   rewindEnergyUse: number,
+  rewindEmissionOutput: number,
   rewindEnergyCost: number,
   replacementEnergyUse: number,
+  replacementEmissionOutput: number,
   replacementEnergyCost: number,
   replacementNowPayback: number,
   replacementFailPayback: number,

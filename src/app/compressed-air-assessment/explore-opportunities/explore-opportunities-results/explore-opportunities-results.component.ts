@@ -66,6 +66,10 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
     this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
       this.modificationResults = val;
+      if (this.modificationResults) {
+        // Do this to pick up on modification change
+        this.modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == this.modificationResults.modification.modificationId });
+      }
       this.setResults();
     });
 

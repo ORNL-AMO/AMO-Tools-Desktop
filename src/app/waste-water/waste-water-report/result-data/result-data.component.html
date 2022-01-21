@@ -299,6 +299,21 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.FieldOTR
             | number:'1.0-2'}}</td>
             </tr>
+            <tr>
+                <th>Annual CO<sub>2</sub> (tonne CO<sub>2</sub>) Emissions</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.co2EmissionsOutput | number:'1.0-0'}}</th>
+                <th *ngFor="let modification of wasteWater.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.co2EmissionsOutput
+            | number:'1.0-0'}}</th>
+            </tr>
+            <tr>
+                <th>Annual CO<sub>2</sub> (tonne CO<sub>2</sub>) Emissions Savings</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+                <th *ngFor="let modification of wasteWater.modifications; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.co2EmissionsSavings
+            | number:'1.0-0'}}</th>
+            </tr>
 
             <tr>
                 <th>Aerator Energy Use (MWh/yr)</th>

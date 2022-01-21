@@ -15,7 +15,7 @@
     [ngClass]="{'col-lg-3 col-md-4': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of savingsItems">
     <div class="p-0">
       <label class="group-label w-100">{{savingsItem.label}} ({{settings.currency}})</label>
-      <app-utility-donut-chart [showPrint]="showPrint" [settings] = "settings" [savingsItem]="savingsItem">
+      <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem">
       </app-utility-donut-chart>
     </div>
   </div>

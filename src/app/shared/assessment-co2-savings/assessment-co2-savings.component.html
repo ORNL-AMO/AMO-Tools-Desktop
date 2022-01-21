@@ -2,7 +2,7 @@
   <form #formElement [formGroup]="form">
     <div class="form-group">
       <label class="small" for="zipcode">
-       Zip Code
+       Zip code
       </label>
       <div class="input-group">
         <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
@@ -10,7 +10,7 @@
       </div>
       <span class="alert-danger pull-right small"
       *ngIf="zipCodeSubRegionData.length === 0 && inBaseline">
-      <span>Enter a valid zip code to find your eGRID subregion</span>
+      <span>Enter a valid zip code to find your eGRID subregion <br> OR Enter 00000 for US Average</span>
       </span>
     </div>
 
@@ -38,7 +38,9 @@
       <div class="input-group">
         <input name="totalEmissionOutputRate" type="number" class="form-control" formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate"
           onfocus="this.select();" (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
-          <span class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>
+          <span *ngIf="!inTreasureHunt" class="input-group-addon units small">kg CO<sub>2</sub>/<span>MWh</span>
+          </span>
+          <span *ngIf="inTreasureHunt" class="input-group-addon units small">kg CO<sub>2</sub>/<span>kWh</span>
           </span>
       </div>
     </div>

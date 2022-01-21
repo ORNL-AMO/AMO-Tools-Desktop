@@ -1,0 +1,69 @@
+<form #formElement [formGroup]="form">
+
+    <!-- Electricity -->
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'electricity'">
+        <label class="small" for="zipcode">
+            Zip code
+        </label>
+        <div class="input-group">
+            <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
+                onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
+            <span>Enter a valid zip code to find your eGRID subregion <br> OR Enter 00000 for US Average</span>
+        </span>
+    </div>
+
+
+    <div *ngIf="zipCodeSubRegionData && co2SavingsData.energyType == 'electricity'" class="form-group">
+        <label class="small" for="eGridSubregion">eGRID Subregion</label>
+        <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
+            <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
+                (focus)="focusField('eGridSubregion')" (change)="setSubRegionEmissionsOutput()">
+                <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
+            </select>
+        </div>
+        <div *ngIf="hasValidSubRegion && zipCodeSubRegionData.length < 2" class="text-center small">
+            {{form.controls.eGridSubregion.value}}
+        </div>
+        <div *ngIf="!hasValidSubRegion || !form.controls.eGridSubregion.value" class="text-center small">
+            <strong>&mdash; &mdash;</strong>
+        </div>
+    </div>
+
+    <!-- Fuel -->
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+        <label class="small" for="energySource">Energy Source</label>
+        <div class="input-group">
+            <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
+                (change)="setFuelOptions(true)" [required]="true" 
+                (focus)="focusField('energySource')">
+                <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+        <label class="small" for="fuelType">Fuel Type</label>
+        <div class="input-group">
+            <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType"
+                 (change)="setFuelTypeOutputRate(true)" [required]="true" (focus)="focusField('fuelType')">
+                <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="small" for="totalEmissionOutputRate">
+            Total Emission Output Rate
+        </label>
+        <div class="input-group">
+            <input name="totalEmissionOutputRate" type="number" class="form-control"
+                formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
+                (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
+            <span class="input-group-addon units small">kg CO<sub>2</sub>/{{settings.energyResultUnit}}
+            </span>
+        </div>
+    </div>
+</form>

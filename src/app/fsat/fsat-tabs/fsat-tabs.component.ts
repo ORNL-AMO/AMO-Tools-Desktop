@@ -130,7 +130,7 @@ export class FsatTabsComponent implements OnInit {
     }
   }
 
-  changeAssessmentTab(str: string) {
+  changeAssessmentTab(str: string) {  
     this.fsatService.assessmentTab.next(str);
   }
 

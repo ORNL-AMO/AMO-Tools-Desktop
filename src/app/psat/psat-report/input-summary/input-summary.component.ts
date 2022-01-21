@@ -14,6 +14,7 @@ export class InputSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  totalEmissionOutputRateDiff: boolean = false;
   pumpDiff: boolean = false;
   pumpRpmDiff: boolean = false;
   driveDiff: boolean = false;
@@ -83,6 +84,9 @@ export class InputSummaryComponent implements OnInit {
     }
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
+        if (mod.psat.inputs.co2SavingsData.totalEmissionOutputRate != this.psat.inputs.co2SavingsData.totalEmissionOutputRate) {
+        this.totalEmissionOutputRateDiff = true;
+        }
         if (mod.psat.inputs.pump_style != this.psat.inputs.pump_style) {
           this.pumpDiff = true;
         }

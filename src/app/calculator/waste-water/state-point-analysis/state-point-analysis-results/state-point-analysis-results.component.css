@@ -1,0 +1,24 @@
+
+.group-label{
+    font-weight: bold;
+}
+
+  
+td{
+    font-size: small;
+    padding: .5rem;
+  }
+  
+  th {
+    border-top: none;
+    padding: .25rem;
+  }
+  
+  tbody {
+    padding-top: .25rem;
+  }
+
+  table {
+    margin-bottom: .5rem;
+    background: white;
+  }

@@ -12,3 +12,8 @@
         overflow-y: visible;
     }
 }
+
+
+.modal-open{
+    z-index: initial !important;
+}

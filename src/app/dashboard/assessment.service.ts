@@ -68,10 +68,10 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
-    } else if (assessment.type == "CompressedAir") {
-      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
-      //   this.tab = 'assessment';
-      // }
+    } else if (assessment.type == 'CompressedAir') {
+      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
@@ -188,6 +188,7 @@ export class AssessmentService {
       fsatOperations: {
         operatingHours: 8760,
         cost: null,
+        cO2SavingsData: null
       },
       fanMotor: {
         lineFrequency: 60,

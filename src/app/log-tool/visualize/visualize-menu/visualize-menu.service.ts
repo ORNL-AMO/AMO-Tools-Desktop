@@ -220,6 +220,9 @@ export class VisualizeMenuService {
       } else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
         selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0]
         selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
+      } else {
+        // Lines not a valid mode for non-time series
+        selectedDataOption.linesOrMarkers = 'markers';
       }
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;

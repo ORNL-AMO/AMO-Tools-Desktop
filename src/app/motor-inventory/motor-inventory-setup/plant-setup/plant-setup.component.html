@@ -9,4 +9,16 @@
             (startSavePolling)="save()" [inInventory]="true">
         </app-application-settings>
     </div>
+    
+    <div class="col-12"
+    *ngIf="co2SavingsData">
+      <app-assessment-co2-savings 
+      [co2SavingsData]="co2SavingsData"
+      [isFormDisabled]="false"
+      [inBaseline]="true"
+      (emitCurrentField)="focusField($event)"
+      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)" 
+      ></app-assessment-co2-savings>
+    </div>
+
 </div>

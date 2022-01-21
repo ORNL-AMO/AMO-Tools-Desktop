@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService } from '../settings/settings.service';
 import { ConvertSsmtService } from './convert-ssmt.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -81,6 +82,7 @@ export class SsmtComponent implements OnInit {
   showSankeyLabelOptions: boolean;
 
   constructor(
+    private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private indexedDbService: IndexedDbService,
@@ -95,6 +97,7 @@ export class SsmtComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {
@@ -243,6 +246,7 @@ export class SsmtComponent implements OnInit {
   }
 
   save() {
+    this._ssmt = this.updateModificationCO2Savings(this._ssmt);
     if (this._ssmt.modifications) {
       if (this._ssmt.modifications.length === 0) {
         this.modificationExists = false;
@@ -261,6 +265,26 @@ export class SsmtComponent implements OnInit {
         this.ssmtService.updateData.next(true);
       });
     });
+  }
+
+  updateModificationCO2Savings(ssmt: SSMT) {
+    if (ssmt.co2SavingsData) {
+      ssmt.modifications.forEach(mod => {
+        if (!mod.ssmt.co2SavingsData) {
+          mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
+        } else {
+          mod.ssmt.co2SavingsData.zipcode = ssmt.co2SavingsData.zipcode;
+          mod.ssmt.co2SavingsData.eGridSubregion = ssmt.co2SavingsData.eGridSubregion;
+          if (!mod.ssmt.co2SavingsData.totalEmissionOutputRate) {
+            mod.ssmt.co2SavingsData.totalEmissionOutputRate = ssmt.co2SavingsData.totalEmissionOutputRate;
+          }
+          if (!mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate) {
+            mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate = ssmt.co2SavingsData.totalFuelEmissionOutputRate;
+          }
+        }
+      });
+    }
+    return ssmt;
   }
 
   checkSetupDone() {

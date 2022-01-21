@@ -9,6 +9,7 @@ import { EnergyInputService } from './losses/energy-input/energy-input.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasByVolumeSuiteResults } from '../shared/models/phast/losses/flueGas';
 import { FlueGasResultsComponent } from '../calculator/furnaces/flue-gas/flue-gas-results/flue-gas-results.component';
+import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
 
 
 @Injectable()
@@ -19,7 +20,8 @@ export class PhastResultsService {
     private auxEquipmentService: AuxEquipmentService,
     private convertUnitsService: ConvertUnitsService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
-    private energyInputService: EnergyInputService) { }
+    private energyInputService: EnergyInputService,
+    private co2SavingPhastService: Co2SavingsPhastService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -181,6 +183,14 @@ export class PhastResultsService {
         results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - Math.abs(results.exothermicHeat);
       }
     }
+
+    if (phast.co2SavingsData) {
+      phast.co2SavingsData.electricityUse = results.grossHeatInput;
+      results.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);   
+    } else {
+      results.co2EmissionsOutput = 0;
+    }
+
     return results;
   }
 

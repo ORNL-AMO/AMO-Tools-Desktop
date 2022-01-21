@@ -2,6 +2,7 @@ import { OperatingHours, OperatingCosts } from "../operations";
 import { SSMTOutput } from "./steam-outputs";
 import { StackLossInput } from "./steam-inputs";
 import { SavingsOpportunity } from "../explore-opps";
+import { Co2SavingsData } from "../../../calculator/utilities/co2-savings/co2-savings.service";
 
 export interface SSMT {
     name?: string;
@@ -12,6 +13,8 @@ export interface SSMT {
     operatingCosts?: OperatingCosts;
     equipmentNotes?: string;
     generalSteamOperations?: GeneralSteamOperations;
+    co2SavingsData?: Co2SavingsData;
+    otherFuelMixedCO2SavingsData?: Array<Co2SavingsData>;
     modifications?: Array<Modification>;
     boilerInput?: BoilerInput;
     headerInput?: HeaderInput;
@@ -23,6 +26,7 @@ export interface SSMT {
 
 export interface SSMTInputs {
     operationsInput: OperationsInput;
+    co2SavingsData: Co2SavingsData;
     boilerInput: BoilerInput;
     headerInput: HeaderInput;
     turbineInput: TurbineInput;

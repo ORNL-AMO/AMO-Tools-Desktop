@@ -25,6 +25,8 @@ export class OperationsSummaryComponent implements OnInit {
   electricityCostDiff: Array<boolean>;
   makeUpWaterCostDiff: Array<boolean>;
   makeUpWaterTempDiff: Array<boolean>;
+  totalEmissionOutputRateDiff: Array<boolean>;
+  totalFuelEmissionOutputRateDiff: Array<boolean>;
   sitePowerImportDiff: Array<boolean>;
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -34,6 +36,8 @@ export class OperationsSummaryComponent implements OnInit {
     this.electricityCostDiff = new Array<boolean>();
     this.makeUpWaterCostDiff = new Array<boolean>();
     this.makeUpWaterTempDiff = new Array<boolean>();
+    this.totalFuelEmissionOutputRateDiff = new Array<boolean>();
+    this.totalEmissionOutputRateDiff = new Array<boolean>();
     this.sitePowerImportDiff = new Array<boolean>();
     if (this.modificationInputData) {
       this.numMods = this.modificationInputData.length;
@@ -42,6 +46,8 @@ export class OperationsSummaryComponent implements OnInit {
         this.fuelCostDiff.push(false);
         this.electricityCostDiff.push(false);
         this.makeUpWaterCostDiff.push(false);
+        this.totalEmissionOutputRateDiff.push(false);
+        this.totalFuelEmissionOutputRateDiff.push(false);
         this.makeUpWaterTempDiff.push(false);
         this.sitePowerImportDiff.push(false);
       });

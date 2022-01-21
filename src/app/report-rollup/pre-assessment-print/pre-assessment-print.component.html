@@ -1,7 +1,7 @@
 <div class="row no-gutters mt-2">
     <div class="print-pie-width">
         <label class="group-label">Energy Use</label>
-        <app-plotly-pie-chart [isPrint]="true" [valuesAndLabels]="energyUsePieData" [valuesUnit]="energyUnit"
+        <app-plotly-pie-chart [isPrint]="true" [valuesAndLabels]="energyUsePieData" [valuesUnit]="resultUnit"
             [textTemplate]="energyTextTemplate">
         </app-plotly-pie-chart>
     </div>
@@ -13,7 +13,7 @@
 </div>
 <div class="row no-gutters">
     <div class="col-12">
-        <app-pre-assessment-table [settings]="settings" [calculator]="calculator">
+        <app-pre-assessment-table [settings]="settings" [calculator]="calculator" [resultUnit]="resultUnit">
         </app-pre-assessment-table>
     </div>
 </div>

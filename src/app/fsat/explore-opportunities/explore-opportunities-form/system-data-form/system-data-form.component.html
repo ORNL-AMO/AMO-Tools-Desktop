@@ -1,6 +1,7 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
         {{ fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.display}}
     </label>
@@ -48,6 +49,7 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
         {{fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.display}}
     </label>
@@ -140,6 +142,7 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="showSystemData">
         <input type="checkbox" id="showSystemData" (focus)="focusField('cost')" (change)="toggleSystemData()"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
             [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
         Adjust Operational Data
     </label>

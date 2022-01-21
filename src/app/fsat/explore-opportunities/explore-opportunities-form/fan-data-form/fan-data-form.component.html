@@ -2,7 +2,7 @@
 <div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="modifyMotorDrive">
     <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')"
-      (change)="toggleMotorDrive()"
+      (change)="toggleMotorDrive()" [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
       [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowDrive.hasOpportunity" />
     {{fsat.modifications[exploreModIndex].exploreOppsShowDrive.display}}
   </label>
@@ -71,7 +71,7 @@
 <div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="showFanType">
     <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')"
-      (change)="toggleFanType()"
+      (change)="toggleFanType()" [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false"
       [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity" />
     {{fsat.modifications[exploreModIndex].exploreOppsShowFanType.display}}
   </label>

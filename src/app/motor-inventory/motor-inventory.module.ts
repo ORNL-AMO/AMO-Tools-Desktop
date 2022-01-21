@@ -17,6 +17,8 @@ import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inv
 import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { BatchAnalysisModule } from './batch-analysis/batch-analysis.module';
+import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,10 @@ import { BatchAnalysisModule } from './batch-analysis/batch-analysis.module';
     MotorPropertiesModule,
     MotorInventorySummaryModule,
     SummaryFilterModule,
+    AssessmentCo2SavingsModule,
     HelpPanelModule,
-    BatchAnalysisModule
+    BatchAnalysisModule,
+    ConfirmDeleteModalModule
   ],
   providers: [
     MotorInventoryService

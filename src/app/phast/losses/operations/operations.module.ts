@@ -9,6 +9,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingCostsModalComponent } from './operating-costs-modal/operating-costs-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { Co2SavingsPhastModule } from './co2-savings-phast/co2-savings-phast.module';
+import { Co2SavingsPhastComponent } from './co2-savings-phast/co2-savings-phast.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +18,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ModalModule,
     FormsModule,
     OperatingHoursModalModule,
-    SharedPipesModule
+    SharedPipesModule,
+    Co2SavingsPhastModule
   ],
   declarations: [OperationsFormComponent, OperationsComponent, OperatingCostsModalComponent],
   providers: [OperationsService, OperationsCompareService],
