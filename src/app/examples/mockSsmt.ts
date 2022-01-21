@@ -26,10 +26,11 @@ export const MockSsmt: Assessment = {
             "makeUpWaterTemperature": 50
         },
         "co2SavingsData": {
+            "otherFuelMixedCO2SavingsData": [],
             "energyType": 'electricity',
             "energySource": '',
             "fuelType": '',
-            "totalEmissionOutputRate": 0,
+            "totalEmissionOutputRate": 430.78,
             "totalFuelEmissionOutputRate": 0,
             "electricityUse": 0,
             "eGridRegion": '',
@@ -89,10 +90,11 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
-                        "totalEmissionOutputRate": 0,
+                        "totalEmissionOutputRate": 430.78,
                         "totalFuelEmissionOutputRate": 0,
                         "electricityUse": 0,
                         "eGridRegion": '',
@@ -198,10 +200,11 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
-                        "totalEmissionOutputRate": 0,
+                        "totalEmissionOutputRate": 430.78,
                         "totalFuelEmissionOutputRate": 0,
                         "electricityUse": 0,
                         "eGridRegion": '',
@@ -307,10 +310,11 @@ export const MockSsmt: Assessment = {
                         "makeUpWaterTemperature": 50
                     },
                     "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
-                        "totalEmissionOutputRate": 0,
+                        "totalEmissionOutputRate": 430.78,
                         "totalFuelEmissionOutputRate": 0,
                         "electricityUse": 0,
                         "eGridRegion": '',

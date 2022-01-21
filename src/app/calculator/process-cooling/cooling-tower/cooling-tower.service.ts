@@ -296,7 +296,7 @@ export class CoolingTowerService {
     let {temperatureDifference, flowRate} = this.getObjFromForm(form);
     if (settings.unitsOfMeasure != "Imperial") {
       flowRate = this.convertUnitsService.value(flowRate).from('m3/s').to('gpm');
-      temperatureDifference = this.convertUnitsService.value(temperatureDifference).from('C').to('R');
+      temperatureDifference = this.convertUnitsService.value(temperatureDifference).from('K').to('R');
     }
     let coolingLoad = flowRate * (8.345 * 60 * 1 / 1000000) * temperatureDifference;
 

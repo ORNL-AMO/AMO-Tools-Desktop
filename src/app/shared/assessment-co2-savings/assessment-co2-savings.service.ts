@@ -76,18 +76,18 @@ export class AssessmentCo2SavingsService {
 
   getCo2SavingsDataFromSettingsForm(settingsForm: FormGroup): Co2SavingsData {
     let obj: Co2SavingsData = {
-      energyType: settingsForm.controls.co2SavingsEnergyType.value,
-      energySource: settingsForm.controls.co2SavingsEnergySource.value,
-      fuelType: settingsForm.controls.co2SavingsFuelType.value,
-      totalEmissionOutputRate: settingsForm.controls.totalEmissionOutputRate.value,
-      electricityUse: settingsForm.controls.electricityUse.value,
-      eGridRegion: settingsForm.controls.eGridRegion.value,
-      eGridSubregion: settingsForm.controls.eGridSubregion.value,
-      totalEmissionOutput: settingsForm.controls.totalEmissionOutput.value,
-      totalFuelEmissionOutputRate: settingsForm.controls.totalFuelEmissionOutputRate.value,
-      userEnteredBaselineEmissions: settingsForm.controls.userEnteredBaselineEmissions.value,
-      userEnteredModificationEmissions: settingsForm.controls.userEnteredModificationEmissions.value,
-      zipcode: settingsForm.controls.zipcode.value,
+      energyType: settingsForm.controls.co2SavingsEnergyType.value || 'electricity',
+      energySource: settingsForm.controls.co2SavingsEnergySource.value || 'Natural Gas',
+      fuelType: settingsForm.controls.co2SavingsFuelType.value || 'Natural Gas',
+      totalEmissionOutputRate: settingsForm.controls.totalEmissionOutputRate.value || 401.07,
+      electricityUse: settingsForm.controls.electricityUse.value || 0,
+      eGridRegion: settingsForm.controls.eGridRegion.value || '',
+      eGridSubregion: settingsForm.controls.eGridSubregion.value || 'US Average',
+      totalEmissionOutput: settingsForm.controls.totalEmissionOutput.value || 0,
+      //totalFuelEmissionOutputRate: settingsForm.controls.totalFuelEmissionOutputRate.value || 0,
+      userEnteredBaselineEmissions: settingsForm.controls.userEnteredBaselineEmissions.value || false,
+      userEnteredModificationEmissions: settingsForm.controls.userEnteredModificationEmissions.value || false,
+      zipcode: settingsForm.controls.zipcode.value || '00000'
     };
 
     return obj;
@@ -103,7 +103,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: settings.eGridRegion,
       eGridSubregion: settings.eGridSubregion,
       totalEmissionOutput: settings.totalEmissionOutput,
-      totalFuelEmissionOutputRate: settings.totalFuelEmissionOutput,
+      totalFuelEmissionOutputRate: settings.totalFuelEmissionOutputRate,
       userEnteredBaselineEmissions: settings.userEnteredBaselineEmissions,
       userEnteredModificationEmissions: settings.userEnteredModificationEmissions,
       zipcode: settings.zipcode,

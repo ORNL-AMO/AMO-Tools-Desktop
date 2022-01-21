@@ -51,7 +51,7 @@ import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-servic
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
-import { MixedCo2EmissionsComponent } from './mixed-co2-emissions/mixed-co2-emissions.component';
+import { MixedCo2EmissionsModule } from '../shared/mixed-co2-emissions/mixed-co2-emissions.module';
 
 @NgModule({
   imports: [
@@ -67,7 +67,8 @@ import { MixedCo2EmissionsComponent } from './mixed-co2-emissions/mixed-co2-emis
     RouterModule,
     TreasureChestMenuModule,
     UpdateUnitsModalModule,
-    AssessmentCo2SavingsModule
+    AssessmentCo2SavingsModule,
+    MixedCo2EmissionsModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -82,7 +83,6 @@ import { MixedCo2EmissionsComponent } from './mixed-co2-emissions/mixed-co2-emis
     SortCardsByPipe,
     UtilitySummaryComponent,
     TreasureHuntGaugeComponent,
-    MixedCo2EmissionsComponent
   ],
   providers: [ 
     TreasureHuntService, 

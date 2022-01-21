@@ -100,21 +100,23 @@ export class SsmtService {
   }
 
   setCo2SavingsEmissionsResult(ssmtInputs: SSMTInputs, ssmtOutput: SSMTOutput, settings: Settings): SSMTOutput {
+    let ssmtInputCopy: SSMTInputs = JSON.parse(JSON.stringify(ssmtInputs)); 
     let co2EmissionsOutput: SteamCo2EmissionsOutput = {
       totalEmissionOutput: undefined,
       fuelEmissionOutput: undefined,
       electricityEmissionOutput: undefined,
       emissionsSavings: undefined,
     };
-    if (ssmtInputs.co2SavingsData) {
-      let electricityUse: number = ssmtOutput.operationsOutput.sitePowerImport * ssmtInputs.operationsInput.operatingHoursPerYear;
+    if (ssmtInputCopy.co2SavingsData) {
+      let electricityUse: number = ssmtOutput.operationsOutput.sitePowerImport * ssmtInputCopy.operationsInput.operatingHoursPerYear;
+      // Convert energy use to match emissions factor (MWh)
       electricityUse = this.convertUnitsService.value(electricityUse).from('kWh').to('MWh');
-      ssmtInputs.co2SavingsData.electricityUse = electricityUse;
-      co2EmissionsOutput.electricityEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputs.co2SavingsData, settings);
+      ssmtInputCopy.co2SavingsData.electricityUse = electricityUse;
+      co2EmissionsOutput.electricityEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings);
       
-      let fuelUse: number = ssmtOutput.boilerOutput.fuelEnergy * ssmtInputs.operationsInput.operatingHoursPerYear;
-      ssmtInputs.co2SavingsData.electricityUse = fuelUse;
-      co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputs.co2SavingsData, settings);
+      let fuelUse: number = ssmtOutput.boilerOutput.fuelEnergy * ssmtInputCopy.operationsInput.operatingHoursPerYear;
+      ssmtInputCopy.co2SavingsData.electricityUse = fuelUse;
+      co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings, true);
 
       co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput;
     } 

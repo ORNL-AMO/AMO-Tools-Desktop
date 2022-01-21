@@ -6,8 +6,6 @@
       [ngClass]="{'active': resultType == 'energyCost'}">Energy Cost</button>
   </div>
   <div class="w-100 pt-3" [ngClass]="{'pt-1': inRollup}">
-    <!-- <app-pie-chart [sideBySide]="!inRollup && !printView" [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
-      [printView]="printView" [exportName]="exportName"></app-pie-chart> -->
     <div class="w-100" #preAssessmentPieChart></div>
   </div>
   <p class="mx-auto no-column-data">Enter metered or design energy data for multiple systems to

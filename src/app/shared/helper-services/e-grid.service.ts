@@ -106,7 +106,8 @@ export class EGridService {
   }
 
   findEGRIDCO2Emissions(eGridSubregion: string): SubregionEmissions {
-    return  _.find(this.co2Emissions, (val) => val.subregion.includes(eGridSubregion));
+    let emissiongsMatch =  _.find(this.co2Emissions, (val) => val.subregion.includes(eGridSubregion));
+    return JSON.parse(JSON.stringify(emissiongsMatch));
   }
 
 }

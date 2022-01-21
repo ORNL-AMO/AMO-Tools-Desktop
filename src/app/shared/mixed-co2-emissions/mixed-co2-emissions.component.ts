@@ -36,13 +36,14 @@ export class MixedCo2EmissionsComponent implements OnInit {
   ngOnInit() {
     this.otherFuels = otherFuels;
 
-    let index: number = 0;
-
+    if (!this.fuelList) {
+      this.fuelList = new Array<Co2SavingsData>();
+    }
+    
     if(this.fuelList.length == 0){
       this.addFuel();
-    }
-
-    if (this.fuelList.length != 0) {
+    } else {
+      let index: number = 0;
       this.fuelList.forEach(fuel => {
         if (fuel.fuelType) {
           let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return fuel.energySource === val.energySource; });

@@ -70,7 +70,9 @@
 
     <!-- powerFactor100 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor100">
-        <label for="powerFactor100">Power Factor at Full Load</label>
+        <label for="powerFactor100">Power Factor at Full Load
+            <a class="form-text small click-link" (click)="calculateMotorPowerFactor100()">Calculate Power Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
                 formControlName="powerFactor100" id="powerFactor100">
@@ -85,7 +87,9 @@
     </div>
     <!-- powerFactor75 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor75">
-        <label for="powerFactor75">Power Factor at 75% Load</label>
+        <label for="powerFactor75">Power Factor at 75% Load
+            <a class="form-text small click-link" (click)="calculateMotorPowerFactor75()">Calculate Power Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
                 formControlName="powerFactor75" id="powerFactor75">
@@ -100,7 +104,9 @@
     </div>
     <!-- powerFactor50 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor50">
-        <label for="powerFactor50">Power Factor at 50% Load</label>
+        <label for="powerFactor50">Power Factor at 50% Load
+            <a class="form-text small click-link" (click)="calculateMotorPowerFactor50()">Calculate Power Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
                 formControlName="powerFactor50" id="powerFactor50">
@@ -115,7 +121,9 @@
     </div>
     <!-- powerFactor25 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor25">
-        <label for="powerFactor25">Power Factor at 25% Load</label>
+        <label for="powerFactor25">Power Factor at 25% Load
+            <a class="form-text small click-link" (click)="calculateMotorPowerFactor25()">Calculate Power Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
                 formControlName="powerFactor25" id="powerFactor25">

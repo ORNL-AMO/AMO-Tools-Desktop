@@ -40,7 +40,7 @@
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed == true">
           <label for="totalEmissionOutputRate">Total CO<sub>2</sub> Emission Output Rate
             <a class="form-text small click-link" (click)="showZipCodeModal()">
-              Calculate Emission Output Rate from Zip Code</a>
+              Calculate Emission Output Rate from zip code</a>
           </label>
           <div class="input-group">
             <input name="totalEmissionOutputRate" type="number" step="any" class="form-control"
@@ -222,10 +222,10 @@
       </div>
       <div class="d-flex flex-fill flex-column p-1">
         <label class="group-label" (click)="toggleWasteWaterUsed()">
-          Waste Water
+          Wastewater
         </label>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.wasteWaterUsed == true">
-          <label for="waterWasteCost">Waste Water Unit Cost</label>
+          <label for="waterWasteCost">Wastewater Unit Cost</label>
           <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="settings.waterWasteCost" id="waterWasteCost"
               (input)="setSaveSettings()" (focus)="focusField('operation-costs')">
@@ -233,7 +233,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/L</span>
           </div>
           <div class="form-group">
-            <label for="annualWasteWaterUsage">Waste Water Annual Consumption</label>
+            <label for="annualWasteWaterUsage">Wastewater Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterUsage" type="number" (focus)="focusField('operation-costs')"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterUsage" (input)="save()">
@@ -242,7 +242,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualWasteWaterCosts">Waste Water Annual Costs</label>
+            <label for="annualWasteWaterCosts">Wastewater Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterCosts" type="number" (focus)="focusField('operation-costs')"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCosts" (input)="save()">
@@ -370,7 +370,7 @@
         <div class="col-md-auto ico-col">
         </div>
         <div>
-          <h3>Carbon Emissions by Zip Code</h3>
+          <h3>Carbon Emissions by zip code</h3>
         </div>
         <button class="close pull-right" aria-label="Close" (click)="hideZipCodeModal()">
           <span aria-hidden="true">&times;</span>
