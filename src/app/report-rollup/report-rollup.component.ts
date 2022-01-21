@@ -8,6 +8,7 @@ import { ReportItem } from './report-rollup-models';
 import { ViewportScroller } from '@angular/common';
 import { DirectoryDashboardService } from '../dashboard/directory-dashboard/directory-dashboard.service';
 import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
+import { ReportSummaryGraphsService } from './report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-report-rollup',
@@ -28,7 +29,8 @@ export class ReportRollupComponent implements OnInit {
 
   gatheringAssessments: boolean = true;
   constructor(private viewportScroller: ViewportScroller, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService,
-    private cd: ChangeDetectorRef, private directoryDashboardService: DirectoryDashboardService, private printOptionsMenuService: PrintOptionsMenuService) { }
+    private cd: ChangeDetectorRef, private directoryDashboardService: DirectoryDashboardService, private printOptionsMenuService: PrintOptionsMenuService,
+    private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -57,6 +59,7 @@ export class ReportRollupComponent implements OnInit {
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();
+    this.reportSummaryGraphService.clearData();
   }
 
   setSidebarHeight() {

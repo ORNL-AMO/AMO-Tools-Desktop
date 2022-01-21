@@ -9,7 +9,6 @@ import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
-import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-report-rollup-units',
@@ -46,8 +45,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService,
     private wasteWaterReportRollupService: WasteWaterReportRollupService,
-    private compressedAirReportRollupService: CompressedAirReportRollupService, 
-    private reportSummaryGraphService: ReportSummaryGraphsService) { }
+    private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -87,7 +85,6 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.settings.currency = this.tmpSettings.currency;
     this.settings.commonRollupUnit = this.tmpSettings.commonRollupUnit;
     this.reportRollupService.settings.next(this.settings);
-    this.reportSummaryGraphService.clearData();
     this.newUnit();
     this.closeUnitModal.emit(true);
   }
@@ -110,10 +107,6 @@ export class ReportRollupUnitsComponent implements OnInit {
 
     let compressedAirAssessments = this.compressedAirReportRollupService.compressedAirAssessments.getValue();
     this.compressedAirReportRollupService.compressedAirAssessments.next(compressedAirAssessments);
-
-    this.reportSummaryGraphService.getEnergyGraphData(this.settings);
-    let energyChartData = this.reportSummaryGraphService.energyChartData.getValue();
-    this.reportSummaryGraphService.energyChartData.next(energyChartData);
   }
 
   checkForRollupUnits() {    
