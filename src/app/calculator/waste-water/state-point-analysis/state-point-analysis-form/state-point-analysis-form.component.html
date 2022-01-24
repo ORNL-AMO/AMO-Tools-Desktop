@@ -72,6 +72,8 @@
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
                 <span class="alert-danger pull-right small"
                     *ngIf="form.controls.diameter.invalid && !form.controls.diameter.pristine">
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.diameter.errors.required">Value
+                        Required</span>
                     <span *ngIf="form.controls.diameter.errors.min">Value can't be less than
                         {{form.controls.diameter.errors.min.min}}
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
@@ -108,6 +110,7 @@
                 <span class="mr-2" *ngIf="form.controls.areaOfClarifier.value">
                     {{form.controls.areaOfClarifier.value | number:'1.0-2'}}
                 </span>
+                <span class="mr-2" *ngIf="!form.controls.areaOfClarifier.value">—</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     ft<sup>2</sup></span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
