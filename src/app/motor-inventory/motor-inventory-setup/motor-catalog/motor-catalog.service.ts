@@ -58,4 +58,26 @@ export class MotorCatalogService {
     //load factor comes in as %, /100 to convert to decimal
     return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, efficiency, motorPower, (loadFactor / 100), settings);
   }
+
+  
+  estimateCurrent(loadFactor: number, motorEfficiency?: number) {
+    let estimatedCurrent: number;
+    let settings: Settings = this.motorInventoryService.settings.getValue();
+    let selectedMotorItem = this.getUpdatedSelectedMotorItem();
+
+    let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
+    let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
+    let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
+    let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
+
+    let efficiencyClass: number = 3;
+
+    let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
+    if (motorEfficiency) {
+      efficiency = motorEfficiency;
+    }
+    let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
+    estimatedCurrent = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
+    return estimatedCurrent;
+  }
 }
