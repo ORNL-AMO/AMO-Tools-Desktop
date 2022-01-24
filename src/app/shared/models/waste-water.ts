@@ -195,7 +195,7 @@ export interface StatePointAnalysisInput {
     numberOfClarifiers: number;
     areaOfClarifier: number;
     diameter: number;
-    userDefinedArea: boolean;
+    isUserDefinedArea: boolean;
     MLSS: number;
     influentFlow: number;
     rasFlow: number;

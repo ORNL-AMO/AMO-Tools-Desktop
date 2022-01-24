@@ -87,7 +87,7 @@ export class StatePointAnalysisFormComponent implements OnInit {
       this.form.controls.numberOfClarifiers.disable();
       this.form.controls.areaOfClarifier.disable();
       this.form.controls.diameter.disable();
-      this.form.controls.userDefinedArea.disable();
+      this.form.controls.isUserDefinedArea.disable();
       this.form.controls.MLSS.disable();
     }
     this.cd.detectChanges();
@@ -128,16 +128,16 @@ export class StatePointAnalysisFormComponent implements OnInit {
 
   showHideInputField() {
     this.form.patchValue({
-      userDefinedArea: !this.form.controls.userDefinedArea.value
+      isUserDefinedArea: !this.form.controls.isUserDefinedArea.value
     });
-    if (!this.form.controls.userDefinedArea.value) {
+    if (!this.form.controls.isUserDefinedArea.value) {
       this.save();
     }
     this.calculate();
   }
 
   save() {
-    if (!this.form.controls.userDefinedArea.value) {
+    if (!this.form.controls.isUserDefinedArea.value) {
       let calculatedArea: number = this.statePointAnalysisService.calculateArea(this.form.controls.diameter.value);
       this.form.patchValue({
         areaOfClarifier: calculatedArea

@@ -63,7 +63,7 @@
             </span>
         </div>
 
-        <div class="form-group" *ngIf="!this.form.controls.userDefinedArea.value">
+        <div class="form-group" *ngIf="!this.form.controls.isUserDefinedArea.value">
             <label>Diameter</label>
             <div class="input-group">
                 <input class="form-control" name="diameter" id="diameter" formControlName="diameter" type="number"
@@ -84,11 +84,11 @@
         <div class="form-group">
             <label for="{{'areaOfClarifier_'+idString}}">Clarifier Area
                 <a class="click-link small form-text" (click)="showHideInputField()"
-                    *ngIf="form.controls.userDefinedArea.value">Auto Calculate From Diameter</a>
+                    *ngIf="form.controls.isUserDefinedArea.value">Auto Calculate From Diameter</a>
                 <a class="click-link small form-text" (click)="showHideInputField()"
-                    *ngIf="!form.controls.userDefinedArea.value">Define Clarifier Area</a>
+                    *ngIf="!form.controls.isUserDefinedArea.value">Define Clarifier Area</a>
             </label>
-            <div class="input-group" *ngIf="this.form.controls.userDefinedArea.value">
+            <div class="input-group" *ngIf="this.form.controls.isUserDefinedArea.value">
                 <input type="number" name="areaOfClarifier" class="form-control number-input-field"
                     id="{{'areaOfClarifier_'+idString}}" (focus)="focusField('areaOfClarifier')" (input)="calculate()"
                     formControlName="areaOfClarifier" [readonly]="!selected">
@@ -104,7 +104,7 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.areaOfClarifier.errors.min">Value can't be
                     negative</span>
             </span>
-            <div class="input-group d-flex justify-content-center small bold" *ngIf="!form.controls.userDefinedArea.value">
+            <div class="input-group d-flex justify-content-center small bold" *ngIf="!form.controls.isUserDefinedArea.value">
                 <span class="mr-2" *ngIf="form.controls.areaOfClarifier.value">
                     {{form.controls.areaOfClarifier.value | number:'1.0-2'}}
                 </span>
