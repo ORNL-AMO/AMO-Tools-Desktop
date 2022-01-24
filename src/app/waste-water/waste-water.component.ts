@@ -16,6 +16,7 @@ import { ConvertWasteWaterService } from './convert-waste-water.service';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -60,12 +61,14 @@ export class WasteWaterComponent implements OnInit {
   showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private router: Router,
+    private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       if (!this.assessment || (this.assessment && this.assessment.type !== 'WasteWater')) {
@@ -159,10 +162,29 @@ export class WasteWaterComponent implements OnInit {
   }
 
   saveWasteWater(wasteWater: WasteWater) {
+    wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
+    
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });
+  }
+
+  updateModificationCO2Savings(wasteWater: WasteWater) {
+    if (wasteWater.baselineData.co2SavingsData) {
+      wasteWater.modifications.forEach(mod => {
+        if (!mod.co2SavingsData) {
+          mod.co2SavingsData = wasteWater.baselineData.co2SavingsData;
+        } else {
+          mod.co2SavingsData.zipcode = wasteWater.baselineData.co2SavingsData.zipcode;
+          mod.co2SavingsData.eGridSubregion = wasteWater.baselineData.co2SavingsData.eGridSubregion;
+          if (!mod.co2SavingsData.totalEmissionOutputRate) {
+            mod.co2SavingsData.totalEmissionOutputRate = wasteWater.baselineData.co2SavingsData.totalEmissionOutputRate;
+          }
+        }
+      });
+    }
+    return wasteWater;
   }
 
   addSettings(settings: Settings) {

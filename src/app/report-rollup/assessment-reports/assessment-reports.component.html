@@ -44,7 +44,7 @@
 <div class="print-container" *ngIf="printView">
     <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row">
         <div class="col-12">
-            <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs" [inPrintView]="true">
+            <app-psat-rollup [calculators]="selectedPsatCalcs" [inPrintView]="true">
             </app-psat-rollup>
         </div>
     </div>
@@ -59,7 +59,7 @@
     <div *ngIf="_phastAssessments.length > 0 && rollupPrintOptions.printPhastRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0}">
         <div class="col-12">
-            <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs" [inPrintView]="true">
+            <app-phast-rollup [calculators]="selectedPhastCalcs" [inPrintView]="true">
             </app-phast-rollup>
         </div>
     </div>
@@ -74,7 +74,7 @@
     <div *ngIf="_fsatAssessments.length > 0 && rollupPrintOptions.printFsatRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0}">
         <div class="col-12">
-            <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs" [inPrintView]="true">
+            <app-fsat-rollup [calculators]="selectedFsatCalcs" [inPrintView]="true">
             </app-fsat-rollup>
         </div>
     </div>
@@ -102,7 +102,7 @@
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0}">
         <div class="col-12">
             <!--treasure hunt print-->
-            <app-treasure-hunt-rollup [settings]="settings" [printView]="true"></app-treasure-hunt-rollup>
+            <app-treasure-hunt-rollup [printView]="true"></app-treasure-hunt-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
@@ -116,7 +116,7 @@
     <div *ngIf="_wasteWaterAssessments.length > 0 && rollupPrintOptions.printWasteWaterRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0 || _treasureHuntAssessments.length != 0}">
         <div class="col-12">
-            <app-waste-water-rollup [settings]="settings" [printView]="true"></app-waste-water-rollup>
+            <app-waste-water-rollup [printView]="true"></app-waste-water-rollup>
         </div>
     </div>
 

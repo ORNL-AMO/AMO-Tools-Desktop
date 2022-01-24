@@ -35,16 +35,16 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
     //use copy to convert to individual type settings
     this.tableData = JSON.parse(JSON.stringify(this.pieChartData));
     this.currencyUnit = this.tableData[0].currencyUnit;
-    this.tableData.forEach(dataItem => {
-      if (dataItem.furnaceType == 'electricity') {
-        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);
-      } else if (dataItem.furnaceType == 'steam') {
-        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupSteamUnit);
-      } else if (dataItem.furnaceType == 'fuel') {
-        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupFuelUnit);
-      }
-      dataItem.annualCost
-    })
+    // this.tableData.forEach(dataItem => {
+    //   if (dataItem.furnaceType == 'electricity') {
+    //     dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);
+    //   } else if (dataItem.furnaceType == 'steam') {
+    //     dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupSteamUnit);
+    //   } else if (dataItem.furnaceType == 'fuel') {
+    //     dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupFuelUnit);
+    //   }
+    //   dataItem.annualCost
+    // })
 
     let fuelResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Fuel' });
     this.totalFuelUsage = _.sumBy(fuelResults, 'energyUsed');

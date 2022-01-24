@@ -26,17 +26,54 @@
       </h6>
     </div>
     <div class="my-2" *ngIf="currentTab == 'operation-costs'">
-      <h6>
-        Operation Costs
-        <br>
-        <small class="text-muted">
-          Enter your current consumption and costs per utility type, for the facility over an entire year.
-          <hr>
-          Compressed air and steam fields are only to be used if the facility receives compressed air or steam as a
-          utility. If they are generated at the facility, then they should be considered part of other utilities
-          (electricity or fuel).
-        </small>
-      </h6>
+      <div class="my-2" *ngIf="currentField == 'operation-costs'">
+        <h6>
+          Operation Costs
+          <br>
+          <small class="text-muted">
+            Enter your current consumption and costs per utility type, for the facility over an entire year.
+            <hr>
+            Compressed air and steam fields are only to be used if the facility receives compressed air or steam as a
+            utility. If they are generated at the facility, then they should be considered part of other utilities
+            (electricity or fuel).
+          </small>
+        </h6>
+      </div>
+      <div class="my-2" *ngIf="currentField == 'totalEmissionOutputRate'">
+        <h6>
+          Total Emission Output Rate
+          <small class="text-muted">
+            <br>
+            The total emissions per unit of energy use. By default, this is set by the
+             dropdown options, but is changeable. The default values are only kg of
+              carbon dioxide (not carbon dioxide equivalent).
+            <hr>
+          </small>
+        </h6>
+      </div>
+      <div class="my-2" *ngIf="currentField == 'fuelType'">
+        <h6>
+          Fuel Type
+          <small class="text-muted">
+            <br>
+            Specific fuel creating the emission (set by Energy Source).
+            <hr>
+          </small>
+        </h6>
+      </div>
+      <div class="my-2" *ngIf="currentField == 'energySource'">
+        <h6>
+          Energy Source
+          <small class="text-muted">
+            <br>
+            Type of fuel creating the emission (used to set Fuel Type dropdown options). 
+            Can choose from Steam & Hot Water, Natural Gas, Petroleum-based fuels 
+            (including diesel and gasoline), biomass fuels (including biodiesel and 
+            landfill gas), coal, and other fuels (including coke).
+            <hr>
+          </small>
+        </h6>
+      </div>
     </div>
   </div>
 </div>

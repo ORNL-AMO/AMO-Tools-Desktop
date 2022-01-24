@@ -11,6 +11,7 @@ import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
 import { AirLeakSurveyInput, AirSystemCapacityInput, CalculateUsableCapacity, CompressedAirPressureReductionData, CompressedAirPressureReductionInput, ReceiverTank, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage } from "./standalone";
 import { AirFlowConversionInput } from "./compressed-air/compressed-air";
 import { ReceiverTankInputs } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
 
 export interface Calculator {
@@ -168,7 +169,9 @@ export interface ReplaceExistingData {
 }
 export interface ReplaceExistingResults {
     existingEnergyUse: number;
+    existingEmissionOutput?: number;
     newEnergyUse: number;
+    newEmissionOutput?: number;
     existingEnergyCost: number;
     newEnergyCost: number;
     annualEnergySavings: number;
@@ -176,6 +179,7 @@ export interface ReplaceExistingResults {
     simplePayback: number;
     percentSavings: number;
     rewoundEnergyUse: number;
+    rewoundEmissionOutput?: number;
     rewoundEnergyCost: number;
     incrementalSunkCost: number;
     incrementalAnnualEnergySavings: number;

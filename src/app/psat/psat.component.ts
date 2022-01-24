@@ -305,8 +305,9 @@ export class PsatComponent implements OnInit {
           mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
           mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
           mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+          mod.psat = this.updateModificationCO2Savings(mod.psat);
         }
-      })
+      });
     } else {
       this.modificationExists = false;
     }
@@ -318,6 +319,21 @@ export class PsatComponent implements OnInit {
       })
     });
     this.cd.detectChanges();
+  }
+
+  updateModificationCO2Savings(modPsat: PSAT) {
+    if (this._psat.inputs.co2SavingsData) {
+      if (!modPsat.inputs.co2SavingsData) {
+        modPsat.inputs.co2SavingsData = this._psat.inputs.co2SavingsData;
+      } else {
+        modPsat.inputs.co2SavingsData.zipcode = this._psat.inputs.co2SavingsData.zipcode;
+        modPsat.inputs.co2SavingsData.eGridSubregion = this._psat.inputs.co2SavingsData.eGridSubregion;
+        if (!modPsat.inputs.co2SavingsData.totalEmissionOutputRate) {
+          modPsat.inputs.co2SavingsData.totalEmissionOutputRate = this._psat.inputs.co2SavingsData.totalEmissionOutputRate;
+        }
+      }
+    }
+    return modPsat;
   }
 
   savePsat(newPSAT: PSAT) {

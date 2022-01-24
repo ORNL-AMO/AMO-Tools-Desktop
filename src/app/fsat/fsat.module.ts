@@ -45,6 +45,7 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { OperationsComponent } from './operations/operations.component';
 import { OperationsService } from './operations/operations.service';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { OperationsService } from './operations/operations.service';
     SystemAndEquipmentCurveModule,
     FsatSankeyModule,
     UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule
   ],
   declarations: [
     FsatComponent,

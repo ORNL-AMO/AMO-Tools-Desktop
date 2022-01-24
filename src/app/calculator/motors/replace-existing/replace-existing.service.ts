@@ -4,13 +4,16 @@ import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/mod
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { Co2SavingsData } from '../../utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class ReplaceExistingService {
 
   replaceExistingData: ReplaceExistingData;
   operatingHours: OperatingHours;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, 
+    private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(settings: Settings, operatingHours: number): FormGroup {
     let obj: ReplaceExistingData = this.initReplaceExistingData(settings, operatingHours);
@@ -79,18 +82,21 @@ export class ReplaceExistingService {
     };
   }
 
-  getResults(inputs: ReplaceExistingData, settings: Settings): ReplaceExistingResults {
+  getResults(inputs: ReplaceExistingData, settings: Settings, co2SavingsData?: Co2SavingsData): ReplaceExistingResults {
     let inputCpy: ReplaceExistingData = JSON.parse(JSON.stringify(inputs));
     let results: ReplaceExistingResults = {
       existingEnergyUse: 0,
+      existingEmissionOutput: 0,
       newEnergyUse: 0,
-      existingEnergyCost: 0,
       newEnergyCost: 0,
+      existingEnergyCost: 0,
+      newEmissionOutput: 0,
       annualEnergySavings: 0,
       costSavings: 0,
       simplePayback: 0,
       percentSavings: 0,
       rewoundEnergyUse: 0,
+      rewoundEmissionOutput: 0,
       rewoundEnergyCost: 0,
       incrementalSunkCost: inputCpy.rewindCost,
       incrementalAnnualEnergySavings: 0,
@@ -115,6 +121,24 @@ export class ReplaceExistingService {
     results.incrementalCostDifference = this.getIncrementalCostDifference(inputCpy);
     results.incrementalEnergyCostSavings = this.getIncrementalEnergyCostSavings(results, inputCpy);
     results.incrementalSimplePayback = this.getIncrementalSimplePayback(results);
+    results = this.setCo2SavingsEmissionsResult(co2SavingsData, results, settings);
+    return results;
+  }
+
+  setCo2SavingsEmissionsResult(co2SavingsData: Co2SavingsData, results: ReplaceExistingResults, settings: Settings): ReplaceExistingResults {
+    results.existingEmissionOutput = undefined;
+    results.rewoundEmissionOutput = undefined;
+    results.newEmissionOutput = undefined;
+    if (co2SavingsData) {
+      co2SavingsData.electricityUse = results.existingEnergyUse;
+      results.existingEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+
+      co2SavingsData.electricityUse = results.rewoundEnergyUse;
+      results.rewoundEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+
+      co2SavingsData.electricityUse = results.newEnergyUse;
+      results.newEmissionOutput = this.assessmentCo2Service.getCo2EmissionsResult(co2SavingsData, settings);
+    }
     return results;
   }
 

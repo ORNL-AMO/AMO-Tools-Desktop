@@ -113,6 +113,16 @@ export class ResultsSummaryComponent implements OnInit {
     return summaryNote;
   }
 
+  getModificationScenario(modifiedFsat: FSAT): Array<string> {
+    let modificationScenario: Array<string> = new Array();
+    if (modifiedFsat.whatIfScenario == true) {
+      modificationScenario.push('Modify Fan');
+    } else if (modifiedFsat.whatIfScenario == false) {
+      modificationScenario.push('Compare Two Fans');
+    }
+    return modificationScenario;
+  }
+
 }
 
 export interface SummaryNote {

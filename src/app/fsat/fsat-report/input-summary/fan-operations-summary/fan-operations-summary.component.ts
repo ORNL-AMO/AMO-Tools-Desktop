@@ -27,12 +27,14 @@ export class FanOperationsSummaryComponent implements OnInit {
 
   operatingHoursDiff: Array<boolean>;
   costDiff: Array<boolean>;
+  totalEmissionOutputRateDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.operatingHoursDiff = new Array<boolean>();
     this.costDiff = new Array<boolean>();
+    this.totalEmissionOutputRateDiff = new Array<boolean>();
 
     if (this.fsat.fsatOperations) {
       let mods = new Array<FsatOperations>();
@@ -44,6 +46,7 @@ export class FanOperationsSummaryComponent implements OnInit {
           }
           this.operatingHoursDiff.push(false);
           this.costDiff.push(false);
+          this.totalEmissionOutputRateDiff.push(false);
         }
         this.fsatOperations = {
           baseline: this.fsat.fsatOperations,

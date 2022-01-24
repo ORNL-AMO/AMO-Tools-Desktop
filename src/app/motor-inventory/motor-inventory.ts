@@ -1,6 +1,8 @@
+import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
+  co2SavingsData?: Co2SavingsData,
   departments: Array<MotorInventoryDepartment>,
   displayOptions: MotorPropertyDisplayOptions
 }

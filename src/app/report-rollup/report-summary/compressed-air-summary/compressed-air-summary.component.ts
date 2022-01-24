@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReportRollupService } from '../../compressed-air-report-rollup.service';
 
@@ -19,7 +20,7 @@ export class CompressedAirSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numCompressedAir: number;
-  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService) { }
+  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
@@ -63,8 +64,8 @@ export class CompressedAirSummaryComponent implements OnInit {
       sumEnergySavings += diffEnergy;
     })
     this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('kWh').to(this.settings.compressedAirRollupUnit);
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
+    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('kWh').to(this.settings.compressedAirRollupUnit)
   }
 }

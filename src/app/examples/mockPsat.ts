@@ -41,7 +41,7 @@ export const MockPsat: Assessment = {
                 "energyType": 'electricity',
                 "energySource": '',
                 "fuelType": '',
-                "totalEmissionOutputRate": 0,
+                "totalEmissionOutputRate": 430.78,
                 "electricityUse": 0,
                 "eGridRegion": '',
                 "eGridSubregion": 'SRTV',
@@ -251,6 +251,12 @@ export const MockPsatSettings: Settings = {
         },
         "date": "Tue Dec 04 2018"
     },
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "MWh",
+    "compressedAirRollupUnit": "MWh"
 }
 
 

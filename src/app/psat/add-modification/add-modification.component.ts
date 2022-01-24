@@ -64,7 +64,6 @@ export class AddModificationComponent implements OnInit {
     tmpModification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    console.log(tmpModification.psat.inputs.pump_specified);
     this.save.emit(tmpModification)
   }
 

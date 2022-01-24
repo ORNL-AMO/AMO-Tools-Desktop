@@ -4,10 +4,11 @@ import { PHAST, PhastResults, ExecutiveSummary, Modification } from '../../share
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Co2SavingsPhastService } from '../losses/operations/co2-savings-phast/co2-savings-phast.service';
 @Injectable()
 export class ExecutiveSummaryService {
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private co2SavingPhastService: Co2SavingsPhastService) { }
 
   getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
@@ -35,6 +36,15 @@ export class ExecutiveSummaryService {
       tmpResultsSummary.annualCostSavings = this.convertUnitsService.value(tmpResultsSummary.annualCostSavings).from("$").to(settings.currency);
       tmpResultsSummary.implementationCosts = this.convertUnitsService.value(tmpResultsSummary.implementationCosts).from("$").to(settings.currency);
     }
+
+    if (phast.co2SavingsData) {
+      phast.co2SavingsData.electricityUse = tmpResultsSummary.annualEnergyUsed;
+      tmpResultsSummary.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);   
+    } else {
+      tmpResultsSummary.co2EmissionsOutput = 0;
+    }
+
+
     return tmpResultsSummary;
   }
 

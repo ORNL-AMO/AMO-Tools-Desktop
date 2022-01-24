@@ -11,7 +11,7 @@
         <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
     </div>
     <div class="col-12">
-        <app-pre-assessment-print [settings]="settings" [calculator]="calculator"></app-pre-assessment-print>
+        <app-pre-assessment-print [settings]="settings" [calculator]="calculator" [resultUnit]="settings.pumpsRollupUnit"></app-pre-assessment-print>
     </div>
 </div>
 
@@ -20,15 +20,15 @@
     <div class="print-pie-width">
         <label class="group-label">Pump Systems Energy Use</label>
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'energy'"
-            [energyUnit]="settings.powerMeasurement" [printView]="true"></app-rollup-summary-pie-chart>
+            [energyUnit]="settings.pumpsRollupUnit" [printView]="true"></app-rollup-summary-pie-chart>
     </div>
     <div class="print-pie-width">
         <label class="group-label">Pump Systems Energy Costs</label>
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'"
-            [energyUnit]="settings.powerMeasurement" [printView]="true"></app-rollup-summary-pie-chart>
+            [energyUnit]="settings.pumpsRollupUnit" [printView]="true"></app-rollup-summary-pie-chart>
     </div>
     <div class="col-12">
-        <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
+        <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.pumpsRollupUnit"
             [equipmentType]="'Pump'"></app-rollup-summary-energy-table>
     </div>
 </div>
@@ -50,7 +50,7 @@
 <div class="row pt-2">
     <div class="col-12">
         <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Pump'"
-            [energyUnit]="settings.powerMeasurement">
+            [energyUnit]="settings.pumpsRollupUnit">
         </app-rollup-summary-table>
     </div>
 </div>

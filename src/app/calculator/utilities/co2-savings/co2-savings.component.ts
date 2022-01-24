@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Co2SavingsService, Co2SavingsData } from './co2-savings.service';
 import * as _ from 'lodash';
+import { EGridService } from '../../../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-co2-savings',
@@ -17,7 +18,7 @@ export class Co2SavingsComponent implements OnInit {
     this.resizeTabs();
   }
   headerHeight: number;
-  currentField: string;
+  currentField: string = 'default';
   tabSelect: string = 'results';
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{
@@ -39,9 +40,13 @@ export class Co2SavingsComponent implements OnInit {
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
   containerHeight: number;
-  constructor(private settingsDbService: SettingsDbService, private co2SavingsService: Co2SavingsService) { }
+
+  constructor(private settingsDbService: SettingsDbService, 
+    private egridService: EGridService,
+    private co2SavingsService: Co2SavingsService) { }
 
   ngOnInit() {
+      this.egridService.getAllSubRegions();
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

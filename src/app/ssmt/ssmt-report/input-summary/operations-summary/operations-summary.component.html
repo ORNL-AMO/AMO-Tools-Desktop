@@ -91,6 +91,33 @@
               </td>
             </tr>
             <tr>
+              <td [ngClass]="{'indicate-report-field-different':totalFuelEmissionOutputRateDiff[0] == true}">
+                Total Fuel Emissions Output Rate (<span>kg CO<sub>2</sub>/<span>MWh</span>
+              </span>)
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':totalFuelEmissionOutputRateDiff[0] == true}">
+                {{baselineInputData.co2SavingsData.totalFuelEmissionOutputRate}}
+              </td>
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.co2SavingsData.totalFuelEmissionOutputRateDiff, mod.inputData.co2SavingsData.totalFuelEmissionOutputRateDiff, 'totalFuelEmissionOutputRate', 0)}">
+                {{mod.inputData.co2SavingsData.totalFuelEmissionOutputRate}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                Total Emissions Output Rate (<span>kg CO<sub>2</sub>/<span>MWh</span>
+              </span>)
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                {{baselineInputData.co2SavingsData.totalEmissionOutputRate}}
+              </td>
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.co2SavingsData.totalEmissionOutputRate, mod.inputData.co2SavingsData.totalEmissionOutputRate, 'totalEmissionOutputRateDiff', 0)}">
+                {{mod.inputData.co2SavingsData.totalEmissionOutputRate}}
+              </td>
+            </tr>
+
+            <tr>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterTempDiff[0] == true}">
                 Make-up Water Temp (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
               </td>

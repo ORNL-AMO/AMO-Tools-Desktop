@@ -20,6 +20,7 @@ import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/
 import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -154,7 +155,25 @@ export class ConvertInputDataService {
     currentEnergyUsage.compressedAirUsage = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirUsage, oldSettings, newSettings);
     //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamUsage = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamUsage, oldSettings, newSettings);
+    
+    currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
+    currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
+    currentEnergyUsage.otherFuelMixedCO2SavingsData = this.convertOtherFuelMixedCO2SavingsData(currentEnergyUsage.otherFuelMixedCO2SavingsData, oldSettings, newSettings);
+    currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.waterCO2OutputRate, oldSettings, newSettings);
+    currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.wasteWaterCO2OutputRate, oldSettings, newSettings);
+    currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirCO2OutputRate, oldSettings, newSettings);
+    currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamCO2OutputRate, oldSettings, newSettings);
+
     return currentEnergyUsage;
+  }
+
+  convertOtherFuelMixedCO2SavingsData(otherFuelMixedCO2SavingsData: Array<Co2SavingsData>, oldSettings: Settings, newSettings: Settings): Array<Co2SavingsData> {
+    if(otherFuelMixedCO2SavingsData.length != 0){
+      otherFuelMixedCO2SavingsData.forEach(fuel => {
+        fuel.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(fuel.totalEmissionOutputRate, oldSettings, newSettings);
+      });
+    }
+    return otherFuelMixedCO2SavingsData;
   }
 
 }

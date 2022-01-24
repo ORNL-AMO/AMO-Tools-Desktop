@@ -19,6 +19,7 @@ import { Settings } from '../shared/models/settings';
 import { DesignedEnergy } from '../shared/models/phast/designedEnergy';
 import { MeteredEnergy } from '../shared/models/phast/meteredEnergy';
 import { OperatingCosts } from '../shared/models/operations';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class ConvertPhastService {
@@ -514,6 +515,13 @@ export class ConvertPhastService {
     return operatingCosts;
   }
 
+  convertCO2SavingsData(co2SavingsData: Co2SavingsData, oldSettings: Settings, newSettings: Settings): Co2SavingsData{
+    let conversionHelper: number = this.convertUnitsService.value(1).from(oldSettings.energyResultUnit).to(newSettings.energyResultUnit);
+    co2SavingsData.totalEmissionOutputRate = co2SavingsData.totalEmissionOutputRate / conversionHelper;
+    co2SavingsData.totalEmissionOutputRate = this.roundVal(co2SavingsData.totalEmissionOutputRate, 2);
+    return co2SavingsData;
+  }
+
   convertExistingData(phast: PHAST, oldSettings: Settings, settings: Settings): PHAST {
     phast.losses = this.convertPhastLosses(phast.losses, oldSettings, settings);
     if (phast.meteredEnergy) {
@@ -523,6 +531,7 @@ export class ConvertPhastService {
       phast.designedEnergy = this.convertDesignedEnergy(phast.designedEnergy, oldSettings, settings);
     }
     phast.operatingCosts = this.convertOperatingCosts(phast.operatingCosts, oldSettings, settings);
+    phast.co2SavingsData = this.convertCO2SavingsData(phast.co2SavingsData, oldSettings, settings);
     if (phast.modifications) {
       phast.modifications.forEach(mod => {
         if (mod.phast.losses) {
@@ -535,6 +544,7 @@ export class ConvertPhastService {
           mod.phast.designedEnergy = this.convertDesignedEnergy(mod.phast.designedEnergy, oldSettings, settings);
         }
         mod.phast.operatingCosts = this.convertOperatingCosts(mod.phast.operatingCosts, oldSettings, settings);
+        mod.phast.co2SavingsData = this.convertCO2SavingsData(mod.phast.co2SavingsData, oldSettings, settings);
       });
     }
     

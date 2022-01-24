@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -19,7 +20,7 @@ export class SsmtSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numSsmt: number;
-  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -57,9 +58,9 @@ export class SsmtSummaryComponent implements OnInit {
       sumEnergy += result.modificationResults.operationsOutput.boilerFuelUsage;
     })
     this.ssmtSavingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MMBtu').to(this.settings.steamRollupUnit);
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
+    this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MMBtu').to(this.settings.steamRollupUnit);
   }
 
 }

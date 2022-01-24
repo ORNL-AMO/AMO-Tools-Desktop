@@ -1,0 +1,17 @@
+.table {
+    font-size: small;
+    width: 100%;
+}
+.table th {
+    border: none;
+    padding: 0px 10px;
+}
+.table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}

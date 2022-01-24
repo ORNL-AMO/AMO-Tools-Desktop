@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { PsatReportRollupService } from '../../psat-report-rollup.service';
 
@@ -18,7 +19,7 @@ export class PsatSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numPsats: number;
-  constructor(public psatReportRollupService: PsatReportRollupService) { }
+  constructor(public psatReportRollupService: PsatReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
@@ -56,8 +57,13 @@ export class PsatSummaryComponent implements OnInit {
       sumEnergy += result.modificationResults.annual_energy;
     });
     this.pumpSavingsPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
+    if(this.settings.pumpsRollupUnit !== 'MWh'){
+      this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.pumpsRollupUnit);
+      this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.pumpsRollupUnit);
+    } else {
+      this.energySavingsPotential = sumEnergySavings;
+      this.totalEnergy = sumEnergy;
+    }    
     this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 }
