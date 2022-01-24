@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as Plotly from 'plotly.js';
+import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 
 @Component({
@@ -9,24 +10,13 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 })
 export class ReportSummaryBarChartComponent implements OnInit {
   @Input()
-  pieChartData: Array<PieChartDataItem>;
-  @Input()
-  titleStr: string;
-  @Input()
-  dataOption: string;
-  @Input()
-  energyUnit: string;
-
-  @Input()
-  barChartDataArray: Array<{ barChartLabels: Array<string>, barChartValues: Array<number>, name: string }>;
-  @Input()
   yAxisLabel: string;
   @Input()
-  chartTitle: string;
+  tickFormat: string;
   @Input()
-  yValueUnit: string;
+  barChartData: Array<BarChartDataItem>;
   @Input()
-  hoverLabel: string;
+  printView: boolean;
 
   @ViewChild('reportBarChart', { static: false }) reportBarChart: ElementRef;
 
@@ -35,7 +25,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
   ngOnInit(): void {
   }
   ngAfterViewInit() {
-    this.createChart();
+    this.createBarChart();
   }
 
   ngOnChanges() {
@@ -43,60 +33,50 @@ export class ReportSummaryBarChartComponent implements OnInit {
       Plotly.purge(this.reportBarChart.nativeElement);
     }
     if (this.reportBarChart) {
-      this.createChart();
+      this.createBarChart();
     }
   }
 
-  createChart() {
-    let traces = this.getTraces();
-    let layout = {
-      width: this.reportBarChart.nativeElement.clientWidth,
-      barmode: 'group',
+  createBarChart() {
+    var layout = {
+      barmode: 'stack',
       showlegend: true,
-      legend: { "orientation": "h" },
+      legend: {
+        x: 1,
+        y: 0.5
+      },
       font: {
-        size: 14,
+        size: 12,
       },
       yaxis: {
         hoverformat: '.3r',
+        // automargin: true,
+        tickformat: this.tickFormat,
+        fixedrange: true,
         title: {
           text: this.yAxisLabel,
           font: {
-            family: 'Roboto',
-            size: 14
+            size: 12,
           }
-        },
-        fixedrange: true
+        }
       },
       xaxis: {
+        automargin: true,
         fixedrange: true
       },
-      margin: { t: 0 }
+      margin: { t: 15, b: 10 }
     };
-
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
-    Plotly.newPlot(this.reportBarChart.nativeElement, traces, layout, configOptions);
+
+    Plotly.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 
-  getTraces(): Array<{ x: Array<string>, y: Array<number>, name: string, type: string, text: Array<string>, textposition: string, hovertemplate: string }> {
-    let traces: Array<{ x: Array<string>, y: Array<number>, name: string, type: string, text: Array<string>, textposition: string, hovertemplate: string }> = new Array();
-    this.barChartDataArray.forEach(bar => {
-      traces.push({
-        x: bar.barChartLabels,
-        y: bar.barChartValues,
-        text: bar.barChartValues.map((y) => { return y.toFixed(2) }),
-        textposition: 'auto',
-        hovertemplate: this.hoverLabel + ': %{y:.3r} ' + this.yValueUnit + '<extra></extra>',
-        name: bar.name,
-        type: 'bar',
-      })
-    });
-    return traces;
-  }
+
+  
 
 }

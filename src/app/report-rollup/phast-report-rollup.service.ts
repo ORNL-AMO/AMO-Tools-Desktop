@@ -35,7 +35,8 @@ export class PhastReportRollupService {
       energySavingsPotential: 0,
       fuelEnergy: 0,
       electricityEnergy: 0,
-      carbonEmissions: 0
+      carbonEmissions: 0,
+      carbonSavings: 0
     }
 
   }
@@ -133,6 +134,7 @@ export class PhastReportRollupService {
     let fuelEnergy = 0;
     let electricityEnergy = 0
     let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
     this.selectedPhastResults.forEach(result => {
       //use copy for conversions
       let resultCopy: PhastResultsData = JSON.parse(JSON.stringify(result))
@@ -148,6 +150,8 @@ export class PhastReportRollupService {
       } else {
         electricityEnergy += (convertedSumEnergy + convertedEnergySavings);
       }
+      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      sumCo2Savings += diffCO2;
       sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
     });
     this.totals = {
@@ -157,7 +161,8 @@ export class PhastReportRollupService {
       totalEnergy: sumEnergy,
       electricityEnergy: electricityEnergy,
       fuelEnergy: fuelEnergy,
-      carbonEmissions: sumCo2Emissions
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
     }
   }
 

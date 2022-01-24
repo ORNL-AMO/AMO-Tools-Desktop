@@ -11,11 +11,15 @@ import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import * as _ from 'lodash';
+import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @Injectable()
 export class ReportSummaryGraphsService {
   reportSummaryGraphData: BehaviorSubject<Array<PieChartDataItem>>;
   energyChartData: BehaviorSubject<Array<PieChartDataItem>>;
+  costBarChart: BehaviorSubject<Array<BarChartDataItem>>;
+  energyBarChart: BehaviorSubject<Array<BarChartDataItem>>;
+  carbonBarChart: BehaviorSubject<Array<BarChartDataItem>>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private compressedAirReportRollupService: CompressedAirReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
@@ -23,11 +27,17 @@ export class ReportSummaryGraphsService {
     private wasteWaterReportRollupService: WasteWaterReportRollupService) {
     this.reportSummaryGraphData = new BehaviorSubject<Array<PieChartDataItem>>(new Array<PieChartDataItem>());
     this.energyChartData = new BehaviorSubject<Array<PieChartDataItem>>(new Array<PieChartDataItem>());
+    this.costBarChart = new BehaviorSubject<Array<BarChartDataItem>>(new Array<BarChartDataItem>());
+    this.energyBarChart = new BehaviorSubject<Array<BarChartDataItem>>(new Array<BarChartDataItem>());
+    this.carbonBarChart = new BehaviorSubject<Array<BarChartDataItem>>(new Array<BarChartDataItem>());
   }
 
   clearData() {
     this.reportSummaryGraphData.next(new Array<PieChartDataItem>());
     this.energyChartData.next(new Array<PieChartDataItem>());
+    this.costBarChart.next(new Array<BarChartDataItem>());
+    this.energyBarChart.next(new Array<BarChartDataItem>());
+    this.carbonBarChart.next(new Array<BarChartDataItem>());
   }
 
   setRollupChartsData(settings: Settings) {
@@ -95,45 +105,165 @@ export class ReportSummaryGraphsService {
     ];
     this.energyChartData.next(energyChartData);
     let reportSummaryGraphData: Array<PieChartDataItem> = new Array();
+    let reportSummaryCostData: Array<BarChartDataItem> = new Array();
+    let reportSummaryEnergyData: Array<BarChartDataItem> = new Array();
+    let reportSummaryCarbonData: Array<BarChartDataItem> = new Array();
     if (compressedAirTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(compressedAirTotals, 'Compressed Air', '#7030A0', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(compressedAirTotals, 'Compressed Air', '#7030A0', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (compressedAirTotals.totalCost != 0) {
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(compressedAirTotals, 'Compressed Air', '#7030A0', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (compressedAirTotals.carbonEmissions != 0) {
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(compressedAirTotals, 'Compressed Air', '#7030A0');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (fsatTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(fsatTotals, 'Fans', '#FFE400', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(fsatTotals, 'Fans', '#FFE400', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (fsatTotals.totalCost != 0){
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(fsatTotals, 'Fans', '#FFE400', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (fsatTotals.carbonEmissions != 0){
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(fsatTotals, 'Fans', '#FFE400');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (phastTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(phastTotals, 'Process Heating', '#bf3d00', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(phastTotals, 'Process Heating', '#bf3d00', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (phastTotals.totalCost != 0) {
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(phastTotals, 'Process Heating', '#bf3d00', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (phastTotals.carbonEmissions != 0) {
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(phastTotals, 'Process Heating', '#bf3d00');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (ssmtTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(ssmtTotals, 'Steam', '#F39C12', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(ssmtTotals, 'Steam', '#F39C12', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (ssmtTotals.totalCost != 0) {
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(ssmtTotals, 'Steam', '#F39C12', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (ssmtTotals.carbonEmissions != 0) {
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(ssmtTotals, 'Steam', '#F39C12');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (psatTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(psatTotals, 'Pumps', '#2980b9', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(psatTotals, 'Pumps', '#2980b9', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (psatTotals.totalCost != 0) {
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(psatTotals, 'Pumps', '#2980b9', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (psatTotals.carbonEmissions != 0) {
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(psatTotals, 'Pumps', '#2980b9');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (wasteWaterTotals.totalEnergy != 0) {
       let pieChartItem: PieChartDataItem = this.getUtilityPieChartItem(wasteWaterTotals, 'Waste Water', '#003087', settings.currency);
       reportSummaryGraphData.push(pieChartItem);
+      let energyBarChartItem: BarChartDataItem = this.getEnergyBarChartItem(wasteWaterTotals, 'Waste Water', '#003087', settings.commonRollupUnit);
+      reportSummaryEnergyData.push(energyBarChartItem);
+    }
+    if (wasteWaterTotals.totalCost != 0) {
+      let costBarChartItem: BarChartDataItem = this.getCostBarChartItem(wasteWaterTotals, 'Waste Water', '#003087', settings.currency);
+      reportSummaryCostData.push(costBarChartItem);
+    }
+    if (wasteWaterTotals.carbonEmissions != 0) {
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(wasteWaterTotals, 'Waste Water', '#003087');
+      reportSummaryCarbonData.push(carbonBarChartItem);
     }
     this.reportSummaryGraphData.next(reportSummaryGraphData);
+    this.costBarChart.next(reportSummaryCostData);
+    this.energyBarChart.next(reportSummaryEnergyData);
+    this.carbonBarChart.next(reportSummaryCarbonData);
   }
 
   getUtilityPieChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string, currency: string): PieChartDataItem {
     return {
       equipmentName: equipmentName,
       energyUsed: totals.totalEnergy + totals.energySavingsPotential,
-      annualCost: totals.totalCost,
+      annualCost: totals.totalCost + totals.savingPotential,
       energySavings: totals.energySavingsPotential,
       costSavings: totals.savingPotential,
       percentCost: totals.savingPotential / totals.totalCost * 100,
       percentEnergy: totals.savingPotential / totals.totalEnergy * 100,
       color: color,
       currencyUnit: currency,
-      carbonEmissions: totals.carbonEmissions
+      carbonEmissions: totals.carbonEmissions + totals.carbonSavings
+    }
+  }
+
+  getCostBarChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string, currency: string): BarChartDataItem {
+    let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${currency !== '$'? 'k': ''}`;
+    let baselineCost: number = totals.totalCost + totals.savingPotential;
+    let modCost: number = totals.totalCost;
+    return {
+      x: ['Baseline', 'Modification'],
+      y: [baselineCost, modCost],
+      hoverinfo: 'all',
+      hovertemplate: hoverTemplate,
+      name: equipmentName,
+      type: 'bar',
+      marker: {
+        color: color
+      }
+
+    }
+  }
+
+  getEnergyBarChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string, unit: string): BarChartDataItem {
+    let hoverTemplate: string = '%{y:,.0f}<extra></extra> ' + unit;
+    let baselineEnergyUse: number = totals.totalEnergy + totals.energySavingsPotential;
+    let modEnergyUse: number = totals.totalEnergy;
+    return {
+      x: ['Baseline', 'Modification'],
+      y: [baselineEnergyUse, modEnergyUse],
+      hoverinfo: 'all',
+      hovertemplate: hoverTemplate,
+      name: equipmentName,
+      type: 'bar',
+      marker: {
+        color: color
+      }
+
+    }
+  }
+
+  getCO2BarChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string): BarChartDataItem {
+    let hoverTemplate: string = '%{y:,.0f}<extra></extra> ' + 'tonne CO<sub>2</sub>';
+    let baselineCO2: number = totals.carbonEmissions + totals.carbonSavings;
+    let modCO2: number = totals.carbonEmissions;
+    return {
+      x: ['Baseline', 'Modification'],
+      y: [baselineCO2, modCO2],
+      hoverinfo: 'all',
+      hovertemplate: hoverTemplate,
+      name: equipmentName,
+      type: 'bar',
+      marker: {
+        color: color
+      }
+
     }
   }
 }

@@ -29,7 +29,8 @@ export class FsatReportRollupService {
       energySavingsPotential: 0,
       fuelEnergy: 0,
       electricityEnergy: 0,
-      carbonEmissions: 0
+      carbonEmissions: 0,
+      carbonSavings: 0
     }
   }
 
@@ -105,6 +106,7 @@ export class FsatReportRollupService {
     let sumCost = 0;
     let sumEnergySavings = 0;
     let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
     this.selectedFsatResults.forEach(result => {
       let diffCost = result.baselineResults.annualCost - result.modificationResults.annualCost;
       sumSavings += diffCost;
@@ -112,6 +114,8 @@ export class FsatReportRollupService {
       let diffEnergy = result.baselineResults.annualEnergy - result.modificationResults.annualEnergy;
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annualEnergy;
+      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      sumCo2Savings += diffCO2;
       sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
     })
     sumEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(settings.fansRollupUnit);
@@ -123,7 +127,8 @@ export class FsatReportRollupService {
       totalCost: sumCost,
       electricityEnergy: sumEnergy + sumEnergySavings,
       fuelEnergy: 0,
-      carbonEmissions: sumCo2Emissions
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
     }
   }
 }

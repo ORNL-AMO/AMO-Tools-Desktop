@@ -30,7 +30,8 @@ export class PsatReportRollupService {
       energySavingsPotential: 0,
       fuelEnergy: 0,
       electricityEnergy: 0,
-      carbonEmissions: 0
+      carbonEmissions: 0,
+      carbonSavings: 0
     }
   }
 
@@ -106,6 +107,7 @@ export class PsatReportRollupService {
     let sumCost = 0;
     let sumEnergySavings = 0;
     let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
     this.selectedPsatResults.forEach(result => {
       let diffCost = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
       sumSavings += diffCost;
@@ -113,6 +115,8 @@ export class PsatReportRollupService {
       let diffEnergy = result.baselineResults.annual_energy - result.modificationResults.annual_energy;
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annual_energy;
+      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      sumCo2Savings += diffCO2;
       sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
     });
     sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(settings.pumpsRollupUnit);
@@ -124,7 +128,8 @@ export class PsatReportRollupService {
       savingPotential: sumSavings,
       electricityEnergy: sumEnergy + sumEnergySavings,
       fuelEnergy: 0,
-      carbonEmissions: sumCo2Emissions
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
     }
   }
 }
