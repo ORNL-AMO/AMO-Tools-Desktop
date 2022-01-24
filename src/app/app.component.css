@@ -1052,6 +1052,7 @@ Calculators
   height: 55px;
   background: linear-gradient(#ffffff, #6f42c1);
   /*background-color: rgba(41, 128, 185, 0);*/
+  padding: 2px;
   border-radius: 15px;
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
