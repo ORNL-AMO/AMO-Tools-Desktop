@@ -8,7 +8,7 @@ export const MockMotorInventory: InventoryItem = {
             "energyType": 'electricity',
             "energySource": '',
             "fuelType": '',
-            "totalEmissionOutputRate": 0,
+            "totalEmissionOutputRate": 430.78,
             "electricityUse": 0,
             "eGridRegion": '',
             "eGridSubregion": 'SRTV',

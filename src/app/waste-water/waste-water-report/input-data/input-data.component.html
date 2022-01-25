@@ -54,7 +54,7 @@
           {{wasteWater.baselineData.co2SavingsData.totalEmissionOutputRate}}
         </td>
         <td *ngFor="let mod of wasteWater.modifications; let index = index;"
-          [ngClass]="{'indicate-report-field-different': compareModifications[index].co2SavingsData.totalEmissionOutputRate == true}">
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].co2DataDifferent.totalEmissionOutputRate == true}">
           {{mod.co2SavingsData.totalEmissionOutputRate}}
         </td>
       </tr>

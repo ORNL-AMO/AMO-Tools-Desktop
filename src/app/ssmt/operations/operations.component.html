@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="co2SavingsData.energySource != 'Mixed Fuels'">
         <label for="fuelType">Fuel Type</label>
         <div class="input-group">
           <select name="fuelType" class="form-control" id="fuelType" (focus)="focusField('fuelType')"
@@ -34,7 +34,10 @@
       </div>
 
       <div class="form-group">
-        <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate</label>
+        <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate
+          <a class="form-text small click-link" (click)="showMixedCO2EmissionsModal()">
+            Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
+        </label>
         <div class="input-group">
           <input class="form-control" name="totalFuelEmissionOutputRate" type="number"
             [disabled]="co2SavingsFormDisabled" (focus)="focusField('totalEmissionOutputRate')"
@@ -70,5 +73,39 @@
       </form>
     </div>
 
+  </div>
+</div>
+
+
+<div bsModal #mixedCO2EmissionsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mixedCO2EmissionsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
+        <div class="col-md-auto ico-col">
+        </div>
+        <div>
+          <h3>Carbon Emissions - Net Carbon Emissions Rate from Fuel</h3>
+        </div>
+        <button class="close pull-right" aria-label="Close" (click)="hideMixedCO2EmissionsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-2">
+        <app-mixed-co2-emissions
+          [fuelList]="ssmt.co2SavingsData.otherFuelMixedCO2SavingsData"
+          [settings]="settings" (emitUpdateOtherFuelsOutputRate)="updateMixedCO2EmissionsModalData($event)"
+          (emitUpdateOtherFuelsMixedList)="saveOtherFuelsMixedList($event)">
+
+        </app-mixed-co2-emissions>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button class="btn btn-danger btn-sm pull-right mr-2" (click)="hideMixedCO2EmissionsModal()">Cancel</button>
+        <span>
+          <button class="btn btn-primary btn-sm pull-right" (click)="applyMixedCO2EmissionsModal()">Apply
+            Data</button>
+        </span>
+      </div>
+    </div>
   </div>
 </div>

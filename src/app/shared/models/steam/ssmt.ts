@@ -14,6 +14,7 @@ export interface SSMT {
     equipmentNotes?: string;
     generalSteamOperations?: GeneralSteamOperations;
     co2SavingsData?: Co2SavingsData;
+    otherFuelMixedCO2SavingsData?: Array<Co2SavingsData>;
     modifications?: Array<Modification>;
     boilerInput?: BoilerInput;
     headerInput?: HeaderInput;
