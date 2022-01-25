@@ -169,7 +169,7 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
-  getNewFsat(): FSAT {
+  getNewFsat(settings: Settings): FSAT {
     let newFsat: FSAT = {
       fieldData: {
         
@@ -191,14 +191,14 @@ export class AssessmentService {
                 energyType: 'electricity',
                 energySource: '',
                 fuelType: '',
-                totalEmissionOutputRate: 401.07,
+                totalEmissionOutputRate: settings.totalEmissionOutputRate,
                 electricityUse: 0,
                 eGridRegion: '',
-                eGridSubregion: 'US Average',
+                eGridSubregion: settings.eGridSubregion,
                 totalEmissionOutput: 0,
                 userEnteredBaselineEmissions: false,
                 userEnteredModificationEmissions: true,
-                zipcode: '00000',
+                zipcode: settings.zipcode,
             },
       },
       fanMotor: {
