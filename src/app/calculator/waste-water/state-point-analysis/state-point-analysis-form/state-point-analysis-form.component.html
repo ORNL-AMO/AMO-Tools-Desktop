@@ -110,7 +110,7 @@
                 <span class="mr-2" *ngIf="form.controls.areaOfClarifier.value">
                     {{form.controls.areaOfClarifier.value | number:'1.0-2'}}
                 </span>
-                <span class="mr-2" *ngIf="!form.controls.areaOfClarifier.value">—</span>
+                <span class="mr-2" *ngIf="!form.controls.areaOfClarifier.value">&mdash; &mdash;</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     ft<sup>2</sup></span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
