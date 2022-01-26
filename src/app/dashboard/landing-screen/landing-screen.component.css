@@ -107,8 +107,8 @@ img.fan-image{
 	width: 75px;
 }
 .phast-image{
-	width: 90px;
-	height:81px;
+	width: 93px;
+	height:83px;
 }
 .steam-image{
 	width:90px;
@@ -133,7 +133,15 @@ img.fan-image{
 }
 
 a.click-link.p-0.steam {
-	margin-left: 15px;
+	margin-left: 12px;
+}
+
+a.click-link.p-0.treasure-hunt {
+	margin-left: 9px;
+}
+
+.p-2.phast {
+	padding-top: 1rem !important;
 }
 
 .p-2.align-items-center.steam {
@@ -166,13 +174,21 @@ img.steam-image {
 }
 
 a.click-link.p-0.fan {
-	margin-left: 8px;
+	margin-left: 4px;
 }
 a.click-link.p-0.compressed-air {
-	margin-left: 25px;
+	margin-left: 18px;
+}
+
+a.click-link.p-0.phast {
+	padding-top: 1rem !important;
 }
 
 span.former-name.steam {
+	margin-left: 5px;
+}
+
+span.former-name.treasure-hunt {
 	margin-left: 5px;
 }
 span.former-name.ca {
@@ -185,7 +201,7 @@ span.former-name.ca {
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #2E4053);
 	border-radius: 15px;
 	border: 0.1px solid rgba(123, 120, 120, 0.25);
-	margin-left: 10px;
+	margin-left: 7px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
