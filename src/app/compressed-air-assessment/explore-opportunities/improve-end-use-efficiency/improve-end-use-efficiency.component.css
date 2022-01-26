@@ -58,3 +58,8 @@ form{
   margin-top: .5rem;
     border-top: groove 2px;
 }
+
+.supply-demand{
+	margin-right: .25rem;
+  border-right: solid ;
+}
