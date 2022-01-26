@@ -101,10 +101,6 @@ export class ExecutiveSummaryComponent implements OnInit {
       demandProjects = demandProjects + "Improve End Use Efficiency<br>";
       hasProjects = true;
     }
-    if (modification.reduceSystemAirPressure.order != 100) {
-      demandProjects = demandProjects + "Reduce System Air Pressure<br>";
-      hasProjects = true;
-    }
     if (!hasProjects) {
       return '&mdash; &mdash;';
     }
@@ -114,6 +110,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   getSupplyEnergyProjects(modification: Modification): string {
     let supplyProjects: string = '';
     let hasProjects: boolean = false;
+
     if (modification.adjustCascadingSetPoints.order != 100) {
       supplyProjects = supplyProjects + "Adjust Cascading Set Points<br>";
       hasProjects = true;
@@ -126,8 +123,12 @@ export class ExecutiveSummaryComponent implements OnInit {
       supplyProjects = supplyProjects + "Reduce Runtime<br>";
       hasProjects = true;
     }
-    if (modification.adjustCascadingSetPoints.order != 100) {
+    if (modification.addPrimaryReceiverVolume.order != 100) {
       supplyProjects = supplyProjects + "Add Primary Receiver Volume<br>";
+      hasProjects = true;
+    }
+    if (modification.reduceSystemAirPressure.order != 100) {
+      supplyProjects = supplyProjects + "Reduce System Air Pressure<br>";
       hasProjects = true;
     }
     if (!hasProjects) {
