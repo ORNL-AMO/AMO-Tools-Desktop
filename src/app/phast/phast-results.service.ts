@@ -201,8 +201,8 @@ export class PhastResultsService {
     results.EAFElectrodeHeatingValue = EAFInputs.electrodeHeatingValue;
     
     if (settings.unitsOfMeasure == 'Metric') {
-      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('kj').to('GJ');
-      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('kj').to('GJ');
+      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('kJ').to('GJ');
+      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('kJ').to('GJ');
     } else {
       results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('Btu').to('MMBtu');
       results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('Btu').to('MMBtu');
