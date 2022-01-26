@@ -108,7 +108,7 @@ export class AssessmentCreateComponent implements OnInit {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('FSAT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        tmpAssessment.fsat = this.assessmentService.getNewFsat();
+        tmpAssessment.fsat = this.assessmentService.getNewFsat(this.settings);
         this.addAssessment(tmpAssessment, '/fsat/');
       }
       //ssmt
