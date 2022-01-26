@@ -55,7 +55,6 @@ export class ReportRollupComponent implements OnInit {
     });
   }
 
-
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();

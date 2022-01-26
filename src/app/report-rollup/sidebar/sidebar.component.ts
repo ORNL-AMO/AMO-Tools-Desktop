@@ -124,6 +124,7 @@ export class SidebarComponent implements OnInit {
 
   collapseSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+    window.dispatchEvent(new Event("resize"));
   }
 
   // initFocusedAssessment() {

@@ -50,7 +50,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
       },
       yaxis: {
         hoverformat: '.3r',
-        // automargin: true,
+        automargin: true,
         tickformat: this.tickFormat,
         fixedrange: true,
         title: {
@@ -64,7 +64,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
         automargin: true,
         fixedrange: true
       },
-      margin: { t: 15, b: 10 }
+      // margin: { t: 15, b: 10 }
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
