@@ -269,4 +269,24 @@ export class ContentControlsComponent implements OnInit {
     }
     this.updateFilterBy();
   }
+
+  setFilterCompressedAir() {
+    if (this.filterDashboardBy.showCompressedAir == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showFans = false;
+        this.filterDashboardBy.showMotorInventory = false;
+      }
+      this.filterDashboardBy.showCompressedAir = true;
+    } else {
+      this.filterDashboardBy.showCompressedAir = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
 }

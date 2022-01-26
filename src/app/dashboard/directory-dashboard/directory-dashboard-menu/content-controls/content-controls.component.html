@@ -101,6 +101,12 @@
                         <label class="pl-1">Wastewater
                         </label>
                     </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterCompressedAir()"
+                        [ngClass]="{'active': filterDashboardBy.showCompressedAir == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Compressed Air
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
