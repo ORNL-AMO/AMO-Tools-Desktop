@@ -35,6 +35,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   //percent graph variables
   unit: string;
   titlePlacement: string;
+  EAFFuelUnit: string;
   constructor(private executiveSummaryService: ExecutiveSummaryService, private phastReportRollupService: PhastReportRollupService, private compareService: PhastCompareService) { }
 
   ngOnInit() {
@@ -59,8 +60,10 @@ export class ExecutiveSummaryComponent implements OnInit {
     }else if (this.settings.energyResultUnit === 'GJ') {
       this.energyUnit = 'kJ/kg';
     }else if (this.settings.unitsOfMeasure === 'Metric') {
+      this.EAFFuelUnit = 'kg';
       this.energyUnit = this.settings.energyResultUnit + '/kg';
     } else if (this.settings.unitsOfMeasure === 'Imperial') {
+      this.EAFFuelUnit = 'lb';
       this.energyUnit = this.settings.energyResultUnit + '/lb';
     }
 

@@ -21,7 +21,8 @@
       <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control"
         id="{{'fuelCost_'+idString}}" (input)="save()" formControlName="fuelCost" (focus)="focusField('operatingCosts')"
         >
-      <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">$/GJ</span>
     </div>
     <a id="materialHelp" *ngIf="settings.energySourceType == 'Fuel'" class="form-text small click-link" (click)="initOperatingCostsModal()">Calculate Net Fuel Cost from Mixed Fuels</a>
   </div> 
@@ -32,7 +33,8 @@
       <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control"
         id="{{'steamCost_'+idString}}" (input)="save()" formControlName="steamCost"
         (focus)="focusField('operatingCosts')" >
-      <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'"  class="units input-group-addon">$/MMBtu</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">$/GJ</span>
     </div>
     <a id="materialHelp" *ngIf="settings.energySourceType == 'Steam'" class="form-text small click-link" (click)="initOperatingCostsModal()">Calculate Net Steam Cost from Mixed Sources</a>
   </div>
