@@ -23,6 +23,11 @@ export class RollupSummaryTableComponent implements OnInit {
   totalCostSavings: number = 0;
   totalImplementationCosts: number = 0;
   totalPaybackPeriod: number = 0;
+
+  totalBaselinePeakEnergyUse: number = 0;
+  totalModificationPeakEnergyUse: number = 0;
+  totalBaselinePeakCost: number = 0;
+  totalModificationPeakCost: number = 0;
   constructor() { }
 
   ngOnInit(): void {
@@ -36,6 +41,14 @@ export class RollupSummaryTableComponent implements OnInit {
       }
       this.totalCostSavings += dataItem.costSavings;
       this.totalImplementationCosts += dataItem.implementationCosts;
+      if(this.equipmentType === 'Compressed Air'){
+        this.totalBaselinePeakEnergyUse += dataItem.baselinePeakDemandEnergy;
+        this.totalBaselinePeakCost += dataItem.baselinePeakDemandCost;
+        if (dataItem.modificationName) {
+          this.totalModificationPeakEnergyUse += dataItem.modPeakDemandEnergy;
+          this.totalModificationPeakCost += dataItem.modPeakDemandCost;
+        }
+      }
     });
     if(this.totalImplementationCosts <= 0){
       this.totalImplementationCosts = 0;
@@ -58,5 +71,9 @@ export interface RollupSummaryTableData {
   costSavings: number,
   implementationCosts: number,
   payBackPeriod: number,
-  currencyUnit?: string
+  currencyUnit?: string,
+  baselinePeakDemandEnergy?: number,
+  baselinePeakDemandCost?: number,
+  modPeakDemandEnergy?: number,
+  modPeakDemandCost?: number
 }
