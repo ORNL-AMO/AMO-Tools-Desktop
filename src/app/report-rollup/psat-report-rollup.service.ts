@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PsatService } from '../psat/psat.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
-import { AllPsatResultsData, PsatCompare, PsatResultsData, ReportItem } from './report-rollup-models';
+import { AllPsatResultsData, PsatCompare, PsatResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class PsatReportRollupService {
@@ -11,7 +13,8 @@ export class PsatReportRollupService {
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   selectedPsatResults: Array<PsatResultsData>;
   allPsatResults: Array<AllPsatResultsData>;
-  constructor(private psatService: PsatService) {
+  totals: ReportUtilityTotal;
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
     this.initSummary();
   }
 
@@ -20,6 +23,16 @@ export class PsatReportRollupService {
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.selectedPsatResults = new Array<PsatResultsData>();
     this.allPsatResults = new Array<AllPsatResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
   }
 
   //USED FOR PSAT SUMMARY
@@ -86,6 +99,38 @@ export class PsatReportRollupService {
       let modificationResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
       this.selectedPsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
+  }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
+    this.selectedPsatResults.forEach(result => {
+      let diffCost = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
+      sumSavings += diffCost;
+      sumCost += result.modificationResults.annual_cost;
+      let diffEnergy = result.baselineResults.annual_energy - result.modificationResults.annual_energy;
+      sumEnergySavings += diffEnergy;
+      sumEnergy += result.modificationResults.annual_energy;
+      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      sumCo2Savings += diffCO2;
+      sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
+    });
+    sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(settings.pumpsRollupUnit);
+    sumEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(settings.pumpsRollupUnit);
+    this.totals = {
+      totalEnergy: sumEnergy,
+      totalCost: sumCost,
+      energySavingsPotential: sumEnergySavings,
+      savingPotential: sumSavings,
+      electricityEnergy: sumEnergy + sumEnergySavings,
+      fuelEnergy: 0,
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
+    }
   }
 }
 

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem } from './report-rollup-models';
+import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Settings } from '../shared/models/settings';
 @Injectable()
 export class CompressedAirReportRollupService {
 
@@ -10,7 +12,9 @@ export class CompressedAirReportRollupService {
   selectedAssessments: BehaviorSubject<Array<CompressedAirCompare>>;
   selectedAssessmentResults: Array<CompressedAirResultsData>;
   allAssessmentResults: Array<AllCompressedAirResultsData>;
-  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) {
+  totals: ReportUtilityTotal;
+  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private convertUnitsService: ConvertUnitsService) {
     this.initSummary();
   }
 
@@ -19,6 +23,16 @@ export class CompressedAirReportRollupService {
     this.selectedAssessments = new BehaviorSubject<Array<CompressedAirCompare>>(new Array<CompressedAirCompare>());
     this.selectedAssessmentResults = new Array<CompressedAirResultsData>();
     this.allAssessmentResults = new Array<AllCompressedAirResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
   }
 
   //USED FOR Compressed air  SUMMARY
@@ -91,5 +105,39 @@ export class CompressedAirReportRollupService {
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: undefined, assessmentId: val.assessmentId, name: val.name, modName: 'Baseline', baseline: val.baseline, modification: val.modification, settings: val.settings });
       }
     });
+  }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    this.selectedAssessmentResults.forEach(result => {
+      let diffCost: number = 0;
+      let diffEnergy: number = 0;
+      if (result.modificationResults) {
+        diffCost = result.baselineResults.total.totalAnnualOperatingCost - result.modificationResults.totalAnnualOperatingCost;
+        sumCost += result.modificationResults.totalAnnualOperatingCost;
+        diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
+        sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
+      } else {
+        sumCost += result.baselineResults.total.totalAnnualOperatingCost;
+        sumEnergy += result.baselineResults.total.energyUse;
+      }
+      sumSavings += diffCost;
+      sumEnergySavings += diffEnergy;
+    })
+    sumEnergy = this.convertUnitsService.value(sumEnergy).from('kWh').to(settings.compressedAirRollupUnit);
+    sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('kWh').to(settings.compressedAirRollupUnit);
+    this.totals = {
+      savingPotential: sumSavings,
+      energySavingsPotential: sumEnergySavings,
+      totalCost: sumCost,
+      totalEnergy: sumEnergy,
+      electricityEnergy: sumEnergy + sumEnergySavings,
+      fuelEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
   }
 }

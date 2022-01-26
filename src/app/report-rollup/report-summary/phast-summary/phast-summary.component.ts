@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
+import * as _ from 'lodash';
+import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-phast-summary',
@@ -19,8 +21,8 @@ export class PhastSummaryComponent implements OnInit {
   numPhasts: number;
   selectedPhastSub: Subscription;
   phastAssessmentsSub: Subscription;
-  constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
-    private reportRollupService: ReportRollupService) { }
+  constructor(public phastReportRollupService: PhastReportRollupService,
+    private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -34,7 +36,13 @@ export class PhastSummaryComponent implements OnInit {
     this.selectedPhastSub = this.phastReportRollupService.selectedPhasts.subscribe(val => {
       if (val.length !== 0) {
         this.phastReportRollupService.setPhastResultsFromSelected(val);
-        this.calcPhastSums();
+        this.phastReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.phastReportRollupService.totals;
+        this.furnaceSavingsPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -43,24 +51,4 @@ export class PhastSummaryComponent implements OnInit {
     this.selectedPhastSub.unsubscribe();
     this.phastAssessmentsSub.unsubscribe();
   }
-
-  calcPhastSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.phastReportRollupService.selectedPhastResults.forEach(result => {
-      let diffCost = result.modificationResults.annualCostSavings;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.annualCost;
-      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-      sumEnergySavings += diffEnergy;
-      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);;
-    });
-    this.furnaceSavingsPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
-    this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
-  }
-
 }
