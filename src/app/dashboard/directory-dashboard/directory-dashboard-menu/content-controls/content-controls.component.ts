@@ -98,7 +98,8 @@ export class ContentControlsComponent implements OnInit {
       // this.filterDashboardBy.showSubFolders == false &&
       this.filterDashboardBy.showPreAssessments == false &&
       this.filterDashboardBy.showPhast == false &&
-      this.filterDashboardBy.showMotorInventory == false
+      this.filterDashboardBy.showMotorInventory == false &&
+      this.filterDashboardBy.showCompressedAir == false
     );
   }
 
@@ -113,6 +114,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showPreAssessments = false;
         this.filterDashboardBy.showPhast = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showPumps = true;
     } else {
@@ -133,6 +135,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showPreAssessments = false;
         this.filterDashboardBy.showPhast = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showFans = true;
     } else {
@@ -153,6 +156,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showPreAssessments = false;
         this.filterDashboardBy.showFans = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showPhast = true;
     } else {
@@ -173,6 +177,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showTreasureHunt = false;
         this.filterDashboardBy.showFans = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showSteam = true;
     } else {
@@ -193,6 +198,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showPreAssessments = false;
         this.filterDashboardBy.showFans = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showTreasureHunt = true;
     } else {
@@ -213,6 +219,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showTreasureHunt = false;
         this.filterDashboardBy.showFans = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showPreAssessments = true;
     } else {
@@ -232,6 +239,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showPreAssessments = false;
         this.filterDashboardBy.showTreasureHunt = false;
         this.filterDashboardBy.showFans = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showMotorInventory = true;
     } else {
@@ -252,6 +260,7 @@ export class ContentControlsComponent implements OnInit {
         this.filterDashboardBy.showTreasureHunt = false;
         this.filterDashboardBy.showFans = false;
         this.filterDashboardBy.showMotorInventory = false;
+        this.filterDashboardBy.showCompressedAir = false;
       }
       this.filterDashboardBy.showWasteWater = true;
     } else {
