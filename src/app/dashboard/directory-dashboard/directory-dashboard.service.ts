@@ -34,7 +34,8 @@ export class DirectoryDashboardService {
       showPhast: true,
       showAll: true,
       showMotorInventory: true,
-      showWasteWater: true
+      showWasteWater: true,
+      showCompressedAir: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
@@ -107,7 +108,10 @@ export class DirectoryDashboardService {
         item.isShown = false;
       } else if (item.assessment.type == 'WasteWater' && filterDashboardBy.showWasteWater == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.isShown == false) {
+      } else if (item.assessment.type == 'CompressedAir' && filterDashboardBy.showCompressedAir == false && filterDashboardBy.showAll == false) {
+        item.isShown = false;
+      }
+      else if (item.isShown == false) {
         item.isShown = true;
       }
     })
