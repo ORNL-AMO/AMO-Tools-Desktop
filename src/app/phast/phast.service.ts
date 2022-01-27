@@ -377,9 +377,8 @@ export class PhastService {
     return results;
   }
 
-  flueGasByMass(input: FlueGasByMass, settings: Settings) {
-    let inputCopy = this.createInputCopy(input);
-    let results = 0;
+  flueGasByMass(input: FlueGasByMass, settings: Settings): number {
+    let inputCopy: FlueGasByMass = this.createInputCopy(input);
     inputCopy.ambientAirTempF = inputCopy.ambientAirTemp;
     inputCopy.combAirMoisturePerc = inputCopy.moistureInAirCombustion;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -388,11 +387,8 @@ export class PhastService {
       inputCopy.ashDischargeTemperature = this.convertUnitsService.value(inputCopy.ashDischargeTemperature).from('C').to('F');
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
-      results = phastAddon.flueGasLossesByMass(inputCopy);
-    } else {
-      results = phastAddon.flueGasLossesByMass(inputCopy);
     }
-    return results;
+    return phastAddon.flueGasLossesByMass(inputCopy);
   }
 
   flueGasCalculateExcessAir(input: MaterialInputProperties) {
