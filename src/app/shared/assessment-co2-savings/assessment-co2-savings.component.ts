@@ -156,7 +156,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         this.setModificationSubregionForm()
       }
     } else {
-      // not a valid zip, form select is hidden, disabled
+      // not a valid zip, set emmissions to US Average
       subRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => val.zip === '00000');
       subRegionData.subregions.forEach(subregion => {
         if (subregion !== '') {
@@ -164,9 +164,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         }
       });
       this.isUsAverage = true;
-      // this.form.controls.eGridSubregion.disable();
-      // this.form.controls.totalEmissionOutputRate.patchValue(null);
-      // this.form.controls.eGridSubregion.patchValue(null);
       if (this.inBaseline) {
         this.setBaselineSubregionForm();
       } else {
@@ -179,7 +176,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }
 
   setBaselineSubregionForm() {
-      if (this.form.controls.eGridSubregion.value === 'US Average' || this.form.controls.eGridSubregion.value === null || this.isUsAverage) {
+      if (this.form.controls.eGridSubregion.value === 'U.S. Average' || this.form.controls.eGridSubregion.value === null || this.isUsAverage) {
         // set the first from the subregion list as default
         this.form.controls.eGridSubregion.patchValue(this.zipCodeSubRegionData[0]);
       }

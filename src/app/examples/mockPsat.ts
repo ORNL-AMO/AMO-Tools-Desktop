@@ -37,18 +37,18 @@ export const MockPsat: Assessment = {
             "specifiedDriveEfficiency": null,
             "implementationCosts": null,
             "whatIfScenario": true,
-            "co2SavingsData": {
+            "co2SavingsData":{
                 "energyType": 'electricity',
                 "energySource": '',
                 "fuelType": '',
-                "totalEmissionOutputRate": 430.78,
+                "totalEmissionOutputRate": 401.07,
                 "electricityUse": 0,
                 "eGridRegion": '',
-                "eGridSubregion": 'SRTV',
+                "eGridSubregion": 'U.S. Average',
                 "totalEmissionOutput": 0,
                 "userEnteredBaselineEmissions": false,
-                "userEnteredModificationEmissions": false,
-                "zipcode": '37830',
+                "userEnteredModificationEmissions": true,
+                "zipcode": '00000',
             }
         },
         "modifications": [{
@@ -83,18 +83,18 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
                     "implementationCosts": null,
-                    "co2SavingsData": {
+                    "co2SavingsData":{
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
-                        "totalEmissionOutputRate": 650,
+                        "totalEmissionOutputRate": 401.07,
                         "electricityUse": 0,
                         "eGridRegion": '',
-                        "eGridSubregion": 'SRTV',
+                        "eGridSubregion": 'U.S. Average',
                         "totalEmissionOutput": 0,
                         "userEnteredBaselineEmissions": false,
                         "userEnteredModificationEmissions": true,
-                        "zipcode": '37830',
+                        "zipcode": '00000',
                     }
                 }
             },
@@ -138,18 +138,18 @@ export const MockPsat: Assessment = {
                     "implementationCosts": null,
                     "isVFD": true,
                     "whatIfScenario": true,
-                    "co2SavingsData": {
+                    "co2SavingsData":{
                         "energyType": 'electricity',
                         "energySource": '',
                         "fuelType": '',
-                        "totalEmissionOutputRate": 650,
+                        "totalEmissionOutputRate": 401.07,
                         "electricityUse": 0,
                         "eGridRegion": '',
-                        "eGridSubregion": 'SRTV',
+                        "eGridSubregion": 'U.S. Average',
                         "totalEmissionOutput": 0,
                         "userEnteredBaselineEmissions": false,
                         "userEnteredModificationEmissions": true,
-                        "zipcode": '37830',
+                        "zipcode": '00000',
                     }
                 }
             },
