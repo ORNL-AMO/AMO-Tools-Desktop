@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FanPsychrometricService } from './fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity } from '../../../shared/models/fans';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-fan-psychrometric',
@@ -27,12 +28,16 @@ export class FanPsychrometricComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, 
               private fanPsychrometricService: FanPsychrometricService,
+              private settingsService: SettingsService
               ) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    //set the settings so fan settings are metric/imperial
+    this.settings = this.settingsService.setFanUnits(this.settings);
+
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

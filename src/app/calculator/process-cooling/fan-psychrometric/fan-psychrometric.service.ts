@@ -5,63 +5,55 @@ import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { ConvertFanAnalysisService } from '../../fans/fan-analysis/convert-fan-analysis.service';
 
 @Injectable()
 export class FanPsychrometricService {
-  
+
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
-  
+
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
   calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
   psychrometricResults: BehaviorSubject<Array<PsychrometricResults>>;
-  
+
   constructor(private gasDensityFormService: GasDensityFormService,
-              private convertUnitsService: ConvertUnitsService,
-              private fsatService: FsatService) {
-    this.currentField = new BehaviorSubject<string>('default'); 
+    private fsatService: FsatService,
+    private convertFanAnalysisService: ConvertFanAnalysisService) {
+    this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-    
+
     this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);
     this.calculatedBaseGasDensity = new BehaviorSubject<PsychrometricResults>(undefined);
-   }
+  }
 
-   getDefaultData(settings: Settings): BaseGasDensity {
-    let barometricPressure = 29.92;
-    if (settings.unitsOfMeasure == 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('Pa')
-    }
+  getDefaultData(settings: Settings): BaseGasDensity {
     let data: BaseGasDensity = {
-        dryBulbTemp: undefined,
-        staticPressure: 0,
-        barometricPressure: barometricPressure,
-        gasDensity: .0765,
-        altitude: undefined,
-        gasType: 'AIR',
-        inputType: 'wetBulb',
-        specificGravity: 1,
-        wetBulbTemp: undefined,
-        relativeHumidity: undefined,
-        dewPoint: undefined,
-        specificHeatGas: .24
-      };
+      dryBulbTemp: undefined,
+      staticPressure: 0,
+      barometricPressure: 29.92,
+      gasDensity: .0765,
+      altitude: undefined,
+      gasType: 'AIR',
+      inputType: 'wetBulb',
+      specificGravity: 1,
+      wetBulbTemp: undefined,
+      relativeHumidity: undefined,
+      dewPoint: undefined,
+      specificHeatGas: .24
+    };
+    data = this.convertFanAnalysisService.convertBaseGasDensityDefaults(data, settings);
     return data;
   }
 
   getExampleData(settings: Settings): BaseGasDensity {
-    let barometricPressure = 26.57;
-    if (settings.unitsOfMeasure == 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('Pa')
-    }
-
     let data: BaseGasDensity = {
       dryBulbTemp: 123,
       staticPressure: 0,
-      barometricPressure: barometricPressure,
+      barometricPressure: 26.57,
       gasDensity: 0.0547,
       gasType: 'AIR',
       inputType: "wetBulb",
@@ -70,7 +62,7 @@ export class FanPsychrometricService {
       specificHeatGas: 0.24,
       wetBulbTemp: 119
     };
-
+    data = this.convertFanAnalysisService.convertBaseGasDensityDefaults(data, settings);
     return data;
   }
 
