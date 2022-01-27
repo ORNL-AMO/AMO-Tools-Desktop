@@ -50,7 +50,6 @@ export class StackLossByVolumeComponent implements OnInit {
         }
       }
     }
-    this.setFuelTemp();
     this.setCalcMethod();
     this.setCombustionValidation();
     this.setFuelTempValidation();

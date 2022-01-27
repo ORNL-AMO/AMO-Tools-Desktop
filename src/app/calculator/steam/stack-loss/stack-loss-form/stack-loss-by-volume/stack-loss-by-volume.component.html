@@ -94,24 +94,6 @@
       </span>
     </div>
 
-    <!-- <div class="form-group">
-      <label class="small" for="combustionAirTemperature">Ambient Air Temperature</label>
-      <div class="input-group">
-        <input name="combustionAirTemperature" type="number" step="10" class="form-control"
-          formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();"
-          (input)="setFuelTempValidation()" (focus)="focusField('combustionAirTemperature')" >
-        <span class="input-group-addon units"><span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="stackLossForm.controls.combustionAirTemperature.invalid && !stackLossForm.controls.combustionAirTemperature.pristine">
-        <span *ngIf="stackLossForm.controls.combustionAirTemperature.errors.required">Value Required</span>
-        <span *ngIf="stackLossForm.controls.combustionAirTemperature.errors.max">Value can't be greater than Stack Gas
-          Temperature ({{stackLossForm.controls.combustionAirTemperature.errors.max.max}} <span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
-      </span>
-    </div> -->
-
     <div class="form-group">
       <label class="small" for="moistureInAirCombustion">Moisture in Combustion Air</label>
       <div class="input-group">
