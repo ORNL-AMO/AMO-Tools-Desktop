@@ -110,7 +110,7 @@
           </td>
         </tr>
         <tr>
-          <td>Annual Carbon Coal Cost ({{settings.currency}}/<span>{{EAFFuelUnit}}</span>)</td>
+          <td>Annual Carbon Coal Cost ({{settings.currency}})</td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualCarbonCoalCost | number:'1.0-0'}}</td>
           <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span *ngIf="mod.annualCarbonCoalCost">{{mod.annualCarbonCoalCost | number:'1.0-0'}}</span>
@@ -118,7 +118,7 @@
           </td>
         </tr>
         <tr>
-          <td>Annual Electrode Cost ({{settings.currency}}/<span>{{EAFFuelUnit}}</span>)</td>
+          <td>Annual Electrode Cost ({{settings.currency}}</td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualElectrodeCost | number:'1.0-0'}}</td>
           <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span *ngIf="mod.annualElectrodeCost">{{mod.annualElectrodeCost | number:'1.0-0'}}</span>
@@ -126,9 +126,7 @@
           </td>
         </tr>
         <tr>
-          <td>Annual Other Fuel Cost 
-            ({{settings.currency}}/<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">GJ</span>)</td>
+          <td>Annual Other Fuel Cost ({{settings.currency}})</td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualOtherFuelCost | number:'1.0-0'}}</td>
           <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span *ngIf="mod.annualOtherFuelCost">{{mod.annualOtherFuelCost | number:'1.0-0'}}</span>
