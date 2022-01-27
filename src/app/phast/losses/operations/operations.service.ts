@@ -23,10 +23,17 @@ export class OperationsService {
     });
 
     if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-      form.controls.coalCarbonCost.setValidators(Validators.required);
-      form.controls.electrodeCost.setValidators(Validators.required);
-      form.controls.otherFuelCost.setValidators(Validators.required);
-      form.updateValueAndValidity();
+      form.controls.coalCarbonCost.setValidators([Validators.required]);
+      form.controls.coalCarbonCost.markAsDirty();
+      form.controls.coalCarbonCost.updateValueAndValidity();
+
+      form.controls.electrodeCost.setValidators([Validators.required]);
+      form.controls.electrodeCost.markAsDirty();
+      form.controls.electrodeCost.updateValueAndValidity();
+      
+      form.controls.otherFuelCost.setValidators([Validators.required]);
+      form.controls.otherFuelCost.markAsDirty();
+      form.controls.otherFuelCost.updateValueAndValidity();
     }
     return form;
   }
