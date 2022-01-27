@@ -216,7 +216,7 @@ export class AssessmentService {
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: 68,
+        dryBulbTemp: 123,
         staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: 0.0749,
