@@ -96,22 +96,22 @@
                 </td>
                 <td class="input-cell" *ngFor="let summaryData of summary.profileSummaryData; let dataIndex = index;">
                     <span *ngIf="summaryData.order != 0 && profileDataType != 'powerFactor'">
-                        <input *ngIf="profileDataType == 'power'" type="number" class="form-control"
+                        <input required *ngIf="profileDataType == 'power'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.power"
                             step="any" min="0">
-                        <input *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
+                        <input required *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.airflow"
                             step="any" min="0">
-                        <input *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
+                        <input required *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentCapacity"
                             step="any" min="0">
-                        <input *ngIf="profileDataType == 'percentPower'" type="number" class="form-control"
+                        <input required *ngIf="profileDataType == 'percentPower'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentPower"

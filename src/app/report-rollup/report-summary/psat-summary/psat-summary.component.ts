@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { PsatReportRollupService } from '../../psat-report-rollup.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-psat-summary',
@@ -19,7 +20,7 @@ export class PsatSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numPsats: number;
-  constructor(public psatReportRollupService: PsatReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(public psatReportRollupService: PsatReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
@@ -33,7 +34,13 @@ export class PsatSummaryComponent implements OnInit {
     this.selectedSub = this.psatReportRollupService.selectedPsats.subscribe(val => {
       if (val.length !== 0) {
         this.psatReportRollupService.setResultsFromSelected(val);
-        this.calcPsatSums();
+        this.psatReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.psatReportRollupService.totals;
+        this.pumpSavingsPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -41,29 +48,5 @@ export class PsatSummaryComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
-  }
-
-  calcPsatSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.psatReportRollupService.selectedPsatResults.forEach(result => {
-      let diffCost = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.annual_cost;
-      let diffEnergy = result.baselineResults.annual_energy - result.modificationResults.annual_energy;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.annual_energy;
-    });
-    this.pumpSavingsPotential = sumSavings;
-    if(this.settings.pumpsRollupUnit !== 'MWh'){
-      this.energySavingsPotential = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(this.settings.pumpsRollupUnit);
-      this.totalEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(this.settings.pumpsRollupUnit);
-    } else {
-      this.energySavingsPotential = sumEnergySavings;
-      this.totalEnergy = sumEnergy;
-    }    
-    this.totalCost = sumCost;
   }
 }

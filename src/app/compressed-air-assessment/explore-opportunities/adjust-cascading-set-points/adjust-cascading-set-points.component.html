@@ -1,5 +1,8 @@
 <div class="checkbox">
     <label class="group-label" for="adjustCascadingSetPoints">
+        <span class="supply-demand">
+            Supply
+        </span>
         Adjust Cascading Set Points
         <span *ngIf="(hasInvalidForm || implementationCostForm.invalid) && adjustCascadingSetPoints.order != 100">
             <span class="fa fa-exclamation-circle"></span>

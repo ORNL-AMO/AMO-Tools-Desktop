@@ -27,7 +27,7 @@ export class ConvertFanAnalysisService {
     try {
       results = fanAddon.getPlaneResults(inputCpy);
       results = this.convertPlaneResults(results, settings);
-    } catch(err) {
+    } catch (err) {
       results.error = true;
     }
     return results;
@@ -81,6 +81,19 @@ export class ConvertFanAnalysisService {
     return inputCpy;
   }
 
+  convertBaseGasDensityDefaults(inputs: BaseGasDensity, settings: Settings): BaseGasDensity{
+    let inputCpy: BaseGasDensity = JSON.parse(JSON.stringify(inputs));
+    inputCpy.dryBulbTemp = this.convertNum(inputCpy.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
+    inputCpy.wetBulbTemp = this.convertNum(inputCpy.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
+    inputCpy.dewPoint = this.convertNum(inputCpy.dewPoint, 'F', settings.fanTemperatureMeasurement);
+    inputCpy.gasDensity = this.convertNum(inputCpy.gasDensity, 'lbscf', settings.densityMeasurement);
+    inputCpy.barometricPressure = this.convertNum(inputCpy.barometricPressure, 'inHg', settings.fanBarometricPressure);
+    inputCpy.staticPressure = this.convertNum(inputCpy.staticPressure, 'inH2o', settings.fanPressureMeasurement);
+    inputCpy.specificHeatGas = this.convertNum(inputCpy.specificHeatGas, 'btulbF', settings.fanSpecificHeatGas);
+    return inputCpy;
+  }
+
+
   convertPlaneForCalculations(inputs: Plane, settings: Settings): Plane {
     let inputCpy: Plane = JSON.parse(JSON.stringify(inputs));
     inputCpy.barometricPressure = this.convertNum(inputCpy.barometricPressure, settings.fanBarometricPressure, 'inHg');
@@ -119,7 +132,7 @@ export class ConvertFanAnalysisService {
 
   convertTraverseData(plane: Plane, from: string, to: string): Plane {
     if (plane.traverseData) {
-    let convertedData: Array<Array<number>> = new Array();
+      let convertedData: Array<Array<number>> = new Array();
       plane.traverseData.forEach(dataRow => {
         let dataRowConv = new Array();
         dataRow.forEach(d => {
@@ -128,19 +141,19 @@ export class ConvertFanAnalysisService {
         convertedData.push(dataRowConv);
       });
       plane.traverseData = convertedData;
-    } 
+    }
 
     if (plane.staticPressureData) {
       let convertedData: Array<Array<number>> = new Array();
-        plane.staticPressureData.forEach(dataRow => {
-          let dataRowConv = new Array();
-          dataRow.forEach(d => {
-            dataRowConv.push(this.convertNum(d, from, to));
-          });
-          convertedData.push(dataRowConv);
+      plane.staticPressureData.forEach(dataRow => {
+        let dataRowConv = new Array();
+        dataRow.forEach(d => {
+          dataRowConv.push(this.convertNum(d, from, to));
         });
-        plane.staticPressureData = convertedData;
-      } 
+        convertedData.push(dataRowConv);
+      });
+      plane.staticPressureData = convertedData;
+    }
 
     return plane;
   }
@@ -240,14 +253,14 @@ export class ConvertFanAnalysisService {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
     input.relativeHumidity = input.relativeHumidity * 100;
     //metric/imperial
-    if(settings.unitsOfMeasure == 'Metric'){
+    if (settings.unitsOfMeasure == 'Metric') {
       input.absolutePressure = this.convertNum(input.absolutePressure, 'inHg', 'Pa');
       input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', 'Pa')
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
-      input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
+      input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');
       input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
     }
-    
+
     input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);
     return input;
   }
@@ -255,7 +268,7 @@ export class ConvertFanAnalysisService {
   convertNum(num: number, from: string, to: string): number {
     if (from != to && num) {
       num = this.convertUnitsService.value(num).from(from).to(to);
-      num = this.convertUnitsService.roundVal(num, 3);
+      num = this.convertUnitsService.roundVal(num, 4);
     }
     return num;
   }

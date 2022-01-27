@@ -1,6 +1,9 @@
 <form [formGroup]="form" class="p-0">
     <div class="checkbox">
         <label class="group-label" for="reduceAirSystemAirPressure">
+            <span class="supply-demand">
+                Supply
+            </span>
             Reduce System Air Pressure
             <span *ngIf="form.invalid && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>

@@ -52,7 +52,7 @@ export class UpdateDataService {
     updateWasteWater(assessment: Assessment): Assessment {
         //logic for updating wastewater data
         assessment.appVersion = packageJson.version;
-        if (!assessment.wasteWater.baselineData.operations) {
+        if (assessment.wasteWater.baselineData && !assessment.wasteWater.baselineData.operations) {
             assessment.wasteWater.baselineData.operations = {
                 MaxDays: 100,
                 TimeIncrement: .5,
@@ -63,12 +63,14 @@ export class UpdateDataService {
 
         if (assessment.wasteWater.modifications) {
             assessment.wasteWater.modifications.forEach(mod => {
-                mod.operations = {
-                    MaxDays: 100,
-                    TimeIncrement: .5,
-                    operatingMonths: 12,
-                    EnergyCostUnit: 0.09
-                };
+                if (!mod.operations) {
+                    mod.operations = {
+                        MaxDays: 100,
+                        TimeIncrement: .5,
+                        operatingMonths: 12,
+                        EnergyCostUnit: 0.09
+                    };
+                }
             })
         }
 

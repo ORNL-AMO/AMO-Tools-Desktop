@@ -47,6 +47,10 @@ td, th{
   }
 
 
+  .supply-demand{
+    margin-right: .25rem;
+    border-right: solid ;
+}
   
 .group-label .form-control{
 	width: fit-content;

@@ -43,3 +43,9 @@ td, th{
   option.invalid{
       color: red;
   }
+
+
+  .supply-demand{
+	margin-right: .25rem;
+      border-right: solid ;
+  }

@@ -96,21 +96,8 @@ export class OperationsDataComponent implements OnInit {
 
   calculateCurrent() {
     if (!this.disableEstimateCurrent) {
-      let settings: Settings = this.motorInventoryService.settings.getValue();
-      let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
-
-      let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
-      let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
-      let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
-      let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
-      //use specified efficiency class
-      let efficiencyClass: number = 3;
-      let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
       let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-      let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
-      let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
-      this.motorForm.controls.currentAtLoad.patchValue(motorCurrent);
-      this.save();
+      this.motorCatalogService.estimateCurrent(loadFactor);
     }
   }
 

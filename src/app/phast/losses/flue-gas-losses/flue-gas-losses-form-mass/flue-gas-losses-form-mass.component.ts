@@ -60,7 +60,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     wetBulbTemp: 118.999
   }
 
-  calculationMethods: Array<string> = [
+  calculationMethods: Array<'Excess Air' | 'Oxygen in Flue Gas'> = [
     'Excess Air',
     'Oxygen in Flue Gas'
   ];
