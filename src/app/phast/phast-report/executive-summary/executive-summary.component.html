@@ -118,7 +118,7 @@
           </td>
         </tr>
         <tr>
-          <td>Annual Electrode Cost ({{settings.currency}}</td>
+          <td>Annual Electrode Cost ({{settings.currency}})</td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualElectrodeCost | number:'1.0-0'}}</td>
           <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span *ngIf="mod.annualElectrodeCost">{{mod.annualElectrodeCost | number:'1.0-0'}}</span>

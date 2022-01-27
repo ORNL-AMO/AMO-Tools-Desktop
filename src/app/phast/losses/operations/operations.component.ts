@@ -47,7 +47,7 @@ export class OperationsComponent implements OnInit {
     this.initForm();
   }
   initForm() {
-    this.operationsForm = this.operationsService.initForm(this.phast);
+    this.operationsForm = this.operationsService.initForm(this.phast, this.settings);
   }
 
   saveLosses() {

@@ -63,7 +63,7 @@ export class PhastValidService {
     let isLeakageValid: boolean = this.checkLeakageValid(phast);
     let isExtendedValid: boolean = this.checkExtendedValid(phast);
     let isOtherValid: boolean = this.checkOtherValid(phast);
-    let isOperationsValid: boolean = this.checkOperationsValid(phast);
+    let isOperationsValid: boolean = this.checkOperationsValid(phast, settings);
     let isSystemEfficiencyValid: boolean = this.checkSysEfficiencyValid(phast);
     let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast, settings);
     let isSlagValid: boolean = this.checkSlagValid(phast);
@@ -149,8 +149,8 @@ export class PhastValidService {
 
   }
 
-  checkOperationsValid(phast: PHAST): boolean {
-    let operationsForm: FormGroup = this.operationsService.initForm(phast);
+  checkOperationsValid(phast: PHAST, settings: Settings): boolean {
+    let operationsForm: FormGroup = this.operationsService.initForm(phast, settings);
     return operationsForm.status === 'VALID'
   }
 

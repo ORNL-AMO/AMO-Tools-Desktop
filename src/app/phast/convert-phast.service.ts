@@ -512,6 +512,17 @@ export class ConvertPhastService {
     let conversionHelper: number = this.convertUnitsService.value(1).from(oldSettings.energyResultUnit).to(newSettings.energyResultUnit);
     operatingCosts.fuelCost = this.roundVal(operatingCosts.fuelCost / conversionHelper, 3);
     operatingCosts.steamCost = this.roundVal(operatingCosts.steamCost / conversionHelper, 3);
+
+    if (oldSettings.unitsOfMeasure === 'Metric' && newSettings.unitsOfMeasure === 'Imperial') {
+      operatingCosts.coalCarbonCost = this.convertVal(operatingCosts.coalCarbonCost, 'kg', 'lb');
+      operatingCosts.electrodeCost = this.convertVal(operatingCosts.electrodeCost, 'kg', 'lb');
+      operatingCosts.otherFuelCost = this.convertVal(operatingCosts.otherFuelCost, 'GJ', 'MMBtu');
+    } else if (oldSettings.unitsOfMeasure === 'Imperial' && newSettings.unitsOfMeasure === 'Metric') { 
+      operatingCosts.coalCarbonCost = this.convertVal(operatingCosts.coalCarbonCost, 'lb', 'kg');
+      operatingCosts.electrodeCost = this.convertVal(operatingCosts.electrodeCost, 'lb', 'kg');
+      operatingCosts.otherFuelCost = this.convertVal(operatingCosts.otherFuelCost, 'MMBtu', 'GJ');
+    }
+    
     return operatingCosts;
   }
 

@@ -78,10 +78,11 @@ export class ExecutiveSummaryService {
     if (settings.energySourceType === 'Electricity') {
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         let naturalGasCost: number = phastResults.EAFNaturalGasUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.fuelCost;
-        resultsSummary.annualCarbonCoalCost = phastResults.EAFCoalCarbonUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.fuelCost;
-        resultsSummary.annualElectrodeCost = phastResults.EAFElectrodeUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.fuelCost;
-        resultsSummary.annualOtherFuelCost = phastResults.EAFOtherFuelUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.fuelCost;
 
+        resultsSummary.annualCarbonCoalCost = phastResults.EAFCoalCarbonUsed * phast.operatingHours.hoursPerYear * this.convertEAFChemicalFuelCosts(phast.operatingCosts.coalCarbonCost);
+        resultsSummary.annualElectrodeCost = phastResults.EAFElectrodeUsed * phast.operatingHours.hoursPerYear * this.convertEAFChemicalFuelCosts(phast.operatingCosts.electrodeCost);
+        
+        resultsSummary.annualOtherFuelCost = phastResults.EAFOtherFuelUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.otherFuelCost;
         resultsSummary.annualElectricityCost = phastResults.EAFElectricEnergyUsed * phast.operatingHours.hoursPerYear * phast.operatingCosts.electricityCost;
         resultsSummary.annualTotalFuelCost = naturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;
         resultsSummary.annualCost = resultsSummary.annualTotalFuelCost + resultsSummary.annualElectricityCost;
@@ -110,6 +111,12 @@ export class ExecutiveSummaryService {
     } 
 
     return resultsSummary;
+  }
+
+  convertEAFChemicalFuelCosts(cost: number): number {
+    // convert btu/lb to mmbtu/lb (or kJ/kg to GJ/kg)
+    let converted: number = cost / (1/1000000);
+    return converted;
   }
   
 

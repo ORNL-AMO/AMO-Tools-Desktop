@@ -137,7 +137,10 @@ export class AssessmentService {
       operatingCosts: {
         electricityCost: settings.electricityCost || .066,
         steamCost: settings.steamCost || 4.69,
-        fuelCost: settings.fuelCost || 3.99
+        fuelCost: settings.fuelCost || 3.99,
+        coalCarbonCost: .06,
+        electrodeCost: 3,
+        otherFuelCost: settings.fuelCost,
       },
       modifications: new Array()
     };
