@@ -369,6 +369,7 @@ export class PhastService {
       inputCopy.flueGasTemperature = this.convertUnitsService.value(inputCopy.flueGasTemperature).from('C').to('F');
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
+      inputCopy.ambientAirTemp = this.convertUnitsService.value(inputCopy.ambientAirTemp).from('C').to('F');
       results = phastAddon.flueGasLossesByVolume(inputCopy);
     } else {
       results = phastAddon.flueGasLossesByVolume(inputCopy);
