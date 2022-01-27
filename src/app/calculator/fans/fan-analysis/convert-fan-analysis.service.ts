@@ -268,6 +268,7 @@ export class ConvertFanAnalysisService {
   convertNum(num: number, from: string, to: string): number {
     if (from != to && num) {
       num = this.convertUnitsService.value(num).from(from).to(to);
+      num = this.convertUnitsService.roundVal(num, 4);
     }
     return num;
   }
