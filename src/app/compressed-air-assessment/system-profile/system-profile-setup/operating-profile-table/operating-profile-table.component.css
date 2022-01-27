@@ -31,3 +31,7 @@ td, th{
   table.table.single-entry{
     width: inherit;
   }
+
+  input.ng-invalid{
+    border-color: red;
+  }
