@@ -4,10 +4,9 @@ branches:
   - develop
 image: Visual Studio 2017
 install:
-- cmd: >-
-    choco install nodejs.install --version 12.8
-    npm install
+- cmd: choco install nodejs.install --version 12.20
 build_script:
 - cmd: >-
+    npm install
     npm run build
 test: off
