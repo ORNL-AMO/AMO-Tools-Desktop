@@ -7,6 +7,6 @@ install:
 - ps: Install-Product node 12
 build_script:
 - cmd: >-
-    npm install
+    npm ci
     npm run build
 test: off
