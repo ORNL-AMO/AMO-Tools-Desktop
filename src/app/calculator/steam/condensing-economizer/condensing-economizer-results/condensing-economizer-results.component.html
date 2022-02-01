@@ -100,8 +100,8 @@
       <td class="bold w-50">Sensible Heat Recovery</td>
       <td *ngIf="output.sensibleHeatRecoveryAnnual" class="text-center w-50">
         {{output.sensibleHeatRecoveryAnnual | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
       </td>
       <td *ngIf="!output.sensibleHeatRecoveryAnnual" class="text-center w-50">
         &mdash; &mdash;
@@ -112,8 +112,8 @@
       <td class="bold w-50">Latent Heat Recovery</td>
       <td *ngIf="output.heatRecoveryAnnual" class="text-center w-50">
         {{output.heatRecoveryAnnual | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
       </td>
       <td *ngIf="!output.heatRecoveryAnnual" class="text-center w-50">
         &mdash; &mdash;
@@ -123,8 +123,8 @@
       <td class="bold w-50">Annual Heat Recovery</td>
       <td *ngIf="output.annualHeatRecovery" class="text-center w-50">
         {{output.annualHeatRecovery | number:'1.0-0'}} 
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.annualHeatRecovery" class="text-center w-50">
         &mdash; &mdash;
