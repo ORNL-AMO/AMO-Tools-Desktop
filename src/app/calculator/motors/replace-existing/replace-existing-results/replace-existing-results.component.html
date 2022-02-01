@@ -38,10 +38,10 @@
         Annual Energy Savings
       </td>
       <td *ngIf="!inTreasureHunt">
-        {{results.existingEnergyUse - results.rewoundEnergyUse | number : '1.0-0'}} kWh/yr
+        {{results.existingEnergyUse - results.rewoundEnergyUse | number : '1.0-0'}} kWh
       </td>
-      <td *ngIf="inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh/yr</td>
-      <td *ngIf="!inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh/yr</td>
+      <td *ngIf="inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh</td>
+      <td *ngIf="!inTreasureHunt">{{results.annualEnergySavings | number : '1.0-0'}} kWh</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
@@ -85,7 +85,7 @@
       <td class="bold">
         Annual Energy Savings
       </td>
-      <td>{{results.incrementalAnnualEnergySavings | number : '1.0-0'}} kWh/yr</td>
+      <td>{{results.incrementalAnnualEnergySavings | number : '1.0-0'}} kWh</td>
     </tr>
     <tr>
       <td class="bold">
