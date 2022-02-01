@@ -30,7 +30,6 @@
 npm-debug.log
 testem.log
 /typings
-package-lock.json
 /db/*.db
 
 # e2e
