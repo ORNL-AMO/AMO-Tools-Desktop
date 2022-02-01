@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
@@ -70,17 +71,17 @@ export class CompressedAirAssessmentService {
 
     isInvalidProfileSummaryData = profileSummary.some(summary => {
       if (summary.dayTypeId == selectedDayTypeId) {
-        let hasInvalidData = summary.profileSummaryData.some(data => {
+        let hasInvalidData: boolean = summary.profileSummaryData.some(data => {
           if (data.order != 0) {
-            if (profileDataType == 'percentCapacity' && (data.percentCapacity < 0 || isNaN(data.percentCapacity))) {
+            if (profileDataType == 'percentCapacity' && this.checkValue(data.percentCapacity)) {
               return true
-            } else if (profileDataType == 'power' && (data.power < 0 || isNaN(data.power))) {
+            } else if (profileDataType == 'power' && this.checkValue(data.power)) {
               return true;
-            } else if (profileDataType == 'airflow' && (data.airflow < 0 || isNaN(data.airflow))) {
+            } else if (profileDataType == 'airflow' && this.checkValue(data.airflow)) {
               return true;
-            } else if (profileDataType == 'percentPower' && (data.percentPower < 0) || isNaN(data.airflow)) {
+            } else if (profileDataType == 'percentPower' && this.checkValue(data.percentPower)) {
               return true;
-            } else if (profileDataType == 'powerFactor' && (data.powerFactor < 0 || isNaN(data.powerFactor) || data.amps < 0 || isNaN(data.amps) || data.volts < 0 || isNaN(data.volts))) {
+            } else if (profileDataType == 'powerFactor' && (this.checkValue(data.powerFactor) || this.checkValue(data.amps) || this.checkValue(data.volts))) {
               return true;
             }
           }
@@ -89,6 +90,10 @@ export class CompressedAirAssessmentService {
       }
     });
     return !isInvalidProfileSummaryData;
+  }
+
+  checkValue(num: number): boolean {
+    return num < 0 || isNaN(num) || isNull(num) || isUndefined(num);
   }
 
 

@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FlueGas, FlueGasByVolumeSuiteResults, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults, FlueGasOutput, FlueGasResult, MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
+import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasFormService } from './flue-gas-form.service';
 
@@ -24,7 +26,8 @@ export class FlueGasService {
   modalOpen: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService, 
               private phastService: PhastService,
-              private flueGasFormService: FlueGasFormService) {
+              private flueGasFormService: FlueGasFormService,
+              private suiteDbService: SuiteDbService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
@@ -101,6 +104,38 @@ export class FlueGasService {
         result.flueGasLosses = flueGasLosses;
         result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
+        let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+        let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == flueGasData.flueGasByMass.gasTypeId });
+        if (flueGasData.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
+          result.calculatedExcessAir = flueGasData.flueGasByMass.excessAirPercentage;
+          let fluGasCo2Inputs: MaterialInputProperties = {
+            carbon: selectedGas.carbon,
+            hydrogen: selectedGas.hydrogen,
+            sulphur: selectedGas.sulphur,
+            inertAsh: selectedGas.inertAsh,
+            o2: selectedGas.o2,
+            moisture: selectedGas.moisture,
+            nitrogen: selectedGas.nitrogen,
+            excessAir: flueGasData.flueGasByMass.excessAirPercentage,
+            moistureInAirCombustion: flueGasData.flueGasByMass.moistureInAirCombustion
+          }
+          result.calculatedFlueGasO2 = this.phastService.flueGasByMassCalculateO2(fluGasCo2Inputs);
+        } else if (flueGasData.flueGasByMass.oxygenCalculationMethod == 'Oxygen in Flue Gas' && selectedGas) {
+          result.calculatedFlueGasO2 = flueGasData.flueGasByMass.o2InFlueGas;
+          //TODO: cal excessAir
+          let fluGasCo2Inputs: MaterialInputProperties = {
+            carbon: selectedGas.carbon,
+            hydrogen: selectedGas.hydrogen,
+            sulphur: selectedGas.sulphur,
+            inertAsh: selectedGas.inertAsh,
+            o2: selectedGas.o2,
+            moisture: selectedGas.moisture,
+            nitrogen: selectedGas.nitrogen,
+            o2InFlueGas: flueGasData.flueGasByMass.o2InFlueGas,
+            moistureInAirCombustion: flueGasData.flueGasByMass.moistureInAirCombustion
+          }
+          result.calculatedExcessAir = this.phastService.flueGasByMassCalculateExcessAir(fluGasCo2Inputs);
+        }
       }
     } 
     result = this.checkAvailableHeatResult(result);

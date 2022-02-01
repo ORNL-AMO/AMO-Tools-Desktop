@@ -7,9 +7,11 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
-import { FlueGasByVolumeSuiteResults } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { FlueGasResultsComponent } from '../calculator/furnaces/flue-gas/flue-gas-results/flue-gas-results.component';
 import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
+import { SuiteDbService } from '../suiteDb/suite-db.service';
+import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 
 
 @Injectable()
@@ -21,7 +23,8 @@ export class PhastResultsService {
     private convertUnitsService: ConvertUnitsService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private energyInputService: EnergyInputService,
-    private co2SavingPhastService: Co2SavingsPhastService) { }
+    private co2SavingPhastService: Co2SavingsPhastService,
+    private suiteDbService: SuiteDbService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -160,7 +163,41 @@ export class PhastResultsService {
         if (tmpFlueGas.flueGasType === 'By Mass') {
           let tmpForm = this.flueGasFormService.initByMassFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
-            const availableHeat = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
+            let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+            let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpFlueGas.flueGasByMass.gasTypeId });
+            let availableHeat: number = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
+            if (tmpFlueGas.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
+              results.calculatedExcessAir = tmpFlueGas.flueGasByMass.excessAirPercentage;
+              let fluGasCo2Inputs: MaterialInputProperties = {
+                carbon: selectedGas.carbon,
+                hydrogen: selectedGas.hydrogen,
+                sulphur: selectedGas.sulphur,
+                inertAsh: selectedGas.inertAsh,
+                o2: selectedGas.o2,
+                moisture: selectedGas.moisture,
+                nitrogen: selectedGas.nitrogen,
+                excessAir: tmpFlueGas.flueGasByMass.excessAirPercentage,
+                moistureInAirCombustion: tmpFlueGas.flueGasByMass.moistureInAirCombustion
+              }
+              results.calculatedFlueGasO2 = this.phastService.flueGasByMassCalculateO2(fluGasCo2Inputs);
+            } else if (tmpFlueGas.flueGasByMass.oxygenCalculationMethod == 'Oxygen in Flue Gas' && selectedGas) {
+              results.calculatedFlueGasO2 = tmpFlueGas.flueGasByMass.o2InFlueGas;
+              //TODO: cal excessAir
+              let fluGasCo2Inputs: MaterialInputProperties = {
+                carbon: selectedGas.carbon,
+                hydrogen: selectedGas.hydrogen,
+                sulphur: selectedGas.sulphur,
+                inertAsh: selectedGas.inertAsh,
+                o2: selectedGas.o2,
+                moisture: selectedGas.moisture,
+                nitrogen: selectedGas.nitrogen,
+                o2InFlueGas: tmpFlueGas.flueGasByMass.o2InFlueGas,
+                moistureInAirCombustion: tmpFlueGas.flueGasByMass.moistureInAirCombustion
+              }
+              results.calculatedExcessAir = this.phastService.flueGasByMassCalculateExcessAir(fluGasCo2Inputs);
+            }
+
+
             results.flueGasAvailableHeat = availableHeat * 100;
             results.flueGasGrossHeat = (results.totalInput / availableHeat);
             results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
@@ -186,7 +223,7 @@ export class PhastResultsService {
 
     if (phast.co2SavingsData) {
       phast.co2SavingsData.electricityUse = results.grossHeatInput;
-      results.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);   
+      results.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);
     } else {
       results.co2EmissionsOutput = 0;
     }
