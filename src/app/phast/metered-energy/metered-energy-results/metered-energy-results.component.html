@@ -18,10 +18,10 @@
       <tr>
         <td>Annual Fuel Energy Used</td>
         <td *ngIf="results.metered.annualEnergy">{{results.metered.annualEnergy | number:'2.2-2'}}
-          {{resultUnits.energyPerTimeUnit}}/yr</td>
+          {{resultUnits.energyPerTimeUnit}}</td>
         <td *ngIf="!results.metered.annualEnergy">&mdash;</td>
         <td *ngIf="results.byPhast.annualEnergy">{{results.byPhast.annualEnergy | number:'2.2-2'}}
-          {{resultUnits.energyPerTimeUnit}}/yr</td>
+          {{resultUnits.energyPerTimeUnit}}</td>
         <td *ngIf="!results.byPhast.annualEnergy">&mdash;</td>
       </tr>
       <tr>
