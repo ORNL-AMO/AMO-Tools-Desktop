@@ -6,7 +6,11 @@
         <tr>
           <td class="bold w-50">Baseline Electricity</td>
           <td *ngIf="output.annualEnergy" class="text-center w-50">
+<<<<<<< HEAD
             {{output.annualEnergy | number:'1.0-0'}} {{settings.phastRollupElectricityUnit}}/yr
+=======
+            {{output.annualEnergy | number:'1.0-0'}} kW
+>>>>>>> fe06a1c2bb2febcbe3586e6459495a2df5881c95
           </td>
           <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
@@ -15,13 +19,21 @@
         <tr>
           <td class="bold w-50">Modification Electricity</td>
           <td class="text-center w-50">
+<<<<<<< HEAD
             0 {{settings.phastRollupElectricityUnit}}/yr
+=======
+            0 kW
+>>>>>>> fe06a1c2bb2febcbe3586e6459495a2df5881c95
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Annual Energy Savings</td>
           <td *ngIf="output.annualEnergy" class="text-center w-50">
+<<<<<<< HEAD
             {{output.annualEnergy | number:'1.0-0'}} {{settings.phastRollupElectricityUnit}}/yr
+=======
+            {{output.annualEnergy | number:'1.0-0'}} kW
+>>>>>>> fe06a1c2bb2febcbe3586e6459495a2df5881c95
           </td>
           <td *ngIf="!output.annualEnergy" class="text-center w-50">
             &mdash; &mdash;
