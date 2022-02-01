@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
-import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
+import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuel, EnergyEquivalencyFuelOutput } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
@@ -594,18 +594,26 @@ export class PhastService {
   }
 
   energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {
-    let inputs = this.createInputCopy(input);
-    if (settings.unitsOfMeasure === 'Metric') {
-      inputs.fuelFiredHeatInput = this.convertUnitsService.value(inputs.fuelFiredHeatInput).from('GJ').to('MMBtu');
-    }
-    return phastAddon.energyEquivalencyElectric(inputs);
+    let inputs: EnergyEquivalencyElectric = this.createInputCopy(input);
+   
+    inputs.fuelFiredHeatInput = this.convertUnitsService.value(inputs.fuelFiredHeatInput).from(settings.phastRollupFuelUnit).to('MMBtu');
+
+    let results: EnergyEquivalencyElectricOutput = phastAddon.energyEquivalencyElectric(inputs);
+
+    results.electricalHeatInput = this.convertUnitsService.value(results.electricalHeatInput).from('kWh').to(settings.phastRollupElectricityUnit);
+    
+    return results;
   }
 
   energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings) {
-    let results = phastAddon.energyEquivalencyFuel(inputs);
-    if (settings.unitsOfMeasure === 'Metric') {
-      results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to('GJ');
-    }
+    let inputsCopy: EnergyEquivalencyFuel = this.createInputCopy(inputs);
+
+    inputsCopy.electricalHeatInput = this.convertUnitsService.value(inputsCopy.electricalHeatInput).from(settings.phastRollupElectricityUnit).to('kWh');
+
+    let results: EnergyEquivalencyFuelOutput = phastAddon.energyEquivalencyFuel(inputsCopy);
+
+    results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to(settings.phastRollupFuelUnit);
+
     return results;
   }
 
