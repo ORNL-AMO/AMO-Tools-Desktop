@@ -31,8 +31,8 @@
       <td class="bold w-50">Energy Savings</td>
       <td *ngIf="output.energySavings" class="text-center w-50">
         {{output.energySavings | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
       </td>
       <td *ngIf="!output.energySavings" class="text-center w-50">
         &mdash; &mdash;
