@@ -82,7 +82,7 @@ export class HeatCascadingService {
     let emptyOutput: HeatCascadingOutput = {
       priFlueVolume: 0,
       hxEnergyRate: 0,
-      eqEnergSupply: 0,
+      eqEnergySupply: 0,
       effOppHours: 0,
       energySavings: 0,
       costSavings: 0,
@@ -111,9 +111,20 @@ export class HeatCascadingService {
       heatCascadingOutput.secAvailableHeat = heatCascadingOutput.secAvailableHeat * 100;
       heatCascadingOutput.priExcessAir = heatCascadingOutput.priExcessAir * 100;
       heatCascadingOutput.secExcessAir = heatCascadingOutput.secExcessAir * 100;
-      heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * inputCopy.fuelCost;
-      heatCascadingOutput.baselineEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate * inputCopy.priOpHours);
-      heatCascadingOutput.modificationEnergy = (inputCopy.secFiringRate * inputCopy.secOpHours) + (inputCopy.priFiringRate * inputCopy.priOpHours) - heatCascadingOutput.energySavings;
+      let fuelCost: number = inputCopy.fuelCost;
+      let conversionHelper: number;
+      if(settings.unitsOfMeasure === 'Metric'){
+        conversionHelper = this.convertUnitsService.value(1).from('GJ').to(settings.phastRollupUnit);
+      } else{
+        conversionHelper = this.convertUnitsService.value(1).from('MMBtu').to(settings.phastRollupUnit);
+      }
+      fuelCost = fuelCost / conversionHelper;
+      heatCascadingOutput.costSavings = heatCascadingOutput.energySavings * fuelCost;
+      let secHeatInput: number = inputCopy.secFiringRate * conversionHelper;
+      let priHeatInput: number = inputCopy.priFiringRate * conversionHelper;
+      heatCascadingOutput.baselineEnergy = (secHeatInput * inputCopy.secOpHours) + (priHeatInput * inputCopy.priOpHours);
+      heatCascadingOutput.modificationEnergy = (secHeatInput * inputCopy.secOpHours) + (priHeatInput * inputCopy.priOpHours) - heatCascadingOutput.energySavings;
+      console.log(heatCascadingOutput);
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }
@@ -242,19 +253,21 @@ export class HeatCascadingService {
   }
 
   convertResultUnits(output: HeatCascadingOutput, settings: Settings): HeatCascadingOutput {
-    if (settings.unitsOfMeasure == "Metric") {
-      output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to('GJ');
+    if(settings.phastRollupUnit != 'MMBtu'){
+      output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to(settings.phastRollupUnit);
       output.energySavings = this.roundVal(output.energySavings, 2);
-
-      output.hxEnergyRate = this.convertUnitsService.value(output.hxEnergyRate).from('MMBtu').to('GJ');
+  
+      output.hxEnergyRate = this.convertUnitsService.value(output.hxEnergyRate).from('MMBtu').to(settings.phastRollupUnit);
       output.hxEnergyRate = this.roundVal(output.hxEnergyRate, 2);
+  
+      output.eqEnergySupply = this.convertUnitsService.value(output.eqEnergySupply).from('MMBtu').to(settings.phastRollupUnit);
+      output.eqEnergySupply = this.roundVal(output.eqEnergySupply, 2);
 
-      output.eqEnergSupply = this.convertUnitsService.value(output.eqEnergSupply).from('MMBtu').to('GJ');
-      output.eqEnergSupply = this.roundVal(output.eqEnergSupply, 2);
+    }
 
+    if (settings.unitsOfMeasure == "Metric") {
       output.priFlueVolume = this.convertUnitsService.value(output.priFlueVolume).from('ft3').to('m3');
       output.priFlueVolume = this.roundVal(output.priFlueVolume, 4);
-
     }
     return output;
   }
