@@ -60,6 +60,8 @@ input.form-control.ng-invalid{
 }
 
 .supply-demand{
-	margin-right: .25rem;
-  border-right: solid ;
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
 }
