@@ -47,6 +47,9 @@
     </div>
   </div>
 
+  <!--calculators-->
+  <app-waste-water-calculators class="d-flex tab-content" *ngIf="mainTab == 'calculators'"
+    [ngStyle]="{'height.px': containerHeight}" [assessment]="assessment"></app-waste-water-calculators>
 
   <!--footer-->
   <div #footer id="wasteWaterFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup'">
