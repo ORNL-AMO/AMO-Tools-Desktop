@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../shared/models/settings';
-import { ReportRollupService } from '../report-rollup.service';
-import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
-import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
-import { ReportSummaryGraphsService } from './report-summary-graphs.service';
+import { Settings } from '../../../shared/models/settings';
+import { ReportRollupService } from '../../report-rollup.service';
+import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { ReportSummaryGraphsService } from '../report-summary-graphs.service';
 
 @Component({
-  selector: 'app-report-summary-graphs',
-  templateUrl: './report-summary-graphs.component.html',
-  styleUrls: ['./report-summary-graphs.component.css']
+  selector: 'app-report-summary-graphs-print',
+  templateUrl: './report-summary-graphs-print.component.html',
+  styleUrls: ['./report-summary-graphs-print.component.css']
 })
-export class ReportSummaryGraphsComponent implements OnInit {
+export class ReportSummaryGraphsPrintComponent implements OnInit {
 
   pieChartDataOption: string = 'energy';
   reportSummaryEnergyUnit: string;
@@ -33,7 +33,7 @@ export class ReportSummaryGraphsComponent implements OnInit {
 
   settings: Settings;
   settingsSub: Subscription;
-  
+
   constructor(private reportRollupService: ReportRollupService,
     private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
@@ -59,13 +59,13 @@ export class ReportSummaryGraphsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {    
+  ngOnDestroy() {
     this.settingsSub.unsubscribe();
     this.pieChartDataSub.unsubscribe();
     this.energyChartDataSub.unsubscribe();
     this.costBarChartSub.unsubscribe();
     this.energyBarChartSub.unsubscribe();
-    this.costBarChartSub.unsubscribe();    
+    this.costBarChartSub.unsubscribe();
   }
 
 }

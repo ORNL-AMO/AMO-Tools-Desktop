@@ -16,8 +16,10 @@ export class ReportSummaryPieChartComponent implements OnInit {
   @Input()
   dataOption: string;
   @Input()
-  energyUnit: string; 
-  
+  energyUnit: string;
+  @Input()
+  printView: boolean;
+
   @ViewChild('reportSummaryPieChart', { static: false }) reportSummaryPieChart: ElementRef;
 
   constructor() { }
@@ -26,17 +28,21 @@ export class ReportSummaryPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.drawPlot();   
+    if (!this.printView) {
+      this.drawPlot();
+    } else {
+      this.drawPrintPlot();
+    }
   }
 
   ngOnChanges() {
-    if(this.reportSummaryPieChart){
+    if (this.reportSummaryPieChart) {
       Plotly.purge(this.reportSummaryPieChart.nativeElement);
     }
     if (this.reportSummaryPieChart) {
       // this.setHeight();
       this.drawPlot();
-    } 
+    }
   }
 
   drawPlot() {
@@ -52,7 +58,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$' ? 'k' : ''}`;
     }
     else if (this.dataOption == 'energySavings') {
       valuesArr = this.pieChartData.map(dataItem => {
@@ -64,7 +70,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.costSavings
       });
-      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$'? 'k' : ''}`;
+      textTemplate = `%{label}:<br>%{value:$,.0f}${this.pieChartData[0].currencyUnit !== '$' ? 'k' : ''}`;
     }
     else if (this.dataOption == 'carbon') {
       valuesArr = this.pieChartData.map(dataItem => {
@@ -105,6 +111,69 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: true,
       responsive: true
+    };
+    Plotly.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
+  }
+
+  drawPrintPlot() {
+    let valuesArr: Array<number>;
+    let textTemplate: string;
+    if (this.dataOption == 'energy') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energyUsed
+      });
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
+    }
+    else if (this.dataOption == 'cost') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.annualCost
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
+    }
+    else if (this.dataOption == 'energySavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.energySavings
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}' + this.energyUnit;
+    }
+    else if (this.dataOption == 'costSavings') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.costSavings
+      });
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
+    }
+    else if (this.dataOption == 'carbon') {
+      valuesArr = this.pieChartData.map(dataItem => {
+        return dataItem.carbonEmissions
+      });
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
+    }
+    var data = [{
+      values: valuesArr,
+      labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),
+      marker: {
+        colors: this.pieChartData.map(dataItem => { return dataItem.color })
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      automargin: true,
+      // textinfo: 'label+value',
+      texttemplate: textTemplate,
+      hoverformat: '.2r',
+      direction: "clockwise",
+      rotation: 90
+    }];
+    var layout = {
+      font: {
+        size: 12,
+      },
+      showlegend: false,
+      margin: { t: 0, b: 0 }
+    };
+    var modebarBtns = {
+      displaylogo: false,
+      displayModeBar: false
     };
     Plotly.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }

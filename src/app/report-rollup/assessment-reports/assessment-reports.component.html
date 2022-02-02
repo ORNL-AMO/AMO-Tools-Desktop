@@ -45,6 +45,9 @@
 
 <!-- PRINT!! -->
 <div class="print-container" *ngIf="printView">
+    <div class="assessment-item" id="{{'rollup_graphs'}}">
+        <app-report-summary-graphs-print class="w-100"></app-report-summary-graphs-print>
+    </div>
     <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row">
         <div class="col-12">
             <app-psat-rollup [calculators]="selectedPsatCalcs" [inPrintView]="true">

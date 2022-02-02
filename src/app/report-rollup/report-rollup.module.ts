@@ -67,6 +67,7 @@ import { ReportSummaryGraphsComponent } from './report-summary-graphs/report-sum
 import { ReportSummaryGraphsService } from './report-summary-graphs/report-summary-graphs.service';
 import { ReportSummaryPieChartComponent } from './report-summary-graphs/report-summary-pie-chart/report-summary-pie-chart.component';
 import { ReportSummaryBarChartComponent } from './report-summary-graphs/report-summary-bar-chart/report-summary-bar-chart.component';
+import { ReportSummaryGraphsPrintComponent } from './report-summary-graphs/report-summary-graphs-print/report-summary-graphs-print.component';
 
 @NgModule({
   imports: [
@@ -130,6 +131,7 @@ import { ReportSummaryBarChartComponent } from './report-summary-graphs/report-s
     ReportSummaryGraphsComponent,
     ReportSummaryPieChartComponent,
     ReportSummaryBarChartComponent,
+    ReportSummaryGraphsPrintComponent,
 
   ],
   providers: [
