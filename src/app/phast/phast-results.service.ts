@@ -7,9 +7,9 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
-import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
-import { FlueGasResultsComponent } from '../calculator/furnaces/flue-gas/flue-gas-results/flue-gas-results.component';
 import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
+import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
+import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 
@@ -121,12 +121,7 @@ export class PhastResultsService {
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
       let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0], undefined);
       if (tmpForm.status === 'VALID') {
-        let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
-        results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
-        //use grossHeatInput here because it will be updated if exhaustGasEAF exists
-        results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
-        results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
-        results.energyInputTotal = results.grossHeatInput;
+        results = this.setEAFResults(phast, results, settings);
       }
       //if no exhaust gas EAF
       if (!this.checkLoss(phast.losses.exhaustGasEAF)) {
@@ -227,6 +222,38 @@ export class PhastResultsService {
     } else {
       results.co2EmissionsOutput = 0;
     }
+
+    return results;
+  }
+
+  setEAFResults(phast: PHAST, results: PhastResults, settings: Settings): PhastResults {
+    let EAFInputs: EnergyInputEAF = JSON.parse(JSON.stringify(phast.losses.energyInputEAF[0]));
+    results.EAFCoalCarbonUsed = EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue;
+    results.EAFElectrodeUsed = EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue;
+    results.EAFNaturalGasUsed = EAFInputs.naturalGasHeatInput;
+    results.EAFOtherFuelUsed = EAFInputs.otherFuels;
+    results.EAFElectricEnergyUsed = EAFInputs.electricityInput;
+    
+    results.EAFCoalHeatingValue = EAFInputs.coalHeatingValue;
+    results.EAFElectrodeHeatingValue = EAFInputs.electrodeHeatingValue;
+    
+    if (settings.unitsOfMeasure == 'Metric') {
+      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('kJ').to('GJ');
+      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('kJ').to('GJ');
+    } else {
+      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('Btu').to('MMBtu');
+      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('Btu').to('MMBtu');
+    }
+    
+    results.EAFTotalFuelEnergyUsed = results.EAFNaturalGasUsed + results.EAFCoalCarbonUsed + results.EAFElectrodeUsed + results.EAFOtherFuelUsed;
+    
+    // Legacy results
+    let tmpResults = this.phastService.energyInputEAF(EAFInputs, settings);
+    results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
+    //use grossHeatInput here because it will be updated if exhaustGasEAF exists
+    results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
+    results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
+    results.energyInputTotal = results.grossHeatInput;
 
     return results;
   }

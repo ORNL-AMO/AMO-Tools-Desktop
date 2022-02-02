@@ -11,6 +11,9 @@ export interface OperatingHours {
   
 export interface OperatingCosts {
     fuelCost?: number;
+    coalCarbonCost?: number;
+    electrodeCost?: number;
+    otherFuelCost?: number;
     steamCost?: number;
     electricityCost?: number;
     makeUpWaterCost?: number;

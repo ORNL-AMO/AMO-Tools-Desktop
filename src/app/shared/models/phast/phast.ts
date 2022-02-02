@@ -124,6 +124,14 @@ export interface PhastResults {
   totalEnergyInput: number;
   totalExhaustGas: number;
   totalExhaustGasEAF: number;
+  EAFNaturalGasUsed?: number;
+  EAFOtherFuelUsed?: number;
+  EAFElectricEnergyUsed?: number;
+  EAFTotalFuelEnergyUsed?: number;
+  EAFCoalCarbonUsed?: number;
+  EAFCoalHeatingValue?: number;
+  EAFElectrodeUsed?: number;
+  EAFElectrodeHeatingValue?: number;
   totalSystemLosses: number;
   energyInputTotal: number;
   exothermicHeat: number;
@@ -157,6 +165,11 @@ export interface ExecutiveSummary {
   energyPerMass?: number;
   annualEnergySavings?: number;
   annualCost?: number;
+  annualCarbonCoalCost?: number,
+  annualElectrodeCost?: number,
+  annualOtherFuelCost?: number,
+  annualTotalFuelCost?: number,
+  annualElectricityCost?: number,
   annualCostSavings?: number;
   implementationCosts?: number;
   paybackPeriod?: number;

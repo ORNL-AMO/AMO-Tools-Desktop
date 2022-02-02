@@ -92,6 +92,48 @@
           <span *ngIf="!mod.annualCost">&mdash; &mdash;</span>
         </td>
       </tr>
+      <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
+        <tr>
+          <td>Annual Electricity Cost ({{settings.currency}})</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualElectricityCost | number:'1.0-0'}}</td>
+          <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualElectricityCost">{{mod.annualElectricityCost | number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualElectricityCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Annual Total Fuel Cost ({{settings.currency}})</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualTotalFuelCost | number:'1.0-0'}}</td>
+          <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualTotalFuelCost">{{mod.annualTotalFuelCost | number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualTotalFuelCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Annual Carbon Coal Cost ({{settings.currency}})</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualCarbonCoalCost | number:'1.0-0'}}</td>
+          <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualCarbonCoalCost">{{mod.annualCarbonCoalCost | number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualCarbonCoalCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Annual Electrode Cost ({{settings.currency}})</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualElectrodeCost | number:'1.0-0'}}</td>
+          <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualElectrodeCost">{{mod.annualElectrodeCost | number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualElectrodeCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Annual Other Fuel Cost ({{settings.currency}})</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualOtherFuelCost | number:'1.0-0'}}</td>
+          <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualOtherFuelCost">{{mod.annualOtherFuelCost | number:'1.0-0'}}</span>
+            <span *ngIf="!mod.annualOtherFuelCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+      </ng-container>
       <tr class="bold-row">
         <td>Annual Cost Savings ({{settings.currency}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>

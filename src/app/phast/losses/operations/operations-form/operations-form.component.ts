@@ -163,6 +163,31 @@ export class OperationsFormComponent implements OnInit {
       return false;
     }
   }
+
+  compareCoalCarbonCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareCoalCarbonCost();
+    } else {
+      return false;
+    }
+  }
+
+  compareElectrodeCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareElectrodeCost();
+    } else {
+      return false;
+    }
+  }
+
+  compareOtherFuelCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareOtherFuelCost();
+    } else {
+      return false;
+    }
+  }
+
   compareSteamCost(): boolean {
     if (this.canCompare()) {
       return this.operationsCompareService.compareSteamCost();
@@ -170,6 +195,7 @@ export class OperationsFormComponent implements OnInit {
       return false;
     }
   }
+  
   compareElectricityCost(): boolean {
     if (this.canCompare()) {
       return this.operationsCompareService.compareElectricityCost();
