@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { StatePointAnalysisInput, StatePointAnalysisOutput } from '../../../shared/models/waste-water';
 import { StatePointAnalysisService } from './state-point-analysis.service';
@@ -15,6 +16,8 @@ export class StatePointAnalysisComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  assessment: Assessment;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;

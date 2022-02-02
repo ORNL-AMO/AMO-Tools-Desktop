@@ -1,0 +1,11 @@
+<ul class="tabs subtabs waste-water">
+    <li [ngClass]="{'active': calcTab == 'o2-utilization-rate'}">
+      <a (click)="changeCalcTab('o2-utilization-rate')">O<sub>2</sub> Utilization Rate</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'state-point-analysis'}">
+      <a (click)="changeCalcTab('state-point-analysis')">State Point Analysis Tool</a>
+    </li>
+    <li [ngClass]="{'active': calcTab == 'water-reduction'}">
+      <a (click)="changeCalcTab('water-reduction')">Water/Wastewater Reduction</a>
+    </li>
+</ul>
