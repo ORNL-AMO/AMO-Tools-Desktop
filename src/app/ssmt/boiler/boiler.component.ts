@@ -272,7 +272,13 @@ export class BoilerComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    if (this.boilerInput && this.boilerInput.stackLossInput) {
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    } else {
+      let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+      this.boilerInput = tmpBoiler;
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }

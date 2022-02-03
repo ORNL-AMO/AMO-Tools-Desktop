@@ -23,7 +23,8 @@ export class PhastSettingsComponent implements OnInit {
     'kcal',
     'kgce',
     'kgoe',
-    'kWh'
+    'kWh',
+    'MWh'
   ];
 
   fuelFiredOptions: Array<string> = [

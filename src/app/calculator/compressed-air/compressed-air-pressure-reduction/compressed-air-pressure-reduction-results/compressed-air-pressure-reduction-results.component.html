@@ -37,7 +37,7 @@
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
           {{compressedAirPressureReductionResults.annualEnergySavings | number: '1.0-0'}}
-          <span> kWh/yr</span>
+          <span> kWh</span>
         </span>
       </td>
     </tr>
@@ -46,7 +46,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}} /yr
+          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}}
         </span>
       </td>
     </tr>

@@ -6,8 +6,7 @@
       <td *ngIf="output.baselineEnergy" class="text-center w-50">
         {{output.baselineEnergy | number:'1.0-0'}}
         <span class="input-group-addon">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span>{{settings.phastRollupUnit}}</span>
         </span>
       </td>
       <td *ngIf="!output.baselineEnergy" class="text-center w-50">
@@ -19,8 +18,7 @@
       <td *ngIf="output.modificationEnergy" class="text-center w-50">
         {{output.modificationEnergy | number:'1.0-0'}}
         <span class="input-group-addon">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span>{{settings.phastRollupUnit}}</span>
         </span>
       </td>
       <td *ngIf="!output.modificationEnergy" class="text-center w-50">
@@ -31,8 +29,7 @@
       <td class="bold w-50">Energy Savings</td>
       <td *ngIf="output.energySavings" class="text-center w-50">
         {{output.energySavings | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span>{{settings.phastRollupUnit}}</span>
       </td>
       <td *ngIf="!output.energySavings" class="text-center w-50">
         &mdash; &mdash;
@@ -81,8 +78,7 @@
             <td class="bold w-50">Recovered Heat</td>
             <td *ngIf="output.hxEnergyRate" class="text-center w-50">
               {{output.hxEnergyRate | number:'1.0-2'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+              <span>{{settings.phastRollupUnit}}/hr</span>
             </td>
             <td *ngIf="!output.hxEnergyRate" class="text-center w-50">
               &mdash; &mdash;
@@ -93,8 +89,7 @@
             <td *ngIf="output.eqEnergySupply" class="text-center w-50">
               {{output.eqEnergySupply | number:'1.0-2'}}
               <span class="input-group-addon">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+                <span>{{settings.phastRollupUnit}}/hr</span>
               </span>
             </td>
             <td *ngIf="!output.eqEnergySupply" class="text-center w-50">

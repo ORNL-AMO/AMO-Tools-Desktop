@@ -71,6 +71,8 @@ export class FsatService {
 
   getPsychrometricWetBulb(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
+    //hard coded per issue 5224
+    inputs.specificHeatGas = .24;
     let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityWetBulb(inputs);
     psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
     return psychrometricResults;

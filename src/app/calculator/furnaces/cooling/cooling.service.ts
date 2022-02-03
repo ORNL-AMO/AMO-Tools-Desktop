@@ -343,12 +343,14 @@ export class CoolingService {
   getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
     let energyUnit: string = settings.energyResultUnit;
     if (energySourceType === 'Electricity') {
-      energyUnit = 'kWh';
-    } else if (settings.unitsOfMeasure === 'Metric') {
-      energyUnit = 'GJ';
-    } else {
-      energyUnit = 'MMBtu';
-    }
+      energyUnit = settings.phastRollupElectricityUnit;
+    } 
+    if (energySourceType === 'Steam') {
+      energyUnit = settings.phastRollupSteamUnit;;
+    } 
+    if (energySourceType === 'Fuel') {
+      energyUnit = settings.phastRollupFuelUnit;;
+    } 
     return energyUnit;
   }
 
