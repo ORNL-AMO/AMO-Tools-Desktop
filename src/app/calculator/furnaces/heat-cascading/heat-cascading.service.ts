@@ -124,7 +124,6 @@ export class HeatCascadingService {
       let priHeatInput: number = inputCopy.priFiringRate * conversionHelper;
       heatCascadingOutput.baselineEnergy = (secHeatInput * inputCopy.secOpHours) + (priHeatInput * inputCopy.priOpHours);
       heatCascadingOutput.modificationEnergy = (secHeatInput * inputCopy.secOpHours) + (priHeatInput * inputCopy.priOpHours) - heatCascadingOutput.energySavings;
-      console.log(heatCascadingOutput);
       this.heatCascadingOutput.next(heatCascadingOutput);
     }
   }

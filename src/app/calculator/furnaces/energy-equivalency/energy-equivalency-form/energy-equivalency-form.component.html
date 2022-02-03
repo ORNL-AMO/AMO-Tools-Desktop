@@ -103,7 +103,6 @@
       <input name="electricalHeatInput3" formControlName="electricalHeatInput" type="number" step="any" class="form-control"
         id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
         >
-      <!-- <span class="input-group-addon units">{{settings.phastRollupElectricityUnit}}</span> -->
       <span class="input-group-addon units" *ngIf="settings.phastRollupElectricityUnit === 'kWh'">
         kW
       </span>
