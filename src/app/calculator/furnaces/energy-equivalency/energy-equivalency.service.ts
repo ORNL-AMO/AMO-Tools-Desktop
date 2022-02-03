@@ -48,29 +48,21 @@ export class EnergyEquivalencyService {
 
 
   getDefaultElectricData(settings: Settings): EnergyEquivalencyElectric {
-    if (settings.unitsOfMeasure === 'Metric') {
-      this.energyEquivalencyElectric = {
-        fuelFiredEfficiency: 60,
-        electricallyHeatedEfficiency: 90,
-        fuelFiredHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2)
-      };
-      return this.energyEquivalencyElectric;
-    }
-    else {
-      this.energyEquivalencyElectric = {
-        fuelFiredEfficiency: 60,
-        electricallyHeatedEfficiency: 90,
-        fuelFiredHeatInput: 10
-      };
-      return this.energyEquivalencyElectric;
-    }
+    
+    this.energyEquivalencyElectric = {
+      fuelFiredEfficiency: 60,
+      electricallyHeatedEfficiency: 90,
+      fuelFiredHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to(settings.phastRollupFuelUnit), 2)
+    };
+    return this.energyEquivalencyElectric;    
+  
   }
 
-  getDefaultFuelData(): EnergyEquivalencyFuel {
+  getDefaultFuelData(settings: Settings): EnergyEquivalencyFuel {
     this.energyEquivalencyFuel = {
       electricallyHeatedEfficiency: 90,
       fuelFiredEfficiency: 60,
-      electricalHeatInput: 1800
+      electricalHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('kWh').to(settings.phastRollupElectricityUnit), 2)
     };
     return this.energyEquivalencyFuel;
   }
