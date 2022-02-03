@@ -137,7 +137,8 @@ export class WasteWaterComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
+      this.tutorialToast();
+      // this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -243,6 +244,13 @@ export class WasteWaterComponent implements OnInit {
       body: '',
       setTimeoutVal: undefined
     };
+    this.cd.detectChanges();
+  }
+
+  tutorialToast(){
+    this.toastData.title = 'Waste Water Tutorial';
+    this.toastData.body = 'Click <a href="assets/waste-water-tutorial.pdf" target="_blank">here</a> to view tutorial on how to use the Waste Water module.';
+    this.showToast = true;
     this.cd.detectChanges();
   }
 
