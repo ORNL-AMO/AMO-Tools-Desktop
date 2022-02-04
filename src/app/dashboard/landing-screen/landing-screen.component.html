@@ -1,52 +1,227 @@
-<div class="row justify-content-center no-gutters mb-3">
-	<div class="col-12">
+<div class="row justify-content-center mb-3 no-gutters">
+	<div class="col-sm-12 col-md-11">
 		<div class="d-flex flex-column">
 			<div class="p-2">
 				<app-measur>
 				</app-measur>
 			</div>
 			<!-- <h1>MEASUR</h1> -->
-			<p class="p-2 lead text-center no-margin-bottom">
+			<p class="p-2 lead text-center mb-0">
 				Welcome to the most efficient way to manage and optimize your facilities' systems and equipment.
 			</p>
 		</div>
 		<hr class="my-2">
-		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find
+		<p class="text-center text-help">Create an assessment to model your system and find
 			opportunities
 			for efficiency or run calculations from one of our many
 			property and equipment calculators.
-			<br>Get started with one of the following options.</p>
-		<div class="row justify-content-center arrow-row no-gutters">
+			<br>Get started with one of the following options.
+		</p>
+
+		<!-- <div class="card"> -->
+		<div class="row justify-content-center">
+			<div class="col-12">
+				<!-- <div class="p-2 text-center">
+						<a class="click-link" (click)="createAssessment()">Create Assessment</a>
+						<p class="text-help small mb-0">Model a system and explore multiple optimization
+							scenarios.
+						</p>
+						<hr class="my-2">
+					</div> -->
+				<div class="d-flex flex-wrap justify-content-center">
+
+					<div class="assessment-block">
+						<div class="icon-block">
+							<img class="psat-image" src="assets/images/pump.png">
+						</div>
+						<a (click)="createAssessment('Pump')" class="click-link">Pump<br>
+							Assessment</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="compressed-air">
+								<div class="compressed-air-icon">
+									<img class="ca-image" src="assets/images/ca-icon.png">
+								</div>
+							</div>
+						</div>
+						<a (click)="createAssessment('CompressedAir')" class="click-link">Compressed
+							Air<br>
+							Assessment</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<img class="phast-image" src="assets/images/ph.png">
+						</div>
+						<a (click)="createAssessment('Furnace')" class="click-link">
+							Process Heating<br> Assessment</a>
+					</div>
+
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="fan-icon">
+								<img class="fan-image" src="assets/images/ico-fsat-diagram.png">
+							</div>
+						</div>
+						<a (click)="createAssessment('Fan')" class="click-link">Fan<br>
+							Assessment</a>
+					</div>
+
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="steam">
+								<img class="steam-image align-self-center" src="assets/images/ico-ssmt-diagram.png">
+
+							</div>
+						</div>
+						<a (click)="createAssessment('Steam')" class="click-link">
+							Steam<br> Assessment</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="treasure-hunt">
+								<img class="treasure-hunt-image" src="assets/images/treasure-hunt.png">
+							</div>
+						</div>
+						<a (click)="createAssessment('TreasureHunt')" class="click-link">
+							Treasure<br> Hunt</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="waste-water">
+								<img class="waste-water-image" src="assets/images/waste-water-icon-landing.png">
+							</div>
+						</div>
+						<a (click)="createAssessment('WasteWater')" class="click-link">
+							Wastewater<br> Assessment</a>
+					</div>
+
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="motor-inventory-background ">
+								<img class="motor-inventory-icon" src="assets/images/motor-inventory-icon.png">
+							</div>
+						</div>
+						<a (click)="createInventory()" class="click-link">
+							Motor <br> Inventory</a>
+					</div>
+
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="data-explorer-background">
+								<img class="data-explorer-icon" src="assets/images/data-explorer-icon.png">
+							</div>
+						</div>
+						<a routerLink="/log-tool" class="click-link">
+							Data <br> Exploration</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="folder-block">
+								<span class="fa fa-folder"></span>
+							</div>
+						</div>
+						<a [routerLink]="['/directory-dashboard', 1]" class="click-link">View <br> Assessments</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="folder-block">
+								<span class="fa fa-calculator"></span>
+							</div>
+						</div>
+						<a [routerLink]="['/calculators/calculators-list']" class="click-link">
+							Equipment <br> Calculators</a>
+					</div>
+				</div>
+				<!-- </div> -->
+				<!-- <div class="col-8">
+					<!--calculators--
+					<div class="row no-gutters">
+						<div class="col-12">
+							<div class="text-center p-2">
+								<a class="click-link" [routerLink]="['/calculators/calculators-list']">Properties &amp;
+									Equipment Calculators</a>
+								<p class="text-help small mb-0">Generate detailed properties and test a
+									variety
+									of
+									adjustments.</p>
+								<hr class="my-2">
+							</div>
+							<div class="row no-gutters">
+								<div class="col-6">
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/general-list']">
+											<i class="fa fa-calculator"></i> General
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/compressed-air-list']">
+											<i class="fa fa-calculator"></i> Compressed Air
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/fans-list']">
+											<i class="fa fa-calculator"></i> Fans</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/lighting-list']">
+											<i class="fa fa-calculator"></i> Lighting
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/motors-list']">
+											<i class="fa fa-calculator"></i> Motors
+										</a>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/process-cooling-list']">
+											<i class="fa fa-calculator"></i> Process Cooling
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link furnace"
+											[routerLink]="['/calculators/process-heating-list']">
+											<i class="fa fa-calculator"></i> Process Heating
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/pumps-list']">
+											<i class="fa fa-calculator"></i> Pumps</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link furnace" [routerLink]="['/calculators/steam-list']">
+											<i class="fa fa-calculator"></i> Steam
+										</a>
+									</div>
+									<div class="p-1">
+										<a class="icon click-link" [routerLink]="['/calculators/waste-water-list']">
+											<i class="fa fa-calculator"></i> Wastewater
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+
+		<!-- <div class="row justify-content-center arrow-row no-gutters">
 			<div class="col-4">
 				<img class="arrow-img" src="assets/images/arrow_left.png">
 			</div>
 			<div class="col-4">
 				<img class="arrow-img pull-right" src="assets/images/arrow_right.png">
 			</div>
-		</div>
-		<div class="row justify-content-center no-gutters">
+		</div> -->
+		<!-- <div class="row justify-content-center no-gutters">
 			<div class="col-sm-12 col-md-11 col-lg-9">
 				<div class="card landing-menu">
-					<!-- <div class="card-header">
-						<div class="row">
-							<div class="col-6 text-center">
-								<a class="click-link" (click)="createAssessment()">Create Assessment</a>
-								<p class="text-help small">Model a system and explore multiple optimization scenarios.
-								</p>
-							</div>
-							<div class="col-6 text-center">
-								<a class="click-link" [routerLink]="['/calculators/calculators-list']">Properties &amp;
-									Equipment
-									Calculators</a>
-								<p class="text-help small">Generate detailed properties and test a variety of
-									adjustments.</p>
-							</div>
-						</div>
-
-					</div> -->
 					<div class="card-body">
 						<div class="row">
-							<!--assessments-->
+							<!--assessments--
 							<div class="col-6 border-right">
 								<div class="p-2 text-center">
 									<a class="click-link" (click)="createAssessment()">Create Assessment</a>
@@ -55,101 +230,62 @@
 									</p>
 									<hr class="my-2">
 								</div>
-								<div class="d-flex">
-									<div class="p-2">
-										<div class="d-flex flex-column">
-											<img class="psat-image p-0 align-self-center" src="assets/images/pump.png">
-										</div>
+								<div class="row">
+									<div class="col-6 text-center">
+										<img class="psat-image p-0 align-self-center" src="assets/images/pump.png">
+										<br>
+										<a (click)="createAssessment('Pump')" class="p-0 click-link">Pump
+											Assessment</a>
 									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Pump')" class="p-0 click-link">Create Pump
-												Assessment</a>
+									<div class="col-6 text-center justify-content-center align-items-center">
+										<div class="compressed-air">
+											<div class="compressed-air-icon">
+												<img class="ca-image" src="assets/images/ca-icon.png">
+											</div>
 										</div>
+										<a (click)="createAssessment('CompressedAir')" class="click-link p-0">Compressed
+											Air
+											Assessment</a>
 									</div>
-								</div>
-								<div class="d-flex">
-									<div class="p-2 align-items-center compressed-air"> 
-										<div class="d-flex flex-column compressed-air-icon align-items-center justify-content-center">
-											<img class="ca-image" src="assets/images/ca-icon.png">
-										</div>
+									<div class="col-6 text-center">
+										<img class="phast-image p-0 align-self-center" src="assets/images/ph.png">
+										<br>
+										<a (click)="createAssessment('Furnace')" class="click-link p-0">
+											Process Heating Assessment</a>
 									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('CompressedAir')" class="click-link p-0 compressed-air">Create Compressed Air
-												Assessment</a>
-										</div>
-									</div>
-								</div>
-								<div class="d-flex">
-									<div class="p-2 phast">
-										<div class="d-flex flex-column">
-											<img class="phast-image p-0 align-self-center" src="assets/images/ph.png">
-										</div>
-									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Furnace')" class="click-link p-0 phast">Create
-												Process Heating Assessment</a>
-										</div>
-									</div>
-								</div>
 
-								<div class="d-flex">
-									<div class="p-2 align-items-center fan">
-										<div class="d-flex flex-column fan-icon align-items-center justify-content-center">
-											<img class="fan-image" src="assets/images/ico-fsat-diagram.png">
-										</div>
+									<div class="col-6 text-center">
+										<img class="fan-image align-self-center"
+											src="assets/images/ico-fsat-diagram.png">
+										<br>
+										<a (click)="createAssessment('Fan')" class="click-link p-0 fan">Create Fan
+											Assessment</a>
 									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Fan')" class="click-link p-0 fan">Create Fan
-												Assessment</a>
+									<!--Steam Assessment--
+									<div class="col-6 text-center">
+										<div class="ssmt-icon">
+											<img class="steam-image align-self-center"
+												src="assets/images/ico-ssmt-diagram.png">
 										</div>
+										<br>
+										<a (click)="createAssessment('Steam')" class="click-link p-0">
+											Steam Assessment</a>
 									</div>
-								</div>
-								<!--Steam Assessment-->
-								<div class="d-flex">
-									<div class="p-2 align-items-center steam">
-										<div
-											class="d-flex flex-column steam-icon align-items-center justify-content-center">
-											<img class="steam-image" src="assets/images/ico-ssmt-diagram.png">
-										</div>
+									<div class="col-6 text-center">
+										<img class="treasure-hunt-image align-self-center"
+											src="assets/images/treasure-hunt.png">
+										<br>
+										<a (click)="createAssessment('TreasureHunt')" class="click-link p-0">
+											Treasure Hunt</a>
 									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Steam')" class="click-link p-0 steam">Create
-												Steam Assessment</a>
+									<div class="col-6 text-center">
+										<div class="waste-water">
+											<img class="waste-water-image align-self-center"
+												src="assets/images/waste-water-icon-landing.png">
 										</div>
-									</div>
-								</div>
-								<div class="d-flex pt-3">
-									<div class="p-2 align-items-center treasure-hunt">
-										<div
-											class="d-flex flex-column treasure-hunt-icon align-items-center justify-content-center">
-											<img class="treasure-hunt-image" src="assets/images/treasure-hunt.png">
-										</div>
-									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('TreasureHunt')"
-												class="click-link p-0 treasure-hunt">Create
-												Treasure Hunt</a>
-										</div>
-									</div>
-								</div>
-								<div class="d-flex pt-3">
-									<div class="p-2 align-items-center waste-water">
-										<div
-											class="d-flex flex-column waste-water-icon-landing align-items-center justify-content-center">
-											<img class="waste-water-image" src="assets/images/waste-water-icon-landing.png">
-										</div>
-									</div>
-									<div class="p-2 d-flex">
-										<div class="d-flex flex-column">
-											<a (click)="createAssessment('WasteWater')" class="click-link p-0 waste-water">Create
-												Wastewater Assessment</a>
-										</div>
+										<br>
+										<a (click)="createAssessment('WasteWater')" class="click-link p-0">
+											Wastewater Assessment</a>
 									</div>
 								</div>
 								<hr>
@@ -159,7 +295,7 @@
 								</div>
 							</div>
 							<div class="col-6">
-								<!--calculators-->
+								<!--calculators--
 								<div class="row no-gutters h-50">
 									<div class="col-12">
 										<div class="text-center p-2">
@@ -238,7 +374,7 @@
 										</div>
 									</div>
 								</div>
-								<!--inventory-->
+								<!--inventory--
 								<div class="row no-gutters">
 									<div class="col-12">
 										<div class="text-center p-2">
@@ -264,7 +400,7 @@
 											</div>
 										</div>
 
-                    <div class="d-flex pt-2">
+										<div class="d-flex pt-2">
 											<div class="p-2">
 												<div class="d-flex flex-column">
 													<div class="data-explorer-background align-self-center">
@@ -287,6 +423,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>
