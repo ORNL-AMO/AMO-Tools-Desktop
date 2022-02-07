@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours, OperatingCosts } from '../../../shared/models/operations';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',
@@ -31,6 +32,8 @@ export class OperationsComponent implements OnInit {
 
   operationsForm: FormGroup;
   isFirstChange: boolean = true;
+  isModalOpenSub: Subscription;
+  isModalOpen: boolean;
   constructor(private operationsService: OperationsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -44,8 +47,16 @@ export class OperationsComponent implements OnInit {
     }
   }
   ngOnInit() {
+    this.isModalOpenSub = this.operationsService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
     this.initForm();
   }
+
+  ngOnDestroy() {
+    this.isModalOpenSub.unsubscribe();
+  }
+  
   initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast, this.settings);
   }

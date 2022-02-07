@@ -10,7 +10,6 @@ import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
-import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -129,7 +128,7 @@ export class EnergyUsedComponent implements OnInit {
   setElectrotechVals() {
     this.electricEnergyUsed = this.phastResults.electricalHeatDelivered;
     if (this.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-      this.electricEnergyUsed = this.phastResults.EAFElectricEnergyUsed; 
+      this.electricEnergyUsed = this.phastResults.hourlyEAFResults.electricEnergyUsed; 
     }
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyElectricity) {
@@ -153,7 +152,7 @@ export class EnergyUsedComponent implements OnInit {
     if (this.settings.energySourceType === 'Electricity') {
       if (this.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         this.fuelName = 'Natural Gas';
-        this.fuelEnergyUsed = this.phastResults.EAFNaturalGasUsed;
+        this.fuelEnergyUsed = this.phastResults.hourlyEAFResults.naturalGasUsed;
         if (this.settings.unitsOfMeasure == 'Imperial') {
           this.energyPerMassUnit = 'Btu/lb';
           this.baseEnergyUnit = 'MMBtu';

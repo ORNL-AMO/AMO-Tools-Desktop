@@ -150,9 +150,9 @@ export class PhastReportRollupService {
       } else {
         electricityEnergy += (convertedSumEnergy + convertedEnergySavings);
       }
-      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      let diffCO2 = result.baselineResults.co2EmissionsOutput.totalEmissionOutput - result.modificationResults.co2EmissionsOutput.totalEmissionOutput;
       sumCo2Savings += diffCO2;
-      sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
+      sumCo2Emissions += result.modificationResults.co2EmissionsOutput.totalEmissionOutput;
     });
     this.totals = {
       savingPotential: sumSavings,

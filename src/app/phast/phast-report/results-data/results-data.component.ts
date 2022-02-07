@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, Modification, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
@@ -7,6 +7,8 @@ import { ReportRollupService } from '../../../report-rollup/report-rollup.servic
 import { Subscription } from 'rxjs';
 import { PhastValidService } from '../../phast-valid.service';
 import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
+import { ExecutiveSummaryService } from '../executive-summary.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-results-data',
@@ -41,19 +43,24 @@ export class ResultsDataComponent implements OnInit {
   lossUnit: string;
   selectedModificationIndex: number;
   decimalCount: string;
+  baselineExecutiveSummary: ExecutiveSummary;
+  modExecutiveSummaries: Array<ExecutiveSummary>;
+  baseEnergyUnit: string = '';
 
   numMods: number = 0;
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
+              private executiveSummaryService: ExecutiveSummaryService,
+              private convertUnitsService: ConvertUnitsService,
               private phastReportRollupService: PhastReportRollupService,
               private phastValidService: PhastValidService) { }
 
   ngOnInit() {
     this.getResults();
-    if (this.settings.energyResultUnit !== 'kWh') {
-      this.lossUnit = this.settings.energyResultUnit + '/hr';
+    if (this.settings.energyResultUnit === 'kWh') {
+      this.lossUnit = 'kWh/hr';
     } else {
-      this.lossUnit = 'kW';
+      this.lossUnit = this.settings.energyResultUnit + '/hr';
     }
 
     if (this.inReport) {
@@ -98,13 +105,24 @@ export class ResultsDataComponent implements OnInit {
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
+      if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
+        this.baseLineResults = this.convertEAFEnergyUsed(this.baseLineResults);
+      }
+      this.baselineExecutiveSummary = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
       if (this.phast.modifications && this.inReport) {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length !== 0) {
+          this.modExecutiveSummaries = new Array<ExecutiveSummary>();
           this.phast.modifications.forEach(mod => {
             mod.phast.valid = this.phastValidService.checkValid(mod.phast, this.settings);
-            let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
-            this.modificationResults.push(tmpResults);
+            let modResults: PhastResults = this.phastResultsService.getResults(mod.phast, this.settings);
+            if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
+              modResults = this.convertEAFEnergyUsed(modResults);
+            }
+            let executiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(mod.phast, false, this.settings, this.phast, this.baselineExecutiveSummary);
+            this.modExecutiveSummaries.push(executiveSummary);
+            modResults.co2EmissionsOutput.emissionsSavings = this.baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput - modResults.co2EmissionsOutput.hourlyTotalEmissionOutput;
+            this.modificationResults.push(modResults);
           });
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
@@ -115,6 +133,24 @@ export class ResultsDataComponent implements OnInit {
     } else {
       this.baseLineResults = this.phastResultsService.initResults();
     }
+  }
+
+  convertEAFEnergyUsed(results: PhastResults) {
+    let phastResults: PhastResults = JSON.parse(JSON.stringify(results));
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('MMBtu').to('kWh');
+
+    } else {
+      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('GJ').to('kWh');
+    }
+
+    return phastResults;
   }
 
   setSigFigsCount() {

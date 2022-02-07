@@ -112,6 +112,12 @@ export interface Settings {
     eGridSubregion?: string,
     totalEmissionOutput?: number,
     totalFuelEmissionOutputRate?: number,
+    totalNaturalGasEmissionOutputRate?: number,
+    totalCoalEmissionOutputRate?: number,
+    totalOtherEmissionOutputRate?: number,
+    coalFuelType?: string;
+    eafOtherFuelSource?: string,
+    otherFuelType?: string;
     userEnteredBaselineEmissions?: boolean,
     userEnteredModificationEmissions?: boolean,
     zipcode?: string
