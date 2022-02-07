@@ -107,7 +107,9 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.phastCO2SavingsService.modificationCo2SavingsData.next(this.co2SavingsData);
       this.co2SavingsDataSub = this.phastCO2SavingsService.modificationCo2SavingsData.subscribe(modificationCo2SavingsData => {
         if (modificationCo2SavingsData) {
-          this.co2SavingsData = modificationCo2SavingsData
+          this.co2SavingsData.eGridSubregion = modificationCo2SavingsData.eGridSubregion;
+          this.co2SavingsData.zipcode = modificationCo2SavingsData.zipcode;
+          this.co2SavingsData.userEnteredModificationEmissions = modificationCo2SavingsData.userEnteredModificationEmissions;
           this.initForm();
         }
       });
@@ -122,18 +124,6 @@ export class Co2SavingsPhastComponent implements OnInit {
   }
 
   disableForm() {
-    // this.form.controls.eGridSubregion.disable();
-    // this.form.controls.energySource.disable();
-    // this.form.controls.fuelType.disable();
-    // this.form.controls.zipcode.disable();
-    // this.form.controls.totalEmissionOutputRate.disable();
-    // this.form.controls.eafOtherFuelSource.disable();
-    // this.form.controls.otherFuelType.disable();
-    // this.form.controls.coalFuelType.disable();
-    // this.form.controls.totalNaturalGasEmissionOutputRate.disable();
-    // this.form.controls.totalFuelEmissionOutputRate.disable();
-    // this.form.controls.totalCoalEmissionOutputRate.disable();
-    // this.form.controls.totalOtherEmissionOutputRate.disable();
     this.form.disable();
   }
 
@@ -145,7 +135,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.form.controls.energySource.enable();
     this.form.controls.fuelType.enable();
     this.form.controls.totalEmissionOutputRate.enable();
-    this.form.controls.totalFuelEmissionOutputRate.enable();
     this.form.controls.eafOtherFuelSource.enable();
     this.form.controls.otherFuelType.enable();
     this.form.controls.coalFuelType.enable();
@@ -163,7 +152,6 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.form.controls.zipcode.disable();
       this.form.controls.eGridSubregion.disable();
     }
-    
     this.setSubRegionData();
     
     // Form must be disabled after subRegionData is set
@@ -188,16 +176,14 @@ export class Co2SavingsPhastComponent implements OnInit {
   setEnergySource(shouldSetOutputRate: boolean = true) {
     let tmpOtherFuel: OtherFuel = _.find(this.energySources, (val) => { return val.energySource === this.form.controls.energySource.value });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
-    this.form.patchValue({
-      fuelType: this.fuelOptions[0].fuelType
-    });
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
         outputRate = this.convertOutputRate(outputRate);
     }
     if (shouldSetOutputRate) {
       this.form.patchValue({
-          totalFuelEmissionOutputRate: outputRate
+          totalFuelEmissionOutputRate: outputRate,
+          fuelType: this.fuelOptions[0].fuelType
       });
     }
     this.calculate();
@@ -386,12 +372,9 @@ export class Co2SavingsPhastComponent implements OnInit {
 
   setLockedModificationValues() {
     let modificationCo2SavingsData: PhastCo2SavingsData = this.phastCO2SavingsService.modificationCo2SavingsData.getValue();
-    if (modificationCo2SavingsData) {
+    if (modificationCo2SavingsData && !this.co2SavingsData.userEnteredBaselineEmissions) {
       modificationCo2SavingsData.eGridSubregion = this.co2SavingsData.eGridSubregion;
       modificationCo2SavingsData.zipcode = this.co2SavingsData.zipcode;
-      modificationCo2SavingsData.energyType = this.co2SavingsData.energyType;
-      modificationCo2SavingsData.fuelType = this.co2SavingsData.fuelType;
-      modificationCo2SavingsData.energySource = this.co2SavingsData.energySource;
       this.phastCO2SavingsService.modificationCo2SavingsData.next(modificationCo2SavingsData);
     }
   }
