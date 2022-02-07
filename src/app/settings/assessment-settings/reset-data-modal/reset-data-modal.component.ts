@@ -129,9 +129,9 @@ export class ResetDataModalComponent implements OnInit {
     tmpSettings.disablePhastAssessmentTutorial = this.settingsDbService.globalSettings.disablePhastAssessmentTutorial;
     tmpSettings.disablePhastReportTutorial = this.settingsDbService.globalSettings.disablePhastReportTutorial;
     tmpSettings.disablePhastSetupTutorial = this.settingsDbService.globalSettings.disablePhastSetupTutorial;
-    tmpSettings.disablePsatAssessmentTutorial = this.settingsDbService.globalSettings.disablePsatAssessmentTutorial;
-    tmpSettings.disablePsatReportTutorial = this.settingsDbService.globalSettings.disablePsatReportTutorial;
-    tmpSettings.disablePsatSetupTutorial = this.settingsDbService.globalSettings.disablePsatSetupTutorial;
+    // tmpSettings.disablePsatAssessmentTutorial = this.settingsDbService.globalSettings.disablePsatAssessmentTutorial;
+    // tmpSettings.disablePsatReportTutorial = this.settingsDbService.globalSettings.disablePsatReportTutorial;
+    // tmpSettings.disablePsatSetupTutorial = this.settingsDbService.globalSettings.disablePsatSetupTutorial;
     tmpSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     tmpSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete tmpSettings.facilityInfo;

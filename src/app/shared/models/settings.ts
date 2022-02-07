@@ -50,9 +50,10 @@ export interface Settings {
 
     disableTutorial?: boolean,
     disableDashboardTutorial?: boolean,
-    disablePsatSetupTutorial?: boolean,
-    disablePsatAssessmentTutorial?: boolean,
-    disablePsatReportTutorial?: boolean,
+    disablePsatTutorial?: boolean,
+    // disablePsatSetupTutorial?: boolean,
+    // disablePsatAssessmentTutorial?: boolean,
+    // disablePsatReportTutorial?: boolean,
     disablePhastSetupTutorial?: boolean,
     disablePhastAssessmentTutorial?: boolean,
     disablePhastReportTutorial?: boolean,

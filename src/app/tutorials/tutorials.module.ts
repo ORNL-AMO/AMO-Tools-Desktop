@@ -11,10 +11,6 @@ import { PhastAssessmentTutorialComponent } from './phast-assessment-tutorial/ph
 import { PhastReportTutorialComponent } from './phast-report-tutorial/phast-report-tutorial.component';
 import { PhastSetupTutorialComponent } from './phast-setup-tutorial/phast-setup-tutorial.component';
 import { PhastTutorialComponent } from './phast-tutorial/phast-tutorial.component';
-import { PsatAssessmentTutorialComponent } from './psat-assessment-tutorial/psat-assessment-tutorial.component';
-import { PsatReportTutorialComponent } from './psat-report-tutorial/psat-report-tutorial.component';
-import { PsatSystemSetupComponent } from './psat-system-setup/psat-system-setup.component';
-import { PsatTutorialComponent } from './psat-tutorial/psat-tutorial.component';
 import { FormsModule } from '@angular/forms';
 import { SsmtSystemSetupTutorialComponent } from './ssmt-system-setup-tutorial/ssmt-system-setup-tutorial.component';
 import { SsmtAssessmentTutorialComponent } from './ssmt-assessment-tutorial/ssmt-assessment-tutorial.component';
@@ -42,10 +38,6 @@ import { TreasureHuntTutorialComponent } from './treasure-hunt-tutorial/treasure
     PhastReportTutorialComponent,
     PhastSetupTutorialComponent,
     PhastTutorialComponent,
-    PsatAssessmentTutorialComponent,
-    PsatReportTutorialComponent,
-    PsatSystemSetupComponent,
-    PsatTutorialComponent,
     SsmtSystemSetupTutorialComponent,
     SsmtAssessmentTutorialComponent,
     SsmtReportTutorialComponent,
@@ -73,10 +65,6 @@ import { TreasureHuntTutorialComponent } from './treasure-hunt-tutorial/treasure
     PhastReportTutorialComponent,
     PhastSetupTutorialComponent,
     PhastTutorialComponent,
-    PsatAssessmentTutorialComponent,
-    PsatReportTutorialComponent,
-    PsatSystemSetupComponent,
-    PsatTutorialComponent,
     SsmtSystemSetupTutorialComponent,
     SsmtAssessmentTutorialComponent,
     SsmtReportTutorialComponent,

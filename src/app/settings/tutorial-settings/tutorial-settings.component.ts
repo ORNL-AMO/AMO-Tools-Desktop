@@ -23,9 +23,10 @@ export class TutorialSettingsComponent implements OnInit {
   checkDisableAll() {
     this.disableAllTutorials = (this.settings.disableTutorial &&
       this.settings.disableDashboardTutorial &&
-      this.settings.disablePsatSetupTutorial &&
-      this.settings.disablePsatAssessmentTutorial &&
-      this.settings.disablePsatReportTutorial &&
+      // this.settings.disablePsatSetupTutorial &&
+      // this.settings.disablePsatAssessmentTutorial &&
+      // this.settings.disablePsatReportTutorial &&
+      this.settings.disablePsatTutorial &&
       this.settings.disablePhastSetupTutorial &&
       this.settings.disablePhastAssessmentTutorial &&
       this.settings.disablePhastReportTutorial &&
@@ -47,9 +48,10 @@ export class TutorialSettingsComponent implements OnInit {
     this.disableAllTutorials = !this.disableAllTutorials;
     this.settings.disableTutorial = this.disableAllTutorials;
     this.settings.disableDashboardTutorial = this.disableAllTutorials;
-    this.settings.disablePsatSetupTutorial = this.disableAllTutorials;
-    this.settings.disablePsatAssessmentTutorial = this.disableAllTutorials;
-    this.settings.disablePsatReportTutorial = this.disableAllTutorials;
+    this.settings.disablePsatTutorial = !this.disableAllTutorials;
+    // this.settings.disablePsatSetupTutorial = this.disableAllTutorials;
+    // this.settings.disablePsatAssessmentTutorial = this.disableAllTutorials;
+    // this.settings.disablePsatReportTutorial = this.disableAllTutorials;
     this.settings.disablePhastSetupTutorial = this.disableAllTutorials;
     this.settings.disablePhastAssessmentTutorial = this.disableAllTutorials;
     this.settings.disablePhastReportTutorial = this.disableAllTutorials;
@@ -79,21 +81,21 @@ export class TutorialSettingsComponent implements OnInit {
     this.checkDisableAll();
     this.saveTutorialChanges.emit(true);
   }
-  togglePumpSetup() {
-    this.settings.disablePsatSetupTutorial = !this.settings.disablePsatSetupTutorial;
-    this.checkDisableAll();
-    this.saveTutorialChanges.emit(true);
-  }
-  togglePumpAssessment() {
-    this.settings.disablePsatAssessmentTutorial = !this.settings.disablePsatAssessmentTutorial;
-    this.checkDisableAll();
-    this.saveTutorialChanges.emit(true);
-  }
-  togglePumpReport() {
-    this.settings.disablePsatReportTutorial = !this.settings.disablePsatReportTutorial;
-    this.checkDisableAll();
-    this.saveTutorialChanges.emit(true);
-  }
+  // togglePumpSetup() {
+  //   this.settings.disablePsatSetupTutorial = !this.settings.disablePsatSetupTutorial;
+  //   this.checkDisableAll();
+  //   this.saveTutorialChanges.emit(true);
+  // }
+  // togglePumpAssessment() {
+  //   this.settings.disablePsatAssessmentTutorial = !this.settings.disablePsatAssessmentTutorial;
+  //   this.checkDisableAll();
+  //   this.saveTutorialChanges.emit(true);
+  // }
+  // togglePumpReport() {
+  //   this.settings.disablePsatReportTutorial = !this.settings.disablePsatReportTutorial;
+  //   this.checkDisableAll();
+  //   this.saveTutorialChanges.emit(true);
+  // }
   togglePhastSetup() {
     this.settings.disablePhastSetupTutorial = !this.settings.disablePhastSetupTutorial;
     this.checkDisableAll();

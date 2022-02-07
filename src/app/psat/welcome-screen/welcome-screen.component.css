@@ -1,0 +1,19 @@
+.welcome-screen{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    background-color: black;
+    opacity: .8;
+    z-index: 100000;
+}
+
+.welcome-content{
+    color: white;
+    text-align: center;
+}
+
+button.close{
+    color: white;
+    font-size: 44px;
+}
