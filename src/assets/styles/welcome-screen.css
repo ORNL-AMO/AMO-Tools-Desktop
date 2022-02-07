@@ -1,0 +1,27 @@
+.welcome-screen{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    background-color: black;
+    opacity: 0;
+    z-index: 100000;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;  
+}
+
+.welcome-screen.show{
+    opacity: .8;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;  
+}
+
+.welcome-content{
+    color: white;
+    text-align: center;
+}
+
+button.close{
+    color: white;
+    font-size: 44px;
+}

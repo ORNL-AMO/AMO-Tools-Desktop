@@ -75,6 +75,7 @@ export class PhastComponent implements OnInit {
   addNewSubscription: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -178,12 +179,9 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
-
+    this.checkShowWelcomeScreen();
   }
 
-  ngAfterContentInit(){
-    this.checkTutorials();
-  }
 
   setExploreOppsDefaults(modification: Modification) {  
     // old assessments with scenario added - prevent break on missing properties
@@ -319,25 +317,6 @@ export class PhastComponent implements OnInit {
     }
     else {
       return 'success';
-    }
-  }
-
-  checkTutorials() {
-    if (this.mainTab === 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-setup-tutorial');
-      }
-    } else if (this.mainTab === 'assessment') {
-      if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-assessment-tutorial');
-      }
-    } else if (this.mainTab === 'report') {
-      if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('phast-report-tutorial');
-      }
     }
   }
 
@@ -583,7 +562,20 @@ export class PhastComponent implements OnInit {
       this.getSettings();
       this._phast.lossDataUnits = this.settings.unitsOfMeasure;
     }
+  }
 
+  
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disablePhastTutorial) {
+      this.showWelcomeScreen = true;
+      this.phastService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    // this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.showWelcomeScreen = false;
+    this.phastService.modalOpen.next(false);
   }
 
 }

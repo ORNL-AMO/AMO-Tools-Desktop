@@ -1,4 +1,6 @@
 <form>
+  <!--Landing Screen-->
+  <!--Assessment Dashboard-->
   <div class="form-group">
     <label for="disableDashboardTutorial">Dashboard Tutorial</label>
     <div class="d-flex justify-content-center" (click)="toggleDashboard()">
@@ -11,223 +13,111 @@
       <span class="pl-2">Show</span>
     </div>
   </div>
-  <!-- <div class="form-group">
-    <label for="disablePsatSetupTutorial">Pump System Setup Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePumpSetup()">
+  <!--Pumps-->
+  <div class="form-group">
+    <label for="disablePsatTutorial">Pumps Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="togglePumps()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disablePsatSetupTutorial" id="disablePsatSetupTutorial"
-          [(ngModel)]="!settings.disablePsatSetupTutorial" type="checkbox">
+        <input name="disablePsatTutorial" id="disablePsatTutorial"
+          [(ngModel)]="!settings.disablePsatTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Fans-->
   <div class="form-group">
-    <label for="disablePsatAssessmentTutorial">Pump Assessment Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePumpAssessment()">
+    <label for="disableFansTutorial">Fans Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleFans()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disablePsatAssessmentTutorial" id="disablePsatAssessmentTutorial"
-          [(ngModel)]="!settings.disablePsatAssessmentTutorial" type="checkbox">
+        <input name="disableFansTutorial" id="disableDashboardTutorial"
+          [(ngModel)]="!settings.disableFansTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Process Heating-->
   <div class="form-group">
-    <label for="disablePsatReportTutorial">Pump Report Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePumpReport()">
+    <label for="disablePhastTutorial">Process Heating Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="togglePHAST()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disablePsatReportTutorial" id="disablePsatReportTutorial"
-          [(ngModel)]="!settings.disablePsatReportTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div> -->
-  <div class="form-group">
-    <label for="disablePhastSetupTutorial">Process Heating System Setup Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePhastSetup()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disablePhastSetupTutorial" id="disablePhastSetupTutorial"
-          [(ngModel)]="!settings.disablePhastSetupTutorial" type="checkbox">
+        <input name="disablePhastTutorial" id="disablePhastTutorial"
+          [(ngModel)]="!settings.disablePhastTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
-
+  <!--Waste Water-->
   <div class="form-group">
-    <label for="disablePhastAssessmentTutorial">Process Heating Assessment Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePhastAssessment()">
+    <label for="disableWasteWaterTutorial">Waste Water Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleWasteWater()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disablePhastAssessmentTutorial" id="disablePhastAssessmentTutorial"
-          [(ngModel)]="!settings.disablePhastAssessmentTutorial" type="checkbox">
+        <input name="disableWasteWaterTutorial" id="disableWasteWaterTutorial"
+          [(ngModel)]="!settings.disableWasteWaterTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Steam-->
   <div class="form-group">
-    <label for="disablePhastReportTutorial">Process Heating Report Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="togglePhastReport()">
+    <label for="disableSteamTutorial">Steam Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleSteam()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disablePhastReportTutorial" id="disablePhastReportTutorial"
-          [(ngModel)]="!settings.disablePhastReportTutorial" type="checkbox">
+        <input name="disableSteamTutorial" id="disableSteamTutorial"
+          [(ngModel)]="!settings.disableSteamTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Motor Inventory-->
   <div class="form-group">
-    <label for="disableFsatSetupTutorial">Fan System Setup Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleFanSetup()">
+    <label for="disableMotorInventoryTutorial">Motor Inventory Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleMotorInventory()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disableFsatSetupTutorial" id="disableFsatSetupTutorial"
-          [(ngModel)]="!settings.disableFsatSetupTutorial" type="checkbox">
+        <input name="disableMotorInventoryTutorial" id="disableMotorInventoryTutorial"
+          [(ngModel)]="!settings.disableMotorInventoryTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Treasure Hunt-->
   <div class="form-group">
-    <label for="disableFsatAssessmentTutorial">Fan Assessment Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleFanAssessment()">
+    <label for="disableTreasureHuntTutorial">Treasure Hunt Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleTreasureHunt()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disableFsatAssessmentTutorial" id="disableFsatAssessmentTutorial"
-          [(ngModel)]="!settings.disableFsatAssessmentTutorial" type="checkbox">
+        <input name="disableTreasureHuntTutorial" id="disableTreasureHuntTutorial"
+          [(ngModel)]="!settings.disableTreasureHuntTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Data Explorer-->
   <div class="form-group">
-    <label for="disableFsatReportTutorial">Fan Report Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleFanReport()">
+    <label for="disableDataExplorerTutorial">Data Explorer Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleDataExplorer()">
       <span class="pr-2">Hide</span>
       <span class="switch">
-        <input name="disableFsatReportTutorial" id="disableFsatReportTutorial"
-          [(ngModel)]="!settings.disableFsatReportTutorial" type="checkbox">
+        <input name="disableDataExplorerTutorial" id="disableDataExplorerTutorial"
+          [(ngModel)]="!settings.disableDataExplorerTutorial" type="checkbox">
         <span class="slider round"></span>
       </span>
       <span class="pl-2">Show</span>
     </div>
   </div>
-
-  <div class="form-group">
-    <label for="disableSsmtSystemSetupTutorial">Steam System Setup Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleSsmtSystemSetup()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableSsmtSystemSetupTutorial" id="disableSsmtSystemSetupTutorial"
-          [(ngModel)]="!settings.disableSsmtSystemSetupTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableSsmtAssessmentTutorial">Steam Assessment Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleSsmtAssessment()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableSsmtAssessmentTutorial" id="disableSsmtAssessmentTutorial"
-          [(ngModel)]="!settings.disableSsmtAssessmentTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableSsmtDiagramTutorial">Steam Diagram Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleSsmtDiagram()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableSsmtDiagramTutorial" id="disableSsmtDiagramTutorial"
-          [(ngModel)]="!settings.disableSsmtDiagramTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableSsmtReportTutorial">Steam Report Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleSsmtReport()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableSsmtReportTutorial" id="disableSsmtReportTutorial"
-          [(ngModel)]="!settings.disableSsmtReportTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="disableTreasureHuntSetupTutorial">Treasure Hunt Setup Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleTreasureHuntSetup()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableTreasureHuntSetupTutorial" id="disableTreasureHuntSetupTutorial"
-          [(ngModel)]="!settings.disableTreasureHuntSetupTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableTreasureHuntFindTreasureTutorial">Treasure Hunt Find Treasure Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleTreasureHuntFindTreasure()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableTreasureHuntFindTreasureTutorial" id="disableTreasureHuntFindTreasureTutorial"
-          [(ngModel)]="!settings.disableTreasureHuntFindTreasureTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableTreasureHuntTreasureChestTutorial">Treasure Hunt Treasure Chest Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleTreasureHuntTreasureChest()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableTreasureHuntTreasureChestTutorial" id="disableTreasureHuntTreasureChestTutorial"
-          [(ngModel)]="!settings.disableTreasureHuntTreasureChestTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="disableTreasureHuntReportTutorial">Treasure Hunt Report Tutorial</label>
-    <div class="d-flex justify-content-center" (click)="toggleTreasureHuntReport()">
-      <span class="pr-2">Hide</span>
-      <span class="switch">
-        <input name="disableTreasureHuntReportTutorial" id="disableTreasureHuntReportTutorial"
-          [(ngModel)]="!settings.disableTreasureHuntReportTutorial" type="checkbox">
-        <span class="slider round"></span>
-      </span>
-      <span class="pl-2">Show</span>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
+  <!--All-->
 
   <div class="form-group">
     <label for="disableAllTutorials">All Tutorials</label>

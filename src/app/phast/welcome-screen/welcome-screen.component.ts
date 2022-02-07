@@ -28,5 +28,4 @@ export class WelcomeScreenComponent implements OnInit {
       this.emitClose.emit(true);
     }, 1500)
   }
-
 }

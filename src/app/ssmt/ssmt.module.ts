@@ -47,6 +47,7 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   imports: [
@@ -95,6 +96,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     HeaderFormComponent,
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
+    WelcomeScreenComponent,
   ],
   providers: [
     SsmtService,

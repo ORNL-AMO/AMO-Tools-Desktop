@@ -9,6 +9,7 @@ export class WelcomeScreenComponent implements OnInit {
   @Output('emitClose')
   emitClose: EventEmitter<boolean> = new EventEmitter<boolean>(false);
 
+  
   showWelcomeScreen: boolean = false;
   constructor() { }
 
