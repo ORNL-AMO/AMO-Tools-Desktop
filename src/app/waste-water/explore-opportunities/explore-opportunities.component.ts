@@ -27,11 +27,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let modification: WasteWaterData = this.wasteWaterService.getModificationFromId();
         if (modification) {
           this.modificationExists = true;
+          this.checkExploreOpps(modification);
         } else {
           this.modificationExists = false;
         }
       }
-      this.checkExploreOpps();
     });
   }
 
@@ -51,9 +51,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
 
-  checkExploreOpps() {
-    if (this.modificationExists) {
-      let modification: WasteWaterData = this.wasteWaterService.getModificationFromId();
+  checkExploreOpps(modification: WasteWaterData) {
       if (modification && !modification.exploreOpportunities) {
         let title: string = 'Explore Opportunities';
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
@@ -62,7 +60,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }else if(this.showToast){
         this.hideToast();
       }
-    }
   }
 
   openToast(title: string, body: string) {
