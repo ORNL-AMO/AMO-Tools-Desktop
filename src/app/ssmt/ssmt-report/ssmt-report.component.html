@@ -94,7 +94,7 @@
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary') || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
@@ -102,28 +102,28 @@
       </app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'energySummary') || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
+      *ngIf="((currentTab == 'energySummary' && !showPrintView) || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
         [assessment]="assessment"></app-energy-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'losses') || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'losses' && !showPrintView) || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
     <div class="results scroll-item report-diagrams hide-print" 
-      *ngIf="(currentTab == 'diagram' || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
+      *ngIf="((currentTab == 'diagram' && !showPrintView) || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [assessment]="assessment" [modificationInputData]="modificationInputData">
       </app-report-diagram>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'reportGraphs') || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
+      *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs [settings]="settings" [ssmt]="assessment.ssmt" [baselineLosses]="baselineLosses"
         [modificationLosses]="modificationLosses" [printView]="showPrintView"
@@ -131,14 +131,14 @@
       </app-report-graphs>
     </div>
     <div class="results scroll-item print-height" 
-      *ngIf="((currentTab == 'reportSankey') || (showPrintView && printOptions.printReportSankey)) && dataCalculated"
+      *ngIf="((currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)) && dataCalculated"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
             [modificationOutputs]="modificationOutputs">
             </app-ssmt-report-sankey>
         </div>
     <div class="results scroll-item input-data print-height print-break-before"
-      *ngIf="((currentTab == 'inputData') || (showPrintView && printOptions.printInputData)) && dataCalculated"
+      *ngIf="((currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
         [modificationInputData]="modificationInputData" [printView]="printOptions.printInputData"
