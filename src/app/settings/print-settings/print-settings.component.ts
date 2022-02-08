@@ -159,7 +159,6 @@ export class PrintSettingsComponent implements OnInit {
   }
 
   togglePrintCompressedAirRollup() {
-    debugger;
     this.settings.printCompressedAirRollup = !this.settings.printCompressedAirRollup;
     this.checkSelectAll();
     this.savePrintSettings.emit(true);
