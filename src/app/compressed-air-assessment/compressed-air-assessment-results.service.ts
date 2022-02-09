@@ -556,6 +556,7 @@ export class CompressedAirAssessmentResultsService {
         selectedDayTypeSummary.push(summary);
       }
     });
+    selectedDayTypeSummary = this.getProfileSummaryDataAverages(selectedDayTypeSummary);
     return selectedDayTypeSummary;
   }
 
@@ -1033,6 +1034,76 @@ export class CompressedAirAssessmentResultsService {
       return inventoryItem.performancePoints.fullLoad.power;
     });
   }
+
+  getProfileSummaryDataAverages(profileSummary: Array<ProfileSummary>): Array<ProfileSummary>{
+    let updatedSum: Array<ProfileSummary> = new Array<ProfileSummary>();
+    profileSummary.forEach(sums => {
+      let updatedData: ProfileSummary = sums;
+      updatedData.avgPower = this.getAvgPower(sums.profileSummaryData);
+      updatedData.avgAirflow = this.getAvgAirflow(sums.profileSummaryData);
+      updatedData.avgPrecentPower = this.getAvgPercentPower(sums.profileSummaryData);
+      updatedData.avgPercentCapacity = this.getAvgPercentCapacity(sums.profileSummaryData);
+      updatedSum.push(updatedData);
+    });
+    return updatedSum;
+  }
+
+  getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
+    let avgPower: number = 0;
+    let counter: number = 0;
+    profileSummaryData.forEach(data => {
+      if(data.power != 0){
+        avgPower += data.power;
+        counter++;
+      }
+    });
+    avgPower = avgPower / counter;
+
+    return avgPower;
+  }
+
+  getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
+    let avgAirflow: number = 0;
+    let counter: number = 0;
+    profileSummaryData.forEach(data => {
+      if(data.airflow != 0){
+        avgAirflow += data.airflow;
+        counter++;
+      }
+    });
+    avgAirflow = avgAirflow / counter;
+
+    return avgAirflow;
+  }
+
+  getAvgPercentPower(profileSummaryData: Array<ProfileSummaryData>): number {
+    let avgPercentPower: number = 0;
+    let counter: number = 0;
+    profileSummaryData.forEach(data => {
+      if(data.percentPower != 0){
+        avgPercentPower += data.percentPower;
+        counter++;
+      }
+    });
+    avgPercentPower = avgPercentPower / counter;
+
+    return avgPercentPower;
+  }
+
+  getAvgPercentCapacity(profileSummaryData: Array<ProfileSummaryData>): number {
+    let avgPercentCapacity: number = 0;
+    let counter: number = 0;
+    profileSummaryData.forEach(data => {
+      if(data.percentCapacity != 0){
+        avgPercentCapacity += data.percentCapacity;
+        counter++;
+      }
+    });
+    avgPercentCapacity = avgPercentCapacity / counter;
+
+    return avgPercentCapacity;
+  }
+
 
 }
 
