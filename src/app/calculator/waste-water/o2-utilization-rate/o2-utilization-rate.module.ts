@@ -26,6 +26,9 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
   ],
   providers: [
     O2UtilizationRateService
+  ],
+  exports: [
+    O2UtilizationRateComponent
   ]
 })
 export class O2UtilizationRateModule { }

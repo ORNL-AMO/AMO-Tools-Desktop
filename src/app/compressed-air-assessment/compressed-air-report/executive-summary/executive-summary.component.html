@@ -217,6 +217,19 @@
                     <span *ngIf="!result.combinedResults.allSavingsResults.adjustedResults.power">&mdash; &mdash;</span>
                 </td>
             </tr>
+            <tr class="bold-row">
+                <td>Total Emission Output Rate (kg CO<sub>2</sub>/MWh)
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.annualEmissionOutput | number:'1.0-0'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.annualEmissionOutput">{{result.combinedResults.annualEmissionOutput
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.annualEmissionOutput">&mdash; &mdash;</span>
+                </td>
+            </tr>
             <tr class="bold-row bg-row">
                 <td>Peak Demand Savings
                     <span> (kW)</span>
@@ -232,7 +245,7 @@
                         &mdash;</span>
                 </td>
             </tr>
-            <tr class="bold-row row-stripe bg-row">
+            <tr class="bold-row bg-row">
                 <td>Annual Energy Savings
                     <span> (kWh/yr)</span>
                 </td>
@@ -244,6 +257,19 @@
                         |
                         sigFigs:'5'}}</span>
                     <span *ngIf="!result.combinedResults.allSavingsResults.savings.power">&mdash; &mdash;</span>
+                </td>
+            </tr>
+
+            <tr class="bold-row row-stripe bg-row">
+                <td>Annual Emission Savings
+                    <span> (kg CO<sub>2</sub>/MWh)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">{{result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings | sigFigs:'5'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">&mdash; &mdash;</span>
                 </td>
             </tr>
 

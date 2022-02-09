@@ -195,21 +195,6 @@ export class UpdateDataService {
                 electricityCost: .066
             };
         }
-        if (!assessment.phast.co2SavingsData) {
-            assessment.phast.co2SavingsData = {
-                energyType: "fuel",
-                energySource: "Natural Gas",
-                fuelType: "Natural Gas",
-                totalEmissionOutputRate: 53.06,
-                electricityUse: 0,
-                eGridRegion: '',
-                eGridSubregion: "SRT",
-                totalEmissionOutput: 0,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: false,
-                zipcode: "37830"
-            };
-        }
 
         assessment.phast = this.updateMoistureInAirCombustion(assessment.phast);
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
@@ -222,26 +207,6 @@ export class UpdateDataService {
         if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
             assessment.phast.modifications.forEach(mod => {
                 mod.phast = this.updateFlueGas(mod.phast);
-            });
-        }
-
-        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
-            assessment.phast.modifications.forEach(mod => {
-                if(!mod.phast.co2SavingsData){
-                    mod.phast.co2SavingsData = {
-                        energyType: "fuel",
-                        energySource: "Natural Gas",
-                        fuelType: "Natural Gas",
-                        totalEmissionOutputRate: 53.06,
-                        electricityUse: 0,
-                        eGridRegion: '',
-                        eGridSubregion: "SRT",
-                        totalEmissionOutput: 0,
-                        userEnteredBaselineEmissions: false,
-                        userEnteredModificationEmissions: false,
-                        zipcode: "37830"
-                    };
-                }
             });
         }
 

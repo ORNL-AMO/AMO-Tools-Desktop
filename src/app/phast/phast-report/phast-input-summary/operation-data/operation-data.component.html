@@ -82,6 +82,47 @@
               {{mod.phast.operatingCosts.fuelCost}}
             </td>
           </tr>
+          <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
+            <tr>
+              <td>
+                Coal Carbon
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">$/kg</span>
+              </td>
+              <td>
+                {{phast.operatingCosts.coalCarbonCost}}
+              </td>
+              <td *ngFor="let mod of phast.modifications">
+                {{mod.phast.operatingCosts.coalCarbonCost}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Electrode 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">$/kg</span>
+              </td>
+              <td>
+                {{phast.operatingCosts.electrodeCost}}
+              </td>
+              <td *ngFor="let mod of phast.modifications">
+                {{mod.phast.operatingCosts.electrodeCost}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Other Fuel
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">$/GJ</span>
+              </td>
+              <td>
+                {{phast.operatingCosts.coalCarbonCost}}
+              </td>
+              <td *ngFor="let mod of phast.modifications">
+                {{mod.phast.operatingCosts.coalCarbonCost}}
+              </td>
+            </tr>
+          </ng-container>
           <tr>
             <td>
               Steam

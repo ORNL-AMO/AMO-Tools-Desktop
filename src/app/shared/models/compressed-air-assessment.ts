@@ -1,3 +1,4 @@
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { DayTypeSummary, LogToolDbData, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -136,7 +137,8 @@ export interface SystemInformation {
     totalAirStorage: number,
     isSequencerUsed: boolean,
     targetPressure: number,
-    variance: number
+    variance: number,
+    co2SavingsData?: Co2SavingsData
 }
 
 export interface CompressorInventoryItem {

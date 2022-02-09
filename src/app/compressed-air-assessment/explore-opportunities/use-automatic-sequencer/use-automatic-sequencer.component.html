@@ -1,11 +1,11 @@
 <form *ngIf="form" [formGroup]="form" class="p-0">
     <div class="checkbox">
         <label class="group-label" for="useAutomaticSequencer">
+            <span *ngIf="!baselineHasSequencer">Use</span>
+            <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
             <span class="supply-demand">
                 Supply
             </span>
-            <span *ngIf="!baselineHasSequencer">Use</span>
-            <span *ngIf="baselineHasSequencer">Adjust</span> Automatic Sequencer
             <span *ngIf="(form.invalid || hasInvalidDayType) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>

@@ -7,11 +7,23 @@
       <th>
         Modification Name
       </th>
+      <th *ngIf="equipmentType == 'Compressed Air'">
+        Baseline Peak Demand Energy Use<br>({{energyUnit}})
+      </th>
+      <th *ngIf="equipmentType == 'Compressed Air'">
+        Modification Peak Demand Energy Use<br>({{energyUnit}})
+      </th>
       <th>
         Baseline Energy Use<br>({{energyUnit}})
       </th>
       <th>
         Modification Energy Use<br>({{energyUnit}})
+      </th>
+      <th *ngIf="equipmentType == 'Compressed Air'">
+        Baseline Peak Demand Cost<br>({{currencyUnit}})
+      </th>
+      <th *ngIf="equipmentType == 'Compressed Air'">
+        Modification Peak Demand Cost<br>({{currencyUnit}})
       </th>
       <th>
         Baseline Annual Cost<br>({{currencyUnit}})
@@ -36,10 +48,18 @@
       <td>{{data.equipmentName}}</td>
       <td *ngIf="data.modificationName">{{data.modificationName}}</td>
       <td *ngIf="!data.modificationName">&mdash;</td>
+      <!-- peak demand energy use -->
+      <td *ngIf="equipmentType == 'Compressed Air'">{{data.baselinePeakDemandEnergy | sigFigs:'5'}}</td>
+      <td *ngIf="data.modificationName && equipmentType == 'Compressed Air'">{{data.modPeakDemandEnergy | sigFigs:'5'}}</td>
+      <td *ngIf="!data.modificationName && equipmentType == 'Compressed Air'">&mdash;</td>
       <!-- energy use -->
       <td>{{data.baselineEnergyUse | sigFigs:'5'}}</td>
       <td *ngIf="data.modificationName">{{data.modificationEnergyUse | sigFigs:'5'}}</td>
       <td *ngIf="!data.modificationName">&mdash;</td>
+       <!-- peak demand annual cost -->
+       <td *ngIf="equipmentType == 'Compressed Air'">{{data.baselinePeakDemandCost | currency:'USD':'symbol':'1.0-0'}}</td>
+       <td *ngIf="data.modificationName && equipmentType == 'Compressed Air'">{{data.modPeakDemandCost | currency:'USD':'symbol':'1.0-0'}}</td>
+       <td *ngIf="!data.modificationName && equipmentType == 'Compressed Air'">&mdash;</td>
       <!-- annual cost -->
       <td>{{data.baselineCost | currency:'USD':'symbol':'1.0-0'}}</td>
       <td *ngIf="data.modificationName">{{data.modificationCost | currency:'USD':'symbol':'1.0-0'}}</td>
@@ -72,10 +92,18 @@
       <!-- name -->
       <td>Total</td>
       <td>&mdash;</td>
+      <!-- peak energy use -->
+      <td *ngIf="equipmentType == 'Compressed Air'">{{totalBaselinePeakEnergyUse | sigFigs:'5'}}</td>
+      <td *ngIf="totalModificationPeakEnergyUse && equipmentType == 'Compressed Air'">{{totalModificationPeakEnergyUse | sigFigs:'5'}}</td>
+      <td *ngIf="!totalModificationPeakEnergyUse && equipmentType == 'Compressed Air'">&mdash;</td>
       <!-- energy use -->
       <td>{{totalBaselineEnergyUse | sigFigs:'5'}}</td>
       <td *ngIf="totalModificationEnergyUse">{{totalModificationEnergyUse | sigFigs:'5'}}</td>
       <td *ngIf="!totalModificationEnergyUse">&mdash;</td>
+      <!-- peak annual cost -->
+      <td *ngIf="equipmentType == 'Compressed Air'">{{totalBaselinePeakCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td *ngIf="totalModificationPeakCost && equipmentType == 'Compressed Air'">{{totalModificationPeakCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td *ngIf="!totalModificationPeakCost && equipmentType == 'Compressed Air'">&mdash;</td>
       <!-- annual cost -->
       <td>{{totalBaselineCost | currency:'USD':'symbol':'1.0-0'}}</td>
       <td *ngIf="totalModificationCost">{{totalModificationCost | currency:'USD':'symbol':'1.0-0'}}</td>

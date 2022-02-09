@@ -1,10 +1,10 @@
 <form *ngIf="form" [formGroup]="form" class="p-0">
     <div class="checkbox">
         <label class="group-label" for="reduceRuntime">
+            Reduce Run Time
             <span class="supply-demand">
                 Supply
             </span>
-            Reduce Run Time
             <span *ngIf="(hasInvalidDayType || form.invalid) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>

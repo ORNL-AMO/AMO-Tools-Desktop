@@ -53,8 +53,17 @@
         <div class="col-2">
             <app-animated-checkmark [active]="settings.printWasteWaterRollup"></app-animated-checkmark>
         </div>
-        <div class="col-8 bold-bottom-divider">
+        <div class="col-8 bottom-divider">
             Wastewater Rollup Summary
+        </div>
+    </div>
+
+    <div class="row toggle-btn pad-top-10" (click)="togglePrintCompressedAirRollup()">
+        <div class="col-2">
+            <app-animated-checkmark [active]="settings.printCompressedAirRollup"></app-animated-checkmark>
+        </div>
+        <div class="col-8 bold-bottom-divider">
+            Compressed Air Rollup Summary
         </div>
     </div>
 

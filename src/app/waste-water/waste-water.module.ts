@@ -43,7 +43,11 @@ import { WasteWaterOperationsComponent } from './waste-water-operations/waste-wa
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
-
+import { O2UtilizationRateModule } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.module';
+import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-analysis/state-point-analysis.module';
+import { WaterReductionModule } from '../calculator/waste-water/water-reduction/water-reduction.module';
+import { WasteWaterCalculatorTabsComponent } from './waste-water-banner/calculator-tabs/calculator-tabs.component';
+import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-water-calculators.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +75,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     ExploreActivatedSludgeFormComponent,
     WasteWaterOperationsComponent,
     OperationsHelpComponent,
+    WasteWaterCalculatorTabsComponent,
+    WasteWaterCalculatorsComponent,
   ],
   imports: [
     CommonModule,
@@ -86,7 +92,10 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     SharedPipesModule,
     ToastModule,
     UpdateUnitsModalModule,
-    AssessmentCo2SavingsModule
+    AssessmentCo2SavingsModule,
+    O2UtilizationRateModule,
+    StatePointAnalysisModule,
+    WaterReductionModule
   ],
   providers: [
     WasteWaterService,

@@ -69,8 +69,12 @@ export class WasteHeatService {
         let wasteHeatOutput: WasteHeatOutput = processHeatAddon.waterHeatingUsingExhaust(inputCopy);
         wasteHeatOutput = this.convertResultUnits(wasteHeatOutput, settings);
 
+        let cost = inputCopy.cost;
+        let conversionHelper = this.convertUnitsService.value(1).from('kWh').to(settings.phastRollupElectricityUnit);
+        cost = cost / conversionHelper;
+
         wasteHeatOutput.annualEnergy = wasteHeatOutput.electricalEnergy * inputCopy.oppHours;
-        wasteHeatOutput.annualCost = wasteHeatOutput.annualEnergy * inputCopy.cost;
+        wasteHeatOutput.annualCost = wasteHeatOutput.annualEnergy * cost;
         this.wasteHeatOutput.next(wasteHeatOutput);
     }
   }
@@ -131,11 +135,13 @@ export class WasteHeatService {
 
   convertResultUnits(output: WasteHeatOutput, settings: Settings): WasteHeatOutput {
     output.electricalEnergy = this.convertUnitsService.value(output.electricalEnergy).from('btuhr').to('kW');
+    output.electricalEnergy = this.convertUnitsService.value(output.electricalEnergy).from('kWh').to(settings.phastRollupElectricityUnit);
     output.electricalEnergy = this.roundVal(output.electricalEnergy, 2);
-    if (settings.unitsOfMeasure == "Metric") {
-      output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to('GJ');
-      output.recoveredHeat = this.roundVal(output.recoveredHeat, 2);
 
+    output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to(settings.phastRollupUnit);
+    output.recoveredHeat = this.roundVal(output.recoveredHeat, 2);
+
+    if (settings.unitsOfMeasure == "Metric") {
       output.hotWaterFlow = this.convertUnitsService.value(output.hotWaterFlow).from('gal/h').to('m3/h');
       output.hotWaterFlow = this.roundVal(output.hotWaterFlow, 2);
 
@@ -146,9 +152,6 @@ export class WasteHeatService {
       output.capacityChiller = this.roundVal(output.capacityChiller, 2);
 
     } else {
-      output.recoveredHeat = this.convertUnitsService.value(output.recoveredHeat).from('Btu').to('MMBtu');
-      output.recoveredHeat = this.roundVal(output.recoveredHeat, 2);
-
       output.hotWaterFlow = this.convertUnitsService.value(output.hotWaterFlow).from('gal/h').to('gpm');
       output.hotWaterFlow = this.roundVal(output.hotWaterFlow, 2);
     }

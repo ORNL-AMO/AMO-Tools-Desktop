@@ -133,6 +133,10 @@ export class AssessmentItemComponent implements OnInit {
         assessmentCopy.fsat.modifications = new Array();
       } else if (assessmentCopy.type == 'SSMT') {
         assessmentCopy.ssmt.modifications = new Array();
+      } else if (assessmentCopy.type === 'CompressedAir') {
+        assessmentCopy.compressedAirAssessment.modifications = new Array();
+      } else if (assessmentCopy.type === 'WasteWater') {
+        assessmentCopy.wasteWater.modifications = new Array();
       }
     }
 

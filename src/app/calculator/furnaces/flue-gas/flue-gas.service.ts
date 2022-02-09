@@ -42,7 +42,7 @@ export class FlueGasService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculate(settings: Settings, inModal = false) {
+  calculate(settings: Settings, inModal = false, isStandAlone?: boolean) {
     this.initDefaultEmptyOutput();
     let output: FlueGasOutput = this.output.getValue();
     
@@ -51,10 +51,10 @@ export class FlueGasService {
     let baselineEnergyData: FlueGasEnergyData = this.baselineEnergyData.getValue();
     let modificationEnergyData: FlueGasEnergyData = this.modificationEnergyData.getValue();
 
-    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
+    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal, isStandAlone);
     output.baseline = baselineResults;
     if (modificationFlueGas && modificationEnergyData) {
-      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal);
+      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal, isStandAlone);
       output.modification = modificationResults;
       
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
@@ -63,7 +63,11 @@ export class FlueGasService {
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, energyData: FlueGasEnergyData, settings: Settings, inModal: boolean): FlueGasResult {
+  getFlueGasResult(flueGasData: FlueGas, energyData: FlueGasEnergyData, settings: Settings, inModal: boolean, isStandAlone: boolean): FlueGasResult {
+    let energyUnit: string = settings.energyResultUnit;
+    if(isStandAlone){
+      energyUnit = settings.phastRollupFuelUnit
+    }
     let result: FlueGasResult = {
       calculatedFlueGasO2: 0,
       calculatedExcessAir: 0,
@@ -72,7 +76,7 @@ export class FlueGasService {
       flueGasLosses: 0,
       fuelCost: 0,
       fuelUse: 0,
-      energyUnit: settings.energyResultUnit
+      energyUnit: energyUnit
     }
 
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
@@ -87,8 +91,14 @@ export class FlueGasService {
         result.calculatedExcessAir = flueGasByVolumeSuiteResults.excessAir * 100;
         result.calculatedFlueGasO2 = flueGasByVolumeSuiteResults.flueGasO2 * 100;
         let flueGasLosses = (1 - flueGasByVolumeSuiteResults.availableHeat) * flueGasData.flueGasByVolume.heatInput;
+        let fuelCost = energyData.fuelCost;
+        if(isStandAlone){
+          let conversionHelper = this.convertUnitsService.value(1).from(settings.energyResultUnit).to(settings.phastRollupFuelUnit);
+          flueGasLosses = flueGasLosses * conversionHelper;
+          fuelCost = fuelCost / conversionHelper;
+        }
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
+        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
@@ -101,8 +111,14 @@ export class FlueGasService {
         let availableHeat: number = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
+        let fuelCost = energyData.fuelCost;
+        if(isStandAlone){
+          let conversionHelper = this.convertUnitsService.value(1).from(settings.energyResultUnit).to(settings.phastRollupFuelUnit);
+          flueGasLosses = flueGasLosses * conversionHelper;
+          fuelCost = fuelCost / conversionHelper;
+        }
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
+        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
         let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
         let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == flueGasData.flueGasByMass.gasTypeId });

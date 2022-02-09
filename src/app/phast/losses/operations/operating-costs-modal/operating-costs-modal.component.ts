@@ -48,15 +48,12 @@ export class OperatingCostsModalComponent implements OnInit {
 
   // called every time a fuel field changes
   calculateMixedFuelCosts() {
-    let length: number = this.fuels.length;
-    let sum: number = 0;
     let summedUse: number = 0;
-    for (let i = 0; i < length; i++){
-      summedUse += this.fuels[i].usage;
-      sum += (this.fuels[i].usage * this.fuels[i].cost);      
+    for (let i = 0; i < this.fuels.length; i++){
+      let fuelUse: number = this.fuels[i].usage * (this.fuels[i].cost / 100);
+      summedUse += fuelUse;      
     }
-    sum = sum / (summedUse);
-    this.mixedFuelCostsResult = this.roundVal(sum);    
+    this.mixedFuelCostsResult = this.roundVal(summedUse);    
   }
   
   roundVal(num: number): number {

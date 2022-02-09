@@ -84,27 +84,28 @@
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
         <div class="input-data results scroll-item print-height page-break-before"
-            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
+            *ngIf="(currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-summary [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings"
                 [printView]="showPrintView">
             </app-input-summary>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="currentTab == 'executiveSummary' || (showPrintView && printOptions.printExecutiveSummary)"
+            *ngIf="(currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"
                 [modifications]="assessment.compressedAirAssessment.modifications" [inRollup]="inRollup"
                 [assessment]="assessment" [settings]="settings"></app-executive-summary>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
+            *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults"
                 [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
             </app-report-graphs>
         </div>
-        <div class="results scroll-item print-height page-break-before" *ngIf="currentTab == 'systemProfiles'"
+        <div class="results scroll-item print-height page-break-before" 
+            *ngIf="(currentTab == 'systemProfiles' && !showPrintView) || (showPrintView && printOptions.printSystemProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles [compressedAirAssessment]="assessment.compressedAirAssessment"
                 [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
@@ -112,7 +113,7 @@
             </app-system-profiles>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="currentTab == 'paybackPeriod' || (showPrintView && printOptions.printReportOpportunityPayback)"
+            *ngIf="(currentTab == 'paybackPeriod' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
         </div>

@@ -19,6 +19,7 @@ export class WasteWaterService {
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
+  calcTab: BehaviorSubject<string>;
   settings: BehaviorSubject<Settings>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showModificationListModal: BehaviorSubject<boolean>;
@@ -33,6 +34,7 @@ export class WasteWaterService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
+    this.calcTab = new BehaviorSubject<string>('o2-utilization-rate');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.wasteWater = new BehaviorSubject<WasteWater>(undefined);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);

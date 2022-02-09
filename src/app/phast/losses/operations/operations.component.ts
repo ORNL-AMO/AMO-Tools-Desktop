@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours, OperatingCosts } from '../../../shared/models/operations';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',
@@ -46,8 +47,10 @@ export class OperationsComponent implements OnInit {
   ngOnInit() {
     this.initForm();
   }
+
+  
   initForm() {
-    this.operationsForm = this.operationsService.initForm(this.phast);
+    this.operationsForm = this.operationsService.initForm(this.phast, this.settings);
   }
 
   saveLosses() {
