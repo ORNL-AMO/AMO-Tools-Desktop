@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
-import { Losses, PHAST, PhastCo2SavingsData } from '../shared/models/phast/phast';
+import { Losses, PHAST, PhastCo2SavingsData, PhastResults } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
@@ -339,6 +339,24 @@ export class ConvertPhastService {
       loss.dustLoading = this.convertVal(loss.dustLoading, 'lbscf', 'kgNm3');
     }
     return loss;
+  }
+
+  convertEAFEnergyUsed(results: PhastResults, settings: Settings) {
+    let phastResults: PhastResults = JSON.parse(JSON.stringify(results));
+    if (settings.unitsOfMeasure == 'Imperial') {
+      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('MMBtu').to('kWh');
+
+    } else {
+      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('GJ').to('kWh');
+    }
+
+    return phastResults;
   }
   //energyInputExhaustGasLoss
   convertEnergyInputExhaustGasLoss(loss: EnergyInputExhaustGasLoss, oldSettings: Settings, newSettings: Settings): EnergyInputExhaustGasLoss {

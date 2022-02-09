@@ -4,15 +4,11 @@ import { FormGroup } from '@angular/forms';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class OperationsService {
 
-  modalOpen: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder) { 
-    this.modalOpen = new BehaviorSubject<boolean>(false);
-
   }
 
   initForm(phast: PHAST, settings: Settings): FormGroup {

@@ -32,8 +32,6 @@ export class OperationsComponent implements OnInit {
 
   operationsForm: FormGroup;
   isFirstChange: boolean = true;
-  isModalOpenSub: Subscription;
-  isModalOpen: boolean;
   constructor(private operationsService: OperationsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -47,15 +45,9 @@ export class OperationsComponent implements OnInit {
     }
   }
   ngOnInit() {
-    this.isModalOpenSub = this.operationsService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
     this.initForm();
   }
 
-  ngOnDestroy() {
-    this.isModalOpenSub.unsubscribe();
-  }
   
   initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast, this.settings);

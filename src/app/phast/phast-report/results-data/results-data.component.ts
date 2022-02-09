@@ -9,6 +9,7 @@ import { PhastValidService } from '../../phast-valid.service';
 import { PhastReportRollupService } from '../../../report-rollup/phast-report-rollup.service';
 import { ExecutiveSummaryService } from '../executive-summary.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { ConvertPhastService } from '../../convert-phast.service';
 
 @Component({
   selector: 'app-results-data',
@@ -45,13 +46,12 @@ export class ResultsDataComponent implements OnInit {
   decimalCount: string;
   baselineExecutiveSummary: ExecutiveSummary;
   modExecutiveSummaries: Array<ExecutiveSummary>;
-  baseEnergyUnit: string = '';
-
   numMods: number = 0;
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
               private executiveSummaryService: ExecutiveSummaryService,
               private convertUnitsService: ConvertUnitsService,
+              private convertPhastService: ConvertPhastService,
               private phastReportRollupService: PhastReportRollupService,
               private phastValidService: PhastValidService) { }
 
@@ -106,7 +106,7 @@ export class ResultsDataComponent implements OnInit {
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
       if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
-        this.baseLineResults = this.convertEAFEnergyUsed(this.baseLineResults);
+        this.baseLineResults = this.convertPhastService.convertEAFEnergyUsed(this.baseLineResults, this.settings);
       }
       this.baselineExecutiveSummary = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
       if (this.phast.modifications && this.inReport) {
@@ -117,7 +117,7 @@ export class ResultsDataComponent implements OnInit {
             mod.phast.valid = this.phastValidService.checkValid(mod.phast, this.settings);
             let modResults: PhastResults = this.phastResultsService.getResults(mod.phast, this.settings);
             if (this.settings.furnaceType == "Electric Arc Furnace (EAF)") {
-              modResults = this.convertEAFEnergyUsed(modResults);
+              modResults = this.convertPhastService.convertEAFEnergyUsed(modResults, this.settings);
             }
             let executiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(mod.phast, false, this.settings, this.phast, this.baselineExecutiveSummary);
             this.modExecutiveSummaries.push(executiveSummary);
@@ -133,24 +133,6 @@ export class ResultsDataComponent implements OnInit {
     } else {
       this.baseLineResults = this.phastResultsService.initResults();
     }
-  }
-
-  convertEAFEnergyUsed(results: PhastResults) {
-    let phastResults: PhastResults = JSON.parse(JSON.stringify(results));
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('MMBtu').to('kWh');
-      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('MMBtu').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('MMBtu').to('kWh');
-      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('MMBtu').to('kWh');
-
-    } else {
-      phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('GJ').to('kWh');
-      phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('GJ').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('GJ').to('kWh');
-      phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('GJ').to('kWh');
-    }
-
-    return phastResults;
   }
 
   setSigFigsCount() {

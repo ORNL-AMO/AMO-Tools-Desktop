@@ -9,7 +9,6 @@ import { EGridService, SubRegionData, SubregionEmissions } from '../../../../sha
 import { PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossesService } from '../../losses.service';
-import { OperationsService } from '../operations.service';
 import { Co2SavingsPhastService } from './co2-savings-phast.service';
 
 @Component({
@@ -69,7 +68,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     private egridService: EGridService, 
     private cd: ChangeDetectorRef,
     private lossesService: LossesService,
-    private operationsService: OperationsService,
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -424,7 +422,7 @@ export class Co2SavingsPhastComponent implements OnInit {
       this.showOtherFuelsMixedModal = false;
     }
 
-    this.operationsService.modalOpen.next(false);
+    this.lossesService.modalOpen.next(false);
     this.mixedCO2EmissionsModal.hide();
     this.calculate();
   }
