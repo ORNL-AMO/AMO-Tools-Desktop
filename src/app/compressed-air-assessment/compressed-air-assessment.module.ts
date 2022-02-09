@@ -130,6 +130,7 @@ import { ExploreOpportunitiesValidationService } from './explore-opportunities/e
 import { CompressedAirReportModule } from './compressed-air-report/compressed-air-report.module';
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 @NgModule({
   declarations: [
@@ -236,6 +237,7 @@ import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-co
     ExportableResultsTableModule,
     CompressedAirReportModule,
     ProfileSummaryTableModule,
+    AssessmentCo2SavingsModule,
     SharedCompressorPipesModule
   ],
   providers: [

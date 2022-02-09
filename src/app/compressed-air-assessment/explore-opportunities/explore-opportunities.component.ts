@@ -163,7 +163,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setCompressedAirAssessmentResults() {
     if (this.modification && this.compressedAirAssessmentResultsService.flowReallocationSummaries) {
-      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries, this.exploreOpportunitiesService.baselineResults);
       this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
     } else {
       this.exploreOpportunitiesService.modificationResults.next(undefined);
