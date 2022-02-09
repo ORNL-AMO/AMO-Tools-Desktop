@@ -229,7 +229,9 @@ export class Co2SavingsPhastService {
       }
       
     } else {
-      co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.fuelEmissionOutput; 
+      phastCopy.co2SavingsData.electricityUse = results.grossHeatInput;
+      co2EmissionsOutput.hourlyTotalEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);   
+      co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput * phastCopy.operatingHours.hoursPerYear;   
     }
 
     return co2EmissionsOutput;
