@@ -8,7 +8,8 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class OperationsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { 
+  }
 
   initForm(phast: PHAST, settings: Settings): FormGroup {
     let form = this.formBuilder.group({
