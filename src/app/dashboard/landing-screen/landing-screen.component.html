@@ -17,7 +17,30 @@
 			property and equipment calculators.
 			<br>Get started with one of the following options.
 		</p>
-
+		<div class="row">
+			<div class="col">
+				<div class="d-flex justify-content-center">
+					<div class="assessment-block top-block">
+						<div class="icon-block">
+							<div class="folder-block">
+								<span class="fa fa-folder"></span>
+							</div>
+						</div>
+						<a [routerLink]="['/directory-dashboard', 1]" class="click-link">View Assessments</a>
+					</div>
+					<div class="assessment-block top-block">
+						<div class="icon-block">
+							<div class="folder-block">
+								<span class="fa fa-calculator"></span>
+							</div>
+						</div>
+						<a [routerLink]="['/calculators/calculators-list']" class="click-link">
+							Equipment Calculators</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr class="my-2">
 		<!-- <div class="card"> -->
 		<div class="row justify-content-center">
 			<div class="col-12">
@@ -115,26 +138,13 @@
 						<a routerLink="/log-tool" class="click-link">
 							Data <br> Exploration</a>
 					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="folder-block">
-								<span class="fa fa-folder"></span>
-							</div>
-						</div>
-						<a [routerLink]="['/directory-dashboard', 1]" class="click-link">View <br> Assessments</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="folder-block">
-								<span class="fa fa-calculator"></span>
-							</div>
-						</div>
-						<a [routerLink]="['/calculators/calculators-list']" class="click-link">
-							Equipment <br> Calculators</a>
-					</div>
 				</div>
-				<!-- </div> -->
-				<!-- <div class="col-8">
+
+			</div>
+		</div>
+		
+		<!-- </div> -->
+		<!-- <div class="col-8">
 					<!--calculators--
 					<div class="row no-gutters">
 						<div class="col-12">
@@ -205,8 +215,8 @@
 						</div>
 					</div>
 				</div> -->
-			</div>
-		</div>
+		<!-- </div>
+		</div> -->
 
 		<!-- <div class="row justify-content-center arrow-row no-gutters">
 			<div class="col-4">
