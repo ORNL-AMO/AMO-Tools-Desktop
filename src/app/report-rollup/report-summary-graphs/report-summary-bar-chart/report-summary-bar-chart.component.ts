@@ -25,7 +25,11 @@ export class ReportSummaryBarChartComponent implements OnInit {
   ngOnInit(): void {
   }
   ngAfterViewInit() {
-    this.createBarChart();
+    if (!this.printView) {
+      this.createBarChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
   ngOnChanges() {
@@ -38,13 +42,10 @@ export class ReportSummaryBarChartComponent implements OnInit {
   }
 
   createBarChart() {
-    var layout = {
+    let layout = {
       barmode: 'stack',
       showlegend: true,
-      legend: {
-        x: 1,
-        y: 0.5
-      },
+      legend: { "orientation": "h" },
       font: {
         size: 12,
       },
@@ -63,16 +64,45 @@ export class ReportSummaryBarChartComponent implements OnInit {
       xaxis: {
         automargin: true,
         fixedrange: true
-      },
-      // margin: { t: 15, b: 10 }
+      }
     };
-    var configOptions = {
+    let configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
 
+    Plotly.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, configOptions);
+  }
+
+  createPrintChart() {
+    let layout = {
+      barmode: 'stack',
+      showlegend: true,
+      legend: { "orientation": "h" },
+      font: {
+        size: 14,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        automargin: true,
+        tickformat: this.tickFormat,
+        fixedrange: true,
+        text: this.yAxisLabel
+      },
+      xaxis: {
+        automargin: true,
+        fixedrange: true
+      },
+
+      margin: { t: 0}
+    };
+
+    let configOptions = {
+      displaylogo: false,
+      displayModeBar: false,
+    };
     Plotly.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 
