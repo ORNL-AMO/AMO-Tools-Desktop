@@ -1,59 +1,14 @@
-/* .fa {
-  text-shadow: -4px 2px 5px rgba(0,0,0,0.28);
-}
-.fa-calculator{
-  /*text-shadow: -4px 2px 2px rgba(0,0,0,0.28);*
-  color: gray;
-} */
-
-
-.fa-folder-o{
-	color: #343434;
-}
-
-.arrow-center {
-  padding-left: 10%;
-}
-
-.arrow-row{
-	margin-top: -35px;
-	margin-bottom: -20px;
-}
-
-.arrow-img{
-	width: 8rem;
-}
-
-
-.card-body{
-	padding: .5rem;
-}
-
-.card{
-	-webkit-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-	-moz-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-	box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-}
-
 .text-help{
 	color: gray;
 }
-
 
 .psat-image{   
 	width: 94px;
     height: 82px;
 }
-/* .ssmt-icon{
-	width: 90px;
-	padding-top: 4px;
-	padding-bottom: 4px;
-} */
-
 
 .ssmt-icon {
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
-	/*background-color: rgba(41, 128, 185, 0);*/
 	border-radius: 15px;
 	border: 0.1px solid rgba(123, 120, 120, 0.25);
 	box-shadow: #7b7878 2px 2px 5px 1px;
@@ -87,10 +42,6 @@
 	opacity: .75;
 }
 
-.landing-menu{
-	z-index: +1;
-}
-
 .steam {
 	width: 80px;
 	height: 70px;
@@ -108,11 +59,8 @@
 	justify-content: center;
 }
 
-
-
 .fan-icon {
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-	/*background-color: rgba(41, 128, 185, 0);*/
 	border-radius: 15px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
 	width: 80px;
@@ -139,7 +87,6 @@
 .folder-block {
 	width: 80px;
 	height: 70px;
-	/* background: linear-gradient(rgba(228, 219, 219, 0.34), #156739); */
 	background: linear-gradient(lightgreen, #156739);
 	border-radius: 15px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
