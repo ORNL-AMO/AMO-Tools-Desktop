@@ -1,15 +1,20 @@
 <div class="card p-2">
     <div class="card-body p-0">
         <div class="group-label">
-            Compressor Profile <span
+            Compressor Profile
+            <span
                 *ngIf="!showAllCompressors && selectedCompressor && !inAssessment">({{selectedCompressor.name}})</span>
-            <span class="checkbox pull-right" *ngIf="!inAssessment">
-                <label>
+            <div class="input-group checkbox" *ngIf="!inAssessment">
+                <label class="p-2">
                     <input type="checkbox" id="showAllCompressors" (change)="drawChart()"
                         [(ngModel)]="showAllCompressors" />
                     Graph All Compressors
                 </label>
-            </span>
+                <label class="p-2">
+                    <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints"/>
+                    Graph Average Operating Points
+                </label>
+            </div>
         </div>
         <div #performanceProfileChart id="performanceProfileChart"></div>
     </div>
