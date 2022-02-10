@@ -39,6 +39,7 @@ export class PrintSettingsComponent implements OnInit {
       this.settings.printWasteWaterRollup &&
       this.settings.printDetailedResults &&
       this.settings.printReportDiagram &&
+      this.settings.printCompressedAirRollup &&
       this.settings.printAll
     );
   }
@@ -62,6 +63,7 @@ export class PrintSettingsComponent implements OnInit {
     this.settings.printWasteWaterRollup = this.selectAllOptions;
     this.settings.printDetailedResults = this.selectAllOptions;
     this.settings.printReportDiagram = this.selectAllOptions;
+    this.settings.printCompressedAirRollup = this.selectAllOptions;
     this.settings.printAll = this.selectAllOptions;
     this.savePrintSettings.emit(true);
   }
@@ -152,6 +154,12 @@ export class PrintSettingsComponent implements OnInit {
 
   togglePrintWasteWaterRollup() {
     this.settings.printWasteWaterRollup = !this.settings.printWasteWaterRollup;
+    this.checkSelectAll();
+    this.savePrintSettings.emit(true);
+  }
+
+  togglePrintCompressedAirRollup() {
+    this.settings.printCompressedAirRollup = !this.settings.printCompressedAirRollup;
     this.checkSelectAll();
     this.savePrintSettings.emit(true);
   }

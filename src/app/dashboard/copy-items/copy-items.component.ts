@@ -139,6 +139,8 @@ export class CopyItemsComponent implements OnInit {
             assessmentCopy.ssmt.modifications = new Array();
           } else if (assessmentCopy.type === 'CompressedAir') {
             assessmentCopy.compressedAirAssessment.modifications = new Array();
+          } else if (assessmentCopy.type === 'WasteWater') {
+            assessmentCopy.wasteWater.modifications = new Array();
           }
         }
 

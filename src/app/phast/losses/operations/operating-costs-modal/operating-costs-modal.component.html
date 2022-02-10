@@ -30,8 +30,8 @@
                     <div class="input-group">
                       <input name="{{index+'_cost'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.cost" id="cost"
                       (input)="calculateMixedFuelCosts()" onfocus="this.select();" (focus)="focusField('cost')">
-                      <span *ngIf="settings.energySourceType != 'Electicity' && settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">$/MMBtu</span>
-                      <span *ngIf="settings.energySourceType != 'Electicity' && settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">$/GJ</span>                 
+                      <span *ngIf="settings.energySourceType != 'Electricity' && settings.unitsOfMeasure != 'Metric'"class="input-group-addon units">$/MMBtu</span>
+                      <span *ngIf="settings.energySourceType != 'Electricity' && settings.unitsOfMeasure == 'Metric'"class="input-group-addon units">$/GJ</span>                 
                       <span *ngIf="settings.energySourceType == 'Electricity'" class="input-group-addon units">$/kWh</span>
                       <i class="fa fa-times btn-delete-field" (click)="deleteFuel(index)"></i>   
                     </div>   

@@ -2,12 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
-import { OperatingHours, OperatingCosts } from '../../../../shared/models/operations';
-import { PHAST } from '../../../../shared/models/phast/phast';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { PHAST, PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { Co2SavingsPhastService } from '../co2-savings-phast/co2-savings-phast.service';
 
 @Component({
@@ -47,7 +46,7 @@ export class OperationsFormComponent implements OnInit {
   showOperatingCostsModal: boolean = false;
 
   co2SavingsFormDisabled: boolean;
-  co2SavingsData: Co2SavingsData;
+  co2SavingsData: PhastCo2SavingsData;
 
   warnings: OperationsWarnings;
   idString: string;
@@ -204,7 +203,7 @@ export class OperationsFormComponent implements OnInit {
     }
   }
 
-  updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+  updateCo2SavingsData(co2SavingsData?: PhastCo2SavingsData) {
     this.phast.co2SavingsData = co2SavingsData;
     this.save();
   }
@@ -212,15 +211,12 @@ export class OperationsFormComponent implements OnInit {
   setCo2SavingsData() {
     if (this.phast.co2SavingsData) {
       this.co2SavingsData = this.phast.co2SavingsData;
-      if (this.settings.energySourceType == 'Fuel') {
-        this.co2SavingsData.energyType = 'fuel';
-      } else if (this.settings.energySourceType == 'Electricity') {
-        this.co2SavingsData.energyType = 'electricity';
-      } else if (this.settings.energySourceType == 'Steam') {
+      this.co2SavingsData.energyType = 'electricity';
+      if (this.settings.energySourceType == 'Fuel' || this.settings.energySourceType == 'Steam') {
         this.co2SavingsData.energyType = 'fuel';
       }
     } else {
-      let co2SavingsData: Co2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
+      let co2SavingsData: PhastCo2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
       this.co2SavingsData = co2SavingsData;
     }
   }

@@ -32,12 +32,12 @@
               <span>Coal Carbon</span>
             </td>
             <td>
-              <span *ngIf="phastResults.EAFCoalCarbonUsed">{{phastResults.EAFCoalCarbonUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-              <span *ngIf="!phastResults.EAFCoalCarbonUsed">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.coalCarbonUsed">{{phastResults.hourlyEAFResults.coalCarbonUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.coalCarbonUsed">&mdash; &mdash;</span>
             </td>
             <td>
-              <span *ngIf="phastResults.EAFCoalHeatingValue">{{phastResults.EAFCoalHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
-              <span *ngIf="!phastResults.EAFCoalHeatingValue">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.coalHeatingValue">{{phastResults.hourlyEAFResults.coalHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.coalHeatingValue">&mdash; &mdash;</span>
             </td>
             <td>{{phast.operatingCosts.coalCarbonCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
           </tr>
@@ -46,12 +46,12 @@
               <span>Electrode</span>
             </td>
             <td>
-              <span *ngIf="phastResults.EAFElectrodeUsed">{{phastResults.EAFElectrodeUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-              <span *ngIf="!phastResults.EAFElectrodeUsed">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.electrodeUsed">{{phastResults.hourlyEAFResults.electrodeUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.electrodeUsed">&mdash; &mdash;</span>
             </td>
             <td>
-              <span *ngIf="phastResults.EAFElectrodeHeatingValue">{{phastResults.EAFElectrodeHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
-              <span *ngIf="!phastResults.EAFElectrodeHeatingValue">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.electrodeHeatingValue">{{phastResults.hourlyEAFResults.electrodeHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.electrodeHeatingValue">&mdash; &mdash;</span>
             </td>
             <td>{{phast.operatingCosts.electrodeCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
           </tr>
@@ -60,8 +60,8 @@
               <span>Other Fuels</span>
             </td>
             <td>
-              <span *ngIf="phastResults.EAFOtherFuelUsed">{{phastResults.EAFOtherFuelUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-              <span *ngIf="!phastResults.EAFOtherFuelUsed">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.otherFuelUsed">{{phastResults.hourlyEAFResults.otherFuelUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.otherFuelUsed">&mdash; &mdash;</span>
             </td>
             <td>
               <span>&mdash; &mdash;</span>

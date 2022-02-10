@@ -942,7 +942,26 @@ export const MockCompressedAirAssessment: Assessment = {
             "notes": undefined,
             "utilityType": "Electricity", "electricityCost": 0.066, "demandCost": 5
         }, "systemInformation": {
-            "systemElevation": 0, "totalAirStorage": 1000, "isSequencerUsed": false, "targetPressure": 0, "variance": 0, "atmosphericPressure": 14.7, "atmosphericPressureKnown": true
+            "systemElevation": 0,
+            "totalAirStorage": 1000,
+            "isSequencerUsed": false, 
+            "targetPressure": 0, 
+            "variance": 0, 
+            "atmosphericPressure": 14.7, 
+            "atmosphericPressureKnown": true,
+            "co2SavingsData": {
+                "energyType": 'electricity',
+                "energySource": '',
+                "fuelType": '',
+                "totalEmissionOutputRate": 401.07,
+                "electricityUse": 0,
+                "eGridRegion": '',
+                "eGridSubregion": 'U.S. Average',
+                "totalEmissionOutput": 0,
+                "userEnteredBaselineEmissions": false,
+                "userEnteredModificationEmissions": false,
+                "zipcode": '00000',
+            }
         },
         "compressorInventoryItems": [{
             "itemId": "mtz2caylr", "name": "Compressor A", "description": null,

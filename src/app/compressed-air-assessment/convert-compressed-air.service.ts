@@ -210,7 +210,6 @@ export class ConvertCompressedAirService {
     inputObj.atmosphericPsi = this.convertUnitsService.value(inputObj.atmosphericPsi).from('kPaa').to('psia');
     inputObj.receiverVolume = this.convertUnitsService.value(inputObj.receiverVolume).from('m3').to('ft3');
 
-    // debugger
     if (controlType != 1 && (inputObj.pressureAtUnload && inputObj.dischargePsiMax)) {
       inputObj.modulatingPsi = (inputObj.pressureAtUnload - inputObj.dischargePsiMax) / (1 - (inputObj.unloadPointCapacity / 100))
     } else if (inputObj.noLoadDischargePressure && inputObj.dischargePsiFullLoad) {
