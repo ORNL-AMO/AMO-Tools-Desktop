@@ -40,7 +40,6 @@ export class ReportSummaryPieChartComponent implements OnInit {
       Plotly.purge(this.reportSummaryPieChart.nativeElement);
     }
     if (this.reportSummaryPieChart) {
-      // this.setHeight();
       this.drawPlot();
     }
   }
@@ -78,7 +77,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       });
       textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
     }
-    var data = [{
+    let data = [{
       values: valuesArr,
       labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),
       marker: {
@@ -87,8 +86,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
-      // textinfo: 'label+value',
+      automargin: true,
       hoverformat: '.2r',
       texttemplate: textTemplate,
       hoverinfo: 'label+percent',
@@ -96,17 +94,17 @@ export class ReportSummaryPieChartComponent implements OnInit {
       rotation: 90
     }];
 
-    var layout = {
+    let layout = {
       title: this.titleStr,
       font: {
-        size: 14,
+        size: 12,
       },
       showlegend: false,
       // margin: { autoexpand: true },
       // autosize: true
     };
 
-    var modebarBtns = {
+    let modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
       displayModeBar: true,
@@ -148,7 +146,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       });
       textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
     }
-    var data = [{
+    let data = [{
       values: valuesArr,
       labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),
       marker: {
@@ -164,14 +162,14 @@ export class ReportSummaryPieChartComponent implements OnInit {
       direction: "clockwise",
       rotation: 90
     }];
-    var layout = {
+    let layout = {
       font: {
         size: 12,
       },
       showlegend: false,
       margin: { t: 0, b: 0 }
     };
-    var modebarBtns = {
+    let modebarBtns = {
       displaylogo: false,
       displayModeBar: false
     };

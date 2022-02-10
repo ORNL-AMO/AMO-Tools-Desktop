@@ -42,13 +42,10 @@ export class ReportSummaryBarChartComponent implements OnInit {
   }
 
   createBarChart() {
-    var layout = {
+    let layout = {
       barmode: 'stack',
       showlegend: true,
-      legend: {
-        x: 1,
-        y: 0.5
-      },
+      legend: { "orientation": "h" },
       font: {
         size: 12,
       },
@@ -67,10 +64,9 @@ export class ReportSummaryBarChartComponent implements OnInit {
       xaxis: {
         automargin: true,
         fixedrange: true
-      },
-      // margin: { t: 15, b: 10 }
+      }
     };
-    var configOptions = {
+    let configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
       displayModeBar: true,
@@ -81,34 +77,29 @@ export class ReportSummaryBarChartComponent implements OnInit {
   }
 
   createPrintChart() {
-    var layout = {
+    let layout = {
       barmode: 'stack',
       showlegend: true,
-      legend: {
-        x: 1,
-        y: 0.5,
-        orientation: "h"
-      },
+      legend: { "orientation": "h" },
       font: {
         size: 14,
       },
       yaxis: {
         hoverformat: '.3r',
-        // automargin: true,
+        automargin: true,
         tickformat: this.tickFormat,
         fixedrange: true,
         text: this.yAxisLabel
       },
       xaxis: {
+        automargin: true,
         fixedrange: true
       },
 
-      width: 1000,
-      margin: { t: 20, l: 100, r: 30, b: 40 }
+      margin: { t: 0}
     };
 
-    var configOptions = {
-      // modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+    let configOptions = {
       displaylogo: false,
       displayModeBar: false,
     };
