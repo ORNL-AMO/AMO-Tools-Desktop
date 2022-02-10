@@ -194,9 +194,9 @@ export class Co2SavingsPhastService {
     };
 
     if (settings.energySourceType == 'Electricity') { 
-      let hourlyElectricityEmissionOutput = phastCopy.co2SavingsData.totalEmissionOutputRate * resultsCopy.electricalHeatDelivered;
-      hourlyElectricityEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);   
-      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+      phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered;
+      let hourlyElectricityEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);
+      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') { 
         if (settings.unitsOfMeasure == 'Imperial') {
           resultsCopy.hourlyEAFResults.electrodeUsed = this.convertUnitsService.value(resultsCopy.hourlyEAFResults.electrodeUsed).from('lb').to('kg');
         } else {
@@ -219,10 +219,13 @@ export class Co2SavingsPhastService {
         co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput + co2EmissionsOutput.coalCarbonEmissionsOutput + co2EmissionsOutput.electrodeEmissionsOutput + co2EmissionsOutput.otherFuelEmissionsOutput;
         
       } else {
-        let hourlyFuelEmissionOutput = resultsCopy.energyInputHeatDelivered * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
+        let fuelHeatInputTotal: number = 0;
+        phastCopy.losses.energyInputExhaustGasLoss.forEach(exGas => {
+          fuelHeatInputTotal += exGas.totalHeatInput;
+        });
+        let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput;
         
-
         co2EmissionsOutput.fuelEmissionOutput = hourlyFuelEmissionOutput * phastCopy.operatingHours.hoursPerYear;
         co2EmissionsOutput.electricityEmissionOutput = hourlyElectricityEmissionOutput * phastCopy.operatingHours.hoursPerYear;
         co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput;

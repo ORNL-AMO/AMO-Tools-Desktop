@@ -659,9 +659,20 @@
             <span *ngIf="!mod.annualElectricityCost">&mdash; &mdash;</span>
           </td>
         </tr>
-        <tr>
-          <td *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'"> Natural Gas </td>
-          <td *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'"> Fuel  </td>
+        <tr *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
+          <td> Natural Gas </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baselineExecutiveSummary.annualNaturalGasCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.annualNaturalGasCost">{{baselineExecutiveSummary.annualNaturalGasCost |
+              currency:'USD':'symbol':'1.0-0'}}</span>
+            <span *ngIf="!mod.annualNaturalGasCost">&mdash; &mdash;</span>
+          </td>
+        </tr>
+
+        <tr *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
+          <td> Fuel </td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
             {{baselineExecutiveSummary.annualTotalFuelCost | currency:'USD':'symbol':'1.0-0'}}</td>
           <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
@@ -674,9 +685,9 @@
 
         <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
           <tr>
-            <td> Carbon Coal </td>
+            <td> Coal Carbon </td>
             <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baselineExecutiveSummary.annualElectricityCost | currency:'USD':'symbol':'1.0-0'}}</td>
+              {{baselineExecutiveSummary.annualCarbonCoalCost | currency:'USD':'symbol':'1.0-0'}}</td>
             <td *ngFor="let mod of modExecutiveSummaries; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
               <span *ngIf="mod.annualCarbonCoalCost">{{mod.annualCarbonCoalCost |

@@ -50,7 +50,6 @@ export class ResultsDataComponent implements OnInit {
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
               private executiveSummaryService: ExecutiveSummaryService,
-              private convertUnitsService: ConvertUnitsService,
               private convertPhastService: ConvertPhastService,
               private phastReportRollupService: PhastReportRollupService,
               private phastValidService: PhastValidService) { }

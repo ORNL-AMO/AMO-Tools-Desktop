@@ -70,12 +70,15 @@ export class ExecutiveSummaryService {
 
     if (settings.energySourceType === 'Electricity') {
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        let naturalGasCost: number = phastResults.annualEAFResults.naturalGasUsed * phast.operatingCosts.fuelCost;
-        resultsSummary.annualCarbonCoalCost = phastResults.annualEAFResults.coalCarbonUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.coalCarbonCost);
-        resultsSummary.annualElectrodeCost = phastResults.annualEAFResults.electrodeUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.electrodeCost);
+        resultsSummary.annualNaturalGasCost = phastResults.annualEAFResults.naturalGasUsed * phast.operatingCosts.fuelCost;
+        // resultsSummary.annualCarbonCoalCost = phastResults.annualEAFResults.coalCarbonUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.coalCarbonCost);
+        // resultsSummary.annualElectrodeCost = phastResults.annualEAFResults.electrodeUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.electrodeCost);
+        // No longer need to convert cost
+        resultsSummary.annualCarbonCoalCost = phastResults.annualEAFResults.coalCarbonUsed * phast.operatingCosts.coalCarbonCost;
+        resultsSummary.annualElectrodeCost = phastResults.annualEAFResults.electrodeUsed * phast.operatingCosts.electrodeCost;
         resultsSummary.annualOtherFuelCost = phastResults.annualEAFResults.otherFuelUsed * phast.operatingCosts.otherFuelCost;
         resultsSummary.annualElectricityCost = phastResults.annualEAFResults.electricEnergyUsed * phast.operatingCosts.electricityCost;
-        resultsSummary.annualTotalFuelCost = naturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;
+        resultsSummary.annualTotalFuelCost = resultsSummary.annualNaturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;
         resultsSummary.annualCost = resultsSummary.annualTotalFuelCost + resultsSummary.annualElectricityCost;
       } else {
         let totalHeatInput: number = 0; 
