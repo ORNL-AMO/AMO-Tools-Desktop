@@ -159,6 +159,7 @@
           </td>
           </tr>
 
+      <ng-container *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
           <tr>
             <td>
               Energy Source
@@ -170,7 +171,7 @@
               {{mod.phast.co2SavingsData.energySource}}
             </td>
           </tr>
-          <tr>
+          <tr *ngIf="phast.co2SavingsData.energySource != 'Mixed Fuels'">
             <td>
               Fuel Type
             </td>
@@ -183,17 +184,140 @@
           </tr>
           <tr>
             <td>
-              Total Emission Output Rate
-              <span>(kg CO<sub>2</sub>/{{settings.energyResultUnit}})</span>
+              Total Fuel Emission Output Rate
+              (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+                CO<sub>2</sub>/MMBtu</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+                CO<sub>2</sub>/GJ</span>)
             </td>
             <td>
-              {{phast.co2SavingsData.totalEmissionOutputRate}}
+              {{phast.co2SavingsData.totalFuelEmissionOutputRate}}
             </td>
             <td *ngFor="let mod of phast.modifications">
-              {{mod.phast.co2SavingsData.totalEmissionOutputRate}}
+              {{mod.phast.co2SavingsData.totalFuelEmissionOutputRate}}
             </td>
           </tr>
-          </tbody>
+        </ng-container>
+
+
+    <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
+      <tr>
+        <td>
+          Natural Gas Emission Output Rate
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+            CO<sub>2</sub>/MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+            CO<sub>2</sub>/GJ</span>
+        </td>
+        <td>
+          {{phast.co2SavingsData.totalNaturalGasEmissionOutputRate}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.totalNaturalGasEmissionOutputRate}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+         Coal Carbon Fuel Type
+        </td>
+        <td>
+          {{phast.co2SavingsData.coalFuelType}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.coalFuelType}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Coal Carbon Emission Output Rate
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+            CO<sub>2</sub>/MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+            CO<sub>2</sub>/GJ</span>)
+        </td>
+        <td>
+          {{phast.co2SavingsData.totalCoalEmissionOutputRate}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.totalCoalEmissionOutputRate}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Other Fuel Energy Source
+        </td>
+        <td>
+          {{phast.co2SavingsData.eafOtherFuelSource}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.eafOtherFuelSource}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+         Other Fuel Type
+        </td>
+        <td>
+          <span *ngIf="phast.co2SavingsData.eafOtherFuelSource != 'Mixed Fuels' && phast.co2SavingsData.eafOtherFuelSource != 'None'">
+            {{phast.co2SavingsData.otherFuelType}}
+          </span>
+          <span *ngIf="phast.co2SavingsData.eafOtherFuelSource == 'Mixed Fuels' || phast.co2SavingsData.eafOtherFuelSource == 'None'">
+            &mdash;
+          </span>
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          <span *ngIf="mod && mod.phast.co2SavingsData.eafOtherFuelSource != 'Mixed Fuels' && mod.phast.co2SavingsData.eafOtherFuelSource != 'None'">
+            {{mod.phast.co2SavingsData.otherFuelType}}
+          </span>
+          <span *ngIf="mod && mod.phast.co2SavingsData.eafOtherFuelSource == 'Mixed Fuels' || mod.phast.co2SavingsData.eafOtherFuelSource == 'None'">
+            &mdash;
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Other Fuel Emission Output Rate
+          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+            CO<sub>2</sub>/MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+            CO<sub>2</sub>/GJ</span>)
+        </td>
+        <td>
+          {{phast.co2SavingsData.totalOtherEmissionOutputRate}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.totalOtherEmissionOutputRate}}
+        </td>
+      </tr>
+    </ng-container>
+          
+
+    <ng-container *ngIf="settings.energySourceType == 'Electricity'">
+      <tr>
+        <td class="bold">
+          Carbon Emissions From Electricity
+        </td>
+        <td>
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+        </td>
+        </tr>
+      <tr>
+        <td>
+          Total Emission Output Rate
+          <span>(kg CO<sub>2</sub>/MWh)</span>
+        </td>
+        <td>
+          {{phast.co2SavingsData.totalEmissionOutputRate}}
+        </td>
+        <td *ngFor="let mod of phast.modifications">
+          {{mod.phast.co2SavingsData.totalEmissionOutputRate}}
+        </td>
+      </tr>
+    </ng-container>
+      
+  
+        </tbody>
         </table>
       </div>
     </div>

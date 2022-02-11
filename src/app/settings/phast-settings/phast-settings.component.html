@@ -2,13 +2,13 @@
   <div class="form-group">
     <label>Select Energy Source Type</label>
     <div class="form-check">
-      <input id="fuel" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="startPolling()">
+      <input id="fuel" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="setOptions()">
       <label for="fuel">Fuel-fired</label>
       <br>
       <input id="electricity" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity" (change)="setOptions()">
       <label for="electricity">Electrotechnology</label>
       <br>
-      <input type="radio" id="steam" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="startPolling()">
+      <input type="radio" id="steam" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">
       <label for="steam">Steam-based</label>
     </div>
   </div>

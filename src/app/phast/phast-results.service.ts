@@ -261,12 +261,12 @@ export class PhastResultsService {
       totalFuelEnergyUsed: undefined,
       electrodeHeatingValue: EAFInputs.electrodeHeatingValue,
       coalHeatingValue: EAFInputs.coalHeatingValue,
+      // coalCarbonInjection is in lb/hr the coalHeatingValue is in btu/lb.  the lbs cancel and you have btu/hr
       coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
       electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
       otherFuelUsed: EAFInputs.otherFuels,
     };
-    
-    if (settings.unitsOfMeasure == 'Metric') {
+     if (settings.unitsOfMeasure == 'Metric') {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
       eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('kJ').to('GJ');
     } else {

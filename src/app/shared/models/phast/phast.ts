@@ -184,6 +184,7 @@ export interface ExecutiveSummary {
   annualEnergySavings?: number;
   annualCost?: number;
   annualCarbonCoalCost?: number,
+  annualNaturalGasCost?: number,
   annualElectrodeCost?: number,
   annualOtherFuelCost?: number,
   annualTotalFuelCost?: number,

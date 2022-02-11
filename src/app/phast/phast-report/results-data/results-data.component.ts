@@ -50,7 +50,6 @@ export class ResultsDataComponent implements OnInit {
   selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, 
               private executiveSummaryService: ExecutiveSummaryService,
-              private convertUnitsService: ConvertUnitsService,
               private convertPhastService: ConvertPhastService,
               private phastReportRollupService: PhastReportRollupService,
               private phastValidService: PhastValidService) { }
@@ -127,8 +126,9 @@ export class ResultsDataComponent implements OnInit {
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
         this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast, this.settings);
-        let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
-        this.modificationResults.push(tmpResults);
+        let modificationResults: PhastResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
+        modificationResults.co2EmissionsOutput.emissionsSavings = this.baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput - modificationResults.co2EmissionsOutput.hourlyTotalEmissionOutput;
+        this.modificationResults.push(modificationResults);
       }
     } else {
       this.baseLineResults = this.phastResultsService.initResults();

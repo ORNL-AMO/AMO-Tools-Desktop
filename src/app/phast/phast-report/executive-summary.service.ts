@@ -70,12 +70,12 @@ export class ExecutiveSummaryService {
 
     if (settings.energySourceType === 'Electricity') {
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        let naturalGasCost: number = phastResults.annualEAFResults.naturalGasUsed * phast.operatingCosts.fuelCost;
-        resultsSummary.annualCarbonCoalCost = phastResults.annualEAFResults.coalCarbonUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.coalCarbonCost);
-        resultsSummary.annualElectrodeCost = phastResults.annualEAFResults.electrodeUsed * this.convertEAFChemicalFuelCosts(phast.operatingCosts.electrodeCost);
+        resultsSummary.annualNaturalGasCost = phastResults.annualEAFResults.naturalGasUsed * phast.operatingCosts.fuelCost;
+        resultsSummary.annualCarbonCoalCost = phast.losses.energyInputEAF[0].coalCarbonInjection * phast.operatingCosts.coalCarbonCost;
+        resultsSummary.annualElectrodeCost = phast.losses.energyInputEAF[0].electrodeUse * phast.operatingCosts.electrodeCost;
         resultsSummary.annualOtherFuelCost = phastResults.annualEAFResults.otherFuelUsed * phast.operatingCosts.otherFuelCost;
         resultsSummary.annualElectricityCost = phastResults.annualEAFResults.electricEnergyUsed * phast.operatingCosts.electricityCost;
-        resultsSummary.annualTotalFuelCost = naturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;
+        resultsSummary.annualTotalFuelCost = resultsSummary.annualNaturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;
         resultsSummary.annualCost = resultsSummary.annualTotalFuelCost + resultsSummary.annualElectricityCost;
       } else {
         let totalHeatInput: number = 0; 
@@ -106,12 +106,6 @@ export class ExecutiveSummaryService {
     return resultsSummary;
   }
 
-  convertEAFChemicalFuelCosts(cost: number): number {
-    // convert btu/lb to mmbtu/lb (or kJ/kg to GJ/kg)
-    let converted: number = cost / (1/1000000);
-    return converted;
-  }
-  
 
   initSummary(): ExecutiveSummary {
     let tmpSummary: ExecutiveSummary = {
