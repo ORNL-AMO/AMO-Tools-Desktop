@@ -261,21 +261,18 @@ export class PhastResultsService {
       totalFuelEnergyUsed: undefined,
       electrodeHeatingValue: EAFInputs.electrodeHeatingValue,
       coalHeatingValue: EAFInputs.coalHeatingValue,
-      // coalCarbonInjection is in lb/hr the coalHeatingValue is in btu/lb.  the pounds cancel and you have btu/hr
-      // coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
-      // electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
-      coalCarbonUsed: EAFInputs.coalCarbonInjection,
-      electrodeUsed: EAFInputs.electrodeUse,
+      // coalCarbonInjection is in lb/hr the coalHeatingValue is in btu/lb.  the lbs cancel and you have btu/hr
+      coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
+      electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
       otherFuelUsed: EAFInputs.otherFuels,
     };
-    
-    // if (settings.unitsOfMeasure == 'Metric') {
-    //   eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
-    //   eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('kJ').to('GJ');
-    // } else {
-    //   eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('Btu').to('MMBtu');
-    //   eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('Btu').to('MMBtu');
-    // }
+     if (settings.unitsOfMeasure == 'Metric') {
+      eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
+      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('kJ').to('GJ');
+    } else {
+      eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('Btu').to('MMBtu');
+      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('Btu').to('MMBtu');
+    }
     
     eafResults.totalFuelEnergyUsed = eafResults.naturalGasUsed + eafResults.coalCarbonUsed + eafResults.electrodeUsed + eafResults.otherFuelUsed;
     phastResults.hourlyEAFResults = eafResults;

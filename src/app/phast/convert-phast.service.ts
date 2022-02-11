@@ -547,13 +547,9 @@ export class ConvertPhastService {
   convertCO2SavingsData(co2SavingsData: PhastCo2SavingsData, oldSettings: Settings, newSettings: Settings): PhastCo2SavingsData {
     let oldFuelUnit: string = 'MMBtu'; 
     let newFuelUnit: string = 'GJ';
-    let oldMassUnit: string = 'lb';
-    let newMassUnit: string = 'kg';
     if (oldSettings.unitsOfMeasure !== 'Imperial') {
       oldFuelUnit = 'GJ';
       newFuelUnit = 'MMBtu';
-      oldMassUnit = 'kg';
-      newMassUnit = 'lb';
     } 
 
     co2SavingsData.totalFuelEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalFuelEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
@@ -564,7 +560,7 @@ export class ConvertPhastService {
       co2SavingsData.totalEmissionOutputRate = this.roundVal(co2SavingsData.totalEmissionOutputRate, 2);
 
       if (oldSettings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        co2SavingsData.totalCoalEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalCoalEmissionOutputRate).from(oldMassUnit).to(newMassUnit);
+        co2SavingsData.totalCoalEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalCoalEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
         co2SavingsData.totalCoalEmissionOutputRate = this.roundVal(co2SavingsData.totalCoalEmissionOutputRate, 2);
 
         co2SavingsData.totalNaturalGasEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalNaturalGasEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);

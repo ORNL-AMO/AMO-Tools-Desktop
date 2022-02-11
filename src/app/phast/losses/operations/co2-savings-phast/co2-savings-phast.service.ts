@@ -197,18 +197,19 @@ export class Co2SavingsPhastService {
       phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered;
       let hourlyElectricityEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') { 
-        if (settings.unitsOfMeasure == 'Imperial') {
-          resultsCopy.hourlyEAFResults.electrodeUsed = this.convertUnitsService.value(resultsCopy.hourlyEAFResults.electrodeUsed).from('lb').to('kg');
-        } else {
+        if (settings.unitsOfMeasure != 'Imperial') {
           co2EmissionsOutput.fuelEmissionOutput = this.convertUnitsService.value(co2EmissionsOutput.fuelEmissionOutput).from('GJ').to('MMBtu');
           co2EmissionsOutput.otherFuelEmissionsOutput = this.convertUnitsService.value(co2EmissionsOutput.otherFuelEmissionsOutput).from('GJ').to('MMBtu');
         }
 
-        hourlyElectricityEmissionOutput = phastCopy.co2SavingsData.totalEmissionOutputRate * resultsCopy.hourlyEAFResults.electricEnergyUsed;
+        // 1t / 1000kW * 1Mw/1000kW
+        hourlyElectricityEmissionOutput = phastCopy.co2SavingsData.totalEmissionOutputRate * 1/1000 * resultsCopy.hourlyEAFResults.electricEnergyUsed * 1/1000;
+        // 1t / 1000kW
+        let hourlyFuelEmissionOutput = resultsCopy.hourlyEAFResults.naturalGasUsed * phastCopy.co2SavingsData.totalNaturalGasEmissionOutputRate * 1/1000;
         let hourlyElectrodeEmissionsOutput = resultsCopy.hourlyEAFResults.electrodeUsed * 44/12;
-        let hourlyFuelEmissionOutput = resultsCopy.hourlyEAFResults.naturalGasUsed * phastCopy.co2SavingsData.totalNaturalGasEmissionOutputRate;
         let hourlyCoalCarbonEmissionsOutput = resultsCopy.hourlyEAFResults.coalCarbonUsed * phastCopy.co2SavingsData.totalCoalEmissionOutputRate;
-        let hourlyOtherFuelEmissionsOutput = resultsCopy.hourlyEAFResults.otherFuelUsed * phastCopy.co2SavingsData.totalOtherEmissionOutputRate;
+        // 1t / 1000kW
+        let hourlyOtherFuelEmissionsOutput = resultsCopy.hourlyEAFResults.otherFuelUsed * phastCopy.co2SavingsData.totalOtherEmissionOutputRate * 1/1000;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput + hourlyCoalCarbonEmissionsOutput + hourlyElectrodeEmissionsOutput + hourlyOtherFuelEmissionsOutput;
         
         co2EmissionsOutput.electricityEmissionOutput = hourlyElectricityEmissionOutput * phastCopy.operatingHours.hoursPerYear;
@@ -220,9 +221,11 @@ export class Co2SavingsPhastService {
         
       } else {
         let fuelHeatInputTotal: number = 0;
-        phastCopy.losses.energyInputExhaustGasLoss.forEach(exGas => {
-          fuelHeatInputTotal += exGas.totalHeatInput;
-        });
+        if (phastCopy.losses && phastCopy.losses.energyInputExhaustGasLoss) {
+          phastCopy.losses.energyInputExhaustGasLoss.forEach(exGas => {
+            fuelHeatInputTotal += exGas.totalHeatInput;
+          });
+        }
         let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput;
         
@@ -233,7 +236,7 @@ export class Co2SavingsPhastService {
       
     } else {
       phastCopy.co2SavingsData.electricityUse = results.grossHeatInput;
-      co2EmissionsOutput.hourlyTotalEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);   
+      co2EmissionsOutput.hourlyTotalEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings, true);   
       co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput * phastCopy.operatingHours.hoursPerYear;   
     }
 

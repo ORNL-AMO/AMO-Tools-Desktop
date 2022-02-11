@@ -25,7 +25,7 @@
       
       <div class="form-group">
         <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate
-          <a class="form-text small click-link" (click)="showMixedCO2EmissionsModal()">
+          <a class="form-text small click-link" *ngIf="form.controls.energySource.value == 'Mixed Fuels'" (click)="showMixedCO2EmissionsModal()">
             Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
           </label>
           <div class="input-group">
@@ -71,9 +71,9 @@
           formControlName="totalCoalEmissionOutputRate" type="number"
           (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
-          CO<sub>2</sub>/lb</span>
+          CO<sub>2</sub>/MMBtu</span>
         <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
-          CO<sub>2</sub>/kg</span>
+          CO<sub>2</sub>/GJ</span>
       </div>
     </div>
 
