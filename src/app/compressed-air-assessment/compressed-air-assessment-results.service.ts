@@ -1071,58 +1071,46 @@ export class CompressedAirAssessmentResultsService {
   }
 
   getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
-    let avgPower: number = 0;
-    let counter: number = 0;
+    let powerData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
       if(data.power != 0){
-        avgPower += data.power;
-        counter++;
+        powerData.push(data.power);        
       }
     });
-    avgPower = avgPower / counter;
-
+    let avgPower: number = _.mean(powerData);    
     return avgPower;
   }
 
   getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
-    let avgAirflow: number = 0;
-    let counter: number = 0;
+    let airflowData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
       if(data.airflow != 0){
-        avgAirflow += data.airflow;
-        counter++;
+        airflowData.push(data.airflow);        
       }
     });
-    avgAirflow = avgAirflow / counter;
-
+    let avgAirflow: number = _.mean(airflowData);
     return avgAirflow;
   }
 
   getAvgPercentPower(profileSummaryData: Array<ProfileSummaryData>): number {
-    let avgPercentPower: number = 0;
-    let counter: number = 0;
+    let percentPowerData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
       if(data.percentPower != 0){
-        avgPercentPower += data.percentPower;
-        counter++;
+        percentPowerData.push(data.percentPower);        
       }
     });
-    avgPercentPower = avgPercentPower / counter;
-
+    let avgPercentPower: number = _.mean(percentPowerData);
     return avgPercentPower;
   }
 
   getAvgPercentCapacity(profileSummaryData: Array<ProfileSummaryData>): number {
-    let avgPercentCapacity: number = 0;
-    let counter: number = 0;
+    let percentCapacityData: Array<number> = new Array<number>();
     profileSummaryData.forEach(data => {
       if(data.percentCapacity != 0){
-        avgPercentCapacity += data.percentCapacity;
-        counter++;
+        percentCapacityData.push(data.percentCapacity);        
       }
     });
-    avgPercentCapacity = avgPercentCapacity / counter;
-
+    let avgPercentCapacity: number = _.mean(percentCapacityData);
     return avgPercentCapacity;
   }
 

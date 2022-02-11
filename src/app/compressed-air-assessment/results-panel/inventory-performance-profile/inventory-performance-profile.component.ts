@@ -216,11 +216,14 @@ export class InventoryPerformanceProfileComponent implements OnInit {
             currentColorIndex++;
           }
         }
-        let unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
-        if (unloadingControlTypes.includes(dataItem.controlType)) {
+        if (this.unloadingControlTypes.includes(dataItem.controlType)) {
           let unloadingTraces: Array<TraceData> = [];
           unloadingTraces = this.getUnloadingTraces(dataItem, currentTraceColor);
-          traceData = traceData.length > 0 ? traceData.concat(unloadingTraces) : unloadingTraces;
+          if(traceData.length > 0){
+            traceData = traceData.concat(unloadingTraces);
+          } else {
+            traceData = unloadingTraces;
+          }
         } else {
           let trace: TraceData = {
             x: dataItem.data.map(cData => {
@@ -251,11 +254,14 @@ export class InventoryPerformanceProfileComponent implements OnInit {
               currentColorIndex++;
             }
           }
-          let unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
-          if (unloadingControlTypes.includes(dataItem.controlType)) {
+          if (this.unloadingControlTypes.includes(dataItem.controlType)) {
             let unloadingTraces: Array<TraceData> = [];
             unloadingTraces = this.getUnloadingTraces(dataItem, currentTraceColor);
-            traceData = traceData.length > 0 ? traceData.concat(unloadingTraces) : unloadingTraces;
+            if(traceData.length > 0){
+              traceData = traceData.concat(unloadingTraces);
+            } else {
+              traceData = unloadingTraces;
+            }
           } else {
             let trace: TraceData = {
               x: dataItem.data.map(cData => {
@@ -501,16 +507,14 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   getProfileSummaryData(compressorSummary: Array<ProfileSummary>, dayTypeId: string): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
     compressorSummary.forEach(compressor => {
-      if (dayTypeId === compressor.dayTypeId) {        
-        if(compressor.avgPercentCapacity){
-          let results: CompressorCalcResult = {
-            powerCalculated: compressor.avgPower,
-            capacityCalculated: compressor.avgAirflow,
-            percentagePower: compressor.avgPrecentPower,
-            percentageCapacity: compressor.avgPercentCapacity
-          }
-          compressorData.push(results);  
+      if (dayTypeId === compressor.dayTypeId && compressor.avgPercentCapacity) {
+        let results: CompressorCalcResult = {
+          powerCalculated: compressor.avgPower,
+          capacityCalculated: compressor.avgAirflow,
+          percentagePower: compressor.avgPrecentPower,
+          percentageCapacity: compressor.avgPercentCapacity
         }
+        compressorData.push(results);
       }
     });
     return compressorData;
