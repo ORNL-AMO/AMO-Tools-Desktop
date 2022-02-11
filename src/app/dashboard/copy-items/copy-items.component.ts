@@ -70,13 +70,13 @@ export class CopyItemsComponent implements OnInit {
     if (this.folderSelected) {
       return this.formBuilder.group({
         'directoryId': [this.directory.parentDirectoryId, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     } else {
       return this.formBuilder.group({
         'directoryId': [this.directory.id, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     }

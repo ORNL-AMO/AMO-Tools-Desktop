@@ -97,7 +97,7 @@ export class AssessmentItemComponent implements OnInit {
     this.copyForm = this.formBuilder.group({
       'name': [this.assessment.name + ' (copy)', Validators.required],
       'directoryId': [this.assessment.directoryId, Validators.required],
-      'copyModifications': [false],
+      'copyModifications': [true],
       'copyCalculators': [false]
     });
     this.copyModal.show();
