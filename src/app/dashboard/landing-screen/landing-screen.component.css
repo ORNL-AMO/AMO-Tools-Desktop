@@ -1,124 +1,38 @@
-.fa {
-  text-shadow: -4px 2px 5px rgba(0,0,0,0.28);
-}
-.fa-calculator{
-  /*text-shadow: -4px 2px 2px rgba(0,0,0,0.28);*/
-  color: gray;
-}
-
-.tutorial-video{
-	max-width: 350px;
-}
-
-.fa-folder-o{
-	color: #343434;
-}
-
-.arrow-center {
-  padding-left: 10%;
-}
-
-.text-adj2 {
-  line-height: 28px;
-  /*margin-top: -7px;*/
-}
-
-.no-margin-bottom{
-	margin-bottom: 0;
-}
-
-.arrow-row{
-	margin-top: -35px;
-	margin-bottom: -20px;
-}
-
-.arrow-img{
-	width: 8rem;
-}
-
-.furnace {
-  white-space: nowrap;
-}
-
-.span-label {
-  font-size: 15px;
-  margin-left: 25px;
-}
-
-
-.card-header{
-	padding: .5rem;
-	background-color: white;
-}
-
-.card-header p, .jumbotron p{
-	margin-bottom: 0px;
-}
-
-.jumbotron{
-	padding-bottom: 0px;
-	padding-top: 0px;
-	margin-bottom: 0px;
-	background-color: rgba(0,0,0,0);
-}
-
-.card-body{
-	padding: .5rem;
-}
-
-.card{
-	-webkit-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-	-moz-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-	box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
-}
-
 .text-help{
 	color: gray;
 }
 
-
-.former-name{
-	font-style: italic;
-	font-size: smaller;
-	padding-left: 15px;
+.psat-image{   
+	width: 94px;
+    height: 82px;
 }
 
-
-img.fan-image{
-	width: 50px !important;
-}
-
-.psat-image{
-	width: 90px;
-	height:81px;
-}
-.ssmt-icon{
-	width: 90px;
-	padding-top: 4px;
-	padding-bottom: 4px;
-}
+.ssmt-icon {
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
+	border-radius: 15px;
+	border: 0.1px solid rgba(123, 120, 120, 0.25);
+	box-shadow: #7b7878 2px 2px 5px 1px;
+	width: 80px;
+	height: 70px;
+  }
 
 .ca-image{
 	width: 70px;
 	padding: 2px;
 }
 
-.steam-image{
-	width: 75px;
-}
 .phast-image{
 	width: 93px;
 	height:83px;
 }
 .steam-image{
-	width:90px;
-	height:81px;
+	width:55px;
+	height:60px;
 }
 
 .waste-water-image {
-	width:90px;
-	height:81px;
-	padding: 8px;
+	width:60px;
+	height:60px;
 }
 
 
@@ -128,90 +42,76 @@ img.fan-image{
 	opacity: .75;
 }
 
-.landing-menu{
-	z-index: +1;
-}
-
-a.click-link.p-0.steam {
-	margin-left: 12px;
-}
-
-a.click-link.p-0.treasure-hunt {
-	margin-left: 9px;
-}
-
-.p-2.phast {
-	padding-top: 1rem !important;
-}
-
-.p-2.align-items-center.steam {
-	width: 90px;
-	height: 81px;
+.steam {
+	width: 80px;
+	height: 70px;
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
 	border-radius: 15px;
-	margin-left: 10px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
+	padding-top: 4px;
 }
-.p-2.align-items-center.compressed-air {
+.compressed-air {
 	width: 80px;
 	height: 70px;
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #c97cf5);
 	border-radius: 15px;
-	margin-left: 10px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
-	margin-top: 10px;
+	justify-content: center;
 }
 
-img.steam-image {
-	width: 65px;
-	height: 90px;
-	padding-bottom: 25px;
-}
-.p-2.align-items-center.fan {
-	padding-bottom: 30px !important;
+.fan-icon {
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+	border-radius: 15px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+	width: 80px;
+	height: 70px;
+	padding-top: 6px;
+  }
+
+.compressed-air-icon{
+    padding-top: 12px;
+    padding-left: 5px;
 }
 
-a.click-link.p-0.fan {
-	margin-left: 4px;
-}
-a.click-link.p-0.compressed-air {
-	margin-left: 18px;
-}
 
-a.click-link.p-0.phast {
-	padding-top: 1rem !important;
-}
-
-span.former-name.steam {
-	margin-left: 5px;
-}
-
-span.former-name.treasure-hunt {
-	margin-left: 5px;
-}
-span.former-name.ca {
-	margin-left: 20px;
-}
-
-.p-2.align-items-center.treasure-hunt {
-	width: 90px;
-	height: 81px;
+.treasure-hunt {
+	width: 80px;
+	height: 70px;
 	background: linear-gradient(rgba(228, 219, 219, 0.34), #2E4053);
 	border-radius: 15px;
-	margin-left: 7px;
 	box-shadow: #7b7878 2px 2px 5px 1px;
+	padding-top: 4px;
 }
 
+
+.folder-block {
+	width: 80px;
+	height: 70px;
+	background: linear-gradient(lightgreen, #156739);
+	border-radius: 15px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+	padding-top: 12px;
+}
+
+.fa.fa-folder, .fa.fa-calculator{
+	color: white;
+	font-size: 44px;
+}
+
+.fa.fa-calculator{
+	padding-left: 7px;
+}
+
+
 img.treasure-hunt-image {
-    width: 75px;
-    height: 85px;
-    padding-bottom: 25px;
+    width: 60px;
+    height: 60px;
 }
 
 
 .motor-inventory-icon{
-	width: 78px;
-    height: 60px;
+    width: 60px;
+    height: 50px;
 }
 
 
@@ -220,6 +120,10 @@ img.treasure-hunt-image {
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 80px;
+	height: 70px;
+    padding-top: 10px;
+    padding-left: 3px;
 }
 
 .data-explorer-icon{
@@ -233,4 +137,45 @@ img.treasure-hunt-image {
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 80px;
+	height: 70px;
+}
+
+
+.waste-water{
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
+	border-radius: 15px;
+	box-shadow: #7b7878 2px 2px 5px 1px;  
+	width: 80px;
+	height: 70px;
+	padding-top: 6px;
+}
+
+.assessment-block{
+	width: 160px;
+    height: 160px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: .25rem;
+    margin: 10px;
+    padding: 10px;
+	box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+	background-color: white;
+}
+
+.icon-block{
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	height: 85px;
+}
+
+.fan-image{
+	height: 60px;
+}
+
+.top-block{
+    width: 250px;
+    height: 140px;
 }
