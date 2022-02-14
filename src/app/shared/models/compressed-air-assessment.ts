@@ -243,7 +243,11 @@ export interface ProfileSummary {
     logToolFieldId?: string,
     logToolFieldIdPowerFactor?: string,
     logToolFieldIdAmps?: string,
-    logToolFieldIdVolts?: string
+    logToolFieldIdVolts?: string,
+    avgPower?: number,
+    avgAirflow?: number,
+    avgPrecentPower?: number,
+    avgPercentCapacity?: number
 }
 
 export interface ProfileSummaryData {
