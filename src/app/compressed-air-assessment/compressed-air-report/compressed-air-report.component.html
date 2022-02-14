@@ -62,6 +62,9 @@
             <li (click)="setTab('paybackPeriod')" [ngClass]="{'active': currentTab == 'paybackPeriod'}">
                 <a>Payback Details</a>
             </li>
+            <li (click)="setTab('performanceProfile')" [ngClass]="{'active': currentTab == 'performanceProfile'}">
+                <a>Performance Profiles</a>
+            </li>
             <li (click)="setTab('systemProfiles')" [ngClass]="{'active': currentTab == 'systemProfiles'}">
                 <a>System Profiles</a>
             </li>
@@ -116,6 +119,12 @@
             *ngIf="(currentTab == 'paybackPeriod' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
+        </div>
+        <div class="results scroll-item print-height page-break-before" 
+            *ngIf="(currentTab == 'performanceProfile' && !showPrintView) || (showPrintView && printOptions.printPerformanceProfiles)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-performance-profile-graph [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
+            </app-performance-profile-graph>
         </div>
     </div>
     <!-- End .report-data -->
