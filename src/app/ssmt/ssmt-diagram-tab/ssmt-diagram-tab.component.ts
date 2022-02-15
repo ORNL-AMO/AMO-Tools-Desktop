@@ -36,6 +36,8 @@ export class SsmtDiagramTabComponent implements OnInit {
   displayCalculators: boolean = false;
   scaleValue: number = 100;
 
+  sidebarCollapsed: boolean;
+
   setDiagramPixelWidth: number = 900;
   baselineResults: SSMTOutput;
   constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
@@ -49,6 +51,10 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   ngAfterViewInit() {
     this.setScaleValue();
+  }
+
+  collapseSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
   setScaleValue() {
