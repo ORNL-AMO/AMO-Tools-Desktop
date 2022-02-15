@@ -42,7 +42,6 @@ import { CompressorOptionsTableComponent } from './inventory/generic-compressor-
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
-import { InventoryPerformanceProfileComponent } from '../shared/inventory-performance-profile/inventory-performance-profile.component';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
 import { BlowoffCalculationsService } from './inventory/performance-points/calculations/blowoff-calculations.service';
 import { FullLoadCalculationsService } from './inventory/performance-points/calculations/full-load-calculations.service';
@@ -131,7 +130,6 @@ import { CompressedAirReportModule } from './compressed-air-report/compressed-ai
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
-import { CompressedAirReportComponent } from './compressed-air-report/compressed-air-report.component';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
 
 @NgModule({
