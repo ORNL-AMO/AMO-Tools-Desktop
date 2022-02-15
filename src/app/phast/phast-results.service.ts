@@ -12,6 +12,7 @@ import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+import { EnInputResultsObj } from './losses/energy-input/energy-input.component';
 
 
 @Injectable()
@@ -252,7 +253,6 @@ export class PhastResultsService {
 
     return results;
   }
-  
   setEAFResults(phast: PHAST, phastResults: PhastResults, settings: Settings): PhastResults {
     let EAFInputs: EnergyInputEAF = JSON.parse(JSON.stringify(phast.losses.energyInputEAF[0]));
     let eafResults: EAFResults = {
@@ -389,4 +389,16 @@ export class PhastResultsService {
       return undefined;
     }
   }
+
+  checkEnergyInputWarnings(energyInputHeatDelivered: number): string {
+    if (energyInputHeatDelivered < 0) {
+      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
+    } else {
+      return null;
+    }
+  }
+}
+
+export interface EnergyInputWarnings {
+  energyInputHeatDelivered: string
 }
