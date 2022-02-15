@@ -35,7 +35,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
     this.settings = this.reportRollupService.checkSettings(this.settings);
     this.setUnits();
     let phastResults: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
-    let fuelResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType == 'Fuel' });
+    let fuelResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType != 'Steam'  });
     this.setFuelSummary(fuelResults);
     let electricityResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType == 'Electricity' });
     this.setElectricitySummary(electricityResults);
@@ -46,8 +46,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   setFuelSummary(fuelResults: Array<PhastResultsData>) {
     this.fuelSummary = new Array();
     fuelResults.forEach(result => {
-      result.baselineResultData.grossHeatInput = this.convertUnitsService.value(result.baselineResultData.grossHeatInput).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-      let fuelItem: PhastRollupEnergySummaryItem = this.getFuel(result.assessment.phast, result.settings, result.baselineResultData);
+      let fuelItem: PhastRollupEnergySummaryItem = this.getFuel(result);
       //combine values for same fuel type
       let findFuelItemExists: PhastRollupEnergySummaryItem = _.find(this.fuelSummary, (val) => { return val.name === fuelItem.name; });
       if (findFuelItemExists === undefined) {
@@ -62,8 +61,11 @@ export class PhastRollupEnergyTableComponent implements OnInit {
     let electricityTotalEnergy: number = 0;
     let electricityCost: number = 0;
     electricityResults.forEach(result => {
-      result.baselineResultData.grossHeatInput = this.convertUnitsService.value(result.baselineResultData.grossHeatInput).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-      electricityTotalEnergy += result.baselineResultData.grossHeatInput;
+      if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+        electricityTotalEnergy += this.convertUnitsService.value(result.baselineResultData.hourlyEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      } else {
+        electricityTotalEnergy += this.convertUnitsService.value(result.baselineResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      }
       electricityCost += result.assessment.phast.operatingCosts.electricityCost;
     })
     this.electricitySummary = {
@@ -117,29 +119,50 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   }
 
 
-  getFuel(phast: PHAST, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
-    let tmpItem: PhastRollupEnergySummaryItem = {
+  getFuel(resultsData: PhastResultsData): PhastRollupEnergySummaryItem {
+    let rollupEnergyItem: PhastRollupEnergySummaryItem = {
       name: '',
       energyUsed: 0,
       hhv: 0,
       cost: 0
     };
-    if (phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-      let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-      if (gas) {
-        tmpItem.name = gas.substance;
-        tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+    
+    if (resultsData.settings.energySourceType === 'Electricity') {
+      let totalFuelEnergyUsed = resultsData.baselineResultData.energyInputHeatDelivered + resultsData.baselineResultData.totalExhaustGas;
+      rollupEnergyItem.energyUsed = this.convertUnitsService.value(totalFuelEnergyUsed).from(resultsData.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      rollupEnergyItem.name = 'Fuel';
+      rollupEnergyItem.hhv = undefined;
+
+      if (resultsData.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+        rollupEnergyItem.energyUsed = this.convertUnitsService.value(resultsData.baselineResultData.hourlyEAFResults.totalFuelEnergyUsed).from(resultsData.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+        rollupEnergyItem.name = 'Fuel';
+        let electrodeHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.electrodeHeatingValue, resultsData.settings);
+        let coalHHVValue = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.coalHeatingValue, resultsData.settings);
+        let naturalGasHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.naturalGasHeatingValue, resultsData.settings); 
+        rollupEnergyItem.hhv = electrodeHHV + coalHHVValue + naturalGasHHV;
       }
-    } else if (phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-      if (gas) {
-        tmpItem.name = gas.substance;
-        tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+    } else {
+      resultsData.baselineResultData.grossHeatInput = this.convertUnitsService.value(resultsData.baselineResultData.grossHeatInput).from(resultsData.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      rollupEnergyItem.energyUsed = resultsData.baselineResultData.grossHeatInput;
+
+      if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
+        let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        if (gas) {
+          rollupEnergyItem.name = gas.substance;
+          rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
+        }
+      } else if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
+        let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        if (gas) {
+          rollupEnergyItem.name = gas.substance;
+          rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
+        }
       }
     }
-    tmpItem.energyUsed = tmpResults.grossHeatInput;
-    tmpItem.cost = phast.operatingCosts.fuelCost;
-    return tmpItem;
+    
+    rollupEnergyItem.cost = resultsData.assessment.phast.operatingCosts.fuelCost;
+
+    return rollupEnergyItem;
   }
 
   convertHHV(val: number, settings: Settings): number {

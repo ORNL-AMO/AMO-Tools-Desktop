@@ -144,13 +144,37 @@ export class PhastReportRollupService {
       sumCost += result.modificationResults.annualCost;
       let convertedEnergySavings = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
       sumEnergySavings += convertedEnergySavings;
-      let convertedSumEnergy = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
-      sumEnergy += convertedSumEnergy
+      
       if (result.settings.energySourceType == 'Steam' || result.settings.energySourceType == 'Fuel') {
-        fuelEnergy += (convertedSumEnergy + convertedEnergySavings);
-      } else {
-        electricityEnergy += (convertedSumEnergy + convertedEnergySavings);
+        let convertedSumEnergy = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+        sumEnergy += convertedSumEnergy;
+        fuelEnergy += convertedSumEnergy + convertedEnergySavings;
+
+      } else if (result.settings.energySourceType == 'Electricity') {
+        if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+          let convertedElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          let convertedChemicalFuelEnergy: number;
+          if (settings.unitsOfMeasure === 'Metric') {
+            convertedChemicalFuelEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed).from('GJ').to(settings.energyResultUnit);
+          } else {
+            convertedChemicalFuelEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed).from('MMBtu').to(settings.energyResultUnit);
+          }
+          
+          electricityEnergy += convertedElectricalEnergy;
+          fuelEnergy += convertedChemicalFuelEnergy;
+          sumEnergy += convertedChemicalFuelEnergy + convertedElectricalEnergy + convertedEnergySavings;
+
+        } else {
+          let convertedElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          let fuelEnergy = resultCopy.modificationResultData.energyInputHeatDelivered + resultCopy.modificationResultData.totalExhaustGas;
+          let convertedFuelEnergy = this.convertUnitsService.value(fuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          
+          electricityEnergy += convertedElectricalEnergy;
+          fuelEnergy += convertedFuelEnergy;
+          sumEnergy += convertedFuelEnergy + convertedElectricalEnergy + convertedEnergySavings;
+        }
       }
+
       if (result.baselineResults.co2EmissionsOutput) {
         diffCO2 = result.baselineResults.co2EmissionsOutput.totalEmissionOutput - result.modificationResults.co2EmissionsOutput.totalEmissionOutput;
         sumCo2Savings += diffCO2;
@@ -169,6 +193,15 @@ export class PhastReportRollupService {
       carbonEmissions: sumCo2Emissions,
       carbonSavings: sumCo2Savings
     }
+  }
+
+  convertResult(val: number, settings: Settings): number {
+    if (settings.unitsOfMeasure === 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+    }
+    return val;
   }
 
 }
