@@ -19,5 +19,6 @@ export interface PrintOptions {
     printDetailedResults: boolean;
     printReportDiagram: boolean;
     printSystemProfiles: boolean;
+    printPerformanceProfiles: boolean;
     selectAll: boolean;
   }
