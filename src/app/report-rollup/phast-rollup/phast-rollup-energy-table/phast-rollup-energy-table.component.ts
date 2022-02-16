@@ -134,7 +134,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       rollupEnergyItem.hhv = undefined;
 
       if (resultsData.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        rollupEnergyItem.energyUsed = this.convertUnitsService.value(resultsData.baselineResultData.hourlyEAFResults.totalFuelEnergyUsed).from(resultsData.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+        rollupEnergyItem.energyUsed = this.phastReportRollupService.convertEAFFuelEnergy(resultsData.baselineResultData.hourlyEAFResults.totalFuelEnergyUsed, resultsData.settings, this.settings.phastRollupUnit);
         rollupEnergyItem.name = 'Fuel';
         let electrodeHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.electrodeHeatingValue, resultsData.settings);
         let coalHHVValue = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.coalHeatingValue, resultsData.settings);

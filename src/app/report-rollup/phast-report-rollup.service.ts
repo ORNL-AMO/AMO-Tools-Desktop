@@ -151,28 +151,31 @@ export class PhastReportRollupService {
         fuelEnergy += convertedSumEnergy + convertedEnergySavings;
 
       } else if (result.settings.energySourceType == 'Electricity') {
-        if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
-          let convertedElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
-          let convertedChemicalFuelEnergy: number;
-          if (settings.unitsOfMeasure === 'Metric') {
-            convertedChemicalFuelEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed).from('GJ').to(settings.energyResultUnit);
-          } else {
-            convertedChemicalFuelEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed).from('MMBtu').to(settings.energyResultUnit);
-          }
-          
-          electricityEnergy += convertedElectricalEnergy;
-          fuelEnergy += convertedChemicalFuelEnergy;
-          sumEnergy += convertedChemicalFuelEnergy + convertedElectricalEnergy + convertedEnergySavings;
+        let modificationElectricalEnergy: number;
+        let baselineElectricalEnergy: number;
+        let modificationFuelEnergy: number;
+        let baselineFuelEnergy: number;
 
-        } else {
-          let convertedElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
-          let fuelEnergy = resultCopy.modificationResultData.energyInputHeatDelivered + resultCopy.modificationResultData.totalExhaustGas;
-          let convertedFuelEnergy = this.convertUnitsService.value(fuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+        if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+          modificationElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineElectricalEnergy = this.convertUnitsService.value(resultCopy.baselineResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
           
-          electricityEnergy += convertedElectricalEnergy;
-          fuelEnergy += convertedFuelEnergy;
-          sumEnergy += convertedFuelEnergy + convertedElectricalEnergy + convertedEnergySavings;
+          modificationFuelEnergy = this.convertEAFFuelEnergy(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
+          baselineFuelEnergy = this.convertEAFFuelEnergy(resultCopy.baselineResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
+        } else {
+          modificationElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineElectricalEnergy = this.convertUnitsService.value(resultCopy.baselineResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          
+          modificationFuelEnergy = resultCopy.modificationResultData.energyInputHeatDelivered + resultCopy.modificationResultData.totalExhaustGas;
+          baselineFuelEnergy = resultCopy.baselineResultData.energyInputHeatDelivered + resultCopy.baselineResultData.totalExhaustGas;
+          modificationFuelEnergy = this.convertUnitsService.value(modificationFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineFuelEnergy = this.convertUnitsService.value(baselineFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
         }
+        electricityEnergy += modificationElectricalEnergy;
+        let fuelEnergySavings: number = baselineFuelEnergy - modificationFuelEnergy;
+        let electricalEnergySavings: number = baselineElectricalEnergy - modificationElectricalEnergy;
+        fuelEnergy += modificationFuelEnergy + fuelEnergySavings + electricalEnergySavings;
+        sumEnergy += modificationFuelEnergy + modificationElectricalEnergy;
       }
 
       if (result.baselineResults.co2EmissionsOutput) {
@@ -203,5 +206,14 @@ export class PhastReportRollupService {
     }
     return val;
   }
+
+  convertEAFFuelEnergy(fuelEnergy: number, resultSettings: Settings, conversionUnit: string) {
+    if (resultSettings.unitsOfMeasure === 'Metric') {
+      return this.convertUnitsService.value(fuelEnergy).from('GJ').to(conversionUnit);
+    } else {
+      return this.convertUnitsService.value(fuelEnergy).from('MMBtu').to(conversionUnit);
+    }
+  }
+
 
 }

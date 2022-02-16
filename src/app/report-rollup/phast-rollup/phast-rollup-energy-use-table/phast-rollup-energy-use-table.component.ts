@@ -51,9 +51,13 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
     this.totalFuelCost = _.sumBy(fuelResults, 'annualCost');
 
     let electricityResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Electricity' });
-    this.totalElectricityUsage = _.sumBy(electricityResults, 'energyUsed');
-    this.totalElectricityCost = _.sumBy(electricityResults, 'annualCost');
-
+    if (electricityResults.length > 0) {
+      this.totalFuelUsage += _.sumBy(electricityResults, 'electrotechFuelEnergyUsed');
+      this.totalFuelCost += _.sumBy(electricityResults, 'electrotechFuelEnergyCost');
+      this.totalElectricityUsage = _.sumBy(electricityResults, 'electrotechElectricityEnergyUsed');
+      this.totalElectricityCost = _.sumBy(electricityResults, 'electrotechElectricityEnergyCost');
+    }
+    
     let steamResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Steam' });
     this.totalSteamUsage = _.sumBy(steamResults, 'energyUsed');
     this.totalSteamCost = _.sumBy(steamResults, 'annualCost');
