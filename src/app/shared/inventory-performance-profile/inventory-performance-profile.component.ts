@@ -37,7 +37,6 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
   showAllCompressors: boolean = false;
   showAvgOpPoints: boolean = false;
-  //compressedAirAssessment: CompressedAirAssessment;
   adjustedCompressors: Array<CompressorInventoryItem>;
   modificationResultsSub: Subscription;
   modificationResults: CompressedAirAssessmentResult;
@@ -57,8 +56,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     '#17becf'   // blue-teal
   ];
   unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
-
-  //settings: Settings;
+  
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
@@ -67,10 +65,6 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   ngOnInit(): void {
     if (!this.settings) {
       this.settings = this.compressedAirAssessmentService.settings.getValue();
-    }
-    if (this.printView) {
-      this.showAvgOpPoints = true;
-      this.showAllCompressors = true;
     }
     if (!this.inAssessment) {
       if (this.inReport) {
@@ -110,19 +104,11 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   ngOnChanges() {
     if (this.performanceProfileChart) {
-      if (this.printView) {
-        this.showAvgOpPoints = true;
-        this.showAllCompressors = true;
-      }
       this.drawChart();
     }
   }
 
   ngAfterViewInit() {
-    if (this.printView) {
-      this.showAllCompressors = true;
-      this.showAvgOpPoints = true;
-    }
     this.drawChart();
     window.dispatchEvent(new Event("resize"));
   }
@@ -232,6 +218,10 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
 
   drawChart() {
+    if (this.printView) {
+      this.showAvgOpPoints = true;
+      this.showAllCompressors = true;
+    }
     let unloadingLines = [];
     if (this.performanceProfileChart && (this.inAssessment || this.selectedCompressor) && this.compressedAirAssessment) {
       let chartData: Array<ProfileChartData>;
