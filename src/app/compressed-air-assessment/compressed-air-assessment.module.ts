@@ -131,6 +131,7 @@ import { CompressedAirReportModule } from './compressed-air-report/compressed-ai
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 
 @NgModule({
   declarations: [
@@ -238,7 +239,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     CompressedAirReportModule,
     ProfileSummaryTableModule,
     AssessmentCo2SavingsModule,
-    SharedCompressorPipesModule
+    SharedCompressorPipesModule,
+    CompressorSummaryTableModule
   ],
   providers: [
     CompressedAirAssessmentService,
