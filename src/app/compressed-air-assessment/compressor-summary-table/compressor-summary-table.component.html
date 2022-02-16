@@ -1,1 +1,55 @@
-<p>compressor-summary-table works!</p>
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-center">
+        <div class="pt-2 pr-1">
+            <h5>Compressor Summary</h5>
+        </div>
+    </div>
+</div>
+<div class="pl-2 pt-3 pr-2">
+    <table #profileTable class="table table-hover bg-white">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="bold" *ngFor="let compressor of compressorInventoryItems">
+                    {{compressor.name}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th></th>
+                <th>Day Type</th>
+                <th *ngFor="let compressor of compressorInventoryItems">
+
+                </th>
+            </tr>
+            <tr>
+                <th>Specific Power at Average Load</th>
+                <th></th>
+                <th *ngFor="let compressor of compressorInventoryItems">
+
+                </th>
+            </tr>
+            <tr>
+                <th>Specific Power at Full Load</th>
+                <th></th>
+                <th *ngFor="let compressor of compressorInventoryItems">
+
+                </th>
+            </tr>
+            <tr>
+                <th>Isentropic Efficiency</th>
+                <th></th>
+                <th *ngFor="let compressor of compressorInventoryItems">
+
+                </th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="w-100 justify-content-end d-flex">
+    <app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
+    </app-exportable-results-table>
+</div>
