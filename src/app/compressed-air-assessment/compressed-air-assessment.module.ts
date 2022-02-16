@@ -132,6 +132,7 @@ import { ProfileSummaryTableModule } from './profile-summary-table/profile-summa
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
+import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
 
 @NgModule({
   declarations: [
@@ -211,7 +212,8 @@ import { CompressorSummaryTableModule } from './compressor-summary-table/compres
     AdjustSequencerProfileComponent,
     AdjustCascadingSetPointsHelpComponent,
     AssessmentNotesComponent,
-    ImproveEndUseEfficiencyItemComponent
+    ImproveEndUseEfficiencyItemComponent,
+    CompressorSummaryComponent
   ],
   imports: [
     CommonModule,
