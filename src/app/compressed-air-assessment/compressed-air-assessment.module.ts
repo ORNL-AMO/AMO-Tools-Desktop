@@ -13,7 +13,7 @@ import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
-import { SystemProfileGraphsComponent } from './system-profile/system-profile-graphs/system-profile-graphs.component';
+import { SystemProfileGraphsModule } from '../shared/system-profile-graphs/system-profile-graphs.module';
 import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
@@ -114,7 +114,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
-import { SystemProfileGraphsService } from './system-profile/system-profile-graphs/system-profile-graphs.service';
+import { SystemProfileGraphsService } from '../shared/system-profile-graphs/system-profile-graphs.service';
 import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
@@ -144,7 +144,6 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     InventoryComponent,
     SystemProfileSetupComponent,
     SystemProfileSummaryComponent,
-    SystemProfileGraphsComponent,
     NameplateDataComponent,
     ControlDataComponent,
     DesignDetailsComponent,
@@ -238,7 +237,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     CompressedAirReportModule,
     ProfileSummaryTableModule,
     AssessmentCo2SavingsModule,
-    SharedCompressorPipesModule
+    SharedCompressorPipesModule,
+    SystemProfileGraphsModule
   ],
   providers: [
     CompressedAirAssessmentService,
