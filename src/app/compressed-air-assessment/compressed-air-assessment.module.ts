@@ -42,7 +42,6 @@ import { CompressorOptionsTableComponent } from './inventory/generic-compressor-
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
 import { InletConditionsComponent } from './inventory/inlet-conditions/inlet-conditions.component';
-import { InventoryPerformanceProfileComponent } from './results-panel/inventory-performance-profile/inventory-performance-profile.component';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
 import { BlowoffCalculationsService } from './inventory/performance-points/calculations/blowoff-calculations.service';
 import { FullLoadCalculationsService } from './inventory/performance-points/calculations/full-load-calculations.service';
@@ -133,6 +132,7 @@ import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-co
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
+import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
 
 @NgModule({
   declarations: [
@@ -167,7 +167,6 @@ import { CompressorSummaryComponent } from './system-profile/compressor-summary/
     FilterCompressorsComponent,
     FilterCompressorsPipe,
     InletConditionsComponent,
-    InventoryPerformanceProfileComponent,
     DayTypeFilterPipe,
     SystemCapacityModalComponent,
     HelpPanelComponent,
@@ -242,7 +241,8 @@ import { CompressorSummaryComponent } from './system-profile/compressor-summary/
     ProfileSummaryTableModule,
     AssessmentCo2SavingsModule,
     SharedCompressorPipesModule,
-    CompressorSummaryTableModule
+    CompressorSummaryTableModule,
+    InventoryPerformanceProfileModule
   ],
   providers: [
     CompressedAirAssessmentService,
