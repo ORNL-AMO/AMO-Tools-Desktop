@@ -108,11 +108,4 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       return false;
     }
   }
-  compareElectricalPowerInput(): boolean {
-    if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareElectricalPowerInput(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
 }

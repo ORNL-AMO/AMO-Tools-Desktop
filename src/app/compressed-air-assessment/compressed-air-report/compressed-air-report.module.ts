@@ -16,6 +16,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { SharedCompressorPipesModule } from '../shared-compressor-pipes/shared-compressor-pipes.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { SystemProfileGraphsModule } from '../../shared/system-profile-graphs/system-profile-graphs.module';
+import { InventoryPerformanceProfileModule } from '../../shared/inventory-performance-profile/inventory-performance-profile.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { SystemProfileGraphsModule } from '../../shared/system-profile-graphs/sy
     SystemProfilesComponent,
     CompressedAirReportComponent,
     SystemInfoSummaryComponent,
-    CompressorItemSummaryComponent,
+    CompressorItemSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +38,8 @@ import { SystemProfileGraphsModule } from '../../shared/system-profile-graphs/sy
     FacilityInfoSummaryModule,
     SharedCompressorPipesModule,
     PrintOptionsMenuModule,
-    SystemProfileGraphsModule
+    SystemProfileGraphsModule,
+    InventoryPerformanceProfileModule
   ],
   exports: [
     CompressedAirReportComponent

@@ -102,6 +102,7 @@ export interface Settings {
     printAll?: boolean,
     printCompressedAirRollup?: boolean,
     printSystemProfiles?: boolean
+    printPerformanceProfiles?: boolean
 
     // Co2SavingsData
     co2SavingsEnergyType?: string,

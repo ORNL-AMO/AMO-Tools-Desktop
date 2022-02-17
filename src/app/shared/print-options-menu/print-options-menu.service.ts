@@ -106,6 +106,9 @@ export class PrintOptionsMenuService {
       case "systemProfiles": {
         currentPrintOptions.printSystemProfiles = !currentPrintOptions.printSystemProfiles;
       }
+      case "performanceProfiles": {
+        currentPrintOptions.printPerformanceProfiles = !currentPrintOptions.printPerformanceProfiles;
+      }
       default: {
         break;
       }
@@ -135,7 +138,8 @@ export class PrintOptionsMenuService {
       printReportDiagram: settings.printReportDiagram,
       selectAll: settings.printAll,
       printCompressedAirRollup: settings.printCompressedAirRollup,
-      printSystemProfiles: settings.printSystemProfiles
+      printSystemProfiles: settings.printSystemProfiles,
+      printPerformanceProfiles: settings.printPerformanceProfiles
     }
   }
 
@@ -160,7 +164,8 @@ export class PrintOptionsMenuService {
       printReportDiagram: bool,
       selectAll: bool,
       printCompressedAirRollup: bool,
-      printSystemProfiles: bool
+      printSystemProfiles: bool,
+      printPerformanceProfiles: bool
     }
   }
  
