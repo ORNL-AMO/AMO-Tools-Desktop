@@ -285,6 +285,6 @@ export interface CompressedAirDayType {
 export interface CompressorSummary {
     dayType: CompressedAirDayType,
     specificPowerAvgLoad: number,
-    specificPowerFullLoad: number,
-    isentropicEfficiency: number
+    ratedSpecificPower: number,
+    ratedIsentropicEfficiency: number
 }

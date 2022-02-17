@@ -1,7 +1,8 @@
 <div class="d-flex flex-column">
     <div class="d-flex justify-content-center">
         <div class="pt-2 pr-1 group-label">
-            Compressor Summary
+            <span *ngIf="inReport">Baseline Compressor Summary</span>
+            <span *ngIf="!inReport">Compressor Summary</span>
         </div>
     </div>
     <div class="pl-2 pt-3 pr-2">
@@ -32,23 +33,23 @@
             </tbody>
             <tbody>
                 <tr>
-                    <th>Specific Power at Full Load, kW/100 acfm</th>
+                    <th>Rated Specific Power, kW/100 acfm</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
-                        <span *ngIf="compressor.specificPowerFullLoad">
-                            {{compressor.specificPowerFullLoad}}
+                        <span *ngIf="compressor.ratedSpecificPower">
+                            {{compressor.ratedSpecificPower}}
                         </span>
-                        <span *ngIf="!compressor.specificPowerFullLoad">
+                        <span *ngIf="!compressor.ratedSpecificPower">
                             &mdash;
                         </span>
                     </td>
                 </tr>
                 <tr>
-                    <th>Isentropic Efficiency, %</th>
+                    <th>Rated Isentropic Efficiency, %</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
-                        <span *ngIf="compressor.isentropicEfficiency">
-                            {{compressor.isentropicEfficiency}}
+                        <span *ngIf="compressor.ratedIsentropicEfficiency">
+                            {{compressor.ratedIsentropicEfficiency}}
                         </span>
-                        <span *ngIf="!compressor.isentropicEfficiency">
+                        <span *ngIf="!compressor.ratedIsentropicEfficiency">
                             &mdash;
                         </span>
                     </td>

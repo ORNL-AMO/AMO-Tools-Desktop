@@ -18,6 +18,8 @@ export class CompressorSummaryTableComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
+  @Input()
+  inReport: boolean;
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;

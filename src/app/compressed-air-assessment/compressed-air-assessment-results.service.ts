@@ -523,27 +523,42 @@ export class CompressedAirAssessmentResultsService {
 
   calculateCompressorSummary(dayTypes: Array<CompressedAirDayType>, compressedAirAssessment: CompressedAirAssessment, settings: Settings): Array<Array<CompressorSummary>> {
     let compressorSummaries: Array<Array<CompressorSummary>> = new Array<Array<CompressorSummary>>();
+    let compressorInventoryItems: Array<CompressorInventoryItem> = compressedAirAssessment.compressorInventoryItems;
     dayTypes.forEach(dayType => {
       let dayTypeCompressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
       let profileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
       profileSummary.forEach(profile => {
         let specificPowerAvgLoad = (profile.avgPower/profile.avgAirflow)*100;
         specificPowerAvgLoad = this.convertUnitsService.roundVal(specificPowerAvgLoad, 4);
-        let specificPowerFullLoad = profile.avgPower;
-        specificPowerFullLoad = this.convertUnitsService.roundVal(specificPowerFullLoad, 4);
-        let isentropicEfficiency = profile.avgAirflow;
-        isentropicEfficiency = this.convertUnitsService.roundVal(isentropicEfficiency, 4);
+        let compressor: CompressorInventoryItem = compressorInventoryItems.find(compressor => {return compressor.itemId == profile.compressorId})
+
+        let ratedSpecificPower = this.calculateRatedSpecificPower(compressor);
+        let ratedIsentropicEfficiency = this.calculateRatedIsentropicEfficiency(compressor, ratedSpecificPower);
         let compressorSummary: CompressorSummary = {
           dayType: dayType,
           specificPowerAvgLoad: specificPowerAvgLoad,
-          specificPowerFullLoad: specificPowerFullLoad,
-          isentropicEfficiency: isentropicEfficiency
+          ratedSpecificPower: ratedSpecificPower,
+          ratedIsentropicEfficiency: ratedIsentropicEfficiency
         }
         dayTypeCompressorSummaries.push(compressorSummary);
       });
       compressorSummaries.push(dayTypeCompressorSummaries);
     });
     return compressorSummaries;
+  }
+
+  calculateRatedSpecificPower(compressor: CompressorInventoryItem): number {
+    let ratedSpecificPower: number;
+    ratedSpecificPower = (compressor.nameplateData.totalPackageInputPower / compressor.nameplateData.fullLoadRatedCapacity) * 100;
+    ratedSpecificPower = this.convertUnitsService.roundVal(ratedSpecificPower, 4);
+    return ratedSpecificPower;
+  }
+
+  calculateRatedIsentropicEfficiency (compressor: CompressorInventoryItem, ratedSpecificPower: number): number {
+    let ratedIsentropicEfficiency: number;
+    ratedIsentropicEfficiency = (16.52 *((((compressor.nameplateData.fullLoadOperatingPressure + 14.5)/14.5)^0.2857)-1))/ratedSpecificPower;
+    ratedIsentropicEfficiency = this.convertUnitsService.roundVal(ratedIsentropicEfficiency, 4);
+    return ratedIsentropicEfficiency;
   }
 
 
