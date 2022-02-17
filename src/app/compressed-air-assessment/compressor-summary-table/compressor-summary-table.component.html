@@ -4,49 +4,58 @@
             <h5>Compressor Summary</h5>
         </div>
     </div>
-</div>
-<div class="pl-2 pt-3 pr-2">
-    <table #profileTable class="table table-hover bg-white">
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th class="bold" *ngFor="let compressor of compressorInventoryItems">
-                    {{compressor.name}}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th></th>
-                <th>Day Type</th>
-                <th *ngFor="let compressor of compressorInventoryItems">
-
-                </th>
-            </tr>
-            <tr>
-                <th>Specific Power at Average Load</th>
-                <th></th>
-                <th *ngFor="let compressor of compressorInventoryItems">
-
-                </th>
-            </tr>
-            <tr>
-                <th>Specific Power at Full Load</th>
-                <th></th>
-                <th *ngFor="let compressor of compressorInventoryItems">
-
-                </th>
-            </tr>
-            <tr>
-                <th>Isentropic Efficiency</th>
-                <th></th>
-                <th *ngFor="let compressor of compressorInventoryItems">
-
-                </th>
-            </tr>
-        </tbody>
-    </table>
+    <div class="pl-2 pt-3 pr-2">
+        <table #profileTable class="table table-hover bg-white">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="bold" *ngFor="let compressor of compressorInventoryItems">
+                        {{compressor.name}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let compressorSummary of compressorSummaries; let index = index">
+                <tr>
+                    <th>
+                        <span>{{dayTypes[index].name}}</span>
+                        Specific Power at Average Load, kW/100 acfm
+                    </th>
+                    <td *ngFor="let compressor of compressorSummary">
+                        <span *ngIf="compressor.specificPowerAvgLoad">
+                            {{compressor.specificPowerAvgLoad}}
+                        </span>
+                        <span *ngIf="!compressor.specificPowerAvgLoad">
+                            &mdash;
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th>Specific Power at Full Load, kW/100 acfm</th>
+                    <td *ngFor="let compressor of compressorSummaries[0]">
+                        <span *ngIf="compressor.specificPowerFullLoad">
+                            {{compressor.specificPowerFullLoad}}
+                        </span>
+                        <span *ngIf="!compressor.specificPowerFullLoad">
+                            &mdash;
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Isentropic Efficiency, %</th>
+                    <td *ngFor="let compressor of compressorSummaries[0]">
+                        <span *ngIf="compressor.isentropicEfficiency">
+                            {{compressor.isentropicEfficiency}}
+                        </span>
+                        <span *ngIf="!compressor.isentropicEfficiency">
+                            &mdash;
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="w-100 justify-content-end d-flex">

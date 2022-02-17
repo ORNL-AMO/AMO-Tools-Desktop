@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, SystemProfile, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, PerformancePoints, EndUseEfficiencyReductionData, SystemInformation } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, SystemProfile, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, PerformancePoints, EndUseEfficiencyReductionData, SystemInformation, CompressorSummary } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
@@ -519,6 +519,31 @@ export class CompressedAirAssessmentResultsService {
       useAutomaticSequencerProfileSummary: useAutomaticSequencerProfileSummary,
       auxiliaryPowerUsage: auxiliaryPowerUsage
     };
+  }
+
+  calculateCompressorSummary(dayTypes: Array<CompressedAirDayType>, compressedAirAssessment: CompressedAirAssessment, settings: Settings): Array<Array<CompressorSummary>> {
+    let compressorSummaries: Array<Array<CompressorSummary>> = new Array<Array<CompressorSummary>>();
+    dayTypes.forEach(dayType => {
+      let dayTypeCompressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
+      let profileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
+      profileSummary.forEach(profile => {
+        let specificPowerAvgLoad = (profile.avgPower/profile.avgAirflow)*100;
+        specificPowerAvgLoad = this.convertUnitsService.roundVal(specificPowerAvgLoad, 4);
+        let specificPowerFullLoad = profile.avgPower;
+        specificPowerFullLoad = this.convertUnitsService.roundVal(specificPowerFullLoad, 4);
+        let isentropicEfficiency = profile.avgAirflow;
+        isentropicEfficiency = this.convertUnitsService.roundVal(isentropicEfficiency, 4);
+        let compressorSummary: CompressorSummary = {
+          dayType: dayType,
+          specificPowerAvgLoad: specificPowerAvgLoad,
+          specificPowerFullLoad: specificPowerFullLoad,
+          isentropicEfficiency: isentropicEfficiency
+        }
+        dayTypeCompressorSummaries.push(compressorSummary);
+      });
+      compressorSummaries.push(dayTypeCompressorSummaries);
+    });
+    return compressorSummaries;
   }
 
 

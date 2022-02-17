@@ -281,3 +281,10 @@ export interface CompressedAirDayType {
     numberOfDays: number,
     profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
 }
+
+export interface CompressorSummary {
+    dayType: CompressedAirDayType,
+    specificPowerAvgLoad: number,
+    specificPowerFullLoad: number,
+    isentropicEfficiency: number
+}

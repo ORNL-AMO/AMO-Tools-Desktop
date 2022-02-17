@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -12,21 +12,32 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 })
 export class CompressorSummaryComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
-  profileSummary: Array<ProfileSummary>;
-  
+  compressedAirAssessment: CompressedAirAssessment;
+  dayTypes: Array<CompressedAirDayType>;
+
+  compressorSummaries: Array<Array<CompressorSummary>>
+
   inventoryItems: Array<CompressorInventoryItem>;
   settings: Settings;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(val, selectedDayType, this.settings);
+      this.compressedAirAssessment = val;
       this.inventoryItems = val.compressorInventoryItems;
+      this.dayTypes = val.compressedAirDayTypes;
     });
+
+    this.compressorSummaries = this.compressedAirAssessmentResultsService.calculateCompressorSummary(this.dayTypes, this.compressedAirAssessment, this.settings);
+
+    
+  }
+
+  ngOnDestroy() {
+    this.compressedAirAssessmentSub.unsubscribe();
   }
 
 }
