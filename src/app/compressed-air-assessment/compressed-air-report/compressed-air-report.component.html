@@ -123,8 +123,8 @@
         <div class="results scroll-item print-height page-break-before" 
             *ngIf="(currentTab == 'performanceProfile' && !showPrintView) || (showPrintView && printOptions.printPerformanceProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-inventory-performance-profile [inReport]="true" [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
-            </app-inventory-performance-profile>
+            <app-performance-profiles [inReport]="true" [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
+            </app-performance-profiles>
         </div>
     </div>
     <!-- End .report-data -->

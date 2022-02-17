@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -11,6 +11,9 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
   styleUrls: ['./compressor-summary.component.css']
 })
 export class CompressorSummaryComponent implements OnInit {
+  @Input()
+  printView: boolean;
+
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
   dayTypes: Array<CompressedAirDayType>;

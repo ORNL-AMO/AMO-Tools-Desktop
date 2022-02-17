@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType, CompressorInventoryItem, CompressorSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -16,6 +16,8 @@ export class CompressorSummaryTableComponent implements OnInit {
   dayTypes: Array<CompressedAirDayType>;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;
