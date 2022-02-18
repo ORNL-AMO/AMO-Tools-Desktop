@@ -30,6 +30,7 @@ export class PrintSettingsComponent implements OnInit {
       this.settings.printReportSankey &&
       this.settings.printResults &&
       this.settings.printInputData &&
+      this.settings.printSystemProfiles &&
       this.settings.printExecutiveSummary &&
       this.settings.printEnergySummary &&
       this.settings.printLossesSummary &&
@@ -54,6 +55,7 @@ export class PrintSettingsComponent implements OnInit {
     this.settings.printReportSankey = this.selectAllOptions;
     this.settings.printResults = this.selectAllOptions;
     this.settings.printInputData = this.selectAllOptions;
+    this.settings.printSystemProfiles = this.selectAllOptions;
     this.settings.printExecutiveSummary = this.selectAllOptions;
     this.settings.printEnergySummary = this.selectAllOptions;
     this.settings.printLossesSummary = this.selectAllOptions;
@@ -112,6 +114,12 @@ export class PrintSettingsComponent implements OnInit {
 
   togglePrintInputData() {
     this.settings.printInputData = !this.settings.printInputData;
+    this.checkSelectAll();
+    this.savePrintSettings.emit(true);
+  }
+
+  togglePrintSystemProfiles() {
+    this.settings.printSystemProfiles = !this.settings.printSystemProfiles;
     this.checkSelectAll();
     this.savePrintSettings.emit(true);
   }

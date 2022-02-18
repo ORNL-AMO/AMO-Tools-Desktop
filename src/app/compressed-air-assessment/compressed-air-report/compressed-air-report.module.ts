@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { SharedCompressorPipesModule } from '../shared-compressor-pipes/shared-compressor-pipes.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { SystemProfileGraphsModule } from '../../shared/system-profile-graphs/system-profile-graphs.module';
 import { InventoryPerformanceProfileModule } from '../../shared/inventory-performance-profile/inventory-performance-profile.module';
 
 @NgModule({
@@ -37,8 +38,8 @@ import { InventoryPerformanceProfileModule } from '../../shared/inventory-perfor
     FacilityInfoSummaryModule,
     SharedCompressorPipesModule,
     PrintOptionsMenuModule,
+    SystemProfileGraphsModule,
     InventoryPerformanceProfileModule
-    
   ],
   exports: [
     CompressedAirReportComponent
