@@ -16,6 +16,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { SharedCompressorPipesModule } from '../shared-compressor-pipes/shared-compressor-pipes.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { CompressorSummaryTableModule } from '../compressor-summary-table/compressor-summary-table.module';
+import { SystemProfileGraphsModule } from '../../shared/system-profile-graphs/system-profile-graphs.module';
 import { InventoryPerformanceProfileModule } from '../../shared/inventory-performance-profile/inventory-performance-profile.module';
 import { PerformanceProfilesComponent } from './performance-profiles/performance-profiles.component';
 
@@ -41,8 +42,8 @@ import { PerformanceProfilesComponent } from './performance-profiles/performance
     SharedCompressorPipesModule,
     PrintOptionsMenuModule,
     CompressorSummaryTableModule,
+    SystemProfileGraphsModule,
     InventoryPerformanceProfileModule
-    
   ],
   exports: [
     CompressedAirReportComponent

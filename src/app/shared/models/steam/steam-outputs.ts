@@ -73,7 +73,8 @@ export interface SteamCo2EmissionsOutput {
   totalEmissionOutput?: number,
   fuelEmissionOutput?: number,
   emissionsSavings?: number,
-  electricityEmissionOutput?: number,
+  electricityEmissionsFromSelling?: number,
+  electricityEmissionsFromChange?: number,
 }
 
 export interface SSMTOperationsOutput {

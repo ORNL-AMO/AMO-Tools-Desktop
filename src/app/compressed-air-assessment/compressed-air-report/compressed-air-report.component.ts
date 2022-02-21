@@ -9,6 +9,7 @@ import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, BaselineResults, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
@@ -48,7 +49,7 @@ export class CompressedAirReportComponent implements OnInit {
   combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
   baselineProfileSummaries: Array<{profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal>}>;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -88,6 +89,9 @@ export class CompressedAirReportComponent implements OnInit {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
         this.showPrintMenu = val;
       });
+    } else {
+      this.compressedAirAssessmentService.compressedAirAssessment.next(this.assessment.compressedAirAssessment);
+      this.compressedAirAssessmentService.settings.next(this.settings);
     }
 
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {

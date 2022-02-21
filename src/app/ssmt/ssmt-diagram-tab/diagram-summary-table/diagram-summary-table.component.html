@@ -40,9 +40,15 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center w-50">Emissions From Electricity</td>
+          <td class="text-center w-50">Emissions From Selling Electricity</td>
           <td class="text-center w-50">
-            {{ co2EmissionsOutput.electricityEmissionOutput | number: "1.0-2" }}
+            {{ co2EmissionsOutput.electricityEmissionsFromSelling | number: "1.0-2" }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Emissions From Change in Electricity Imports</td>
+          <td class="text-center w-50">
+            {{ co2EmissionsOutput.electricityEmissionsFromChange | number: "1.0-2" }}
           </td>
         </tr>
         <tr>
