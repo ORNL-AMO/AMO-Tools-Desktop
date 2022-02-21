@@ -61,7 +61,7 @@ export class SsmtService {
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (ssmtValid.isValid) {
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
-      outputData = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings); 
+      outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);
       return { inputData: setupInputData, outputData: outputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
@@ -90,7 +90,7 @@ export class SsmtService {
         setupInputData = updatedResults.inputData;
         modificationOutputData = updatedResults.outputData;
       }
-      modificationOutputData = this.setCo2SavingsEmissionsResult(setupInputData, modificationOutputData, settings);
+      modificationOutputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, modificationOutputData, settings);
       modificationOutputData.co2EmissionsOutput.emissionsSavings = baselineResults.co2EmissionsOutput.totalEmissionOutput - modificationOutputData.co2EmissionsOutput.totalEmissionOutput;
       return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
@@ -99,30 +99,60 @@ export class SsmtService {
     }
   }
 
-  setCo2SavingsEmissionsResult(ssmtInputs: SSMTInputs, ssmtOutput: SSMTOutput, settings: Settings): SSMTOutput {
+  setCo2SavingsEmissionsResult(ssmtInputs: SSMTInputs, ssmtOutput: SSMTOutput, settings: Settings, isBaseline?: boolean): SteamCo2EmissionsOutput {
     let ssmtInputCopy: SSMTInputs = JSON.parse(JSON.stringify(ssmtInputs)); 
-    let co2EmissionsOutput: SteamCo2EmissionsOutput = {
+    ssmtOutput.co2EmissionsOutput = {
       totalEmissionOutput: undefined,
       fuelEmissionOutput: undefined,
-      electricityEmissionOutput: undefined,
+      electricityEmissionsFromChange: undefined,
+      electricityEmissionsFromSelling: undefined,
       emissionsSavings: undefined,
     };
+    
     if (ssmtInputCopy.co2SavingsData) {
-      let electricityUse: number = ssmtOutput.operationsOutput.sitePowerImport * ssmtInputCopy.operationsInput.operatingHoursPerYear;
-      // Convert energy use to match emissions factor (MWh)
-      electricityUse = this.convertUnitsService.value(electricityUse).from('kWh').to('MWh');
-      ssmtInputCopy.co2SavingsData.electricityUse = electricityUse;
-      co2EmissionsOutput.electricityEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings);
+      ssmtOutput.co2EmissionsOutput = this.getSteamElectricityEmissions(ssmtOutput, ssmtInputCopy, settings, isBaseline);
       
       let fuelUse: number = ssmtOutput.boilerOutput.fuelEnergy * ssmtInputCopy.operationsInput.operatingHoursPerYear;
       ssmtInputCopy.co2SavingsData.electricityUse = fuelUse;
-      co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings, true);
+      ssmtOutput.co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings, true);
 
-      co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput;
+      ssmtOutput.co2EmissionsOutput.totalEmissionOutput = ssmtOutput.co2EmissionsOutput.fuelEmissionOutput + ssmtOutput.co2EmissionsOutput.electricityEmissionsFromChange + ssmtOutput.co2EmissionsOutput.electricityEmissionsFromSelling;
     } 
 
-    ssmtOutput.co2EmissionsOutput = co2EmissionsOutput;
-    return ssmtOutput;
+    return ssmtOutput.co2EmissionsOutput;
+  }
+
+  getSteamElectricityEmissions(ssmtOutput: SSMTOutput, ssmtInput: SSMTInputs, settings: Settings, isBaseline: boolean): SteamCo2EmissionsOutput {
+    let electricityImport = ssmtInput.operationsInput.sitePowerImport;
+    if (!isBaseline) {
+      electricityImport = ssmtOutput.operationsOutput.sitePowerImport;
+    }
+
+    ssmtOutput.co2EmissionsOutput.electricityEmissionsFromSelling = 0; 
+    if (electricityImport <= 0) {
+      ssmtInput.co2SavingsData.electricityUse = electricityImport * ssmtInput.operationsInput.operatingHoursPerYear;
+      ssmtInput.co2SavingsData.electricityUse = this.convertUnitsService.value(ssmtInput.co2SavingsData.electricityUse).from('kWh').to('MWh');
+      ssmtOutput.co2EmissionsOutput.electricityEmissionsFromSelling = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInput.co2SavingsData, settings);
+    }
+
+    if (isBaseline) {
+      ssmtOutput.co2EmissionsOutput.electricityEmissionsFromChange = 0; 
+    } else {
+      let baselineElectricityImport: number = 0; 
+      let modificationElectricityImport: number = 0;
+      if (ssmtInput.operationsInput.sitePowerImport >= 0 ) {
+        baselineElectricityImport = ssmtInput.operationsInput.sitePowerImport; 
+      }
+      if (ssmtOutput.operationsOutput.sitePowerImport >= 0 ) {
+        modificationElectricityImport = ssmtOutput.operationsOutput.sitePowerImport;
+      }
+
+      ssmtInput.co2SavingsData.electricityUse = (modificationElectricityImport - baselineElectricityImport) * ssmtInput.operationsInput.operatingHoursPerYear;
+      ssmtInput.co2SavingsData.electricityUse = this.convertUnitsService.value(ssmtInput.co2SavingsData.electricityUse).from('kWh').to('MWh');
+      ssmtOutput.co2EmissionsOutput.electricityEmissionsFromChange = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInput.co2SavingsData, settings);
+    }
+
+    return ssmtOutput.co2EmissionsOutput;
   }
 
   updateProcessSteamAndCalculate(ssmtCopy: SSMT, settings: Settings, setupInputData: SSMTInputs, baselineResultsCpy: SSMTOutput, modificationOutputData: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
