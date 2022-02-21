@@ -255,6 +255,10 @@ export class PhastResultsService {
   }
   setEAFResults(phast: PHAST, phastResults: PhastResults, settings: Settings): PhastResults {
     let EAFInputs: EnergyInputEAF = JSON.parse(JSON.stringify(phast.losses.energyInputEAF[0]));
+    let naturalGasHeatingValue: number = 22030.7;
+    if (settings.unitsOfMeasure === 'Metric') {
+      naturalGasHeatingValue = this.convertUnitsService.value(naturalGasHeatingValue).from('Btu').to('kJ');
+    } 
     let eafResults: EAFResults = {
       naturalGasUsed: EAFInputs.naturalGasHeatInput,
       electricEnergyUsed: EAFInputs.electricityInput,
@@ -265,6 +269,7 @@ export class PhastResultsService {
       coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
       electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
       otherFuelUsed: EAFInputs.otherFuels,
+      naturalGasHeatingValue: naturalGasHeatingValue
     };
      if (settings.unitsOfMeasure == 'Metric') {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
@@ -279,8 +284,11 @@ export class PhastResultsService {
 
     let annualEAFResults: EAFResults = JSON.parse(JSON.stringify(eafResults));
     annualEAFResults.coalCarbonUsed = eafResults.coalCarbonUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.coalHeatingValue = eafResults.coalHeatingValue * phast.operatingHours.hoursPerYear;
     annualEAFResults.electrodeUsed = eafResults.electrodeUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.electrodeHeatingValue = eafResults.electrodeHeatingValue * phast.operatingHours.hoursPerYear;
     annualEAFResults.naturalGasUsed = eafResults.naturalGasUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.naturalGasHeatingValue = eafResults.naturalGasHeatingValue * phast.operatingHours.hoursPerYear;
     annualEAFResults.otherFuelUsed = eafResults.otherFuelUsed * phast.operatingHours.hoursPerYear;
     annualEAFResults.electricEnergyUsed = eafResults.electricEnergyUsed * phast.operatingHours.hoursPerYear;
     phastResults.annualEAFResults = annualEAFResults;

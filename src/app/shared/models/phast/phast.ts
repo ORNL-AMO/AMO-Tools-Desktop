@@ -149,6 +149,7 @@ export interface EAFResults {
   totalFuelEnergyUsed?: number;
   coalCarbonUsed?: number;
   coalHeatingValue?: number;
+  naturalGasHeatingValue?: number;
   electrodeUsed?: number;
   electrodeHeatingValue?: number;
 }
