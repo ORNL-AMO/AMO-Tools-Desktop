@@ -10,17 +10,22 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th>Day Type</th>
                     <th class="bold" *ngFor="let compressor of compressorInventoryItems">
                         {{compressor.name}}
                     </th>
                 </tr>
             </thead>
-            <tbody *ngFor="let compressorSummary of compressorSummaries; let index = index">
+            <tbody>
                 <tr>
-                    <th>
-                        <span>{{dayTypes[index].name}}</span>
+                    <th [attr.rowspan]="dayTypes.length + 1">
                         Specific Power at Average Load, kW/100 acfm
                     </th>
+                </tr>
+                <tr *ngFor="let compressorSummary of compressorSummaries; let index = index">
+                    <td>
+                        {{dayTypes[index].name}}
+                    </td>
                     <td *ngFor="let compressor of compressorSummary">
                         <span *ngIf="compressor.specificPowerAvgLoad">
                             {{compressor.specificPowerAvgLoad}}
@@ -29,11 +34,10 @@
                             &mdash;
                         </span>
                     </td>
+
                 </tr>
-            </tbody>
-            <tbody>
                 <tr>
-                    <th>Rated Specific Power, kW/100 acfm</th>
+                    <th colspan="2">Rated Specific Power, kW/100 acfm</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedSpecificPower">
                             {{compressor.ratedSpecificPower}}
@@ -44,7 +48,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Rated Isentropic Efficiency, %</th>
+                    <th colspan="2">Rated Isentropic Efficiency, %</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedIsentropicEfficiency">
                             {{compressor.ratedIsentropicEfficiency}}
