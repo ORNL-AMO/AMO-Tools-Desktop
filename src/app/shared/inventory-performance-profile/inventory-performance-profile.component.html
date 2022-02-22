@@ -1,5 +1,5 @@
-<div class="card p-2">
-    <div class="card-body p-0">
+<div class="print-container">
+    <div class="page-break-before">
         <div class="group-label">
             <span *ngIf="inReport">Baseline Performance Profiles</span>
             <span *ngIf="!inReport">Performance Profile</span>
@@ -12,11 +12,12 @@
                     Graph All Compressors
                 </label>
                 <label class="p-2">
-                    <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints"/>
+                    <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
                     Graph Average Operating Points
                 </label>
             </div>
         </div>
         <div #performanceProfileChart id="performanceProfileChart"></div>
+
     </div>
 </div>
