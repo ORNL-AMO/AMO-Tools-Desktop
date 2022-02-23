@@ -303,7 +303,6 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.allSavingsResults.savings.cost += modResult.allSavingsResults.savings.cost;
       dayTypeModificationResult.allSavingsResults.savings.power += modResult.allSavingsResults.savings.power;
 
-      dayTypeModificationResult.allSavingsResults.implementationCost += modResult.allSavingsResults.implementationCost;
       dayTypeModificationResult.allSavingsResults.baselineResults.cost += modResult.allSavingsResults.baselineResults.cost;
       dayTypeModificationResult.allSavingsResults.baselineResults.power += modResult.allSavingsResults.baselineResults.power;
 
@@ -343,6 +342,8 @@ export class CompressedAirAssessmentResultsService {
     dayTypeModificationResult.peakDemandCost = _.maxBy(modificationResults.dayTypeModificationResults, (result) => { return result.peakDemandCost }).peakDemandCost;
     
     if (modificationResults.dayTypeModificationResults && modificationResults.dayTypeModificationResults.length > 0) {
+      dayTypeModificationResult.allSavingsResults.implementationCost = modificationResults.dayTypeModificationResults[0].allSavingsResults.implementationCost;
+      
       dayTypeModificationResult.addReceiverVolumeSavings.implementationCost = modificationResults.dayTypeModificationResults[0].addReceiverVolumeSavings.implementationCost;
       dayTypeModificationResult.adjustCascadingSetPointsSavings.implementationCost = modificationResults.dayTypeModificationResults[0].adjustCascadingSetPointsSavings.implementationCost;
       dayTypeModificationResult.improveEndUseEfficiencySavings.implementationCost = modificationResults.dayTypeModificationResults[0].improveEndUseEfficiencySavings.implementationCost;
