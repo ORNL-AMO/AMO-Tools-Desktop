@@ -105,9 +105,11 @@ export class PrintOptionsMenuService {
       }
       case "systemProfiles": {
         currentPrintOptions.printSystemProfiles = !currentPrintOptions.printSystemProfiles;
+        break;
       }
       case "performanceProfiles": {
         currentPrintOptions.printPerformanceProfiles = !currentPrintOptions.printPerformanceProfiles;
+        break;
       }
       default: {
         break;
