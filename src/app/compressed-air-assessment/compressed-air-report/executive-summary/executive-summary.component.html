@@ -267,8 +267,10 @@
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
-                        *ngIf="result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">{{result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">&mdash; &mdash;</span>
+                        *ngIf="result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">{{result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings
+                        | sigFigs:'5'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
 
@@ -455,10 +457,10 @@
                     &mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="result.combinedResults.peakDemandCost">{{baselineResults.total.demandCost
-                        - result.combinedResults.peakDemandCost
+                    <span
+                        *ngIf="result.combinedResults.peakDemandCostSavings">{{result.combinedResults.peakDemandCostSavings
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                    <span *ngIf="!result.combinedResults.peakDemandCostSavings">&mdash;
                         &mdash;</span>
                 </td>
             </tr>
