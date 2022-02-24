@@ -39,9 +39,9 @@ export class OperationsComponent implements OnInit {
       if (changes.modificationIndex) {
         this.initForm();
       }
-      else {
-        this.isFirstChange = false;
-      }
+    }
+    else {
+      this.isFirstChange = false;
     }
   }
   ngOnInit() {

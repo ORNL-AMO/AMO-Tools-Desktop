@@ -1,0 +1,18 @@
+@media print {
+    .page-break-before{
+        page-break-before: always;
+    }
+
+    .print-page-title {
+        font-size: 22px !important;
+        font-weight: bold;
+    }
+
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
+}
+
+.group-label{
+    font-size: 22px;
+}
