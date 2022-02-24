@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, SystemProfile, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, PerformancePoints, EndUseEfficiencyReductionData, SystemInformation, CompressorSummary } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ReduceSystemAirPressure, Modification, ProfileSummary, ReduceRuntime, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntimeData, ImproveEndUseEfficiency, ReduceAirLeaks, UseAutomaticSequencer, AdjustCascadingSetPoints, CascadingSetPointData, EndUseEfficiencyReductionData, CompressorSummary } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
