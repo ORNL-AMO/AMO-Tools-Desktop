@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 @Injectable()
 export class EnergyInputExhaustGasService {
 
@@ -10,33 +11,27 @@ export class EnergyInputExhaustGasService {
 
   initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
-      'excessAir': ['', Validators.required],
-      'combustionAirTemp': ['', Validators.required],
-      'exhaustGasTemp': ['', Validators.required],
       'totalHeatInput': [0, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'availableHeat': [100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]]
     });
   }
 
   getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): FormGroup {
     let tmpGroup = this.formBuilder.group({
-      'excessAir': [energyInputExhaustGas.excessAir, Validators.required],
-      'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp, Validators.required],
-      'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp, Validators.required],
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
-      'name': [energyInputExhaustGas.name]
+      'name': [energyInputExhaustGas.name],
+      'availableHeat': [energyInputExhaustGas.availableHeat, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]]
     });
     return tmpGroup;
   }
 
   getLossFromForm(form: FormGroup): EnergyInputExhaustGasLoss {
     let tmpExhaustGas: EnergyInputExhaustGasLoss = {
-      excessAir: form.controls.excessAir.value,
-      combustionAirTemp: form.controls.combustionAirTemp.value,
-      exhaustGasTemp: form.controls.exhaustGasTemp.value,
       totalHeatInput: form.controls.totalHeatInput.value,
       otherLosses: 0.0,
-      name: form.controls.name.value
+      name: form.controls.name.value,
+      availableHeat: form.controls.availableHeat.value
     };
     return tmpExhaustGas;
   }
