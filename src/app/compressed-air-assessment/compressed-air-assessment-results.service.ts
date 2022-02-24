@@ -526,14 +526,13 @@ export class CompressedAirAssessmentResultsService {
     let compressorInventoryItems: Array<CompressorInventoryItem> = compressedAirAssessment.compressorInventoryItems;
     dayTypes.forEach(dayType => {
       let dayTypeCompressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
-      let profileSummary = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
+      let profileSummary: Array<ProfileSummary> = this.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings);
       profileSummary.forEach(profile => {
-        let specificPowerAvgLoad = (profile.avgPower/profile.avgAirflow)*100;
+        let specificPowerAvgLoad: number = (profile.avgPower/profile.avgAirflow)*100;
         specificPowerAvgLoad = this.convertUnitsService.roundVal(specificPowerAvgLoad, 4);
-        let compressor: CompressorInventoryItem = compressorInventoryItems.find(compressor => {return compressor.itemId == profile.compressorId})
-
-        let ratedSpecificPower = this.calculateRatedSpecificPower(compressor);
-        let ratedIsentropicEfficiency = this.calculateRatedIsentropicEfficiency(compressor, ratedSpecificPower);
+        let compressor: CompressorInventoryItem = compressorInventoryItems.find(compressor => {return compressor.itemId == profile.compressorId});
+        let ratedSpecificPower: number = this.calculateRatedSpecificPower(compressor);
+        let ratedIsentropicEfficiency: number = this.calculateRatedIsentropicEfficiency(compressor, ratedSpecificPower, settings);
         let compressorSummary: CompressorSummary = {
           dayType: dayType,
           specificPowerAvgLoad: specificPowerAvgLoad,
@@ -547,16 +546,22 @@ export class CompressedAirAssessmentResultsService {
     return compressorSummaries;
   }
 
+  // RATED Specific Power from Nameplate Data
   calculateRatedSpecificPower(compressor: CompressorInventoryItem): number {
-    let ratedSpecificPower: number;
-    ratedSpecificPower = (compressor.nameplateData.totalPackageInputPower / compressor.nameplateData.fullLoadRatedCapacity) * 100;
+    let ratedSpecificPower: number = (compressor.nameplateData.totalPackageInputPower / compressor.nameplateData.fullLoadRatedCapacity) * 100;
     ratedSpecificPower = this.convertUnitsService.roundVal(ratedSpecificPower, 4);
     return ratedSpecificPower;
   }
 
-  calculateRatedIsentropicEfficiency (compressor: CompressorInventoryItem, ratedSpecificPower: number): number {
-    let ratedIsentropicEfficiency: number;
-    ratedIsentropicEfficiency = (16.52 *((((compressor.nameplateData.fullLoadOperatingPressure + 14.5)/14.5)^0.2857)-1))/ratedSpecificPower;
+  // RATED Isentropic Efficiency from Nameplate Data
+  calculateRatedIsentropicEfficiency (compressor: CompressorInventoryItem, ratedSpecificPower: number, settings: Settings): number {
+    let dischargePressure: number = compressor.nameplateData.fullLoadOperatingPressure;
+    if(settings.unitsOfMeasure == 'Metric'){
+      dischargePressure = this.convertUnitsService.value(dischargePressure).from('barg').to('psig');
+      let conversionHelper: number = this.convertUnitsService.value(1).from('m3/min').to('ft3/min');
+      ratedSpecificPower = this.convertUnitsService.roundVal((ratedSpecificPower/conversionHelper), 4);
+    }
+    let ratedIsentropicEfficiency: number = (16.52 *((((dischargePressure + 14.5)/14.5)^0.2857)-1))/ratedSpecificPower;
     ratedIsentropicEfficiency = this.convertUnitsService.roundVal(ratedIsentropicEfficiency, 4);
     return ratedIsentropicEfficiency;
   }

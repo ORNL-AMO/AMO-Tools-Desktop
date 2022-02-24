@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-performance-profiles',
@@ -21,19 +20,9 @@ export class PerformanceProfilesComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  dayTypes: Array<CompressedAirDayType>;
+  constructor() { }
 
-  compressorSummaries: Array<Array<CompressorSummary>>
-
-  inventoryItems: Array<CompressorInventoryItem>;
-
-  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
-
-  ngOnInit() {
-    this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
-    this.dayTypes = this.compressedAirAssessment.compressedAirDayTypes;
-    this.compressorSummaries = this.compressedAirAssessmentResultsService.calculateCompressorSummary(this.dayTypes, this.compressedAirAssessment, this.settings);
-
+  ngOnInit(): void{
   }
 
 }

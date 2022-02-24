@@ -19,7 +19,9 @@
             <tbody>
                 <tr>
                     <th [attr.rowspan]="dayTypes.length + 1">
-                        Specific Power at Average Load, kW/100 acfm
+                        Specific Power at Average Load,
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> kW/100 acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> kW/m<sup>3</sup>/min</span>
                     </th>
                 </tr>
                 <tr *ngFor="let compressorSummary of compressorSummaries; let index = index">
@@ -37,7 +39,10 @@
 
                 </tr>
                 <tr>
-                    <th colspan="2">Rated Specific Power, kW/100 acfm</th>
+                    <th colspan="2">Rated Specific Power,
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> kW/100 acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> kW/m<sup>3</sup>/min</span>
+                    </th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedSpecificPower">
                             {{compressor.ratedSpecificPower}}

@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressedAirDayType, CompressorInventoryItem, CompressorSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
+import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 
 @Component({
   selector: 'app-compressor-summary-table',
@@ -9,24 +10,28 @@ import { Settings } from '../../shared/models/settings';
 })
 export class CompressorSummaryTableComponent implements OnInit {
   @Input()
-  compressorSummaries: Array<Array<CompressorSummary>>;
-  @Input()
-  compressorInventoryItems: Array<CompressorInventoryItem>;
-  @Input()
-  dayTypes: Array<CompressedAirDayType>;
+  compressedAirAssessment: CompressedAirAssessment;
   @Input()
   settings: Settings;
   @Input()
   printView: boolean;
   @Input()
-  inReport: boolean;
+  inReport: boolean;  
+  
+  compressorSummaries: Array<Array<CompressorSummary>>;
+  dayTypes: Array<CompressedAirDayType>;
+  compressorInventoryItems: Array<CompressorInventoryItem>;
+
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;
 
-  constructor() { }
+  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems;
+    this.dayTypes = this.compressedAirAssessment.compressedAirDayTypes;
+    this.compressorSummaries = this.compressedAirAssessmentResultsService.calculateCompressorSummary(this.dayTypes, this.compressedAirAssessment, this.settings);
   }
 
   updateTableString() {
