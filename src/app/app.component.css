@@ -1056,15 +1056,6 @@ Calculators
   border-radius: 15px;
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
-
-.fan-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-  width: 85px;
-  height: 75px;
-}
 .lighting-bulb {
   height: 55px;
   width: 55px;
@@ -1074,19 +1065,7 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
 }
 
-.ssmt-icon {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
-  /*background-color: rgba(41, 128, 185, 0);*/
-  border-radius: 15px;
-  border: 0.1px solid rgba(123, 120, 120, 0.25);
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
 
-.waste-water-icon-landing {
-  background: linear-gradient(rgba(228, 219, 219, 0.34), #70A2FF);
-  border-radius: 15px;
-  box-shadow: #7b7878 2px 2px 5px 1px;
-}
 
 .ico-size4.general {
   height: 55px;

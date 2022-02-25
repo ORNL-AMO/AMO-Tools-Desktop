@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { ReportRollupService } from '../report-rollup.service';
@@ -59,14 +59,13 @@ export class ReportSummaryGraphsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    this.reportSummaryGraphService.clearData();
+  ngOnDestroy() {    
     this.settingsSub.unsubscribe();
     this.pieChartDataSub.unsubscribe();
     this.energyChartDataSub.unsubscribe();
     this.costBarChartSub.unsubscribe();
     this.energyBarChartSub.unsubscribe();
-    this.costBarChartSub.unsubscribe();
+    this.costBarChartSub.unsubscribe();    
   }
 
 }

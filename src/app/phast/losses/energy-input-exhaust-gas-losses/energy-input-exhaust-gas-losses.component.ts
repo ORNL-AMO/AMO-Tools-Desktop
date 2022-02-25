@@ -6,7 +6,7 @@ import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/e
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { PhastResultsService } from '../../phast-results.service';
+import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -45,21 +45,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   showError: boolean = false;
   electricalHeatDelivered: number = 0;
   energyInputTotal: number = 0;
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null};
   constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastResultsService: PhastResultsService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.addLossToggle) {
-        this.addLoss();
-      } else if (changes.modificationIndex) {
-        this._exhaustGasLosses = new Array();
-        this.initForms();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
 
   ngOnInit() {
     if (this.settings.energyResultUnit !== 'kWh') {
@@ -76,6 +63,21 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       this.lossesLocked = true;
     }
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.addLossToggle) {
+        this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._exhaustGasLosses = new Array();
+        this.initForms();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+  }
+
 
   initForms() {
     if (this.losses.energyInputExhaustGasLoss) {
@@ -124,6 +126,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputTotal = tmpResults.grossHeatInput;
       this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss - loss.exhaustGas;
+      this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(this.electricalHeatDelivered);
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;

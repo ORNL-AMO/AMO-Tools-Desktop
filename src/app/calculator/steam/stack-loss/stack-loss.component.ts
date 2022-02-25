@@ -103,6 +103,7 @@ export class StackLossComponent implements OnInit {
         this.stackLossForm = this.stackLossService.initFormMass(this.settings);
       }
     }
+   this.cd.detectChanges();
   }
 
   changeFuelType() {

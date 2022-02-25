@@ -1,0 +1,57 @@
+<div class="row print-avoid-break">
+    <div class="col-12">
+        <label class="group-label text-center">Annual Energy Usage</label>
+    </div>
+    <div class="col-6" *ngIf="pieChartData">
+        <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
+            [energyUnit]="reportSummaryEnergyUnit" [printView]="true">
+        </app-report-summary-pie-chart>
+    </div>
+    <div class="col-6" *ngIf="energyBarChart">
+        <app-report-summary-bar-chart [barChartData]="energyBarChart"
+            [yAxisLabel]="'Annual Energy Usage (' + settings.commonRollupUnit +')'" [tickFormat]="'.2s'"
+            [printView]="true">
+        </app-report-summary-bar-chart>
+    </div>
+</div>
+<div class="row print-avoid-break">
+    <div class="col-12">
+        <label class="group-label text-center">Annual Costs</label>
+    </div>
+    <div class="col-6" *ngIf="pieChartData">
+        <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'"
+            [energyUnit]="reportSummaryEnergyUnit" [printView]="true">
+        </app-report-summary-pie-chart>
+    </div>
+    <div class="col-6" *ngIf="costBarChart">
+        <app-report-summary-bar-chart [barChartData]="costBarChart"
+            [yAxisLabel]="'Annual Energy Usage (' + settings.currency +'/yr)'" [tickFormat]="'$.2s'" [printView]="true">
+        </app-report-summary-bar-chart>
+    </div>
+</div>
+<div class="row print-avoid-break">
+    <div class="col-12">
+        <label class="group-label text-center">Annual Carbon Emissions</label>
+    </div>
+    <div class="col-6" *ngIf="pieChartData">
+        <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'carbon'"
+            [energyUnit]="reportSummaryEnergyUnit" [printView]="true">
+        </app-report-summary-pie-chart>
+    </div>
+    <div class="col-6" *ngIf="carbonBarChart">
+        <app-report-summary-bar-chart [barChartData]="carbonBarChart"
+            [yAxisLabel]="'Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)'" [tickFormat]="'.2s'"
+            [printView]="true">
+        </app-report-summary-bar-chart>
+    </div>
+</div>
+<div class="row print-avoid-break">
+    <div class="col-12">
+        <label class="group-label text-center">Fuel vs Electricity Energy Usage</label>
+    </div>
+    <div class="col-6" *ngIf="energyChartData">
+        <app-report-summary-pie-chart [pieChartData]="energyChartData" [dataOption]="pieChartDataOption"
+            [energyUnit]="reportSummaryEnergyUnit" [printView]="true">
+        </app-report-summary-pie-chart>
+    </div>
+</div>

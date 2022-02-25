@@ -18,7 +18,6 @@ import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
 import { SavingsOpportunity } from '../explore-opps';
-import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
 
 export interface PHAST {
   name?: string;
@@ -38,7 +37,7 @@ export interface PHAST {
   dataUpdated?: boolean;
   lossDataUnits?: string;
   valid?: PhastValid;
-  co2SavingsData?: Co2SavingsData;
+  co2SavingsData?: PhastCo2SavingsData;
 }
 
 
@@ -124,14 +123,8 @@ export interface PhastResults {
   totalEnergyInput: number;
   totalExhaustGas: number;
   totalExhaustGasEAF: number;
-  EAFNaturalGasUsed?: number;
-  EAFOtherFuelUsed?: number;
-  EAFElectricEnergyUsed?: number;
-  EAFTotalFuelEnergyUsed?: number;
-  EAFCoalCarbonUsed?: number;
-  EAFCoalHeatingValue?: number;
-  EAFElectrodeUsed?: number;
-  EAFElectrodeHeatingValue?: number;
+  hourlyEAFResults: EAFResults;
+  annualEAFResults: EAFResults;
   totalSystemLosses: number;
   energyInputTotal: number;
   exothermicHeat: number;
@@ -146,7 +139,30 @@ export interface PhastResults {
   calculatedFlueGasO2: number;
   availableHeatPercent: number;
   electricalHeatDelivered?: number;
-  co2EmissionsOutput?: number;
+  co2EmissionsOutput?: PhastCo2EmissionsOutput
+}
+
+export interface EAFResults {
+  naturalGasUsed?: number;
+  otherFuelUsed?: number;
+  electricEnergyUsed?: number;
+  totalFuelEnergyUsed?: number;
+  coalCarbonUsed?: number;
+  coalHeatingValue?: number;
+  naturalGasHeatingValue?: number;
+  electrodeUsed?: number;
+  electrodeHeatingValue?: number;
+}
+
+export interface PhastCo2EmissionsOutput {
+  hourlyTotalEmissionOutput: number,
+  totalEmissionOutput: number,
+  fuelEmissionOutput: number,
+  electrodeEmissionsOutput: number,
+  otherFuelEmissionsOutput: number,
+  coalCarbonEmissionsOutput: number,
+  electricityEmissionOutput: number,
+  emissionsSavings: number,
 }
 
 export interface ShowResultsCategories {
@@ -157,6 +173,9 @@ export interface ShowResultsCategories {
   showEnInput1: boolean;
   showEnInput2: boolean;
   showExGas: boolean;
+  showHeatDelivered?: boolean;
+  showElectricalDelivered?: boolean;
+  showChemicalEnergyDelivered?: boolean;
 }
 
 export interface ExecutiveSummary {
@@ -166,6 +185,7 @@ export interface ExecutiveSummary {
   annualEnergySavings?: number;
   annualCost?: number;
   annualCarbonCoalCost?: number,
+  annualNaturalGasCost?: number,
   annualElectrodeCost?: number,
   annualOtherFuelCost?: number,
   annualTotalFuelCost?: number,
@@ -173,7 +193,7 @@ export interface ExecutiveSummary {
   annualCostSavings?: number;
   implementationCosts?: number;
   paybackPeriod?: number;
-  co2EmissionsOutput?: number;
+  co2EmissionsOutput?: PhastCo2EmissionsOutput;
 }
 
 
@@ -202,4 +222,27 @@ export interface PhastValid {
   exhaustGasValid: boolean;
   inputExhaustValid: boolean
   auxPowerValid: boolean;
+}
+
+export interface PhastCo2SavingsData {
+  energyType: string;
+  totalEmissionOutputRate: number;
+  totalFuelEmissionOutputRate?: number,
+  totalNaturalGasEmissionOutputRate?: number,
+  totalCoalEmissionOutputRate?: number,
+  totalOtherEmissionOutputRate?: number,
+  coalFuelType?: string;
+  eafOtherFuelSource?: string,
+  otherFuelType?: string;
+  electricityUse: number;
+  energySource?: string;
+  fuelType?: string;
+  eGridRegion?: string;
+  eGridSubregion?: string;
+  totalEmissionOutput: number;
+  userEnteredBaselineEmissions?: boolean;
+  userEnteredModificationEmissions?: boolean;
+  zipcode?: string,
+  percentFuelUsage?: number,
+  otherFuelMixedCO2SavingsData?: Array<PhastCo2SavingsData>,
 }

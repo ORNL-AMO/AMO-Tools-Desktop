@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories, CalculatedByPhast } from '../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, CalculatedByPhast, EAFResults } from '../shared/models/phast/phast';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
@@ -12,6 +12,7 @@ import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+import { EnInputResultsObj } from './losses/energy-input/energy-input.component';
 
 
 @Injectable()
@@ -67,7 +68,37 @@ export class PhastResultsService {
       heatingSystemEfficiency: 0,
       calculatedExcessAir: 0,
       calculatedFlueGasO2: 0,
-      availableHeatPercent: 0
+      availableHeatPercent: 0,
+      hourlyEAFResults: {
+        naturalGasUsed: 0,
+        otherFuelUsed: 0,
+        electricEnergyUsed: 0,
+        electrodeHeatingValue: 0,
+        coalHeatingValue: 0,
+        totalFuelEnergyUsed: 0,
+        coalCarbonUsed: 0,
+        electrodeUsed: 0,
+      },
+      annualEAFResults: {
+        naturalGasUsed: 0,
+        otherFuelUsed: 0,
+        electricEnergyUsed: 0,
+        totalFuelEnergyUsed: 0,
+        electrodeHeatingValue: 0,
+        coalHeatingValue: 0,
+        coalCarbonUsed: 0,
+        electrodeUsed: 0,
+      },
+      co2EmissionsOutput: {
+        hourlyTotalEmissionOutput: undefined,
+        totalEmissionOutput: undefined,
+        fuelEmissionOutput: undefined,
+        electricityEmissionOutput: undefined,
+        emissionsSavings: undefined,
+        electrodeEmissionsOutput: undefined,
+        otherFuelEmissionsOutput: undefined,
+        coalCarbonEmissionsOutput: undefined,
+      }
     };
     return results;
   }
@@ -217,46 +248,63 @@ export class PhastResultsService {
     }
 
     if (phast.co2SavingsData) {
-      phast.co2SavingsData.electricityUse = results.grossHeatInput;
-      results.co2EmissionsOutput = this.co2SavingPhastService.getCo2EmissionsResult(phast.co2SavingsData, settings);
-    } else {
-      results.co2EmissionsOutput = 0;
-    }
+      results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);   
+    } 
 
     return results;
   }
-
-  setEAFResults(phast: PHAST, results: PhastResults, settings: Settings): PhastResults {
+  setEAFResults(phast: PHAST, phastResults: PhastResults, settings: Settings): PhastResults {
     let EAFInputs: EnergyInputEAF = JSON.parse(JSON.stringify(phast.losses.energyInputEAF[0]));
-    results.EAFCoalCarbonUsed = EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue;
-    results.EAFElectrodeUsed = EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue;
-    results.EAFNaturalGasUsed = EAFInputs.naturalGasHeatInput;
-    results.EAFOtherFuelUsed = EAFInputs.otherFuels;
-    results.EAFElectricEnergyUsed = EAFInputs.electricityInput;
-    
-    results.EAFCoalHeatingValue = EAFInputs.coalHeatingValue;
-    results.EAFElectrodeHeatingValue = EAFInputs.electrodeHeatingValue;
-    
-    if (settings.unitsOfMeasure == 'Metric') {
-      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('kJ').to('GJ');
-      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('kJ').to('GJ');
+    let naturalGasHeatingValue: number = 22030.7;
+    if (settings.unitsOfMeasure === 'Metric') {
+      naturalGasHeatingValue = this.convertUnitsService.value(naturalGasHeatingValue).from('Btu').to('kJ');
+    } 
+    let eafResults: EAFResults = {
+      naturalGasUsed: EAFInputs.naturalGasHeatInput,
+      electricEnergyUsed: EAFInputs.electricityInput,
+      totalFuelEnergyUsed: undefined,
+      electrodeHeatingValue: EAFInputs.electrodeHeatingValue,
+      coalHeatingValue: EAFInputs.coalHeatingValue,
+      // coalCarbonInjection is in lb/hr the coalHeatingValue is in btu/lb.  the lbs cancel and you have btu/hr
+      coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
+      electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
+      otherFuelUsed: EAFInputs.otherFuels,
+      naturalGasHeatingValue: naturalGasHeatingValue
+    };
+     if (settings.unitsOfMeasure == 'Metric') {
+      eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
+      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('kJ').to('GJ');
     } else {
-      results.EAFCoalCarbonUsed = this.convertUnitsService.value(results.EAFCoalCarbonUsed).from('Btu').to('MMBtu');
-      results.EAFElectrodeUsed = this.convertUnitsService.value(results.EAFElectrodeUsed).from('Btu').to('MMBtu');
+      eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('Btu').to('MMBtu');
+      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('Btu').to('MMBtu');
     }
     
-    results.EAFTotalFuelEnergyUsed = results.EAFNaturalGasUsed + results.EAFCoalCarbonUsed + results.EAFElectrodeUsed + results.EAFOtherFuelUsed;
-    
+    eafResults.totalFuelEnergyUsed = eafResults.naturalGasUsed + eafResults.coalCarbonUsed + eafResults.electrodeUsed + eafResults.otherFuelUsed;
+    phastResults.hourlyEAFResults = eafResults;
+
+    let annualEAFResults: EAFResults = JSON.parse(JSON.stringify(eafResults));
+    annualEAFResults.coalCarbonUsed = eafResults.coalCarbonUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.coalHeatingValue = eafResults.coalHeatingValue * phast.operatingHours.hoursPerYear;
+    annualEAFResults.electrodeUsed = eafResults.electrodeUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.electrodeHeatingValue = eafResults.electrodeHeatingValue * phast.operatingHours.hoursPerYear;
+    annualEAFResults.naturalGasUsed = eafResults.naturalGasUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.naturalGasHeatingValue = eafResults.naturalGasHeatingValue * phast.operatingHours.hoursPerYear;
+    annualEAFResults.otherFuelUsed = eafResults.otherFuelUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.electricEnergyUsed = eafResults.electricEnergyUsed * phast.operatingHours.hoursPerYear;
+    phastResults.annualEAFResults = annualEAFResults;
+
     // Legacy results
     let tmpResults = this.phastService.energyInputEAF(EAFInputs, settings);
-    results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
+    phastResults.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
     //use grossHeatInput here because it will be updated if exhaustGasEAF exists
-    results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
-    results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
-    results.energyInputTotal = results.grossHeatInput;
+    phastResults.grossHeatInput = phastResults.grossHeatInput + phastResults.totalExhaustGasEAF;
+    phastResults.energyInputHeatDelivered = phastResults.grossHeatInput - tmpResults.totalChemicalEnergyInput;
+    phastResults.energyInputTotal = phastResults.grossHeatInput;
 
-    return results;
+    return phastResults;
   }
+
+
 
   getResultCategories(settings: Settings): ShowResultsCategories {
     let tmpResultCategories: ShowResultsCategories = {
@@ -266,15 +314,23 @@ export class PhastResultsService {
       showFlueGas: false,
       showEnInput1: false,
       showEnInput2: false,
-      showExGas: false
+      showExGas: false,
+      showHeatDelivered: false,
+      showElectricalDelivered: false,
+      showChemicalEnergyDelivered: false,
     };
     if (settings.energySourceType === 'Fuel') {
       tmpResultCategories.showFlueGas = true;
+      tmpResultCategories.showHeatDelivered = true;
     } else if (settings.energySourceType === 'Electricity') {
+      tmpResultCategories.showHeatDelivered = true;
+      tmpResultCategories.showElectricalDelivered = true;
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         tmpResultCategories.showSlag = true;
         tmpResultCategories.showExGas = true;
         tmpResultCategories.showEnInput1 = true;
+        tmpResultCategories.showHeatDelivered = false;
+        tmpResultCategories.showChemicalEnergyDelivered = true;
       } else if (settings.furnaceType !== 'Custom Electrotechnology') {
         tmpResultCategories.showAuxPower = true;
         tmpResultCategories.showEnInput2 = true;
@@ -341,4 +397,16 @@ export class PhastResultsService {
       return undefined;
     }
   }
+
+  checkEnergyInputWarnings(energyInputHeatDelivered: number): string {
+    if (energyInputHeatDelivered < 0) {
+      return 'More heat than necessary is being delivered via burners. Check fuel inputs or estimate other losses.';
+    } else {
+      return null;
+    }
+  }
+}
+
+export interface EnergyInputWarnings {
+  energyInputHeatDelivered: string
 }

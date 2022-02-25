@@ -71,3 +71,7 @@ tr > th:not(:first-child){
 tr.total{
     border-top: solid;
 }
+
+tr td{
+    width: 20%;
+}

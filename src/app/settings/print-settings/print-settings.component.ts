@@ -30,6 +30,7 @@ export class PrintSettingsComponent implements OnInit {
       this.settings.printReportSankey &&
       this.settings.printResults &&
       this.settings.printInputData &&
+      this.settings.printSystemProfiles &&
       this.settings.printExecutiveSummary &&
       this.settings.printEnergySummary &&
       this.settings.printLossesSummary &&
@@ -39,6 +40,7 @@ export class PrintSettingsComponent implements OnInit {
       this.settings.printWasteWaterRollup &&
       this.settings.printDetailedResults &&
       this.settings.printReportDiagram &&
+      this.settings.printCompressedAirRollup &&
       this.settings.printAll
     );
   }
@@ -53,6 +55,7 @@ export class PrintSettingsComponent implements OnInit {
     this.settings.printReportSankey = this.selectAllOptions;
     this.settings.printResults = this.selectAllOptions;
     this.settings.printInputData = this.selectAllOptions;
+    this.settings.printSystemProfiles = this.selectAllOptions;
     this.settings.printExecutiveSummary = this.selectAllOptions;
     this.settings.printEnergySummary = this.selectAllOptions;
     this.settings.printLossesSummary = this.selectAllOptions;
@@ -62,6 +65,7 @@ export class PrintSettingsComponent implements OnInit {
     this.settings.printWasteWaterRollup = this.selectAllOptions;
     this.settings.printDetailedResults = this.selectAllOptions;
     this.settings.printReportDiagram = this.selectAllOptions;
+    this.settings.printCompressedAirRollup = this.selectAllOptions;
     this.settings.printAll = this.selectAllOptions;
     this.savePrintSettings.emit(true);
   }
@@ -114,6 +118,12 @@ export class PrintSettingsComponent implements OnInit {
     this.savePrintSettings.emit(true);
   }
 
+  togglePrintSystemProfiles() {
+    this.settings.printSystemProfiles = !this.settings.printSystemProfiles;
+    this.checkSelectAll();
+    this.savePrintSettings.emit(true);
+  }
+
   togglePrintExecutiveSummary() {
     this.settings.printExecutiveSummary = !this.settings.printExecutiveSummary;
     this.checkSelectAll();
@@ -152,6 +162,12 @@ export class PrintSettingsComponent implements OnInit {
 
   togglePrintWasteWaterRollup() {
     this.settings.printWasteWaterRollup = !this.settings.printWasteWaterRollup;
+    this.checkSelectAll();
+    this.savePrintSettings.emit(true);
+  }
+
+  togglePrintCompressedAirRollup() {
+    this.settings.printCompressedAirRollup = !this.settings.printCompressedAirRollup;
     this.checkSelectAll();
     this.savePrintSettings.emit(true);
   }

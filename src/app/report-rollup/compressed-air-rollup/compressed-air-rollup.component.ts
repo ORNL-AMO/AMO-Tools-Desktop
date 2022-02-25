@@ -151,8 +151,6 @@ export class CompressedAirRollupComponent implements OnInit {
       if (this.settings.compressedAirRollupUnit !== 'kWh') {
         baseEnergyUsed = this.convertUnitsService.value(baseEnergyUsed).from('kWh').to(this.settings.compressedAirRollupUnit);
         modEnergyUse = this.convertUnitsService.value(modEnergyUse).from('kWh').to(this.settings.compressedAirRollupUnit);
-        basePeakEnergy = this.convertUnitsService.value(basePeakEnergy).from('kWh').to(this.settings.compressedAirRollupUnit);
-        modPeakEnergyUse = this.convertUnitsService.value(modPeakEnergyUse).from('kWh').to(this.settings.compressedAirRollupUnit);
       }
       this.rollupSummaryTableData.push({
         equipmentName: resultItem.name,

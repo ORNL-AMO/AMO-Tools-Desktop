@@ -74,8 +74,8 @@ export class CompressedAirReportRollupService {
           if (val.assessment.compressedAirAssessment.modifications.length !== 0) {
             let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
             val.assessment.compressedAirAssessment.modifications.forEach(mod => {
-              let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod, val.settings);
-              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults)
+              let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, undefined, baselineResults);
+              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults);
               modResultsArr.push(combinedResults);
             });
             this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
@@ -98,8 +98,8 @@ export class CompressedAirReportRollupService {
     selectedAssessments.forEach(val => {
       let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
       if (val.modification) {
-        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings);
-        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults)
+        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings, undefined, baselineResults);
+        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults);
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: combinedResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
       } else {
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: undefined, assessmentId: val.assessmentId, name: val.name, modName: 'Baseline', baseline: val.baseline, modification: val.modification, settings: val.settings });
@@ -112,6 +112,8 @@ export class CompressedAirReportRollupService {
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
     this.selectedAssessmentResults.forEach(result => {
       let diffCost: number = 0;
       let diffEnergy: number = 0;
@@ -120,9 +122,13 @@ export class CompressedAirReportRollupService {
         sumCost += result.modificationResults.totalAnnualOperatingCost;
         diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
         sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
+        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings;
+        sumCo2Emissions += result.modificationResults.annualEmissionOutput;
+        
       } else {
         sumCost += result.baselineResults.total.totalAnnualOperatingCost;
         sumEnergy += result.baselineResults.total.energyUse;
+        sumCo2Emissions += result.baselineResults.total.annualEmissionOutput;
       }
       sumSavings += diffCost;
       sumEnergySavings += diffEnergy;
@@ -136,8 +142,8 @@ export class CompressedAirReportRollupService {
       totalEnergy: sumEnergy,
       electricityEnergy: sumEnergy + sumEnergySavings,
       fuelEnergy: 0,
-      carbonEmissions: 0,
-      carbonSavings: 0
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
     }
   }
 }

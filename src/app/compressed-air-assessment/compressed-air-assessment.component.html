@@ -22,7 +22,7 @@
     <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item bg-white"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-profile-setup-form *ngIf="profileTab != 'annual-summary'"></app-profile-setup-form>
+      <app-profile-setup-form *ngIf="profileTab != 'annual-summary' && profileTab != 'compressor-summary'"></app-profile-setup-form>
       <app-system-profile-setup class="w-100" *ngIf="profileTab == 'setup'">
       </app-system-profile-setup>
       <app-system-profile-summary class="w-100" *ngIf="profileTab == 'summary'">
@@ -31,6 +31,8 @@
       </app-system-profile-graphs>
       <app-system-profile-annual-summary class="w-100" *ngIf="profileTab == 'annual-summary'">
       </app-system-profile-annual-summary>
+      <app-compressor-summary class="w-100" *ngIf="profileTab == 'compressor-summary'">
+      </app-compressor-summary>
     </div>
   </div>
 

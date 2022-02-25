@@ -60,6 +60,7 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
+  hasEgridDataInit: boolean;
   assessmentTab: string = 'explore-opportunities';
   sankeyPhast: PHAST;
   modificationIndex: number;
@@ -93,7 +94,11 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.egridService.getAllSubRegions();
+    this.egridService.processCSVData().then(result => {
+      this.hasEgridDataInit = true;
+    }).catch(err => {
+      this.hasEgridDataInit = false;
+    });
     this.tab1Status = '';
     this.tab2Status = '';
 

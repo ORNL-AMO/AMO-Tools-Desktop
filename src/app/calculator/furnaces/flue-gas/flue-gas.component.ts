@@ -104,12 +104,12 @@ export class FlueGasComponent implements OnInit {
     this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
       if (baselineData) {
         this.setBaselineSelected();
-        this.flueGasService.calculate(this.settings);
+        this.flueGasService.calculate(this.settings, false, true);
       }
     });
     this.modificationDataSub = this.flueGasService.modificationData.subscribe(modificationData => {
       if (modificationData) {
-        this.flueGasService.calculate(this.settings);
+        this.flueGasService.calculate(this.settings, false, true);
       }
     });
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
@@ -119,12 +119,12 @@ export class FlueGasComponent implements OnInit {
     });
     this.baselineEnergySub = this.flueGasService.baselineEnergyData.subscribe(baselineEnergyData => {
       if (baselineEnergyData) {
-        this.flueGasService.calculate(this.settings);
+        this.flueGasService.calculate(this.settings, false, true);
       }
     });
     this.modificationEnergySub = this.flueGasService.modificationEnergyData.subscribe(modificationEnergyData => {
       if (modificationEnergyData) {
-        this.flueGasService.calculate(this.settings);
+        this.flueGasService.calculate(this.settings, false, true);
       }
   });
   }
@@ -144,7 +144,7 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
-    this.flueGasService.calculate(this.settings);
+    this.flueGasService.calculate(this.settings, false, true);
    }
 
   btnResetData() {

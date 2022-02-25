@@ -1,6 +1,6 @@
 <div class="d-flex ssmt modify-conditions panel-container ssmt-diagram w-100" *ngIf="outputData && dataCalculated">
-  <div class="panel-column scroll-item diagram-container col-md-8 col-sm-6 justify-content-center"
-    [ngStyle]="{'height.px': containerHeight}" #diagramContainer>
+  <div class="panel-column scroll-item diagram-container justify-content-center"
+    [ngStyle]="{'height.px': containerHeight}" #diagramContainer [ngClass]="{'col-11': this.sidebarCollapsed, 'col-md-8 col-sm-6': !sidebarCollapsed}">
     <div class="row no-gutters justify-content-between">
       <div class="col-auto pt-2 pl-3 pr-3">
         <div class="form-group">
@@ -40,36 +40,61 @@
     </div>
 
   </div>
-  <div class="d-flex flex-column flex-fill diagram-help-panel scroll-item col-md-4 col-sm-6"
-    [ngStyle]="{'height.px': containerHeight}" *ngIf="outputData">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-          <div>Results</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-          <div>Help</div>
-        </a>
-      </div>
+    <div class="sidebar hide-print scroll-item" id="sidebar"
+      [ngClass]="{'w-25': sidebarCollapsed,'w-100': !sidebarCollapsed}">
+      <ul id="sidebar-list">
+        <li class="collapse-option">
+          <div class="d-flex align-items-center" (click)="collapseSidebar()">
+            <div class="p-1 d-flex text-center">
+              <span *ngIf="!sidebarCollapsed" class="fa fa-chevron-right"></span>
+              <span *ngIf="sidebarCollapsed" class="fa fa-chevron-left pr-2 pl-2"></span>
+            </div>
+            <div class="p-0" [ngClass]="{'collapse': sidebarCollapsed}">
+              Collapse Sidebar
+            </div>
+          </div>
+        </li>
+        <li [ngClass]="{'collapse': sidebarCollapsed}">
+          <div class="d-flex align-items-center">
+            <div class="d-flex flex-column flex-fill diagram-help-panel scroll-item"
+              [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'col-1': sidebarCollapsed, '': !sidebarCollapsed}"
+              *ngIf="outputData">
+              <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                  <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                    (click)="setTab('results')">
+                    <div>Results</div>
+                  </a>
+                </div>
+                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                  <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                    <div>Help</div>
+                  </a>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center mr-2 ml-2">
+                <div class="pt-4 result-tables w-100"
+                  *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
+                  <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
+                    [settings]="settings" (emitCalculateResultsWithMarginalCosts)="calculateResultsWithMarginalCosts()">
+                  </app-results-table>
+                  <div class="d-flex w-100 pt-2 justify-content-center">
+                    <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
+                      General Summary</a>
+                    <a class="click-link small" (click)="selectTable('cost')" *ngIf="selectedTable == 'default'">View More
+                      Cost
+                      Details</a>
+                  </div>
+                </div>
+                <div class="w-100" *ngIf="tabSelect == 'help'">
+                  <app-diagram-help></app-diagram-help>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div class="d-flex justify-content-center mr-2 ml-2">
-      <div class="pt-4 result-tables w-100" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
-        <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
-          [settings]="settings" (emitCalculateResultsWithMarginalCosts)="calculateResultsWithMarginalCosts()"></app-results-table>
-        <div class="d-flex w-100 pt-2 justify-content-center">
-          <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
-            General Summary</a>
-          <a class="click-link small" (click)="selectTable('cost')" *ngIf="selectedTable == 'default'">View More Cost
-            Details</a>
-        </div>
-      </div>
-      <div class="w-100" *ngIf="tabSelect == 'help'">
-        <app-diagram-help></app-diagram-help>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center"

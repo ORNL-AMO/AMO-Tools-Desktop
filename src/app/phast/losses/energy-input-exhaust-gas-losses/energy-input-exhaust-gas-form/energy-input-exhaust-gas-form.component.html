@@ -10,15 +10,6 @@
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
-    <div class="form-group">
-      <label class="small" for="{{'electricalPowerInput_'+idString}}">Electrical Power Input</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareElectricalPowerInput(), 'invalid': exhaustGasForm.controls.electricalPowerInput.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0"
-          class="form-control" formControlName="electricalPowerInput" id="{{'electricalPowerInput_'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('electricalPowerInput')">
-        <span class="input-group-addon units">kW</span>
-      </div>
-    </div>
   </div>
   <div class="form-section">
     <div class="form-group">
