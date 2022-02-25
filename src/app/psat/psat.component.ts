@@ -453,7 +453,8 @@ export class PsatComponent implements OnInit {
   }
 
   closeWelcomeScreen() {
-    // this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.psatService.modalOpen.next(false);
   }
