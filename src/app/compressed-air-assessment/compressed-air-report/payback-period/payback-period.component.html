@@ -6,16 +6,19 @@
             <table class="table table-hover table-striped">
                 <tbody>
                     <tr>
-                        <td class="w-25 bold">
+                        <td class="bold">
                             <!-- {{combinedResult.dayTypeName}} -->
                         </td>
-                        <td class="w-25 bold">
-                            Cost Savings <br> ($)
+                        <td class="bold">
+                            Energy Cost Savings <br> ($)
                         </td>
-                        <td class="w-25 bold">
+                        <td class="bold">
+                            Peak Demand Savings <br> ($)
+                        </td>
+                        <td class="bold">
                             Implementation Cost <br> ($)
                         </td>
-                        <td class="w-25 bold">
+                        <td class="bold">
                             Payback <br> (months)
                         </td>
                     </tr>
@@ -32,6 +35,9 @@
                         <td>
                             &mdash;
                         </td>
+                        <td>
+                            &mdash;
+                        </td>
                     </tr>
                     <tr *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.cost">
                         <td class="bold">
@@ -39,6 +45,9 @@
                         </td>
                         <td>
                             {{result.combinedResults.addReceiverVolumeSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
                         </td>
                         <td>
                             {{result.combinedResults.addReceiverVolumeSavings.implementationCost}}
@@ -55,6 +64,9 @@
                             {{result.combinedResults.adjustCascadingSetPointsSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
+                            &mdash;
+                        </td>
+                        <td>
                             {{result.combinedResults.adjustCascadingSetPointsSavings.implementationCost}}
                         </td>
                         <td>
@@ -67,6 +79,9 @@
                         </td>
                         <td>
                             {{result.combinedResults.improveEndUseEfficiencySavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
                         </td>
                         <td>
                             {{result.combinedResults.improveEndUseEfficiencySavings.implementationCost}}
@@ -83,6 +98,9 @@
                             {{result.combinedResults.reduceAirLeaksSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
+                            &mdash;
+                        </td>
+                        <td>
                             {{result.combinedResults.reduceAirLeaksSavings.implementationCost}}
                         </td>
                         <td>
@@ -95,6 +113,9 @@
                         </td>
                         <td>
                             {{result.combinedResults.reduceRunTimeSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
                         </td>
                         <td>
                             {{result.combinedResults.reduceRunTimeSavings.implementationCost}}
@@ -111,6 +132,9 @@
                             {{result.combinedResults.reduceSystemAirPressureSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
+                            &mdash;
+                        </td>
+                        <td>
                             {{result.combinedResults.reduceSystemAirPressureSavings.implementationCost}}
                         </td>
                         <td>
@@ -125,10 +149,30 @@
                             {{result.combinedResults.useAutomaticSequencerSavings.savings.cost | number:'1.0-0'}}
                         </td>
                         <td>
+                            &mdash;
+                        </td>
+                        <td>
                             {{result.combinedResults.useAutomaticSequencerSavings.implementationCost}}
                         </td>
                         <td>
                             {{result.combinedResults.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="result.combinedResults.auxiliaryPowerUsage.cost">
+                        <td class="bold">
+                            Auxiliary Power
+                        </td>
+                        <td>
+                            {{-result.combinedResults.auxiliaryPowerUsage.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                        <td>
+                            &mdash;
                         </td>
                     </tr>
                     <tr class="total">
@@ -137,6 +181,9 @@
                         </td>
                         <td>
                             {{result.combinedResults.allSavingsResults.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.peakDemandCostSavings | number:'1.0-0'}}
                         </td>
                         <td>
                             {{result.combinedResults.allSavingsResults.implementationCost}}
