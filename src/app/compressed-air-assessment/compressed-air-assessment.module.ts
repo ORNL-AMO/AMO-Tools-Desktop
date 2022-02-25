@@ -130,6 +130,8 @@ import { CompressedAirReportModule } from './compressed-air-report/compressed-ai
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
+import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
 
 @NgModule({
@@ -208,7 +210,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     AdjustSequencerProfileComponent,
     AdjustCascadingSetPointsHelpComponent,
     AssessmentNotesComponent,
-    ImproveEndUseEfficiencyItemComponent
+    ImproveEndUseEfficiencyItemComponent,
+    CompressorSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -237,6 +240,7 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     ProfileSummaryTableModule,
     AssessmentCo2SavingsModule,
     SharedCompressorPipesModule,
+    CompressorSummaryTableModule,
     SystemProfileGraphsModule,
     InventoryPerformanceProfileModule
   ],
