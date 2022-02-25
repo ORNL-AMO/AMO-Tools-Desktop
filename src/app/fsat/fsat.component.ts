@@ -473,16 +473,15 @@ export class FsatComponent implements OnInit {
   }
 
   checkShowWelcomeScreen() {
-    console.log('check show!')
     if (!this.settingsDbService.globalSettings.disableFansTutorial) {
       this.showWelcomeScreen = true;
-      console.log('show!')
       this.fsatService.modalOpen.next(true);
     }
   }
 
   closeWelcomeScreen() {
-    // this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.fsatService.modalOpen.next(false);
   }

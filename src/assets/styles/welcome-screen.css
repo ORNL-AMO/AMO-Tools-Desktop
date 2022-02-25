@@ -21,7 +21,27 @@
     text-align: center;
 }
 
-button.close{
+.welcome-screen button.close{
     color: white;
     font-size: 44px;
+}
+
+.welcome-screen .banner-box{
+    height: 69px;
+}
+
+.welcome-screen nav.navbar{
+    background-color: black;
+}
+
+.welcome-screen .home-nav-item:not(.book-item){
+    opacity: 0;
+}
+
+.welcome-screen a.user-manual{
+    color: white;
+}
+
+.welcome-screen .welcome-content{
+    margin-top: 3rem;
 }
