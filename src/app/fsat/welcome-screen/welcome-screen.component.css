@@ -1,0 +1,12 @@
+.book-item{
+    background-color: #FFE400;
+}
+
+
+.welcome-screen a.user-manual{
+    color: black;
+}
+
+.welcome-screen .welcome-content a.user-manual{
+    color: white;
+}
