@@ -2,7 +2,7 @@ import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-ass
 import { MotorPerformanceInputs } from "../../calculator/motors/motor-performance/motor-performance.service";
 import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.service";
 import { O2Enrichment, EnrichmentInput } from "./phast/o2Enrichment";
-import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
+import { EfficiencyImprovement, EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
@@ -44,6 +44,7 @@ export interface Calculator {
     //airSystemCapacityInputs: AirSystemCapacityInput;
     o2EnrichmentInputs?: Array<EnrichmentInput>;
     efficiencyImprovementInputs?: EfficiencyImprovementInputs;
+    efficiencyImprovement?: EfficiencyImprovement;
     energyEquivalencyInputs?: {
         energyEquivalencyFuel: EnergyEquivalencyFuel,
         energyEquivalencyElectric: EnergyEquivalencyElectric

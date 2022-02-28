@@ -1,0 +1,116 @@
+<label class="group-label">Baseline Results</label>
+<table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Available Heat</td>
+            <td *ngIf="efficiencyImprovement.results.baselineAvailableHeat" class="text-center w-50">
+                {{efficiencyImprovement.results.baselineAvailableHeat | number:'0.2-2'}} %
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.baselineAvailableHeat" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Heat Input</td>
+            <td *ngIf="efficiencyImprovement.results.baselineHeatInput" class="text-center w-50">
+                {{efficiencyImprovement.results.baselineHeatInput | sigFigs:'3'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    MMBtu
+                </span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    GJ
+                </span>
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.baselineHeatInput" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Energy Cost</td>
+            <td *ngIf="efficiencyImprovement.results.baselineEnergyCost" class="text-center w-50">
+                {{efficiencyImprovement.results.baselineEnergyCost | currency:'USD':'symbol':'1.2-2'}}
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.baselineEnergyCost" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- export table component -->
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>
+
+
+<label class="group-label" *ngIf="efficiencyImprovement.modification">Modification Results</label>
+<table *ngIf="efficiencyImprovement.modification" #copyTable1 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Available Heat</td>
+            <td *ngIf="efficiencyImprovement.results.modificationAvailableHeat" class="text-center w-50">
+                {{efficiencyImprovement.results.modificationAvailableHeat | number:'0.2-2'}} %
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.modificationAvailableHeat" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Heat Input</td>
+            <td *ngIf="efficiencyImprovement.results.modificationHeatInput" class="text-center w-50">
+                {{efficiencyImprovement.results.modificationHeatInput | sigFigs:'3'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    MMBtu
+                </span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    GJ
+                </span>
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.modificationHeatInput" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Energy Cost</td>
+            <td *ngIf="efficiencyImprovement.results.modificationEnergyCost" class="text-center w-50">
+                {{efficiencyImprovement.results.modificationEnergyCost | currency:'USD':'symbol':'1.2-2'}}
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.modificationEnergyCost" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<app-exportable-results-table *ngIf="efficiencyImprovement.modification" [tableString]="table1String"
+    (updateTableString)="updateTable1String()"></app-exportable-results-table>
+
+<label class="group-label" *ngIf="efficiencyImprovement.modification">Savings</label>
+<table *ngIf="efficiencyImprovement.modification" #copyTable2 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Annual Energy Savings</td>
+            <td *ngIf="efficiencyImprovement.results.annualEnergySavings" class="text-center w-50">
+                {{efficiencyImprovement.results.annualEnergySavings |
+                number:'1.0-0'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    MMBtu
+                </span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    GJ
+                </span>
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.annualEnergySavings" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Cost Savings</td>
+            <td *ngIf="efficiencyImprovement.results.annualCostSavings" class="text-center w-50">{{efficiencyImprovement.results.annualCostSavings |
+                currency:'USD':'symbol':'1.2-2'}}
+            </td>
+            <td *ngIf="!efficiencyImprovement.results.annualCostSavings" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<app-exportable-results-table *ngIf="modificationExists" [tableString]="table2String"
+    (updateTableString)="updateTable2String()"></app-exportable-results-table>

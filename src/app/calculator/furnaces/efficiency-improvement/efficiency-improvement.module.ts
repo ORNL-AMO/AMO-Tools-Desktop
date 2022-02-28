@@ -9,6 +9,7 @@ import { EfficiencyImprovementGraphComponent } from './efficiency-improvement-gr
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { EfficiencyImprovementResultsComponent } from './efficiency-improvement-results/efficiency-improvement-results.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +23,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     EfficiencyImprovementComponent,
     EfficiencyImprovementFormComponent,
     EfficiencyImprovementHelpComponent,
-    EfficiencyImprovementGraphComponent
+    EfficiencyImprovementGraphComponent,
+    EfficiencyImprovementResultsComponent
   ],
   exports: [
     EfficiencyImprovementComponent
