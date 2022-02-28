@@ -131,6 +131,7 @@ import { ProfileSummaryTableModule } from './profile-summary-table/profile-summa
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -238,7 +239,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     AssessmentCo2SavingsModule,
     SharedCompressorPipesModule,
     SystemProfileGraphsModule,
-    InventoryPerformanceProfileModule
+    InventoryPerformanceProfileModule,
+    Co2HelpTextModule
   ],
   providers: [
     CompressedAirAssessmentService,
