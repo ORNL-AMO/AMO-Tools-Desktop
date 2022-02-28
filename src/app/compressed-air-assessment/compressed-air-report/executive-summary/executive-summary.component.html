@@ -205,7 +205,7 @@
             </tr>
             <tr class="bold-row">
                 <td>Annual Energy Used
-                    <span> (kWh/yr)</span>
+                    <span> (kWh)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{baselineResults.total.energyUse | number:'1.0-0'}}</td>
@@ -247,7 +247,7 @@
             </tr>
             <tr class="bold-row bg-row">
                 <td>Annual Energy Savings
-                    <span> (kWh/yr)</span>
+                    <span> (kWh)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
@@ -267,15 +267,20 @@
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     <span
-                        *ngIf="result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">{{result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings | sigFigs:'5'}}</span>
-                    <span *ngIf="!result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">&mdash; &mdash;</span>
+                        *ngIf="result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">{{result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings
+                        | sigFigs:'5'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings">&mdash;
+                        &mdash;</span>
                 </td>
             </tr>
 
             <!--cost-->
+            <tr class="bold-row">
+                <th colspan="3">Annual Savings</th>
+            </tr>
             <tr *ngIf="displayFlowReallocation">
                 <td>Flow Reallocation Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -289,7 +294,7 @@
             </tr>
             <tr *ngIf="displayAddReceiverVolume">
                 <td>Add Receiver Volume Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -303,7 +308,7 @@
             </tr>
             <tr *ngIf="displayAdjustCascadingSetPoints">
                 <td>Adjust Cascading Set Points Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -318,7 +323,7 @@
             </tr>
             <tr *ngIf="displayImproveEndUseEfficiency">
                 <td>Improve End Use Efficiency Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -333,7 +338,7 @@
             </tr>
             <tr *ngIf="displayReduceAirLeaks">
                 <td>Reduce Air Leaks Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -347,7 +352,7 @@
             </tr>
             <tr *ngIf="displayReduceRuntime">
                 <td>Reduce Runtime Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -361,7 +366,7 @@
             </tr>
             <tr *ngIf="displayReduceSystemPressure">
                 <td>Reduce System Air Pressure Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -376,7 +381,7 @@
             </tr>
             <tr *ngIf="displayUseAutomaticSequencer">
                 <td>Use Automatic Sequencer Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -391,7 +396,7 @@
             </tr>
             <tr *ngIf="displayAuxiliaryPower">
                 <td>Auxiliary Power Cost
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
@@ -406,7 +411,7 @@
             </tr>
             <tr class="bold-row">
                 <td>Peak Demand Cost
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{baselineResults.total.demandCost | number:'1.0-2'}}</td>
@@ -419,8 +424,8 @@
                 </td>
             </tr>
             <tr class="bold-row">
-                <td>Annual Energy Cost
-                    <span> ($/yr)</span>
+                <td>Energy Cost
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{baselineResults.total.cost | number:'1.0-0'}}</td>
@@ -433,8 +438,8 @@
                 </td>
             </tr>
             <tr class="bold-row">
-                <td>Annual Operating Cost
-                    <span> ($/yr)</span>
+                <td>Operating Cost
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{baselineResults.total.totalAnnualOperatingCost | number:'1.0-0'}}</td>
@@ -449,22 +454,22 @@
 
             <tr class="bold-row bg-row">
                 <td>Peak Demand Cost Savings
-                    <span> ($/yr)</span>
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span *ngIf="result.combinedResults.peakDemandCost">{{baselineResults.total.demandCost
-                        - result.combinedResults.peakDemandCost
+                    <span
+                        *ngIf="result.combinedResults.peakDemandCostSavings">{{result.combinedResults.peakDemandCostSavings
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.combinedResults.peakDemandCost">&mdash;
+                    <span *ngIf="!result.combinedResults.peakDemandCostSavings">&mdash;
                         &mdash;</span>
                 </td>
             </tr>
             <tr class="bold-row bg-row">
-                <td>Annual Energy Cost Savings
-                    <span> ($/yr)</span>
+                <td>Energy Cost Savings
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
@@ -476,8 +481,8 @@
                 </td>
             </tr>
             <tr class="bold-row row-stripe bg-row">
-                <td>Annual Cost Savings
-                    <span> ($/yr)</span>
+                <td>Cost Savings
+                    <span> ($)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"
