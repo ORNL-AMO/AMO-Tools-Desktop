@@ -156,24 +156,35 @@ export class ConvertInputDataService {
     //imperial: klb/yr, metric: tonne/yr
     currentEnergyUsage.steamUsage = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamUsage, oldSettings, newSettings);
     
-    currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
-    currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldSettings, newSettings);
-    currentEnergyUsage.otherFuelMixedCO2SavingsData = this.convertOtherFuelMixedCO2SavingsData(currentEnergyUsage.otherFuelMixedCO2SavingsData, oldSettings, newSettings);
-    currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.waterCO2OutputRate, oldSettings, newSettings);
-    currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertKGalAndLiterValue(currentEnergyUsage.wasteWaterCO2OutputRate, oldSettings, newSettings);
-    currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertKSCFAndM3Value(currentEnergyUsage.compressedAirCO2OutputRate, oldSettings, newSettings);
-    currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertKlbAndTonneValue(currentEnergyUsage.steamCO2OutputRate, oldSettings, newSettings);
+    let oldFuelUnit: string = 'MMBtu'; 
+    let newFuelUnit: string = 'GJ';
+    if (oldSettings.unitsOfMeasure === 'Imperial') {
+      debugger;
+      currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'kgal', 'L');
+      currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'kgal', 'L');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'kSCF', 'm3');
+      currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'klb', 'tonne');
+    
+    } else {
+      oldFuelUnit = 'GJ';
+      newFuelUnit = 'MMBtu';
+      debugger;
+      currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'L', 'kgal');
+      currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'L', 'kgal');
+      currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'm3', 'kSCF');
+      currentEnergyUsage.steamCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.steamCO2OutputRate, 'tonne', 'klb');
+    }
 
-    return currentEnergyUsage;
-  }
-
-  convertOtherFuelMixedCO2SavingsData(otherFuelMixedCO2SavingsData: Array<Co2SavingsData>, oldSettings: Settings, newSettings: Settings): Array<Co2SavingsData> {
-    if(otherFuelMixedCO2SavingsData.length != 0){
-      otherFuelMixedCO2SavingsData.forEach(fuel => {
-        fuel.totalEmissionOutputRate = this.convertUnitsService.convertMMBtuAndGJValue(fuel.totalEmissionOutputRate, oldSettings, newSettings);
+    currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.naturalGasCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+    currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+    if(currentEnergyUsage.otherFuelMixedCO2SavingsData.length != 0){
+      currentEnergyUsage.otherFuelMixedCO2SavingsData.forEach(fuel => {
+        fuel.totalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(fuel.totalEmissionOutputRate, oldFuelUnit, newFuelUnit);
       });
     }
-    return otherFuelMixedCO2SavingsData;
+    
+
+    return currentEnergyUsage;
   }
 
 }
