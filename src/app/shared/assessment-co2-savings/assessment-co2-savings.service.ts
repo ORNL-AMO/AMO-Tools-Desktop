@@ -82,7 +82,7 @@ export class AssessmentCo2SavingsService {
       totalEmissionOutputRate: settingsForm.controls.totalEmissionOutputRate.value || 401.07,
       electricityUse: settingsForm.controls.electricityUse.value || 0,
       eGridRegion: settingsForm.controls.eGridRegion.value || '',
-      eGridSubregion: settingsForm.controls.eGridSubregion.value || 'US Average',
+      eGridSubregion: settingsForm.controls.eGridSubregion.value || 'U.S. Average',
       totalEmissionOutput: settingsForm.controls.totalEmissionOutput.value || 0,
       //totalFuelEmissionOutputRate: settingsForm.controls.totalFuelEmissionOutputRate.value || 0,
       userEnteredBaselineEmissions: settingsForm.controls.userEnteredBaselineEmissions.value || false,

@@ -114,13 +114,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     }
   }
 
-  convertOutputRate(outputRate: number) {   
-    let conversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(this.settings.phastRollupFuelUnit)
-    outputRate = outputRate / conversionHelper;
-    outputRate = Number(outputRate.toFixed(2));    
-    return outputRate;
-  }
-
   disableForm() {
     this.form.disable();
   }
@@ -176,7 +169,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-        outputRate = this.convertOutputRate(outputRate);
+        outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
     }
     if (shouldSetOutputRate) {
       this.form.patchValue({
@@ -196,7 +189,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     });
     let outputRate: number = this.eafOtherFuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-        outputRate = this.convertOutputRate(outputRate);
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
     }
 
     if (shouldSetOutputRate) {
@@ -245,7 +238,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     let fuel = _.find(options, (val) => { return fuelType === val.fuelType; });
     let outputRate: number = fuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertOutputRate(outputRate);
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
     }
     return outputRate;
   }
