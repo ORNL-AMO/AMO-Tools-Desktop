@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, ChangeDetectorRef, SimpleChanges } from '@angular/core';
-import { EfficiencyImprovement, EfficiencyImprovementInputData, EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
+import { EfficiencyImprovement } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
 import { EfficiencyImprovementService } from '../efficiency-improvement.service';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { FlueGasMaterial } from '../../../../shared/models/materials';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-efficiency-improvement-form',
   templateUrl: './efficiency-improvement-form.component.html',
@@ -12,8 +14,6 @@ import { OperatingHours } from '../../../../shared/models/operations';
 export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
   efficiencyImprovement: EfficiencyImprovement;
-  // @Input()
-  // efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
   @Output('calculate')
   calculate = new EventEmitter<EfficiencyImprovement>();
   @Output('changeField')
@@ -36,8 +36,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   formWidth: number;
   form: FormGroup;
   idString: string;
+  options: Array<FlueGasMaterial>;
 
-  constructor(private efficiencyImprovementService: EfficiencyImprovementService, private cd: ChangeDetectorRef) { }
+  constructor(private efficiencyImprovementService: EfficiencyImprovementService, private suiteDbService: SuiteDbService) { }
 
   ngOnInit(): void {
     if(this.baselineSelected){
@@ -48,11 +49,13 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     this.init();
   }
   init(){
+    this.options = this.suiteDbService.selectGasFlueGasMaterials();
     if(this.baselineSelected){
       this.form = this.efficiencyImprovementService.getFormFromObjInputData(this.efficiencyImprovement.baseline);
     } else {
       this.form = this.efficiencyImprovementService.getFormFromObjInputData(this.efficiencyImprovement.modification);
     }
+    this.setFormState();
   }
   setFormState() {
     if (this.selected == false) {
@@ -60,11 +63,12 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     } else {
       this.form.enable();
     }
-    this.cd.detectChanges();
+    this.save();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
+      this.options = this.suiteDbService.selectGasFlueGasMaterials();
       this.setFormState();
     }
   }
@@ -82,16 +86,7 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     this.calculate.emit(this.efficiencyImprovement);
   }
 
-  calc() {
-    let efficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
-    this.efficiencyImprovementService.updateFormValidators(this.form, efficiencyImprovementInputs);
-    this.form.controls.currentCombustionAirTemp.markAsDirty({ onlySelf: true });
-    this.form.controls.currentCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-    this.form.controls.newCombustionAirTemp.markAsDirty({ onlySelf: true });
-    this.form.controls.newCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-   // this.calculate.emit(efficiencyImprovementInputs);
-  }
-
+ 
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -111,7 +106,7 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   updateOperatingHours(oppHours: OperatingHours) {
     this.efficiencyImprovementService.operatingHours = oppHours;
     this.operatingHoursControl.patchValue(oppHours.hoursPerYear);
-    this.calc();
+    this.save();
     this.closeOperatingHoursModal();
   }
 
@@ -119,5 +114,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  setProperties(){
+    this.save();
   }
 }

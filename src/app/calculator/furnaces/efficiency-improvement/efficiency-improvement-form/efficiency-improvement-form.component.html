@@ -22,10 +22,10 @@
 
     <div class="form-group">
       <label class="small" for="{{'fuelType_'+idString}}">Fuel Type</label>
-      <div class="input-group">
-        <input autofocus class="form-control" name="fuelType" type="text" max="100" step="any"
-          id="{{'fuelType_'+idString}}" formControlName="fuelType" (input)="save()" onfocus="this.select();">
-      </div>
+      <select name="fuelType" class="form-control" formControlName="fuelType" id="{{'fuelType_'+idString}}"
+        (change)="setProperties()" (focus)="focusField('fuelType')" disabled>
+        <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -152,58 +152,8 @@
       <div *ngIf="!efficiencyImprovement.results.modificationEnergyInput" class="text-center bold small">
         &mdash; &mdash;
       </div>
-    </div>
-
-
-    <!-- <div class="eff-form-section d-flex flex-wrap">
-      <div class="col-4 pl-0">
-        <label for="fuelSavings">Available Heat</label>
-      </div>
-      <div class="col-4 text-center small bold">
-        {{efficiencyImprovementOutputs.currentAvailableHeat | number:'0.2-2'}} % of HHV
-      </div>
-      <div class="col-4 text-center small bold pr-0">
-        {{efficiencyImprovementOutputs.newAvailableHeat | number:'0.2-2'}} % of HHV
-      </div>
-
-      <div class="col-4 pl-0">
-        <label class="w-50" for="currentFlueGasOxygen">Fuel Savings</label>
-      </div>
-
-      <div class="col-4 text-center small bold">
-        &mdash;
-      </div>
-      <div class="col-4 text-center small bold pr-0">
-        {{efficiencyImprovementOutputs.newFuelSavings | number:'0.2-2'}} %
-      </div>
-
-
-      <div class="col-4 pl-0">
-        <label for="currentEnergyInput">Energy Input</label>
-      </div>
-      <div class="d-flex flex-column col-4 pr-1">
-        <div class="input-group w-100">
-          <input class="form-control" name="currentEnergyInput" type="number" step="any" id="currentEnergyInput"
-            formControlName="currentEnergyInput" (input)="calc()" onfocus="this.select();"
-            (focus)="focusField('energyInput')">
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.currentEnergyInput.invalid && !form.controls.currentEnergyInput.pristine">
-          <span *ngIf="form.controls.currentEnergyInput.errors.required">Value required.</span>
-        </span>
-      </div>
-      <div class="col-4 text-center small bold pr-0">
-        {{efficiencyImprovementOutputs.newEnergyInput | number:'0.2-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-          MMBtu/hr
-        </span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-          GJ/hr
-        </span>
-      </div>
-    </div> -->
+    </div>   
+    
   </div>
 </form>
 

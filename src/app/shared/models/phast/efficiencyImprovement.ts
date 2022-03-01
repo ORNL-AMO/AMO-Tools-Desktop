@@ -6,11 +6,10 @@ export interface EfficiencyImprovement {
 
 export interface EfficiencyImprovementInputData {
     annualOperatingHours: number;
-    fuelType: string;
+    fuelType: number;
     utilityCost: number;
     operatingHours: number;
     flueGasOxygen: number;
-    //excessAir: number;
     flueGasTemp: number;
     combustionAirTemp: number;
     energyInput?: number;

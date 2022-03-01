@@ -1,5 +1,5 @@
 <label class="group-label">Baseline Results</label>
-<table #copyTable0 class="table table-hover table-striped">
+<table #copyTable0 class="table table-hover table-striped"  *ngIf="efficiencyImprovement.results">
     <tbody>
         <tr>
             <td class="bold w-50">Available Heat</td>
@@ -37,12 +37,12 @@
     </tbody>
 </table>
 <!-- export table component -->
-<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+<app-exportable-results-table *ngIf="efficiencyImprovement.results" [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
 
 
-<label class="group-label" *ngIf="efficiencyImprovement.modification">Modification Results</label>
-<table *ngIf="efficiencyImprovement.modification" #copyTable1 class="table table-hover table-striped">
+<label class="group-label">Modification Results</label>
+<table *ngIf="efficiencyImprovement.results" #copyTable1 class="table table-hover table-striped">
     <tbody>
         <tr>
             <td class="bold w-50">Available Heat</td>
@@ -79,11 +79,11 @@
         </tr>
     </tbody>
 </table>
-<app-exportable-results-table *ngIf="efficiencyImprovement.modification" [tableString]="table1String"
+<app-exportable-results-table *ngIf="efficiencyImprovement.results" [tableString]="table1String"
     (updateTableString)="updateTable1String()"></app-exportable-results-table>
 
-<label class="group-label" *ngIf="efficiencyImprovement.modification">Savings</label>
-<table *ngIf="efficiencyImprovement.modification" #copyTable2 class="table table-hover table-striped">
+<label class="group-label">Savings</label>
+<table *ngIf="efficiencyImprovement.results" #copyTable2 class="table table-hover table-striped">
     <tbody>
         <tr>
             <td class="bold w-50">Annual Energy Savings</td>
@@ -112,5 +112,5 @@
         </tr>
     </tbody>
 </table>
-<app-exportable-results-table *ngIf="modificationExists" [tableString]="table2String"
+<app-exportable-results-table *ngIf="efficiencyImprovement.results" [tableString]="table2String"
     (updateTableString)="updateTable2String()"></app-exportable-results-table>

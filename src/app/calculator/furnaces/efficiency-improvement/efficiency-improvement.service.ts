@@ -119,8 +119,8 @@ export class EfficiencyImprovementService {
     let modInputData: EfficiencyImprovementInputData;
     if (settings.unitsOfMeasure === 'Metric'){
       baselineInputData = {
-        annualOperatingHours: 8640,
-        fuelType: 'Natual Gas',
+        annualOperatingHours: 8760,
+        fuelType: 1,
         utilityCost: settings.fuelCost,
         flueGasOxygen: 6,
         operatingHours: 8760,
@@ -129,8 +129,8 @@ export class EfficiencyImprovementService {
         energyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2)
       }
       modInputData = {
-        annualOperatingHours: 8640,
-        fuelType: 'Natual Gas',
+        annualOperatingHours: 8760,
+        fuelType: 1,
         utilityCost: settings.fuelCost,
         flueGasOxygen: 2,
         operatingHours: 8760,
@@ -139,18 +139,18 @@ export class EfficiencyImprovementService {
       }
     } else{
       baselineInputData = {
-        annualOperatingHours: 8640,
-        fuelType: 'Natual Gas',
+        annualOperatingHours: 8760,
+        fuelType: 1,
         utilityCost: settings.fuelCost,
         flueGasOxygen: 6,
-        operatingHours: 8640,
+        operatingHours: 8760,
         flueGasTemp: 1600,
         combustionAirTemp: 80,
         energyInput: 10
       }
       modInputData = {
         annualOperatingHours: 8760,
-        fuelType: 'Natual Gas',
+        fuelType: 1,
         utilityCost: settings.fuelCost,
         flueGasOxygen: 2,
         operatingHours: 8760,
@@ -183,21 +183,21 @@ export class EfficiencyImprovementService {
     let baselineInputData: EfficiencyImprovementInputData;
     let modInputData: EfficiencyImprovementInputData;
     baselineInputData = {
-      annualOperatingHours: 8640,
-      fuelType: 'Natual Gas',
+      annualOperatingHours: 8760,
+      fuelType: 1,
       utilityCost: settings.fuelCost,
       flueGasOxygen: 0,
-      operatingHours: 0,
+      operatingHours: 8760,
       flueGasTemp: 0,
       combustionAirTemp: 0,
       energyInput: 0
     }
     modInputData = {
       annualOperatingHours: 8760,
-      fuelType: 'Natual Gas',
+      fuelType: 1,
       utilityCost: settings.fuelCost,
       flueGasOxygen: 0,
-      operatingHours: 0,
+      operatingHours: 8760,
       flueGasTemp: 0,
       combustionAirTemp: 0
     }   

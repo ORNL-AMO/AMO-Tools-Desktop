@@ -43,7 +43,6 @@ export class EfficiencyImprovementComponent implements OnInit {
   tabSelect: string = 'results';
   resetForm: boolean = true;
   baselineSelected: boolean = true;
-  modificationExists: boolean = false;
 
 
   calcExists: boolean;
@@ -65,8 +64,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    }
-    this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
+    }    
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;
@@ -84,24 +82,19 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   btnResetData() {
-    if (this.inAssessment && this.originalCalculator.efficiencyImprovementInputs) {
+    if (this.inAssessment && this.originalCalculator.efficiencyImprovement) {
       this.calculator = this.originalCalculator;
-      this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
+      this.efficiencyImprovement = this.calculator.efficiencyImprovement;
     }
     else {
-      this.efficiencyImprovementInputs = this.efficiencyImprovementService.getResetData();
+      this.efficiencyImprovement = this.efficiencyImprovementService.getRestDataNewObj(this.settings);
     }
-    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.resetForm = true;
-    this.modificationExists = false;
     this.calculate(this.efficiencyImprovement);
   }
 
   btnGenerateExample() {
     this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
-    this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
-    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
-    this.modificationExists = true;
     this.calculate(this.efficiencyImprovement);
   }
 
@@ -126,23 +119,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.saveCalculator();
     }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
-    let results = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
-    this.efficiencyImprovement.results = {
-      baselineAvailableHeat: results.currentAvailableHeat,
-      baselineHeatInput: results.currentHeatInput,
-      baselineEnergyCost: 0,
-
-      modificationAvailableHeat: results.newAvailableHeat,
-      modificationHeatInput: results.newHeatInput,
-      modificationEnergyCost: 0,
-
-      annualEnergySavings: results.newFuelSavings,
-      annualCostSavings: 0,
-
-      baselineExcessAir: results.currentExcessAir,
-      modificationExcessAir: results.newExcessAir,
-      modificationEnergyInput: results.newEnergyInput
-    }
+    this.efficiencyImprovement.results = this.phastService.efficiencyImprovementResults(data, this.efficiencyImprovementOutputs, this.settings);
   }
 
   setCurrentField(str: string) {
@@ -164,7 +141,6 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
-    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
 
   initCalculator(): Calculator {
@@ -182,7 +158,6 @@ export class EfficiencyImprovementComponent implements OnInit {
     } else {
       this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
     }
-    //this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovement);
   }
 
@@ -219,10 +194,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   createModification() {
-    // this.flueGasService.initModification();
-    this.modificationExists = true;
     this.setModificationSelected();
-    // this.flueGasService.calculate(this.settings, false, true);
   }
 
 }

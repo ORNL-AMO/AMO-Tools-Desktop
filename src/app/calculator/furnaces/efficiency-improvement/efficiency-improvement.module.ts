@@ -10,6 +10,8 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { EfficiencyImprovementResultsComponent } from './efficiency-improvement-results/efficiency-improvement-results.component';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +19,9 @@ import { EfficiencyImprovementResultsComponent } from './efficiency-improvement-
     FormsModule,
     SimpleTooltipModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule,
+    SuiteDbModule
   ],
   declarations: [
     EfficiencyImprovementComponent,

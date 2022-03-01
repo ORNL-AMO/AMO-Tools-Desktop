@@ -104,4 +104,14 @@ span.alert-warning {
     margin-left: 10px;
     margin-right: 10px;
 }
-     
+    
+
+.eff-form-section{
+    padding-top: 1rem;
+    border-top: dashed 1px;
+}
+
+
+.eff-width{
+    width: 33%;
+}

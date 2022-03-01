@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
+import { EfficiencyImprovement, EfficiencyImprovementInputs, EfficiencyImprovementOutputs, EfficiencyImprovementResults } from '../shared/models/phast/efficiencyImprovement';
 import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuel, EnergyEquivalencyFuelOutput } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
@@ -592,6 +592,34 @@ export class PhastService {
       let results = phastAddon.efficiencyImprovement(inputs);
       return results;
     }
+  }
+  
+  efficiencyImprovementResults(data: EfficiencyImprovement, output: EfficiencyImprovementOutputs, settings: Settings): EfficiencyImprovementResults {
+    
+    let baselineHeatInput: number = data.baseline.energyInput * data.baseline.operatingHours;
+    let modificationHeatInput: number = output.newEnergyInput * data.modification.operatingHours;
+
+    let baselineEnergyCost: number = baselineHeatInput * data.baseline.utilityCost;
+    let modificationEnergyCost: number = modificationHeatInput * data.modification.utilityCost;
+
+    let efficiencyImprovementResults: EfficiencyImprovementResults = {
+      baselineAvailableHeat: output.currentAvailableHeat,
+      baselineHeatInput: baselineHeatInput,
+      baselineEnergyCost: baselineEnergyCost,
+
+      modificationAvailableHeat: output.newAvailableHeat,
+      modificationHeatInput: modificationHeatInput,
+      modificationEnergyCost: modificationEnergyCost,
+
+      annualEnergySavings: baselineHeatInput - modificationHeatInput,
+      annualCostSavings: baselineEnergyCost - modificationEnergyCost,
+
+      baselineExcessAir: output.currentExcessAir,
+      modificationExcessAir: output.newExcessAir,
+      modificationEnergyInput: output.newEnergyInput
+    }
+
+    return efficiencyImprovementResults;
   }
 
   energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {
