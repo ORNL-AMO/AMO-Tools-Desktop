@@ -77,7 +77,7 @@ export class PhastResultsService {
         coalHeatingValue: 0,
         totalFuelEnergyUsed: 0,
         coalCarbonUsed: 0,
-        electrodeUsed: 0,
+        electrodeEnergyUsed: 0,
       },
       annualEAFResults: {
         naturalGasUsed: 0,
@@ -87,7 +87,7 @@ export class PhastResultsService {
         electrodeHeatingValue: 0,
         coalHeatingValue: 0,
         coalCarbonUsed: 0,
-        electrodeUsed: 0,
+        electrodeEnergyUsed: 0,
       },
       co2EmissionsOutput: {
         hourlyTotalEmissionOutput: undefined,
@@ -264,28 +264,29 @@ export class PhastResultsService {
       electricEnergyUsed: EAFInputs.electricityInput,
       totalFuelEnergyUsed: undefined,
       electrodeHeatingValue: EAFInputs.electrodeHeatingValue,
+      electrodeUse: EAFInputs.electrodeUse,
       coalHeatingValue: EAFInputs.coalHeatingValue,
       // coalCarbonInjection is in lb/hr the coalHeatingValue is in btu/lb.  the lbs cancel and you have btu/hr
       coalCarbonUsed: EAFInputs.coalCarbonInjection * EAFInputs.coalHeatingValue,
-      electrodeUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
+      electrodeEnergyUsed: EAFInputs.electrodeUse * EAFInputs.electrodeHeatingValue,
       otherFuelUsed: EAFInputs.otherFuels,
       naturalGasHeatingValue: naturalGasHeatingValue
     };
      if (settings.unitsOfMeasure == 'Metric') {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
-      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('kJ').to('GJ');
+      eafResults.electrodeEnergyUsed = this.convertUnitsService.value(eafResults.electrodeEnergyUsed).from('kJ').to('GJ');
     } else {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('Btu').to('MMBtu');
-      eafResults.electrodeUsed = this.convertUnitsService.value(eafResults.electrodeUsed).from('Btu').to('MMBtu');
+      eafResults.electrodeEnergyUsed = this.convertUnitsService.value(eafResults.electrodeEnergyUsed).from('Btu').to('MMBtu');
     }
     
-    eafResults.totalFuelEnergyUsed = eafResults.naturalGasUsed + eafResults.coalCarbonUsed + eafResults.electrodeUsed + eafResults.otherFuelUsed;
+    eafResults.totalFuelEnergyUsed = eafResults.naturalGasUsed + eafResults.coalCarbonUsed + eafResults.electrodeEnergyUsed + eafResults.otherFuelUsed;
     phastResults.hourlyEAFResults = eafResults;
 
     let annualEAFResults: EAFResults = JSON.parse(JSON.stringify(eafResults));
     annualEAFResults.coalCarbonUsed = eafResults.coalCarbonUsed * phast.operatingHours.hoursPerYear;
     annualEAFResults.coalHeatingValue = eafResults.coalHeatingValue * phast.operatingHours.hoursPerYear;
-    annualEAFResults.electrodeUsed = eafResults.electrodeUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.electrodeEnergyUsed = eafResults.electrodeEnergyUsed * phast.operatingHours.hoursPerYear;
     annualEAFResults.electrodeHeatingValue = eafResults.electrodeHeatingValue * phast.operatingHours.hoursPerYear;
     annualEAFResults.naturalGasUsed = eafResults.naturalGasUsed * phast.operatingHours.hoursPerYear;
     annualEAFResults.naturalGasHeatingValue = eafResults.naturalGasHeatingValue * phast.operatingHours.hoursPerYear;
