@@ -150,7 +150,7 @@ export class PhastReportRollupService {
         sumEnergy += convertedSumEnergy;
         fuelEnergy += convertedSumEnergy + convertedEnergySavings;
 
-      } else if (result.settings.energySourceType == 'Electricity') {
+      }else if (result.settings.energySourceType == 'Electricity') {
         let modificationElectricalEnergy: number;
         let baselineElectricalEnergy: number;
         let modificationFuelEnergy: number;
