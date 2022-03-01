@@ -1,0 +1,14 @@
+@media print {
+    .print-container {
+        page-break-before: always;
+        page-break-inside: avoid;
+        width: 1000px;
+        overflow: hidden;
+    }
+    .page-break-before{
+        page-break-before: auto;
+    }
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
+}
