@@ -171,6 +171,9 @@ export class PhastReportRollupService {
           modificationFuelEnergy = this.convertUnitsService.value(modificationFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
           baselineFuelEnergy = this.convertUnitsService.value(baselineFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
         }
+        modificationElectricalEnergy = this.convertEAFFuelEnergy(modificationElectricalEnergy, result.settings, settings.phastRollupUnit);
+        baselineElectricalEnergy = this.convertEAFFuelEnergy(baselineElectricalEnergy, result.settings, settings.phastRollupUnit);
+
         electricityEnergy += modificationElectricalEnergy;
         let fuelEnergySavings: number = baselineFuelEnergy - modificationFuelEnergy;
         let electricalEnergySavings: number = baselineElectricalEnergy - modificationElectricalEnergy;
