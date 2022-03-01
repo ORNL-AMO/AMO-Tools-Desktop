@@ -71,8 +71,10 @@ export class ExecutiveSummaryService {
     if (settings.energySourceType === 'Electricity') {
       if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         resultsSummary.annualNaturalGasCost = phastResults.annualEAFResults.naturalGasUsed * phast.operatingCosts.fuelCost;
-        resultsSummary.annualCarbonCoalCost = phast.losses.energyInputEAF[0].coalCarbonInjection * phast.operatingCosts.coalCarbonCost;
-        resultsSummary.annualElectrodeCost = phast.losses.energyInputEAF[0].electrodeUse * phast.operatingCosts.electrodeCost;
+        if (phast.losses.energyInputEAF && phast.losses.energyInputEAF.length > 0) {
+          resultsSummary.annualCarbonCoalCost = phast.losses.energyInputEAF[0].coalCarbonInjection * phast.operatingCosts.coalCarbonCost * phast.operatingHours.hoursPerYear;
+          resultsSummary.annualElectrodeCost = phast.losses.energyInputEAF[0].electrodeUse * phast.operatingCosts.electrodeCost * phast.operatingHours.hoursPerYear;
+        }
         resultsSummary.annualOtherFuelCost = phastResults.annualEAFResults.otherFuelUsed * phast.operatingCosts.otherFuelCost;
         resultsSummary.annualElectricityCost = phastResults.annualEAFResults.electricEnergyUsed * phast.operatingCosts.electricityCost;
         resultsSummary.annualTotalFuelCost = resultsSummary.annualNaturalGasCost + resultsSummary.annualCarbonCoalCost + resultsSummary.annualElectrodeCost + resultsSummary.annualOtherFuelCost;

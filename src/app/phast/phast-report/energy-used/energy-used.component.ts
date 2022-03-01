@@ -73,7 +73,11 @@ export class EnergyUsedComponent implements OnInit {
   electricityHeatingValue: number;
 
   phastResults: PhastResults;
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, 
+    private meteredEnergyService: MeteredEnergyService, 
+    private phastResultsService: PhastResultsService, 
+    private suiteDbService: SuiteDbService, 
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.phastResults = this.phastResultsService.getResults(this.phast, this.settings);
@@ -152,6 +156,7 @@ export class EnergyUsedComponent implements OnInit {
     if (this.settings.energySourceType === 'Electricity') {
       if (this.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         this.fuelName = 'Natural Gas';
+        this.fuelHeatingValue = this.phastResults.hourlyEAFResults.naturalGasHeatingValue; 
         this.fuelEnergyUsed = this.phastResults.hourlyEAFResults.naturalGasUsed;
         if (this.settings.unitsOfMeasure == 'Imperial') {
           this.energyPerMassUnit = 'Btu/lb';
