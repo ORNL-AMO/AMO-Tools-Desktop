@@ -55,6 +55,18 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     '#bcbd22',  // curry yellow-green
     '#17becf'   // blue-teal
   ];
+  plotlyMarkerShapes: Array<string> = [
+    'star',
+    'star-diamond',
+    'hexagram',
+    'star-square',
+    'square',
+    'diamond',
+    'cross',
+    'x',
+    'diamond-wide',
+    'diamond-tall'
+  ];
   unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
   
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
@@ -69,6 +81,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     if (!this.inAssessment) {
       if (this.inReport) {
         this.showAllCompressors = true;
+        this.showAvgOpPoints = true;
         this.selectedCompressor = this.compressedAirAssessment.compressorInventoryItems[0];
         this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
         this.drawChart();
@@ -274,6 +287,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       });
 
       if (avgOpPointData) {
+        let currentShapeIndex: number = 0;
         avgOpPointData.forEach(dataItem => {
           let currentTraceColor: string;
           if (this.showAllCompressors) {
@@ -282,6 +296,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
               currentColorIndex = 0;
             } else {
               currentColorIndex++;
+            }
+          }
+          let currentMarkerShape: string;
+          if (this.showAllCompressors) {
+            currentMarkerShape = this.plotlyMarkerShapes[currentShapeIndex];
+            if (currentShapeIndex == 9) {
+              currentShapeIndex = 0;
+            } else {
+              currentShapeIndex++;
             }
           }
           if (this.unloadingControlTypes.includes(dataItem.controlType)) {
@@ -303,6 +326,10 @@ export class InventoryPerformanceProfileComponent implements OnInit {
               text: dataItem.data.map(cData => { return dataItem.compressorName }),
               hovertemplate: "%{text}: (Airflow: %{x:.2f}%, Power: %{y:.2f}%) <extra></extra>",
               mode: 'markers',
+              marker:{
+                size: 12,
+                symbol: currentMarkerShape
+              },
               fillcolor: currentTraceColor
             }
             traceData.push(trace);

@@ -128,6 +128,7 @@ export interface TraceData {
         sizeref?: number,
         sizemin?: number,
         sizemode?: string,
+        symbol?: string,
     },
     line?: {
         shape?: string,
