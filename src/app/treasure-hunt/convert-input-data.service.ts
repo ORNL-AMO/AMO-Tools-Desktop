@@ -159,7 +159,6 @@ export class ConvertInputDataService {
     let oldFuelUnit: string = 'MMBtu'; 
     let newFuelUnit: string = 'GJ';
     if (oldSettings.unitsOfMeasure === 'Imperial') {
-      debugger;
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'kgal', 'L');
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'kgal', 'L');
       currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'kSCF', 'm3');
@@ -168,7 +167,6 @@ export class ConvertInputDataService {
     } else {
       oldFuelUnit = 'GJ';
       newFuelUnit = 'MMBtu';
-      debugger;
       currentEnergyUsage.waterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.waterCO2OutputRate, 'L', 'kgal');
       currentEnergyUsage.wasteWaterCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.wasteWaterCO2OutputRate, 'L', 'kgal');
       currentEnergyUsage.compressedAirCO2OutputRate = this.convertUnitsService.convertInvertedEnergy(currentEnergyUsage.compressedAirCO2OutputRate, 'm3', 'kSCF');
