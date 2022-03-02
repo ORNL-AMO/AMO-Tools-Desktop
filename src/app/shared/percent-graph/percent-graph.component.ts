@@ -14,7 +14,7 @@ export class PercentGraphComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    // this.initChart();
+    this.initChart();
   }
   chart: any;
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
