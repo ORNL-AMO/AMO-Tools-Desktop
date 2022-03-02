@@ -48,7 +48,7 @@
         <td class="text-center">{{point.x}}</td>
         <td class="text-center">{{point.y}}</td>
         <td class='delete-row text-center'>
-          <a *ngIf="!validCurrentSpeed || index != 0" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
+          <a *ngIf="!validCurrentSpeed || index != 0" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete
           </a>
         </td>

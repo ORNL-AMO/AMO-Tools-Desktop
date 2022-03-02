@@ -70,7 +70,6 @@ export class EnrichmentGraphComponent implements OnInit {
 
   ngAfterViewInit(){
     this.renderChart();
-    this.triggerInitialResize();
   }
 
   ngOnDestroy() {
@@ -91,12 +90,6 @@ export class EnrichmentGraphComponent implements OnInit {
     });
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.renderChart();
-    }, 25)
-  }
 
 
   initAxisOptions() {

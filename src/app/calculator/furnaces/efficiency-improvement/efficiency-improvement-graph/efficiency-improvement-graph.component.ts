@@ -60,7 +60,11 @@ export class EfficiencyImprovementGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initAxisOptions();
-    this.triggerInitialResize();
+  }
+
+  ngAfterViewInit() {
+    this.renderChart();
+    this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -71,12 +75,6 @@ export class EfficiencyImprovementGraphComponent implements OnInit {
     }
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.renderChart();
-    }, 25)
-  }
 
   initAxisOptions() {
     let temperatureUnit = '&#8457;';
@@ -96,33 +94,35 @@ export class EfficiencyImprovementGraphComponent implements OnInit {
   }
 
   renderChart() {
-    this.initChartSetup();
-    this.setTraces('Baseline');
-    this.setTraces('Modification');
+    if (this.expandedChartDiv || this.panelChartDiv) {
+      this.initChartSetup();
+      this.setTraces('Baseline');
+      this.setTraces('Modification');
 
-    let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
-    if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
-        .then(chart => {
-          chart.on('plotly_hover', hoverData => {
-            this.displayHoverGroupData(hoverData);
+      let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
+      if (this.expanded && this.expandedChartDiv) {
+        this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
+          .then(chart => {
+            chart.on('plotly_hover', hoverData => {
+              this.displayHoverGroupData(hoverData);
+            });
+            chart.on('plotly_unhover', unhoverData => {
+              this.removeHoverGroupData();
+            });
           });
-          chart.on('plotly_unhover', unhoverData => {
-            this.removeHoverGroupData();
+      } else if (!this.expanded && this.panelChartDiv) {
+        this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
+          .then(chart => {
+            chart.on('plotly_hover', hoverData => {
+              this.displayHoverGroupData(hoverData);
+            });
+            chart.on('plotly_unhover', unhoverData => {
+              this.removeHoverGroupData();
+            });
           });
-        });
-    } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
-        .then(chart => {
-          chart.on('plotly_hover', hoverData => {
-            this.displayHoverGroupData(hoverData);
-          });
-          chart.on('plotly_unhover', unhoverData => {
-            this.removeHoverGroupData();
-          });
-        });
+      }
+      this.save();
     }
-    this.save();
   }
 
   initChartSetup() {

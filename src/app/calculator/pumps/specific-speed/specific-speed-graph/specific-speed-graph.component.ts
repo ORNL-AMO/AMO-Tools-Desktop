@@ -52,7 +52,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   hoverBtnGridLines: any;
   displayGridLinesTooltip: boolean;
   displayCollapseTooltip: boolean;
-
+  dataPointTraces: Array<TraceData>;
   constructor(private psatService: PsatService,
     private specificSpeedService: SpecificSpeedService,
     private cd: ChangeDetectorRef,
@@ -63,14 +63,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.triggerInitialResize();
-  }
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.renderChart();
-    }, 25)
+    this.renderChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -95,38 +88,43 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   renderChart() {
-
     this.initChartSetup();
+    this.dataPointTraces = new Array();
+    this.selectedDataPoints = new Array();
     this.setCalculatedTrace();
+    this.newPlot();
+    this.save();
+  }
 
+  newPlot() {
+    let traceData: Array<TraceData> = new Array();
+    this.specificSpeedChart.data.forEach((trace, i) => {
+      traceData.push(trace);
+    });
+    this.dataPointTraces.forEach(trace => {
+      traceData.push(trace);
+    })
     let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
           });
         });
     }
-    this.save();
-
   }
 
   updateChart() {
-    let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     this.setCalculatedTrace();
-    if (this.expanded) {
-      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.specificSpeedChart.data, chartLayout, [1]);
-    } else {
-      this.plotlyService.update(this.panelChartDiv.nativeElement, this.specificSpeedChart.data, chartLayout, [1]);
-    }
+    this.newPlot();
     this.save();
   }
 
@@ -166,14 +164,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   createDataPoint(graphData) {
     let selectedPoint: DataPoint = {
-      pointColor: this.pointColors[(this.specificSpeedChart.data.length + 1) % this.pointColors.length],
+      pointColor: this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length],
       x: graphData.points[0].x,
       y: graphData.points[0].y
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);
-    // Plotly.addTraces(this.currentChartId, selectedPointTrace);
+    this.dataPointTraces.push(selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
+    this.newPlot();
     this.cd.detectChanges();
     this.save();
   }
@@ -224,16 +223,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     return traceCoordinates;
   }
 
-  deleteDataPoint(point: DataPoint) {
-    let traceCount: number = this.specificSpeedChart.data.length;
-    let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
-    // ignore default traces
-    if (traceCount > 2 && deleteTraceIndex != -1) {
-      // Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);
-      this.selectedDataPoints.splice(deleteTraceIndex - 1, 1);
-      this.cd.detectChanges();
-      this.save();
-    }
+  deleteDataPoint(point: DataPoint, index: number) {
+    this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.marker.color != point.pointColor });
+    this.selectedDataPoints.splice(index, 1);
+    this.newPlot();
+    this.cd.detectChanges();
+    this.save();
   }
 
   getSpecificSpeed(): number {
@@ -257,7 +252,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.renderChart();
+      this.newPlot();
     }, 100);
   }
 
@@ -266,7 +261,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.renderChart();
+      this.newPlot();
     }, 100);
   }
 

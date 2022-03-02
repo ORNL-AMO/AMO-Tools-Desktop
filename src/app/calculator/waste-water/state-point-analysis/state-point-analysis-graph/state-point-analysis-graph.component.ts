@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
@@ -68,16 +68,6 @@ export class StatePointAnalysisGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.triggerInitialResize();
-    this.initSubscriptions();
-  }
-
-
-  ngOnDestroy() {
-    this.outputSub.unsubscribe();
-  }
-
-  initSubscriptions() {
     this.outputSub = this.statePoinAnalysisService.output.subscribe(output => {
       if (output) {
         this.setGraphData(output);
@@ -86,6 +76,9 @@ export class StatePointAnalysisGraphComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.outputSub.unsubscribe();
+  }
 
   initRenderChart() {
     this.initChartSetup();
@@ -208,14 +201,6 @@ export class StatePointAnalysisGraphComponent implements OnInit {
     setTimeout(() => {
       this.initRenderChart();
     }, 100);
-  }
-
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
   }
 
   hideTooltip(btnType: string) {

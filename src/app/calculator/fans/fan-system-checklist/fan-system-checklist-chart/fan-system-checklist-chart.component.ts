@@ -31,14 +31,7 @@ export class FanSystemChecklistChartComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.triggerInitialResize();
-  }
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event("resize"));
-    setTimeout(() => {
-      this.renderChart();
-    }, 100);
+    this.renderChart();
   }
 
   @HostListener("document:keyup", ["$event"])

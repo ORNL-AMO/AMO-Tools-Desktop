@@ -36,9 +36,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.drawGraph();      
-    }, 100)
+    this.drawGraph();
   }
 
   drawGraph() {
@@ -83,7 +81,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
     }
   }
 
-  
+
   expandChart() {
     this.expanded = true;
     this.hideTooltip('btnExpandChart');
@@ -101,7 +99,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
       this.drawGraph();
     }, 100);
   }
-  
+
 
   hideTooltip(btnType: string) {
     if (btnType === 'btnExpandChart') {

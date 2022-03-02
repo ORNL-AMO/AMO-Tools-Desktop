@@ -62,7 +62,6 @@ export class MotorPerformanceChartComponent implements OnInit {
   tempAmps: number;
   tempLineFrequency: string;
   motorPointColors: Array<string>;
-  chart: any;
   dataPointTraces: Array<TraceData>;
   constructor(private performanceChartService: MotorPerformanceChartService, private cd: ChangeDetectorRef,
     private plotlyService: PlotlyService) { }
@@ -103,16 +102,14 @@ export class MotorPerformanceChartComponent implements OnInit {
     if (this.expanded && this.expandedChartDiv) {
       this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
         .then(chart => {
-          this.chart = chart;
-          this.chart.on('plotly_click', chartData => {
+          chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
       this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
         .then(chart => {
-          this.chart = chart;
-          this.chart.on('plotly_click', chartData => {
+          chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);
           });
         });

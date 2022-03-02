@@ -47,14 +47,7 @@ export class CashFlowDiagramComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.triggerInitialResize(); 
-  }
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 100)
+    this.initRenderChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
