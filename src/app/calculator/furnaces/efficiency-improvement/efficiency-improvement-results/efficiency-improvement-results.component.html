@@ -4,7 +4,7 @@
         <tr>
             <td class="bold w-50">Available Heat</td>
             <td *ngIf="efficiencyImprovement.results.baselineAvailableHeat" class="text-center w-50">
-                {{efficiencyImprovement.results.baselineAvailableHeat | number:'0.2-2'}} %
+                {{efficiencyImprovement.results.baselineAvailableHeat | number:'0.2-2'}} % of HHV
             </td>
             <td *ngIf="!efficiencyImprovement.results.baselineAvailableHeat" class="text-center w-50">
                 &mdash; &mdash;
@@ -47,7 +47,7 @@
         <tr>
             <td class="bold w-50">Available Heat</td>
             <td *ngIf="efficiencyImprovement.results.modificationAvailableHeat" class="text-center w-50">
-                {{efficiencyImprovement.results.modificationAvailableHeat | number:'0.2-2'}} %
+                {{efficiencyImprovement.results.modificationAvailableHeat | number:'0.2-2'}} % of HHV
             </td>
             <td *ngIf="!efficiencyImprovement.results.modificationAvailableHeat" class="text-center w-50">
                 &mdash; &mdash;

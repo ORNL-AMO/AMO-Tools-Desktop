@@ -71,6 +71,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
       this.setFormState();
     }
+    if (changes.efficiencyImprovement && !changes.efficiencyImprovement.firstChange) {
+      this.init();
+    }
   }
 
   ngAfterViewInit() {

@@ -211,8 +211,8 @@ export class EfficiencyImprovementService {
 
   getInputsFromObj( efficiencyImprovement: EfficiencyImprovement): EfficiencyImprovementInputs {
     let efficiencyImprovementInputs: EfficiencyImprovementInputs = {
-      currentOperatingHours: efficiencyImprovement.baseline.operatingHours,
-      newOperatingHours: efficiencyImprovement.modification.operatingHours,
+      currentOperatingHours: efficiencyImprovement.baseline.annualOperatingHours,
+      newOperatingHours: efficiencyImprovement.modification.annualOperatingHours,
       currentFlueGasOxygen: efficiencyImprovement.baseline.flueGasOxygen,
       newFlueGasOxygen: efficiencyImprovement.modification.flueGasOxygen,
       currentFlueGasTemp: efficiencyImprovement.baseline.flueGasTemp,

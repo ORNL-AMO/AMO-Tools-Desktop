@@ -23,7 +23,7 @@
     <div class="form-group">
       <label class="small" for="{{'fuelType_'+idString}}">Fuel Type</label>
       <select name="fuelType" class="form-control" formControlName="fuelType" id="{{'fuelType_'+idString}}"
-        (change)="setProperties()" (focus)="focusField('fuelType')" disabled>
+        (change)="setProperties()" (focus)="focusField('fuelType')">
         <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
       </select>
     </div>
@@ -32,7 +32,8 @@
       <label class="small" for="{{'utilityCost_'+idString}}">Utility Cost</label>
       <div class="input-group">
         <input autofocus class="form-control" name="utilityCost" type="number" max="100" step="any"
-          id="{{'utilityCost_'+idString}}" formControlName="utilityCost" (input)="save()" onfocus="this.select();">
+          (focus)="focusField('fuelCost')" id="{{'utilityCost_'+idString}}" formControlName="utilityCost"
+          (input)="save()" onfocus="this.select();">
         <span class="input-group-addon units">$/<span [innerHTML]="settings.energyResultUnit"></span>
         </span>
       </div>
@@ -152,8 +153,8 @@
       <div *ngIf="!efficiencyImprovement.results.modificationEnergyInput" class="text-center bold small">
         &mdash; &mdash;
       </div>
-    </div>   
-    
+    </div>
+
   </div>
 </form>
 

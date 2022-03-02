@@ -80,4 +80,56 @@
       </small>
     </h6>
   </div>
+
+  <div class="my-2" *ngIf="currentField == 'operatingHours'">
+    <h6>
+      Annual Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
+    <h6>
+      Fuel Cost
+      <br>
+      <small class="text-muted">
+        Cost of fuel per energy unit
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelType'">
+    <h6>
+      Fuel
+      <br>
+      <small class="text-muted">
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels are
+        intended to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 </div>

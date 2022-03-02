@@ -133,7 +133,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       if (this.calculator.efficiencyImprovement) {
         this.efficiencyImprovement = this.calculator.efficiencyImprovement;
       } else {
-        this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
+        this.efficiencyImprovement = this.efficiencyImprovementService.getRestDataNewObj(this.settings);
         this.calculator.efficiencyImprovement = this.efficiencyImprovement;
         this.saveCalculator();
       }
