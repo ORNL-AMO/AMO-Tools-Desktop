@@ -4,11 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
-
-import * as Plotly from 'plotly.js';
 import { DataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { AchievableEfficiencyService } from '../achievable-efficiency.service';
 import { pumpTypeRanges } from '../../../../psat/psatConstants';
+import { PlotlyService } from 'angular-plotly.js';
 
 
 @Component({
@@ -28,12 +27,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
+
 
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -43,7 +41,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       }
     }
   }
-  
+
   // Tooltips
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
@@ -52,10 +50,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
-  
+
   validEfficiency: boolean = false;
   firstChange: boolean = true;
-  
+
   // Graphing / Defaults
   selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
@@ -66,8 +64,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   defaultTraceOutlineColor = 'rgba(0, 0, 0, .6)';
 
   constructor(private psatService: PsatService,
-              private achievableEfficiencyService: AchievableEfficiencyService,
-              private cd: ChangeDetectorRef) { }
+    private achievableEfficiencyService: AchievableEfficiencyService,
+    private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     this.xAxisTitle = `Flow Rate (${this.settings.flowMeasurement})`;
@@ -79,12 +78,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleResetData) {
         this.achievableEfficiencyService.initChartData();
-        this.initRenderChart();
+        this.renderChart();
       }
       if (changes.toggleExampleData) {
         if (this.checkForm()) {
           this.achievableEfficiencyService.initChartData();
-          this.initRenderChart();
+          this.renderChart();
         }
       }
       if (changes.toggleCalculate && !changes.toggleResetData && !changes.toggleExampleData) {
@@ -100,51 +99,46 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   triggerInitialResize() {
     window.dispatchEvent(new Event('resize'));
     setTimeout(() => {
-      this.initRenderChart();
+      this.renderChart();
     }, 25)
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      if (this.checkForm()) {
-        this.initRenderChart();
-      }
-    }
-  }
 
   save() {
     this.achievableEfficiencyService.efficiencyChart.next(this.efficiencyChart);
     this.achievableEfficiencyService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
-  initRenderChart() {
-    Plotly.purge(this.currentChartId);
-    
+  renderChart() {
     this.initChartSetup();
     this.setCalculatedTraces();
-
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
-    Plotly.newPlot(this.currentChartId, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
-      .then(chart => {
-        chart.on('plotly_click', (graphData) => {
-          this.createDataPoints(graphData);
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoints(graphData);
+          });
         });
-      });
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoints(graphData);
+          });
+        });
+    }
     this.save();
   }
 
   updateChart() {
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
     this.setCalculatedTraces();
-    Plotly.update(this.currentChartId, this.efficiencyChart.data, chartLayout, [2,3]);
-
+    if (this.expanded) {
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, [2, 3]);
+    } else {
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.efficiencyChart.data, chartLayout, [2, 3]);
+    }
     this.save();
   }
 
@@ -152,7 +146,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.pointColors = graphColors;
     this.efficiencyChart = this.achievableEfficiencyService.efficiencyChart.getValue();
     this.selectedDataPoints = this.achievableEfficiencyService.selectedDataPoints.getValue();
-    
+
     // Default line traces
     let maxData: TraceCoordinates = this.getMaxData();
     this.efficiencyChart.data[0].x = maxData.x;
@@ -163,27 +157,27 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.efficiencyChart.data[1].x = avgData.x;
     this.efficiencyChart.data[1].y = avgData.y;
     this.efficiencyChart.data[1].line.color = this.pointColors[1];
-    
+
     this.efficiencyChart.layout.xaxis.title.text = this.xAxisTitle;
   }
-  
+
 
   getCurrentPoints(isUserDataPoint: boolean, userDataPointX?: number): Array<DataPoint> {
-    let flowRateValue: number = isUserDataPoint? userDataPointX : this.efficiencyForm.controls.flowRate.value;
+    let flowRateValue: number = isUserDataPoint ? userDataPointX : this.efficiencyForm.controls.flowRate.value;
     let points: Array<DataPoint> = [];
-    
+
     // Y values
     let efficiencyMax = this.calculateYmax(flowRateValue);
     let efficiencyAvg = this.calculateYaverage(flowRateValue);
     let calculatedX: number;
-    
+
     if (efficiencyMax >= 0) {
       calculatedX = flowRateValue;
-      points.push({x: calculatedX, y: efficiencyMax});
-    } 
+      points.push({ x: calculatedX, y: efficiencyMax });
+    }
     if (efficiencyAvg >= 0) {
       calculatedX = flowRateValue;
-      points.push({x: calculatedX, y: efficiencyAvg});
+      points.push({ x: calculatedX, y: efficiencyAvg });
     }
 
     return points;
@@ -204,7 +198,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           y: point.y
         }
         let resultCoordinateTrace: TraceData = this.achievableEfficiencyService.getTraceDataFromPoint(calculatedPoint);
-        let yMeasureTitle = i == 0? 'Maximum' : 'Average';
+        let yMeasureTitle = i == 0 ? 'Maximum' : 'Average';
         let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
         resultCoordinateTrace.hovertemplate = hoverTemplate;
         resultCoordinateTrace.marker.color = calculatedPoint.pointColor;
@@ -224,7 +218,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   createDataPoints(graphData) {
     let dataPoints: DataPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
-    
+
     dataPoints.forEach((point, i) => {
       let selectedPoint: DataPoint = {
         pointColor: this.pointColors[(this.efficiencyChart.data.length + 1) % this.pointColors.length],
@@ -232,14 +226,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         y: point.y
       }
       let selectedPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(selectedPoint);
-      let yMeasureTitle = i == 0? 'Maximum' : 'Average';
+      let yMeasureTitle = i == 0 ? 'Maximum' : 'Average';
       let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
       selectedPointTrace.hovertemplate = hoverTemplate;
 
-      Plotly.addTraces(this.currentChartId, selectedPointTrace);
+      // Plotly.addTraces(this.currentChartId, selectedPointTrace);
       this.selectedDataPoints.push(selectedPoint);
     });
-    
+
     this.cd.detectChanges();
     this.save();
   }
@@ -248,7 +242,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (this.efficiencyForm.controls.pumpType.value !== this.currentPumpType) {
       this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
       this.achievableEfficiencyService.initChartData();
-      this.initRenderChart();
+      this.renderChart();
     } else {
       this.updateChart();
     }
@@ -257,10 +251,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   deleteDataPoint(point: DataPoint) {
     let traceCount: number = this.efficiencyChart.data.length;
     let deleteTraceIndex: number = this.efficiencyChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
-    
+
     // ignore default traces
     if (traceCount > this.defaultTraceCount && deleteTraceIndex != -1) {
-      Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);
+      // Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);
       this.selectedDataPoints.splice(deleteTraceIndex - this.defaultTraceCount, 1);
       this.cd.detectChanges();
       this.save();
@@ -270,7 +264,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   setXRange() {
     let ranges = JSON.parse(JSON.stringify(pumpTypeRanges));
     let xRange = {
-      range: {min: 0, max: 0},
+      range: { min: 0, max: 0 },
       increment: 10,
     };
     xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
@@ -295,7 +289,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       return tmpResults.average;
     } else { return 0; }
   }
-  
+
   calculateYmax(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
@@ -357,7 +351,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
 
@@ -366,10 +360,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
-  
+
 
   hideTooltip(btnType: string) {
     if (btnType === 'btnExpandChart') {

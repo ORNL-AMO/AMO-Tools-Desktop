@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { Settings } from '../../../../../shared/models/settings';

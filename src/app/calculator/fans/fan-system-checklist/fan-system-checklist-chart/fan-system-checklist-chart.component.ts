@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FanSystemChecklistOutput, FanSystemChecklistResult } from '../../../../shared/models/fans';
+import { PlotlyService } from 'angular-plotly.js';
+import { FanSystemChecklistOutput } from '../../../../shared/models/fans';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
-import * as Plotly from 'plotly.js';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -10,18 +10,13 @@ import { Settings } from '../../../../shared/models/settings';
   styleUrls: ['./fan-system-checklist-chart.component.css']
 })
 export class FanSystemChecklistChartComponent implements OnInit {
-
   @Input()
   output: FanSystemChecklistOutput;
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer", { static: false })
-  ngChartContainer: ElementRef;
-
-  tabPanelChartId: string = "tabPanelDiv";
-  expandedChartId: string = "expandedChartDiv";
-  currentChartId: string = "tabPanelDiv";
+  @ViewChild("expandedChartDiv", { static: false })  expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false })  panelChartDiv: ElementRef;
   fanChecklistChart: SimpleChart;
 
   expanded: boolean;
@@ -30,16 +25,19 @@ export class FanSystemChecklistChartComponent implements OnInit {
   hoverBtnCollapse: boolean;
   displayCollapseTooltip: boolean;
 
-  constructor() {}
+  constructor(private plotlyService: PlotlyService) {}
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(){
     this.triggerInitialResize();
   }
 
   triggerInitialResize() {
     window.dispatchEvent(new Event("resize"));
     setTimeout(() => {
-      this.initRenderChart();
+      this.renderChart();
     }, 100);
   }
 
@@ -54,12 +52,11 @@ export class FanSystemChecklistChartComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.output && !changes.output.firstChange) {
-      this.initRenderChart();
+      this.renderChart();
     }
   }
 
-  initRenderChart() {
-    Plotly.purge(this.currentChartId);
+  renderChart() {
     let traces: Array<TraceData> = [];
     let xEquipment: Array<string> = [];
     let totalScores: Array<number> = [];
@@ -134,12 +131,21 @@ export class FanSystemChecklistChartComponent implements OnInit {
     this.fanChecklistChart.layout.annotations = annotations;
 
     let chartLayout = JSON.parse(JSON.stringify(this.fanChecklistChart.layout));
-    Plotly.newPlot(
-      this.currentChartId,
-      traces,
-      chartLayout,
-      this.fanChecklistChart.config
-    );
+    if(this.expanded && this.expandedChartDiv){
+      this.plotlyService.newPlot(
+        this.expandedChartDiv.nativeElement,
+        traces,
+        chartLayout,
+        this.fanChecklistChart.config
+      );
+    }else if(!this.expanded && this.panelChartDiv){
+      this.plotlyService.newPlot(
+        this.panelChartDiv.nativeElement,
+        traces,
+        chartLayout,
+        this.fanChecklistChart.config
+      );
+    }
   }
 
 
@@ -212,24 +218,12 @@ export class FanSystemChecklistChartComponent implements OnInit {
     };
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      } else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      this.initRenderChart();
-    }
-  }
-
   expandChart() {
     this.expanded = true;
     this.hideTooltip("btnExpandChart");
     this.hideTooltip("btnCollapseChart");
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
 
@@ -238,7 +232,7 @@ export class FanSystemChecklistChartComponent implements OnInit {
     this.hideTooltip("btnExpandChart");
     this.hideTooltip("btnCollapseChart");
     setTimeout(() => {
-      this.resizeGraph();
+      this.renderChart();
     }, 100);
   }
 

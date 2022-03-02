@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js/dist/plotly';
 import { AnnotationData } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -17,13 +17,17 @@ export class VisualizeGraphComponent implements OnInit {
   selectedGraphDataSubscription: Subscription;
   plotClickSubscription: any;
   gettingRanges: any;
-  constructor(private visualizeService: VisualizeService, private logToolDbService: LogToolDbService) {
+  constructor(private visualizeService: VisualizeService, private logToolDbService: LogToolDbService,
+    private plotlyService: PlotlyService) {
   }
 
   ngOnInit() {
     //on init react
     this.visualizeService.plotFunctionType = 'react';
 
+  }
+
+  ngAfterViewInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
       this.logToolDbService.saveData();
       let mode = {
@@ -32,33 +36,34 @@ export class VisualizeGraphComponent implements OnInit {
         displaylogo: false,
         displayModeBar: true
       }
-
-      //first time rendering chart
-      if (this.visualizeService.plotFunctionType == 'react') {
-        Plotly.purge('plotlyDiv');
-        // render chart
-        //use copy of layout otherwise range value gets set and messes stuff up
-        //layoutCopy ranges used in data table
-        let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
-        Plotly.newPlot('plotlyDiv', graphObj.data, layoutCopy, mode).then(chart => {
-          let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
-          this.visualizeService.restyleRanges.next(newRanges);
-          // subscribe to click event for annotations
-          chart.on('plotly_click', (data) => {
-            // send data point for annotations
-            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
-            this.visualizeService.annotateDataPoint.next(newAnnotation);
-          });
-
-          chart.on('plotly_relayout', (data) => {
+      if (this.visualizeChart) {
+        //first time rendering chart
+        if (this.visualizeService.plotFunctionType == 'react') {
+          // Plotly.purge('plotlyDiv');
+          // render chart
+          //use copy of layout otherwise range value gets set and messes stuff up
+          //layoutCopy ranges used in data table
+          let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, layoutCopy, mode).then(chart => {
             let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
             this.visualizeService.restyleRanges.next(newRanges);
-          })
-        });
-      } else {
-        //update chart
-        //use copy of layout otherwise range value gets set and messes stuff up
-        Plotly.update('plotlyDiv', graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
+            // subscribe to click event for annotations
+            chart.on('plotly_click', (data) => {
+              // send data point for annotations
+              let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+              this.visualizeService.annotateDataPoint.next(newAnnotation);
+            });
+
+            chart.on('plotly_relayout', (data) => {
+              let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
+              this.visualizeService.restyleRanges.next(newRanges);
+            })
+          });
+        } else {
+          //update chart
+          //use copy of layout otherwise range value gets set and messes stuff up
+          this.plotlyService.update(this.visualizeChart.nativeElement, graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
+        }
       }
     });
   }

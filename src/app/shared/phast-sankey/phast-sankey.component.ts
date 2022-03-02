@@ -6,8 +6,8 @@ import { PHAST } from '../models/phast/phast';
 import { Settings } from '../models/settings';
 import { PHASTSankeyNode } from "../models/phast/sankey.model";
 import { DecimalPipe } from "@angular/common";
+import { PlotlyService } from 'angular-plotly.js';
 
-import * as Plotly from "plotly.js";
 
 @Component({
   selector: 'app-phast-sankey',
@@ -69,7 +69,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     private phastValidService: PhastValidService,
     private _dom: ElementRef,
     private renderer: Renderer2,
-    private decimalPipe: DecimalPipe) { }
+    private decimalPipe: DecimalPipe,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
@@ -126,8 +127,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   }
 
   renderSankey() {
-    Plotly.purge(this.ngChart.nativeElement); 
-
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -204,7 +203,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       responsive: true,
     };
   
-      Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+      this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
         .then(chart => {
           chart.on('plotly_restyle', () => {
             this.setGradient();

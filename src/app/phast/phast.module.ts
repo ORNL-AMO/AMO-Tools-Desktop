@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';

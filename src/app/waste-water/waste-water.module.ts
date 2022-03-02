@@ -17,7 +17,7 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';

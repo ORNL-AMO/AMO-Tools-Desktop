@@ -1,8 +1,8 @@
 
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import * as Plotly from 'plotly.js';
 import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
 import { Settings } from '../../../../shared/models/settings'; 
+import { PlotlyService } from 'angular-plotly.js';
 @Component({
   selector: 'app-energy-analysis-bar-chart',
   templateUrl: './energy-analysis-bar-chart.component.html',
@@ -17,7 +17,8 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('analysisBarChart', { static: false }) analysisBarChart: ElementRef;
-  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
+  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
   }
@@ -60,7 +61,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       displayModeBar: !this.printView,
       responsive: true,
     };
-    Plotly.newPlot(this.analysisBarChart.nativeElement, traceData, layout, configOptions);
+    this.plotlyService.newPlot(this.analysisBarChart.nativeElement, traceData, layout, configOptions);
   }
 
   getEnergyCostData() {

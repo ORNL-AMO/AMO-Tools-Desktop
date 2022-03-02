@@ -3,11 +3,11 @@ import { Settings } from '../../../../shared/models/settings';
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
-import * as Plotly from 'plotly.js';
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 import { Subscription } from 'rxjs';
 import { StatePointAnalysisGraphService } from '../state-point-analysis-graph.service';
 import { StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../../shared/models/waste-water';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-state-point-analysis-graph',
@@ -20,7 +20,7 @@ export class StatePointAnalysisGraphComponent implements OnInit {
   settings: Settings;
   @Input()
   modificationExists: boolean;
-  
+
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
@@ -29,15 +29,14 @@ export class StatePointAnalysisGraphComponent implements OnInit {
       }
     }
   }
-  
+
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
-  
+
   // Tooltips
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
@@ -46,27 +45,33 @@ export class StatePointAnalysisGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
-  
+
   outputSub: Subscription;
 
   // Graphing
   spaGraph: SimpleChart;
-  graphData: {data: Array<StatePointAnalysisResults>, sviParameterName: string};
+  graphData: { data: Array<StatePointAnalysisResults>, sviParameterName: string };
   traceNames = {
     0: 'SVIGN',
   };
   graphColors: Array<string>;
   spaColors: Array<string>;
-  yUnits: string = 'lb/ft<sup>2</sup>d';  
+  yUnits: string = 'lb/ft<sup>2</sup>d';
 
-  constructor(private statePointAnalysisGraphService: StatePointAnalysisGraphService, 
-              private statePoinAnalysisService: StatePointAnalysisService, 
-              ) { }
+  constructor(private statePointAnalysisGraphService: StatePointAnalysisGraphService,
+    private statePoinAnalysisService: StatePointAnalysisService,
+    private plotlyService: PlotlyService
+  ) { }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit() {
     this.triggerInitialResize();
     this.initSubscriptions();
   }
+
 
   ngOnDestroy() {
     this.outputSub.unsubscribe();
@@ -83,12 +88,15 @@ export class StatePointAnalysisGraphComponent implements OnInit {
 
 
   initRenderChart() {
-    Plotly.purge(this.currentChartId);
     this.initChartSetup();
     this.drawTraces();
 
     let chartLayout = JSON.parse(JSON.stringify(this.spaGraph.layout));
-    Plotly.newPlot(this.currentChartId, this.spaGraph.data, chartLayout, this.spaGraph.config);
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.spaGraph.data, chartLayout, this.spaGraph.config);
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.spaGraph.data, chartLayout, this.spaGraph.config);
+    }
     this.save();
   }
 
@@ -103,7 +111,7 @@ export class StatePointAnalysisGraphComponent implements OnInit {
   }
 
   setGraphData(output: StatePointAnalysisOutput) {
-    this.graphData = {data: [], sviParameterName: 'SVIGN'};
+    this.graphData = { data: [], sviParameterName: 'SVIGN' };
     this.graphData.data.push(output.baseline);
     this.graphData.sviParameterName = output.sviParameterName;
     if (output.modification) {
@@ -129,7 +137,7 @@ export class StatePointAnalysisGraphComponent implements OnInit {
       if (index == 1) {
         resultType = 'Modification';
         traceIndex += 3;
-      } 
+      }
       let underflowTrace = this.statePointAnalysisGraphService.getEmptyTrace();
       let underflowCoordinates: TraceCoordinates = this.statePointAnalysisGraphService.buildCoordinatesFromPoints([0, result.UnderFlowRateY1], [result.UnderFlowRateX2, 0]);
       underflowTrace.x = underflowCoordinates.x;
@@ -137,11 +145,11 @@ export class StatePointAnalysisGraphComponent implements OnInit {
 
       underflowTrace.name = `Underflow Rate (${resultType})`;
       underflowTrace.legendGroup = `group${index}`;
-      underflowTrace.hovertemplate =  `Concentration %{x:.2r} (g/L) <br>Flux %{y:.2r} (${this.yUnits})`;
+      underflowTrace.hovertemplate = `Concentration %{x:.2r} (g/L) <br>Flux %{y:.2r} (${this.yUnits})`;
       underflowTrace.line.color = this.graphColors[traceIndex % this.graphColors.length]
       this.spaGraph.data[traceIndex] = underflowTrace;
 
-      
+
       let statePointTrace = this.statePointAnalysisGraphService.getEmptyTrace();
       statePointTrace.x = [result.StatePointX];
       statePointTrace.y = [result.StatePointY];
@@ -166,7 +174,7 @@ export class StatePointAnalysisGraphComponent implements OnInit {
       overflowTrace.line.width = 4;
       this.spaGraph.data[traceIndex + 1] = overflowTrace;
 
-      
+
       statePointTrace.line.color = this.graphColors[(traceIndex) % this.graphColors.length]
       this.spaGraph.data[traceIndex + 2] = statePointTrace;
     });
@@ -184,7 +192,11 @@ export class StatePointAnalysisGraphComponent implements OnInit {
     this.spaGraph.layout.yaxis.showgrid = !showingGridY;
 
     let chartLayout = JSON.parse(JSON.stringify(this.spaGraph.layout));
-    Plotly.update(this.currentChartId, this.spaGraph.data, chartLayout);
+    if(this.expanded){
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.spaGraph.data, chartLayout);
+    }else{
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.spaGraph.data, chartLayout);
+    }
     this.save();
   }
 
@@ -194,29 +206,16 @@ export class StatePointAnalysisGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.initRenderChart();
     }, 100);
   }
 
-  
+
   triggerInitialResize() {
     window.dispatchEvent(new Event('resize'));
     setTimeout(() => {
       this.initRenderChart();
     }, 25)
-  }
-
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      this.initRenderChart();
-    }
   }
 
   hideTooltip(btnType: string) {
@@ -281,7 +280,7 @@ export class StatePointAnalysisGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.initRenderChart();
     }, 200);
   }
 

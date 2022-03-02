@@ -15,7 +15,7 @@ import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-su
 import { HeaderInputTableComponent } from './input-summary/header-summary/header-input-table/header-input-table.component';
 import { TurbineInputTableComponent } from './input-summary/turbine-summary/turbine-input-table/turbine-input-table.component';
 import { FormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';

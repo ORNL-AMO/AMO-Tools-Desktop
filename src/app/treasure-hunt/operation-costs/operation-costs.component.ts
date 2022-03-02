@@ -6,7 +6,7 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';

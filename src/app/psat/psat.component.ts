@@ -10,7 +10,7 @@ import { Settings } from '../shared/models/settings';
 import { JsonToCsvService } from '../shared/helper-services/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { Subscription } from 'rxjs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';

@@ -7,8 +7,8 @@ import { CalculateLossesService } from "../../ssmt/calculate-losses.service";
 import { SsmtService } from "../../ssmt/ssmt.service";
 import { SSMTSankeyNode } from "../models/steam/sankey.model";
 import { DecimalPipe } from "@angular/common";
+import { PlotlyService } from "angular-plotly.js";
 
-import * as Plotly from "plotly.js";
 
 @Component({
   selector: 'app-ssmt-sankey',
@@ -54,7 +54,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
     private _dom: ElementRef,
     private renderer: Renderer2,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private plotlyService: PlotlyService
     ) { }
 
   ngOnInit(){
@@ -132,9 +133,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   renderSankey() {
-    if (this.ngChart) {
-      Plotly.purge(this.ngChart.nativeElement); 
-    }
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -212,7 +210,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       responsive: true,
     };
 
-    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
     .then(chart => {
       chart.on('plotly_restyle', () => {
         this.setGradient();

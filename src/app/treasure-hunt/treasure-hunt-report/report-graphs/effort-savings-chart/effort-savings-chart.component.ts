@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
-import * as Plotly from 'plotly.js';
+// import * as Plotly from 'plotly.js';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from "../../../../shared/models/settings";
@@ -55,7 +55,7 @@ export class EffortSavingsChartComponent implements OnInit {
   }
 
   initRenderChart() {
-    Plotly.purge(this.effortChartId);
+    // Plotly.purge(this.effortChartId);
 
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
@@ -99,24 +99,24 @@ export class EffortSavingsChartComponent implements OnInit {
 
     this.buildTrace();
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
-      .then(chart => {
-        chart.on('plotly_beforehover', () => {
-          if (this.showingHoverLabels) {
-            return false;
-          }
-        });
-        chart.on('plotly_legendclick', (legendClick) => {
-         this.updateVisibleLabels(legendClick);
-        });
-        chart.on('plotly_relayout', () => {
-          this.showingHoverLabels = false;
-        });
-      });
+    // Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
+    //   .then(chart => {
+    //     chart.on('plotly_beforehover', () => {
+    //       if (this.showingHoverLabels) {
+    //         return false;
+    //       }
+    //     });
+    //     chart.on('plotly_legendclick', (legendClick) => {
+    //      this.updateVisibleLabels(legendClick);
+    //     });
+    //     chart.on('plotly_relayout', () => {
+    //       this.showingHoverLabels = false;
+    //     });
+    //   });
   }
 
   initRenderPrintChart() {
-    Plotly.purge(this.effortChartId);
+    // Plotly.purge(this.effortChartId);
 
     this.effortChart = {
       name: 'Payback vs. Effort to Implement',
@@ -161,20 +161,20 @@ export class EffortSavingsChartComponent implements OnInit {
 
     this.buildTrace();
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
-      .then(chart => {
-        chart.on('plotly_beforehover', () => {
-          if (this.showingHoverLabels) {
-            return false;
-          }
-        });
-        chart.on('plotly_legendclick', (legendClick) => {
-         this.updateVisibleLabels(legendClick);
-        });
-        chart.on('plotly_relayout', () => {
-          this.showingHoverLabels = false;
-        });
-      });
+    // Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
+    //   .then(chart => {
+    //     chart.on('plotly_beforehover', () => {
+    //       if (this.showingHoverLabels) {
+    //         return false;
+    //       }
+    //     });
+    //     chart.on('plotly_legendclick', (legendClick) => {
+    //      this.updateVisibleLabels(legendClick);
+    //     });
+    //     chart.on('plotly_relayout', () => {
+    //       this.showingHoverLabels = false;
+    //     });
+    //   });
   }
 
   updateVisibleLabels(legendClick) {
@@ -190,18 +190,18 @@ export class EffortSavingsChartComponent implements OnInit {
       }
     });
 
-    if (this.showingHoverLabels) {
-      // Match Plotly's 300ms doubleclick timeout
-      setTimeout(() => {
-        Plotly.Fx.hover(this.effortChartId, []);
-        Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
-      }, 300);
-    }
+    // if (this.showingHoverLabels) {
+    //   // Match Plotly's 300ms doubleclick timeout
+    //   setTimeout(() => {
+    //     Plotly.Fx.hover(this.effortChartId, []);
+    //     Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
+    //   }, 300);
+    // }
   }
 
   updateChart() {
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    Plotly.relayout(this.effortChartId, chartLayout);
+    // Plotly.relayout(this.effortChartId, chartLayout);
   }
 
   buildTrace() {
@@ -296,10 +296,10 @@ export class EffortSavingsChartComponent implements OnInit {
   
   toggleLabels() {
     if (!this.showingHoverLabels) {
-      Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
+      // Plotly.Fx.hover(this.effortChartId, this.hoverLabels);
       this.showingHoverLabels = true;
     } else {
-      Plotly.Fx.hover(this.effortChartId, []);
+      // Plotly.Fx.hover(this.effortChartId, []);
       this.showingHoverLabels = false;
     }
   }

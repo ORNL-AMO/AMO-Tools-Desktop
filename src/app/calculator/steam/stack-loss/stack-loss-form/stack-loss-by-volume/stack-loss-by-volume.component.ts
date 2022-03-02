@@ -4,7 +4,7 @@ import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { StackLossService } from '../../stack-loss.service';
 import { FlueGasMaterial } from '../../../../../shared/models/materials';
 import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';

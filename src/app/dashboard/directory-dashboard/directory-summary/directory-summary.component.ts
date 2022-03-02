@@ -20,7 +20,7 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';

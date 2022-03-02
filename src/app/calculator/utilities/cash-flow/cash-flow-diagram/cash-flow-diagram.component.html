@@ -10,7 +10,7 @@
     </div>
   </div>
   <div *ngIf="expanded" class="w-100 p-3">
-    <div id="expandedChartDiv"></div>
+    <div id="expandedChartDiv" #expandedChartDiv></div>
   </div>
 
   <div class="d-flex w-100 justify-content-center">
@@ -35,7 +35,7 @@
   </div>
 
   <div class="w-100 p-2">
-    <div class="w-100" id="tabPanelDiv"></div>
+    <div class="w-100" id="tabPanelDiv" #panelChartDiv></div>
     <div class="col-md-12">
       <div class="graph-btn-container">
         <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()"

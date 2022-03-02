@@ -7,7 +7,7 @@ import { HeatCascadingHelpComponent } from './heat-cascading-help/heat-cascading
 import { HeatCascadingService } from './heat-cascading.service';
 import { HeatCascadingFormService } from './heat-cascading-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';

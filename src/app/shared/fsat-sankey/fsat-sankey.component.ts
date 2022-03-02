@@ -3,9 +3,9 @@ import { Settings } from '../models/settings';
 import { FSAT } from '../models/fans';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FsatService } from '../../fsat/fsat.service';
-import * as Plotly from "plotly.js";
 import { FsatSankeyNode } from '../fsat/sankey.model';
 import { DecimalPipe } from '@angular/common';
+import { PlotlyService } from 'angular-plotly.js';
 
 
 @Component({
@@ -46,7 +46,8 @@ export class FsatSankeyComponent implements OnInit {
               private fsatService: FsatService,
               private _dom: ElementRef,
               private decimalPipe: DecimalPipe,
-              private renderer: Renderer2) { }
+              private renderer: Renderer2,
+              private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     this.getResults();
@@ -110,7 +111,6 @@ export class FsatSankeyComponent implements OnInit {
   }
   
   sankey() {
-    Plotly.purge(this.ngChart.nativeElement);
 
     const links: Array<{source: number, target: number}> = [];
     let nodes: Array<FsatSankeyNode> = [];
@@ -223,7 +223,7 @@ export class FsatSankeyComponent implements OnInit {
       };
     }
 
-    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
     this.buildSvgArrows();
 

@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SsmtValid } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';

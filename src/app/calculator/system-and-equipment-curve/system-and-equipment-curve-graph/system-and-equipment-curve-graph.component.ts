@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import * as Plotly from 'plotly.js';
 import { SimpleChart } from '../../../shared/models/plotting';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { SystemAndEquipmentCurveGraphService, HoverGroupData, SystemCurveDataPoint } from './system-and-equipment-curve-graph.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { CurveDataService } from '../curve-data.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -21,16 +21,15 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   equipmentType: string;
   
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedPowerChartDiv", { static: false })  expandedPowerChartDiv: ElementRef;
+  @ViewChild("expandedSystemChartDiv", { static: false })  expandedSystemChartDiv: ElementRef;
+
+  @ViewChild("powerPanelChartDiv", { static: false })  powerPanelChartDiv: ElementRef;
+  @ViewChild("systemPanelDiv", { static: false })  systemPanelDiv: ElementRef;
+  
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  systemPanelChartId: string = 'systemPanelChartDiv';
-  expandedSystemChartId: string = 'expandedSystemChartDiv';
-  currentSystemChartId: string = 'systemPanelChartDiv';
 
-  powerPanelChartId: string = 'powerPanelChartDiv';
-  expandedPowerChartId: string = 'expandedPowerChartDiv';
-  currentPowerChartId: string = 'powerPanelChartDiv';
   
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -97,7 +96,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
     private curveDataService: CurveDataService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService
   ) { }
 
   ngOnInit(): void {
@@ -184,24 +184,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }, 25)
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentSystemChartId = this.expandedSystemChartId;
-      }
-      else {
-        this.currentSystemChartId = this.systemPanelChartId;
-      }
-      if (this.powerExpanded) {
-        this.currentPowerChartId = this.expandedPowerChartId;
-      }
-      else {
-        this.currentPowerChartId = this.powerPanelChartId;
-      } 
-      this.initRenderChart(true);
-    }
-  }
 
   save() {
     this.systemAndEquipmentCurveGraphService.curveEquipmentChart.next(this.curveEquipmentChart);
@@ -211,38 +193,36 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   // Every update is newPlot to force resize
   initRenderChart(isResize = false) {
-    Plotly.purge(this.currentSystemChartId);
-    Plotly.purge(this.currentPowerChartId);
     this.setDisplayDataOptions();
     this.initChartSetup(isResize);
     this.drawTraceData();
 
     let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
-    Plotly.newPlot(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
-      .then(chart => {
-        chart.on('plotly_click', (graphData) => {
-          this.createDataPoint(graphData);
-        });
-        chart.on('plotly_hover', hoverData => {
-              this.displayHoverData(hoverData);
-        });
-        chart.on('plotly_unhover', unhoverData => {
-            this.removeHoverData(this.currentPowerChartId);
-        });
-    });
+    // Plotly.newPlot(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
+    //   .then(chart => {
+    //     chart.on('plotly_click', (graphData) => {
+    //       this.createDataPoint(graphData);
+    //     });
+    //     chart.on('plotly_hover', hoverData => {
+    //           this.displayHoverData(hoverData);
+    //     });
+    //     chart.on('plotly_unhover', unhoverData => {
+    //         this.removeHoverData(this.currentPowerChartId);
+    //     });
+    // });
 
-    if (this.displayPowerChart) {
-      let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
-      Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config)
-        .then(chart => {
-          chart.on('plotly_hover', powerHoverData => {
-            this.displayHoverData(powerHoverData, true);
-          });
-          chart.on('plotly_unhover', unhoverData => {
-            this.removeHoverData(this.currentSystemChartId);
-          });
-        });
-    }
+    // if (this.displayPowerChart) {
+    //   let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
+    //   Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config)
+    //     .then(chart => {
+    //       chart.on('plotly_hover', powerHoverData => {
+    //         this.displayHoverData(powerHoverData, true);
+    //       });
+    //       chart.on('plotly_unhover', unhoverData => {
+    //         this.removeHoverData(this.currentSystemChartId);
+    //       });
+    //     });
+    // }
     this.save();
   }
 
@@ -462,53 +442,53 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   displayHoverData(plotlyHoverEvent, onPowerChart: boolean = false) {
     this.buildHoverGroupData(plotlyHoverEvent);
 
-    let hoveredPoint = plotlyHoverEvent.points[0];
-    let hoveredPointIndex: number = this.powerChart.data[0].x.findIndex(x => x == hoveredPoint.x);
-    let flowValue = this.powerChart.data[0].x[hoveredPointIndex];
-    this.hoverChartId = this.displayPowerChart? this.currentPowerChartId : undefined;
-    let hoverTraces = [{ curveNumber: 0, pointNumber: hoveredPointIndex }];
+    // let hoveredPoint = plotlyHoverEvent.points[0];
+    // let hoveredPointIndex: number = this.powerChart.data[0].x.findIndex(x => x == hoveredPoint.x);
+    // let flowValue = this.powerChart.data[0].x[hoveredPointIndex];
+    // this.hoverChartId = this.displayPowerChart? this.currentPowerChartId : undefined;
+    // let hoverTraces = [{ curveNumber: 0, pointNumber: hoveredPointIndex }];
 
-    if (hoveredPoint.curveNumber == this.traces.modification) {
-      // Hovering on equipment mod
-      // Round up or down to nearest 10 - (mod x coordinates are offset by the base/mod speed ratio)
-      let pointX = Math.round(hoveredPoint.x/10) * 10;
-      hoveredPointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
-      hoverTraces[0].pointNumber = hoveredPointIndex;
-    }
+    // if (hoveredPoint.curveNumber == this.traces.modification) {
+    //   // Hovering on equipment mod
+    //   // Round up or down to nearest 10 - (mod x coordinates are offset by the base/mod speed ratio)
+    //   let pointX = Math.round(hoveredPoint.x/10) * 10;
+    //   hoveredPointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
+    //   hoverTraces[0].pointNumber = hoveredPointIndex;
+    // }
 
-    if (!onPowerChart && this.powerChart.data[1]) {
-      // hovertag for power chart modification
-      if (hoveredPoint.curveNumber != this.traces.modification) {
-        let matchFunction = JSON.parse(JSON.stringify(this.powerChart.data[1].x)).map(x => Math.round(x/10) * 10);
-        hoveredPointIndex = matchFunction.findIndex(x => x == flowValue);
-      } else {
-        // Modification lines are same length - use index
-        hoveredPointIndex = hoveredPoint.pointIndex;
-      }
-      hoverTraces.push({ curveNumber: 1, pointNumber: hoveredPointIndex });
-    } else if (onPowerChart && hoveredPoint.curveNumber == 0) {
-      // Hovering on power baseline
-      hoveredPointIndex = this.curveEquipmentChart.data[this.traces.baseline].x.findIndex(x => x == hoveredPoint.x);
-      this.hoverChartId = this.currentSystemChartId;
-      hoverTraces[0].curveNumber = this.traces.baseline;
-    } else if (onPowerChart && hoveredPoint.curveNumber == 1) {
-      // Hovering on power modification
-      hoveredPointIndex = hoveredPoint.pointIndex;
-      this.hoverChartId = this.currentSystemChartId;
-      hoverTraces[0].curveNumber = this.traces.modification;
-      hoverTraces[0].pointNumber = hoveredPointIndex;
-    }
+    // if (!onPowerChart && this.powerChart.data[1]) {
+    //   // hovertag for power chart modification
+    //   if (hoveredPoint.curveNumber != this.traces.modification) {
+    //     let matchFunction = JSON.parse(JSON.stringify(this.powerChart.data[1].x)).map(x => Math.round(x/10) * 10);
+    //     hoveredPointIndex = matchFunction.findIndex(x => x == flowValue);
+    //   } else {
+    //     // Modification lines are same length - use index
+    //     hoveredPointIndex = hoveredPoint.pointIndex;
+    //   }
+    //   hoverTraces.push({ curveNumber: 1, pointNumber: hoveredPointIndex });
+    // } else if (onPowerChart && hoveredPoint.curveNumber == 0) {
+    //   // Hovering on power baseline
+    //   hoveredPointIndex = this.curveEquipmentChart.data[this.traces.baseline].x.findIndex(x => x == hoveredPoint.x);
+    //   this.hoverChartId = this.currentSystemChartId;
+    //   hoverTraces[0].curveNumber = this.traces.baseline;
+    // } else if (onPowerChart && hoveredPoint.curveNumber == 1) {
+    //   // Hovering on power modification
+    //   hoveredPointIndex = hoveredPoint.pointIndex;
+    //   this.hoverChartId = this.currentSystemChartId;
+    //   hoverTraces[0].curveNumber = this.traces.modification;
+    //   hoverTraces[0].pointNumber = hoveredPointIndex;
+    // }
 
-    if (this.hoverChartId) {
-      Plotly.Fx.hover(this.hoverChartId, hoverTraces);
-    }
+    // if (this.hoverChartId) {
+    //   Plotly.Fx.hover(this.hoverChartId, hoverTraces);
+    // }
   }
 
   removeHoverData(chartId: string) {
     this.resetHoverData();
-    if (this.hoverChartId) {
-      Plotly.Fx.hover(chartId, []);
-    }
+    // if (this.hoverChartId) {
+    //   Plotly.Fx.hover(chartId, []);
+    // }
     this.cd.detectChanges();
   }
 
@@ -572,7 +552,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
     selectedPoint = this.systemAndEquipmentCurveGraphService.getSelectedDataPointEfficiency(selectedPoint, this.equipmentType, this.settings, isModification); 
     let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-    Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
+    // Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     
     this.cd.detectChanges();
@@ -584,7 +564,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     // ignore default traces
     if (traceCount > this.defaultPointCount && deleteTraceIndex != -1) {
-      Plotly.deleteTraces(this.currentSystemChartId, [deleteTraceIndex]);
+      // Plotly.deleteTraces(this.currentSystemChartId, [deleteTraceIndex]);
       this.selectedDataPoints.splice(index, 1);
       this.cd.detectChanges();
       this.save();
@@ -625,7 +605,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      // this.resizeGraph();
     }, 100);
   }
 
@@ -639,7 +619,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      // this.resizeGraph();
     }, 100);
   }
   

@@ -11,9 +11,9 @@ import { PSAT, PsatOutputs, PsatInputs, PsatValid } from "../models/psat";
 import { ConvertUnitsService } from "../convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../../psat/psat.service";
-import * as Plotly from "plotly.js";
 import { DecimalPipe } from "@angular/common";
 import { PsatSankeyNode } from '../../shared/models/psat/sankey.model';
+import { PlotlyService } from "angular-plotly.js";
 
 @Component({
   selector: 'app-psat-sankey',
@@ -65,7 +65,8 @@ export class PsatSankeyComponent implements OnInit {
     private convertUnitsService: ConvertUnitsService,
     private _dom: ElementRef,
     private renderer: Renderer2,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private plotlyService: PlotlyService
   ) { }
 
   ngOnInit() {
@@ -155,7 +156,6 @@ export class PsatSankeyComponent implements OnInit {
     const links: Array<{ source: number, target: number }> = [];
     let nodes: Array<PsatSankeyNode> = [];
 
-    Plotly.purge(this.ngChart.nativeElement);
     this.buildNodes(results, nodes);
 
     links.push(
@@ -253,7 +253,7 @@ export class PsatSankeyComponent implements OnInit {
       };
     }
 
-    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
     this.buildSvgArrows();
   }

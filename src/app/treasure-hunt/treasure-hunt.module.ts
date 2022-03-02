@@ -7,7 +7,7 @@ import { TreasureHuntService } from './treasure-hunt.service';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
