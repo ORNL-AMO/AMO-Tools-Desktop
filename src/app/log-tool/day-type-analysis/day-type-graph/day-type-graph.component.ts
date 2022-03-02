@@ -43,7 +43,9 @@ export class DayTypeGraphComponent implements OnInit {
     private plotlyService: PlotlyService) { }
 
   ngOnInit() {
+  }
 
+  ngAfterViewInit(){
     this.dayTypeScatterPlotDataSub = this.dayTypeGraphService.dayTypeScatterPlotData.subscribe(val => {
       this.dayTypeScatterPlotData = val;
       if (this.selectedGraphType == 'dayType') {
@@ -63,6 +65,7 @@ export class DayTypeGraphComponent implements OnInit {
       this.setGraphData();
     });
   }
+
 
   ngOnDestroy() {
     this.individualDayScatterPlotDataSub.unsubscribe();

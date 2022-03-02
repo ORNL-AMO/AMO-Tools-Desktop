@@ -38,32 +38,32 @@ export class VisualizeGraphComponent implements OnInit {
       }
       if (this.visualizeChart) {
         //first time rendering chart
-        if (this.visualizeService.plotFunctionType == 'react') {
-          // Plotly.purge('plotlyDiv');
-          // render chart
-          //use copy of layout otherwise range value gets set and messes stuff up
-          //layoutCopy ranges used in data table
-          let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
-          this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, layoutCopy, mode).then(chart => {
+        // if (this.visualizeService.plotFunctionType == 'react') {
+        // Plotly.purge('plotlyDiv');
+        // render chart
+        //use copy of layout otherwise range value gets set and messes stuff up
+        //layoutCopy ranges used in data table
+        let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
+        this.plotlyService.newPlot(this.visualizeChart.nativeElement, graphObj.data, layoutCopy, mode).then(chart => {
+          let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
+          this.visualizeService.restyleRanges.next(newRanges);
+          // subscribe to click event for annotations
+          chart.on('plotly_click', (data) => {
+            // send data point for annotations
+            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+            this.visualizeService.annotateDataPoint.next(newAnnotation);
+          });
+
+          chart.on('plotly_relayout', (data) => {
             let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
             this.visualizeService.restyleRanges.next(newRanges);
-            // subscribe to click event for annotations
-            chart.on('plotly_click', (data) => {
-              // send data point for annotations
-              let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
-              this.visualizeService.annotateDataPoint.next(newAnnotation);
-            });
-
-            chart.on('plotly_relayout', (data) => {
-              let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
-              this.visualizeService.restyleRanges.next(newRanges);
-            })
-          });
-        } else {
-          //update chart
-          //use copy of layout otherwise range value gets set and messes stuff up
-          this.plotlyService.update(this.visualizeChart.nativeElement, graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
-        }
+          })
+        });
+        // } else {
+        //   //update chart
+        //   //use copy of layout otherwise range value gets set and messes stuff up
+        //   this.plotlyService.update(this.visualizeChart.nativeElement, graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
+        // }
       }
     });
   }
