@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import { EfficiencyImprovement } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
 import { EfficiencyImprovementService } from '../efficiency-improvement.service';
@@ -51,9 +51,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   init(){
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
     if(this.baselineSelected){
-      this.form = this.efficiencyImprovementService.getFormFromObjInputData(this.efficiencyImprovement.baseline);
+      this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovement.baseline);
     } else {
-      this.form = this.efficiencyImprovementService.getFormFromObjInputData(this.efficiencyImprovement.modification);
+      this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovement.modification);
     }
     this.setFormState();
   }
@@ -82,9 +82,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
 
   save(){
     if(this.baselineSelected){
-      this.efficiencyImprovement.baseline = this.efficiencyImprovementService.getObjInputDataFromForm(this.form);
+      this.efficiencyImprovement.baseline = this.efficiencyImprovementService.getObjFromForm(this.form);
     } else {
-      this.efficiencyImprovement.modification = this.efficiencyImprovementService.getObjInputDataFromForm(this.form);
+      this.efficiencyImprovement.modification = this.efficiencyImprovementService.getObjFromForm(this.form);
     }
     this.calculate.emit(this.efficiencyImprovement);
   }

@@ -594,7 +594,7 @@ export class PhastService {
     }
   }
   
-  efficiencyImprovementResults(data: EfficiencyImprovement, output: EfficiencyImprovementOutputs, settings: Settings): EfficiencyImprovementResults {
+  efficiencyImprovementResults(data: EfficiencyImprovement, output: EfficiencyImprovementOutputs): EfficiencyImprovementResults {
     
     let baselineHeatInput: number = data.baseline.energyInput * data.baseline.operatingHours;
     let modificationHeatInput: number = output.newEnergyInput * data.modification.operatingHours;

@@ -8,7 +8,6 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -49,7 +48,6 @@ export class EfficiencyImprovementComponent implements OnInit {
   saving: boolean;
   originalCalculator: Calculator;
   calculator: Calculator;
-  efficiencyImprovementForm: FormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
@@ -87,14 +85,14 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.efficiencyImprovement = this.calculator.efficiencyImprovement;
     }
     else {
-      this.efficiencyImprovement = this.efficiencyImprovementService.getRestDataNewObj(this.settings);
+      this.efficiencyImprovement = this.efficiencyImprovementService.getEmptyInputs(this.settings);
     }
     this.resetForm = true;
     this.calculate(this.efficiencyImprovement);
   }
 
   btnGenerateExample() {
-    this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
+    this.efficiencyImprovement = this.efficiencyImprovementService.generateExample(this.settings);
     this.calculate(this.efficiencyImprovement);
   }
 
@@ -111,7 +109,7 @@ export class EfficiencyImprovementComponent implements OnInit {
 
   calculate(data: EfficiencyImprovement) {
     this.efficiencyImprovement = data;
-    this.efficiencyImprovementInputs = this.efficiencyImprovementService.getInputsFromObj(data);
+    this.efficiencyImprovementInputs = this.efficiencyImprovementService.getInputsForSuite(data);
     if (!this.inAssessment) {
       this.efficiencyImprovementService.efficiencyImprovement = this.efficiencyImprovement;
     } else if (this.inAssessment && this.calcExists) {
@@ -119,7 +117,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.saveCalculator();
     }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
-    this.efficiencyImprovement.results = this.phastService.efficiencyImprovementResults(data, this.efficiencyImprovementOutputs, this.settings);
+    this.efficiencyImprovement.results = this.phastService.efficiencyImprovementResults(data, this.efficiencyImprovementOutputs);
   }
 
   setCurrentField(str: string) {
@@ -133,7 +131,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       if (this.calculator.efficiencyImprovement) {
         this.efficiencyImprovement = this.calculator.efficiencyImprovement;
       } else {
-        this.efficiencyImprovement = this.efficiencyImprovementService.getRestDataNewObj(this.settings);
+        this.efficiencyImprovement = this.efficiencyImprovementService.getEmptyInputs(this.settings);
         this.calculator.efficiencyImprovement = this.efficiencyImprovement;
         this.saveCalculator();
       }
@@ -144,7 +142,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    let tmpEfficiencyImprovement: EfficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
+    let tmpEfficiencyImprovement: EfficiencyImprovement = this.efficiencyImprovementService.generateExample(this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       efficiencyImprovement: tmpEfficiencyImprovement
@@ -156,7 +154,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     if (this.efficiencyImprovementService.efficiencyImprovement) {
       this.efficiencyImprovement = this.efficiencyImprovementService.efficiencyImprovement;
     } else {
-      this.efficiencyImprovement = this.efficiencyImprovementService.generateExampleNewObj(this.settings);
+      this.efficiencyImprovement = this.efficiencyImprovementService.generateExample(this.settings);
     }
     this.calculate(this.efficiencyImprovement);
   }
@@ -192,9 +190,4 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
-
-  createModification() {
-    this.setModificationSelected();
-  }
-
 }
