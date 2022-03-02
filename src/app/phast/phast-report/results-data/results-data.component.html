@@ -361,14 +361,14 @@
         <td> CO<sub>2</sub> Emissions (kg CO<sub>2</sub>/hr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput">
-            {{baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput | number:'1.0-3'}}
+            {{baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput | number:'1.0-2'}}
           </span>
           <span *ngIf="!baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput">&mdash; &mdash;</span>
         </td>
         <td *ngFor="let mod of modificationResults; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput.hourlyTotalEmissionOutput |
-            number:'1.0-3'}}</span>
+            number:'1.0-2'}}</span>
           <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -378,7 +378,7 @@
         <td *ngFor="let mod of modificationResults; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.co2EmissionsOutput">
-            {{mod.co2EmissionsOutput.emissionsSavings | number:'1.0-3'}}
+            {{mod.co2EmissionsOutput.emissionsSavings | number:'1.0-2'}}
           </span>
           <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
         </td>
@@ -542,13 +542,13 @@
         <tr>
           <td> Electrical CO<sub>2</sub> Emissions </td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-            {{baseLineResults.co2EmissionsOutput.electricityEmissionOutput | number:'1.0-3'}}</td>
+            {{baseLineResults.co2EmissionsOutput.electricityEmissionOutput | number:'1.0-2'}}</td>
           <td *ngFor="let mod of modificationResults; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span
               *ngIf="mod.co2EmissionsOutput.electricityEmissionOutput">{{mod.co2EmissionsOutput.electricityEmissionOutput
               |
-              number:'1.0-3'}}</span>
+              number:'1.0-2'}}</span>
             <span *ngIf="!mod.co2EmissionsOutput.electricityEmissionOutput">&mdash; &mdash;</span>
           </td>
         </tr>
@@ -556,11 +556,11 @@
           <td *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'"> Natural Gas CO<sub>2</sub> Emissions </td>
           <td *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'"> Fuel CO<sub>2</sub> Emissions </td>
           <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-            {{baseLineResults.co2EmissionsOutput.fuelEmissionOutput | number:'1.0-3'}}</td>
+            {{baseLineResults.co2EmissionsOutput.fuelEmissionOutput | number:'1.0-2'}}</td>
           <td *ngFor="let mod of modificationResults; let index = index;"
             [ngClass]="{'selected-modification': index == selectedModificationIndex}">
             <span *ngIf="mod.co2EmissionsOutput.fuelEmissionOutput">{{mod.co2EmissionsOutput.fuelEmissionOutput |
-              number:'1.0-3'}}</span>
+              number:'1.0-2'}}</span>
             <span *ngIf="!mod.co2EmissionsOutput.fuelEmissionOutput">&mdash; &mdash;</span>
           </td>
         </tr>
@@ -570,13 +570,13 @@
           <tr>
             <td> Coal Carbon CO<sub>2</sub> Emissions </td>
             <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.co2EmissionsOutput.coalCarbonEmissionsOutput | number:'1.0-3'}}</td>
+              {{baseLineResults.co2EmissionsOutput.coalCarbonEmissionsOutput | number:'1.0-2'}}</td>
             <td *ngFor="let mod of modificationResults; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
               <span
                 *ngIf="mod.co2EmissionsOutput.coalCarbonEmissionsOutput">{{mod.co2EmissionsOutput.coalCarbonEmissionsOutput
                 |
-                number:'1.0-3'}}</span>
+                number:'1.0-2'}}</span>
               <span *ngIf="!mod.co2EmissionsOutput.coalCarbonEmissionsOutput">&mdash; &mdash;</span>
             </td>
           </tr>
@@ -584,12 +584,12 @@
           <tr>
             <td> Electrode CO<sub>2</sub> Emissions </td>
             <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.co2EmissionsOutput.electrodeEmissionsOutput | number:'1.0-3'}}</td>
+              {{baseLineResults.co2EmissionsOutput.electrodeEmissionsOutput | number:'1.0-2'}}</td>
             <td *ngFor="let mod of modificationResults; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
               <span
                 *ngIf="mod.co2EmissionsOutput.electrodeEmissionsOutput">{{mod.co2EmissionsOutput.electrodeEmissionsOutput
-                | number:'1.0-3'}}</span>
+                | number:'1.0-2'}}</span>
               <span *ngIf="!mod.co2EmissionsOutput.electrodeEmissionsOutput">&mdash; &mdash;</span>
             </td>
           </tr>
@@ -599,10 +599,10 @@
             <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
               {{baseLineResults.co2EmissionsOutput.otherFuelEmissionsOutput
               |
-              number:'1.0-3'}}</td>
+              number:'1.0-2'}}</td>
             <td *ngFor="let mod of modificationResults; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.co2EmissionsOutput.otherFuelEmissionsOutput">{{mod.co2EmissionsOutput.otherFuelEmissionsOutput | number:'1.0-3'}}</span>
+              <span *ngIf="mod.co2EmissionsOutput.otherFuelEmissionsOutput">{{mod.co2EmissionsOutput.otherFuelEmissionsOutput | number:'1.0-2'}}</span>
               <span *ngIf="!mod.co2EmissionsOutput.otherFuelEmissionsOutput">&mdash; &mdash;</span>
             </td>
           </tr>
