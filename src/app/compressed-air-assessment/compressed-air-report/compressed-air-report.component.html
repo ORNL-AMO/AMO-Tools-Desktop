@@ -107,7 +107,7 @@
                 [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
             </app-report-graphs>
         </div>
-        <div class="results scroll-item print-height page-break-before" 
+        <div class="print-height page-break-before" [ngClass]="{'results scroll-item':!showPrintView}"
             *ngIf="(currentTab == 'systemProfiles' && !showPrintView) || (showPrintView && printOptions.printSystemProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment"

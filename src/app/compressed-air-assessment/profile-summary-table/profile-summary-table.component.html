@@ -1,4 +1,6 @@
-<div class="pl-2 pt-3 pr-2 scroll-item" *ngIf="profileSummary">
+    <div class="d-flex flex-column print-container" [ngClass]="{'scroll-item': !printView}" *ngIf="profileSummary">
+        <div class="d-flex justify-content-center">
+            <div class="pl-2 pt-3 pr-2">
     <table #profileTable class="table table-hover bg-white">
         <thead>
             <tr>
@@ -139,6 +141,8 @@
             </tr>
         </tbody>
     </table>
+    </div>
+</div>
 </div>
 
 
