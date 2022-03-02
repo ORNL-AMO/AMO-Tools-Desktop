@@ -89,6 +89,10 @@ export class Co2SavingsPhastComponent implements OnInit {
       }
       this.cd.detectChanges();
     }
+    if (changes.co2SavingsData && !changes.co2SavingsData.firstChange) {
+      this.initForm();
+    }
+
   }
 
   initCo2SavingsSubscription() {
@@ -138,6 +142,7 @@ export class Co2SavingsPhastComponent implements OnInit {
   initForm() {
     let shouldSetOutputRate: boolean = true;
     this.form = this.phastCO2SavingsService.getEmissionsForm(this.co2SavingsData);
+    console.log('co2savingsdata form', this.form);
     // Regions are the same for Mod
     if (!this.isBaseline) {
       this.form.controls.zipcode.disable();
