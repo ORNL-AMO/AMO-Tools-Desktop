@@ -5,7 +5,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { DataTableVariable } from '../../dataTableVariables';
 import { PlotlyService } from 'angular-plotly.js';
-
+import * as Plotly from 'plotly.js-dist';
 @Component({
   selector: 'app-srt-graph',
   templateUrl: './srt-graph.component.html',
@@ -111,7 +111,7 @@ export class SrtGraphComponent implements OnInit {
 
   setHover(points: Array<{ curveNumber: number, pointNumber: number }>) {
     if (this.srtGraphItem && points != undefined) {
-      // Plotly.Fx.hover(this.srtGraphItem.nativeElement, points)
+      Plotly.Fx.hover(this.srtGraphItem.nativeElement, points)
     }
   }
 }
