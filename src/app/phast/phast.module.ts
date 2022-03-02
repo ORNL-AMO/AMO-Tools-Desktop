@@ -16,7 +16,6 @@ import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { PhastService } from './phast.service';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
-import { SankeyModule } from './sankey/sankey.module';
 import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
@@ -67,7 +66,6 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AuxEquipmentModule,
     DesignedEnergyModule,
     MeteredEnergyModule,
-    SankeyModule,
     PhastReportModule,
     PreAssessmentModule,
     O2EnrichmentModule,

@@ -1,12 +1,12 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { PhastValidService } from '../../phast/phast-valid.service';
-import { FuelResults, SankeyService } from '../../phast/sankey/sankey.service';
 import { Assessment } from '../models/assessment';
 import { PHAST } from '../models/phast/phast';
 import { Settings } from '../models/settings';
 import { PHASTSankeyNode } from "../models/phast/sankey.model";
 import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from 'angular-plotly.js';
+import { FuelResults, SankeyService } from './sankey.service';
 
 
 @Component({
