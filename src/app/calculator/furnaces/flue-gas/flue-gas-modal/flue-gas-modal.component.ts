@@ -72,9 +72,9 @@ export class FlueGasModalComponent implements OnInit {
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
       if (val) {
         this.output = val;
+        this.cd.detectChanges();
       }
     });
-    this.cd.detectChanges();
   }
 
   changeFuelType() {

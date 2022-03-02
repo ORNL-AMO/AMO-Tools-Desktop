@@ -36,9 +36,8 @@ export class EnergyInputExhaustGasService {
     return tmpExhaustGas;
   }
 
-  checkWarnings(energyInputExhaustGas: EnergyInputExhaustGasLoss, settings: Settings): { combustionTempWarning: string, heatWarning: string } {
+  checkWarnings(energyInputExhaustGas: EnergyInputExhaustGasLoss, settings: Settings): {heatWarning: string } {
     return {
-      combustionTempWarning: this.checkCombustionTemp(energyInputExhaustGas),
       heatWarning: this.checkHeatInput(energyInputExhaustGas, settings)
     };
   }
@@ -59,13 +58,5 @@ export class EnergyInputExhaustGasService {
     }
   }
 
-  checkCombustionTemp(energyInputExhaustGas: EnergyInputExhaustGasLoss): string {
-    if (energyInputExhaustGas.totalHeatInput > 0 && energyInputExhaustGas.combustionAirTemp >= energyInputExhaustGas.exhaustGasTemp) {
-      return 'Combustion air temperature must be less than exhaust gas temperature';
-    }
-    else {
-      return null;
-    }
-  }
 
 }

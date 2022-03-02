@@ -59,16 +59,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     }
     this.save();
   }
-
-  checkWarnings() {
-    let tmpExhaustGas: EnergyInputExhaustGasLoss = this.energyInputExhaustGasService.getLossFromForm(this.exhaustGasForm);
-    let tmpWarnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(tmpExhaustGas, this.settings);
-    this.combustionTempWarning = tmpWarnings.combustionTempWarning;
-    this.heatWarning = tmpWarnings.heatWarning;
-    let hasWarning: boolean = ((this.heatWarning !== null) || (this.combustionTempWarning !== null));
-    this.inputError.emit(hasWarning);
-  }
-
+  
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -90,26 +81,12 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
   compareExcessAir(): boolean {
     if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareExcessAir(this.lossIndex);
+      return this.energyInputExhaustGasCompareService.compareAvailableHeat(this.lossIndex);
     } else {
       return false;
     }
   }
 
-  compareCombustionAirTemp(): boolean {
-    if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareCombustionAirTemp(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  compareExhaustGasTemp(): boolean {
-    if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareExhaustGasTemp(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
   compareTotalHeatInput(): boolean {
     if (this.canCompare()) {
       return this.energyInputExhaustGasCompareService.compareTotalHeatInput(this.lossIndex);

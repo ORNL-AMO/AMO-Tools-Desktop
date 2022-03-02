@@ -11,6 +11,7 @@ import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
+import { PH } from 'lodash';
 declare const packageJson;
 
 @Injectable()
@@ -210,6 +211,13 @@ export class UpdateDataService {
             });
         }
 
+        assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateEnergyInputExhaustGasLoss(mod.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
     }
@@ -252,6 +260,17 @@ export class UpdateDataService {
         } 
         fg.ambientAirTemp = ambientAirTemp;
         return fg;
+    }
+
+    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST{
+        if (phast.losses && phast.losses.energyInputExhaustGasLoss && phast.losses.energyInputExhaustGasLoss.length > 0) {
+            phast.losses.energyInputExhaustGasLoss.forEach(input => {
+                if(!input.availableHeat){
+                    input.availableHeat = 100;
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
