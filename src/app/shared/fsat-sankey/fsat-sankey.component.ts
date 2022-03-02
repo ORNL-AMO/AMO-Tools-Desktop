@@ -141,6 +141,7 @@ export class FsatSankeyComponent implements OnInit {
       value: nodes.map(node => node.value),
       source: links.map(link => link.source),
       target: links.map(link => link.target),
+      color: links.map(link => this.nodeStartColor),
       hoverinfo: 'none',
       line: {
         color: this.nodeStartColor,
@@ -223,9 +224,10 @@ export class FsatSankeyComponent implements OnInit {
       };
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
-    this.addGradientElement();
-    this.buildSvgArrows();
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config).then(() =>{
+      this.addGradientElement();
+      this.buildSvgArrows();
+    });
 
   }
 

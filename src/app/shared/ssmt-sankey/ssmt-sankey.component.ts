@@ -212,6 +212,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
     .then(chart => {
+      this.addGradientElement();
+      this.buildSvgArrows();
       chart.on('plotly_restyle', () => {
         this.setGradient();
       });
@@ -228,8 +230,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         this.setGradient();
       });
     });
-    this.addGradientElement();
-    this.buildSvgArrows();
   }
 
   buildLinks() {  
@@ -674,7 +674,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let fillOpacity = 1;
     let fill: string;
     let returnedCondensateNode = this.nodes.length - 2;
-
+    // debugger
     for (let i = 0; i < links.length; i++) {
       if (this.redLinkPaths.includes(i + 1)) {
         // To replicate Plotly event hover/unhover fill opacity
@@ -698,8 +698,10 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setNodeLabelSpacing(nodeLabel) {
-    let labelText = nodeLabel.querySelector('.node-label-text-path');
-    labelText.setAttribute('startOffset', '3%');
+    let labelText = nodeLabel.querySelector('.node-label');
+    if(labelText){
+      labelText.setAttribute('startOffset', '3%');
+    }
   }
 
   buildSvgArrows() {

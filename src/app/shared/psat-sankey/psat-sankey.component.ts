@@ -253,9 +253,10 @@ export class PsatSankeyComponent implements OnInit {
       };
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
-    this.addGradientElement();
-    this.buildSvgArrows();
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config).then(() => {
+      this.addGradientElement();
+      this.buildSvgArrows();
+    });
   }
 
   calcLosses(results) {

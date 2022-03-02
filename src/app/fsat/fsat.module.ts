@@ -70,7 +70,6 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     ToastModule,
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
-    FsatSankeyModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule
   ],
