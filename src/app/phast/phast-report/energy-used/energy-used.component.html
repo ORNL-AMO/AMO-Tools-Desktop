@@ -46,8 +46,8 @@
               <span>Electrode</span>
             </td>
             <td>
-              <span *ngIf="phastResults.hourlyEAFResults.electrodeUsed">{{phastResults.hourlyEAFResults.electrodeUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
-              <span *ngIf="!phastResults.hourlyEAFResults.electrodeUsed">&mdash; &mdash;</span>
+              <span *ngIf="phastResults.hourlyEAFResults.electrodeEnergyUsed">{{phastResults.hourlyEAFResults.electrodeEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+              <span *ngIf="!phastResults.hourlyEAFResults.electrodeEnergyUsed">&mdash; &mdash;</span>
             </td>
             <td>
               <span *ngIf="phastResults.hourlyEAFResults.electrodeHeatingValue">{{phastResults.hourlyEAFResults.electrodeHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
