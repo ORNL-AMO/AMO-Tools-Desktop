@@ -120,7 +120,7 @@ export class SankeyService {
       totalExhaustGas: 0,
       totalSystemLosses: 0,
       availableHeatPercent: 0,
-      nodes: new Array<SankeyNode>()
+      nodes: new Array<PhastSankeyNode>()
     };
     return results;
   }
@@ -185,10 +185,10 @@ export interface FuelResults {
   totalExhaustGas: number;
   totalSystemLosses: number;
   availableHeatPercent: number;
-  nodes?: Array<SankeyNode>;
+  nodes?: Array<PhastSankeyNode>;
 }
 
-export interface SankeyNode {
+export interface PhastSankeyNode {
   name: string;
   value: number;
   displaySize: number;

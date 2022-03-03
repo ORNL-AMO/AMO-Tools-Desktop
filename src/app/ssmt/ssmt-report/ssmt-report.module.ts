@@ -22,7 +22,6 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
-import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-graph.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { SsmtPieChartComponent } from './report-graphs/ssmt-pie-chart/ssmt-pie-chart.component';
 import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-waterfall.component';
@@ -38,7 +37,6 @@ import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
-    WaterfallGraphModule,
     SharedPipesModule,
     SsmtSankeyModule
   ],

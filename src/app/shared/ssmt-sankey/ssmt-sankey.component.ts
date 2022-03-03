@@ -5,9 +5,9 @@ import { SSMT, SSMTInputs } from "../models/steam/ssmt";
 import { Assessment } from "../models/assessment";
 import { CalculateLossesService } from "../../ssmt/calculate-losses.service";
 import { SsmtService } from "../../ssmt/ssmt.service";
-import { SSMTSankeyNode } from "../models/steam/sankey.model";
 import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from "angular-plotly.js";
+import { SankeyNode } from "../models/sankey";
 
 
 @Component({
@@ -33,7 +33,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   losses: SSMTLosses;
   results: { inputData: SSMTInputs, outputData: SSMTOutput };
   links: Array<{ source: number, target: number }> = [];
-  nodes: Array<SSMTSankeyNode> = [];
+  nodes: Array<SankeyNode> = [];
 
   gradientStartColorOrange: string = '#c77f0a';
   gradientEndColorOrange: string = '#f6b141';
@@ -251,7 +251,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       }
   }
 
-  buildNodes(): Array<SSMTSankeyNode> {
+  buildNodes(): Array<SankeyNode> {
     this.nodes = [];
     let energyInput = this.losses.fuelEnergy + this.losses.makeupWaterEnergy;
     let stackLosses = this.losses.stack;

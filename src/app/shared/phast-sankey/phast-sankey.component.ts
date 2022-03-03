@@ -3,10 +3,10 @@ import { PhastValidService } from '../../phast/phast-valid.service';
 import { Assessment } from '../models/assessment';
 import { PHAST } from '../models/phast/phast';
 import { Settings } from '../models/settings';
-import { PHASTSankeyNode } from "../models/phast/sankey.model";
 import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from 'angular-plotly.js';
 import { FuelResults, SankeyService } from './sankey.service';
+import { SankeyNode } from '../models/sankey';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   links: Array<{ source: number, target: number }> = [];
-  nodes: Array<PHASTSankeyNode> = [];
+  nodes: Array<SankeyNode> = [];
 
   gradientStartColor = '#a71600';
   gradientEndColor = '#ffa400';

@@ -12,8 +12,8 @@ import { ConvertUnitsService } from "../convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../../psat/psat.service";
 import { DecimalPipe } from "@angular/common";
-import { PsatSankeyNode } from '../../shared/models/psat/sankey.model';
 import { PlotlyService } from "angular-plotly.js";
+import { SankeyNode } from "../models/sankey";
 
 @Component({
   selector: 'app-psat-sankey',
@@ -154,7 +154,7 @@ export class PsatSankeyComponent implements OnInit {
 
   sankey(results: PsatOutputs) {
     const links: Array<{ source: number, target: number }> = [];
-    let nodes: Array<PsatSankeyNode> = [];
+    let nodes: Array<SankeyNode> = [];
 
     this.buildNodes(results, nodes);
 
@@ -287,7 +287,7 @@ export class PsatSankeyComponent implements OnInit {
     this.validLosses = invalidLosses.length > 0? false : true;
   }
 
-    buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
+    buildNodes(results: PsatOutputs, nodes: Array<SankeyNode>): Array<SankeyNode> {
     const motorConnectorValue: number = results.motor_power - this.motor;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;

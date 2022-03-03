@@ -3,9 +3,9 @@ import { Settings } from '../models/settings';
 import { FSAT } from '../models/fans';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FsatService } from '../../fsat/fsat.service';
-import { FsatSankeyNode } from '../fsat/sankey.model';
 import { DecimalPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
+import { SankeyNode } from '../models/sankey';
 
 
 @Component({
@@ -113,7 +113,7 @@ export class FsatSankeyComponent implements OnInit {
   sankey() {
 
     const links: Array<{source: number, target: number}> = [];
-    let nodes: Array<FsatSankeyNode> = [];
+    let nodes: Array<SankeyNode> = [];
 
     nodes = this.buildNodes();
 
@@ -231,8 +231,8 @@ export class FsatSankeyComponent implements OnInit {
 
   }
 
-  buildNodes(): Array<FsatSankeyNode> {
-    let nodes: Array<FsatSankeyNode> = [];
+  buildNodes(): Array<SankeyNode> {
+    let nodes: Array<SankeyNode> = [];
     let motorConnectorValue = this.energyInput - this.motorLosses;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;

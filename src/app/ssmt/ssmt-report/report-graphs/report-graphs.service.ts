@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SSMT } from '../../../shared/models/steam/ssmt';
-import { Settings } from '../../../shared/models/settings';
 import * as d3 from 'd3';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
-import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
+import { WaterfallInput, WaterfallItem } from '../../../shared/models/plotting';
 
 @Injectable()
 export class ReportGraphsService {
