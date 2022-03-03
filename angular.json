@@ -112,7 +112,7 @@
               "browserTarget": "amo-tools-desktop:build:production"
             },
             "development": {
-              "browserTarget": "verifi:build:development"
+              "browserTarget": "amo-tools-desktop:build:development"
             }
           },
           "defaultConfiguration": "development"
