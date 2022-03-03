@@ -56,7 +56,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
   powerExpanded: boolean = false;
-  createGraphTimer: NodeJS.Timeout;
+  createGraphTimer: any;
 
   // Graphing
   selectedDataPoints: Array<SystemCurveDataPoint>;
