@@ -170,6 +170,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
         outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+        outputRate = Number(outputRate.toFixed(2));
     }
     if (shouldSetOutputRate) {
       this.form.patchValue({
@@ -190,6 +191,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     let outputRate: number = this.eafOtherFuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+      outputRate = Number(outputRate.toFixed(2));
     }
 
     if (shouldSetOutputRate) {
@@ -239,6 +241,7 @@ export class Co2SavingsPhastComponent implements OnInit {
     let outputRate: number = fuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+      outputRate = Number(outputRate.toFixed(2));
     }
     return outputRate;
   }
