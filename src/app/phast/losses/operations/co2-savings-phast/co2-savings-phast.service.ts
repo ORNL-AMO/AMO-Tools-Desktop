@@ -202,9 +202,9 @@ export class Co2SavingsPhastService {
           co2EmissionsOutput.otherFuelEmissionsOutput = this.convertUnitsService.value(co2EmissionsOutput.otherFuelEmissionsOutput).from('GJ').to('MMBtu');
         }
 
-        // 1t / 1000kW * 1Mw/1000kW
+        // 1tonne / 1000kW * 1Mw/1000kW
         hourlyElectricityEmissionOutput = phastCopy.co2SavingsData.totalEmissionOutputRate * 1/1000 * resultsCopy.hourlyEAFResults.electricEnergyUsed * 1/1000;
-        // 1t / 1000kW
+        // 1tonne / 1000kW or 1tonne / 1000kg
         let hourlyFuelEmissionOutput = resultsCopy.hourlyEAFResults.naturalGasUsed * phastCopy.co2SavingsData.totalNaturalGasEmissionOutputRate * 1/1000;
         let hourlyElectrodeUse: number = resultsCopy.hourlyEAFResults.electrodeUse;
         if (settings.unitsOfMeasure === 'Imperial') {
@@ -214,7 +214,6 @@ export class Co2SavingsPhastService {
         let hourlyElectrodeEmissionsOutput = hourlyElectrodeUse * (44/12) * 1/1000;
         co2EmissionsOutput.electrodeEmissionsOutput = hourlyElectrodeEmissionsOutput * phastCopy.operatingHours.hoursPerYear;
         let hourlyCoalCarbonEmissionsOutput = resultsCopy.hourlyEAFResults.coalCarbonUsed * phastCopy.co2SavingsData.totalCoalEmissionOutputRate * 1/1000;
-        // 1t / 1000kW
         let hourlyOtherFuelEmissionsOutput = resultsCopy.hourlyEAFResults.otherFuelUsed * phastCopy.co2SavingsData.totalOtherEmissionOutputRate * 1/1000;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput + hourlyCoalCarbonEmissionsOutput + hourlyElectrodeEmissionsOutput + hourlyOtherFuelEmissionsOutput;
         
@@ -233,9 +232,9 @@ export class Co2SavingsPhastService {
         }
         let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput;
-        
-        co2EmissionsOutput.fuelEmissionOutput = hourlyFuelEmissionOutput * phastCopy.operatingHours.hoursPerYear;
-        co2EmissionsOutput.electricityEmissionOutput = hourlyElectricityEmissionOutput * phastCopy.operatingHours.hoursPerYear;
+        // 1tonne / 1000kW or 1tonne / 1000kg
+        co2EmissionsOutput.fuelEmissionOutput = hourlyFuelEmissionOutput * phastCopy.operatingHours.hoursPerYear * 1/1000;
+        co2EmissionsOutput.electricityEmissionOutput = hourlyElectricityEmissionOutput * phastCopy.operatingHours.hoursPerYear * 1/1000;
         co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.electricityEmissionOutput + co2EmissionsOutput.fuelEmissionOutput;
       }
       

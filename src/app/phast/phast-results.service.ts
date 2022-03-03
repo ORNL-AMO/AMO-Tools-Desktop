@@ -292,6 +292,8 @@ export class PhastResultsService {
     annualEAFResults.naturalGasHeatingValue = eafResults.naturalGasHeatingValue * phast.operatingHours.hoursPerYear;
     annualEAFResults.otherFuelUsed = eafResults.otherFuelUsed * phast.operatingHours.hoursPerYear;
     annualEAFResults.electricEnergyUsed = eafResults.electricEnergyUsed * phast.operatingHours.hoursPerYear;
+    annualEAFResults.totalFuelEnergyUsed = eafResults.totalFuelEnergyUsed * phast.operatingHours.hoursPerYear;
+
     phastResults.annualEAFResults = annualEAFResults;
 
     // Legacy results
