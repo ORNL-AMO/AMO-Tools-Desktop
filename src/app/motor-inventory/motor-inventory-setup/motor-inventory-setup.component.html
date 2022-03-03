@@ -2,7 +2,7 @@
     <div class="d-flex w-100 h-100 tab-content">
         <div class="w-50 panel-column panel-container modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
-            <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
+            <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
             <app-motor-properties *ngIf="setupTab == 'motor-properties'"></app-motor-properties>
             <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>

@@ -42,13 +42,16 @@
     </div>
     <div class="form-group">
       <label class="bold">Electrical Heat Delivered</label>
-      <div *ngIf="loss.results.energyInputHeatDelivered" class="text-center bold">
-        {{loss.results.energyInputHeatDelivered | sigFigs:'6'}}
+      <div *ngIf="loss.results.energyInputHeatDelivered > 0" class="text-center bold">
+        <span>{{loss.results.energyInputHeatDelivered | sigFigs:'6'}}</span>
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!loss.results.energyInputHeatDelivered" class="text-center bold">
+      <div *ngIf="!loss.results.energyInputHeatDelivered || loss.results.energyInputHeatDelivered <= 0" class="text-center bold">
         &mdash; &mdash;
       </div>
+      <div *ngIf="warnings.energyInputHeatDelivered !== null" class="text-alert alert-warning ">
+        {{warnings.energyInputHeatDelivered}}
+    </div>
     </div>
     <div class="form-group">
       <label class="bold">Energy Input Total</label>

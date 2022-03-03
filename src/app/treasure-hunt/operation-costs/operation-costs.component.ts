@@ -309,11 +309,12 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
       this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
     } else {
+      let convertOutputRate: number = this.globalSettings.totalEmissionOutputRate/1000;
       let co2SavingsData: Co2SavingsData = {
         energyType: 'electricity',
         energySource: '',
         fuelType: '',
-        totalEmissionOutputRate: this.convertUnitsService.value(this.globalSettings.totalEmissionOutputRate).from('MWh').to('kWh'),
+        totalEmissionOutputRate: convertOutputRate,
         electricityUse: 0,
         eGridRegion: '',
         eGridSubregion: this.globalSettings.eGridSubregion,
@@ -374,7 +375,8 @@ export class OperationCostsComponent implements OnInit {
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
     }
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
     this.checkIsUsingMixedFuel();
@@ -385,7 +387,8 @@ export class OperationCostsComponent implements OnInit {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType === val.fuelType; });
     let outputRate: number = tmpFuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
     }
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
     this.save();

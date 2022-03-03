@@ -66,6 +66,15 @@ export interface SSMTOutput {
   // sitePowerImport: number;
   // sitePowerDemand: number;
   operationsOutput: SSMTOperationsOutput;
+  co2EmissionsOutput?: SteamCo2EmissionsOutput;
+}
+
+export interface SteamCo2EmissionsOutput {
+  totalEmissionOutput?: number,
+  fuelEmissionOutput?: number,
+  emissionsSavings?: number,
+  electricityEmissionsFromSelling?: number,
+  electricityEmissionsFromChange?: number,
 }
 
 export interface SSMTOperationsOutput {

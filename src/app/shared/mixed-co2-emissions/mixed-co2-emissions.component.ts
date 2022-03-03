@@ -36,13 +36,14 @@ export class MixedCo2EmissionsComponent implements OnInit {
   ngOnInit() {
     this.otherFuels = otherFuels;
 
-    let index: number = 0;
-
+    if (!this.fuelList) {
+      this.fuelList = new Array<Co2SavingsData>();
+    }
+    
     if(this.fuelList.length == 0){
       this.addFuel();
-    }
-
-    if (this.fuelList.length != 0) {
+    } else {
+      let index: number = 0;
       this.fuelList.forEach(fuel => {
         if (fuel.fuelType) {
           let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return fuel.energySource === val.energySource; });
@@ -105,14 +106,13 @@ export class MixedCo2EmissionsComponent implements OnInit {
 
   calculateMixedFuelCosts() {
     let length: number = this.fuelList.length;
-    let sum: number = 0;
+    let fuelUse: number = 0;
     let summedUse: number = 0;
     for (let i = 0; i < length; i++) {
-      summedUse += this.fuelList[i].percentFuelUsage;
-      sum += (this.fuelList[i].percentFuelUsage * this.fuelList[i].totalEmissionOutputRate);
+      fuelUse = this.fuelList[i].totalEmissionOutputRate * (this.fuelList[i].percentFuelUsage / 100);
+      summedUse += fuelUse;
     }
-    sum = sum / (summedUse);
-    this.mixedOutputRateResult = this.roundVal(sum);
+    this.mixedOutputRateResult = this.roundVal(summedUse);
     this.emitUpdateOtherFuelsOutputRate.emit(this.mixedOutputRateResult);
     this.emitUpdateOtherFuelsMixedList.emit(this.fuelList);
   }

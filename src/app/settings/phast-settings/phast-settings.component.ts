@@ -23,7 +23,8 @@ export class PhastSettingsComponent implements OnInit {
     'kcal',
     'kgce',
     'kgoe',
-    'kWh'
+    'kWh',
+    'MWh'
   ];
 
   fuelFiredOptions: Array<string> = [
@@ -72,8 +73,13 @@ export class PhastSettingsComponent implements OnInit {
         furnaceType: 'Electrical Infrared',
         energyResultUnit: 'kWh'
       });
-      this.startPolling();
+    } else if (this.settingsForm.controls.energySourceType.value === 'Fuel' || this.settingsForm.controls.energySourceType.value === 'Steam') {
+      this.settingsForm.patchValue({
+        furnaceType: null,
+        energyResultUnit: 'MMBtu'
+      });
     }
+    this.startPolling();
   }
 
 

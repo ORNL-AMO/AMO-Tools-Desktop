@@ -34,7 +34,8 @@ export class DirectoryDashboardService {
       showPhast: true,
       showAll: true,
       showMotorInventory: true,
-      showWasteWater: true
+      showWasteWater: true,
+      showCompressedAir: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
@@ -43,49 +44,55 @@ export class DirectoryDashboardService {
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {
     let directoryItems = new Array<DirectoryItem>();
     let calculatorIndex: number = 0;
-    directory.calculators.forEach(calculator => {
-      directoryItems.push({
-        type: 'calculator',
-        calculator: calculator,
-        calculatorIndex: calculatorIndex,
-        isShown: true,
-        createdDate: calculator.createdDate,
-        modifiedDate: calculator.modifiedDate,
-        name: calculator.name
+    if(directory){
+        directory.calculators.forEach(calculator => {
+        directoryItems.push({
+          type: 'calculator',
+          calculator: calculator,
+          calculatorIndex: calculatorIndex,
+          isShown: true,
+          createdDate: calculator.createdDate,
+          modifiedDate: calculator.modifiedDate,
+          name: calculator.name
+        });
+        calculatorIndex++;
       });
-      calculatorIndex++;
-    })
-    directory.assessments.forEach(assessment => {
-      directoryItems.push({
-        type: 'assessment',
-        assessment: assessment,
-        isShown: true,
-        createdDate: assessment.createdDate,
-        modifiedDate: assessment.modifiedDate,
-        name: assessment.name,
-        assessmentType: assessment.type
-      })
-    });
-    directory.subDirectory.forEach(subDirectory => {
-      directoryItems.push({
-        type: 'directory',
-        subDirectory: subDirectory,
-        isShown: true,
-        createdDate: subDirectory.createdDate,
-        modifiedDate: subDirectory.modifiedDate,
-        name: subDirectory.name
+      
+      directory.assessments.forEach(assessment => {
+        directoryItems.push({
+          type: 'assessment',
+          assessment: assessment,
+          isShown: true,
+          createdDate: assessment.createdDate,
+          modifiedDate: assessment.modifiedDate,
+          name: assessment.name,
+          assessmentType: assessment.type
+        })
       });
-    });
-    directory.inventories.forEach(inventoryItem => {
-      directoryItems.push({
-        type: 'inventory',
-        inventoryItem: inventoryItem,
-        isShown: true,
-        createdDate: inventoryItem.createdDate,
-        modifiedDate: inventoryItem.modifiedDate,
-        name: inventoryItem.name
+      
+      directory.subDirectory.forEach(subDirectory => {
+        directoryItems.push({
+          type: 'directory',
+          subDirectory: subDirectory,
+          isShown: true,
+          createdDate: subDirectory.createdDate,
+          modifiedDate: subDirectory.modifiedDate,
+          name: subDirectory.name
+        });
       });
-    });
+      
+      directory.inventories.forEach(inventoryItem => {
+        directoryItems.push({
+          type: 'inventory',
+          inventoryItem: inventoryItem,
+          isShown: true,
+          createdDate: inventoryItem.createdDate,
+          modifiedDate: inventoryItem.modifiedDate,
+          name: inventoryItem.name
+        });
+      });
+    }
+    
     return directoryItems;
   }
 
@@ -107,7 +114,10 @@ export class DirectoryDashboardService {
         item.isShown = false;
       } else if (item.assessment.type == 'WasteWater' && filterDashboardBy.showWasteWater == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.isShown == false) {
+      } else if (item.assessment.type == 'CompressedAir' && filterDashboardBy.showCompressedAir == false && filterDashboardBy.showAll == false) {
+        item.isShown = false;
+      }
+      else if (item.isShown == false) {
         item.isShown = true;
       }
     })

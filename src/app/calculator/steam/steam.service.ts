@@ -291,15 +291,14 @@ export class SteamService {
       results.outletIdealTemperature = idealResults.outletTemperature;
       results.outletIdealVolume = idealResults.outletVolume;
     } else {
-      let inletSpecificEntropy = results.inletSpecificEntropy
       let idealOutletInput: SteamPropertiesInput = {
         thermodynamicQuantity: 2,
         pressure: inputCpy.outletSteamPressure,
-        quantityValue: inletSpecificEntropy
+        quantityValue: results.inletSpecificEntropy
       }
       let idealOutletResults: SteamPropertiesOutput = steamAddon.steamProperties(idealOutletInput);
       results.outletIdealPressure = idealOutletResults.pressure;
-      results.outletIdealQuality = results.outletQuality;
+      results.outletIdealQuality = idealOutletResults.quality;
       results.outletIdealSpecificEnthalpy = idealOutletResults.specificEnthalpy;
       results.outletIdealSpecificEntropy = idealOutletResults.specificEntropy;
       results.outletIdealTemperature = idealOutletResults.temperature;

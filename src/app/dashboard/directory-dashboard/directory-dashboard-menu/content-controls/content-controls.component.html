@@ -98,7 +98,13 @@
                     <div class="d-flex list-group-item list-group-item-action align-items-center"
                         (click)="setFilterWasteWater()"
                         [ngClass]="{'active': filterDashboardBy.showWasteWater == true && filterDashboardBy.showAll == false}">
-                        <label class="pl-1">Waste Water
+                        <label class="pl-1">Wastewater
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterCompressedAir()"
+                        [ngClass]="{'active': filterDashboardBy.showCompressedAir == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Compressed Air
                         </label>
                     </div>
                 </div>
@@ -146,7 +152,11 @@
         </button>
         <button *ngIf="filterDashboardBy.showWasteWater == true" class="btn btn-secondary action-btn ml-1"
         (click)="setFilterWasteWater()">
-        <span class="fa fa-close"></span> Waste Water
+        <span class="fa fa-close"></span> Wastewater
+    </button>
+    <button *ngIf="filterDashboardBy.showCompressedAir == true" class="btn btn-secondary action-btn ml-1"
+        (click)="setFilterCompressedAir()">
+        <span class="fa fa-close"></span> Compressed Air
     </button>
     </div>
 </div>

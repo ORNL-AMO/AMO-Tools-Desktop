@@ -13,6 +13,7 @@ import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
+import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -48,7 +49,7 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();

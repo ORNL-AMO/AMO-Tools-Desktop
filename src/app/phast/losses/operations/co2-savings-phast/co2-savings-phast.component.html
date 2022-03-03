@@ -1,69 +1,201 @@
 <form #formElement [formGroup]="form">
 
-    <!-- Electricity -->
-    <div class="form-group" *ngIf="co2SavingsData.energyType == 'electricity'">
-        <label class="small" for="zipcode">
-            Zip Code
-        </label>
-        <div class="input-group">
-            <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
-                onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
-        </div>
-        <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
-            <span>Enter a valid zip code to find your eGRID subregion</span>
-        </span>
-    </div>
-
-
-    <div *ngIf="zipCodeSubRegionData && co2SavingsData.energyType == 'electricity'" class="form-group">
-        <label class="small" for="eGridSubregion">eGRID Subregion</label>
-        <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
-            <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
-                (focus)="focusField('eGridSubregion')" (change)="setSubRegionEmissionsOutput()">
-                <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
-            </select>
-        </div>
-        <div *ngIf="hasValidSubRegion && zipCodeSubRegionData.length < 2" class="text-center small">
-            {{form.controls.eGridSubregion.value}}
-        </div>
-        <div *ngIf="!hasValidSubRegion || !form.controls.eGridSubregion.value" class="text-center small">
-            <strong>&mdash; &mdash;</strong>
-        </div>
-    </div>
-
-    <!-- Fuel -->
-    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+  <label class="group-label w-100">Carbon Emissions From Fuel</label>
+  
+  <ng-container *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'">
+      <div class="form-group">
         <label class="small" for="energySource">Energy Source</label>
         <div class="input-group">
-            <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
-                (change)="setFuelOptions(true)" [required]="true" 
-                (focus)="focusField('energySource')">
-                <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
-            </select>
+          <select name="energySource" class="form-control" id="energySource" formControlName="energySource"
+            (change)="setEnergySource()" [required]="true" (focus)="focusField('energySource')">
+            <option *ngFor="let option of energySources" [ngValue]="option.energySource">{{option.energySource}}</option>
+          </select>
         </div>
-    </div>
-
-    <div class="form-group" *ngIf="co2SavingsData.energyType == 'fuel'">
+      </div>
+    
+      <div class="form-group" *ngIf="form.controls.energySource.value != 'Mixed Fuels'">
         <label class="small" for="fuelType">Fuel Type</label>
         <div class="input-group">
-            <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType"
-                 (change)="setFuelTypeOutputRate(true)" [required]="true" (focus)="focusField('fuelType')">
-                <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
-            </select>
+          <select name="fuelType" class="form-control" id="fuelType" formControlName="fuelType" (change)="setFuel()"
+            [required]="true" (focus)="focusField('fuelType')">
+            <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+          </select>
         </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="totalFuelEmissionOutputRate">Total Fuel Emission Output Rate
+          <a class="form-text small click-link" *ngIf="form.controls.energySource.value == 'Mixed Fuels'" (click)="showMixedCO2EmissionsModal()">
+            Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
+          </label>
+          <div class="input-group">
+            <input class="form-control" name="totalFuelEmissionOutputRate" formControlName="totalFuelEmissionOutputRate" type="number"
+            (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
+            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+              CO<sub>2</sub>/MMBtu</span>
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+                CO<sub>2</sub>/GJ</span>
+              </div>
+            </div>
+    </ng-container>
+
+    <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
+    <div class="form-group">
+      <label for="totalNaturalGasEmissionOutputRate">Natural Gas Emission Output Rate
+      </label>
+      <div class="input-group">
+        <input class="form-control" name="totalNaturalGasEmissionOutputRate"
+          formControlName="totalNaturalGasEmissionOutputRate" type="number"
+          (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+          CO<sub>2</sub>/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+          CO<sub>2</sub>/GJ</span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="small" for="coalFuelType">Coal Carbon Fuel Type</label>
+      <div class="input-group">
+          <select name="coalFuelType" class="form-control" id="coalFuelType" formControlName="coalFuelType"
+               (change)="setCoalFuel(true, true)" [required]="true" (focus)="focusField('fuelType')">
+              <option *ngFor="let option of coalFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+          </select>
+      </div>
+   </div>
+    <div class="form-group">
+      <label for="totalCoalEmissionOutputRate">Coal Carbon Emission Output Rate
+      </label>
+      <div class="input-group">
+        <input class="form-control" name="totalCoalEmissionOutputRate"
+          formControlName="totalCoalEmissionOutputRate" type="number"
+          (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+          CO<sub>2</sub>/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+          CO<sub>2</sub>/GJ</span>
+      </div>
     </div>
 
+    <div class="form-group">
+      <label class="small" for="eafOtherFuelSource">Other Fuel Energy Source</label>
+      <div class="input-group">
+        <select name="eafOtherFuelSource" class="form-control" id="eafOtherFuelSource" formControlName="eafOtherFuelSource"
+          (change)="setEAFFuelSource()" [required]="true" (focus)="focusField('energySource')">
+          <option *ngFor="let option of eafOtherFuelSources" [ngValue]="option.energySource">{{option.energySource}}</option>
+        </select>
+      </div>
+    </div>
 
+  <div class="form-group" *ngIf="form.controls.eafOtherFuelSource.value != 'Mixed Fuels' && form.controls.eafOtherFuelSource.value != 'None'">
+      <label class="small" for="otherFuelType">Other Fuel Type</label>
+      <div class="input-group">
+          <select name="otherFuelType" class="form-control" id="otherFuelType" formControlName="otherFuelType"
+               (change)="setOtherFuel()" [required]="true" (focus)="focusField('fuelType')">
+              <option *ngFor="let option of eafOtherFuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
+          </select>
+      </div>
+  </div>
+
+    <div class="form-group">
+      <label for="totalOtherEmissionOutputRate">Other Fuel Emission Output Rate
+        <a *ngIf="form.controls.eafOtherFuelSource.value == 'Mixed Fuels'" class="form-text small click-link" (click)="showOtherFuelsMixedCO2EmissionsModal()">
+          Calculate Net CO<sub>2</sub> Emissions from Mixed Sources</a>
+      </label>
+      <div class="input-group">
+        <input class="form-control" name="totalOtherEmissionOutputRate"
+          formControlName="totalOtherEmissionOutputRate" type="number"
+          (focus)="focusField('totalEmissionOutputRate')" (input)="calculate()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+          CO<sub>2</sub>/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+          CO<sub>2</sub>/GJ</span>
+      </div>
+    </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="co2SavingsData.energyType == 'electricity'">
+        <label class="group-label w-100 mt-2">Carbon Emissions From Electricity</label>
+        <div class="form-group">
+            <label class="small" for="zipcode">
+                Zip code
+            </label>
+            <div class="input-group">
+                <input name="zipcode" type="text" class="form-control" formControlName="zipcode" id="zipcode"
+                onfocus="this.select();" (input)="setZipcode()" (focus)="focusField('zipcode')">
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="zipCodeSubRegionData.length === 0 && isBaseline">
+                <span>Enter a valid zip code to find your eGRID subregion <br> OR Enter 00000 for U.S. Average</span>
+            </span>
+        </div>
+        
+        
+        <div *ngIf="zipCodeSubRegionData" class="form-group">
+            <label class="small" for="eGridSubregion">eGRID Subregion</label>
+            <div *ngIf="zipCodeSubRegionData.length > 1" class="input-group">
+                <select name="eGridSubregion" class="form-control" id="eGridSubregion" formControlName="eGridSubregion"
+                    (focus)="focusField('eGridSubregion')" (change)="setSubRegionEmissionsOutput(setSubRegionEmissionsOutput)">
+                    <option *ngFor="let subregion of zipCodeSubRegionData" [ngValue]="subregion">{{subregion}}</option>
+                </select>
+            </div>
+            <div *ngIf="hasValidSubRegion && zipCodeSubRegionData.length < 2" class="text-center small">
+                {{form.controls.eGridSubregion.value}}
+            </div>
+            <div *ngIf="!hasValidSubRegion || !form.controls.eGridSubregion.value" class="text-center small">
+                <strong>&mdash; &mdash;</strong>
+            </div>
+        </div>
+    
     <div class="form-group">
         <label class="small" for="totalEmissionOutputRate">
             Total Emission Output Rate
         </label>
         <div class="input-group">
             <input name="totalEmissionOutputRate" type="number" class="form-control"
-                formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
-                (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
-            <span class="input-group-addon units small">kg CO<sub>2</sub>/{{settings.energyResultUnit}}
+            formControlName="totalEmissionOutputRate" id="totalEmissionOutputRate" onfocus="this.select();"
+            (input)="setUserEmissionsOutput()" (focus)="focusField('totalEmissionOutputRate')">
+            <span class="input-group-addon units small">kg CO<sub>2</sub>/MWh
             </span>
         </div>
+        <div class="alert-info w-100 p-2 small text-center" *ngIf="isUsAverage && inBaseline">
+          No eGRID subregion found matching Zip code, using U.S. Average for emissions output rate.
+        </div>
     </div>
+</ng-container>
+
+
 </form>
+
+<div bsModal #mixedCO2EmissionsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mixedCO2EmissionsModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="d-flex header mr-2 ml-2 pb-1 pt-1 justify-content-between">
+        <div class="col-md-auto ico-col">
+        </div>
+        <div>
+          <h3>Carbon Emissions - Net Carbon Emissions Rate from Fuel</h3>
+        </div>
+        <button class="close pull-right" aria-label="Close" (click)="hideMixedCO2EmissionsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-2">
+        <app-mixed-co2-emissions *ngIf="showMixedFuelsModal || showOtherFuelsMixedModal"
+          [fuelList]="co2SavingsData.otherFuelMixedCO2SavingsData"
+          [settings]="settings" (emitUpdateOtherFuelsOutputRate)="updateMixedCO2EmissionsModalData($event)"
+          (emitUpdateOtherFuelsMixedList)="saveOtherFuelsMixedList($event)">
+        </app-mixed-co2-emissions>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button class="btn btn-danger btn-sm pull-right mr-2" (click)="hideMixedCO2EmissionsModal()">Cancel</button>
+        <span>
+          <button class="btn btn-primary btn-sm pull-right" (click)="applyMixedCO2EmissionsModal()">Apply
+            Data</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

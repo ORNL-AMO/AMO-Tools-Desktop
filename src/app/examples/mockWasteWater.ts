@@ -50,6 +50,19 @@ export const MockWasteWater: Assessment = {
         TimeIncrement: .5,
         operatingMonths: 12,
         EnergyCostUnit: 0.09
+      },
+      co2SavingsData: {
+        energyType: 'electricity',
+        energySource: '',
+        fuelType: '',
+        totalEmissionOutputRate: 401.07,
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: 'U.S. Average',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: true,
+        zipcode: '00000',
       }
     },
     modifications: [
@@ -95,6 +108,19 @@ export const MockWasteWater: Assessment = {
           TimeIncrement: .5,
           operatingMonths: 12,
           EnergyCostUnit: 0.09
+        },
+        co2SavingsData: {
+          energyType: 'electricity',
+          energySource: '',
+          fuelType: '',
+          totalEmissionOutputRate: 401.07,
+          electricityUse: 0,
+          eGridRegion: '',
+          eGridSubregion: 'U.S. Average',
+          totalEmissionOutput: 0,
+          userEnteredBaselineEmissions: false,
+          userEnteredModificationEmissions: true,
+          zipcode: '00000',
         }
       },
     ],

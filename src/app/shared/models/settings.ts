@@ -100,7 +100,9 @@ export interface Settings {
     printDetailedResults?: boolean,
     printReportDiagram?: boolean,
     printAll?: boolean,
-    printCompressedAirRollup?: boolean
+    printCompressedAirRollup?: boolean,
+    printSystemProfiles?: boolean
+    printPerformanceProfiles?: boolean
 
     // Co2SavingsData
     co2SavingsEnergyType?: string,
@@ -111,6 +113,13 @@ export interface Settings {
     eGridRegion?: string,
     eGridSubregion?: string,
     totalEmissionOutput?: number,
+    totalFuelEmissionOutputRate?: number,
+    totalNaturalGasEmissionOutputRate?: number,
+    totalCoalEmissionOutputRate?: number,
+    totalOtherEmissionOutputRate?: number,
+    coalFuelType?: string;
+    eafOtherFuelSource?: string,
+    otherFuelType?: string;
     userEnteredBaselineEmissions?: boolean,
     userEnteredModificationEmissions?: boolean,
     zipcode?: string

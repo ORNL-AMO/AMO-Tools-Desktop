@@ -28,6 +28,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: [inputObj.eGridRegion],
       eGridSubregion: [inputObj.eGridSubregion],
       totalEmissionOutput: [inputObj.totalEmissionOutput],
+      totalFuelEmissionOutputRate: [inputObj.totalFuelEmissionOutputRate],
       userEnteredBaselineEmissions: [inputObj.userEnteredBaselineEmissions],
       userEnteredModificationEmissions: [inputObj.userEnteredModificationEmissions],
       zipcode: [inputObj.zipcode],
@@ -46,6 +47,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: form.controls.eGridRegion.value,
       eGridSubregion: form.controls.eGridSubregion.value,
       totalEmissionOutput: form.controls.totalEmissionOutput.value,
+      totalFuelEmissionOutputRate: form.controls.totalFuelEmissionOutputRate.value,
       userEnteredBaselineEmissions: form.controls.userEnteredBaselineEmissions.value,
       userEnteredModificationEmissions: form.controls.userEnteredModificationEmissions.value,
       zipcode: form.controls.zipcode.value,
@@ -63,6 +65,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: inputObj.eGridRegion,
       eGridSubregion: inputObj.eGridSubregion,
       totalEmissionOutput: inputObj.totalEmissionOutput,
+      totalFuelEmissionOutputRate: inputObj.totalFuelEmissionOutputRate,
       userEnteredBaselineEmissions: inputObj.userEnteredBaselineEmissions,
       userEnteredModificationEmissions: inputObj.userEnteredModificationEmissions,
       zipcode: inputObj.zipcode,
@@ -73,17 +76,18 @@ export class AssessmentCo2SavingsService {
 
   getCo2SavingsDataFromSettingsForm(settingsForm: FormGroup): Co2SavingsData {
     let obj: Co2SavingsData = {
-      energyType: settingsForm.controls.co2SavingsEnergyType.value,
-      energySource: settingsForm.controls.co2SavingsEnergySource.value,
-      fuelType: settingsForm.controls.co2SavingsFuelType.value,
-      totalEmissionOutputRate: settingsForm.controls.totalEmissionOutputRate.value,
-      electricityUse: settingsForm.controls.electricityUse.value,
-      eGridRegion: settingsForm.controls.eGridRegion.value,
-      eGridSubregion: settingsForm.controls.eGridSubregion.value,
-      totalEmissionOutput: settingsForm.controls.totalEmissionOutput.value,
-      userEnteredBaselineEmissions: settingsForm.controls.userEnteredBaselineEmissions.value,
-      userEnteredModificationEmissions: settingsForm.controls.userEnteredModificationEmissions.value,
-      zipcode: settingsForm.controls.zipcode.value,
+      energyType: settingsForm.controls.co2SavingsEnergyType.value || 'electricity',
+      energySource: settingsForm.controls.co2SavingsEnergySource.value || 'Natural Gas',
+      fuelType: settingsForm.controls.co2SavingsFuelType.value || 'Natural Gas',
+      totalEmissionOutputRate: settingsForm.controls.totalEmissionOutputRate.value || 401.07,
+      electricityUse: settingsForm.controls.electricityUse.value || 0,
+      eGridRegion: settingsForm.controls.eGridRegion.value || '',
+      eGridSubregion: settingsForm.controls.eGridSubregion.value || 'U.S. Average',
+      totalEmissionOutput: settingsForm.controls.totalEmissionOutput.value || 0,
+      //totalFuelEmissionOutputRate: settingsForm.controls.totalFuelEmissionOutputRate.value || 0,
+      userEnteredBaselineEmissions: settingsForm.controls.userEnteredBaselineEmissions.value || false,
+      userEnteredModificationEmissions: settingsForm.controls.userEnteredModificationEmissions.value || false,
+      zipcode: settingsForm.controls.zipcode.value || '00000'
     };
 
     return obj;
@@ -99,6 +103,7 @@ export class AssessmentCo2SavingsService {
       eGridRegion: settings.eGridRegion,
       eGridSubregion: settings.eGridSubregion,
       totalEmissionOutput: settings.totalEmissionOutput,
+      totalFuelEmissionOutputRate: settings.totalFuelEmissionOutputRate,
       userEnteredBaselineEmissions: settings.userEnteredBaselineEmissions,
       userEnteredModificationEmissions: settings.userEnteredModificationEmissions,
       zipcode: settings.zipcode,
@@ -107,18 +112,23 @@ export class AssessmentCo2SavingsService {
     return obj;
   }
 
-  getCo2EmissionsResult(data: Co2SavingsData, settings: Settings): number {
+  getCo2EmissionsResult(data: Co2SavingsData, settings: Settings, isCombinedEnergy?: boolean): number {
     //use copy for conversion data
     let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
     let totalEmissionsResult: number;
+    let totalEmissionOutputRate: number = dataCpy.totalEmissionOutputRate;
+    if (isCombinedEnergy) {
+      totalEmissionOutputRate = dataCpy.totalFuelEmissionOutputRate;
+    }
     if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
-      dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
+      totalEmissionOutputRate = totalEmissionOutputRate / conversionHelper;
       dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');
     }
-    if (dataCpy.totalEmissionOutputRate && dataCpy.electricityUse) {
+    
+    if (totalEmissionOutputRate && dataCpy.electricityUse) {
       //set results on original obj
-      totalEmissionsResult = (dataCpy.totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
+      totalEmissionsResult = (totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
     } else {
       totalEmissionsResult = 0;
     }

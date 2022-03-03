@@ -70,13 +70,13 @@ export class CopyItemsComponent implements OnInit {
     if (this.folderSelected) {
       return this.formBuilder.group({
         'directoryId': [this.directory.parentDirectoryId, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     } else {
       return this.formBuilder.group({
         'directoryId': [this.directory.id, Validators.required],
-        'copyModifications': [false],
+        'copyModifications': [true],
         'copyCalculators': [false]
       });
     }
@@ -137,6 +137,10 @@ export class CopyItemsComponent implements OnInit {
             assessmentCopy.fsat.modifications = new Array();
           } else if (assessmentCopy.type == 'SSMT') {
             assessmentCopy.ssmt.modifications = new Array();
+          } else if (assessmentCopy.type === 'CompressedAir') {
+            assessmentCopy.compressedAirAssessment.modifications = new Array();
+          } else if (assessmentCopy.type === 'WasteWater') {
+            assessmentCopy.wasteWater.modifications = new Array();
           }
         }
 

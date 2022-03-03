@@ -53,8 +53,17 @@
         <div class="col-2">
             <app-animated-checkmark [active]="settings.printWasteWaterRollup"></app-animated-checkmark>
         </div>
+        <div class="col-8 bottom-divider">
+            Wastewater Rollup Summary
+        </div>
+    </div>
+
+    <div class="row toggle-btn pad-top-10" (click)="togglePrintCompressedAirRollup()">
+        <div class="col-2">
+            <app-animated-checkmark [active]="settings.printCompressedAirRollup"></app-animated-checkmark>
+        </div>
         <div class="col-8 bold-bottom-divider">
-            Waste Water Rollup Summary
+            Compressed Air Rollup Summary
         </div>
     </div>
 
@@ -157,6 +166,15 @@
         </div>
         <div class="col-8">
             Input Summary
+        </div>
+    </div>
+
+    <div class="row toggle-btn pad-top-10" (click)="togglePrintSystemProfiles()">
+        <div class="col-2">
+            <app-animated-checkmark [active]="settings.printSystemProfiles"></app-animated-checkmark>
+        </div>
+        <div class="col-8">
+            System Profiles
         </div>
     </div>
 </form>

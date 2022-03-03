@@ -136,9 +136,6 @@ export class LossesComponent implements OnInit {
       } else {
         modPHAST.co2SavingsData.zipcode = this.phast.co2SavingsData.zipcode;
         modPHAST.co2SavingsData.eGridSubregion = this.phast.co2SavingsData.eGridSubregion;
-        modPHAST.co2SavingsData.energySource = this.phast.co2SavingsData.energySource;
-        modPHAST.co2SavingsData.fuelType = this.phast.co2SavingsData.fuelType;
-       // modPHAST.co2SavingsData.totalEmissionOutputRate = this.phast.co2SavingsData.totalEmissionOutputRate;
         if(!modPHAST.co2SavingsData.totalEmissionOutputRate){
           modPHAST.co2SavingsData.totalEmissionOutputRate = this.phast.co2SavingsData.totalEmissionOutputRate;
         }

@@ -117,6 +117,10 @@ export class StackLossByVolumeComponent implements OnInit {
           o2InFlueGas: 0,
         });
     }
+    this.stackLossForm.patchValue({
+      fuelTemperature: this.stackLossForm.controls.ambientAirTemp.value,
+      combustionAirTemperature: this.stackLossForm.controls.ambientAirTemp.value
+    });
     this.calculate();
   }
 
@@ -147,13 +151,6 @@ export class StackLossByVolumeComponent implements OnInit {
   calculate() {
     this.checkStackLossTemp();
     this.emitCalculate.emit(this.stackLossForm);
-  }
-
-  setFuelTemp() {
-    this.stackLossForm.patchValue({
-      fuelTemperature: this.stackLossForm.controls.combustionAirTemperature.value
-    });
-    this.calculate();
   }
 
   changeMethod() {

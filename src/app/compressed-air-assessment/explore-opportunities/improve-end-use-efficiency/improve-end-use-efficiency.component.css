@@ -58,3 +58,10 @@ form{
   margin-top: .5rem;
     border-top: groove 2px;
 }
+
+.supply-demand{
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
+}

@@ -14,7 +14,6 @@ export class EnergyInputExhaustGasService {
       'combustionAirTemp': ['', Validators.required],
       'exhaustGasTemp': ['', Validators.required],
       'totalHeatInput': [0, Validators.required],
-      'electricalPowerInput': ['', Validators.required],
       'name': ['Loss #' + lossNum]
     });
   }
@@ -25,7 +24,6 @@ export class EnergyInputExhaustGasService {
       'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp, Validators.required],
       'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp, Validators.required],
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
-      'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput, Validators.required],
       'name': [energyInputExhaustGas.name]
     });
     return tmpGroup;
@@ -37,7 +35,6 @@ export class EnergyInputExhaustGasService {
       combustionAirTemp: form.controls.combustionAirTemp.value,
       exhaustGasTemp: form.controls.exhaustGasTemp.value,
       totalHeatInput: form.controls.totalHeatInput.value,
-      electricalPowerInput: form.controls.electricalPowerInput.value,
       otherLosses: 0.0,
       name: form.controls.name.value
     };

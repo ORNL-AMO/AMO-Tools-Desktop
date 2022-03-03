@@ -134,14 +134,20 @@ export class CompressedAirRollupComponent implements OnInit {
       let savings: number = resultItem.baselineResults.total.totalAnnualOperatingCost - this.getModificationCost(resultItem);
       let implementationCosts: number = this.getImplementationCost(resultItem);
       let currencyUnit = this.settings.currency;
+      let basePeakCost: number = resultItem.baselineResults.total.demandCost;
+      let modPeakCost: number = this.getModificationPeakCost(resultItem);
       if (this.settings.currency !== '$') {
         modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
         baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
         savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
         implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
+        basePeakCost = this.convertUnitsService.value(basePeakCost).from('$').to(this.settings.currency);
+        modPeakCost = this.convertUnitsService.value(modPeakCost).from('$').to(this.settings.currency);
       }
       let modEnergyUse: number = this.getModificationEnergyUse(resultItem);
+      let modPeakEnergyUse: number = this.getModificationPeakEnergy(resultItem);
       let baseEnergyUsed: number = resultItem.baselineResults.total.energyUse;
+      let basePeakEnergy: number = resultItem.baselineResults.total.peakDemand;
       if (this.settings.compressedAirRollupUnit !== 'kWh') {
         baseEnergyUsed = this.convertUnitsService.value(baseEnergyUsed).from('kWh').to(this.settings.compressedAirRollupUnit);
         modEnergyUse = this.convertUnitsService.value(modEnergyUse).from('kWh').to(this.settings.compressedAirRollupUnit);
@@ -156,7 +162,11 @@ export class CompressedAirRollupComponent implements OnInit {
         costSavings: savings,
         implementationCosts: implementationCosts,
         payBackPeriod: this.getPayback(resultItem),
-        currencyUnit: currencyUnit
+        currencyUnit: currencyUnit,
+        baselinePeakDemandEnergy: basePeakEnergy,
+        baselinePeakDemandCost: basePeakCost,
+        modPeakDemandEnergy: modPeakEnergyUse,
+        modPeakDemandCost: modPeakCost
       })
     });
   }
@@ -190,6 +200,22 @@ export class CompressedAirRollupComponent implements OnInit {
       return resultItem.modificationResults.allSavingsResults.paybackPeriod;
     } else {
       return 0;
+    }
+  }
+
+  getModificationPeakEnergy(resultItem: CompressedAirResultsData): number {
+    if (resultItem.modificationResults) {
+      return resultItem.modificationResults.peakDemand;
+    } else {
+      return resultItem.baselineResults.total.peakDemand;
+    }
+  }
+
+  getModificationPeakCost(resultItem: CompressedAirResultsData): number {
+    if (resultItem.modificationResults) {
+      return resultItem.modificationResults.peakDemandCost;
+    } else {
+      return resultItem.baselineResults.total.demandCost;
     }
   }
 }

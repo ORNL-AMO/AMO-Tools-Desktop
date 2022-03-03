@@ -502,6 +502,13 @@ export class ConvertUnitsService {
     return value / conversionHelper;
   }
 
+  convertInvertedEnergy(outputRate: number, oldUnit: string, newUnit: string) {  
+    // For fuel emissions factor and other mass/energy
+    let conversionHelper: number = this.value(1).from(oldUnit).to(newUnit);
+    outputRate = outputRate / conversionHelper;
+    return outputRate;
+  }
+
   convertSettingsUnitCosts(oldSettings: Settings, newSettings: Settings): Settings {
     //imperial: $/MMBtu, metric: $/GJ
     newSettings.fuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.fuelCost, oldSettings, newSettings);

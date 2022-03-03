@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { LoadCharacteristicOptions, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data.service';
+import { PsatService } from '../../../../psat/psat.service';
 
 @Component({
   selector: 'app-load-characteristic-data',
@@ -12,14 +13,16 @@ import { LoadCharacteristicDataService } from './load-characteristic-data.servic
   styleUrls: ['./load-characteristic-data.component.css']
 })
 export class LoadCharacteristicDataComponent implements OnInit {
-
   motorForm: FormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: LoadCharacteristicOptions;
   displayForm: boolean = true;
   selectedMotorItem: MotorItem;
   disableEstimateLoadEfficiency: boolean;
-  constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
+
+  constructor(private motorCatalogService: MotorCatalogService, 
+    private psatService: PsatService,
+    private motorInventoryService: MotorInventoryService,
     private loadCharacteristicsDataService: LoadCharacteristicDataService) { }
 
   ngOnInit(): void {
@@ -83,5 +86,76 @@ export class LoadCharacteristicDataComponent implements OnInit {
   focusHelp(str: string) {
     this.focusField(str);
     this.motorInventoryService.helpPanelTab.next('help');
+  }
+
+
+  calculateMotorPowerFactor25() {
+    let powerFactorInput = this.getPowerFactorInput(25, this.motorForm.controls.efficiency25.value);
+    let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
+      powerFactorInput.motorRatedPower,
+      powerFactorInput.loadFactor,
+      powerFactorInput.motorCurrent,
+      powerFactorInput.motorEfficiency,
+      powerFactorInput.ratedVoltage,
+      powerFactorInput.settings,
+      );
+    this.motorForm.controls.powerFactor25.patchValue(calculatedPowerFactor);
+    this.save();
+  }
+
+  calculateMotorPowerFactor50() {
+    let powerFactorInput = this.getPowerFactorInput(50, this.motorForm.controls.efficiency50.value);
+    let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
+      powerFactorInput.motorRatedPower,
+      powerFactorInput.loadFactor,
+      powerFactorInput.motorCurrent,
+      powerFactorInput.motorEfficiency,
+      powerFactorInput.ratedVoltage,
+      powerFactorInput.settings,
+      );
+    this.motorForm.controls.powerFactor50.patchValue(calculatedPowerFactor);
+    this.save();
+  }
+
+  calculateMotorPowerFactor75() {
+    let powerFactorInput = this.getPowerFactorInput(75, this.motorForm.controls.efficiency75.value);
+    let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
+      powerFactorInput.motorRatedPower,
+      powerFactorInput.loadFactor,
+      powerFactorInput.motorCurrent,
+      powerFactorInput.motorEfficiency,
+      powerFactorInput.ratedVoltage,
+      powerFactorInput.settings,
+      );
+    this.motorForm.controls.powerFactor75.patchValue(calculatedPowerFactor);
+    this.save();
+  }
+
+  calculateMotorPowerFactor100() {
+    let powerFactorInput = this.getPowerFactorInput(100, this.selectedMotorItem.nameplateData.nominalEfficiency);
+    let calculatedPowerFactor: number = this.psatService.motorPowerFactor(
+      powerFactorInput.motorRatedPower,
+      powerFactorInput.loadFactor,
+      powerFactorInput.motorCurrent,
+      powerFactorInput.motorEfficiency,
+      powerFactorInput.ratedVoltage,
+      powerFactorInput.settings,
+      );
+    this.motorForm.controls.powerFactor100.patchValue(calculatedPowerFactor);
+    this.save();
+  }
+
+
+  getPowerFactorInput(loadFactor: number, motorEfficiency: number) {
+    let settings = this.motorInventoryService.settings.getValue();
+    let motorCurrent: number = this.motorCatalogService.estimateCurrent(loadFactor, motorEfficiency);
+    return {
+      motorRatedPower: this.selectedMotorItem.nameplateData.ratedMotorPower,
+      loadFactor: loadFactor,
+      motorEfficiency: motorEfficiency,
+      motorCurrent: motorCurrent,
+      ratedVoltage: this.selectedMotorItem.nameplateData.ratedVoltage,
+      settings: settings
+    }
   }
 }

@@ -39,7 +39,7 @@
 
   <div class="form-section" *ngIf="data.energyType == 'electricity'">
     <div class="form-group">
-      <label for="{{'zipcode'+modId+index}}">Zipcode</label>
+      <label for="{{'zipcode'+modId+index}}">Zip code</label>
       <div class="input-group">
         <input name="{{'zipcode'+modId+index}}" type="text" class="form-control" id="{{'zipcode'+modId+index}}"
           (input)="setZipcode()" [(ngModel)]="data.zipcode" [required]="true" (focus)="focusField('zipcode')">

@@ -36,6 +36,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }>;
   zipCodeSubRegionData: Array<string>;
   co2SavingsDataSub: Subscription;
+  isUsAverage: boolean;
   constructor(private assessmentCo2Service: AssessmentCo2SavingsService, private egridService: EGridService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -143,6 +144,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
 
     let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.form.controls.zipcode.value === val.zip);
     if (subRegionData) {
+      this.isUsAverage = false;
       subRegionData.subregions.forEach(subregion => {
         if (subregion !== '') {
           this.zipCodeSubRegionData.push(subregion);
@@ -154,10 +156,19 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         this.setModificationSubregionForm()
       }
     } else {
-      // not a valid zip, form select is hidden, disabled
-      this.form.controls.eGridSubregion.disable();
-      this.form.controls.totalEmissionOutputRate.patchValue(null);
-      this.form.controls.eGridSubregion.patchValue(null);
+      // not a valid zip, set emmissions to US Average
+      subRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => val.zip === '00000');
+      subRegionData.subregions.forEach(subregion => {
+        if (subregion !== '') {
+          this.zipCodeSubRegionData.push(subregion);
+        }
+      });
+      this.isUsAverage = true;
+      if (this.inBaseline) {
+        this.setBaselineSubregionForm();
+      } else {
+        this.setModificationSubregionForm()
+      }
     }
     if (!isFormInit) {
       this.calculate();
@@ -165,7 +176,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }
 
   setBaselineSubregionForm() {
-      if (this.form.controls.eGridSubregion.value === null) {
+      if (this.form.controls.eGridSubregion.value === 'U.S. Average' || this.form.controls.eGridSubregion.value === null || this.isUsAverage) {
         // set the first from the subregion list as default
         this.form.controls.eGridSubregion.patchValue(this.zipCodeSubRegionData[0]);
       }
@@ -210,12 +221,12 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.setUserEnteredModificationEmissions(false);
     }
 
-
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
 
     if (subregionEmissions) {
       if(this.inTreasureHunt){
-        subregionEmissions.co2Emissions = this.convertUnitsService.value(subregionEmissions.co2Emissions).from('MWh').to('kWh');
+        let conversionHelper = this.convertUnitsService.value(1).from('MWh').to('kWh');
+        subregionEmissions.co2Emissions = subregionEmissions.co2Emissions / conversionHelper;
       }
       this.form.patchValue({
         totalEmissionOutputRate: subregionEmissions.co2Emissions

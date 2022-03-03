@@ -167,6 +167,10 @@ export class RollupSummaryPieChartComponent implements OnInit {
 export interface PieChartDataItem {
   equipmentName: string,
   energyUsed: number,
+  electrotechFuelEnergyUsed?: number,
+  electrotechFuelEnergyCost?: number,
+  electrotechElectricityEnergyUsed?: number,
+  electrotechElectricityEnergyCost?: number,
   annualCost: number,
   energySavings: number,
   costSavings: number,
@@ -174,5 +178,6 @@ export interface PieChartDataItem {
   percentEnergy: number,
   color: string,
   furnaceType?: string
-  currencyUnit?: string
+  currencyUnit?: string,
+  carbonEmissions?: number
 }
