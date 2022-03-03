@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SSMT } from '../../../shared/models/steam/ssmt';
-import * as d3 from 'd3';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { WaterfallInput, WaterfallItem } from '../../../shared/models/plotting';
 
 @Injectable()
 export class ReportGraphsService {
 
-  // number formatter for d3
-  format: any = d3.format(',.2f');
 
   constructor() { }
 
