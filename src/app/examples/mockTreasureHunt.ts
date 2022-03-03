@@ -21,7 +21,7 @@ export const MockTreasureHunt: Assessment = {
                 "energyType": 'electricity',
                 "energySource": '',
                 "fuelType": '',
-                "totalEmissionOutputRate": 401.07,
+                "totalEmissionOutputRate": .40107,
                 "electricityUse": 0,
                 "eGridRegion": '',
                 "eGridSubregion": 'U.S. Average',

@@ -346,13 +346,13 @@ export class ConvertPhastService {
     if (settings.unitsOfMeasure == 'Imperial') {
       phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('MMBtu').to('kWh');
       phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('MMBtu').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.electrodeEnergyUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeEnergyUsed).from('MMBtu').to('kWh');
       phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('MMBtu').to('kWh');
 
     } else {
       phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('GJ').to('kWh');
       phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('GJ').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.electrodeEnergyUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeEnergyUsed).from('GJ').to('kWh');
       phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('GJ').to('kWh');
     }
 

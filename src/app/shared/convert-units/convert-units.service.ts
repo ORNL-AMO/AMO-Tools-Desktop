@@ -506,7 +506,6 @@ export class ConvertUnitsService {
     // For fuel emissions factor and other mass/energy
     let conversionHelper: number = this.value(1).from(oldUnit).to(newUnit);
     outputRate = outputRate / conversionHelper;
-    outputRate = Number(outputRate.toFixed(2));    
     return outputRate;
   }
 
