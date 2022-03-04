@@ -121,10 +121,6 @@
   </div>
 </div>
 
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
-
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
   <div class="modal-dialog modal-lg list-modal">

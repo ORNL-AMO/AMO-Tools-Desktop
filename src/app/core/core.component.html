@@ -68,27 +68,7 @@
     </div>
 
     <router-outlet></router-outlet>
-
-    <div class="card survey-card hide-print" [@survey]="showSurvey" *ngIf="!destroySurvey">
-        <div class="card-header text-center">
-            We want your feedback!
-            <button class="close pull-right" (click)="closeSurvey()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="card-body p-2">
-            <p class="hard-text">
-                We thank you for using MEASUR as we build and improve. If you would like to help us in creating a
-                quality tool for you and others, please use this
-                <a (click)="closeSurvey()" href="https://www.surveymonkey.com/r/DOE-AMO-TOOLS" target="_blank">Survey
-                    Monkey</a> to provide feedback.
-            </p>
-        </div>
-        <div class="card-footer text-right p-2">
-            <a class="click-link" (click)="disableSurvey()">Disable</a>
-        </div>
-    </div>
-
+ 
     <div class="card translate-card hide-print" [@translate]="showTranslate">
         <div class="card-header text-center">
             Translate Application
