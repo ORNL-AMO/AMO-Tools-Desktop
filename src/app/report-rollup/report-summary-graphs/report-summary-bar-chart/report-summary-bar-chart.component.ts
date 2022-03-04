@@ -95,7 +95,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
         automargin: true,
         fixedrange: true
       },
-
+      automargin: true,
       margin: { t: 0}
     };
 
