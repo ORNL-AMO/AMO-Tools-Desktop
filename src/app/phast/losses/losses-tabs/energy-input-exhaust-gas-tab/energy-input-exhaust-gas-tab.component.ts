@@ -101,9 +101,6 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
 
 
   checkLossValid(loss: EnergyInputExhaustGasLoss) {
-    if(!loss.availableHeat){
-      loss.availableHeat = 100;
-    }
     let tmpForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
     if (tmpForm.status === 'VALID') {
       return true;

@@ -82,9 +82,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (this.losses.energyInputExhaustGasLoss) {
       let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
-        if (!loss.availableHeat) {
-          loss.availableHeat = 100;
-        }  
         let tmpLoss = {
           form: this.energyInputExhaustGasService.getFormFromLoss(loss),
           heatLoss: 0.0,

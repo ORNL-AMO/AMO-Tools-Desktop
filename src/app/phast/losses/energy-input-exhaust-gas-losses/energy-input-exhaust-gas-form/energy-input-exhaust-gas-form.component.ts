@@ -3,7 +3,6 @@ import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas
 import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { LossesService } from '../../losses.service';
@@ -47,7 +46,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   firstChange: boolean = true;
   idString: string;
   constructor(private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService,
-    private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private lossesService: LossesService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -79,7 +77,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       return false;
     }
   }
-  compareExcessAir(): boolean {
+  compareAvailableHeat(): boolean {
     if (this.canCompare()) {
       return this.energyInputExhaustGasCompareService.compareAvailableHeat(this.lossIndex);
     } else {

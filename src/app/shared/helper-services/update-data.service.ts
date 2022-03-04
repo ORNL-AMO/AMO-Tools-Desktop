@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
@@ -11,7 +11,6 @@ import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
-import { PH } from 'lodash';
 declare const packageJson;
 
 @Injectable()
