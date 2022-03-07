@@ -346,13 +346,13 @@ export class ConvertPhastService {
     if (settings.unitsOfMeasure == 'Imperial') {
       phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('MMBtu').to('kWh');
       phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('MMBtu').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('MMBtu').to('kWh');
+      phastResults.annualEAFResults.electrodeEnergyUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeEnergyUsed).from('MMBtu').to('kWh');
       phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('MMBtu').to('kWh');
 
     } else {
       phastResults.annualEAFResults.naturalGasUsed = this.convertUnitsService.value(phastResults.annualEAFResults.naturalGasUsed).from('GJ').to('kWh');
       phastResults.annualEAFResults.coalCarbonUsed = this.convertUnitsService.value(phastResults.annualEAFResults.coalCarbonUsed).from('GJ').to('kWh');
-      phastResults.annualEAFResults.electrodeUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeUsed).from('GJ').to('kWh');
+      phastResults.annualEAFResults.electrodeEnergyUsed = this.convertUnitsService.value(phastResults.annualEAFResults.electrodeEnergyUsed).from('GJ').to('kWh');
       phastResults.annualEAFResults.otherFuelUsed = this.convertUnitsService.value(phastResults.annualEAFResults.otherFuelUsed).from('GJ').to('kWh');
     }
 
@@ -552,27 +552,22 @@ export class ConvertPhastService {
       newFuelUnit = 'MMBtu';
     } 
 
-    co2SavingsData.totalFuelEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalFuelEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
-    
+    co2SavingsData.totalFuelEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalFuelEmissionOutputRate, oldFuelUnit, newFuelUnit);
+     
     if (oldSettings.energySourceType === 'Electricity') {
       let conversionHelper: number = this.convertUnitsService.value(1).from(oldSettings.energyResultUnit).to(newSettings.energyResultUnit);
       co2SavingsData.totalEmissionOutputRate = co2SavingsData.totalEmissionOutputRate / conversionHelper;
       co2SavingsData.totalEmissionOutputRate = this.roundVal(co2SavingsData.totalEmissionOutputRate, 2);
 
       if (oldSettings.furnaceType === 'Electric Arc Furnace (EAF)') {
-        co2SavingsData.totalCoalEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalCoalEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
-        co2SavingsData.totalCoalEmissionOutputRate = this.roundVal(co2SavingsData.totalCoalEmissionOutputRate, 2);
-
-        co2SavingsData.totalNaturalGasEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalNaturalGasEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
-        co2SavingsData.totalNaturalGasEmissionOutputRate = this.roundVal(co2SavingsData.totalNaturalGasEmissionOutputRate, 2);
-
-        co2SavingsData.totalOtherEmissionOutputRate = this.convertUnitsService.value(co2SavingsData.totalOtherEmissionOutputRate).from(oldFuelUnit).to(newFuelUnit);
-        co2SavingsData.totalOtherEmissionOutputRate = this.roundVal(co2SavingsData.totalOtherEmissionOutputRate, 2);
+        co2SavingsData.totalCoalEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalCoalEmissionOutputRate, oldFuelUnit, newFuelUnit);
+        co2SavingsData.totalNaturalGasEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalNaturalGasEmissionOutputRate, oldFuelUnit, newFuelUnit);
+        co2SavingsData.totalOtherEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalOtherEmissionOutputRate, oldFuelUnit, newFuelUnit);
       }
     }
     return co2SavingsData;
   }
-
+  
   convertExistingData(phast: PHAST, oldSettings: Settings, settings: Settings): PHAST {
     phast.losses = this.convertPhastLosses(phast.losses, oldSettings, settings);
     if (phast.meteredEnergy) {

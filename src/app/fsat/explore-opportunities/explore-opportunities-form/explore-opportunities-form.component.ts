@@ -10,7 +10,7 @@ import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FsatService } from '../../fsat.service';
 import { FanFieldDataWarnings, FanOperationsWarnings, FsatWarningService } from '../../fsat-warning.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { OperationsService } from '../../operations/operations.service';
 

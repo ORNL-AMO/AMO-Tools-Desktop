@@ -3,7 +3,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { LossesService } from '../../../phast/losses/losses.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';

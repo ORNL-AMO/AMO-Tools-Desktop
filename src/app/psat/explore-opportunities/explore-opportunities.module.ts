@@ -10,7 +10,7 @@ import { RatedMotorFormComponent } from './explore-opportunities-form/rated-moto
 import { PumpDataFormComponent } from './explore-opportunities-form/pump-data-form/pump-data-form.component';
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { HeadToolModule } from '../../calculator/pumps/head-tool/head-tool.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { ToastModule } from '../../shared/toast/toast.module';

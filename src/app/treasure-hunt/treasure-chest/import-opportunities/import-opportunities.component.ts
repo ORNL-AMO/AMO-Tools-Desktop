@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { TreasureHuntService } from '../../treasure-hunt.service';

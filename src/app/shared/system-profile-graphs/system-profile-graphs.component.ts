@@ -2,12 +2,12 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service'; 
-import * as Plotly from 'plotly.js';
 import { ExploreOpportunitiesService } from '../../compressed-air-assessment/explore-opportunities/explore-opportunities.service';
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
 import * as _ from 'lodash';
 import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
 import { Settings } from '../models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -41,7 +41,8 @@ export class SystemProfileGraphsComponent implements OnInit {
   showingPowerMaxSub: Subscription;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -199,18 +200,18 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   setHover(hoverPositionData: HoverPositionData) {
-    if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
-      Plotly.Fx.hover(this.systemCapacityGraph.nativeElement, hoverPositionData.points)
-    }
-    if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
-      Plotly.Fx.hover(this.compressorCapacityGraph.nativeElement, hoverPositionData.points)
-    }
-    if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph.nativeElement && hoverPositionData.points != undefined) {
-      Plotly.Fx.hover(this.systemPowerGraph.nativeElement, hoverPositionData.points)
-    }
-    if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined) {
-      Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
-    }
+    // if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
+    //   Plotly.Fx.hover(this.systemCapacityGraph.nativeElement, hoverPositionData.points)
+    // }
+    // if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
+    //   Plotly.Fx.hover(this.compressorCapacityGraph.nativeElement, hoverPositionData.points)
+    // }
+    // if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph.nativeElement && hoverPositionData.points != undefined) {
+    //   Plotly.Fx.hover(this.systemPowerGraph.nativeElement, hoverPositionData.points)
+    // }
+    // if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined) {
+    //   Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
+    // }
   }
 
   updateHoverPositionData(chart: any, chartName: string) {
@@ -288,7 +289,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(maxLineTrace);
       }
 
-      Plotly.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
         this.updateLayout(chart, this.systemCapacityGraph);
       });
@@ -348,7 +349,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      Plotly.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'compressorCapacityGraph');
       });
     }
@@ -396,7 +397,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         traceData.push(maxLineTrace);
       }
 
-      Plotly.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemPowerGraph');
         this.updateLayout(chart, this.systemPowerGraph);
       });
@@ -433,7 +434,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      Plotly.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'compressorPowerGraph');
       });
     }

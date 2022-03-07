@@ -3,7 +3,7 @@ import { Assessment } from '../../../../../shared/models/assessment';
 import { PsatOutputs, PSAT } from '../../../../../shared/models/psat';
 import { Settings } from '../../../../../shared/models/settings';
 import { PsatService } from '../../../../../psat/psat.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment.service';
 

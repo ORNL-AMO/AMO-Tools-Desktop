@@ -7,7 +7,6 @@ import { ExecutiveSummaryComponent } from './executive-summary/executive-summary
 import { ResultsDataComponent } from './results-data/results-data.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
-import { SankeyModule } from '../sankey/sankey.module';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
@@ -25,7 +24,6 @@ import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module
   imports: [
     CommonModule,
     FormsModule,
-    SankeyModule,
     PhastInputSummaryModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,

@@ -6,7 +6,7 @@ import { ImportService } from './import.service';
 import { FormsModule } from '@angular/forms';
 import { ImportModalComponent } from './import-modal/import-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   imports: [

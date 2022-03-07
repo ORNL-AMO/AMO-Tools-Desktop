@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { TreasureHunt, TreasureHuntOpportunity, OpportunitySheet, Treasure } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntOpportunityService } from '../treasure-hunt-calculator-services/treasure-hunt-opportunity.service';
 
 @Component({

@@ -71,7 +71,9 @@
               "src/assets/styles/pagination.css",
               "src/assets/styles/welcome-screen.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/plotly.js-dist/plotly.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -89,8 +91,17 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -100,8 +111,12 @@
           "configurations": {
             "production": {
               "browserTarget": "amo-tools-desktop:build:production"
+            },
+            "development": {
+              "browserTarget": "amo-tools-desktop:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -114,8 +129,8 @@
           "options": {
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
+            "polyfills": "src/polyfills.ts",
             "scripts": [],
             "styles": [
               "src/styles.css",

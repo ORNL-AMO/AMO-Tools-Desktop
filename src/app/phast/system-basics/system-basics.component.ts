@@ -63,7 +63,9 @@ export class SystemBasicsComponent implements OnInit {
 
     if (phastLosses) {
       // if a loss is added and removed, phast.losses object still has array
-      lossesExist = Object.values(phast.losses).some((lossArray: []) => lossArray.length > 0);
+      lossesExist = Object.keys(phast.losses).some((key, index) => {
+        return phast.losses[key]?.length > 0;
+      });
     }
 
     return lossesExist;

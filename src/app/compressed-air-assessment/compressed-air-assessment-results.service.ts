@@ -568,7 +568,8 @@ export class CompressedAirAssessmentResultsService {
       let conversionHelper: number = this.convertUnitsService.value(1).from('m3/min').to('ft3/min');
       ratedSpecificPower = this.convertUnitsService.roundVal((ratedSpecificPower/conversionHelper), 4);
     }
-    let ratedIsentropicEfficiency: number = (16.52 *((((dischargePressure + 14.5)/14.5)^0.2857)-1))/ratedSpecificPower;
+    let subNum: number = Math.pow(((dischargePressure + 14.5) / 14.5), 0.2857);
+    let ratedIsentropicEfficiency: number = ((16.52 * (subNum - 1)) / ratedSpecificPower) * 100;
     ratedIsentropicEfficiency = this.convertUnitsService.roundVal(ratedIsentropicEfficiency, 4);
     return ratedIsentropicEfficiency;
   }

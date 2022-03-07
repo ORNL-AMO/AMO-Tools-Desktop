@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { ReportGraphsService } from '../report-graphs.service';
-import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-ssmt-pie-chart',
@@ -22,7 +22,8 @@ export class SsmtPieChartComponent implements OnInit {
 
   @ViewChild('ssmtPieChart', { static: false }) ssmtPieChart: ElementRef;
   noData: boolean;
-  constructor(private reportGraphsService: ReportGraphsService, private cd: ChangeDetectorRef) { }
+  constructor(private reportGraphsService: ReportGraphsService, private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -57,7 +58,6 @@ export class SsmtPieChartComponent implements OnInit {
       valuesAndLabels = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
       texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamPowerMeasurement;
     }
-    Plotly.purge(this.ssmtPieChart.nativeElement);
     if (valuesAndLabels.length != 0) {
       this.noData = false;
       this.cd.detectChanges();
@@ -93,7 +93,7 @@ export class SsmtPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
     } else {
       this.noData = true;
       this.cd.detectChanges();
@@ -111,7 +111,6 @@ export class SsmtPieChartComponent implements OnInit {
       valuesAndLabels = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
       texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamPowerMeasurement;
     }
-    Plotly.purge(this.ssmtPieChart.nativeElement);
     if (valuesAndLabels.length != 0) {
       this.noData = false;
       this.cd.detectChanges();
@@ -147,7 +146,7 @@ export class SsmtPieChartComponent implements OnInit {
         displaylogo: false,
         displayModeBar: false
       };
-      Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
     } else {
       this.noData = true;
       this.cd.detectChanges();

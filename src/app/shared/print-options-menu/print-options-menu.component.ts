@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PrintOptionsMenuService } from './print-options-menu.service';
 import { PrintOptions } from '../models/printing';
 import { Subscription } from 'rxjs';

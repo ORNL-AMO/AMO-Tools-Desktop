@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { InventorySummary, InventorySummaryOverviewService } from '../inventory-summary-overview.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-inventory-overview-bar-chart',
@@ -13,7 +13,8 @@ export class InventoryOverviewBarChartComponent implements OnInit {
   @ViewChild('overviewBarChart', { static: false }) overviewBarChart: ElementRef;
 
   invetorySummarySub: Subscription;
-  constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService) { }
+  constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -47,7 +48,7 @@ export class InventoryOverviewBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.newPlot(this.overviewBarChart.nativeElement, dataArray, layout, configOptions);
+      this.plotlyService.newPlot(this.overviewBarChart.nativeElement, dataArray, layout, configOptions);
     })
   }
 

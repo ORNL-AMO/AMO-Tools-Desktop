@@ -14,7 +14,7 @@ import { OperationsModule } from './operations/operations.module';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
