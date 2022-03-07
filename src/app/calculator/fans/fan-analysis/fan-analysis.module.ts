@@ -31,7 +31,7 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas-density-results.module';
 import { InternalDimensionModalComponent } from './internal-dimension-modal/internal-dimension-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TraversePlanesComponent } from './fan-analysis-form/plane-data-form/traverse-planes/traverse-planes.component';
 
 @NgModule({

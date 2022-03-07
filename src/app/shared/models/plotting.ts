@@ -164,3 +164,21 @@ export interface DataPoint {
     x: number;
     y: number;
 }
+
+
+
+export interface WaterfallItem {
+    value: number,
+    label: string,
+    isStartValue: boolean,
+    isNetValue: boolean
+  };
+  
+  export interface WaterfallInput {
+    name: string,
+    inputObjects: Array<WaterfallItem>,
+    units: string,
+    startColor: string,
+    lossColor: string,
+    netColor: string
+  }

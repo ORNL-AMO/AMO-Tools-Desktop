@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
 import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';

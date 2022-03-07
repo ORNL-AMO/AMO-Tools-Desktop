@@ -26,8 +26,6 @@ export class PsatReportComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inPsat: boolean;
-  @Output('exportData')
-  exportData = new EventEmitter<boolean>();
   @Input()
   inRollup: boolean;
   @Input()
@@ -143,11 +141,7 @@ export class PsatReportComponent implements OnInit {
       }
     }
   }
-
-  exportToCsv() {
-    this.exportData.emit(true);
-  }
-
+  
   print() {
     this.printOptionsMenuService.printContext.next('psat');
     this.printOptionsMenuService.showPrintMenu.next(true);

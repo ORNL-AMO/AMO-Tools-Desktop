@@ -7,10 +7,9 @@ import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
-import { JsonToCsvService } from '../shared/helper-services/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { Subscription } from 'rxjs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';
@@ -82,7 +81,6 @@ export class PsatComponent implements OnInit {
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
@@ -317,11 +315,6 @@ export class PsatComponent implements OnInit {
   savePsat(newPSAT: PSAT) {
     this._psat = newPSAT;
     this.save();
-  }
-
-  exportData() {
-    //TODO: Logic for exporting assessment
-    this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
   goToReport() {

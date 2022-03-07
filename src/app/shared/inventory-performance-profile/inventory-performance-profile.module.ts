@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { InventoryPerformanceProfileComponent } from './inventory-performance-profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 
 

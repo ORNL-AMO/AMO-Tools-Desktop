@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import * as Plotly from 'plotly.js';
 import { InventorySummaryGraphsService } from '../inventory-summary-graphs.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { Subscription } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-inventory-summary-graph',
@@ -15,11 +15,14 @@ export class InventorySummaryGraphComponent implements OnInit {
 
   selectedFieldSub: Subscription;
   constructor(private inventorySummaryGraphsService: InventorySummaryGraphsService, private motorInventoryService: MotorInventoryService,
-    private inventorySummaryGraphService: InventorySummaryGraphsService) { }
+    private inventorySummaryGraphService: InventorySummaryGraphsService, private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit() {
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
-      Plotly.purge('inventoryGraph');
       if (val) {
         let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
         let filterInventorySummary = this.motorInventoryService.filterInventorySummary.getValue();
@@ -75,7 +78,9 @@ export class InventorySummaryGraphComponent implements OnInit {
           },
         };
         let config = { responsive: true }
-        Plotly.newPlot('inventoryGraph', data, layout, config);
+        if (this.visualizeChart) {
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, config);
+        }
       }
     });
   }

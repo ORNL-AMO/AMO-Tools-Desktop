@@ -1,13 +1,13 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { PhastValidService } from '../../phast/phast-valid.service';
-import { FuelResults, SankeyService } from '../../phast/sankey/sankey.service';
 import { Assessment } from '../models/assessment';
 import { PHAST } from '../models/phast/phast';
 import { Settings } from '../models/settings';
-import { PHASTSankeyNode } from "../models/phast/sankey.model";
 import { DecimalPipe } from "@angular/common";
+import { PlotlyService } from 'angular-plotly.js';
+import { FuelResults, SankeyService } from './sankey.service';
+import { SankeyNode } from '../models/sankey';
 
-import * as Plotly from "plotly.js";
 
 @Component({
   selector: 'app-phast-sankey',
@@ -32,20 +32,20 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   links: Array<{ source: number, target: number }> = [];
-  nodes: Array<PHASTSankeyNode> = [];
-  
+  nodes: Array<SankeyNode> = [];
+
   gradientStartColor = '#a71600';
   gradientEndColor = '#ffa400';
   exothermicColor = '#a71600';
-  
+
   connectingNodes: Array<number>;
   orangeLinkPaths: Array<number>;
-  minLosses: Array<{name: string, text: string}> = [];
+  minLosses: Array<{ name: string, text: string }> = [];
   units: string = 'MMBtu';
 
   // node/link not rendered or too small to see
   minPlotlyDisplayValue = .2;
-  
+
   currentSourceIndex = 0;
   initialLossConnectorTargets: Array<number> = [];
   energyInput: number = 0;
@@ -65,11 +65,12 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
   results: FuelResults;
 
-  constructor(private sankeyService: SankeyService, 
+  constructor(private sankeyService: SankeyService,
     private phastValidService: PhastValidService,
     private _dom: ElementRef,
     private renderer: Renderer2,
-    private decimalPipe: DecimalPipe) { }
+    private decimalPipe: DecimalPipe,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
@@ -126,8 +127,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   }
 
   renderSankey() {
-    Plotly.purge(this.ngChart.nativeElement); 
-
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -185,13 +184,13 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       },
       xaxis: {
         showgrid: false,
-        showticklabels:false,
-        showline:false,
+        showticklabels: false,
+        showline: false,
       },
       yaxis: {
         showgrid: false,
-        showticklabels:false,
-        showline:false,
+        showticklabels: false,
+        showline: false,
       },
     };
 
@@ -200,57 +199,57 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       layout.plot_bgcolor = 'ececec';
     }
     let config = {
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       responsive: true,
     };
-  
-      Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
-        .then(chart => {
-          chart.on('plotly_restyle', () => {
-            this.setGradient();
-          });
-          chart.on('plotly_afterplot', () => {
-            this.setGradient();
-          });
-          chart.on('plotly_hover', (hoverData) => {
-            this.setGradient(hoverData);
-          });
-          chart.on('plotly_unhover', () => {
-            this.setGradient();
-          });
-          chart.on('plotly_relayout', () => {
-            this.setGradient();
-          });
-        });
 
-      this.addGradientElement();
-      this.buildSvgArrows();
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+      .then(chart => {
+        this.addGradientElement();
+        this.buildSvgArrows();
+        chart.on('plotly_restyle', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_afterplot', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_hover', (hoverData) => {
+          this.setGradient(hoverData);
+        });
+        chart.on('plotly_unhover', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_relayout', () => {
+          this.setGradient();
+        });
+      });
+
 
   }
 
 
-  buildLinks() {  
-    this.links = [];  
+  buildLinks() {
+    this.links = [];
     for (let i = 0; i < this.nodes.length; i++) {
       if (this.nodes[i].isConnector) {
-          this.connectingNodes.push(i); 
+        this.connectingNodes.push(i);
       }
 
       for (let j = 0; j < this.nodes[i].target.length; j++) {
-          this.links.push(
-            {
-              source: this.nodes[i].source,
-              target: this.nodes[i].target[j]
-            }
-          )
-        }
+        this.links.push(
+          {
+            source: this.nodes[i].source,
+            target: this.nodes[i].target[j]
+          }
+        )
       }
+    }
   }
 
-  
+
   buildNodes() {
     this.energyInput = this.results.totalInput;
-    
+
     let flueGasLoss = this.results.totalFlueGas;
     let waterCoolingLoss = this.results.totalCoolingLoss;
     let wallLoss = this.results.totalWallLoss;
@@ -286,7 +285,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     } else {
       this.units = 'kW';
     }
-      
+
     this.addInitialNodes();
     let currentPosition = 0;
     for (let lossName in losses) {
@@ -315,7 +314,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
     let fuelValue = (this.fuelEnergy / this.energyInput) * 100;
     let electricalValue = (this.electricalEnergy / this.energyInput) * 100;
-    
+
     if (this.fuelEnergy) {
       this.currentSourceIndex = 4;
       this.secondConnectorLoss = 6;
@@ -403,7 +402,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       let startingSource = 0;
 
       if (this.exothermicHeat) {
-        totalInputValue -= this.exothermicHeatValue;        
+        totalInputValue -= this.exothermicHeatValue;
         startingSource++;
 
         this.nodes.push(
@@ -533,44 +532,44 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   addEndNode(chargeMaterialLoss) {
     let chargeMaterialLossValue = (chargeMaterialLoss / this.energyInput) * 100;
     if (chargeMaterialLossValue > 0) {
-     if (chargeMaterialLossValue > this.minPlotlyDisplayValue) {
-       if (this.hasLossConnectors) {
-        // Connect to the last loss connector added
-         this.nodes[this.nodes.length - 2].target.push(this.currentSourceIndex);
+      if (chargeMaterialLossValue > this.minPlotlyDisplayValue) {
+        if (this.hasLossConnectors) {
+          // Connect to the last loss connector added
+          this.nodes[this.nodes.length - 2].target.push(this.currentSourceIndex);
         } else {
           this.initialLossConnectorTargets.push(this.currentSourceIndex);
         }
-       this.nodes.push(
-         {
-           name: this.getNameLabel("Charge Material", chargeMaterialLoss, chargeMaterialLossValue),
-           value: chargeMaterialLossValue,
-           x: .9,
-           y: .6,
-           source: this.currentSourceIndex,
-           target: [],
-           isConnector: false,
-           nodeColor: this.gradientEndColor,
-           id: 'chargeMaterial'
-         }
-       );
-       this.orangeLinkPaths.push(this.currentSourceIndex);
-     } else {
-       this.minLosses.push(
-         {
-           name: 'Charge Material',
-           text: `${this.decimalPipe.transform(chargeMaterialLoss, '1.0-2')} ${this.units}/hr (${this.decimalPipe.transform(chargeMaterialLossValue, '1.1-2')}%)`,
-         }
-       );
-     }
-   }
+        this.nodes.push(
+          {
+            name: this.getNameLabel("Charge Material", chargeMaterialLoss, chargeMaterialLossValue),
+            value: chargeMaterialLossValue,
+            x: .9,
+            y: .6,
+            source: this.currentSourceIndex,
+            target: [],
+            isConnector: false,
+            nodeColor: this.gradientEndColor,
+            id: 'chargeMaterial'
+          }
+        );
+        this.orangeLinkPaths.push(this.currentSourceIndex);
+      } else {
+        this.minLosses.push(
+          {
+            name: 'Charge Material',
+            text: `${this.decimalPipe.transform(chargeMaterialLoss, '1.0-2')} ${this.units}/hr (${this.decimalPipe.transform(chargeMaterialLossValue, '1.1-2')}%)`,
+          }
+        );
+      }
+    }
 
   }
 
 
   setFuelAndChemical() {
     let totalFuelEnergy = 0;
-    if ((this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) 
-        || (this.sankeyService.getChemicalEnergy() !== null && this.sankeyService.getChemicalEnergy() !== undefined)) {
+    if ((this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined)
+      || (this.sankeyService.getChemicalEnergy() !== null && this.sankeyService.getChemicalEnergy() !== undefined)) {
       if (this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) {
         totalFuelEnergy = this.sankeyService.getFuelEnergy();
       }
@@ -632,7 +631,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
         fill = `${this.gradientStartColor} !important`;
       }
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
-      
+
       if (i == this.nodes.length - 1) {
         this.setNodeLabelSpacing(nodes[i]);
       }

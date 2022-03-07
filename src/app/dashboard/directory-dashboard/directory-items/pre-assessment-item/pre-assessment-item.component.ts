@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Calculator } from '../../../../shared/models/calculators';
 import { Directory } from '../../../../shared/models/directory';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

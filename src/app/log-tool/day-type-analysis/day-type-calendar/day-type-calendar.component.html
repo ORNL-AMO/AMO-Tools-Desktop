@@ -1,5 +1,5 @@
 <div class="card-body p-0">
-    <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
+    <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (dateSelect)="onDateSelect($event)"
         [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths" [firstDayOfWeek]="7">
     </ngb-datepicker>
 </div>

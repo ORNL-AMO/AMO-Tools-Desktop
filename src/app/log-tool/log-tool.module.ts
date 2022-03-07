@@ -27,7 +27,7 @@ import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-ty
 import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
 import { DataTableComponent } from './system-setup/setup-data/data-table/data-table.component';
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { AnnotateGraphComponent } from './visualize/visualize-menu/annotate-graph/annotate-graph.component';
 import { GraphBasicsComponent } from './visualize/visualize-menu/graph-basics/graph-basics.component';

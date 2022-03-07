@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } from '../../batch-analysis.service';
-import * as Plotly from 'plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-total-motors-bar-chart',
@@ -13,7 +13,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
 
   @ViewChild('barChart', { static: false }) barChart: ElementRef;
   batchAnalysisDataItemsSub: Subscription;
-  constructor(private batchAnalysisService: BatchAnalysisService) { }
+  constructor(private batchAnalysisService: BatchAnalysisService, private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -51,7 +51,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.newPlot(this.barChart.nativeElement, [data], layout, configOptions);
+      this.plotlyService.newPlot(this.barChart.nativeElement, [data], layout, configOptions);
     });
   }
 

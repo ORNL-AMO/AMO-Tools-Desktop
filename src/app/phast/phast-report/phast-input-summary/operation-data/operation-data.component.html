@@ -191,10 +191,10 @@
                 CO<sub>2</sub>/GJ</span>)
             </td>
             <td>
-              {{phast.co2SavingsData.totalFuelEmissionOutputRate}}
+              {{phast.co2SavingsData.totalFuelEmissionOutputRate | number:'1.0-2'}}
             </td>
             <td *ngFor="let mod of phast.modifications">
-              {{mod.phast.co2SavingsData.totalFuelEmissionOutputRate}}
+              {{mod.phast.co2SavingsData.totalFuelEmissionOutputRate | number:'1.0-2'}}
             </td>
           </tr>
         </ng-container>
@@ -210,10 +210,10 @@
             CO<sub>2</sub>/GJ</span>
         </td>
         <td>
-          {{phast.co2SavingsData.totalNaturalGasEmissionOutputRate}}
+          {{phast.co2SavingsData.totalNaturalGasEmissionOutputRate | number:'1.0-2'}}
         </td>
         <td *ngFor="let mod of phast.modifications">
-          {{mod.phast.co2SavingsData.totalNaturalGasEmissionOutputRate}}
+          {{mod.phast.co2SavingsData.totalNaturalGasEmissionOutputRate | number:'1.0-2'}}
         </td>
       </tr>
       <tr>
@@ -236,10 +236,10 @@
             CO<sub>2</sub>/GJ</span>)
         </td>
         <td>
-          {{phast.co2SavingsData.totalCoalEmissionOutputRate}}
+          {{phast.co2SavingsData.totalCoalEmissionOutputRate | number:'1.0-2'}}
         </td>
         <td *ngFor="let mod of phast.modifications">
-          {{mod.phast.co2SavingsData.totalCoalEmissionOutputRate}}
+          {{mod.phast.co2SavingsData.totalCoalEmissionOutputRate | number:'1.0-2'}}
         </td>
       </tr>
       <tr>
@@ -283,10 +283,10 @@
             CO<sub>2</sub>/GJ</span>)
         </td>
         <td>
-          {{phast.co2SavingsData.totalOtherEmissionOutputRate}}
+          {{phast.co2SavingsData.totalOtherEmissionOutputRate | number:'1.0-2'}}
         </td>
         <td *ngFor="let mod of phast.modifications">
-          {{mod.phast.co2SavingsData.totalOtherEmissionOutputRate}}
+          {{mod.phast.co2SavingsData.totalOtherEmissionOutputRate | number:'1.0-2'}}
         </td>
       </tr>
     </ng-container>
@@ -308,10 +308,10 @@
           <span>(kg CO<sub>2</sub>/MWh)</span>
         </td>
         <td>
-          {{phast.co2SavingsData.totalEmissionOutputRate}}
+          {{phast.co2SavingsData.totalEmissionOutputRate | number:'1.0-2'}}
         </td>
         <td *ngFor="let mod of phast.modifications">
-          {{mod.phast.co2SavingsData.totalEmissionOutputRate}}
+          {{mod.phast.co2SavingsData.totalEmissionOutputRate | number:'1.0-2'}}
         </td>
       </tr>
     </ng-container>

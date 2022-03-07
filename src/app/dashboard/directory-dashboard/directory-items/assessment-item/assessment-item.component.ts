@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../../../shared/models/directory';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
