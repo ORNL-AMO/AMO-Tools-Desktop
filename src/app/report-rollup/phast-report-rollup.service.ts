@@ -150,7 +150,7 @@ export class PhastReportRollupService {
         sumEnergy += convertedSumEnergy;
         fuelEnergy += convertedSumEnergy + convertedEnergySavings;
 
-      } else if (result.settings.energySourceType == 'Electricity') {
+      }else if (result.settings.energySourceType == 'Electricity') {
         let modificationElectricalEnergy: number;
         let baselineElectricalEnergy: number;
         let modificationFuelEnergy: number;
@@ -171,6 +171,7 @@ export class PhastReportRollupService {
           modificationFuelEnergy = this.convertUnitsService.value(modificationFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
           baselineFuelEnergy = this.convertUnitsService.value(baselineFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
         }
+
         electricityEnergy += modificationElectricalEnergy;
         let fuelEnergySavings: number = baselineFuelEnergy - modificationFuelEnergy;
         let electricalEnergySavings: number = baselineElectricalEnergy - modificationElectricalEnergy;

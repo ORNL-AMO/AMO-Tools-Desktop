@@ -79,8 +79,8 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+        let warnings: { heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.heatWarning != null) {
           hasWarning = true;
         }
       });
@@ -90,8 +90,8 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+        let warnings: { heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.heatWarning != null) {
           hasWarning = true;
         }
       });

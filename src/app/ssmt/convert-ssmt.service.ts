@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
 import { SSMT, BoilerInput, PressureTurbine, CondensingTurbine, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 
 @Injectable()
 export class ConvertSsmtService {
@@ -11,6 +12,10 @@ export class ConvertSsmtService {
   convertAllInputData(ssmt: SSMT, oldSettings: Settings, newSettings: Settings): SSMT {
     if (ssmt.boilerInput) {
       ssmt.boilerInput = this.convertBoiler(ssmt.boilerInput, oldSettings, newSettings);
+    }
+
+    if (ssmt.co2SavingsData) {
+      ssmt.co2SavingsData = this.convertCO2SavingsData(ssmt.co2SavingsData, newSettings);
     }
     if (ssmt.turbineInput) {
       ssmt.turbineInput.condensingTurbine = this.convertCondensingTurbine(ssmt.turbineInput.condensingTurbine, oldSettings, newSettings);
@@ -38,6 +43,16 @@ export class ConvertSsmtService {
       let newVal: number = this.convertUnitsService.value(val).from(oldUnit).to(newUnit);
       return this.convertUnitsService.roundVal(newVal, 4);
     } else { return }
+  }
+  convertCO2SavingsData(co2SavingsData: Co2SavingsData, newSettings: Settings): Co2SavingsData {
+    // Keep same if custom
+    if (newSettings.unitsOfMeasure === 'Metric') {
+      co2SavingsData.totalFuelEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalFuelEmissionOutputRate, 'MMBtu', 'GJ');
+    } else if (newSettings.unitsOfMeasure === 'Imperial') {
+      co2SavingsData.totalFuelEmissionOutputRate = this.convertUnitsService.convertInvertedEnergy(co2SavingsData.totalFuelEmissionOutputRate, 'GJ', 'MMBtu');
+    }
+    
+    return co2SavingsData;
   }
 
   convertBoiler(boilerInput: BoilerInput, oldSettings: Settings, newSettings: Settings): BoilerInput {

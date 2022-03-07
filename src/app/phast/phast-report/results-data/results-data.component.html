@@ -476,12 +476,12 @@
           <tr>
             <td>Electrode  </td>
             <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-              {{baseLineResults.annualEAFResults.electrodeUsed |
+              {{baseLineResults.annualEAFResults.electrodeEnergyUsed |
               sigFigs:'3'}}</td>
             <td *ngFor="let mod of modificationResults; let index = index;"
               [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-              <span *ngIf="mod.annualEAFResults.electrodeUsed">{{mod.annualEAFResults.electrodeUsed | number:'1.0-0'}}</span>
-              <span *ngIf="!mod.annualEAFResults.electrodeUsed">&mdash; &mdash;</span>
+              <span *ngIf="mod.annualEAFResults.electrodeEnergyUsed">{{mod.annualEAFResults.electrodeEnergyUsed | number:'1.0-0'}}</span>
+              <span *ngIf="!mod.annualEAFResults.electrodeEnergyUsed">&mdash; &mdash;</span>
             </td>
           </tr>
 
