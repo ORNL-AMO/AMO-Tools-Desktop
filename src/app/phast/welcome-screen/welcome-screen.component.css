@@ -1,0 +1,16 @@
+.book-item{
+    background-color: #BF3D00;
+}
+
+
+/* .welcome-screen a.user-manual{
+    color: black;
+} */
+
+.welcome-screen .welcome-content a.user-manual{
+    color: white;
+}
+
+.banner-box{
+    height: 90px !important;
+}
