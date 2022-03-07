@@ -167,13 +167,6 @@ export class CoreComponent implements OnInit {
     });
   }
 
-  closeSurvey() {
-    this.showSurvey = 'hide';
-    setTimeout(() => {
-      this.destroySurvey = true;
-    }, 500);
-  }
-
   hideUpdateToast() {
     this.showUpdateModal = false;
     this.changeDetectorRef.detectChanges();
@@ -186,15 +179,6 @@ export class CoreComponent implements OnInit {
 
   closeTranslate() {
     this.showTranslate = 'hide';
-  }
-
-
-  disableSurvey() {
-    this.settingsDbService.globalSettings.disableSurveyMonkey = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.closeSurvey();
   }
 
 }

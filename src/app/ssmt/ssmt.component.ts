@@ -163,7 +163,6 @@ export class SsmtComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -406,33 +405,6 @@ export class SsmtComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
-  }
-
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
   }
 
   checkTutorials() {
