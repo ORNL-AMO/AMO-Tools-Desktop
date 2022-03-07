@@ -263,7 +263,7 @@ export class SsmtComponent implements OnInit {
   }
 
   updateModificationCO2Savings(ssmt: SSMT) {
-    if (ssmt.co2SavingsData) {
+    if (ssmt.co2SavingsData && ssmt.modifications) {
       ssmt.modifications.forEach(mod => {
         if (!mod.ssmt.co2SavingsData) {
           mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
