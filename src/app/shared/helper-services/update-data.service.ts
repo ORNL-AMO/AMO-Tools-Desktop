@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
@@ -210,6 +210,13 @@ export class UpdateDataService {
             });
         }
 
+        assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateEnergyInputExhaustGasLoss(mod.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
     }
@@ -252,6 +259,17 @@ export class UpdateDataService {
         } 
         fg.ambientAirTemp = ambientAirTemp;
         return fg;
+    }
+
+    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST{
+        if (phast.losses && phast.losses.energyInputExhaustGasLoss && phast.losses.energyInputExhaustGasLoss.length > 0) {
+            phast.losses.energyInputExhaustGasLoss.forEach(input => {
+                if(!input.availableHeat){
+                    input.availableHeat = 100;
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {
