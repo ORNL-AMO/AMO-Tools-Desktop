@@ -94,8 +94,6 @@
 
   <!--Calculators-->
   <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'" [inAssessment]="true"
-      [assessment]="assessment" [settings]="settings"></app-efficiency-improvement>
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
