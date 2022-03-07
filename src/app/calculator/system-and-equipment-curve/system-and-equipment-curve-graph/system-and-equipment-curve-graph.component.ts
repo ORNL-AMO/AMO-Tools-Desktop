@@ -212,6 +212,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
           });
+          chart.on('plotly_hover', hoverData => {
+            this.displayHoverData(hoverData);
+          });
+          chart.on('plotly_unhover', unhoverData => {
+            this.removeHoverData(this.powerPanelChartDiv);
+          });
         });
 
     } else if (!this.expanded && this.systemPanelDiv) {
@@ -233,9 +239,15 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (this.displayPowerChart) {
       let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
       if (this.powerExpanded && this.expandedPowerChartDiv) {
-        //no hover stuff for expanded
-        this.plotlyService.newPlot(this.expandedPowerChartDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config);
-
+        this.plotlyService.newPlot(this.expandedPowerChartDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config)
+          .then(chart => {
+            chart.on('plotly_hover', powerHoverData => {
+              this.displayHoverData(powerHoverData, true);
+            });
+            chart.on('plotly_unhover', unhoverData => {
+              this.removeHoverData(this.systemPanelDiv);
+            });
+          });
       } else if (!this.powerExpanded && this.powerPanelChartDiv) {
         this.plotlyService.newPlot(this.powerPanelChartDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config)
           .then(chart => {
