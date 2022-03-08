@@ -11,11 +11,13 @@ import { HelpPanelService } from './help-panel.service';
 import { FormsModule } from '@angular/forms';
 import { ExploreOpportunitiesModule } from '../explore-opportunities/explore-opportunities.module';
 import { PumpOperationsHelpComponent } from './pump-operations-help/pump-operations-help.component';
+import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ExploreOpportunitiesModule
+    ExploreOpportunitiesModule,
+    Co2HelpTextModule
   ],
   declarations: [
     HelpPanelComponent,

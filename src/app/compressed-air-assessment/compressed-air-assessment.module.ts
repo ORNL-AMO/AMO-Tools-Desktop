@@ -133,6 +133,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -242,7 +243,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     SharedCompressorPipesModule,
     CompressorSummaryTableModule,
     SystemProfileGraphsModule,
-    InventoryPerformanceProfileModule
+    InventoryPerformanceProfileModule,
+    Co2HelpTextModule
   ],
   providers: [
     CompressedAirAssessmentService,

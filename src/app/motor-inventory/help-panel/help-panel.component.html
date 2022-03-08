@@ -46,61 +46,6 @@
             </small>
         </h5>
         <hr class="my-1 hr-spacer">
-        <div class="my-2"
-        *ngIf="focusedField == 'totalEmissionOutputRate' || focusedField == 'eGridSubregion' || focusedField == 'zipcode'">
-        <h5>
-          CO<sub>2</sub> Savings Help
-          <br>
-          <small class="text-muted small">This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
-            It also helps to calculate the emissions fuel use for transportation. Select the emission source type to select the emission from combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
-            Next select the emission source and corresponding fuel type. For calculating emission from purchased electricity from the grid select Electricity under Emission Source Type.
-            Enter the facility’s eGrid region for electricity. The emission output rate can be edited but will return to the default value when the electricity/fuel options are changed. 
-            Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
-          </small>
-          <hr>
-        </h5>
-        <div>
-          <h6>
-            <small class="text-muted">
-              <a href="https://www.epa.gov/sites/production/files/2020-04/documents/ghg-emission-factors-hub.pdf" target="_blank">
-                US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
-            </small>
-          </h6>
-        </div>
-      </div>
-    
-      <div class="my-2" *ngIf="focusedField == 'eGridSubregion'">
-        <h6>
-          eGrid Sub-Region
-          <small class="text-muted">
-            <br>
-            eGrid sub-region where electricity is generated.
-            <hr>
-          </small>
-        </h6>
-        <img src="assets/images/egrid-subregions.png" alt="eGridSubRegions">
-      </div>
-      <div class="my-2" *ngIf="focusedField == 'totalEmissionOutputRate'">
-        <h6>
-          Total Emission Output Rate
-          <small class="text-muted">
-            <br>
-            The total emissions per unit of energy use. By default, this is set by the
-            dropdown options, but is changeable. The default values are only kg of
-            carbon dioxide (not carbon dioxide equivalent).
-            <hr>
-          </small>
-        </h6>
-      </div>
-      <div class="my-2" *ngIf="focusedField == 'zipcode'">
-        <h6>
-          Zip code
-          <small class="text-muted">
-            <br>
-            Enter a vaild zip code to find the eGrid Subregion where electricity is generated.
-            <hr>
-          </small>
-        </h6>
-      </div>
+        <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
     </div>
 </div>
