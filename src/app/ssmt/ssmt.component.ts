@@ -486,7 +486,7 @@ export class SsmtComponent implements OnInit {
   }
 
   closeWelcomeScreen() {
-    // this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.settingsDbService.globalSettings.disableSteamTutorial = true;
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
   }
