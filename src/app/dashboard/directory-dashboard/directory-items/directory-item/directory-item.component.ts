@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../../../shared/models/directory';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../../shared/models/assessment';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';

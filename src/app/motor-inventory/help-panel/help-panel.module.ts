@@ -9,6 +9,7 @@ import { OtherHelpComponent } from './other-help/other-help.component';
 import { PurchaseInformationHelpComponent } from './purchase-information-help/purchase-information-help.component';
 import { TorqueHelpComponent } from './torque-help/torque-help.component';
 import { HelpPanelComponent } from './help-panel.component';
+import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
 
 
 
@@ -25,7 +26,8 @@ import { HelpPanelComponent } from './help-panel.component';
     TorqueHelpComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    Co2HelpTextModule
   ],
   exports: [
     HelpPanelComponent

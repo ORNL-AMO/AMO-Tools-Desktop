@@ -24,7 +24,7 @@ import { CustomSolidLoadChargeMaterialsComponent } from './custom-materials/cust
 import { CustomSolidLiquidFlueGasMaterialsComponent } from './custom-materials/custom-solid-liquid-flue-gas-materials/custom-solid-liquid-flue-gas-materials.component';
 import { CustomAtmosphereSpecificHeatMaterialsComponent } from './custom-materials/custom-atmosphere-specific-heat-materials/custom-atmosphere-specific-heat-materials.component';
 import { CustomWallLossesSurfacesComponent } from './custom-materials/custom-wall-losses-sufaces/custom-wall-losses-surfaces.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from './custom-materials/custom-materials.service';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({

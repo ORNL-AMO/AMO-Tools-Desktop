@@ -10,7 +10,7 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
         
-      <app-operations *ngIf="stepTab == 'operations'" [settings]="settings" [inSetup]="true" [selected]="true"
+      <app-operations *ngIf="stepTab == 'fan-operations'" [settings]="settings" [inSetup]="true" [selected]="true"
       [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat"></app-operations>
 
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
@@ -140,10 +140,6 @@
   </div>
 </div>
 
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'fsat'"
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

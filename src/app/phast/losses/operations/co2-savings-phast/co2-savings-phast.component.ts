@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { coalFuels, EAFOtherFuels, OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -114,13 +114,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     }
   }
 
-  convertOutputRate(outputRate: number) {   
-    let conversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(this.settings.phastRollupFuelUnit)
-    outputRate = outputRate / conversionHelper;
-    outputRate = Number(outputRate.toFixed(2));    
-    return outputRate;
-  }
-
   disableForm() {
     this.form.disable();
   }
@@ -176,7 +169,8 @@ export class Co2SavingsPhastComponent implements OnInit {
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-        outputRate = this.convertOutputRate(outputRate);
+        outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+        outputRate = Number(outputRate.toFixed(2));
     }
     if (shouldSetOutputRate) {
       this.form.patchValue({
@@ -196,7 +190,8 @@ export class Co2SavingsPhastComponent implements OnInit {
     });
     let outputRate: number = this.eafOtherFuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-        outputRate = this.convertOutputRate(outputRate);
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+      outputRate = Number(outputRate.toFixed(2));
     }
 
     if (shouldSetOutputRate) {
@@ -245,7 +240,8 @@ export class Co2SavingsPhastComponent implements OnInit {
     let fuel = _.find(options, (val) => { return fuelType === val.fuelType; });
     let outputRate: number = fuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertOutputRate(outputRate);
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
+      outputRate = Number(outputRate.toFixed(2));
     }
     return outputRate;
   }

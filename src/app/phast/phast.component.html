@@ -94,8 +94,6 @@
 
   <!--Calculators-->
   <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'" [inAssessment]="true"
-      [assessment]="assessment" [settings]="settings"></app-efficiency-improvement>
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
@@ -120,10 +118,6 @@
     </div>
   </div>
 </div>
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
 
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">

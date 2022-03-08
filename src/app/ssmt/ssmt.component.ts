@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SsmtValid } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
@@ -163,7 +163,6 @@ export class SsmtComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -263,7 +262,7 @@ export class SsmtComponent implements OnInit {
   }
 
   updateModificationCO2Savings(ssmt: SSMT) {
-    if (ssmt.co2SavingsData) {
+    if (ssmt.co2SavingsData && ssmt.modifications) {
       ssmt.modifications.forEach(mod => {
         if (!mod.ssmt.co2SavingsData) {
           mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
@@ -406,33 +405,6 @@ export class SsmtComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
-  }
-
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
   }
 
   checkTutorials() {

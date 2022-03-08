@@ -3,7 +3,7 @@ import { Assessment } from '../../../../../shared/models/assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { FsatService } from '../../../../../fsat/fsat.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FsatOutput, FSAT } from '../../../../../shared/models/fans';
 import { AssessmentService } from '../../../../assessment.service';
 

@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab, stepTabs } from './tabs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -244,7 +244,6 @@ export class PhastComponent implements OnInit {
     //after init show disclaimer toasty
     setTimeout(() => {
       //initialize container height after content is rendered
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -516,33 +515,6 @@ export class PhastComponent implements OnInit {
     tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this._phast.systemEfficiency)));
     tmpModification.exploreOpportunities = true;
     this.saveNewMod(tmpModification);
-  }
-
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
   }
 
   addSettings(settings: Settings) {

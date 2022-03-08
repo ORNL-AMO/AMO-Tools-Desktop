@@ -221,7 +221,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.setUserEnteredModificationEmissions(false);
     }
 
-
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
 
     if (subregionEmissions) {

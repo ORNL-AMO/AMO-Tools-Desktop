@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
-import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-cost-pie-chart',
@@ -20,7 +20,7 @@ export class CostPieChartComponent implements OnInit {
   settings: Settings
 
   @ViewChild('costPieChart', { static: false }) costPieChart: ElementRef;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit() {
   }
@@ -45,7 +45,6 @@ export class CostPieChartComponent implements OnInit {
 
   createChart() {
     let valuesAndLabels = this.getLabelsAndValues();
-    Plotly.purge(this.costPieChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
       labels: valuesAndLabels.labels,
@@ -78,13 +77,12 @@ export class CostPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }
 
 
   createPrintChart() {
     let valuesAndLabels = this.getLabelsAndValues();
-    Plotly.purge(this.costPieChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
       labels: valuesAndLabels.labels,
@@ -117,7 +115,7 @@ export class CostPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }
 
 

@@ -27,7 +27,7 @@
   <div *ngIf="!loss.collapse">
     <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form"
       (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
-      [lossIndex]="lossIndex" [availableHeat]="availableHeat" [settings]="settings" (inputError)="setError($event)"
+      [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"
       [inSetup]="inSetup" [isBaseline]="isBaseline"></app-energy-input-exhaust-gas-form>
   </div>
   <div class="d-flex flex-column loss-total" [ngClass]="{'input-error': showError == true}">

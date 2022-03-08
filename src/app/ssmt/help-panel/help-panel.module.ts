@@ -9,12 +9,14 @@ import { HelpPanelComponent } from './help-panel.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions-notes/modify-conditions-notes.component';
 import { FormsModule } from '@angular/forms';
 import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel.module';
+import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    SsmtResultsPanelModule
+    SsmtResultsPanelModule,
+    Co2HelpTextModule
   ],
   declarations: [
     HelpPanelComponent,

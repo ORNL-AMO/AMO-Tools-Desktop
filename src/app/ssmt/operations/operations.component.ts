@@ -10,7 +10,7 @@ import { SsmtService } from '../ssmt.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -126,7 +126,7 @@ export class OperationsComponent implements OnInit {
     this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
     }
     if (shouldSetOutputRate) {
       this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
@@ -138,7 +138,7 @@ export class OperationsComponent implements OnInit {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.co2SavingsData.fuelType === val.fuelType; });
     let outputRate: number = tmpFuel.outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.value(outputRate).from('MMBtu').to('GJ');
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
     }
     this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
     this.save();

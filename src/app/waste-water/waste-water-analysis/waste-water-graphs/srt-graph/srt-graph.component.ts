@@ -1,11 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis.service';
-import * as Plotly from 'plotly.js';
 import { WasteWaterService } from '../../../waste-water.service';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { DataTableVariable } from '../../dataTableVariables';
-
+import { PlotlyService } from 'angular-plotly.js';
+import * as Plotly from 'plotly.js-dist';
 @Component({
   selector: 'app-srt-graph',
   templateUrl: './srt-graph.component.html',
@@ -25,7 +25,8 @@ export class SrtGraphComponent implements OnInit {
 
 
   xAxisHoverSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService, private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
+  constructor(private wasteWaterService: WasteWaterService, private wasteWaterAnalysisService: WasteWaterAnalysisService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     this.xAxisHoverSub = this.wasteWaterAnalysisService.xAxisHover.subscribe(val => {
@@ -87,7 +88,7 @@ export class SrtGraphComponent implements OnInit {
       configOptions.modeBarButtonsToRemove = ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'];
     }
 
-    Plotly.newPlot(this.srtGraphItem.nativeElement, this.analysisGraphItem.traces, layout, configOptions).then(chart => {
+    this.plotlyService.newPlot(this.srtGraphItem.nativeElement, this.analysisGraphItem.traces, layout, configOptions).then(chart => {
       chart.on('plotly_hover', (data) => {
         this.wasteWaterAnalysisService.xAxisHover.next(data.points);
       });

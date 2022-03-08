@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas-compare.service';
-import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
+import { LossesService } from '../../losses.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
@@ -23,8 +24,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @Input()
-  availableHeat: number;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
   @Input()
@@ -34,11 +33,19 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+
+  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
+
+
+  showFlueGasModal: boolean;
+
   combustionTempWarning: string = null;
   heatWarning: string = null;
   firstChange: boolean = true;
   idString: string;
-  constructor(private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService) { }
+  constructor(private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService,
+    private lossesService: LossesService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -47,18 +54,9 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.checkWarnings();
+    this.save();
   }
-
-  checkWarnings() {
-    let tmpExhaustGas: EnergyInputExhaustGasLoss = this.energyInputExhaustGasService.getLossFromForm(this.exhaustGasForm);
-    let tmpWarnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(tmpExhaustGas, this.settings);
-    this.combustionTempWarning = tmpWarnings.combustionTempWarning;
-    this.heatWarning = tmpWarnings.heatWarning;
-    let hasWarning: boolean = ((this.heatWarning !== null) || (this.combustionTempWarning !== null));
-    this.inputError.emit(hasWarning);
-  }
-
+  
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -67,7 +65,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
   save() {
-    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
@@ -79,33 +76,44 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       return false;
     }
   }
-  compareExcessAir(): boolean {
+  compareAvailableHeat(): boolean {
     if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareExcessAir(this.lossIndex);
+      return this.energyInputExhaustGasCompareService.compareAvailableHeat(this.lossIndex);
     } else {
       return false;
     }
   }
 
-  compareCombustionAirTemp(): boolean {
-    if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareCombustionAirTemp(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  compareExhaustGasTemp(): boolean {
-    if (this.canCompare()) {
-      return this.energyInputExhaustGasCompareService.compareExhaustGasTemp(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
   compareTotalHeatInput(): boolean {
     if (this.canCompare()) {
       return this.energyInputExhaustGasCompareService.compareTotalHeatInput(this.lossIndex);
     } else {
       return false;
     }
+  }
+
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.lossesService.modalOpen.next(this.showFlueGasModal);
+    this.flueGasModal.show();
+  }
+
+  hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
+    if (flueGasModalData) {
+      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
+      this.exhaustGasForm.patchValue({
+        availableHeat: flueGasModalData.calculatedAvailableHeat
+      });
+    }
+    this.flueGasModal.hide();
+    this.showFlueGasModal = false;
+    this.lossesService.modalOpen.next(this.showFlueGasModal);
+    this.cd.detectChanges();
+    this.save();
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 }

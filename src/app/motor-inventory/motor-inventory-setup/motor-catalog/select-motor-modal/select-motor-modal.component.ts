@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { SuiteDbMotor } from '../../../../shared/models/materials';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import * as _ from 'lodash';
 
