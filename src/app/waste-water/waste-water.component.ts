@@ -59,6 +59,7 @@ export class WasteWaterComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
@@ -122,6 +123,7 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -137,8 +139,7 @@ export class WasteWaterComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.tutorialToast();
-      // this.disclaimerToast();
+      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -247,13 +248,6 @@ export class WasteWaterComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  tutorialToast(){
-    this.toastData.title = 'Waste Water Tutorial';
-    this.toastData.body = 'Click <a href="assets/waste-water-tutorial.pdf" target="_blank">here</a> to view tutorial on how to use the Waste Water module.';
-    this.showToast = true;
-    this.cd.detectChanges();
-  }
-
   disableDisclaimer() {
     this.settingsDbService.globalSettings.disableDisclaimer = true;
     this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
@@ -289,5 +283,19 @@ export class WasteWaterComponent implements OnInit {
     this.assessment.wasteWater = this.convertWasteWaterService.convertWasteWater(this.assessment.wasteWater, this.oldSettings, currentSettings);
     this.assessment.wasteWater.existingDataUnits = currentSettings.unitsOfMeasure;
     this.saveWasteWater(this.assessment.wasteWater);
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableWasteWaterTutorial) {
+      this.showWelcomeScreen = true;
+      this.wasteWaterService.isModalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.wasteWaterService.isModalOpen.next(false);
   }
 }
