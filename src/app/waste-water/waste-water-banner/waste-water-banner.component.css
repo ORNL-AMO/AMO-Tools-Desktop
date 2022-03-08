@@ -96,3 +96,7 @@
 .br-color-white{
     background: #fff;
 }
+
+.banner .home-nav-item a{
+    color: white;
+}
