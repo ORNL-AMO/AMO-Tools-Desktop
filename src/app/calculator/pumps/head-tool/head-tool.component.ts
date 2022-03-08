@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -36,7 +36,7 @@ export class HeadToolComponent implements OnInit {
 
   headerHeight: number;
 
-  results: any = {
+  results: HeadToolResults = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
     differentialVelocityHead: 0.0,
@@ -55,7 +55,8 @@ export class HeadToolComponent implements OnInit {
   canSave: boolean = false;
   isSavedCalc: boolean = false;
   calculator: Calculator;
-  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, 
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -199,6 +200,7 @@ export class HeadToolComponent implements OnInit {
     if (this.results.pumpHead > 0 && this.inAssessment) {
       this.canSave = true;
     }
+    this.cd.detectChanges();
   }
 
 
@@ -226,6 +228,7 @@ export class HeadToolComponent implements OnInit {
     if (this.results.pumpHead > 0 && this.inAssessment) {
       this.canSave = true;
     }
+    this.cd.detectChanges();
   }
 
   setFormView(str: string) {
@@ -247,4 +250,14 @@ export class HeadToolComponent implements OnInit {
     this.setFormView('Suction gauge elevation');
     this.calculateHeadToolSuctionTank();
   }
+}
+
+
+export interface HeadToolResults {
+  differentialElevationHead: number,
+  differentialPressureHead: number,
+  differentialVelocityHead: number,
+  estimatedSuctionFrictionHead: number,
+  estimatedDischargeFrictionHead: number,
+  pumpHead: number
 }

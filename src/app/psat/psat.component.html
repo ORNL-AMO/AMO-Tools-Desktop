@@ -15,11 +15,11 @@
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}">
       <app-pump-operations *ngIf="stepTab == 'operations'" [(psat)]="_psat" (saved)="save()" [selected]="true"
-      [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
+        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings($event)" (updateAssessment)="savePsat($event)" (openModal)="modalOpen()"
         (closeModal)="modalClose()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-        <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
         [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
       <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
@@ -28,8 +28,9 @@
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex" [currentTab]="stepTab" [inSetup]="true"
-        [containerHeight]="containerHeight" [showResults]="stepTab == 'field-data'"></app-help-panel>
+      <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
+        [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
+        [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>
   <!--End system-setup-->
@@ -85,16 +86,16 @@
             </select>
           </div>
         </div>
-          <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
-          </div>
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+            [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+            [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+            [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
       </div>
-  </nav>
+    </nav>
     <div class="sankey-padding w-100">
       <app-psat-sankey [psat]="psat1.psat" [labelStyle]="sankeyLabelStyle" [appBackground]="true" [settings]="settings"
         [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
@@ -106,7 +107,7 @@
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
-        (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
+        [containerHeight]="containerHeight"></app-psat-report>
     </div>
   </div>
   <!--end report-->
@@ -170,4 +171,4 @@
 <!--end create modified condition modal-->
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

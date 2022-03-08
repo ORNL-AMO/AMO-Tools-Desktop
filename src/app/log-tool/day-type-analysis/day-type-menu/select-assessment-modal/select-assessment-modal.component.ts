@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';

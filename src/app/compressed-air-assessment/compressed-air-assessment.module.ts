@@ -37,7 +37,7 @@ import { UnloadPointComponent } from './inventory/performance-points/unload-poin
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
@@ -133,6 +133,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -242,7 +243,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     SharedCompressorPipesModule,
     CompressorSummaryTableModule,
     SystemProfileGraphsModule,
-    InventoryPerformanceProfileModule
+    InventoryPerformanceProfileModule,
+    Co2HelpTextModule
   ],
   providers: [
     CompressedAirAssessmentService,

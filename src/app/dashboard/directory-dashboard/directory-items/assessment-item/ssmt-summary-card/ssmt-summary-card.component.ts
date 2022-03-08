@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 import { SSMTInputs, SSMT } from '../../../../../shared/models/steam/ssmt';

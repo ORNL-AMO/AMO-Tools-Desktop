@@ -5,7 +5,7 @@ import { OpportunityCardsService, OpportunityCardData } from './opportunity-card
 import { CalculatorsService } from '../../calculators/calculators.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './sort-cards-by.pipe';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { MockPhastSettings, MockPhast } from '../../../examples/mockPhast';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';

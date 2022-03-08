@@ -8,7 +8,7 @@ import { OperationsDataService } from './operations-data.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PercentLoadEstimationService } from '../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service';
 
 @Component({

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitte
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService, InletVelocityPressureInputs } from '../fsat.service';

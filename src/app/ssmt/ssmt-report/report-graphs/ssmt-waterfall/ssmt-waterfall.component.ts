@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SSMT, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { SSMTLosses } from '../../../../shared/models/steam/steam-outputs';
-import * as Plotly from 'plotly.js';
 import { ReportGraphsService } from '../report-graphs.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-ssmt-waterfall',
@@ -29,7 +29,8 @@ export class SsmtWaterfallComponent implements OnInit {
 
   @ViewChild('ssmtWaterfall', { static: false }) ssmtWaterfall: ElementRef;
 
-  constructor(private reportGraphsService: ReportGraphsService) { }
+  constructor(private reportGraphsService: ReportGraphsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -56,7 +57,6 @@ export class SsmtWaterfallComponent implements OnInit {
   }
 
   createChart() {
-    Plotly.purge(this.ssmtWaterfall.nativeElement);
     let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = this.getSsmtWatefallData(this.ssmt);
     let stackTraces = {
       x: labelsAndValues.map(val => { return val.stackTraceValue }),
@@ -115,7 +115,7 @@ export class SsmtWaterfallComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.react(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
   }
 
   getSsmtWatefallData(ssmt: SSMT): Array<{ value: number, label: string, stackTraceValue: number, color: string }> {
@@ -130,7 +130,6 @@ export class SsmtWaterfallComponent implements OnInit {
   }
 
   createPrintChart() {
-    Plotly.purge(this.ssmtWaterfall.nativeElement);
     let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = this.getSsmtWatefallData(this.ssmt);
     let stackTraces = {
       x: labelsAndValues.map(val => { return val.stackTraceValue }),
@@ -189,7 +188,7 @@ export class SsmtWaterfallComponent implements OnInit {
       displayModeBar: false
     };
 
-    Plotly.react(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
   }
 
 }

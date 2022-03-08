@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab, stepTabs } from './tabs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';

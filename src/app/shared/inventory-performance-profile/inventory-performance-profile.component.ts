@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventoryService } from '../../compressed-air-assessment/inventory/inventory.service';
-import * as Plotly from 'plotly.js';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../../compressed-air-assessment/compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service';
@@ -9,6 +8,7 @@ import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } 
 import { ExploreOpportunitiesService } from '../../compressed-air-assessment/explore-opportunities/explore-opportunities.service';
 import { TraceData } from '../models/plotting';
 import { Settings } from '../models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-inventory-performance-profile',
@@ -72,7 +72,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -374,7 +375,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      Plotly.newPlot(this.performanceProfileChart.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.performanceProfileChart.nativeElement, traceData, layout, config);
     }
   }
 
