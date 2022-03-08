@@ -44,8 +44,6 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   updateError: boolean = false;
 
-  showSurvey: string = 'hide';
-  destroySurvey: boolean = false;
   info: any;
   updateAvailableSubscription: Subscription;
   showTranslateModalSub: Subscription;
@@ -119,17 +117,6 @@ export class CoreComponent implements OnInit {
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      if (this.settingsDbService.globalSettings.disableSurveyMonkey != true) {
-        this.showSurvey = 'show';
-      } else {
-        this.destroySurvey = true;
-      }
-    }, 3500);
-  }
-
 
   initData() {
     this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
