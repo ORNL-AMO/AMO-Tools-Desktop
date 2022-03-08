@@ -170,9 +170,5 @@
 </div>
 <!--end create modified condition modal-->
 
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
-
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
   (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
