@@ -1,0 +1,7 @@
+.book-item{
+    background-color: #F39C12;
+}
+
+.home-nav-item.book-item a{
+    color: black !important;
+}
