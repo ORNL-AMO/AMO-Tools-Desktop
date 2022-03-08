@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { GasLoadChargeMaterial } from '../../../shared/models/materials';
 import * as _ from 'lodash';

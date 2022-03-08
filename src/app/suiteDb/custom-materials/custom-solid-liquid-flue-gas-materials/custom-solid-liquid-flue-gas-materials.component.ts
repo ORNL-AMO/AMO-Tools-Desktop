@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';

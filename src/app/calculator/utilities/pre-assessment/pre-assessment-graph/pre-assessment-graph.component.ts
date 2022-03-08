@@ -3,8 +3,8 @@ import { PreAssessment } from '../pre-assessment';
 import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
-import * as Plotly from 'plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -30,7 +30,8 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @ViewChild('preAssessmentPieChart', { static: false }) preAssessmentPieChart: ElementRef;
 
   showPieChart: boolean;
-  constructor(private preAssessmentService: PreAssessmentService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private convertUnitsService: ConvertUnitsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     if (!this.resultType) {
@@ -55,7 +56,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
   drawPlot() {
     let valuesAndLabels = this.getValuesAndLabels();
-    Plotly.purge(this.preAssessmentPieChart.nativeElement);
+    // Plotly.purge(this.preAssessmentPieChart.nativeElement);
     if (valuesAndLabels.length != 0) {
       let values: Array<number> = new Array();
       let textTemplate: string;
@@ -116,7 +117,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
     }
   }
 

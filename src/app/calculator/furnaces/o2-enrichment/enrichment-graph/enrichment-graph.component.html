@@ -9,7 +9,7 @@
       </div>
     </div>
     <div *ngIf="expanded" class="w-100 p-3">
-      <div class="w-100" id="expandedChartDiv"></div>
+      <div class="w-100" id="expandedChartDiv" #expandedChartDiv></div>
       <div class="col-md-12">
         <form class="w-75 mx-auto">
           <div class="form-group">
@@ -26,7 +26,7 @@
   </div>
   
   <div class="w-100 tab-panel-background p-2">
-    <div class="w-100" id="tabPanelDiv"></div>
+    <div class="w-100" id="tabPanelDiv" #panelChartDiv></div>
     <div class="col-md-12">
       <form class="w-75 mx-auto">
         <div class="form-group">

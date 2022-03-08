@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleCh
 import { Settings } from '../../../../shared/models/settings';
 
 import { SimpleChart } from '../../../../shared/models/plotting';
-import * as Plotly from 'plotly.js';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 
 
@@ -27,10 +27,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   toggleReset: boolean;
 
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
+
 
   enthalpyChart: SimpleChart;
   defaultEnthalpyUnit: string = 'kJkg';
@@ -56,22 +55,26 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   }
 
   // Use shared SaturatedPropertiesService to supply isotherm, isobar, and dome objects/rendering
-  constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
-    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
-  
+  constructor(private saturatedPropertiesService: SaturatedPropertiesService,
+    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService,
+    private plotlyService: PlotlyService) { }
+
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.triggerInitialResize();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.steamPropertiesOutput && !changes.toggleReset && !changes.steamPropertiesOutput.firstChange) {
-        if (this.validPlot && this.steamPropertiesOutput !== undefined) {
-          this.updateChart();
-        }
+      if (this.validPlot && this.steamPropertiesOutput !== undefined) {
+        this.updateChart();
+      }
     } else if (changes.toggleReset && !changes.toggleReset.firstChange) {
       if (this.enthalpyChart.existingPoint) {
         this.removePointTrace();
-      } 
+      }
     }
     else {
       this.initRenderChart();
@@ -88,7 +91,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   save() {
     this.saturatedPropertiesService.enthalpyChart.next(this.enthalpyChart);
   }
-  
+
   // Force specified conversions to avoid rendering problems
   initConvertPressureUnit() {
     if (this.defaultPressureUnit == this.settings.steamPressureMeasurement) {
@@ -97,11 +100,10 @@ export class SteamPropertiesPhChartComponent implements OnInit {
       this.convertPressureUnit = 'psia';
     } else if (this.settings.steamPressureMeasurement.includes('Pa') || this.settings.steamPressureMeasurement.includes('bar')) {
       this.convertPressureUnit = 'bara';
-    } 
+    }
   }
 
   initRenderChart() {
-    Plotly.purge(this.currentChartId);
     this.initChartSetup();
     this.initIsothermTraces();
     this.initVaporQualityTraces();
@@ -111,7 +113,11 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     }
 
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
-    Plotly.newPlot(this.currentChartId, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+    }
     this.save();
   }
 
@@ -120,7 +126,11 @@ export class SteamPropertiesPhChartComponent implements OnInit {
       this.plotPoint(this.steamPropertiesOutput.pressure, this.steamPropertiesOutput.specificEnthalpy);
     }
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
-    Plotly.update(this.currentChartId, this.enthalpyChart.data, chartLayout);
+    if(this.expanded){
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+    }else{
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -130,10 +140,10 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     this.enthalpyChart = this.saturatedPropertiesService.enthalpyChart.getValue();
     this.saturatedPropertiesService.setEnthalpyChartConfig(this.settings);
   }
-  
+
   initIsothermTraces() {
     this.checkConvertIsotherms();
-    let isotherms: Array<IsothermCoordinates> = this.saturatedPropertiesService.isotherms.getValue();    
+    let isotherms: Array<IsothermCoordinates> = this.saturatedPropertiesService.isotherms.getValue();
     isotherms.forEach((line: IsothermCoordinates) => {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
@@ -145,7 +155,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   }
 
   initVaporQualityTraces() {
-    let vaporQualities: Array<IsothermCoordinates> = this.saturatedPropertiesService.vaporQualities.getValue();    
+    let vaporQualities: Array<IsothermCoordinates> = this.saturatedPropertiesService.vaporQualities.getValue();
     vaporQualities.forEach((line: IsothermCoordinates) => {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
@@ -156,12 +166,12 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   }
 
   checkConvertIsotherms() {
-    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined 
+    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined
       && this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
       this.saturatedPropertiesConversionService.convertIsothermEnthalpy(this.settings, this.defaultEnthalpyUnit);
       this.saturatedPropertiesConversionService.convertVaporQualities(this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
     }
-    if (this.settings.steamPressureMeasurement !== undefined 
+    if (this.settings.steamPressureMeasurement !== undefined
       && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
       this.saturatedPropertiesConversionService.convertIsothermPressure(this.settings, this.defaultPressureUnit, this.convertPressureUnit);
       this.saturatedPropertiesConversionService.convertVaporQualities(this.defaultPressureUnit, this.convertPressureUnit, true);
@@ -184,7 +194,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated"
     domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
-    
+
     this.enthalpyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
 
@@ -211,7 +221,11 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     this.enthalpyChart.data.splice(this.enthalpyChart.data.length - 1, 1);
     this.enthalpyChart.existingPoint = false;
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
-    Plotly.update(this.currentChartId, this.enthalpyChart.data, chartLayout);
+    if(this.expanded){
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+    }else{
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+    }
     this.save();
   }
 
@@ -272,36 +286,23 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     }
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
       this.initRenderChart();
-    }
+    }, 200);
   }
 
-    expandChart() {
-      this.expanded = true;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
-  
-    contractChart() {
-      this.expanded = false;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 200);
+  }
 
   toggleGrid() {
     let showingGridX: boolean = this.enthalpyChart.layout.xaxis.showgrid;

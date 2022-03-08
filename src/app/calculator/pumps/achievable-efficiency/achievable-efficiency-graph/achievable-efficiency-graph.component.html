@@ -9,12 +9,12 @@
     </div>
   </div>
   <div *ngIf="expanded" class="w-100 p-3">
-    <div id="expandedChartDiv"></div>
+    <div id="expandedChartDiv" #expandedChartDiv></div>
   </div>
 </div>
 
 <div class="w-100 p-2 tab-panel-background">
-  <div class="w-100" id="tabPanelDiv"></div>
+  <div class="w-100" id="tabPanelDiv" #panelChartDiv></div>
   <div class="col-md-12">
     <div class="graph-btn-container">
       <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -50,7 +50,7 @@
       <td class="text-center">{{point.x}}</td>
       <td class="text-center">{{point.y}}</td>
       <td class='delete-row text-center'>
-        <a *ngIf="!validEfficiency || index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
+        <a *ngIf="!validEfficiency || index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
           Delete
         </a>
       </td>

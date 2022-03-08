@@ -12,7 +12,6 @@ import { ContactPageComponent } from '../dashboard/contact-page/contact-page.com
 import { AcknowledgmentsPageComponent } from '../dashboard/acknowledgments-page/acknowledgments-page.component';
 import { AssessmentSettingsComponent } from '../settings/assessment-settings/assessment-settings.component';
 import { CustomMaterialsComponent } from '../suiteDb/custom-materials/custom-materials.component';
-import { calculatorRoutes } from '../calculator/calculator-routing/calculators.routing';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/directory-dashboard.component';
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';

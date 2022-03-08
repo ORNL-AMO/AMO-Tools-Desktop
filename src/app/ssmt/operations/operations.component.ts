@@ -10,7 +10,7 @@ import { SsmtService } from '../ssmt.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 
 @Component({

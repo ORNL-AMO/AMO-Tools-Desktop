@@ -37,7 +37,7 @@ import { UnloadPointComponent } from './inventory/performance-points/unload-poin
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';

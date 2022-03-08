@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-boiler-efficiency-modal',

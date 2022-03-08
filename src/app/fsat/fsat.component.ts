@@ -4,7 +4,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';

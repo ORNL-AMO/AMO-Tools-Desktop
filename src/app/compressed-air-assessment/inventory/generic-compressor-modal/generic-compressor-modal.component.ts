@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { GenericCompressorDbService } from '../../generic-compressor-db.service';

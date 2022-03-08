@@ -10,7 +10,7 @@ import { AirHeatingHelpComponent } from './air-heating-help/air-heating-help.com
 import { AirHeatingService } from './air-heating.service';
 import { AirHeatingFormService } from './air-heating-form.service';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 
 @NgModule({

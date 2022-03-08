@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, SimpleChanges } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-utility-bar-chart',
@@ -21,7 +21,7 @@ export class UtilityBarChartComponent implements OnInit {
 
   @ViewChild('utilityBarChart', { static: false }) utilityBarChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -78,7 +78,7 @@ export class UtilityBarChartComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
   }
 
   createPrintBarChart() {
@@ -113,7 +113,7 @@ export class UtilityBarChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
   }
 
   createRollupPrintBarChart() {
@@ -148,7 +148,7 @@ export class UtilityBarChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
   }
 
   getDataObject(){

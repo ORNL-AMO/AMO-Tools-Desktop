@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';

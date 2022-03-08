@@ -156,7 +156,7 @@ export class VisualizeMenuService {
   }
 
   setBarHistogramData(selectedGraphObj: GraphObj) {
-    if (selectedGraphObj.useStandardDeviation == true) {
+    if (selectedGraphObj.useStandardDeviation == true && selectedGraphObj.bins.length != 0) {
       //get std deviation
       let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins, selectedGraphObj.bins[0].min);
       //set data
