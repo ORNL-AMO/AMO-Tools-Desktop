@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas-compare.service';
-import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { LossesService } from '../../losses.service';
 

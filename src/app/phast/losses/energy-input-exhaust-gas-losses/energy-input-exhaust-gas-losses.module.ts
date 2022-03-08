@@ -7,7 +7,7 @@ import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { FlueGasModule } from '../../../calculator/furnaces/flue-gas/flue-gas.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 @NgModule({
   imports: [
     CommonModule,
