@@ -6,11 +6,15 @@ import { EnergyInputExhaustGasLossesComponent } from './energy-input-exhaust-gas
 import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { FlueGasModule } from '../../../calculator/furnaces/flue-gas/flue-gas.module';
+import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SharedPipesModule
+    SharedPipesModule,
+    FlueGasModule,
+    ModalModule,
   ],
   declarations: [EnergyInputExhaustGasFormComponent, EnergyInputExhaustGasLossesComponent],
   providers: [EnergyInputExhaustGasCompareService, EnergyInputExhaustGasService],
