@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Settings } from '../models/settings';
 
 @Component({
   selector: 'app-co2-help-text',
