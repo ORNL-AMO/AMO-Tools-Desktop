@@ -43,6 +43,7 @@ import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.c
 import { LogToolDbService } from './log-tool-db.service';
 import { SelectAssessmentModalComponent } from './day-type-analysis/day-type-menu/select-assessment-modal/select-assessment-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { ExportModalComponent } from './export-modal/export-modal.component';
     SelectedDataTableComponent,
     BinDataComponent,
     SelectAssessmentModalComponent,
-    ExportModalComponent
+    ExportModalComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CommonModule,

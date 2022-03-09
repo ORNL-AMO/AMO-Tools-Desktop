@@ -16,7 +16,7 @@
     color: white;
 }
 
-.banner .nav-link:not(.disabled):not(.active){
+.banner .nav-link:not(.disabled):not(.active), .home-nav-item a.user-manual{
     color: white;
 }
 
