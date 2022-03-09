@@ -117,6 +117,19 @@
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <!--Compressed air-->
+  <div class="form-group">
+    <label for="disableCompressedAirTutorial">Compressed Air Tutorial</label>
+    <div class="d-flex justify-content-center" (click)="toggleCompressedAir()">
+      <span class="pr-2">Hide</span>
+      <span class="switch">
+        <input name="disableCompressedAirTutorial" id="disableCompressedAirTutorial"
+          [(ngModel)]="!settings.disableCompressedAirTutorial" type="checkbox">
+        <span class="slider round"></span>
+      </span>
+      <span class="pl-2">Show</span>
+    </div>
+  </div>
   <!--All-->
 
   <div class="form-group">

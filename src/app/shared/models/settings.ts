@@ -58,6 +58,7 @@ export interface Settings {
     disableMotorInventoryTutorial?: boolean,
     disableTreasureHuntTutorial?: boolean,
     disableDataExplorerTutorial?: boolean,
+    disableCompressedAirTutorial?: boolean,
 
     disableSurveyMonkey?: boolean,
     disableDisclaimer?: boolean,

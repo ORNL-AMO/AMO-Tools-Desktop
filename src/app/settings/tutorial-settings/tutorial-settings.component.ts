@@ -29,7 +29,9 @@ export class TutorialSettingsComponent implements OnInit {
       this.settings.disableWasteWaterTutorial &&
       this.settings.disableSteamTutorial &&
       this.settings.disableMotorInventoryTutorial &&
-      this.settings.disableTreasureHuntTutorial
+      this.settings.disableTreasureHuntTutorial && 
+      this.settings.disableDataExplorerTutorial && 
+      this.settings.disableCompressedAirTutorial
     );
   }
 
@@ -37,7 +39,7 @@ export class TutorialSettingsComponent implements OnInit {
     this.disableAllTutorials = !this.disableAllTutorials;
     this.settings.disableTutorial = this.disableAllTutorials;
     this.settings.disableDashboardTutorial = this.disableAllTutorials;
-    this.settings.disablePsatTutorial = !this.disableAllTutorials;
+    this.settings.disablePsatTutorial = this.disableAllTutorials;
     this.settings.disableFansTutorial = this.disableAllTutorials;
     this.settings.disablePhastTutorial = this.disableAllTutorials;
     this.settings.disableWasteWaterTutorial = this.disableAllTutorials;
@@ -45,6 +47,7 @@ export class TutorialSettingsComponent implements OnInit {
     this.settings.disableMotorInventoryTutorial = this.disableAllTutorials;
     this.settings.disableTreasureHuntTutorial = this.disableAllTutorials;
     this.settings.disableDataExplorerTutorial = this.disableAllTutorials;
+    this.settings.disableCompressedAirTutorial = this.disableAllTutorials;
     this.saveTutorialChanges.emit(true);
   }
 
@@ -103,6 +106,12 @@ export class TutorialSettingsComponent implements OnInit {
 
   toggleDataExplorer() {
     this.settings.disableDataExplorerTutorial = !this.settings.disableDataExplorerTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+
+  toggleCompressedAir(){
+    this.settings.disableCompressedAirTutorial = !this.settings.disableCompressedAirTutorial;
     this.checkDisableAll();
     this.saveTutorialChanges.emit(true);
   }

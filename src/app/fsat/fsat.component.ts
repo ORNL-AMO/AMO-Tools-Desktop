@@ -480,7 +480,7 @@ export class FsatComponent implements OnInit {
   }
 
   closeWelcomeScreen() {
-    this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.settingsDbService.globalSettings.disableFansTutorial = true;
     this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.fsatService.modalOpen.next(false);

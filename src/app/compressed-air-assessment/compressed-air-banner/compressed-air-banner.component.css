@@ -39,10 +39,9 @@
 
 
 
-/* .home-nav-item{
-    color: black;
-    border-color: black !important;
-} */
+.home-nav-item a.user-manual{
+    color: white;
+}
 
 .nav-link{
     padding: 6px;
