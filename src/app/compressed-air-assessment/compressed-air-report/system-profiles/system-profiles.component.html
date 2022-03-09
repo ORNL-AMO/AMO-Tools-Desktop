@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <app-profile-summary-table [profileSummary]="selectedProfileSummary"
+    <app-profile-summary-table [printView]="printView"  [profileSummary]="selectedProfileSummary"
         [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
         [settings]="settings">
     </app-profile-summary-table>
