@@ -61,8 +61,13 @@ export class SsmtService {
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (ssmtValid.isValid) {
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
-      outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);
-      return { inputData: setupInputData, outputData: outputData };
+      if(!outputData){
+        let outputData: SSMTOutput = this.getEmptyResults();
+        return { inputData: setupInputData, outputData: outputData };
+      } else {
+        outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);
+        return { inputData: setupInputData, outputData: outputData };
+      }
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
       return { inputData: setupInputData, outputData: outputData };
@@ -73,8 +78,9 @@ export class SsmtService {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let baselineResultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
     const ssmtValid: SsmtValid = this.checkValid(ssmtCopy, settings);
-    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
-    if (ssmtValid.isValid) {
+    let setupInputData: SSMTInputs;
+    if (ssmtValid.isValid && baselineResultsCpy.operationsOutput !== undefined) {
+      setupInputData = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
         if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
           ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;
@@ -84,15 +90,20 @@ export class SsmtService {
         }
       }
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
-      if (ssmtCopy.headerInput.numberOfHeaders > 1) {
-        this.iterationCount = 0;
-        let updatedResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
-        setupInputData = updatedResults.inputData;
-        modificationOutputData = updatedResults.outputData;
+      if(!modificationOutputData){
+        let outputData: SSMTOutput = this.getEmptyResults();
+        return { inputData: setupInputData, outputData: outputData };
+      } else {
+        if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+          this.iterationCount = 0;
+          let updatedResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
+          setupInputData = updatedResults.inputData;
+          modificationOutputData = updatedResults.outputData;
+        }
+        modificationOutputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, modificationOutputData, settings);
+        modificationOutputData.co2EmissionsOutput.emissionsSavings = baselineResults.co2EmissionsOutput.totalEmissionOutput - modificationOutputData.co2EmissionsOutput.totalEmissionOutput;
+        return { inputData: setupInputData, outputData: modificationOutputData };       
       }
-      modificationOutputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, modificationOutputData, settings);
-      modificationOutputData.co2EmissionsOutput.emissionsSavings = baselineResults.co2EmissionsOutput.totalEmissionOutput - modificationOutputData.co2EmissionsOutput.totalEmissionOutput;
-      return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
       return { inputData: setupInputData, outputData: outputData };
