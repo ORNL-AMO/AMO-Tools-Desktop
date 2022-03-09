@@ -53,6 +53,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   modalOpenSub: Subscription;
   assessmentTab: string;
   assessmentTabSub: Subscription;
+  showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -122,7 +123,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -269,5 +271,19 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, this.oldSettings, currentSettings);
     this.assessment.compressedAirAssessment.existingDataUnits = currentSettings.unitsOfMeasure;
     this.save(this.assessment.compressedAirAssessment);
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableCompressedAirTutorial) {
+      this.showWelcomeScreen = true;
+      this.compressedAirAssessmentService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableCompressedAirTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.compressedAirAssessmentService.modalOpen.next(false);
   }
 }

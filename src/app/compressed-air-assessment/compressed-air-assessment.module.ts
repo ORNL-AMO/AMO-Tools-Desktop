@@ -133,6 +133,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
 import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
 import { InventoryPerformanceProfileModule } from '../shared/inventory-performance-profile/inventory-performance-profile.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -211,7 +212,8 @@ import { InventoryPerformanceProfileModule } from '../shared/inventory-performan
     AdjustCascadingSetPointsHelpComponent,
     AssessmentNotesComponent,
     ImproveEndUseEfficiencyItemComponent,
-    CompressorSummaryComponent
+    CompressorSummaryComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CommonModule,
