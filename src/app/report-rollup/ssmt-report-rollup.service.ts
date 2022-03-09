@@ -30,7 +30,9 @@ export class SsmtReportRollupService {
       fuelEnergy: 0,
       electricityEnergy: 0,
       carbonEmissions: 0,
-      carbonSavings: 0
+      carbonSavings: 0,
+      // totalBaselineCost: 0,
+      // totalModificationCost: 0
     }
   }
 
@@ -114,6 +116,8 @@ export class SsmtReportRollupService {
     let sumEnergySavings = 0;
     let sumCo2Emissions = 0;
     let sumCo2Savings = 0;
+    let modificationTotalCost = 0;
+    let baselineTotalCost = 0;
     this.selectedSsmtResults.forEach(result => {
       //need to convert fuel usage from result setting to common unit
       let resultsCopy: SsmtResultsData = JSON.parse(JSON.stringify(result));
@@ -122,13 +126,18 @@ export class SsmtReportRollupService {
 
       let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
       sumSavings += diffCost;
-      sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
+      debugger;
+      console.log(result.modificationResults.operationsOutput.totalOperatingCost);
+      baselineTotalCost = result.baselineResults.operationsOutput.boilerFuelCost + result.baselineResults.operationsOutput.makeupWaterCost;
+      modificationTotalCost = result.modificationResults.operationsOutput.boilerFuelCost + result.modificationResults.operationsOutput.makeupWaterCost;
+      sumCost += baselineTotalCost - (baselineTotalCost - modificationTotalCost);
       let diffEnergy = resultsCopy.baselineResults.operationsOutput.boilerFuelUsage - resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
       sumEnergySavings += diffEnergy;
       sumEnergy += resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
       let diffCO2 = resultsCopy.baselineResults.co2EmissionsOutput.totalEmissionOutput - resultsCopy.modificationResults.co2EmissionsOutput.totalEmissionOutput;
       sumCo2Savings += diffCO2;
       sumCo2Emissions += resultsCopy.modificationResults.co2EmissionsOutput.totalEmissionOutput;
+
     });
     this.totals = {
       totalCost: sumCost,
@@ -138,7 +147,9 @@ export class SsmtReportRollupService {
       fuelEnergy: sumEnergy + sumEnergySavings,
       electricityEnergy: 0,
       carbonEmissions: sumCo2Emissions,
-      carbonSavings: sumCo2Savings
+      carbonSavings: sumCo2Savings,
+      // totalBaselineCost: baselineTotalCost,
+      // totalModificationCost: modificationTotalCost
     }
   }
 
