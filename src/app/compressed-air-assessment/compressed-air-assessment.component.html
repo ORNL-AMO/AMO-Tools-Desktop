@@ -40,8 +40,7 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
     class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
-      (exploreOppsToast)="hideToast($event)">
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
   </div>
   <!--diagram-->

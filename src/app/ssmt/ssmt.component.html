@@ -33,8 +33,8 @@
       [containerHeight]="containerHeight"></app-modify-conditions>
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [ssmt]="_ssmt" [assessment]="assessment"
       [settings]="settings" (emitSave)="saveSsmt($event)" [containerHeight]="containerHeight"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"
-      (exploreOppsToast)="hideToast($event)"></app-explore-opportunities>
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
+    </app-explore-opportunities>
   </div>
 
   <!--report-->

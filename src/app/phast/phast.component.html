@@ -46,8 +46,8 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
-        [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex"
-        (exploreOppsToast)="hideToast($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities>
+        [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
+      </app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions' && hasEgridDataInit">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings"
