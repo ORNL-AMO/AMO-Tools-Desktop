@@ -295,7 +295,7 @@ export class HeaderService {
 
         if (ssmt.boilerInput.blowdownFlashed == false && pressureLevel === 'highPressure') {
           headerType = 'high';
-          let hasHeaderInputs: boolean = ssmt.headerInput.highPressureHeader !== undefined && ssmt.headerInput.highPressure !== undefined && ssmt.headerInput.mediumPressureHeader !== undefined && ssmt.headerInput.mediumPressure !== undefined && ssmt.headerInput.lowPressureHeader !== undefined && ssmt.headerInput.lowPressure !== undefined;
+          let hasHeaderInputs: boolean = ssmt.headerInput.highPressureHeader !== undefined && ssmt.headerInput.highPressure !== undefined && ssmt.headerInput.lowPressureHeader !== undefined && ssmt.headerInput.lowPressure !== undefined;
           if (hasHeaderInputs) {
           if (ssmt.headerInput.highPressureHeader.pressure) {
             pressure = ssmt.headerInput.highPressureHeader.pressure;
