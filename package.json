@@ -65,6 +65,10 @@
     "directories": {
       "output": "../output/"
     },
+    "files": [
+      "!**/.angular",
+      "!.travis.yml"
+    ],
     "win": {
       "target": "nsis",
       "icon": "src/assets/icons/win/icon.ico"
