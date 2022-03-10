@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { LogToolDbService } from './log-tool-db.service';
 import { LogToolService } from './log-tool.service';
 
@@ -21,8 +23,11 @@ export class LogToolComponent implements OnInit {
 
   openExportDataSub: Subscription;
   openExportData: boolean;
-
-  constructor(private activatedRoute: ActivatedRoute, private logToolDbService: LogToolDbService, private logToolService: LogToolService) { }
+  showWelcomeScreen: boolean = false;
+  constructor(private activatedRoute: ActivatedRoute, 
+    private logToolDbService: LogToolDbService, private logToolService: LogToolService,
+    private settingsDbService: SettingsDbService,
+    private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.logToolDbService.initLogToolData();
@@ -33,7 +38,7 @@ export class LogToolComponent implements OnInit {
     this.openExportDataSub = this.logToolService.openExportData.subscribe(val => {
       this.openExportData = val;
     });
-
+    this.checkShowWelcomeScreen();
   }
 
   ngAfterViewInit() {
@@ -54,6 +59,20 @@ export class LogToolComponent implements OnInit {
 
   ngOnDestroy(){
     this.openExportDataSub.unsubscribe();
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableDataExplorerTutorial) {
+      this.showWelcomeScreen = true;
+      this.logToolService.isModalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableDataExplorerTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.logToolService.isModalOpen.next(false);
   }
   
 }
