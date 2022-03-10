@@ -41,7 +41,7 @@ export class SsmtSummaryComponent implements OnInit {
         let totals: ReportUtilityTotal = this.ssmtReportRollupService.totals;
         this.ssmtSavingPotential = totals.savingPotential;
         this.energySavingsPotential = totals.energySavingsPotential;
-        this.totalCost = totals.totalCost;
+        this.totalCost = totals.steamTotalModificationCost;
         this.totalEnergy = totals.totalEnergy;
       }
     });

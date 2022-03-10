@@ -217,6 +217,9 @@ export class ReportSummaryGraphsService {
     let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${currency !== '$'? 'k': ''}`;
     let baselineCost: number = totals.totalCost + totals.savingPotential;
     let modCost: number = totals.totalCost;
+    if (totals.steamTotalModificationCost !== undefined) {
+      modCost = totals.steamTotalModificationCost;
+    }
     return {
       x: ['Baseline', 'Modification'],
       y: [baselineCost, modCost],
@@ -227,7 +230,6 @@ export class ReportSummaryGraphsService {
       marker: {
         color: color
       }
-
     }
   }
 
