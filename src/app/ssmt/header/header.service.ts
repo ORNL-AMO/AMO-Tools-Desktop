@@ -295,11 +295,14 @@ export class HeaderService {
 
         if (ssmt.boilerInput.blowdownFlashed == false && pressureLevel === 'highPressure') {
           headerType = 'high';
+          let hasHeaderInputs: boolean = ssmt.headerInput.highPressureHeader !== undefined && ssmt.headerInput.highPressure !== undefined && ssmt.headerInput.mediumPressureHeader !== undefined && ssmt.headerInput.mediumPressure !== undefined && ssmt.headerInput.lowPressureHeader !== undefined && ssmt.headerInput.lowPressure !== undefined;
+          if (hasHeaderInputs) {
           if (ssmt.headerInput.highPressureHeader.pressure) {
             pressure = ssmt.headerInput.highPressureHeader.pressure;
           } else if (ssmt.headerInput.highPressure) {
             pressure = ssmt.headerInput.highPressure.pressure;
           }
+        }
         } else if (ssmt.boilerInput.blowdownFlashed == true && pressureLevel == 'lowPressure') {
           headerType = 'low';
           if (ssmt.headerInput.lowPressureHeader) {
