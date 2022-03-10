@@ -31,8 +31,6 @@ export class SsmtReportRollupService {
       electricityEnergy: 0,
       carbonEmissions: 0,
       carbonSavings: 0,
-      // totalBaselineCost: 0,
-      // totalModificationCost: 0
     }
   }
 
@@ -130,9 +128,7 @@ export class SsmtReportRollupService {
       let modificationCost = result.modificationResults.operationsOutput.boilerFuelCost + result.modificationResults.operationsOutput.makeupWaterCost;
       let costSavings = baselineCost - modificationCost;
       sumCost += baselineCost - costSavings;
-      console.log(sumCost);
       
-      // total Modification cost = bl fuel cost + bl water cost - costsavings
       steamTotalModificationCost += baselineCost - diffCost;
 
       let diffEnergy = resultsCopy.baselineResults.operationsOutput.boilerFuelUsage - resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
