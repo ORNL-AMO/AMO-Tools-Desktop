@@ -25,8 +25,7 @@
     [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight">
     </app-modify-conditions>
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
-    (exploreOppsToast)="hideToast($event)">
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
   </div>
 

@@ -26,8 +26,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
   emitSave = new EventEmitter<FSAT>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
-  @Output('exploreOppsToast')
-  exploreOppsToast = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
@@ -110,7 +108,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let title: string = 'Explore Opportunities';
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
-        this.exploreOppsToast.emit(false);
       } else if (this.showToast) {
         this.hideToast();
       }
