@@ -13,6 +13,7 @@ import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GasDensityResultsModule } from '../../shared/gas-density-results/gas-density-results.module';
 import { FanOperationsHelpComponent } from './fan-operations-help/fan-operations-help.component';
+import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { FanOperationsHelpComponent } from './fan-operations-help/fan-operations
     FormsModule,
     ReactiveFormsModule,
     FsatResultsModule,
-    GasDensityResultsModule
+    GasDensityResultsModule,
+    Co2HelpTextModule
   ],
   declarations: [
     HelpPanelComponent,

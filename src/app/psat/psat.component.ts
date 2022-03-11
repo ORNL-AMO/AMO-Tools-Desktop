@@ -191,7 +191,6 @@ export class PsatComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-      this.disclaimerToast();
     }, 100);
   }
 
@@ -367,33 +366,6 @@ export class PsatComponent implements OnInit {
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)
-  }
-
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
   }
 
   addSettings(settings: Settings) {

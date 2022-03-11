@@ -40,8 +40,7 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
     class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight"
-      (exploreOppsToast)="hideToast($event)">
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
   </div>
   <!--diagram-->
@@ -78,13 +77,6 @@
 
 <app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
 <app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
-
-<!-- 
-  <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-    [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-    (emitDisable)="disableDisclaimer()"></app-toast>
-  -->
-
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
   [assessmentType]="'compressed-air'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">

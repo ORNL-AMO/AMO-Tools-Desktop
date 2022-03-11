@@ -55,7 +55,7 @@
     </thead>
     <tbody>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Steam System Summary</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Annual Steam System Summary</td>
         <td
           [ngClass]="{
             'selected-modification': selectedModificationIndex == -1
@@ -69,37 +69,7 @@
         ></td>
       </tr>
       <tr>
-        <td class="pl-4">Total Steam Generated (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel: '/hr'"></span>)</td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        >
-          <span *ngIf="baselineOutput.boilerOutput">
-            {{
-              baselineOutput.boilerOutput.steamMassFlow | number: "1.0-1"
-             
-            }}
-          </span>
-          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
-        </td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
-            {{
-              modResults.outputData.boilerOutput.steamMassFlow | number: "1.0-1"
-              
-            }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="pl-4">Total Operating Cost ($/yr) </td>
+        <td class="pl-4">Operating Cost ($) </td>
         <td [ngClass]="{
                   'selected-modification': selectedModificationIndex == -1
                 }">
@@ -123,7 +93,7 @@
       </tr>
       <tr>
         <td class="pl-4">
-          Total CO<sub>2</sub> Emissions (<span>tonne CO<sub>2</sub>/yr</span>)  
+          CO<sub>2</sub> Emissions (<span>tonne CO<sub>2</sub></span>)  
         </td>
         <td [ngClass]="{
                   'selected-modification': selectedModificationIndex == -1
@@ -144,7 +114,7 @@
       </tr>
       <tr>
         <td class="pl-4">
-          Total CO<sub>2</sub> Emissions Savings (<span>tonne CO<sub>2</sub>/yr</span>)  
+          CO<sub>2</sub> Emissions Savings (<span>tonne CO<sub>2</sub></span>)  
         </td>
         <td [ngClass]="{
                   'selected-modification': selectedModificationIndex == -1
@@ -192,41 +162,6 @@
       </tr>
       <tr>
         <td class="pl-4">
-          Generation (<span
-            [innerHTML]="settings.steamPowerMeasurement | settingsLabel"
-          ></span
-          >)
-        </td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        >
-          <span *ngIf="baselineOutput.boilerOutput">
-            {{
-              baselineOutput.operationsOutput.powerGenerated | number: "1.0-1"
-            }}
-          </span>
-          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
-        </td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
-            {{
-              modResults.outputData.operationsOutput.powerGenerated
-                | number: "1.0-1"
-            }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="pl-4">
           Demand (<span
             [innerHTML]="settings.steamPowerMeasurement | settingsLabel"
           ></span
@@ -253,6 +188,41 @@
           <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.sitePowerDemand
+                | number: "1.0-1"
+            }}
+          </span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="pl-4">
+          Generation (<span
+            [innerHTML]="settings.steamPowerMeasurement | settingsLabel"
+          ></span
+          >)
+        </td>
+        <td
+          [ngClass]="{
+            'selected-modification': selectedModificationIndex == -1
+          }"
+        >
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{
+              baselineOutput.operationsOutput.powerGenerated | number: "1.0-1"
+            }}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td
+          *ngFor="let modResults of modificationOutputs; let index = index"
+          [ngClass]="{
+            'selected-modification': index == selectedModificationIndex
+          }"
+        >
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
+            {{
+              modResults.outputData.operationsOutput.powerGenerated
                 | number: "1.0-1"
             }}
           </span>
@@ -324,8 +294,38 @@
         </td>
       </tr>
       <tr>
+        <td class="pl-4">Total Steam Generated (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel: '/hr'"></span>)</td>
+        <td
+          [ngClass]="{
+            'selected-modification': selectedModificationIndex == -1
+          }"
+        >
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{
+              baselineOutput.boilerOutput.steamMassFlow | number: "1.0-1"
+             
+            }}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td
+          *ngFor="let modResults of modificationOutputs; let index = index"
+          [ngClass]="{
+            'selected-modification': index == selectedModificationIndex
+          }"
+        >
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
+            {{
+              modResults.outputData.boilerOutput.steamMassFlow | number: "1.0-1"
+              
+            }}
+          </span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
+      </tr>
+      <tr>
         <td class="pl-4">
-          Boiler (<span
+          Boiler Fuel (<span
             [innerHTML]="settings.steamEnergyMeasurement | settingsLabel: '/hr'"
           ></span
           >)

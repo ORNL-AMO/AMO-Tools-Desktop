@@ -54,43 +54,10 @@
               <td *ngFor="let mod of data.modifications">
                 {{mod.totalHeatInput}}
               </td>
-            </tr>
+            </tr>          
             <tr>
               <td>
-                Excess Air
-              </td>
-              <td>
-                {{data.baseline.excessAir}}
-              </td>
-              <td *ngFor="let mod of data.modifications">
-                {{mod.excessAir}}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Combustion Air Temperature
-              </td>
-              <td>
-                {{data.baseline.combustionAirTemp}}
-              </td>
-              <td *ngFor="let mod of data.modifications">
-                {{mod.combustionAirTemp}}
-              </td>
-            </tr>
-            <tr>
-              <td>
-              Exhaust Gas Temperature  
-              </td>
-              <td>
-                {{data.baseline.exhaustGasTemp}}
-              </td>
-              <td *ngFor="let mod of data.modifications">
-                {{mod.exhaustGasTemp}}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Available Heat
+                Fuel Heater Efficiency
               </td>
               <td>
                 {{data.baseline.availableHeat}}

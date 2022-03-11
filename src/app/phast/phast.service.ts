@@ -563,18 +563,27 @@ export class PhastService {
       exhaustGasLosses: 0
     };
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
-      inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('GJ').to('Btu');
-      results = phastAddon.energyInputExhaustGasLosses(inputs);
+      results = this.calcEnergyInputExhaustGasLosses(inputs);
     } else {
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
-      results = phastAddon.energyInputExhaustGasLosses(inputs);
+      results = this.calcEnergyInputExhaustGasLosses(inputs);
     }
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
 
     return results;
+  }
+
+  calcEnergyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss){
+    let heatDelivered: number = (input.totalHeatInput * input.availableHeat)/100;
+    let exhaustGasLosses: number = heatDelivered*(100 - input.availableHeat) / input.availableHeat;
+    let results = {
+      availableHeat: input.availableHeat,
+      heatDelivered: heatDelivered,
+      exhaustGasLosses: exhaustGasLosses
+    }
+    return results
   }
 
   efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings) {

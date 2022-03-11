@@ -164,7 +164,8 @@ export class ReportSummaryPieChartComponent implements OnInit {
         size: 12,
       },
       showlegend: false,
-      margin: { t: 0, b: 0 }
+      margin: { t: 0, b: 0 },
+      width: 500
     };
     let modebarBtns = {
       displaylogo: false,

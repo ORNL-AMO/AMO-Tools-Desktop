@@ -42,8 +42,8 @@
     <!--Explore opportunities-->
     <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment"
       [settings]="settings" [(psat)]="_psat" (saved)="save()" [containerHeight]="containerHeight"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"
-      (exploreOppsToast)="hideToast($event)"></app-explore-opportunities>
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
+    </app-explore-opportunities>
     <!--Modify conditions-->
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings"
       [(psat)]="_psat" (saved)="save()" [modificationIndex]="modificationIndex"
@@ -169,10 +169,6 @@
   </div>
 </div>
 <!--end create modified condition modal-->
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
   (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

@@ -60,8 +60,6 @@ export interface Settings {
     disableDataExplorerTutorial?: boolean,
     disableCompressedAirTutorial?: boolean,
 
-    disableSurveyMonkey?: boolean,
-    disableDisclaimer?: boolean,
     //costs
     electricityCost?: number,
     fuelCost?: number,

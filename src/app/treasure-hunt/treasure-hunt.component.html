@@ -50,13 +50,8 @@
   </div>
   <!--end footer-->
 </div>
-
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true" (emitDisable)="disableDisclaimer()"></app-toast>
-
-  <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'treasure-hunt'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
-
- 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+  [assessmentType]="'treasure-hunt'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
+</app-update-units-modal>

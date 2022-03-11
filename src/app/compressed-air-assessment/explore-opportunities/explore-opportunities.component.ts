@@ -16,8 +16,6 @@ import { ExploreOpportunitiesService } from './explore-opportunities.service';
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
-  @Output('exploreOppsToast')
-  exploreOppsToast = new EventEmitter<boolean>();
 
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment

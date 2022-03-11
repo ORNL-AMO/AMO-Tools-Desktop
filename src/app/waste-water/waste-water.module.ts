@@ -49,6 +49,7 @@ import { WaterReductionModule } from '../calculator/waste-water/water-reduction/
 import { WasteWaterCalculatorTabsComponent } from './waste-water-banner/calculator-tabs/calculator-tabs.component';
 import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-water-calculators.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
     AssessmentCo2SavingsModule,
     O2UtilizationRateModule,
     StatePointAnalysisModule,
-    WaterReductionModule
+    WaterReductionModule,
+    Co2HelpTextModule
   ],
   providers: [
     WasteWaterService,
