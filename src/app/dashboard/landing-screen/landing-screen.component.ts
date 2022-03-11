@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AssessmentService } from '../assessment.service';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -8,9 +10,13 @@ import { DashboardService } from '../dashboard.service';
 })
 export class LandingScreenComponent implements OnInit {
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService, private settingsDbService: SettingsDbService,
+    private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    if(!this.settingsDbService.globalSettings.disableTutorial){
+      this.assessmentService.showTutorial.next('landing-screen');
+    }
   }
 
   createAssessment(str?: string) {
