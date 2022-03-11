@@ -1,26 +1,79 @@
 <div class="row">
-  <div class="col-10  mx-auto general">
-    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
-      <div class="card">
-        <div class="card-header bold">
-          Opening Tutorial
-        </div>
-        <div class="card-body text-center">
-          <button class="btn btn-primary mx-auto" (click)="viewOpeningTutorial()">View Opening Tutorial</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-10  mx-auto general">
-    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
-      <div class="card">
-        <div class="card-header bold">
-          Assessment Dashboard Tutorial
-        </div>
-        <div class="card-body text-center">
-          <button class="btn btn-primary mx-auto" (click)="viewDashboardTutorial()">View Dashboard Tutorial</button>
-        </div>
-      </div>
+  <div class="col-10  mx-auto">
+    <div class="content-container">
+      <div class="content-header">User Manuals</div>
+      <p class="small">
+        Below is a list of user manual PDFs available to help you use MEASUR.
+      </p>
+      <ul>
+        <li>
+          <a class="general" href="assets/user-manuals/MEASUR-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> MEASUR Dashboard User Manual
+          </a>
+        </li>
+        <li>
+          <a class="psat" href="assets/user-manuals/Pumps-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Pump Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="phast" href="assets/user-manuals/Process-Heating-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Process Heating Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="fsat" href="assets/user-manuals/Fans-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Fan Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="wastewater" href="assets/user-manuals/Waste-Water-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Wastewater Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="steam" href="assets/user-manuals/Steam-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Steam Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="compressed-air" href="assets/user-manuals/Compressed-Air-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Compressed Air Assessment User Manual
+          </a>
+        </li>
+        <li>
+          <a class="treasure-hunt" href="assets/user-manuals/Treasure-Hunt-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Treasure Hunt User Manual
+          </a>
+        </li>
+        <li>
+          <a class="motors" href="assets/user-manuals/Motor-Inventory-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Motor Inventory User Manual
+          </a>
+        </li>
+        <li>
+          <a class="log-tool" href="assets/user-manuals/Data-Explorer-User-Manual.pdf" target="_blank">
+            <span class="fa fa-book"></span> Data Explorer User Manual
+          </a>
+        </li>
+      </ul>
+      <hr>
+      <div class="content-header">Opening Tutorials</div>
+      <p class="small">
+        MEASUR has two opening tutorials that can be viewed by clicking on the links below.
+      </p>
+      <ul>
+        <li>
+          <a class="click-link" (click)="viewOpeningTutorial()">
+            View Opening Tutorial
+          </a>
+        </li>
+        <li>
+          <a class="click-link" (click)="viewDashboardTutorial()">
+            View Assessment Dashboard Tutorial
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
