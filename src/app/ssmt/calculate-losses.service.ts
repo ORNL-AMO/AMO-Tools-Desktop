@@ -16,11 +16,12 @@ export class CalculateLossesService {
     if( ssmtResults !== undefined ){
       resultsCpy = JSON.parse(JSON.stringify(ssmtResults));      
     }
-    let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
+    let inputCpy: SSMTInputs;
     let ssmtCpy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let ssmtLosses: SSMTLosses = this.initLosses();
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(ssmtCpy, settings);
     if (ssmtValid.isValid && resultsCpy.boilerOutput !== undefined) {
+      inputCpy = JSON.parse(JSON.stringify(inputData));
       ssmtLosses.stack = this.calculateStack(resultsCpy);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
       ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -158,15 +158,20 @@ export class SsmtComponent implements OnInit {
       if (newSSMT) {
         this.saveSsmt(newSSMT);
       }
-    })
+    });
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
+      this.checkForInputCrash();
     }, 100);
   }
 
+  ngOnChanges() {
+    this.checkForInputCrash(); 
+  }
+  
   ngOnDestroy() {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
@@ -240,6 +245,7 @@ export class SsmtComponent implements OnInit {
   }
 
   save() {
+    this.checkForInputCrash();
     this._ssmt = this.updateModificationCO2Savings(this._ssmt);
     if (this._ssmt.modifications) {
       if (this._ssmt.modifications.length === 0) {
@@ -471,5 +477,29 @@ export class SsmtComponent implements OnInit {
     this._ssmt.existingDataUnits = this.settings.unitsOfMeasure;
     this.save();
     this.getSettings();
+  }
+
+  checkForInputCrash() {
+    if (this._ssmt.outputData == undefined) {
+      let title: string = 'Invalid Inputs';
+      let body: string = 'Steam Properties cannot be calculated. Please check input values.';
+      this.openToast(title, body);
+    }     
+    this.cd.detectChanges();   
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
   }
 }
