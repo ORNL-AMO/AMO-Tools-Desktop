@@ -2,14 +2,61 @@ p{
     font-size: medium;
 }
 
-.general .btn-primary{
-    background: #145A32;
+a.general  .fa-book{
+    color: #145A32;
 }
 
-.psat .btn-primary{
-    background: #2980b9;
+a.psat  .fa-book{
+    color: #2980b9;
 }
 
-.phast .btn-primary{
-    background: #BF3D00;
+a.phast .fa-book{
+    color: #BF3D00;
+}
+
+
+a.fsat .fa-book{
+    color: #FFE400;
+}
+
+
+a.wastewater .fa-book{
+    color: #003087;
+}
+
+
+a.steam .fa-book{
+    color: #F39C12;
+}
+
+
+a.compressed-air .fa-book{
+    color: #7030A0;
+}
+
+
+a.treasure-hunt .fa-book{
+    color: #2E4053;
+}
+
+
+a.motors .fa-book{
+    color: #84b641;
+}
+
+
+a.log-tool .fa-book{
+    color: #117A65;
+}
+
+
+
+ul {
+    list-style-type: none;
+}
+
+
+.content-header{
+    font-size: 1.5rem;
+    font-weight: bold;
 }
