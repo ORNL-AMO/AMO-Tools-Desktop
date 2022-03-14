@@ -409,11 +409,7 @@ export class PhastComponent implements OnInit {
       this.assessmentDbService.setAll();
     });
   }
-
-  exportData() {
-    //TODO: Logic for exporting data (csv?)
-  }
-
+  
   setSankeyLabelStyle(style: string) {
     this.sankeyLabelStyle = style;
   }

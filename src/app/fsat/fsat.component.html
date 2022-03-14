@@ -45,7 +45,7 @@
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
-        (exportData)="exportData()" [containerHeight]="containerHeight"></app-fsat-report>
+        [containerHeight]="containerHeight"></app-fsat-report>
     </div>
   </div>
 
