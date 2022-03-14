@@ -46,6 +46,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { OperationsComponent } from './operations/operations.component';
 import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     ModificationListComponent,
     ModifyFieldDataFormComponent,
     FsatDiagramComponent,
-    OperationsComponent
+    OperationsComponent,
+    WelcomeScreenComponent
   ],
   providers: [
     FsatService,

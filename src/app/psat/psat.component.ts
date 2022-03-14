@@ -17,7 +17,7 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
-import { SettingsService } from '../settings/settings.service';
+import { PumpImperialDefaults, PumpMetricDefaults, SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
@@ -50,8 +50,8 @@ export class PsatComponent implements OnInit {
   //TODO: move this and sankey choosing logic oput of this component
   psatOptions: Array<any>;
   psatOptionsLength: number;
-  psat1: {name: string, psat: PSAT};
-  psat2: {name: string, psat: PSAT};
+  psat1: { name: string, psat: PSAT };
+  psat2: { name: string, psat: PSAT };
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
@@ -75,6 +75,7 @@ export class PsatComponent implements OnInit {
   stepTab: string;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private psatService: PsatService,
@@ -126,7 +127,6 @@ export class PsatComponent implements OnInit {
           this.psatTabService.secondaryTab.next('explore-opportunities');
         }
       }
-      this.checkTutorials();
       this.getContainerHeight();
     })
     this.secondaryTabSub = this.psatTabService.secondaryTab.subscribe(val => {
@@ -166,8 +166,10 @@ export class PsatComponent implements OnInit {
     })
 
     this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
-    this.isModalOpen = isOpen;
-  })
+      this.isModalOpen = isOpen;
+    });
+
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -203,25 +205,6 @@ export class PsatComponent implements OnInit {
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
-    }
-  }
-
-  checkTutorials() {
-    if (this.mainTab == 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disablePsatSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('psat-system-setup');
-      }
-    } else if (this.mainTab == 'assessment') {
-      if (!this.settingsDbService.globalSettings.disablePsatAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('psat-assessment-tutorial');
-      }
-    } else if (this.mainTab == 'report') {
-      if (!this.settingsDbService.globalSettings.disablePsatReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('psat-report-tutorial');
-      }
     }
   }
 
@@ -293,7 +276,7 @@ export class PsatComponent implements OnInit {
         this.modificationExists = true;
       }
       this._psat.modifications.forEach(mod => {
-        if(mod.psat.inputs.whatIfScenario){
+        if (mod.psat.inputs.whatIfScenario) {
           mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
           mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
           mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
@@ -387,12 +370,43 @@ export class PsatComponent implements OnInit {
 
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(newSettings).then(id => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  setSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpMetricDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingPowerMeasurement: boolean = settings.powerMeasurement === unitDefaults.powerMeasurement; 
+    let hasMatchingFlowMeasurement: boolean = settings.flowMeasurement === unitDefaults.flowMeasurement; 
+    let hasMatchingDistanceMeasurement: boolean = settings.distanceMeasurement === unitDefaults.distanceMeasurement; 
+    let hasMatchingPressureMeasurement: boolean = settings.pressureMeasurement === unitDefaults.pressureMeasurement; 
+    let hasMatchingTemperatureMeasurement: boolean = settings.temperatureMeasurement === unitDefaults.temperatureMeasurement; 
+    
+    let hasMatchingUnitTypes: boolean = hasMatchingPowerMeasurement
+    && hasMatchingFlowMeasurement
+    && hasMatchingDistanceMeasurement
+    && hasMatchingPressureMeasurement
+    && hasMatchingTemperatureMeasurement;
+
+    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -411,7 +425,7 @@ export class PsatComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
     } else {
       this.save();
@@ -425,5 +439,19 @@ export class PsatComponent implements OnInit {
     this.save();
     this.getSettings();
 
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disablePsatTutorial) {
+      this.showWelcomeScreen = true;
+      this.psatService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disablePsatTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.psatService.modalOpen.next(false);
   }
 }

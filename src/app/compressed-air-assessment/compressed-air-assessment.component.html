@@ -81,3 +81,5 @@
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
   [assessmentType]="'compressed-air'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
 </app-update-units-modal>
+
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

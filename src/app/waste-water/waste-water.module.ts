@@ -48,6 +48,7 @@ import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-
 import { WaterReductionModule } from '../calculator/waste-water/water-reduction/water-reduction.module';
 import { WasteWaterCalculatorTabsComponent } from './waste-water-banner/calculator-tabs/calculator-tabs.component';
 import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-water-calculators.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
@@ -78,6 +79,7 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
     OperationsHelpComponent,
     WasteWaterCalculatorTabsComponent,
     WasteWaterCalculatorsComponent,
+    WelcomeScreenComponent,
   ],
   imports: [
     CommonModule,

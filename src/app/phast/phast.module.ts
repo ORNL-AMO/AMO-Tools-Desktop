@@ -40,6 +40,7 @@ import { PhastValidService } from './phast-valid.service';
 import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent
+    AddModificationComponent,
+    WelcomeScreenComponent
   ],
   exports: [
   ],

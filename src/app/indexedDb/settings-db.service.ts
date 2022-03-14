@@ -77,13 +77,13 @@ export class SettingsDbService {
       selectedSettings = this.globalSettings;
     }
     if (selectedSettings) {
-      selectedSettings = this.checkSettings(selectedSettings);
+      selectedSettings = this.checkSettings(selectedSettings, assessment);
     }
     return selectedSettings;
   }
 
 
-  checkSettings(settings: Settings): Settings {
+  checkSettings(settings: Settings, assessment?: Assessment): Settings {
     if (!settings.energyResultUnit) {
       settings = this.settingService.setEnergyResultUnitSetting(settings);
     }
@@ -151,6 +151,16 @@ export class SettingsDbService {
     }
     if (!settings.compressedAirRollupUnit) {
       settings.compressedAirRollupUnit = 'MWh';
+    }
+
+    if (!settings.unitsOfMeasure) {
+      settings.unitsOfMeasure = 'Imperial';
+    }
+    if (assessment && settings.unitsOfMeasure === 'Custom') {
+      let hasCustomUnitOption: boolean = assessment.psat !== undefined || assessment.fsat !== undefined || assessment.ssmt !== undefined;  
+      if (!hasCustomUnitOption) {
+        settings.unitsOfMeasure = 'Imperial';
+      }
     }
     return settings;
   }

@@ -62,28 +62,30 @@
     </div>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item"
+    [ngStyle]="{'height.px': containerHeight}">
     <nav class="navbar phast">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-            <div class="form-group" *ngIf="phastOptions.length > 1">
-              <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
-                <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
-              </select>
-            </div>
-        </div>
-          <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+          <div class="form-group" *ngIf="phastOptions.length > 1">
+            <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
+              <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
+            </select>
           </div>
+        </div>
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+            [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+            [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+          <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+            [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+        </div>
       </div>
-  </nav>
+    </nav>
     <div *ngIf="sankeyPhast" class="sankey-padding">
-      <app-phast-sankey [phast]="sankeyPhast" [labelStyle]="sankeyLabelStyle" [settings]="settings" [appBackground]="true"></app-phast-sankey>
+      <app-phast-sankey [phast]="sankeyPhast" [labelStyle]="sankeyLabelStyle" [settings]="settings"
+        [appBackground]="true"></app-phast-sankey>
     </div>
   </div>
 
@@ -158,4 +160,7 @@
 </div>
 
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'phast'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

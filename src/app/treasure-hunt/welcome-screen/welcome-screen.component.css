@@ -1,0 +1,9 @@
+.book-item{
+    background-color: #2E4053;
+}
+.manual-arrow{
+    position: absolute;
+    height: 300px;
+    top: 45px;
+    right: 155px;
+}

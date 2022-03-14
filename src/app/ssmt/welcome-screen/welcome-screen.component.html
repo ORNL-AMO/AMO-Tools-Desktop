@@ -1,0 +1,58 @@
+<div class="welcome-screen" [ngClass]="{'show': showWelcomeScreen}">
+    <nav class="navbar banner d-flex mr-auto p-0 flex-nowrap">
+        <div class="banner-box">
+
+        </div>
+        <div class="d-flex ml-auto pr-2 h-100">
+            <div class="pl-2 pr-2 border-left border-right home-nav-item book-item">
+                <a class="user-manual" href="assets/user-manuals/Steam-User-Manual.pdf" target="_blank">
+                    <span class="fa fa-book"></span>
+                </a>
+                <img class="manual-arrow" src="assets/images/manual-arrow.png">
+            </div>
+            <div class="pl-2 pr-2 border-right home-nav-item">
+                <span class="fa fa-cog"></span>
+            </div>
+            <div class="pl-2 pr-2 border-right border-left home-nav-item">
+                <span class="fa fa-folder-open"></span>
+            </div>
+            <div class="pl-2 pr-2 border-right home-nav-item">
+                <span class="fa fa-home"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row w-100 justify-content-center">
+        <div class="col-sm-10 col-md-8 welcome-content">
+            <div class="w-100 d-flex justify-content-end">
+                <div>
+                    <button class="close" (click)="closePopUp()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <h1>Welcome to MEASUR's Steam System Assessment Module!
+            </h1>
+            <br>
+            <p>
+                Get started with the System Setup by providing the properties of your
+                current
+                system or "baseline"! After you've established
+                your baseline, conduct an Assessment by modifying the conditions of your system to view the potential
+                savings!
+            </p>
+            <hr>
+            <p>
+                If you need help at any point along the way, click the
+                <a class="user-manual" href="assets/user-manuals/Steam-User-Manual.pdf" target="_blank">
+                    user manual (<span class="fa fa-book"></span>)
+                </a>
+                icon in the upper right hand corner
+                for detailed instructions on how to complete the steam system assessment!
+            </p>
+            <div class="btn btn-primary" (click)="closePopUp()">
+                Get Started!
+            </div>
+        </div>
+    </div>
+</div>

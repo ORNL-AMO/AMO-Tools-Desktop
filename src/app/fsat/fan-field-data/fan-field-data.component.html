@@ -182,7 +182,8 @@
     </div>
 
     <!--min-->
-    <div class="form-group">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
         <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="toggleUserDefinedCompressibilityFactor()"
           [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>

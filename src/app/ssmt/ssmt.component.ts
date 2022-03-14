@@ -12,7 +12,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { SettingsService } from '../settings/settings.service';
+import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../settings/settings.service';
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 
@@ -80,7 +80,7 @@ export class SsmtComponent implements OnInit {
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-
+  showWelcomeScreen: boolean = false;
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
@@ -158,7 +158,8 @@ export class SsmtComponent implements OnInit {
       if (newSSMT) {
         this.saveSsmt(newSSMT);
       }
-    })
+    });
+    this.checkShowWelcomeScreen();
   }
 
   ngAfterViewInit() {
@@ -188,7 +189,6 @@ export class SsmtComponent implements OnInit {
   subscribeTabs() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
-      this.checkTutorials();
       this.getContainerHeight();
     });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
@@ -406,39 +406,57 @@ export class SsmtComponent implements OnInit {
       }, 100);
     }
   }
-
-  checkTutorials() {
-    if (this.mainTab == 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disableSsmtSystemSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-system-setup-tutorial');
-      }
-    } else if (this.mainTab == 'assessment') {
-      if (!this.settingsDbService.globalSettings.disableSsmtAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-assessment-tutorial');
-      }
-    } else if (this.mainTab == 'diagram') {
-      if (!this.settingsDbService.globalSettings.disableSsmtDiagramTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-diagram-tutorial');
-      }
-    } else if (this.mainTab == 'report') {
-      if (!this.settingsDbService.globalSettings.disableSsmtReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-report-tutorial');
-      }
-    }
-  }
-
+  
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(newSettings).then(id => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  setSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, SteamImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, SteamMetricDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingTemperatureMeasurement: boolean = settings.steamTemperatureMeasurement === unitDefaults.steamTemperatureMeasurement;
+    let hasMatchingPressureMeasurement: boolean = settings.steamPressureMeasurement === unitDefaults.steamPressureMeasurement;
+    let hasMatchingSpecificEnthalpyMeasurement: boolean = settings.steamSpecificEnthalpyMeasurement === unitDefaults.steamSpecificEnthalpyMeasurement;
+    let hasMatchingSpecificEntropyMeasurement: boolean = settings.steamSpecificEntropyMeasurement === unitDefaults.steamSpecificEntropyMeasurement;
+    let hasMatchingSpecificVolumeMeasurement: boolean = settings.steamSpecificVolumeMeasurement === unitDefaults.steamSpecificVolumeMeasurement;
+    let hasMatchingMassFlowMeasurement: boolean = settings.steamMassFlowMeasurement === unitDefaults.steamMassFlowMeasurement;
+    let hasMatchingPowerMeasurement: boolean = settings.steamPowerMeasurement === unitDefaults.steamPowerMeasurement;
+    let hasMatchingVolumeMeasurement: boolean = settings.steamVolumeMeasurement === unitDefaults.steamVolumeMeasurement;
+    let hasMatchingVolumeFlowMeasurement: boolean = settings.steamVolumeFlowMeasurement === unitDefaults.steamVolumeFlowMeasurement;
+    let hasMatchingVacuumPressure: boolean = settings.steamVacuumPressure === unitDefaults.steamVacuumPressure;
+
+
+    let hasMatchingUnitTypes: boolean = hasMatchingTemperatureMeasurement
+    && hasMatchingPressureMeasurement
+    && hasMatchingSpecificEnthalpyMeasurement
+    && hasMatchingSpecificEntropyMeasurement
+    && hasMatchingSpecificVolumeMeasurement
+    && hasMatchingMassFlowMeasurement
+    && hasMatchingPowerMeasurement
+    && hasMatchingVolumeMeasurement
+    && hasMatchingVolumeFlowMeasurement
+    && hasMatchingVacuumPressure
+
+    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -472,4 +490,19 @@ export class SsmtComponent implements OnInit {
     this.save();
     this.getSettings();
   }
+
+  
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableSteamTutorial) {
+      this.showWelcomeScreen = true;
+      this.ssmtService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableSteamTutorial = true;
+    this.showWelcomeScreen = false;
+    this.ssmtService.modalOpen.next(false);
+  }
+
 }

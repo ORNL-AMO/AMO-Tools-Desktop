@@ -59,6 +59,7 @@ export class WasteWaterComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
@@ -122,6 +123,7 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -253,5 +255,19 @@ export class WasteWaterComponent implements OnInit {
     this.assessment.wasteWater = this.convertWasteWaterService.convertWasteWater(this.assessment.wasteWater, this.oldSettings, currentSettings);
     this.assessment.wasteWater.existingDataUnits = currentSettings.unitsOfMeasure;
     this.saveWasteWater(this.assessment.wasteWater);
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableWasteWaterTutorial) {
+      this.showWelcomeScreen = true;
+      this.wasteWaterService.isModalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.wasteWaterService.isModalOpen.next(false);
   }
 }
