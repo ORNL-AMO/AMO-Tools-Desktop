@@ -17,7 +17,7 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
-import { SettingsService } from '../settings/settings.service';
+import { PumpImperialDefaults, PumpMetricDefaults, SettingsService } from '../settings/settings.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
@@ -387,12 +387,43 @@ export class PsatComponent implements OnInit {
 
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(newSettings).then(id => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  setSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, PumpMetricDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingPowerMeasurement: boolean = settings.powerMeasurement === unitDefaults.powerMeasurement; 
+    let hasMatchingFlowMeasurement: boolean = settings.flowMeasurement === unitDefaults.flowMeasurement; 
+    let hasMatchingDistanceMeasurement: boolean = settings.distanceMeasurement === unitDefaults.distanceMeasurement; 
+    let hasMatchingPressureMeasurement: boolean = settings.pressureMeasurement === unitDefaults.pressureMeasurement; 
+    let hasMatchingTemperatureMeasurement: boolean = settings.temperatureMeasurement === unitDefaults.temperatureMeasurement; 
+    
+    let hasMatchingUnitTypes: boolean = hasMatchingPowerMeasurement
+    && hasMatchingFlowMeasurement
+    && hasMatchingDistanceMeasurement
+    && hasMatchingPressureMeasurement
+    && hasMatchingTemperatureMeasurement;
+
+    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {

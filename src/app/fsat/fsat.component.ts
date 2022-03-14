@@ -16,7 +16,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { SettingsService } from '../settings/settings.service';
+import { FanImperialDefaults, FanMetricDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 
@@ -424,12 +424,48 @@ export class FsatComponent implements OnInit {
   
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(newSettings).then(id => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  setSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+
+  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingDensityMeasurement: boolean = settings.densityMeasurement === unitDefaults.densityMeasurement;
+    let hasMatchingFanPowerMeasurement: boolean = settings.fanPowerMeasurement === unitDefaults.fanPowerMeasurement;
+    let hasMatchingFanFlowRate: boolean = settings.fanFlowRate === unitDefaults.fanFlowRate;
+    let hasMatchingFanPressureMeasurement: boolean = settings.fanPressureMeasurement === unitDefaults.fanPressureMeasurement;
+    let hasMatchingFanBarometricPressure: boolean = settings.fanBarometricPressure === unitDefaults.fanBarometricPressure;
+    let hasMatchingFanSpecificHeatGas: boolean = settings.fanSpecificHeatGas === unitDefaults.fanSpecificHeatGas;
+    let hasMatchingFanTemperatureMeasurement: boolean = settings.fanTemperatureMeasurement === unitDefaults.fanTemperatureMeasurement;
+
+    let hasMatchingUnitTypes: boolean = hasMatchingDensityMeasurement
+    && hasMatchingFanPowerMeasurement
+    && hasMatchingFanFlowRate
+    && hasMatchingFanPressureMeasurement
+    && hasMatchingFanBarometricPressure
+    && hasMatchingFanSpecificHeatGas
+    && hasMatchingFanTemperatureMeasurement            
+
+    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
