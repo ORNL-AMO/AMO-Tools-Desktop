@@ -79,11 +79,12 @@ export class FsatComponent implements OnInit {
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-  fsat1: {fsat: FSAT, name: string};
-  fsat2: {fsat: FSAT, name: string};
+  fsat1: { fsat: FSAT, name: string };
+  fsat2: { fsat: FSAT, name: string };
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -130,7 +131,6 @@ export class FsatComponent implements OnInit {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
-      this.checkTutorials();
     });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
@@ -162,12 +162,13 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     });
-      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
     });
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -188,25 +189,6 @@ export class FsatComponent implements OnInit {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
-  }
-
-  checkTutorials() {
-    if (this.mainTab === 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disableFsatSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-system-setup');
-      }
-    } else if (this.mainTab === 'assessment') {
-      if (!this.settingsDbService.globalSettings.disableFsatAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-assessment-tutorial');
-      }
-    } else if (this.mainTab === 'report') {
-      if (!this.settingsDbService.globalSettings.disableFsatReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-report-tutorial');
-      }
-    }
   }
 
   initSankeyList() {
@@ -484,7 +466,7 @@ export class FsatComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
     } else {
       this.save();
@@ -497,5 +479,19 @@ export class FsatComponent implements OnInit {
     this._fsat.existingDataUnits = this.settings.unitsOfMeasure;
     this.save();
     this.getSettings();
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableFansTutorial) {
+      this.showWelcomeScreen = true;
+      this.fsatService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableFansTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.fsatService.modalOpen.next(false);
   }
 }

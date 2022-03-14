@@ -58,6 +58,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { PumpOperationsComponent } from './pump-operations/pump-operations.component';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
     PsatReportGraphsPrintComponent,
-    PumpOperationsComponent
+    PumpOperationsComponent,
+    WelcomeScreenComponent
   ],
   exports: [
     PsatReportComponent

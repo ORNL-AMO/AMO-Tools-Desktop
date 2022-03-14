@@ -68,7 +68,8 @@
               "src/assets/styles/sidebar.css",
               "src/assets/styles/plotly-overrides.css",
               "src/assets/styles/explore-opps.css",
-              "src/assets/styles/pagination.css"
+              "src/assets/styles/pagination.css",
+              "src/assets/styles/welcome-screen.css"
             ],
             "scripts": [
               "node_modules/plotly.js-dist/plotly.js"

@@ -80,7 +80,7 @@ export class SsmtComponent implements OnInit {
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-
+  showWelcomeScreen: boolean = false;
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
@@ -158,7 +158,8 @@ export class SsmtComponent implements OnInit {
       if (newSSMT) {
         this.saveSsmt(newSSMT);
       }
-    })
+    });
+    this.checkShowWelcomeScreen();
   }
 
   ngAfterViewInit() {
@@ -188,7 +189,6 @@ export class SsmtComponent implements OnInit {
   subscribeTabs() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
-      this.checkTutorials();
       this.getContainerHeight();
     });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
@@ -406,31 +406,7 @@ export class SsmtComponent implements OnInit {
       }, 100);
     }
   }
-
-  checkTutorials() {
-    if (this.mainTab == 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disableSsmtSystemSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-system-setup-tutorial');
-      }
-    } else if (this.mainTab == 'assessment') {
-      if (!this.settingsDbService.globalSettings.disableSsmtAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-assessment-tutorial');
-      }
-    } else if (this.mainTab == 'diagram') {
-      if (!this.settingsDbService.globalSettings.disableSsmtDiagramTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-diagram-tutorial');
-      }
-    } else if (this.mainTab == 'report') {
-      if (!this.settingsDbService.globalSettings.disableSsmtReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('ssmt-report-tutorial');
-      }
-    }
-  }
-
+  
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings = this.setSettingsUnitType(newSettings);
@@ -514,4 +490,19 @@ export class SsmtComponent implements OnInit {
     this.save();
     this.getSettings();
   }
+
+  
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableSteamTutorial) {
+      this.showWelcomeScreen = true;
+      this.ssmtService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableSteamTutorial = true;
+    this.showWelcomeScreen = false;
+    this.ssmtService.modalOpen.next(false);
+  }
+
 }

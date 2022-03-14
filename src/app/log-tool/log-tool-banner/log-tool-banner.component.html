@@ -29,11 +29,12 @@
             (click)="openExportData()">
             <span class="fa fa-download"></span>
         </div>
-        <!-- <button class="pl-2 pr-2 border-left download-nav-item" [disabled]="dataCleaned == false" type="button"
-            (click)="openExportData()">
-            <span class="fa fa-download"></span>
-        </button> -->
-        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/landing-screen']">
+		<div class="pl-2 pr-2 border-left home-nav-item">
+			<a class="user-manual" href="assets/user-manuals/Data-Explorer-User-Manual.pdf" target="_blank">
+				<span class="fa fa-book"></span>
+			</a>
+		</div>
+        <div class="pl-2 pr-2 border-left border-right home-nav-item" [routerLink]="['/landing-screen']">
             <span class="fa fa-home"></span>
         </div>
     </div>

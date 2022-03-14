@@ -50,6 +50,8 @@
   </div>
   <!--end footer-->
 </div>
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
   [assessmentType]="'treasure-hunt'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
 </app-update-units-modal>
