@@ -362,7 +362,9 @@ export class CompressedAirAssessmentResultsService {
     dayTypeModificationResult.flowReallocationSavings.paybackPeriod = 0;
     dayTypeModificationResult.addReceiverVolumeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.addReceiverVolumeSavings);
     dayTypeModificationResult.adjustCascadingSetPointsSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.adjustCascadingSetPointsSavings);
-    dayTypeModificationResult.improveEndUseEfficiencySavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.improveEndUseEfficiencySavings);
+    let improveEndUseEfficiencySavingsCpy: EemSavingsResults = JSON.parse(JSON.stringify(dayTypeModificationResult.improveEndUseEfficiencySavings));
+    improveEndUseEfficiencySavingsCpy.savings.cost = improveEndUseEfficiencySavingsCpy.savings.cost - dayTypeModificationResult.auxiliaryPowerUsage.cost;
+    dayTypeModificationResult.improveEndUseEfficiencySavings.paybackPeriod = this.getPaybackPeriod(improveEndUseEfficiencySavingsCpy);
     dayTypeModificationResult.reduceAirLeaksSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceAirLeaksSavings);
     dayTypeModificationResult.reduceRunTimeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceRunTimeSavings);
     dayTypeModificationResult.reduceSystemAirPressureSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.reduceSystemAirPressureSavings);
