@@ -64,7 +64,7 @@
         <!-- Aerator -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aerator, 'invalid': form.controls.Aerator.invalid}">
-            <label for="{{'Aerator_'+idString}}">Aerator</label>
+            <label for="{{'Aerator_'+idString}}">Aerator/Blower</label>
             <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
                 (focus)="focusField('aerator')">
                 <optgroup label="Diffused Air Systems">
