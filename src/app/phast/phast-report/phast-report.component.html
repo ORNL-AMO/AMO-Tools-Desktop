@@ -20,7 +20,6 @@
 
         <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
-            <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
         </div>
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>

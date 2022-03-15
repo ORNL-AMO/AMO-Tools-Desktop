@@ -386,7 +386,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Aerator') == true}">
-          Aerator
+          Aerator/Blower
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Aerator') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.Aerator}}
@@ -441,7 +441,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingTime') == true}">
-          Aerator Operating Time (hr/day)
+          Aerator/Blower Operating Time (hr/day)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingTime') == true}">
@@ -454,7 +454,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('TypeAerators') == true}">
-          Type of Aerator
+          Type of Aerator/Blower
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('TypeAerators') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.TypeAerators | wasteWaterOptionsDisplay}}
@@ -466,7 +466,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Speed') == true}">
-          Aerator Speed (%)
+          Aerator/Blower Speed (%)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Speed') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.Speed}}
