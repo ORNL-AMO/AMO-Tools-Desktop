@@ -1,5 +1,8 @@
+<div *ngIf="inputCrashed" class="ml-5">
+    <p>Sankey could not be created, please check inputs.</p>
+</div>
 <div #ngChart></div>
-<div class="d-flex small mt-2 ml-5">
+<div *ngIf="!inputCrashed" class="d-flex small mt-2 ml-5">
     <span class="bold mr-2">* Other Losses include:</span>
     High Pressure Header,
     Medium Pressure Header,
@@ -11,7 +14,7 @@
     <ng-container *ngIf="hasLowPressureVentLoss"> Low Pressure Vent</ng-container>
 </div>
 
-<div *ngIf="minLosses.length > 0" class="ml-5">
+<div *ngIf="minLosses.length > 0 && !inputCrashed" class="ml-5">
     <div class="mt-4">
         <label class="group-label bold mb-2">Negligible Losses (not shown)</label>
         <table class="small w-25 ml-3">

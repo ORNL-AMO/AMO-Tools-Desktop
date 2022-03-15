@@ -318,8 +318,14 @@ export class SteamService {
     } catch (err) {
       // Rare/wildy unrealistic cases will crash modeler
       console.log(err);
+    } 
+
+    if (outputData) {
+      outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
+      return outputData;
+    } else {
+      return null;
     }
-    outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
-    return outputData;
+
   }
 }

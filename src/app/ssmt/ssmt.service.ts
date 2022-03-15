@@ -32,6 +32,7 @@ export class SsmtService {
   saveSSMT: BehaviorSubject<SSMT>;
   isBaselineFocused: BehaviorSubject<boolean>;
   currCurrency: string = "$";
+  inputErrorToast: BehaviorSubject<boolean>;
 
   iterationCount: number;
   constructor(private steamService: SteamService, 
@@ -53,6 +54,7 @@ export class SsmtService {
     this.calcTab = new BehaviorSubject<string>('boiler');
     this.saveSSMT = new BehaviorSubject<SSMT>(undefined);
     this.isBaselineFocused = new BehaviorSubject<boolean>(true);
+    this.inputErrorToast = new BehaviorSubject<boolean>(false);
   }
 
   calculateBaselineModel(ssmt: SSMT, settings: Settings): { inputData: SSMTInputs, outputData: SSMTOutput } {
@@ -61,8 +63,14 @@ export class SsmtService {
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (ssmtValid.isValid) {
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
-      outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);
-      return { inputData: setupInputData, outputData: outputData };
+      if (outputData) {
+        outputData.co2EmissionsOutput = this.setCo2SavingsEmissionsResult(setupInputData, outputData, settings, true);
+        return { inputData: setupInputData, outputData: outputData };
+      } else {        
+        this.inputErrorToast.next(true);
+        let outputData: SSMTOutput = this.getEmptyResults();
+        return { inputData: setupInputData, outputData: outputData };
+      }
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
       return { inputData: setupInputData, outputData: outputData };
@@ -73,8 +81,9 @@ export class SsmtService {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let baselineResultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
     const ssmtValid: SsmtValid = this.checkValid(ssmtCopy, settings);
-    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
-    if (ssmtValid.isValid) {
+    let setupInputData: SSMTInputs;
+    if (ssmtValid.isValid && baselineResultsCpy.operationsOutput !== undefined ) {
+      setupInputData = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
         if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
           ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;

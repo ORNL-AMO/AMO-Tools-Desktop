@@ -51,6 +51,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   minPlotlyDisplayValue = .2;
   hasLowPressureVentLoss: boolean;
 
+  inputCrashed: boolean;
+
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
     private _dom: ElementRef,
     private renderer: Renderer2,
@@ -60,21 +62,28 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit(){
     if (this.ssmt.setupDone) {
-      this.getLosses();
-      this.initSankeySetup();
+      let baselineResultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
+      this.ssmt.outputData = baselineResultData.outputData;
+      if (this.ssmt.outputData.boilerOutput !== undefined){
+        this.inputCrashed = false;
+        this.getLosses();
+        this.initSankeySetup();
+      } else {
+        this.inputCrashed = true;
+      }
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ssmt && !changes.ssmt.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.ssmt.setupDone && !this.inputCrashed) {
         this.getLosses();
         this.initSankeySetup();
         this.renderSankey();
       }
     }
     if (changes.labelStyle && !changes.labelStyle.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.ssmt.setupDone && !this.inputCrashed) {
         this.initSankeySetup();
         this.renderSankey();
       }
@@ -82,7 +91,9 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
   
   ngAfterViewInit() {
-    this.renderSankey();
+    if (this.ssmt.setupDone && !this.inputCrashed) {
+      this.renderSankey();
+    }
   }
 
   getLosses() {

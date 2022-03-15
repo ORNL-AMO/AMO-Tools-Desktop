@@ -52,10 +52,10 @@ export class SsmtReportComponent implements OnInit {
   constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
-    if (this.assessment.ssmt.setupDone) {
+    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
+    if (this.assessment.ssmt.setupDone && resultData.outputData.boilerOutput !== undefined) {
       setTimeout(() => {
         this.assessment.ssmt.valid = this.ssmtService.checkValid(this.assessment.ssmt, this.settings);
-        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
         this.assessment.ssmt.name = 'Baseline';
         resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
         this.assessment.ssmt.outputData = resultData.outputData;
@@ -87,7 +87,7 @@ export class SsmtReportComponent implements OnInit {
         this.dataCalculated = true;
       }, 10);
     } else {
-      this.dataCalculated = true;
+      this.dataCalculated = false;
     }
     if (this.assessment) {
       this.assessmentDirectories = new Array();

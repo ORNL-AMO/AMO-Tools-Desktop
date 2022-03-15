@@ -152,3 +152,7 @@
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+
+
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>

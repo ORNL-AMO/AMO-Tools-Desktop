@@ -74,9 +74,11 @@ export class SsmtComponent implements OnInit {
   modListOpen: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  inputErrorToastSub: Subscription;
+  inputErrorToast: boolean = false;
 
   ssmtOptions: Array<any>;
-  selectedSSMT: {ssmt: SSMT, name};
+  selectedSSMT: { ssmt: SSMT, name };
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
@@ -146,13 +148,18 @@ export class SsmtComponent implements OnInit {
       }
     });
 
-      this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
+
+    this.inputErrorToastSub = this.ssmtService.inputErrorToast.subscribe(val => {
+      this.inputErrorToast = val;
+      this.checkInputErrorToast();
+    })
 
     this.saveSsmtSub = this.ssmtService.saveSSMT.subscribe(newSSMT => {
       if (newSSMT) {
@@ -184,6 +191,8 @@ export class SsmtComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.ssmtService.saveSSMT.next(undefined);
     this.saveSsmtSub.unsubscribe();
+    this.ssmtService.inputErrorToast.next(false);
+    this.inputErrorToastSub.unsubscribe();
   }
 
   subscribeTabs() {
@@ -406,7 +415,7 @@ export class SsmtComponent implements OnInit {
       }, 100);
     }
   }
-  
+
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings = this.setSettingsUnitType(newSettings);
@@ -446,15 +455,15 @@ export class SsmtComponent implements OnInit {
 
 
     let hasMatchingUnitTypes: boolean = hasMatchingTemperatureMeasurement
-    && hasMatchingPressureMeasurement
-    && hasMatchingSpecificEnthalpyMeasurement
-    && hasMatchingSpecificEntropyMeasurement
-    && hasMatchingSpecificVolumeMeasurement
-    && hasMatchingMassFlowMeasurement
-    && hasMatchingPowerMeasurement
-    && hasMatchingVolumeMeasurement
-    && hasMatchingVolumeFlowMeasurement
-    && hasMatchingVacuumPressure
+      && hasMatchingPressureMeasurement
+      && hasMatchingSpecificEnthalpyMeasurement
+      && hasMatchingSpecificEntropyMeasurement
+      && hasMatchingSpecificVolumeMeasurement
+      && hasMatchingMassFlowMeasurement
+      && hasMatchingPowerMeasurement
+      && hasMatchingVolumeMeasurement
+      && hasMatchingVolumeFlowMeasurement
+      && hasMatchingVacuumPressure
 
     return hasMatchingUnitTypes;
   }
@@ -475,7 +484,7 @@ export class SsmtComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
     }
     else {
@@ -491,7 +500,7 @@ export class SsmtComponent implements OnInit {
     this.getSettings();
   }
 
-  
+
   checkShowWelcomeScreen() {
     if (!this.settingsDbService.globalSettings.disableSteamTutorial) {
       this.showWelcomeScreen = true;
@@ -503,6 +512,32 @@ export class SsmtComponent implements OnInit {
     this.settingsDbService.globalSettings.disableSteamTutorial = true;
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
+  }
+
+  checkInputErrorToast() {
+    if (this.inputErrorToast) {
+      let title: string = 'Input Data Error';
+      let body: string = 'Steam Properties cannot be calculated. Please check input values.';
+      this.openToast(title, body);
+    }
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+    this.cd.detectChanges();
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
+    this.ssmtService.inputErrorToast.next(false);
+    this.cd.detectChanges();
   }
 
 }

@@ -65,10 +65,12 @@ export class SsmtResultsPanelComponent implements OnInit {
     this.modificationOutput = modificationResultData.outputData;
     this.checkValid();
 
-    if (this.modValid) {
-      this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
+    if (this.baselineOutput != undefined && this.modificationOutput != undefined){
+      if (this.modValid && this.baselineValid) {
+        this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
+        this.getLosses();
+      }
     }
-    this.getLosses();
 
   }
 
