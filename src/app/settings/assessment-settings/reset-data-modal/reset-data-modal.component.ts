@@ -20,6 +20,7 @@ import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { MockMotorInventory } from '../../../examples/mockMotorInventoryData';
 import { MockWasteWater, MockWasteWaterSettings } from '../../../examples/mockWasteWater';
 import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../../../examples/mockCompressedAirAssessment';
+import { Calculator } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -37,6 +38,7 @@ export class ResetDataModalComponent implements OnInit {
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
+  hidingModal: any;
   constructor(private dashboardService: DashboardService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService,
     private inventoryDbService: InventoryDbService) { }
 
@@ -52,9 +54,14 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   hideResetSystemSettingsModal() {
-    this.resetSystemSettingsModal.hide();
-    this.dashboardService.updateDashboardData.next(true);
-    this.closeModal.emit(true);
+    if (this.hidingModal) {
+      clearTimeout(this.hidingModal);
+    }
+    this.hidingModal = setTimeout(() => {
+      this.resetSystemSettingsModal.hide();
+      this.dashboardService.updateDashboardData.next(true);
+      this.closeModal.emit(true);
+    }, 1000)
   }
 
   toggleResetSystemSettingsOption(option: string) {
@@ -104,7 +111,9 @@ export class ResetDataModalComponent implements OnInit {
       this.resetFactoryCustomMaterials();
     }
     //reset all data if resetting user assessments
-    if (this.resetUserAssessments) {
+    if (this.resetAll) {
+      this.resetAllData();
+    } else if (this.resetUserAssessments) {
       this.resetFactoryUserAssessments();
     } else {
       //reset settings
@@ -404,31 +413,30 @@ export class ResetDataModalComponent implements OnInit {
 
   resetFactoryUserAssessments() {
     //reset entire Db
-    this.indexedDbService.deleteDb().then(
-      results => {
-        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
-          this.coreService.createDirectory().then(() => {
-            //after dir settings add check to see if we want to reset settings or keep existing
-            if (!this.resetAppSettings) {
-              //keep existing
-              this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-                this.coreService.createExamples().then(() => {
-                  this.coreService.createDirectorySettings().then(() => {
-                    this.setAllDbData();
-                  });
-                });
-              });
-            } else {
-              //use reset settings
-              this.coreService.createExamples().then(() => {
-                this.coreService.createDirectorySettings().then(() => {
-                  this.setAllDbData();
-                });
-              });
-            }
+    for (let index: number = 0; index < this.assessmentDbService.allAssessments.length; index++) {
+      let assessment: Assessment = this.assessmentDbService.allAssessments[index];
+      if (!assessment.isExample) {
+        let assessmentSettings: Settings = this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id });
+        let assessmentCalculator: Calculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
+        if (assessmentCalculator) {
+          this.indexedDbService.deleteCalculator(assessmentCalculator.id).then(() => {
+            this.calculatorDbService.setAll().then(() => {
+              this.hideResetSystemSettingsModal();
+            });
+          });
+        }
+        this.indexedDbService.deleteAssessment(assessment.id).then(() => {
+          this.assessmentDbService.setAll().then(() => {
+            this.hideResetSystemSettingsModal();
           });
         });
-      });
+        this.indexedDbService.deleteSettings(assessmentSettings.id).then(() => {
+          this.settingsDbService.setAll().then(() => {
+            this.hideResetSystemSettingsModal();
+          });
+        });
+      }
+    }
   }
 
   setAllDbData() {
@@ -455,5 +463,33 @@ export class ResetDataModalComponent implements OnInit {
     this.indexedDbService.clearSolidLiquidFlueGasMaterials();
     this.indexedDbService.clearSolidLoadChargeMaterial();
     this.indexedDbService.clearWallLossesSurface();
+  }
+
+  resetAllData() {
+    this.indexedDbService.deleteDb().then(
+      results => {
+        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
+          this.coreService.createDirectory().then(() => {
+            //after dir settings add check to see if we want to reset settings or keep existing
+            if (!this.resetAppSettings) {
+              //keep existing
+              this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+                this.coreService.createExamples().then(() => {
+                  this.coreService.createDirectorySettings().then(() => {
+                    this.setAllDbData();
+                  });
+                });
+              });
+            } else {
+              //use reset settings
+              this.coreService.createExamples().then(() => {
+                this.coreService.createDirectorySettings().then(() => {
+                  this.setAllDbData();
+                });
+              });
+            }
+          });
+        });
+      });
   }
 }
