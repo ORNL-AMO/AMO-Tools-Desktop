@@ -63,7 +63,7 @@ export class ExploreAeratorFormComponent implements OnInit {
     let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.OperatingTime != this.baselineData.aeratorPerformanceData.OperatingTime ||
       this.modificationData.aeratorPerformanceData.Aeration != this.baselineData.aeratorPerformanceData.Aeration ||
       this.modificationData.aeratorPerformanceData.Speed != this.baselineData.aeratorPerformanceData.Speed);
-    this.modificationData.exploreAeratorPerformance = { display: 'Modify Aerator Performance', hasOpportunity: hasOpportunity }
+    this.modificationData.exploreAeratorPerformance = { display: 'Modify Aerator/Blower Performance', hasOpportunity: hasOpportunity }
   }
 
   initExploreReduceOxygen() {
@@ -76,7 +76,7 @@ export class ExploreAeratorFormComponent implements OnInit {
     let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.Aerator != this.baselineData.aeratorPerformanceData.Aerator ||
       this.modificationData.aeratorPerformanceData.SOTR != this.baselineData.aeratorPerformanceData.SOTR ||
       this.modificationData.aeratorPerformanceData.TypeAerators != this.baselineData.aeratorPerformanceData.TypeAerators);
-    this.modificationData.exploreAeratorUpgrade = { display: 'Upgrade Aerator', hasOpportunity: hasOpportunity };
+    this.modificationData.exploreAeratorUpgrade = { display: 'Upgrade Aerator/Blower', hasOpportunity: hasOpportunity };
   }
 
   setExploreAeratorPerformance() {
