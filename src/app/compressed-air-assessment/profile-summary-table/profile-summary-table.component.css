@@ -25,3 +25,9 @@ td, th{
   select.form-control{
     width: auto;
   }
+
+  .print-container {
+    page-break-before: always;
+    page-break-inside: avoid;
+    width: fit-content;
+  }

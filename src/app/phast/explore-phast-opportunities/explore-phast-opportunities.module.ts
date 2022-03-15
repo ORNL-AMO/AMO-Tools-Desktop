@@ -12,7 +12,7 @@ import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
 import { FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
 import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';

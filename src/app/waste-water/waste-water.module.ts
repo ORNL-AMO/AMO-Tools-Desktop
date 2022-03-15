@@ -17,7 +17,7 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
@@ -48,6 +48,8 @@ import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-
 import { WaterReductionModule } from '../calculator/waste-water/water-reduction/water-reduction.module';
 import { WasteWaterCalculatorTabsComponent } from './waste-water-banner/calculator-tabs/calculator-tabs.component';
 import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-water-calculators.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,7 @@ import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-
     OperationsHelpComponent,
     WasteWaterCalculatorTabsComponent,
     WasteWaterCalculatorsComponent,
+    WelcomeScreenComponent,
   ],
   imports: [
     CommonModule,
@@ -95,7 +98,8 @@ import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-
     AssessmentCo2SavingsModule,
     O2UtilizationRateModule,
     StatePointAnalysisModule,
-    WaterReductionModule
+    WaterReductionModule,
+    Co2HelpTextModule
   ],
   providers: [
     WasteWaterService,

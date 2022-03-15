@@ -10,7 +10,7 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
         
-      <app-operations *ngIf="stepTab == 'operations'" [settings]="settings" [inSetup]="true" [selected]="true"
+      <app-operations *ngIf="stepTab == 'fan-operations'" [settings]="settings" [inSetup]="true" [selected]="true"
       [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat"></app-operations>
 
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
@@ -34,8 +34,8 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment"
       [settings]="settings" (emitSave)="saveFsat($event)" [containerHeight]="containerHeight"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"
-      (exploreOppsToast)="hideToast($event)"></app-explore-opportunities>
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
+    </app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
       (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
@@ -45,7 +45,7 @@
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
-        (exportData)="exportData()" [containerHeight]="containerHeight"></app-fsat-report>
+        [containerHeight]="containerHeight"></app-fsat-report>
     </div>
   </div>
 
@@ -141,9 +141,8 @@
 </div>
 
 
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
-
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'fsat'"
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+ 
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

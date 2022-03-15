@@ -1,0 +1,18 @@
+.book-item{
+    background-color: #FFE400;
+}
+
+
+.welcome-screen a.user-manual{
+    color: black;
+}
+
+.welcome-screen .welcome-content a.user-manual{
+    color: white;
+}
+.manual-arrow{
+    position: absolute;
+    height: 300px;
+    top: 45px;
+    right: 155px;
+}

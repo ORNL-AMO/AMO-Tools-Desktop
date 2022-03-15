@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Directory } from '../../shared/models/directory';
 import { Router } from '@angular/router';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';

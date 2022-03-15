@@ -17,7 +17,6 @@
 
     <div *ngIf="!inRollup" class="btn-group hide-print">
       <button class="btn btn-secondary" (click)="print()" [disabled]="false">Print</button>
-      <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>

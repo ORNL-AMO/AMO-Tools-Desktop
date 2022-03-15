@@ -1,7 +1,7 @@
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';

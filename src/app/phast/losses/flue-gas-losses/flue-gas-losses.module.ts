@@ -7,7 +7,7 @@ import { FlueGasLossesMoistureComponent } from './flue-gas-losses-moisture/flue-
 import { FlueGasLossesFormMassComponent } from "./flue-gas-losses-form-mass/flue-gas-losses-form-mass.component";
 import { FlueGasCompareService } from "./flue-gas-compare.service";
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { FlueGasMoistureResultsComponent } from './flue-gas-moisture-results/flue-gas-moisture-results.component';
 import { FlueGasMoistureHelpComponent } from './flue-gas-moisture-help/flue-gas-moisture-help.component';

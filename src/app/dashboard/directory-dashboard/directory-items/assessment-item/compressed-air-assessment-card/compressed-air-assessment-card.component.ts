@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/explore-opportunities/explore-opportunities-validation.service';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';

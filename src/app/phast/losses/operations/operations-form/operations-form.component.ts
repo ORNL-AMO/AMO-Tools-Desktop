@@ -6,7 +6,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { PHAST, PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Co2SavingsPhastService } from '../co2-savings-phast/co2-savings-phast.service';
 
 @Component({

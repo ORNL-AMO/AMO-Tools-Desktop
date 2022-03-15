@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { coalFuels, EAFOtherFuels, OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';

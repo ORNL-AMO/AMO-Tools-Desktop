@@ -344,7 +344,7 @@ export const MockMotorInventory: InventoryItem = {
                         "id": "r1hkhnkxp",
                         "departmentId": "a2jd7ua9i",
                         "description": "",
-                        "name": "Adhesive Agitetor ",
+                        "name": "Adhesive Agitator ",
                         "batchAnalysisData": {
                             "modifiedCost": 19538,
                             "modifiedPower": 150,

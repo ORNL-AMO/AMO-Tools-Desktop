@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-rollup-summary-bar-chart',
@@ -17,7 +17,7 @@ export class RollupSummaryBarChartComponent implements OnInit {
   printView: boolean;
 
   @ViewChild('rollupBarChart', { static: false }) rollupBarChart: ElementRef;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -31,9 +31,6 @@ export class RollupSummaryBarChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if(this.rollupBarChart){
-      Plotly.purge(this.rollupBarChart.nativeElement);
-    }
     if (this.rollupBarChart && !this.printView) {
       this.createBarChart();
     } else if (this.rollupBarChart && this.printView) {
@@ -77,7 +74,7 @@ export class RollupSummaryBarChartComponent implements OnInit {
       responsive: true
     };
 
-    Plotly.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
+    this.plotlyService.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 
   createPrintChart() {
@@ -112,7 +109,7 @@ export class RollupSummaryBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    Plotly.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
+    this.plotlyService.newPlot(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
 }
 

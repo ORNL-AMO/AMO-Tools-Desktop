@@ -11,7 +11,6 @@ import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
 import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
 import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
-import { ModalModule } from '../../../../node_modules/ngx-bootstrap';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
@@ -21,6 +20,7 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
 import { DetailedResultsComponent } from './detailed-results/detailed-results.component';
 import { TraverseResultsComponent } from './detailed-results/traverse-results/traverse-results.component';
 import { FanOperationsSummaryComponent } from './input-summary/fan-operations-summary/fan-operations-summary.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({

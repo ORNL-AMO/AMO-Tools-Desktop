@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../shared/models/settings';
 import { MockPhastSettings, MockPhast } from '../../../examples/mockPhast';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -126,12 +126,14 @@ export class ResetDataModalComponent implements OnInit {
     tmpSettings.directoryId = 1;
     tmpSettings.id = 1;
     tmpSettings.disableDashboardTutorial = this.settingsDbService.globalSettings.disableDashboardTutorial;
-    tmpSettings.disablePhastAssessmentTutorial = this.settingsDbService.globalSettings.disablePhastAssessmentTutorial;
-    tmpSettings.disablePhastReportTutorial = this.settingsDbService.globalSettings.disablePhastReportTutorial;
-    tmpSettings.disablePhastSetupTutorial = this.settingsDbService.globalSettings.disablePhastSetupTutorial;
-    tmpSettings.disablePsatAssessmentTutorial = this.settingsDbService.globalSettings.disablePsatAssessmentTutorial;
-    tmpSettings.disablePsatReportTutorial = this.settingsDbService.globalSettings.disablePsatReportTutorial;
-    tmpSettings.disablePsatSetupTutorial = this.settingsDbService.globalSettings.disablePsatSetupTutorial;
+    tmpSettings.disablePsatTutorial = this.settingsDbService.globalSettings.disablePsatTutorial;
+    tmpSettings.disableFansTutorial = this.settingsDbService.globalSettings.disableFansTutorial;
+    tmpSettings.disablePhastTutorial = this.settingsDbService.globalSettings.disablePhastTutorial;
+    tmpSettings.disableWasteWaterTutorial = this.settingsDbService.globalSettings.disableWasteWaterTutorial;
+    tmpSettings.disableSteamTutorial = this.settingsDbService.globalSettings.disableSteamTutorial;
+    tmpSettings.disableMotorInventoryTutorial = this.settingsDbService.globalSettings.disableMotorInventoryTutorial;
+    tmpSettings.disableTreasureHuntTutorial = this.settingsDbService.globalSettings.disableTreasureHuntTutorial;
+    tmpSettings.disableDataExplorerTutorial = this.settingsDbService.globalSettings.disableDataExplorerTutorial;
     tmpSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     tmpSettings.printAll = this.settingsDbService.globalSettings.printAll;
     delete tmpSettings.facilityInfo;

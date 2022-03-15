@@ -5,7 +5,7 @@ import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';

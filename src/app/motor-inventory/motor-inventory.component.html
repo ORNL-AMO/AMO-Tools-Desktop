@@ -3,7 +3,7 @@
         <app-motor-inventory-banner [motorInventoryItem]="motorInventoryItem"></app-motor-inventory-banner>
     </div>
     <div class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-100 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+        <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
             <app-motor-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-motor-inventory-setup>
             <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>
             <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
@@ -16,3 +16,6 @@
         </div>
     </div>
 </div>
+
+
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 
 @Component({
@@ -22,7 +22,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
 
   @ViewChild('reportSummaryPieChart', { static: false }) reportSummaryPieChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -36,9 +36,6 @@ export class ReportSummaryPieChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.reportSummaryPieChart) {
-      Plotly.purge(this.reportSummaryPieChart.nativeElement);
-    }
     if (this.reportSummaryPieChart) {
       this.drawPlot();
     }
@@ -110,7 +107,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -167,13 +164,14 @@ export class ReportSummaryPieChartComponent implements OnInit {
         size: 12,
       },
       showlegend: false,
-      margin: { t: 0, b: 0 }
+      margin: { t: 0, b: 0 },
+      width: 500
     };
     let modebarBtns = {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 
 

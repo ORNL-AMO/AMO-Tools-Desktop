@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 @Component({
   selector: 'app-plotly-bar-chart',
   templateUrl: './plotly-bar-chart.component.html',
@@ -21,7 +21,7 @@ export class PlotlyBarChartComponent implements OnInit {
 
   @ViewChild('barChart', { static: false }) barChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -78,7 +78,7 @@ export class PlotlyBarChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.barChart.nativeElement, traces, layout, configOptions);
+    this.plotlyService.newPlot(this.barChart.nativeElement, traces, layout, configOptions);
   }
 
   drawPrintChart(){
@@ -114,7 +114,7 @@ export class PlotlyBarChartComponent implements OnInit {
       displayModeBar: false,
       responsive: false
     };
-    Plotly.react(this.barChart.nativeElement, traces, layout, configOptions);
+    this.plotlyService.newPlot(this.barChart.nativeElement, traces, layout, configOptions);
 
   }
 

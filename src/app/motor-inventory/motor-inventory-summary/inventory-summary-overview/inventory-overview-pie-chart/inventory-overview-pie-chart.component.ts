@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { InventorySummary, InventorySummaryOverviewService } from '../inventory-summary-overview.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-inventory-overview-pie-chart',
@@ -14,7 +14,8 @@ export class InventoryOverviewPieChartComponent implements OnInit {
   @ViewChild('overviewPieChart', { static: false }) overviewPieChart: ElementRef;
 
   invetorySummarySub: Subscription;
-  constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService) { }
+  constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -60,7 +61,7 @@ export class InventoryOverviewPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
+      this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
     })
   }
 

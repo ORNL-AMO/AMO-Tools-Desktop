@@ -10,7 +10,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { FlueGasModule } from '../flue-gas/flue-gas.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { GasCoolingFormComponent } from './gas-cooling-form/gas-cooling-form.component';
 import { LiquidCoolingFormComponent } from './liquid-cooling-form/liquid-cooling-form.component';
 import { LossNameFormComponent } from './loss-name-form/loss-name-form.component';

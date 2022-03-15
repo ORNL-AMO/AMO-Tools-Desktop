@@ -30,7 +30,7 @@ export class SsmtReportRollupService {
       fuelEnergy: 0,
       electricityEnergy: 0,
       carbonEmissions: 0,
-      carbonSavings: 0
+      carbonSavings: 0,
     }
   }
 
@@ -114,6 +114,7 @@ export class SsmtReportRollupService {
     let sumEnergySavings = 0;
     let sumCo2Emissions = 0;
     let sumCo2Savings = 0;
+    let steamTotalModificationCost = 0;
     this.selectedSsmtResults.forEach(result => {
       //need to convert fuel usage from result setting to common unit
       let resultsCopy: SsmtResultsData = JSON.parse(JSON.stringify(result));
@@ -122,7 +123,14 @@ export class SsmtReportRollupService {
 
       let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
       sumSavings += diffCost;
-      sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
+
+      let baselineCost = result.baselineResults.operationsOutput.boilerFuelCost + result.baselineResults.operationsOutput.makeupWaterCost;
+      let modificationCost = result.modificationResults.operationsOutput.boilerFuelCost + result.modificationResults.operationsOutput.makeupWaterCost;
+      let costSavings = baselineCost - modificationCost;
+      sumCost += baselineCost - costSavings;
+      
+      steamTotalModificationCost += baselineCost - diffCost;
+
       let diffEnergy = resultsCopy.baselineResults.operationsOutput.boilerFuelUsage - resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
       sumEnergySavings += diffEnergy;
       sumEnergy += resultsCopy.modificationResults.operationsOutput.boilerFuelUsage;
@@ -133,12 +141,13 @@ export class SsmtReportRollupService {
     this.totals = {
       totalCost: sumCost,
       totalEnergy: sumEnergy,
+      steamTotalModificationCost: steamTotalModificationCost,
       energySavingsPotential: sumEnergySavings,
       savingPotential: sumSavings,
       fuelEnergy: sumEnergy + sumEnergySavings,
       electricityEnergy: 0,
       carbonEmissions: sumCo2Emissions,
-      carbonSavings: sumCo2Savings
+      carbonSavings: sumCo2Savings,
     }
   }
 
