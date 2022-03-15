@@ -36,6 +36,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
   showOperatingTimeAlert: boolean = false;
   showSpeedAlert: boolean = false;
   disableOptimize: boolean = false;
+  aeratorBlowerLabel: string;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
@@ -90,8 +91,10 @@ export class AeratorPerformanceFormComponent implements OnInit {
     this.form.controls.TypeAerators.enable();
 
     if (this.form.controls.Aerator.value == 'Other') {
+      this.aeratorBlowerLabel = "Aerator/Blower";
       this.aeratorTypes = defaultAeratorTypes;
     } else if (isDiffuserAerator) {
+      this.aeratorBlowerLabel = "Blower";
       // Mechanical is removed. set to next option.
       if (this.form.controls.TypeAerators.value == 1) {
         this.form.patchValue({
@@ -100,6 +103,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       }
       this.aeratorTypes = defaultAeratorTypes.filter(aerator => aerator.value != 1);
     } else {
+      this.aeratorBlowerLabel = "Aerator";
       this.aeratorTypes = defaultAeratorTypes;
       this.form.patchValue({
         TypeAerators: defaultAeratorTypes[0].value
