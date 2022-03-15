@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { LiquidMaterialFormService } from '../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
+import { ChargeMaterialCompareService } from './charge-material-compare.service';
 
 @Component({
   selector: 'app-charge-material',
@@ -53,7 +54,9 @@ export class ChargeMaterialComponent implements OnInit {
               private liquidMaterialFormService: LiquidMaterialFormService,
               private gasMaterialFormService: GasMaterialFormService,
               private solidMaterialFormService: SolidMaterialFormService,
-              private cd: ChangeDetectorRef
+              private cd: ChangeDetectorRef,
+              private chargeMaterialCompareService: ChargeMaterialCompareService
+
     ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -289,6 +292,11 @@ export class ChargeMaterialComponent implements OnInit {
   setError(bool: boolean) {
     this.showError = bool;
   }
+
+  compareMaterialType(index: number) {
+    return this.chargeMaterialCompareService.compareMaterialType(index);
+  }
+
 }
 
 
