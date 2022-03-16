@@ -33,6 +33,8 @@ export class OperationsFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  modificationIndex: number;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;
@@ -61,7 +63,6 @@ export class OperationsFormComponent implements OnInit {
       this.idString = '_baseline';
     }
     this.init();
-    
   }
 
   ngAfterViewInit() {
@@ -76,7 +77,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
     }
   }

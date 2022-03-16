@@ -189,20 +189,7 @@ export class AssessmentService {
       },
       fsatOperations: {
         operatingHours: 8760,
-            cost: 0.06,
-            cO2SavingsData: {
-                energyType: 'electricity',
-                energySource: '',
-                fuelType: '',
-                totalEmissionOutputRate: settings.totalEmissionOutputRate,
-                electricityUse: 0,
-                eGridRegion: '',
-                eGridSubregion: settings.eGridSubregion,
-                totalEmissionOutput: 0,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: true,
-                zipcode: settings.zipcode,
-            },
+        cost: 0.06,
       },
       fanMotor: {
         lineFrequency: 60,
