@@ -23,7 +23,7 @@
             </th>
         </tr>
         <tr
-            *ngFor="let compressor of genericCompressors | filterCompressors:filterCompressorOptions | slice: ((pageNumber-1) * itemsPerPage): pageNumber * itemsPerPage">
+            *ngFor="let compressor of filteredCompressors | slice: ((pageNumber-1) * itemsPerPage): pageNumber * itemsPerPage">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
             </td>
@@ -40,7 +40,7 @@
                 {{compressor.Model}}
             </td>
             <td>
-                {{compressor.RatedCapacity}} 
+                {{compressor.RatedCapacity}}
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 <span *ngIf="settings.unitsOfMeasure != 'Metric'">acfm</span>
             </td>
