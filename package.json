@@ -52,6 +52,7 @@
     "electron-updater": "4.3.5",
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.2.0",
+    "ngx-indexed-db": "^10.0.0",
     "regression": "^2.0.0",
     "rxjs": "6.6.6",
     "rxjs-compat": "6.6.3",
