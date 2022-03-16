@@ -26,8 +26,10 @@ td, th{
     width: auto;
   }
 
+  @media print {
   .print-container {
     page-break-before: always;
     page-break-inside: avoid;
     width: fit-content;
   }
+}

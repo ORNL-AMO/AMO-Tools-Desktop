@@ -1,12 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service'; 
-import { ExploreOpportunitiesService } from '../../compressed-air-assessment/explore-opportunities/explore-opportunities.service';
-import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service'; 
+import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
 import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
-import { Settings } from '../models/settings';
+import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
@@ -97,6 +97,9 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.drawCharts();
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));      
+    }, 100)
   }
 
   setProfileData() {

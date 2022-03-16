@@ -3,11 +3,12 @@
     text-transform: none;
 }
 
-.print-container {
-    width: 1000px;
-}
+
 
 @media print {
+    .print-container {
+        width: 1000px;
+    }
     .print-avoid-break{
         page-break-inside: avoid;
     }
