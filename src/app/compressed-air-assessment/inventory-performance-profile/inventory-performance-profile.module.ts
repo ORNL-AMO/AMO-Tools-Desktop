@@ -4,7 +4,7 @@ import { InventoryPerformanceProfileComponent } from './inventory-performance-pr
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 
 
