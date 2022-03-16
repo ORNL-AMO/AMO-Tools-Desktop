@@ -127,13 +127,11 @@ export class PumpOperationsComponent implements OnInit {
   updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
     this.psat.inputs.co2SavingsData = co2SavingsData;
     this.save();
-    if (this.canCompare()) {
-      this.compareService.isCo2SavingsDifferent();
-    }
+    this.isCo2SavingsDifferent();
   }
 
   setCo2SavingsData() {
-    this.compareService.isCo2SavingsDifferent();
+    this.isCo2SavingsDifferent();
     if (this.psat.inputs.co2SavingsData) {
       this.co2SavingsData = this.psat.inputs.co2SavingsData;
     } else {
@@ -189,6 +187,14 @@ export class PumpOperationsComponent implements OnInit {
       return this.compareService.isCostKwhrDifferent();
     } else {
       return false;
+    }
+  }
+
+  isCo2SavingsDifferent() {
+    if (this.canCompare()) {
+      this.compareService.isCo2SavingsDifferent();
+    } else {
+      this.compareService.co2SavingsDifferent.next({totalEmissionOutputRate: false})
     }
   }
 
