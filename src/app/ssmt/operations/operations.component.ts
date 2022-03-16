@@ -85,6 +85,7 @@ export class OperationsComponent implements OnInit {
     }
     if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
       this.initForm();
+      this.setCo2SavingsData();
     }
   }
 
@@ -111,8 +112,10 @@ export class OperationsComponent implements OnInit {
       co2SavingsData.energySource = 'Natural Gas';
     }
     this.co2SavingsData = co2SavingsData;
-    let shouldSetOutputRate = this.co2SavingsData.totalFuelEmissionOutputRate === undefined || this.co2SavingsData.totalFuelEmissionOutputRate === 0;
-
+    let shouldSetOutputRate: boolean = false;
+    if(!this.co2SavingsData.totalFuelEmissionOutputRate) {
+      shouldSetOutputRate = true;
+    } 
     this.setEnergySource(shouldSetOutputRate);
   }
 
@@ -123,13 +126,14 @@ export class OperationsComponent implements OnInit {
 
   setEnergySource(shouldSetOutputRate: boolean = true) {
     this.setFuelOptions();
-    this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
     }
     if (shouldSetOutputRate) {
       this.co2SavingsData.totalFuelEmissionOutputRate = outputRate;
+      this.co2SavingsData.fuelType = this.fuelOptions[0].fuelType;
     }
     this.save();
   }

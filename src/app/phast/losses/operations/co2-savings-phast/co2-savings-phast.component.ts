@@ -142,7 +142,6 @@ export class Co2SavingsPhastComponent implements OnInit {
   initForm() {
     let shouldSetOutputRate: boolean = true;
     this.form = this.phastCO2SavingsService.getEmissionsForm(this.co2SavingsData);
-    console.log('co2savingsdata form', this.form);
     // Regions are the same for Mod
     if (!this.isBaseline) {
       this.form.controls.zipcode.disable();
@@ -158,13 +157,13 @@ export class Co2SavingsPhastComponent implements OnInit {
     if (this.settings.furnaceType == 'Electric Arc Furnace (EAF)') {
       this.coalFuelOptions = coalFuels;
       this.eafOtherFuelSources = EAFOtherFuels;
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalCoalEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalCoalEmissionOutputRate;
       this.setCoalFuel(shouldSetOutputRate);
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalOtherEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalOtherEmissionOutputRate;
       this.setEAFFuelSource(shouldSetOutputRate);
     } else {
       this.energySources = otherFuels;
-      shouldSetOutputRate = this.isFieldEmpty(this.co2SavingsData.totalFuelEmissionOutputRate);
+      shouldSetOutputRate = !this.co2SavingsData.totalFuelEmissionOutputRate;
       this.setEnergySource(shouldSetOutputRate);
     }
   }
@@ -190,9 +189,6 @@ export class Co2SavingsPhastComponent implements OnInit {
     let eafOtherFuelSources: OtherFuel = _.find(this.eafOtherFuelSources, (val) => { return this.form.controls.eafOtherFuelSource.value === val.energySource; });
     this.eafOtherFuelOptions = eafOtherFuelSources.fuelTypes;
 
-    this.form.patchValue({
-      otherFuelType: this.eafOtherFuelOptions[0].fuelType
-    });
     let outputRate: number = this.eafOtherFuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
       outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', this.settings.phastRollupFuelUnit);
@@ -201,7 +197,8 @@ export class Co2SavingsPhastComponent implements OnInit {
 
     if (shouldSetOutputRate) {
       this.form.patchValue({
-        totalOtherEmissionOutputRate: outputRate
+        totalOtherEmissionOutputRate: outputRate,
+        otherFuelType: this.eafOtherFuelOptions[0].fuelType
       });
     }
 
@@ -235,10 +232,6 @@ export class Co2SavingsPhastComponent implements OnInit {
       totalOtherEmissionOutputRate: outputRate
     });
     this.calculate();
-  }
-
-  isFieldEmpty(value: number): boolean {
-    return value === undefined || value === null || value === 0;
   }
 
   getFuelOutputRate(fuelType: string, options: Array<{fuelType: string, outputRate: number}>): number {
