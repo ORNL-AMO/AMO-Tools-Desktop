@@ -170,7 +170,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         this.setModificationSubregionForm()
       }
     }
-    if (!isFormInit) {
+    if (!isFormInit || this.isUsAverage) {
       this.calculate();
     }
   }

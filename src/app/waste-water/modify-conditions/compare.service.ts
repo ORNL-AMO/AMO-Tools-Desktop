@@ -52,8 +52,14 @@ export class CompareService {
   }
 
   compareCo2SavingsData(baselineCo2Data: Co2SavingsData, modificationCo2Data: Co2SavingsData): CO2DataDifferent {
-    return {
-      totalEmissionOutputRate: baselineCo2Data.totalEmissionOutputRate != modificationCo2Data.totalEmissionOutputRate, 
+    if(baselineCo2Data && modificationCo2Data){
+      return {
+        totalEmissionOutputRate: baselineCo2Data.totalEmissionOutputRate != modificationCo2Data.totalEmissionOutputRate, 
+      }
+    }else{
+      return {
+        totalEmissionOutputRate: false
+      }
     }
   }
 

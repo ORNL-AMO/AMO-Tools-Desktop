@@ -547,6 +547,7 @@ export class PhastComponent implements OnInit {
 
   closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disablePhastTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.phastService.modalOpen.next(false);
   }
