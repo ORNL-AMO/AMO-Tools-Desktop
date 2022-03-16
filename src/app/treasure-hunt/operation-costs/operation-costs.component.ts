@@ -53,6 +53,8 @@ export class OperationCostsComponent implements OnInit {
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
   saveSettingsOnDestroy: boolean = false;
+  electricityModalShown: boolean = false;
+  naturalGasEmissionsShown: boolean = false;
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -285,6 +287,7 @@ export class OperationCostsComponent implements OnInit {
 
   }
   showZipCodeModal() {
+    this.electricityModalShown = true;
     this.treasureHuntService.modalOpen.next(true);
     this.zipCodeModal.show();
   }
@@ -292,6 +295,7 @@ export class OperationCostsComponent implements OnInit {
   hideZipCodeModal() {
     this.treasureHuntService.modalOpen.next(false);
     this.zipCodeModal.hide();
+    this.electricityModalShown = false;
   }
 
   applyModalData() {
@@ -396,6 +400,7 @@ export class OperationCostsComponent implements OnInit {
 
   
   showMixedCO2EmissionsModal() {
+    this.naturalGasEmissionsShown = true;
     this.treasureHuntService.modalOpen.next(true);
     this.mixedCO2EmissionsModal.show();
   }
@@ -403,6 +408,7 @@ export class OperationCostsComponent implements OnInit {
   hideMixedCO2EmissionsModal() {
     this.treasureHuntService.modalOpen.next(false);
     this.mixedCO2EmissionsModal.hide();
+    this.naturalGasEmissionsShown = false;
   }
 
   updateMixedCO2EmissionsModalData(mixedOutputRate: number) {

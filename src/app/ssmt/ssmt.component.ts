@@ -501,6 +501,7 @@ export class SsmtComponent implements OnInit {
 
   closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableSteamTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
   }

@@ -268,6 +268,7 @@ export class TreasureHuntComponent implements OnInit {
 
   closeWelcomeScreen() {
     this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
   }

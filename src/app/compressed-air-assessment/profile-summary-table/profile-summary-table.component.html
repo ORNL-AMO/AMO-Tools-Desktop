@@ -1,6 +1,4 @@
-    <div class="d-flex flex-column print-container" [ngClass]="{'scroll-item': !printView}" *ngIf="profileSummary">
-        <div class="d-flex justify-content-center">
-            <div class="pl-2 pt-3 pr-2">
+<div class="print-container pl-2 pt-3 pr-2" [ngClass]="{'scroll-item': !printView}" *ngIf="profileSummary">
     <table #profileTable class="table table-hover bg-white">
         <thead>
             <tr>
@@ -32,7 +30,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, 
+                    Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -115,7 +113,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, 
+                    Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -141,8 +139,6 @@
             </tr>
         </tbody>
     </table>
-    </div>
-</div>
 </div>
 
 

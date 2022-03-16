@@ -1,13 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { InventoryService } from '../../compressed-air-assessment/inventory/inventory.service';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../models/compressed-air-assessment';
-import { CompressedAirCalculationService, CompressorCalcResult } from '../../compressed-air-assessment/compressed-air-calculation.service';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service';
-import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment/compressed-air-assessment-results.service';
-import { ExploreOpportunitiesService } from '../../compressed-air-assessment/explore-opportunities/explore-opportunities.service';
-import { TraceData } from '../models/plotting';
-import { Settings } from '../models/settings';
+import { InventoryService } from '../inventory/inventory.service';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
+import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
+import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
+import { TraceData } from '../../shared/models/plotting';
+import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
