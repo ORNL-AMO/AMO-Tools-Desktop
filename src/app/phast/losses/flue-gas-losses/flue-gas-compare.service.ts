@@ -93,6 +93,8 @@ export class FlueGasCompareService {
       this.compareMassExcessAirPercentage(index) ||
       this.compareMassCombustionAirTemperature(index) ||
       this.compareMassFuelTemperature(index) ||
+      this.compareMassAmbientAirTemp(index) ||
+      this.compareMassOxygenCalculationMethod(index) ||
       this.compareMassAshDischargeTemperature(index) ||
       this.compareMassMoistureInAirCombustion(index) ||
       this.compareMassUnburnedCarbonInAsh(index));
@@ -131,6 +133,7 @@ export class FlueGasCompareService {
   compareByVolumeLoss(index: number) {
     return (this.compareVolumeGasTypeId(index) ||
       this.compareVolumeFlueGasTemperature(index) ||
+      this.compareVolumeAmbientAirTemp(index) ||
       this.compareVolumeExcessAirPercentage(index) ||
       this.compareVolumeCombustionAirTemperature(index) ||
       this.compareVolumeFuelTemperature(index) ||
@@ -198,6 +201,7 @@ export class FlueGasCompareService {
           this.compare(baseline.flueGasByMass.combustionAirTemperature, modification.flueGasByMass.combustionAirTemperature) ||
           this.compare(baseline.flueGasByMass.fuelTemperature, modification.flueGasByMass.fuelTemperature) ||
           this.compare(baseline.flueGasByMass.ashDischargeTemperature, modification.flueGasByMass.ashDischargeTemperature) ||
+          this.compare(baseline.flueGasByMass.ambientAirTemp, modification.flueGasByMass.ambientAirTemp) ||
           this.compare(baseline.flueGasByMass.moistureInAirCombustion, modification.flueGasByMass.moistureInAirCombustion) ||
           this.compare(baseline.flueGasByMass.unburnedCarbonInAsh, modification.flueGasByMass.unburnedCarbonInAsh) ||
           this.compare(baseline.flueGasByMass.oxygenCalculationMethod, modification.flueGasByMass.oxygenCalculationMethod)) {
