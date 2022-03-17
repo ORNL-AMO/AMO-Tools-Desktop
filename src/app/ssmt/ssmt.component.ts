@@ -15,6 +15,7 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../settings/settings.service';
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
+import { SteamService } from '../calculator/steam/steam.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -49,6 +50,7 @@ export class SsmtComponent implements OnInit {
   _ssmt: SSMT;
   mainTab: string;
   mainTabSubscription: Subscription;
+  steamModelerErrorSubscription: Subscription;
   stepTab: string;
   stepTabSubscription: Subscription;
   modelTabSubscription: Subscription;
@@ -92,6 +94,7 @@ export class SsmtComponent implements OnInit {
     private assessmentService: AssessmentService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
+    private steamService: SteamService,
     private convertSsmtService: ConvertSsmtService
   ) { }
 
@@ -123,6 +126,12 @@ export class SsmtComponent implements OnInit {
     });
     this.subscribeTabs();
 
+    this.steamModelerErrorSubscription = this.steamService.steamModelerError.subscribe(error => {
+      if (error) {
+        this.openToast('Invalid Inputs', error);
+        this.cd.detectChanges();
+      }
+    });
     this.addNewModificationSubscription = this.ssmtService.openNewModificationModal.subscribe(val => {
       this.showAddModal = val;
       if (val) {
@@ -184,6 +193,7 @@ export class SsmtComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.ssmtService.saveSSMT.next(undefined);
     this.saveSsmtSub.unsubscribe();
+    this.steamModelerErrorSubscription.unsubscribe();
   }
 
   subscribeTabs() {
@@ -503,6 +513,21 @@ export class SsmtComponent implements OnInit {
     this.settingsDbService.globalSettings.disableSteamTutorial = true;
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
   }
 
 }
