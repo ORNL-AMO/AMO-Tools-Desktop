@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
@@ -40,7 +40,7 @@ export class StackLossComponent implements OnInit {
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) {
+  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -103,6 +103,7 @@ export class StackLossComponent implements OnInit {
         this.stackLossForm = this.stackLossService.initFormMass(this.settings);
       }
     }
+   this.cd.detectChanges();
   }
 
   changeFuelType() {
@@ -119,6 +120,7 @@ export class StackLossComponent implements OnInit {
         this.stackLossForm = this.stackLossService.initFormMass(this.settings);
       }
     }
+    this.cd.detectChanges();
   }
 
   calculate(form: FormGroup) {

@@ -13,7 +13,7 @@ export interface AvailableHeatData {
 export interface FlueGasByMass {
     gasTypeId?: number;
     flueGasTemperature?: number;
-    oxygenCalculationMethod?: string;
+    oxygenCalculationMethod?: 'Oxygen in Flue Gas' | 'Excess Air';
     excessAirPercentage?: number;
     o2InFlueGas?: number;
     ambientAirTemp?: number;
@@ -43,7 +43,7 @@ export interface FlueGasByVolume {
     ambientAirTemp?: number;
     //ambientAirTempF suite name for ambientAirTemp
     ambientAirTempF?: number;
-    oxygenCalculationMethod?: string;
+    oxygenCalculationMethod?:  'Oxygen in Flue Gas' | 'Excess Air';
     excessAirPercentage?: number;
     o2InFlueGas?: number;
     //flueGasO2Percentage suite name for o2InFlueGas

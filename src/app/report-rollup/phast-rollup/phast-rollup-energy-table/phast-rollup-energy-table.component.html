@@ -19,9 +19,12 @@
               <td>
                 {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
               </td>
-              <td>
+              <td *ngIf="data.hhv">
                 {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
               </td>
+              <span *ngIf="!data.hhv">
+                &mdash;
+              </span>
               <td>
                 {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
               </td>

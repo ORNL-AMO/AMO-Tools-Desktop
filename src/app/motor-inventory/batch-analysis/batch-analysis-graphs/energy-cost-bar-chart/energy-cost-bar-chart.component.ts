@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BatchAnalysisService, BatchAnalysisResults, BatchAnalysisSettings } from '../../batch-analysis.service';
-import * as Plotly from 'plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-energy-cost-bar-chart',
@@ -13,7 +13,7 @@ export class EnergyCostBarChartComponent implements OnInit {
 
   @ViewChild('energyBarChart', { static: false }) energyBarChart: ElementRef;
   batchAnalysisDataItemsSub: Subscription;
-  constructor(private batchAnalysisService: BatchAnalysisService) { }
+  constructor(private batchAnalysisService: BatchAnalysisService, private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -89,7 +89,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.newPlot(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
+      this.plotlyService.newPlot(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
     });
   }
 

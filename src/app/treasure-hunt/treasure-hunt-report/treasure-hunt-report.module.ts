@@ -26,6 +26,7 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
 import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/opportunity-summary-copy-table/opportunity-summary-copy-table.component';
 import { EffortSavingsChartComponent } from './report-graphs/effort-savings-chart/effort-savings-chart.component';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
+import { CarbonEmissionsSummaryTableComponent } from './executive-summary/carbon-emissions-summary-table/carbon-emissions-summary-table.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.
     TeamSummaryTableComponent,
     TeamSummaryPieChartComponent,
     OpportunitySummaryCopyTableComponent,
-    EffortSavingsChartComponent
+    EffortSavingsChartComponent,
+    CarbonEmissionsSummaryTableComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe]

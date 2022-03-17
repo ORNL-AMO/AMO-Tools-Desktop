@@ -31,6 +31,8 @@ export class ExploreAeratorFormComponent implements OnInit {
   SOTRDefaults: Array<{ label: string, value: number }>;
   aeratorTypes: Array<{ value: number, display: string }>;
   disableOptimize: boolean = false;
+  modificationAeratorBlowerLabel: string;
+  baselineAeratorBlowerLabel: string;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService) { }
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.settings = this.wasteWaterService.settings.getValue();
     this.baselineData = this.wasteWaterService.wasteWater.getValue().baselineData;
     this.baselineForm = this.aeratorPerformanceFormService.getFormFromObj(this.baselineData.aeratorPerformanceData);
+    this.setBaselineAeratorBlowerLabel();
     this.baselineWarnings = this.aeratorPerformanceFormService.checkWarnings(this.baselineData.aeratorPerformanceData);
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
       if (val) {
@@ -63,7 +66,7 @@ export class ExploreAeratorFormComponent implements OnInit {
     let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.OperatingTime != this.baselineData.aeratorPerformanceData.OperatingTime ||
       this.modificationData.aeratorPerformanceData.Aeration != this.baselineData.aeratorPerformanceData.Aeration ||
       this.modificationData.aeratorPerformanceData.Speed != this.baselineData.aeratorPerformanceData.Speed);
-    this.modificationData.exploreAeratorPerformance = { display: 'Modify Aerator Performance', hasOpportunity: hasOpportunity }
+    this.modificationData.exploreAeratorPerformance = { display: 'Modify Aerator/Blower Performance', hasOpportunity: hasOpportunity }
   }
 
   initExploreReduceOxygen() {
@@ -76,7 +79,7 @@ export class ExploreAeratorFormComponent implements OnInit {
     let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.Aerator != this.baselineData.aeratorPerformanceData.Aerator ||
       this.modificationData.aeratorPerformanceData.SOTR != this.baselineData.aeratorPerformanceData.SOTR ||
       this.modificationData.aeratorPerformanceData.TypeAerators != this.baselineData.aeratorPerformanceData.TypeAerators);
-    this.modificationData.exploreAeratorUpgrade = { display: 'Upgrade Aerator', hasOpportunity: hasOpportunity };
+    this.modificationData.exploreAeratorUpgrade = { display: 'Upgrade Aerator/Blower', hasOpportunity: hasOpportunity };
   }
 
   setExploreAeratorPerformance() {
@@ -192,8 +195,10 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.modificationForm.controls.TypeAerators.enable();
 
     if (this.modificationForm.controls.Aerator.value == 'Other') {
+      this.modificationAeratorBlowerLabel = "Aerator/Blower";
       this.aeratorTypes = defaultAeratorTypes;
     } else if (isDiffuserAerator) {
+      this.modificationAeratorBlowerLabel = "Blower";
       // Mechanical is removed. set to next option.
       if (this.modificationForm.controls.TypeAerators.value == 1) {
         this.modificationForm.patchValue({
@@ -202,6 +207,7 @@ export class ExploreAeratorFormComponent implements OnInit {
       }
       this.aeratorTypes = defaultAeratorTypes.filter(aerator => aerator.value != 1);
     } else {
+      this.modificationAeratorBlowerLabel = "Aerator";
       this.aeratorTypes = defaultAeratorTypes;
       this.modificationForm.patchValue({
         TypeAerators: defaultAeratorTypes[0].value
@@ -217,5 +223,16 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.disableOptimize = modificationValid.isValid == false;
   }
 
+
+  setBaselineAeratorBlowerLabel() {
+    let isDiffuserAerator: boolean = this.aerationRanges.diffusers.some(aerationRange => aerationRange.label == this.baselineForm.controls.Aerator.value);
+    if (this.baselineForm.controls.Aerator.value == 'Other') {
+      this.baselineAeratorBlowerLabel = "Aerator/Blower";
+    } else if (isDiffuserAerator) {
+      this.baselineAeratorBlowerLabel = "Blower";
+    } else {
+      this.baselineAeratorBlowerLabel = "Aerator";
+    }
+  }
 
 }

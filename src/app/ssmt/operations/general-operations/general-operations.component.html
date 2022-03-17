@@ -21,7 +21,7 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'assessment-padding': isBaseline && !inSetup}">
       <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
       <div class="input-group" *ngIf="isBaseline">
         <input name="sitePowerImport" type="number" step="any" class="form-control" id="{{idString+'sitePowerImport'}}"
@@ -32,8 +32,8 @@
         *ngIf="form.controls.sitePowerImport.invalid && !form.controls.sitePowerImport.pristine && isBaseline">
         <span *ngIf="form.controls.sitePowerImport.errors.required">Value Required</span>
       </span>
-      <div class="help-text text-center small" *ngIf="isBaseline == false">
-        Site Power Import calculated from your baseline during modeling.
+      <div class="d-flex help-text text-center small" *ngIf="isBaseline == false">
+        Calculated from your baseline during modeling.
       </div>
     </div>
     <div class="form-group">
@@ -56,7 +56,6 @@
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
       </span>
       <span class="alert-warning pull-right small" *ngIf="warnings.makeUpWaterTemperature !== null">{{warnings.makeUpWaterTemperature}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </span>   
     </div>
   </form>

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../../../shared/models/directory';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../../shared/models/assessment';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
@@ -39,8 +39,10 @@ export class DirectoryItemComponent implements OnInit {
   ngOnInit() {    
     this.directory.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.directory = this.directoryDbService.getById(this.directory.id);
-      this.directory.selected = false;
+      this.directory = this.directoryDbService.getById(this.directory.id);  
+      if(this.directory){
+        this.directory.selected = false;    
+      }
       this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
     });
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {

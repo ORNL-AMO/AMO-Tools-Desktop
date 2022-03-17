@@ -15,7 +15,7 @@ export class EGridService {
   constructor() {}
   
   getAllSubRegions() {
-    Papa.parse("assets/eGrid_co2.csv", {
+    Papa.parse("assets/eGRID-co2-emissions.csv", {
       header: true,
       download: true,
       complete: results => {
@@ -30,6 +30,45 @@ export class EGridService {
         this.setSubRegionsByZip(results.data);
       }
     });
+    
+  }
+
+  getEmissionsParsed(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      Papa.parse("assets/eGRID-co2-emissions.csv", {
+        header: true,
+        download: true,
+        complete: results => {
+          this.setCo2Emissions(results.data);
+          resolve(true);
+        },
+        error: results => {
+          reject(true);
+        },
+      });
+    });
+  }
+
+  getSubRegionsParsed(): Promise<boolean> {  
+    return new Promise((resolve, reject) => {
+      Papa.parse("assets/eGrid_zipcode_lookup.csv", {
+        header: true,
+        download: true,
+        complete: results => {
+          this.setSubRegionsByZip(results.data); 
+          resolve(true);
+        },
+        error: results => {
+          reject(true);
+        },
+      });
+    });
+  }
+
+  processCSVData(): Promise<[boolean, boolean]> {
+    let emissionsParsed: Promise<boolean> = this.getEmissionsParsed();
+    let subRegionsParsed: Promise<boolean> = this.getSubRegionsParsed();
+    return Promise.all([emissionsParsed, subRegionsParsed]);
   }
 
   setSubRegionsByZip(csvResults: Array<any>) {
@@ -50,14 +89,15 @@ export class EGridService {
 
     this.subRegionsByZipcode = subRegionsByZipcode;
   }
+  
 
   setCo2Emissions(csvResults: Array<any>) {
     let co2Emissions = new Array<SubregionEmissions>();
     csvResults.forEach(result => {
-      if (result['SUBRGN']) {
+      if (result['eGRID Subregion']) {
         co2Emissions.push({
-            subregion: result['SUBRGN'],
-            co2Emissions: Number(result['CO2e']),
+            subregion: result['eGRID Subregion'],
+            co2Emissions: Number(result['CO2 Factor']),
           })
       }
     });
@@ -65,10 +105,22 @@ export class EGridService {
     this.co2Emissions = co2Emissions;
   }
 
+  findEGRIDCO2Emissions(eGridSubregion: string): SubregionEmissions {
+    let emissiongsMatch =  _.find(this.co2Emissions, (val) => val.subregion.includes(eGridSubregion));
+    if(emissiongsMatch){
+      return JSON.parse(JSON.stringify(emissiongsMatch));
+    }else{
+      return{
+        subregion: undefined,
+        co2Emissions: undefined
+      }
+    }
+  }
+
 }
 
 export interface SubRegionData {
-  zip: number,
+  zip: string,
   state: string,
   co2Emissions?: number,
   subregions?: Array<string>

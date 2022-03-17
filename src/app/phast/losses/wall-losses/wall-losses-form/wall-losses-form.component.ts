@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChange
 import { WallLossCompareService } from '../wall-loss-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';

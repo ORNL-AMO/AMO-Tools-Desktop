@@ -1,11 +1,12 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Input, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { DataPoint, SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
+import { DataPoint, SimpleChart, TraceCoordinates, TraceData } from '../../../../shared/models/plotting';
 import { FormGroup } from '@angular/forms';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
-import * as Plotly from 'plotly.js';
 import { MotorPerformanceChartService, MotorPoint } from '../motor-performance-chart.service';
+import { PlotlyService } from 'angular-plotly.js';
+
 
 @Component({
   selector: 'app-motor-performance-chart',
@@ -30,12 +31,10 @@ export class MotorPerformanceChartComponent implements OnInit {
   }
 
   // DOM
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("expandedChartDiv", { static: false }) expandedChartDiv: ElementRef;
+  @ViewChild("panelChartDiv", { static: false }) panelChartDiv: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
 
   // Tooltips
   hoverBtnGridLines: boolean = false;
@@ -55,7 +54,7 @@ export class MotorPerformanceChartComponent implements OnInit {
     2: 'Efficiency'
   };
   graphColors: Array<string>;
-  
+
   tempMotorPower: number;
   tempRpm: number;
   tempEfficiencyClass: string;
@@ -63,58 +62,65 @@ export class MotorPerformanceChartComponent implements OnInit {
   tempAmps: number;
   tempLineFrequency: string;
   motorPointColors: Array<string>;
-  constructor(private performanceChartService: MotorPerformanceChartService, private cd: ChangeDetectorRef) { }
+  dataPointTraces: Array<TraceData>;
+  constructor(private performanceChartService: MotorPerformanceChartService, private cd: ChangeDetectorRef,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
-    this.triggerInitialResize();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleCalculate && !changes.toggleCalculate.firstChange && this.performanceForm.valid) {
-        this.checkCurveChanged();
-        this.initRenderChart();
+      this.checkCurveChanged();
+      this.renderChart();
     }
   }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
+  ngAfterViewInit(){
+    this.renderChart();
   }
 
-  resizeGraph() {
-    let expandedChart = this.ngChartContainer.nativeElement;
-    if (expandedChart) {
-      if (this.expanded) {
-        this.currentChartId = this.expandedChartId;
-      }
-      else {
-        this.currentChartId = this.tabPanelChartId;
-      }
-      this.initRenderChart();
-    }
-  }
-
-  initRenderChart() {
-    Plotly.purge(this.currentChartId);
+  renderChart() {
     this.initChartSetup();
     this.drawTraces();
+    this.dataPointTraces = new Array();
+    this.selectedDataPoints = new Array();
+    this.newPlot();
+    this.save();
+  }
+
+  newPlot() {
+    let traceData: Array<TraceData> = new Array();
+    this.performanceChart.data.forEach((trace, i) => {
+      traceData.push(trace);
+    });
+    this.dataPointTraces.forEach(trace => {
+      traceData.push(trace);
+    })
 
     let chartLayout = JSON.parse(JSON.stringify(this.performanceChart.layout));
-    Plotly.newPlot(this.currentChartId, this.performanceChart.data, chartLayout, this.performanceChart.config)
-      .then(chart => {
-        chart.on('plotly_click', chartData => {
-          this.addSelectedPointTraces(chartData);
+    if (this.expanded && this.expandedChartDiv) {
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
+        .then(chart => {
+          chart.on('plotly_click', chartData => {
+            this.addSelectedPointTraces(chartData);
+          });
         });
-      });
-    this.save();
+    } else if (!this.expanded && this.panelChartDiv) {
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
+        .then(chart => {
+          chart.on('plotly_click', chartData => {
+            this.addSelectedPointTraces(chartData);
+          });
+        });
+    }
   }
 
   initChartSetup() {
     this.graphColors = graphColors;
     this.performanceChart = this.performanceChartService.performanceChart.getValue();
     this.selectedDataPoints = this.performanceChartService.selectedDataPoints.getValue();
+    this.cd.detectChanges();
   }
 
   drawTraces() {
@@ -133,7 +139,7 @@ export class MotorPerformanceChartComponent implements OnInit {
   addSelectedPointTraces(graphData) {
     let currentPointIndex: number = graphData.points[0].pointIndex;
     let selectedMotorPoint: MotorPoint = this.getMotorPoint(currentPointIndex, graphData.points[0]);
-    let currentColor = this.graphColors[(this.performanceChart.data.length - 1) % this.graphColors.length]
+    let currentColor = this.graphColors[(this.dataPointTraces.length / 3 + 3) % this.graphColors.length]
     this.performanceChart.data.forEach((trace, i) => {
       // Create points for 3 default line traces
       if (i < 3) {
@@ -147,9 +153,10 @@ export class MotorPerformanceChartComponent implements OnInit {
           y: Number(trace.y[currentPointIndex])
         };
         let pointTrace = this.performanceChartService.getTraceDataFromPoint(point);
-        Plotly.addTraces(this.currentChartId, pointTrace);
+        this.dataPointTraces.push(pointTrace);
       }
     });
+    this.newPlot();
     selectedMotorPoint.pointColor = currentColor;
     selectedMotorPoint.shaftLoad = Number((selectedMotorPoint.shaftLoad * 100).toFixed(0));
     this.selectedDataPoints.push(selectedMotorPoint);
@@ -207,14 +214,9 @@ export class MotorPerformanceChartComponent implements OnInit {
   }
 
   deleteDataPoint(point: DataPoint, index: number) {
-    let deleteTraceIndex: number = this.performanceChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
-    // ignore default motorpoint trace
-    if (deleteTraceIndex == -1) {
-      deleteTraceIndex = this.performanceChart.data.length - 3;
-    }
-    let traces = [deleteTraceIndex, deleteTraceIndex + 1, deleteTraceIndex + 2];
-    Plotly.deleteTraces(this.currentChartId, traces);
+    this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.marker.color != point.pointColor });
     this.selectedDataPoints.splice(index, 1);
+    this.newPlot();
     this.cd.detectChanges();
     this.save();
   }
@@ -224,9 +226,7 @@ export class MotorPerformanceChartComponent implements OnInit {
     let showingGridY: boolean = this.performanceChart.layout.yaxis.showgrid;
     this.performanceChart.layout.xaxis.showgrid = !showingGridX;
     this.performanceChart.layout.yaxis.showgrid = !showingGridY;
-
-    let chartLayout = JSON.parse(JSON.stringify(this.performanceChart.layout));
-    Plotly.update(this.currentChartId, this.performanceChart.data, chartLayout);
+    this.newPlot();
     this.save();
   }
 
@@ -239,7 +239,7 @@ export class MotorPerformanceChartComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.newPlot();
     }, 100);
   }
 
@@ -305,7 +305,7 @@ export class MotorPerformanceChartComponent implements OnInit {
     this.hideTooltip('btnExpandChart');
     this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.resizeGraph();
+      this.newPlot();
     }, 200);
   }
 

@@ -1,6 +1,6 @@
 <ul class="tabs subtabs phast">
   <li *ngFor="let tab of lossTabs" [ngClass]="{'active': selectedTab.step == tab.step}" (click)="tabChange(tab)">
-    <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast" [inSetup]="inSetup"></app-operations-tab>
+    <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-operations-tab>
     <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast" [inSetup]="inSetup"></app-charge-material-tab>
     <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast" [inSetup]="inSetup"></app-atmosphere-tab>
     <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast" [inSetup]="inSetup"></app-auxiliary-power-tab>

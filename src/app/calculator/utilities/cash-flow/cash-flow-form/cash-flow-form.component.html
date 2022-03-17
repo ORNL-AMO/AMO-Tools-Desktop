@@ -16,7 +16,7 @@
       <div class="input-group calc-addon-group">
         <input type="number" step="any" class="form-control addon-input" name="energySavings" id="energySavings"
           [(ngModel)]="cashFlowForm.energySavings" (focus)="focusField('energySavings')" (input)="calculate()">
-        <span class="input-group-addon units">$/yr</span>
+        <span class="input-group-addon units">$</span>
       </div>
     </div>
     <div class="form-group">
@@ -44,7 +44,7 @@
       <div class="input-group calc-addon-group">
         <input type="number" step="any" class="form-control addon-input" name="operationCost" id="operationCost"
           [(ngModel)]="cashFlowForm.operationCost" (focus)="focusField('operationCost')" (input)="calculate()">
-        <span class="input-group-addon units">$/yr</span>
+        <span class="input-group-addon units">$</span>
       </div>
     </div>
     <div class="form-group">
@@ -52,7 +52,7 @@
       <div class="input-group calc-addon-group">
         <input type="number" step="any" class="form-control addon-input" name="fuelCost" id="fuelCost"
           [(ngModel)]="cashFlowForm.fuelCost" (focus)="focusField('fuelCost')" (input)="calculate()">
-        <span class="input-group-addon units">$/yr</span>
+        <span class="input-group-addon units">$</span>
       </div>
     </div>
     <div class="form-group">

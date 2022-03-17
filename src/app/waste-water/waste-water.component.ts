@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -16,6 +16,7 @@ import { ConvertWasteWaterService } from './convert-waste-water.service';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -58,13 +59,16 @@ export class WasteWaterComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
+    private egridService: EGridService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
@@ -119,6 +123,7 @@ export class WasteWaterComponent implements OnInit {
       this.isModalOpen = val;
     });
 
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -134,7 +139,6 @@ export class WasteWaterComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -154,10 +158,29 @@ export class WasteWaterComponent implements OnInit {
   }
 
   saveWasteWater(wasteWater: WasteWater) {
+    wasteWater = this.updateModificationCO2Savings(wasteWater);
     this.assessment.wasteWater = wasteWater;
+    
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });
+  }
+
+  updateModificationCO2Savings(wasteWater: WasteWater) {
+    if (wasteWater.baselineData.co2SavingsData) {
+      wasteWater.modifications.forEach(mod => {
+        if (!mod.co2SavingsData) {
+          mod.co2SavingsData = wasteWater.baselineData.co2SavingsData;
+        } else {
+          mod.co2SavingsData.zipcode = wasteWater.baselineData.co2SavingsData.zipcode;
+          mod.co2SavingsData.eGridSubregion = wasteWater.baselineData.co2SavingsData.eGridSubregion;
+          if (!mod.co2SavingsData.totalEmissionOutputRate) {
+            mod.co2SavingsData.totalEmissionOutputRate = wasteWater.baselineData.co2SavingsData.totalEmissionOutputRate;
+          }
+        }
+      });
+    }
+    return wasteWater;
   }
 
   addSettings(settings: Settings) {
@@ -205,33 +228,6 @@ export class WasteWaterComponent implements OnInit {
     }
   }
 
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
     this.showUpdateUnitsModal = true;
@@ -259,5 +255,19 @@ export class WasteWaterComponent implements OnInit {
     this.assessment.wasteWater = this.convertWasteWaterService.convertWasteWater(this.assessment.wasteWater, this.oldSettings, currentSettings);
     this.assessment.wasteWater.existingDataUnits = currentSettings.unitsOfMeasure;
     this.saveWasteWater(this.assessment.wasteWater);
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableWasteWaterTutorial) {
+      this.showWelcomeScreen = true;
+      this.wasteWaterService.isModalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableWasteWaterTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.wasteWaterService.isModalOpen.next(false);
   }
 }

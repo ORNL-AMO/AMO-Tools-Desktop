@@ -21,6 +21,20 @@ export const MockPhast: Assessment = {
             steamCost: 8,
             electricityCost: 0.05
         },
+        co2SavingsData: {
+            energyType: "fuel",
+            energySource: "Natural Gas",
+            fuelType: "Natural Gas",
+            totalEmissionOutputRate: 401.07,
+            totalFuelEmissionOutputRate: 53.06,
+            electricityUse: 0,
+            eGridRegion: '',
+            eGridSubregion: "U.S. Average",
+            totalEmissionOutput: 0,
+            userEnteredBaselineEmissions: false,
+            userEnteredModificationEmissions: false,
+            zipcode: "37830"
+        },
         modifications: [
             {
                 phast: {
@@ -168,7 +182,21 @@ export const MockPhast: Assessment = {
                         // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
-                    systemEfficiency: 90
+                    systemEfficiency: 90,
+                    co2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 401.07,
+                        totalFuelEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "U.S. Average",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "00000"
+                    },
                 },
                 notes: {
                     chargeNotes: '',
@@ -334,7 +362,21 @@ export const MockPhast: Assessment = {
                         // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
-                    systemEfficiency: 90
+                    systemEfficiency: 90,
+                    co2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 401.07,
+                        totalFuelEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "U.S. Average",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "00000"
+                    },
                 },
                 notes: {
                     chargeNotes: '',
@@ -500,7 +542,21 @@ export const MockPhast: Assessment = {
                         // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
-                    systemEfficiency: 90
+                    systemEfficiency: 90,
+                    co2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 401.07,
+                        totalFuelEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "U.S. Average",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "00000"
+                    },
                 },
                 notes: {
                     chargeNotes: '',
@@ -666,7 +722,21 @@ export const MockPhast: Assessment = {
                         // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment. "
                     },
-                    systemEfficiency: 90
+                    systemEfficiency: 90,
+                    co2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 401.07,
+                        totalFuelEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "U.S. Average",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "00000"
+                    },
                 },
                 notes: {
                     chargeNotes: '',
@@ -832,7 +902,21 @@ export const MockPhast: Assessment = {
                         // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
-                    systemEfficiency: 90
+                    systemEfficiency: 90,
+                    co2SavingsData: {
+                        energyType: "fuel",
+                        energySource: "Natural Gas",
+                        fuelType: "Natural Gas",
+                        totalEmissionOutputRate: 401.07,
+                        totalFuelEmissionOutputRate: 53.06,
+                        electricityUse: 0,
+                        eGridRegion: '',
+                        eGridSubregion: "U.S. Average",
+                        totalEmissionOutput: 0,
+                        userEnteredBaselineEmissions: false,
+                        userEnteredModificationEmissions: false,
+                        zipcode: "00000"
+                    },
                 },
                 notes: {
                     chargeNotes: '',
@@ -1210,14 +1294,27 @@ export const MockPhastSettings: Settings = {
         }
     },
     co2SavingsEnergyType: "electricity",
-    co2SavingsEnergySource: "",
-    co2SavingsFuelType: '',
-    totalEmissionOutputRate: 0,
+    co2SavingsEnergySource: "Natural Gas",
+    co2SavingsFuelType: "Natural Gas",
+    totalEmissionOutputRate: 401.07,
+    totalFuelEmissionOutputRate: 0,
+    totalNaturalGasEmissionOutputRate: 53.06,
+    totalCoalEmissionOutputRate: 0,
+    totalOtherEmissionOutputRate: 0,
+    coalFuelType: 'Mixed - Industrial Sector',
+    eafOtherFuelSource: 'None',
+    otherFuelType: '',
     electricityUse: 0,
     eGridRegion: '',
-    eGridSubregion: '',
+    eGridSubregion: 'U.S. Average',
     totalEmissionOutput: 0,
     userEnteredBaselineEmissions: false,
     userEnteredModificationEmissions: false,
-    zipcode: '',
+    zipcode: '00000',
+    commonRollupUnit: "MMBtu",
+    pumpsRollupUnit: "MWh",
+    fansRollupUnit: "MWh",
+    steamRollupUnit: "MMBtu",
+    wasteWaterRollupUnit: "MWh",
+    compressedAirRollupUnit: "MWh"
 };

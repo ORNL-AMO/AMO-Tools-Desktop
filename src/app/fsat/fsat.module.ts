@@ -8,7 +8,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanSetupComponent } from './fan-setup/fan-setup.component';
@@ -45,6 +45,8 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { OperationsComponent } from './operations/operations.component';
 import { OperationsService } from './operations/operations.service';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 @NgModule({
   imports: [
@@ -69,8 +71,8 @@ import { OperationsService } from './operations/operations.service';
     ToastModule,
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
-    FsatSankeyModule,
     UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule
   ],
   declarations: [
     FsatComponent,
@@ -87,7 +89,8 @@ import { OperationsService } from './operations/operations.service';
     ModificationListComponent,
     ModifyFieldDataFormComponent,
     FsatDiagramComponent,
-    OperationsComponent
+    OperationsComponent,
+    WelcomeScreenComponent
   ],
   providers: [
     FsatService,

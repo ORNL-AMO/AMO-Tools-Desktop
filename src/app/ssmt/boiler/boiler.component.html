@@ -8,26 +8,7 @@
   <div class="p-3">
 
     <form [formGroup]="boilerForm" #formElement>
-      <div class="form-group">
-        <label for="{{idString+'fuelType'}}">Fuel Type</label>
-        <select name="fuelType" class="form-control" id="{{idString+'fuelType'}}" (change)="setFuelTypes()"
-          (focus)="focusField('fuelType')"  formControlName="fuelType"
-          [ngClass]="{'indicate-different': isFuelTypeDifferent()}">
-          <option [ngValue]="0">Solid/Liquid</option>
-          <option [ngValue]="1">Gas</option>
-        </select>
-      </div>
 
-      <div class="form-group">
-        <label for="{{idString+'fuel'}}">Fuel
-          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add
-            New Fuel</a>
-        </label>
-        <select name="fuel" class="form-control" id="{{idString+'fuel'}}" (change)="save()" (focus)="focusField('fuel')"
-           formControlName="fuel" [ngClass]="{'indicate-different': isFuelDifferent()}">
-          <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
-        </select>
-      </div>
       <div class="form-group">
         <label for="{{idString+'combustionEfficiency'}}">Boiler Combustion Efficiency
           <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
@@ -110,8 +91,7 @@
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value must be greater than 0 <span
               [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>.
         </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}}
-          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        <span class="alert-warning pull-right small" *ngIf="warnings.approachTemperature !== null">{{warnings.approachTemperature}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
         </span>         
       </div>
 
@@ -195,18 +175,3 @@
 
 
 <!--CREATE material MODAL-->
-<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="materialModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div>
-        <app-solid-liquid-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 0"
-          (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings">
-        </app-solid-liquid-flue-gas-material>
-        <app-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 1"
-          (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings">
-        </app-flue-gas-material>
-      </div>
-    </div>
-  </div>
-</div>

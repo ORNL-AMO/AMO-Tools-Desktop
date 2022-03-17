@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -55,7 +55,6 @@ export class ModificationListModalComponent implements OnInit {
   confirmDelete() {
     let deleteModIndex: number = this.compressedAirAssessment.modifications.findIndex(modification => { return modification.modificationId == this.deleteModificationId });
     this.compressedAirAssessment.modifications.splice(deleteModIndex, 1);
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     if (this.deleteModificationId == this.selectedModificationId) {
       if (this.compressedAirAssessment.modifications.length != 0) {
         this.compressedAirAssessmentService.selectedModificationId.next(this.compressedAirAssessment.modifications[0].modificationId);
@@ -63,6 +62,7 @@ export class ModificationListModalComponent implements OnInit {
         this.compressedAirAssessmentService.selectedModificationId.next(undefined);
       }
     }
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.deleteModificationId = undefined;
   }
 

@@ -15,6 +15,7 @@ import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.
 import { SettingsService } from '../settings/settings.service';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -49,6 +50,7 @@ export class TreasureHuntComponent implements OnInit {
   nextDisabled: boolean;
   selectedCalcSub: Subscription;
   selectedCalc: string;
+  showWelcomeScreen: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
@@ -61,10 +63,12 @@ export class TreasureHuntComponent implements OnInit {
     private calculatorsService: CalculatorsService,
     private treasureChestMenuService: TreasureChestMenuService,
     private settingsService: SettingsService,
-    private convertUnitsService: ConvertUnitsService
+    private convertUnitsService: ConvertUnitsService,
+    private egridService: EGridService
   ) { }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
         if (!this.assessment.treasureHunt) {
@@ -101,7 +105,6 @@ export class TreasureHuntComponent implements OnInit {
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
-      this.checkTutorials();
       this.getContainerHeight();
       this.getCanContinue();
     });
@@ -122,7 +125,9 @@ export class TreasureHuntComponent implements OnInit {
     this.selectedCalcSub = this.calculatorsService.selectedCalc.subscribe(val => {
       this.selectedCalc = val;
       this.getContainerHeight();
-    })
+    });
+
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -140,7 +145,6 @@ export class TreasureHuntComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -211,58 +215,7 @@ export class TreasureHuntComponent implements OnInit {
       this.treasureHuntService.mainTab.next('find-treasure');
     }
   }
-
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
-  checkTutorials() {
-    if (this.mainTab == 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disableTreasureHuntSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('treasure-hunt-setup-tutorial');
-      }
-    } else if (this.mainTab == 'find-treasure') {
-      if (!this.settingsDbService.globalSettings.disableTreasureHuntFindTreasureTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('treasure-hunt-find-treasure-tutorial');
-      }
-    } else if (this.mainTab == 'treasure-chest') {
-      if (!this.settingsDbService.globalSettings.disableTreasureHuntTreasureChestTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('treasure-hunt-treasure-chest-tutorial');
-      }
-    } else if (this.mainTab == 'report') {
-      if (!this.settingsDbService.globalSettings.disableTreasureHuntReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('treasure-hunt-report-tutorial');
-      }
-    }
-  }
-
+  
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
     newSettings.assessmentId = this.assessment.id;
@@ -304,5 +257,19 @@ export class TreasureHuntComponent implements OnInit {
     this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
     this.saveTreasureHunt(this.assessment.treasureHunt);
     this.getSettings();
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableTreasureHuntTutorial) {
+      this.showWelcomeScreen = true;
+      this.treasureHuntService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.treasureHuntService.modalOpen.next(false);
   }
 }

@@ -5,6 +5,10 @@ import { SettingsService } from '../../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
+import { MotorInventoryData } from '../../motor-inventory';
+import { Subscription } from 'rxjs';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
   selector: 'app-plant-setup',
@@ -15,15 +19,33 @@ export class PlantSetupComponent implements OnInit {
 
   settingsForm: FormGroup;
   settings: Settings;
+
+  co2SavingsData: Co2SavingsData;
+  motorInventoryData: MotorInventoryData;
+  motorInventoryDataSub: Subscription;
+
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private motorInventoryService: MotorInventoryService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit(): void {
     this.settings = this.motorInventoryService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(inventoryData => {
+      this.motorInventoryData = inventoryData;
+    });
+    this.setCo2SavingsData();
   }
 
-  save(){
+  ngOnDestroy() {
+    this.motorInventoryDataSub.unsubscribe();
+  }
+
+  focusField(field: string) {
+    this.motorInventoryService.focusedField.next(field);
+  }
+
+  save() {
     let id: number = this.settings.id;
     let createdDate = this.settings.createdDate;
     let inventoryId: number = this.settings.inventoryId;
@@ -36,6 +58,20 @@ export class PlantSetupComponent implements OnInit {
     this.indexedDbService.putSettings(this.settings).then(() => {
       this.settingsDbService.setAll();
     });
+  }
+
+  updateCo2SavingsData(co2SavingsData?: Co2SavingsData) {
+    this.motorInventoryData.co2SavingsData = co2SavingsData;
+    this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
+  }
+
+  setCo2SavingsData() {
+    if (this.motorInventoryData.co2SavingsData) {
+      this.co2SavingsData = this.motorInventoryData.co2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
+    }
   }
 
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from "@angular/core";
 import { OpportunitiesPaybackDetails } from "../../../../shared/models/treasure-hunt";
-import * as Plotly from 'plotly.js';
 import { graphColors } from "../../../../phast/phast-report/report-graphs/graphColors";
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from "angular-plotly.js";
 
 @Component({
   selector: "app-opportunity-payback-bar-chart",
@@ -18,7 +18,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   settings: Settings;
 
   @ViewChild("paybackBarChart", { static: false }) paybackBarChart: ElementRef;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit() { }
 
@@ -88,7 +88,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.paybackBarChart.nativeElement, traces, layout, configOptions);
+    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, configOptions);
 
   }
 
@@ -141,7 +141,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.react(this.paybackBarChart.nativeElement, traces, layout, configOptions);
+    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, configOptions);
   }
 
   getLabelsAndData(): Array<{ label: string, data: number }> {

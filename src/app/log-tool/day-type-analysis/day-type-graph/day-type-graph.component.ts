@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js';
 import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PlotlyService } from 'angular-plotly.js';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
   styleUrls: ['./day-type-graph.component.css']
 })
 export class DayTypeGraphComponent implements OnInit {
+
+  @ViewChild("dayTypeGraph", { static: false }) dayTypeGraph: ElementRef;
+
 
   graph = {
     data: [],
@@ -36,10 +39,13 @@ export class DayTypeGraphComponent implements OnInit {
   selectedGraphType: string;
   individualDayScatterPlotDataSub: Subscription;
   individualDayScatterPlotData: Array<DayTypeGraphItem>;
-  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService, private convertUnitsService: ConvertUnitsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
+  }
 
+  ngAfterViewInit(){
     this.dayTypeScatterPlotDataSub = this.dayTypeGraphService.dayTypeScatterPlotData.subscribe(val => {
       this.dayTypeScatterPlotData = val;
       if (this.selectedGraphType == 'dayType') {
@@ -59,6 +65,7 @@ export class DayTypeGraphComponent implements OnInit {
       this.setGraphData();
     });
   }
+
 
   ngOnDestroy() {
     this.individualDayScatterPlotDataSub.unsubscribe();
@@ -81,7 +88,9 @@ export class DayTypeGraphComponent implements OnInit {
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
-    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout, { responsive: true });
+    if (this.dayTypeGraph) {
+      this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, { responsive: true });
+    }
   }
 
   getGraphData(): Array<DayTypeGraphItem> {

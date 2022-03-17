@@ -4,7 +4,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Subscription } from 'rxjs';
@@ -16,8 +16,9 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { SettingsService } from '../settings/settings.service';
+import { FanImperialDefaults, FanMetricDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
+import { EGridService } from '../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-fsat',
@@ -78,11 +79,12 @@ export class FsatComponent implements OnInit {
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-  fsat1: {fsat: FSAT, name: string};
-  fsat2: {fsat: FSAT, name: string};
+  fsat1: { fsat: FSAT, name: string };
+  fsat2: { fsat: FSAT, name: string };
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showWelcomeScreen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -96,10 +98,12 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
+    private egridService: EGridService,
     private convertFsatService: ConvertFsatService) {
   }
 
   ngOnInit() {
+    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
       this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
@@ -127,7 +131,6 @@ export class FsatComponent implements OnInit {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
-      this.checkTutorials();
     });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
@@ -159,12 +162,13 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     });
-      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
     });
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -184,27 +188,7 @@ export class FsatComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-      this.disclaimerToast();
     }, 100);
-  }
-
-  checkTutorials() {
-    if (this.mainTab === 'system-setup') {
-      if (!this.settingsDbService.globalSettings.disableFsatSetupTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-system-setup');
-      }
-    } else if (this.mainTab === 'assessment') {
-      if (!this.settingsDbService.globalSettings.disableFsatAssessmentTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-assessment-tutorial');
-      }
-    } else if (this.mainTab === 'report') {
-      if (!this.settingsDbService.globalSettings.disableFsatReportTutorial) {
-        this.assessmentService.tutorialShown = false;
-        this.assessmentService.showTutorial.next('fsat-report-tutorial');
-      }
-    }
   }
 
   initSankeyList() {
@@ -307,6 +291,9 @@ export class FsatComponent implements OnInit {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
+        this._fsat.modifications.forEach(mod => {
+          mod.fsat = this.updateModificationCO2Savings(mod.fsat);
+        });
       }
     } else {
       this.modificationExists = false;
@@ -320,6 +307,22 @@ export class FsatComponent implements OnInit {
       });
     });
   }
+
+  updateModificationCO2Savings(modFsat: FSAT) {
+    if (this._fsat.fsatOperations.cO2SavingsData) {
+      if (!modFsat.fsatOperations.cO2SavingsData) {
+        modFsat.fsatOperations.cO2SavingsData = this._fsat.fsatOperations.cO2SavingsData;
+      } else {
+        modFsat.fsatOperations.cO2SavingsData.zipcode = this._fsat.fsatOperations.cO2SavingsData.zipcode;
+        modFsat.fsatOperations.cO2SavingsData.eGridSubregion = this._fsat.fsatOperations.cO2SavingsData.eGridSubregion;
+        if (!modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate) {
+          modFsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate = this._fsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate;
+        }
+      }
+    }
+    return modFsat;
+  }
+
 
   checkSetupDone(fsat: FSAT): boolean {
     return this.fsatService.checkValid(fsat, true, this.settings).isValid;
@@ -400,41 +403,51 @@ export class FsatComponent implements OnInit {
     this.saveNewMod(tmpModification);
   }
 
-  disclaimerToast() {
-    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
-      this.toastData.title = 'Disclaimer';
-      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-      this.showToast = true;
-      this.cd.detectChanges();
-    }
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.cd.detectChanges();
-  }
-
-  disableDisclaimer() {
-    this.settingsDbService.globalSettings.disableDisclaimer = true;
-    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-      this.settingsDbService.setAll();
-    });
-    this.hideToast();
-  }
-
+  
   addSettings(settings: Settings) {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings = this.setSettingsUnitType(newSettings);
     newSettings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(newSettings).then(id => {
       this.settingsDbService.setAll().then(() => {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  setSettingsUnitType(settings: Settings): Settings {
+    let hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+    let hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+
+  checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    let hasMatchingDensityMeasurement: boolean = settings.densityMeasurement === unitDefaults.densityMeasurement;
+    let hasMatchingFanPowerMeasurement: boolean = settings.fanPowerMeasurement === unitDefaults.fanPowerMeasurement;
+    let hasMatchingFanFlowRate: boolean = settings.fanFlowRate === unitDefaults.fanFlowRate;
+    let hasMatchingFanPressureMeasurement: boolean = settings.fanPressureMeasurement === unitDefaults.fanPressureMeasurement;
+    let hasMatchingFanBarometricPressure: boolean = settings.fanBarometricPressure === unitDefaults.fanBarometricPressure;
+    let hasMatchingFanSpecificHeatGas: boolean = settings.fanSpecificHeatGas === unitDefaults.fanSpecificHeatGas;
+    let hasMatchingFanTemperatureMeasurement: boolean = settings.fanTemperatureMeasurement === unitDefaults.fanTemperatureMeasurement;
+
+    let hasMatchingUnitTypes: boolean = hasMatchingDensityMeasurement
+    && hasMatchingFanPowerMeasurement
+    && hasMatchingFanFlowRate
+    && hasMatchingFanPressureMeasurement
+    && hasMatchingFanBarometricPressure
+    && hasMatchingFanSpecificHeatGas
+    && hasMatchingFanTemperatureMeasurement            
+
+    return hasMatchingUnitTypes;
   }
 
   initUpdateUnitsModal(oldSettings: Settings) {
@@ -453,7 +466,7 @@ export class FsatComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
+    if (shouldUpdateData == true) {
       this.updateData();
     } else {
       this.save();
@@ -466,5 +479,19 @@ export class FsatComponent implements OnInit {
     this._fsat.existingDataUnits = this.settings.unitsOfMeasure;
     this.save();
     this.getSettings();
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableFansTutorial) {
+      this.showWelcomeScreen = true;
+      this.fsatService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableFansTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.fsatService.modalOpen.next(false);
   }
 }

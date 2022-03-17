@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BoilerOutput, SSMTOperationsOutput } from '../../../shared/models/steam/steam-outputs';
-import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { BoilerOutput, SSMTOperationsOutput, SteamCo2EmissionsOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -14,11 +13,12 @@ export class DiagramSummaryTableComponent implements OnInit {
   @Input()
   boiler: BoilerOutput;
   @Input()
+  co2EmissionsOutput: SteamCo2EmissionsOutput;
+  @Input()
   settings: Settings;
   constructor() { }
 
   ngOnInit() {
-    
   }
 
 }

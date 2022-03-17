@@ -52,6 +52,7 @@ export class Co2SavingsService {
 export interface Co2SavingsData {
   energyType: string;
   totalEmissionOutputRate: number;
+  totalFuelEmissionOutputRate?: number,
   electricityUse: number;
   energySource?: string;
   fuelType?: string;
@@ -61,4 +62,6 @@ export interface Co2SavingsData {
   userEnteredBaselineEmissions?: boolean;
   userEnteredModificationEmissions?: boolean;
   zipcode?: string,
+  percentFuelUsage?: number,
+  otherFuelMixedCO2SavingsData?: Array<Co2SavingsData>
 }

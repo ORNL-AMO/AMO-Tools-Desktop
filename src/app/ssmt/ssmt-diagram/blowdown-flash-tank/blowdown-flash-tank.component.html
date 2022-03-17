@@ -24,7 +24,7 @@
     </div>
     <div class="d-flex tank-pipe justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')"
       (mouseleave)="hoverEquipment('default')" [ngClass]="outletCondensateClasses"
-      (click)="selectEquipment('blowdownHovered')">
+      (click)="selectEquipment('boilerBlowdownFlashedLiquidHovered')">
       <div class="outlet-blowdown-holder">
         <span class="outlet-blowdown" *ngIf="flashTank.outletLiquidMassFlow != 0">
           {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}

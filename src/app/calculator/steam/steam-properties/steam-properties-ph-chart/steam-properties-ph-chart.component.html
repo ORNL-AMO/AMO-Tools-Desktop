@@ -9,12 +9,12 @@
       </div>
     </div>
     <div *ngIf="expanded" class="w-75 mx-auto p-3">
-      <div class="w-100" id="expandedChartDiv"></div>
+      <div class="w-100" id="expandedChartDiv" #expandedChartDiv></div>
     </div>
   </div>
   
   <div class="w-100 tab-panel-background p-2">
-    <div class="w-100" id="tabPanelDiv"></div>
+    <div class="w-100" id="tabPanelDiv" #panelChartDiv></div>
     <div class="col-md-12">
       <div class="graph-btn-container">
         <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>

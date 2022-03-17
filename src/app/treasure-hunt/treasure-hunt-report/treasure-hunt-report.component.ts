@@ -14,6 +14,7 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PrintOptions } from '../../shared/models/printing';
 import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
+import { TreasureHuntService } from '../treasure-hunt.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -57,7 +58,7 @@ export class TreasureHuntReportComponent implements OnInit {
     private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
     private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService) { }
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     if (this.assessment) {

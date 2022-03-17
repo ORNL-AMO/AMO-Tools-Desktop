@@ -94,7 +94,7 @@
           Inlet Pressure</a>
       </label>
       <div class="input-group">
-        <input name="inletPressure" type="number" max="0" step="any" class="form-control"
+        <input name="inletPressure" type="number" step="any" class="form-control"
           formControlName="inletPressure" id="{{'inletPressure_'+idString}}" (input)="save()"
           (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
@@ -182,7 +182,8 @@
     </div>
 
     <!--min-->
-    <div class="form-group">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
         <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="toggleUserDefinedCompressibilityFactor()"
           [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>

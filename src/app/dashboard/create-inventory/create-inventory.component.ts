@@ -12,7 +12,7 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
 import { InventoryService } from '../inventory.service';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 @Component({

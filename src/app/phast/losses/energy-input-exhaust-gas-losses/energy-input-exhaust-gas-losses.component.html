@@ -27,7 +27,7 @@
   <div *ngIf="!loss.collapse">
     <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form"
       (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
-      [lossIndex]="lossIndex" [availableHeat]="availableHeat" [settings]="settings" (inputError)="setError($event)"
+      [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"
       [inSetup]="inSetup" [isBaseline]="isBaseline"></app-energy-input-exhaust-gas-form>
   </div>
   <div class="d-flex flex-column loss-total" [ngClass]="{'input-error': showError == true}">
@@ -53,12 +53,15 @@
     </div>
     <div class="form-group">
       <label class="bold">Electrical Heat Delivered</label>
-      <div *ngIf="electricalHeatDelivered" class="text-center bold">
+      <div *ngIf="electricalHeatDelivered > 0" class="text-center bold">
         {{electricalHeatDelivered | sigFigs:'6'}}
         <span>{{resultsUnit}}</span>
       </div>
-      <div *ngIf="!electricalHeatDelivered" class="text-center bold">
+      <div *ngIf="!electricalHeatDelivered || electricalHeatDelivered <= 0" class="text-center bold">
         &mdash; &mdash;
+      </div>
+     <div *ngIf="warnings.energyInputHeatDelivered !== null" class="text-alert alert-warning">
+          {{warnings.energyInputHeatDelivered}}
       </div>
     </div>
 

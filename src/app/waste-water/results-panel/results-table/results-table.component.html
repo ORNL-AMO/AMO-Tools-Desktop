@@ -311,7 +311,7 @@
     <div class="d-flex stripe my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">Aerator Energy Use (MWh/yr)</span>
+            <span class="table-text">Aeration Energy Use (MWh/yr)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
@@ -326,7 +326,7 @@
     <div class="d-flex my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">Aerator Energy Cost ({{settings.currency}}/yr)</span>
+            <span class="table-text">Aeration Energy Cost ({{settings.currency}}/yr)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
@@ -335,6 +335,35 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
             [ngClass]="{'positive-savings': modificationResults.percentCostSavings > 10}">
             <span class="table-text">{{modificationResults.AeCost | number: '1.0-0'}}</span>
+        </div>
+    </div>
+    <!-- co2EmissionsOutput -->
+    <div class="d-flex stripe my-table-item my-table-bg bold">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="bold table-text">Annual CO<sub>2</sub> (tonne CO<sub>2</sub>)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">{{baselineResults.co2EmissionsOutput | number: '1.0-0'}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
+            <span class="table-text">{{modificationResults.co2EmissionsOutput | number: '1.0-0'}}</span>
+        </div>
+    </div>
+     <!-- co2EmissionsOutput Savings-->
+     <div class="d-flex stripe my-table-item my-table-bg bold">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="bold table-text">Annual CO<sub>2</sub> Savings (tonne CO<sub>2</sub>)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
+            [ngClass]="{'positive-savings': modificationResults.co2EmissionsSavings > 1}">
+            <span class="table-text">{{modificationResults.co2EmissionsSavings | number: '1.0-0'}}</span>
         </div>
     </div>
     <!-- costSavings -->

@@ -7,7 +7,7 @@
 			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="flue-icon">
 		  </div>
 		  <div class="pl-2">
-			<h3>Flue Gas</h3>
+			<h3>Flue Gas Loss</h3>
 		  </div>
 		</div>
 		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
@@ -50,26 +50,24 @@
 				
 			 <!-- Results -->
 			<div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
-				<ng-container *ngIf="method === 'By Volume'">
-					<div class="form-group m-0">
-						<label class="bold">Oxygen In Flue Gas</label>
-						<div *ngIf="output.baseline.calculatedFlueGasO2" class="text-center bold small">
-							{{output.baseline.calculatedFlueGasO2 | number:'0.1-2'}} %
-						</div>
-						<div *ngIf="!output.baseline.calculatedFlueGasO2" class="text-center bold small">
-							&mdash; &mdash;
-						</div>
+				<div class="form-group m-0">
+					<label class="bold">Oxygen In Flue Gas</label>
+					<div *ngIf="output.baseline.calculatedFlueGasO2" class="text-center bold small">
+						{{output.baseline.calculatedFlueGasO2 | number:'0.1-2'}} %
 					</div>
-					<div class="form-group m-0">
-						<label class="bold">Excess Air </label>
-						<div *ngIf="output.baseline.calculatedExcessAir" class="text-center bold small">
-							{{output.baseline.calculatedExcessAir | number:'0.1-2'}} %
-						</div>
-						<div *ngIf="!output.baseline.calculatedExcessAir" class="text-center bold small">
-							&mdash; &mdash;
-						</div>
+					<div *ngIf="!output.baseline.calculatedFlueGasO2" class="text-center bold small">
+						&mdash; &mdash;
 					</div>
-				</ng-container>
+				</div>
+				<div class="form-group m-0">
+					<label class="bold">Excess Air </label>
+					<div *ngIf="output.baseline.calculatedExcessAir" class="text-center bold small">
+						{{output.baseline.calculatedExcessAir | number:'0.1-2'}} %
+					</div>
+					<div *ngIf="!output.baseline.calculatedExcessAir" class="text-center bold small">
+						&mdash; &mdash;
+					</div>
+				</div>
 				<div class="form-group m-0">
 				  <label class="bold">Available Heat</label>
 				  <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
@@ -85,7 +83,7 @@
 				  <div *ngIf="output.baseline.flueGasLosses" class="text-center bold small">
 					{{output.baseline.flueGasLosses | sigFigs:'3'}} 
 					<span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+						[innerHTML]="settings.phastRollupFuelUnit | settingsLabel"></span>/hr</span>
 				  </div>
 				  <div *ngIf="!output.baseline.flueGasLosses" class="text-center bold small">
 					&mdash; &mdash;
@@ -130,7 +128,6 @@
 			  [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
 			 <!-- Mod results -->
 				<div class="d-flex flex-column mt-3 mb-2">
-					<ng-container *ngIf="method === 'By Volume'">
 						<div class="form-group m-0">
 							<label class="bold">Oxygen In Flue Gas</label>
 							<div *ngIf="output.modification.calculatedFlueGasO2" class="text-center bold small">
@@ -149,7 +146,6 @@
 								&mdash; &mdash;
 							</div>
 						</div>
-					</ng-container>
 					<div class="form-group m-0">
 					  <label class="bold">Available Heat</label>
 					  <div *ngIf="output.modification.availableHeat" class="text-center bold small">
@@ -165,7 +161,7 @@
 					  <div *ngIf="output.modification.flueGasLosses" class="text-center bold small">
 						{{output.modification.flueGasLosses | sigFigs:'3'}}
 						<span class="input-group-addon"><span
-							[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+							[innerHTML]="settings.phastRollupFuelUnit | settingsLabel"></span>/hr</span>
 					  </div>
 					  <div *ngIf="!output.modification.flueGasLosses" class="text-center bold small">
 						&mdash; &mdash;

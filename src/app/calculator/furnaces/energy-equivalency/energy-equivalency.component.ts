@@ -95,7 +95,7 @@ export class EnergyEquivalencyComponent implements OnInit {
   generateExample() {
     this.energyEquivalencyElectric = this.energyEquivalencyService.getDefaultElectricData(this.settings);
     this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
-    this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData();
+    this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData(this.settings);
     this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
     this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
@@ -161,7 +161,7 @@ export class EnergyEquivalencyComponent implements OnInit {
       } else {
         let tmpEnergyEquivalencyInputs: { energyEquivalencyFuel: EnergyEquivalencyFuel, energyEquivalencyElectric: EnergyEquivalencyElectric } = {
           energyEquivalencyElectric: this.energyEquivalencyService.getDefaultElectricData(this.settings),
-          energyEquivalencyFuel: this.energyEquivalencyService.getDefaultFuelData()
+          energyEquivalencyFuel: this.energyEquivalencyService.getDefaultFuelData(this.settings)
         };
         this.calculator.energyEquivalencyInputs = tmpEnergyEquivalencyInputs;
         this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
@@ -179,7 +179,7 @@ export class EnergyEquivalencyComponent implements OnInit {
   initCalculator(): Calculator {
     let tmpEnergyEquivalencyInputs: { energyEquivalencyFuel: EnergyEquivalencyFuel, energyEquivalencyElectric: EnergyEquivalencyElectric } = {
       energyEquivalencyElectric: this.energyEquivalencyService.getDefaultElectricData(this.settings),
-      energyEquivalencyFuel: this.energyEquivalencyService.getDefaultFuelData()
+      energyEquivalencyFuel: this.energyEquivalencyService.getDefaultFuelData(this.settings)
     };
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
@@ -198,7 +198,7 @@ export class EnergyEquivalencyComponent implements OnInit {
     if (this.energyEquivalencyService.energyEquivalencyFuel) {
       this.energyEquivalencyFuel = this.energyEquivalencyService.energyEquivalencyFuel;
     } else {
-      this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData();
+      this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData(this.settings);
     }
     this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);

@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -19,7 +21,8 @@ export class SsmtSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numSsmt: number;
-  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
+
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
@@ -33,7 +36,13 @@ export class SsmtSummaryComponent implements OnInit {
     this.selectedSub = this.ssmtReportRollupService.selectedSsmt.subscribe(val => {
       if (val.length != 0) {
         this.ssmtReportRollupService.setSsmtResultsFromSelected(val);
-        this.calcSsmtSums();
+        this.ssmtReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.ssmtReportRollupService.totals;
+        this.ssmtSavingPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.steamTotalModificationCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -41,25 +50,6 @@ export class SsmtSummaryComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
-  }
-
-  calcSsmtSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
-      let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
-      let diffEnergy = result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.operationsOutput.boilerFuelUsage;
-    })
-    this.ssmtSavingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
-    this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 
 }

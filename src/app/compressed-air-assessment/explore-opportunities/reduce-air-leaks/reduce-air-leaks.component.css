@@ -24,3 +24,10 @@
     font-size: .75rem;
     padding-right: .5rem;
 }
+
+.supply-demand{
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
+}

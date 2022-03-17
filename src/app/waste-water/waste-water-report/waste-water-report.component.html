@@ -4,7 +4,7 @@
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
         <div class="report-title">
-            <h4>Waste Water Efficiency Report:</h4>
+            <h4>Wastewater Efficiency Report:</h4>
             <h4>{{assessment.name}}</h4>
             <h5>{{createdDate| date:'short'}}</h5>
         </div>
@@ -16,7 +16,6 @@
 
         <div *ngIf="inAssessment && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
-            <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
         <div *ngIf="assessment" class="row assessment-name">
@@ -76,19 +75,19 @@
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
         <div class="input-data results scroll-item print-height"
-            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
+            *ngIf="(currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-data [wasteWater]="assessment.wasteWater" [settings]="settings" [printView]="showPrintView">
             </app-input-data>
         </div>
         <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
+            *ngIf="(currentTab == 'results' && !showPrintView) || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-result-data [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-result-data>
         </div>
         <div class="results print-height scroll-item"
-            *ngIf="currentTab == 'reportGraphs' || (showPrintView && printOptions.printReportGraphs)"
+            *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-energy-analysis [printView]="showPrintView" [settings]="settings"></app-energy-analysis>
             <app-srt-graphs [printView]="showPrintView" [settings]="settings"></app-srt-graphs>

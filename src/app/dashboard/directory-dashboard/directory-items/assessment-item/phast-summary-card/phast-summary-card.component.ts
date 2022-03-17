@@ -3,7 +3,7 @@ import { Assessment } from '../../../../../shared/models/assessment';
 import { ExecutiveSummary } from '../../../../../shared/models/phast/phast';
 import { ExecutiveSummaryService } from '../../../../../phast/phast-report/executive-summary.service';
 import { Settings } from '../../../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment.service';
 

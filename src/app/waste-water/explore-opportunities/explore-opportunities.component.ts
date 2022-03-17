@@ -11,8 +11,6 @@ import { WasteWaterService } from '../waste-water.service';
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
-  @Output('exploreOppsToast')
-  exploreOppsToast: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   modificationExists: boolean;
   selectedModificationIdSub: Subscription;
@@ -22,13 +20,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
-    this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
-      if (val) {
-        this.modificationExists = true;
-      } else {
-        this.modificationExists = false;
+    this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(selectedModificationId => {
+      if (selectedModificationId) {
+        let modification: WasteWaterData = this.wasteWaterService.getModificationFromId();
+        if (modification) {
+          this.modificationExists = true;
+          this.checkExploreOpps(modification);
+        } else {
+          this.modificationExists = false;
+        }
       }
-      this.checkExploreOpps();
     });
   }
 
@@ -48,18 +49,14 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
 
-  checkExploreOpps() {
-    if (this.modificationExists) {
-      let modification: WasteWaterData = this.wasteWaterService.getModificationFromId();
-      if (!modification.exploreOpportunities) {
+  checkExploreOpps(modification: WasteWaterData) {
+      if (modification && !modification.exploreOpportunities) {
         let title: string = 'Explore Opportunities';
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
-        this.exploreOppsToast.emit(false);
       }else if(this.showToast){
         this.hideToast();
       }
-    }
   }
 
   openToast(title: string, body: string) {

@@ -9,7 +9,7 @@ import { PsatSummaryCardComponent } from './directory-items/assessment-item/psat
 import { SsmtSummaryCardComponent } from './directory-items/assessment-item/ssmt-summary-card/ssmt-summary-card.component';
 import { TreasureHuntSummaryCardComponent } from './directory-items/assessment-item/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { PsatModule } from '../../psat/psat.module';
 import { FsatReportModule } from '../../fsat/fsat-report/fsat-report.module';
 import { TreasureHuntReportModule } from '../../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';

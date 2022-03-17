@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AllFsatResultsData, FsatCompare, FsatResultsData, ReportItem } from './report-rollup-models';
+import { AllFsatResultsData, FsatCompare, FsatResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
 import { FsatService } from '../fsat/fsat.service';
-import { FSAT, FsatOutput } from '../shared/models/fans';
+import { FsatOutput } from '../shared/models/fans';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class FsatReportRollupService {
@@ -12,13 +14,24 @@ export class FsatReportRollupService {
   selectedFsats: BehaviorSubject<Array<FsatCompare>>;
   selectedFsatResults: Array<FsatResultsData>;
   allFsatResults: Array<AllFsatResultsData>;
-  constructor(private fsatService: FsatService) { }
+  totals: ReportUtilityTotal;
+  constructor(private fsatService: FsatService, private convertUnitsService: ConvertUnitsService) { }
 
   initSummary() {
     this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.selectedFsats = new BehaviorSubject<Array<FsatCompare>>(new Array<FsatCompare>());
     this.selectedFsatResults = new Array<FsatResultsData>();
     this.allFsatResults = new Array<AllFsatResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
   }
 
   //USED FOR FSAT SUMMARY
@@ -85,5 +98,37 @@ export class FsatReportRollupService {
       let modificationResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), false, val.settings);
       this.selectedFsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
-  } 
+  }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
+    this.selectedFsatResults.forEach(result => {
+      let diffCost = result.baselineResults.annualCost - result.modificationResults.annualCost;
+      sumSavings += diffCost;
+      sumCost += result.modificationResults.annualCost;
+      let diffEnergy = result.baselineResults.annualEnergy - result.modificationResults.annualEnergy;
+      sumEnergySavings += diffEnergy;
+      sumEnergy += result.modificationResults.annualEnergy;
+      let diffCO2 = result.baselineResults.co2EmissionsOutput - result.modificationResults.co2EmissionsOutput;
+      sumCo2Savings += diffCO2;
+      sumCo2Emissions += result.modificationResults.co2EmissionsOutput;
+    })
+    sumEnergy = this.convertUnitsService.value(sumEnergy).from('MWh').to(settings.fansRollupUnit);
+    sumEnergySavings = this.convertUnitsService.value(sumEnergySavings).from('MWh').to(settings.fansRollupUnit);
+    this.totals = {
+      energySavingsPotential: sumEnergySavings,
+      totalEnergy: sumEnergy,
+      savingPotential: sumSavings,
+      totalCost: sumCost,
+      electricityEnergy: sumEnergy + sumEnergySavings,
+      fuelEnergy: 0,
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
+    }
+  }
 }

@@ -1,0 +1,52 @@
+<div class="welcome-screen" [ngClass]="{'show': showWelcomeScreen}">
+    <nav class="navbar banner d-flex mr-auto p-0 flex-nowrap">
+        <div class="banner-box">
+
+        </div>
+        <div class="d-flex ml-auto pr-2 h-100">
+            <div class="pl-2 pr-2 border-left home-nav-item">
+                <span class="fa fa-download"></span>
+            </div>
+            <div class="pl-2 pr-2 border-right border-left home-nav-item book-item">
+                <a class="user-manual" href="assets/user-manuals/Data-Explorer-User-Manual.pdf" target="_blank">
+                    <span class="fa fa-book"></span>
+                </a>
+                <img class="manual-arrow" src="assets/images/manual-arrow.png">
+            </div>
+            <div class="pl-2 pr-2 border-right home-nav-item">
+                <span class="fa fa-home"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row w-100 h-100 justify-content-center">
+        <div class="col-sm-10 col-md-8 welcome-content">
+            <div class="w-100 d-flex justify-content-end">
+                <div>
+                    <button class="close" (click)="closePopUp()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <h1>Welcome to MEASUR's Data Exploration Module!
+            </h1>
+            <br>
+            <p>
+                Get started by importing a compatible data file and settings it up! After your data has been setup, run
+                a Day Type Analysis on the data or create data visualizations!
+            </p>
+            <hr>
+            <p>
+                If you need help at any point along the way, click the
+                <a class="user-manual" href="assets/user-manuals/Data-Explorer-User-Manual.pdf" target="_blank">
+                    user manual (<span class="fa fa-book"></span>)
+                </a>
+                icon in the upper right hand corner
+                for detailed instructions on how to complete the data exploration!
+            </p>
+            <div class="btn btn-primary" (click)="closePopUp()">
+                Get Started!
+            </div>
+        </div>
+    </div>
+</div>

@@ -28,4 +28,5 @@ export interface FilterDashboardBy {
     showPhast: boolean,
     showMotorInventory: boolean,
     showWasteWater: boolean,
+    showCompressedAir: boolean
 }

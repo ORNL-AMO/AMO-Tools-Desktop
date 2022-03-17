@@ -5,7 +5,7 @@ import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
@@ -179,20 +179,6 @@ export class BoilerComponent implements OnInit {
       return false;
     }
   }
-  isFuelTypeDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelTypeDifferent();
-    } else {
-      return false;
-    }
-  }
-  isFuelDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelDifferent();
-    } else {
-      return false;
-    }
-  }
   isBlowdownRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isBlowdownRateDifferent();
@@ -274,27 +260,6 @@ export class BoilerComponent implements OnInit {
   openBoilerEfficiencyModal() {
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
-    } else if (this.boilerForm.controls.fuelType.value == 0) {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByVolume: undefined,
-        flueGasByMass: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
-
-    } else {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByMass: undefined,
-        flueGasByVolume: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
     }
     this.showBoilerEfficiencyModal = true;
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
@@ -307,7 +272,13 @@ export class BoilerComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    if (this.boilerInput && this.boilerInput.stackLossInput) {
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    } else {
+      let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+      this.boilerInput = tmpBoiler;
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }

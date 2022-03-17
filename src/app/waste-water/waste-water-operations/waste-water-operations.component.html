@@ -1,68 +1,92 @@
-<div class="d-flex flex-column panel-container">
+<div class="d-flex flex-column">
+    <div class="panel-container mb-3">
+
+        <div *ngIf="inSetup" class="d-flex flex-column">
+            <div class="header mr-2 ml-2">
+                <h3>Operations</h3>
+            </div>
+        </div>
+
+        <form class="pl-3 pr-3" #formRef [formGroup]="operationsForm">
+            <!-- <label class="group-label">Modeling Conditions</label> -->
+            <!-- MaxDays -->
+            <div class="form-group"
+                [ngClass]="{'indicate-different': operationsDifferent.MaxDays}">
+                <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
+                <div class="input-group">
+                    <input type="number" name="MaxDays" class="form-control number-input-field"
+                        id="{{'MaxDays_'+idString}}" (focus)="focusField('MaxDays')" (input)="saveOperations()"
+                        formControlName="MaxDays">
+                    <span class="input-group-addon units">days</span>
+                </div>
+                <span *ngIf="operationsForm.controls.MaxDays.invalid && !operationsForm.controls.MaxDays.pristine">
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.MaxDays.errors.required">Value
+                        Required</span>
+                    <span class="alert-danger pull-right small" *ngIf="operationsForm.controls.MaxDays.errors.min">Value
+                        can't be
+                        less than {{operationsForm.controls.MaxDays.errors.min.min}} days</span>
+                </span>
+            </div>
+            <!--operatingMonths-->
+            <div class="form-group"
+                [ngClass]="{'indicate-different': operationsDifferent.operatingMonths}">
+                <label for="operatingMonths">Operating Months</label>
+                <div class="input-group">
+                    <input type="number" name="operatingMonths" class="form-control number-input-field"
+                        id="{{'operatingMonths_'+idString}}" (focus)="focusField('operatingMonths')"
+                        (input)="saveOperations()" formControlName="operatingMonths">
+                    <span class="input-group-addon units">months</span>
+                </div>
+                <span
+                    *ngIf="operationsForm.controls.operatingMonths.invalid && !operationsForm.controls.operatingMonths.pristine">
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.operatingMonths.errors.required">Value
+                        Required</span>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.operatingMonths.errors.min">Value can't
+                        be less than {{operationsForm.controls.operatingMonths.errors.min.min}} months</span>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.operatingMonths.errors.max">Value can't
+                        be greater than {{operationsForm.controls.operatingMonths.errors.max.max}} months</span>
+                </span>
+            </div>
+
+            <div class="form-group"
+                [ngClass]="{'indicate-different': operationsDifferent.EnergyCostUnit, 'invalid': operationsForm.controls.EnergyCostUnit.invalid}">
+                <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
+                <div class="input-group">
+                    <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
+                        id="{{'EnergyCostUnit_'+idString}}" (focus)="focusField('EnergyCostUnit')"
+                        (input)="saveOperations()" formControlName="EnergyCostUnit">
+                    <span class="input-group-addon units">$/kWh</span>
+                </div>
+                <span
+                    *ngIf="operationsForm.controls.EnergyCostUnit.invalid && !operationsForm.controls.EnergyCostUnit.pristine">
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.EnergyCostUnit.errors.required">Value
+                        Required</span>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="operationsForm.controls.EnergyCostUnit.errors.min">Value can't
+                        be less than {{operationsForm.controls.EnergyCostUnit.errors.min.min | currency}}</span>
+                </span>
+            </div>
+        </form>
+    </div>
+
     <div *ngIf="inSetup" class="d-flex flex-column">
         <div class="header mr-2 ml-2">
-            <h3>Operations</h3>
+            <h3>Carbon Emissions</h3>
         </div>
     </div> 
-   
-    <form class="pl-3 pr-3" #formRef [formGroup]="operationsForm">
-        <!-- <label class="group-label">Modeling Conditions</label> -->
-        <!-- MaxDays -->
-        <div class="form-group">
-            <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
-            <div class="input-group">
-                <input type="number" name="MaxDays" class="form-control number-input-field" id="{{'MaxDays_'+idString}}"
-                    (focus)="focusField('MaxDays')" (input)="saveOperations()" formControlName="MaxDays">
-                <span class="input-group-addon units">days</span>
-            </div>
-            <span *ngIf="operationsForm.controls.MaxDays.invalid && !operationsForm.controls.MaxDays.pristine">
-                <span class="alert-danger pull-right small"
-                    *ngIf="operationsForm.controls.MaxDays.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small" *ngIf="operationsForm.controls.MaxDays.errors.min">Value
-                    can't be
-                    less than {{operationsForm.controls.MaxDays.errors.min.min}} days</span>
-            </span>
-        </div>
-        <!--operatingMonths-->
-        <div class="form-group">
-            <label for="operatingMonths">Operating Months</label>
-            <div class="input-group">
-                <input type="number" name="operatingMonths" class="form-control number-input-field" id="{{'operatingMonths_'+idString}}"
-                    (focus)="focusField('operatingMonths')" (input)="saveOperations()"
-                    formControlName="operatingMonths">
-                <span class="input-group-addon units">months</span>
-            </div>
-            <span
-                *ngIf="operationsForm.controls.operatingMonths.invalid && !operationsForm.controls.operatingMonths.pristine">
-                <span class="alert-danger pull-right small"
-                    *ngIf="operationsForm.controls.operatingMonths.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small"
-                    *ngIf="operationsForm.controls.operatingMonths.errors.min">Value can't
-                    be less than {{operationsForm.controls.operatingMonths.errors.min.min}} months</span>
-                <span class="alert-danger pull-right small"
-                    *ngIf="operationsForm.controls.operatingMonths.errors.max">Value can't
-                    be greater than {{operationsForm.controls.operatingMonths.errors.max.max}} months</span>
-            </span>
-        </div>
-
-        <div class="form-group"
-            [ngClass]="{'indicate-different': operationsDifferent.EnergyCostUnit, 'invalid': operationsForm.controls.EnergyCostUnit.invalid}">
-            <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
-            <div class="input-group">
-                <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
-                    id="{{'EnergyCostUnit_'+idString}}" (focus)="focusField('EnergyCostUnit')" (input)="saveOperations()"
-                    formControlName="EnergyCostUnit">
-                <span class="input-group-addon units">$/kWh</span>
-            </div>
-            <span *ngIf="operationsForm.controls.EnergyCostUnit.invalid && !operationsForm.controls.EnergyCostUnit.pristine">
-                <span class="alert-danger pull-right small" *ngIf="operationsForm.controls.EnergyCostUnit.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small" *ngIf="operationsForm.controls.EnergyCostUnit.errors.min">Value can't
-                    be less than {{operationsForm.controls.EnergyCostUnit.errors.min.min | currency}}</span>
-            </span>
-        </div>
-
-    </form>
+    
+    <div class="pl-3 pr-3">
+      <app-assessment-co2-savings *ngIf="co2SavingsData"
+      [co2SavingsData]="co2SavingsData"
+      [isFormDisabled]="co2SavingsFormDisabled"
+      [inBaseline]="!isModification"
+      (emitCurrentField)="focusField($event)"
+      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"
+      ></app-assessment-co2-savings>
+    </div>
 </div>

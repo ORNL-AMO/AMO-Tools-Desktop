@@ -1,4 +1,4 @@
-<div class="pl-2 pt-3 pr-2 scroll-item" *ngIf="profileSummary">
+<div class="print-container pl-2 pt-3 pr-2" [ngClass]="{'scroll-item': !printView}" *ngIf="profileSummary">
     <table #profileTable class="table table-hover bg-white">
         <thead>
             <tr>
@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, 
+                    Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -113,7 +113,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    Airflow, 
+                    Airflow,
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </td>
@@ -143,7 +143,7 @@
 
 
 
-<div class="w-100 justify-content-end d-flex">
+<div *ngIf="!printView" class="w-100 justify-content-end d-flex">
     <app-exportable-results-table [tableString]="allTablesString" (updateTableString)="updateTableString()">
     </app-exportable-results-table>
 </div>
