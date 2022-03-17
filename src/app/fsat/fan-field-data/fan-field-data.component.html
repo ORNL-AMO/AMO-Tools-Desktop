@@ -46,7 +46,7 @@
         Duct Area
       </label>
       <div class="input-group">
-        <input name="ductArea" type="number" max="0" step="any" class="form-control"
+        <input name="ductArea" type="number" step="any" class="form-control"
           formControlName="ductArea" id="{{'ductArea'+idString}}" (input)="save()"
           (focus)="focusField('ductArea')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">
@@ -64,11 +64,15 @@
           [ngClass]="{'disabled-link':!selected}">Define Inlet Velocity Pressure</a>
       </label>
       <div *ngIf="userDefinedVelocityPressure" class="input-group">
-        <input name="inletVelocityPressure" type="number" max="0" step="any" class="form-control"
+        <input name="inletVelocityPressure" type="number" step="any" class="form-control"
         formControlName="inletVelocityPressure" id="{{'inletVelocityPressure'+idString}}" (input)="save()"
         (focus)="focusField('inletVelocityPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="fieldDataForm.controls.inletVelocityPressure.invalid && !fieldDataForm.controls.inletVelocityPressure.pristine">
+        <span *ngIf="fieldDataForm.controls.inletVelocityPressure.errors.required">Value Required</span>
+      </span>
       <div *ngIf="!userDefinedVelocityPressure" class="input-group d-flex justify-content-center small bold">
         <span class="mr-2" *ngIf="fieldDataForm.controls.inletVelocityPressure.value !== undefined">
           {{fieldDataForm.controls.inletVelocityPressure.value | number:'1.0-5'}}
