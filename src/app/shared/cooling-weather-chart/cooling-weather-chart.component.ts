@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-dist';
 import { WeatherBinnedChartData } from '../models/chillers';
 
 @Component({

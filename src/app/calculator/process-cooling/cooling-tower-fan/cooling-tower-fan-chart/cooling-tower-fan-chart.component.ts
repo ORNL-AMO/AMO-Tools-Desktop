@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChillerPerformanceOutput } from '../../../../shared/models/chillers';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-dist';
 
 @Component({
   selector: 'app-cooling-tower-fan-chart',

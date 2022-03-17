@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-dist';
 import { ChillerPerformanceOutput } from '../../../../shared/models/chillers';
 
 

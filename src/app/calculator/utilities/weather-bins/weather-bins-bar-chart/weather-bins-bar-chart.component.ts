@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { WeatherBinsService, WeatherBinsInput } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
-import * as Plotly from 'plotly.js';
+import * as Plotly from 'plotly.js-dist';
 
 @Component({
   selector: 'app-weather-bins-bar-chart',
