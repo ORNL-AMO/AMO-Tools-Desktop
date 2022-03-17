@@ -20,7 +20,7 @@ export class CompareService {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
     this.openNewModal = new BehaviorSubject<boolean>(undefined);
-    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>(undefined);
+    this.co2SavingsDifferent = new BehaviorSubject<Co2SavingsDifferent>({totalEmissionOutputRate: false});
   }
 
   setCompareVals(psat: PSAT, selectedModIndex: number) {
