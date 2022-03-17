@@ -10,7 +10,8 @@ import { PsatService } from '../psat.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { PumpOperationsService } from './pump-operations.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pump-operations',
@@ -37,6 +38,7 @@ export class PumpOperationsComponent implements OnInit {
 
  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  co2SavingsDifferentSubscription: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -46,6 +48,7 @@ export class PumpOperationsComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   co2SavingsFormDisabled: boolean;
   co2SavingsData: Co2SavingsData;
+  co2SavingsDifferent: Co2SavingsDifferent;
 
   psatForm: FormGroup;
   operationsWarnings: OperationsWarnings;
@@ -61,11 +64,18 @@ export class PumpOperationsComponent implements OnInit {
     else {
       this.idString = 'psat_baseline';
     }
+    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
+      this.co2SavingsDifferent = val;
+    });
     this.init();
     if (!this.selected) {
       this.disableForm();
     }
 
+  }
+
+  ngOnDestroy() {
+    this.co2SavingsDifferentSubscription.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -117,9 +127,11 @@ export class PumpOperationsComponent implements OnInit {
   updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
     this.psat.inputs.co2SavingsData = co2SavingsData;
     this.save();
+    this.isCo2SavingsDifferent();
   }
 
   setCo2SavingsData() {
+    this.isCo2SavingsDifferent();
     if (this.psat.inputs.co2SavingsData) {
       this.co2SavingsData = this.psat.inputs.co2SavingsData;
     } else {
@@ -175,6 +187,14 @@ export class PumpOperationsComponent implements OnInit {
       return this.compareService.isCostKwhrDifferent();
     } else {
       return false;
+    }
+  }
+
+  isCo2SavingsDifferent() {
+    if (this.canCompare()) {
+      this.compareService.isCo2SavingsDifferent();
+    } else {
+      this.compareService.co2SavingsDifferent.next({totalEmissionOutputRate: false})
     }
   }
 
