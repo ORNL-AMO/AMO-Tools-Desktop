@@ -161,7 +161,7 @@
     </label>
     <form [formGroup]="form">
       <div formArrayName="baselineLoadList" class="form-group form-array"
-        *ngFor="let baselineLoad of form.controls.baselineLoadList.controls; let i = index">
+        *ngFor="let baselineLoad of getBaselineLoadList(); let i = index">
         <label class="small" for="{{'baselineLoad'+i}}">Load Assigned to Chiller {{i + 1}}</label>
         <div class="input-group">
           <input class="form-control" name="{{'baselineLoad'+i}}" id="{{'baselineLoad'+i}}" [formControl]="baselineLoad"
@@ -183,7 +183,7 @@
     </label>
     <form [formGroup]="form">
       <div formArrayName="modLoadList" class="form-group form-array"
-        *ngFor="let modLoad of form.controls.modLoadList.controls; let i = index">
+        *ngFor="let modLoad of getModLoadList(); let i = index">
         <label class="small" for="{{'modLoad'+i}}">Load Assigned to Chiller {{i + 1}}</label>
         <div class="input-group">
           <input class="form-control" name="{{'modLoad'+i}}" id="{{'modLoad'+i}}" [formControl]="modLoad" type="number"
