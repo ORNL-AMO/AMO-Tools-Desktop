@@ -40,7 +40,9 @@ export class ChargeMaterialCompareService {
   }
 
   compareMaterialType(index: number) {
-    return this.compare(this.baselineMaterials[index].chargeMaterialType, this.modifiedMaterials[index].chargeMaterialType);
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      return this.compare(this.baselineMaterials[index].chargeMaterialType, this.modifiedMaterials[index].chargeMaterialType);
+    }
   }
 
   //liquid
