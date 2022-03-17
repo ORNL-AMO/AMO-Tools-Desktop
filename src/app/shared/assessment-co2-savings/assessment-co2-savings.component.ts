@@ -42,6 +42,10 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   constructor(private assessmentCo2Service: AssessmentCo2SavingsService, private egridService: EGridService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    // Only needed until all are hooked up
+    if (!this.co2SavingsDifferent) {
+      this.co2SavingsDifferent = this.assessmentCo2Service.getDefaultCO2Different();
+    }
     this.initCo2SavingsSubscription();
   }
   
