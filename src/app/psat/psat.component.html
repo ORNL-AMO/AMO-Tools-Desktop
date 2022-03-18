@@ -37,7 +37,7 @@
 
   <!--assessment tab-->
   <div class="tab-content"
-    *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
+    *ngIf="mainTab == 'assessment' && !modificationModalOpen && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
     [ngStyle]="{'height.px': containerHeight}">
     <!--Explore opportunities-->
     <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment"
