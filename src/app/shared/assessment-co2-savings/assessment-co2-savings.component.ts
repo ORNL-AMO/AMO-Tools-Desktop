@@ -80,7 +80,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
       this.assessmentCo2Service.modificationCo2SavingsData.next(this.co2SavingsData);
       this.co2SavingsDataSub = this.assessmentCo2Service.modificationCo2SavingsData.subscribe(modificationCo2SavingsData => {
         if (modificationCo2SavingsData) {
-          this.co2SavingsData = modificationCo2SavingsData
+          this.co2SavingsData.eGridSubregion = modificationCo2SavingsData.eGridSubregion;
+          this.co2SavingsData.zipcode = modificationCo2SavingsData.zipcode;
           this.initForm();
         }
       });
@@ -156,11 +157,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
           this.zipCodeSubRegionData.push(subregion);
         }
       });
-      if (this.inBaseline) {
-        this.setBaselineSubregionForm();
-      } else {
-        this.setModificationSubregionForm()
-      }
     } else {
       // not a valid zip, set emmissions to US Average
       subRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => val.zip === '00000');
@@ -170,12 +166,14 @@ export class AssessmentCo2SavingsComponent implements OnInit {
         }
       });
       this.isUsAverage = true;
-      if (this.inBaseline) {
-        this.setBaselineSubregionForm();
-      } else {
-        this.setModificationSubregionForm()
-      }
     }
+
+    if (this.inBaseline) {
+      this.setBaselineSubregionForm();
+    } else {
+      this.setModificationSubregionForm()
+    }
+
     if (!isFormInit || this.isUsAverage) {
       this.calculate();
     }

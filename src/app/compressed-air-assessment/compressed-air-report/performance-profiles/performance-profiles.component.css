@@ -2,7 +2,6 @@
     .print-container {
         page-break-before: always;
         page-break-inside: avoid;
-        width: 1000px;
         overflow: hidden;
     }
     .page-break-before{
