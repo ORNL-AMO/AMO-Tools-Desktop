@@ -154,6 +154,7 @@ export class FsatComponent implements OnInit {
       if (val) {
         this.selectModificationModal();
       }
+      
     });
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._fsat) {
