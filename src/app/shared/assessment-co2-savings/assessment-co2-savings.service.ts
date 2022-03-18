@@ -134,32 +134,4 @@ export class AssessmentCo2SavingsService {
     }
     return totalEmissionsResult;
   }
-
-  getDefaultCO2Different(): Co2SavingsDifferent {
-    return {
-      energyType: false,
-      totalEmissionOutputRate: false,
-      totalFuelEmissionOutputRate: false,
-      electricityUse: false,
-      energySource: false,
-      fuelType: false,
-      eGridRegion: false,
-      eGridSubregion: false,
-      totalEmissionOutput: false,
-      zipcode: false,
-    }
-  }
-}
-
-export interface Co2SavingsDifferent {
-  energyType?: boolean;
-  totalEmissionOutputRate?: boolean;
-  totalFuelEmissionOutputRate?: boolean,
-  electricityUse?: boolean;
-  energySource?: boolean;
-  fuelType?: boolean;
-  eGridRegion?: boolean;
-  eGridSubregion?: boolean;
-  totalEmissionOutput?: boolean;
-  zipcode?: boolean,
 }

@@ -17,7 +17,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   @Input()
   co2SavingsData: Co2SavingsData;
   @Input()
-  co2SavingsDifferent: Co2SavingsDifferent;
+  totalEmissionOutputRateDifferent: boolean;
   @Input()
   isFormDisabled: boolean;
   @Input()
@@ -43,8 +43,8 @@ export class AssessmentCo2SavingsComponent implements OnInit {
 
   ngOnInit() {
     // Only needed until all are hooked up
-    if (!this.co2SavingsDifferent) {
-      this.co2SavingsDifferent = this.assessmentCo2Service.getDefaultCO2Different();
+    if (!this.totalEmissionOutputRateDifferent) {
+      this.totalEmissionOutputRateDifferent = false;
     }
     this.initCo2SavingsSubscription();
   }
