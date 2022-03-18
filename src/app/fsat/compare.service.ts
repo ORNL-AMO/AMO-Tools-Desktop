@@ -16,7 +16,6 @@ export class CompareService {
 
   setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
-    console.log(selectedModIndex);
     if (fsat.modifications && selectedModIndex != undefined) {
       if (fsat.modifications.length !== 0) {
         this.selectedModification.next(fsat.modifications[selectedModIndex].fsat);
