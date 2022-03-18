@@ -77,8 +77,8 @@
       "oneClick": false,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
-      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "installerIcon": "src/favicon.ico",
+      "installerHeaderIcon": "src/favicon.ico",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "linux": {
