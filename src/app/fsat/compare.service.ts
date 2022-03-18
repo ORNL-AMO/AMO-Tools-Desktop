@@ -16,7 +16,8 @@ export class CompareService {
 
   setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
-    if (fsat.modifications) {
+    console.log(selectedModIndex);
+    if (fsat.modifications && selectedModIndex != undefined) {
       if (fsat.modifications.length !== 0) {
         this.selectedModification.next(fsat.modifications[selectedModIndex].fsat);
         this.modifiedFSAT = this.selectedModification.value;
@@ -397,7 +398,8 @@ export class CompareService {
         this.isInletPressureDifferent(baseline, modification) ||
         this.isOutletPressureDifferent(baseline, modification) ||
         this.isSpecificHeatRatioDifferent(baseline, modification) ||
-        this.isCompressibilityFactorDifferent(baseline, modification)
+        this.isCompressibilityFactorDifferent(baseline, modification) || 
+        this.isMeasuredVoltageDifferent(baseline, modification)
       );
     } else {
       return false;

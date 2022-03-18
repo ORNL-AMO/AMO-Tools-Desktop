@@ -161,6 +161,7 @@ export class FsatComponent implements OnInit {
       } else {
         this.modificationIndex = undefined;
       }
+      console.log(this.modificationIndex);
     });
     this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
