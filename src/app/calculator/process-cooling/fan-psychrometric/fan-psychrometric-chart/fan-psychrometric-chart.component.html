@@ -1,0 +1,72 @@
+<div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
+  <div *ngIf="expanded" class="row">
+    <div class="col-12">
+      <div class="graph-btn-container">
+        <span class="fa fa-compress" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')"
+          (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <app-simple-tooltip [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+          [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="expanded" class="w-100 p-3">
+    <div #expandedChartDiv id="expandedChartDiv"></div>
+      <div class="w-100 tab-panel-background">
+        <div class="col-md-12 mt-1">
+          <div class="graph-btn-container">
+            <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
+            <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
+              [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+          <div class="graph-btn-container">
+            <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+            <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
+              [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  
+  <div class="w-100 p-2 tab-panel-background">
+
+    <div class="w-100" #tabPanelDiv id="tabPanelDiv">
+    </div>
+    <div class="w-100 tab-panel-background">
+      <div class="col-md-12 mt-1">
+        <div class="graph-btn-container">
+          <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
+          <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
+            [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+        </div>
+        <div class="graph-btn-container">
+          <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+          <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
+            [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Hidden copy table -->
+    <app-exportable-results-table [tableString]="dataSummaryTableString"
+    (updateTableString)="updateTableString()"></app-exportable-results-table>
+    <div class="hidden-copy-table">
+    <label class="group-label bold">Data Summary</label>
+    <table #dataSummaryTable class="table pt-2 d-flex">
+      <tbody class="w-100">
+        <tr class="bold small text-center no-border">
+          <th class="bold w-25">Motor Shaft Load (%)</th>
+          <th class="bold w-25">Current (%)</th>
+          <th class="bold w-25">Power Factor (%)</th>
+          <th class="bold w-25">Efficiency (%)</th>
+        </tr>
+        <tr *ngFor="let point of selectedDataPoints; let index = index">
+          <td class="text-center">{{point.shaftLoad | number: '1.0-3'}}</td>
+        <td class="text-center">{{point.current | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.power | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.efficiency | number: '1.0-0'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>

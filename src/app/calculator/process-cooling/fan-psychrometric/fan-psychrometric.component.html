@@ -32,6 +32,12 @@
 					<div>Results</div>
 				</a>
 			</div>
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'chart'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+					(click)="setTab('chart')">
+					<div>Chart</div>
+				</a>
+			</div>
 			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
 				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
 					<div>Help</div>
@@ -41,6 +47,7 @@
 		<div class="d-flex mr-2 ml-2">
             <div class="d-flex flex-column w-100 align-items-center p-1">
                 <app-fan-psychrometric-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings"></app-fan-psychrometric-results>
+                <app-fan-psychrometric-chart class="w-100" *ngIf="tabSelect == 'chart'" [gasDensityForm]="gasDensityForm" [settings]="settings"></app-fan-psychrometric-chart>
 				
 				<app-fan-psychrometric-help *ngIf="tabSelect == 'help'"></app-fan-psychrometric-help>
 			</div>
