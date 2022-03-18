@@ -10,7 +10,7 @@ import { PsatService } from '../psat.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { PumpOperationsService } from './pump-operations.service';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -38,7 +38,6 @@ export class PumpOperationsComponent implements OnInit {
 
  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  co2SavingsDifferentSubscription: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -48,7 +47,8 @@ export class PumpOperationsComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   co2SavingsFormDisabled: boolean;
   co2SavingsData: Co2SavingsData;
-  co2SavingsDifferent: Co2SavingsDifferent;
+  totalEmissionOutputRateDifferent: boolean = false;
+  totalEmissionOutputRateDifferentSub: Subscription;
 
   psatForm: FormGroup;
   operationsWarnings: OperationsWarnings;
@@ -58,15 +58,15 @@ export class PumpOperationsComponent implements OnInit {
     private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private pumpOperationsService: PumpOperationsService) { }
 
   ngOnInit() {
+    this.totalEmissionOutputRateDifferentSub = this.compareService.totalEmissionOutputRateDifferent.subscribe(isDifferent => {
+      this.totalEmissionOutputRateDifferent = isDifferent;
+    });
     if (!this.baseline) {
       this.idString = 'psat_modification_' + this.modificationIndex;
     }
     else {
       this.idString = 'psat_baseline';
     }
-    this.co2SavingsDifferentSubscription = this.compareService.co2SavingsDifferent.subscribe(val => {
-      this.co2SavingsDifferent = val;
-    });
     this.init();
     if (!this.selected) {
       this.disableForm();
@@ -75,7 +75,8 @@ export class PumpOperationsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.co2SavingsDifferentSubscription.unsubscribe();
+    this.compareService.totalEmissionOutputRateDifferent.next(false);
+    this.totalEmissionOutputRateDifferentSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -127,11 +128,11 @@ export class PumpOperationsComponent implements OnInit {
   updatePsatCo2SavingsData(co2SavingsData?: Co2SavingsData) {
     this.psat.inputs.co2SavingsData = co2SavingsData;
     this.save();
-    this.isCo2SavingsDifferent();
+    this.isTotalEmissionOutputRateDifferent();
   }
 
   setCo2SavingsData() {
-    this.isCo2SavingsDifferent();
+    this.isTotalEmissionOutputRateDifferent();
     if (this.psat.inputs.co2SavingsData) {
       this.co2SavingsData = this.psat.inputs.co2SavingsData;
     } else {
@@ -190,11 +191,11 @@ export class PumpOperationsComponent implements OnInit {
     }
   }
 
-  isCo2SavingsDifferent() {
+  isTotalEmissionOutputRateDifferent() {
     if (this.canCompare()) {
-      this.compareService.isCo2SavingsDifferent();
+      this.compareService.isTotalEmissionOutputRateDifferent();
     } else {
-      this.compareService.co2SavingsDifferent.next({totalEmissionOutputRate: false})
+      this.compareService.totalEmissionOutputRateDifferent.next(false);
     }
   }
 
