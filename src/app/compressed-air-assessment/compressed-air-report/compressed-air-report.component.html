@@ -113,7 +113,7 @@
                 [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
                 [settings]="settings">
             </app-system-profiles>
-            <app-system-profile-graphs></app-system-profile-graphs>
+            <app-system-profile-graphs [printView] = "printView"></app-system-profile-graphs>
         </div>
         <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'paybackPeriod' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)"
