@@ -1,11 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FsatService } from '../../../../fsat/fsat.service';
 import { FormGroup } from '@angular/forms';
-import { FSAT, BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
+import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 import { FsatFluidService, GasDensityValidators } from '../../../../fsat/fsat-fluid/fsat-fluid.service';
 import { Settings } from '../../../../shared/models/settings';
-import { CompareService } from '../../../../fsat/compare.service';
-import { GasDensityFormService } from '../../../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 @Component({
@@ -14,21 +12,9 @@ import { FlueGasCompareService } from '../flue-gas-compare.service';
   styleUrls: ['./flue-gas-losses-moisture.component.css']
 })
 export class FlueGasLossesMoistureComponent implements OnInit {
-  baseGasDensity: BaseGasDensity;
-  @Input()
-  gasDone: boolean;
-  @Input()
-  inSetup: boolean;
-  @Input()
-  selected: boolean;
-  @Input()
-  modificationIndex: number;
   @Input()
   settings: Settings;
-  @Input()
-  baseline: boolean;
-  @Input()
-  fsat: FSAT;
+
   @Output('hideModal')
   hideModal = new EventEmitter<number>();
 
@@ -46,78 +32,44 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   ];
 
   moistureInCombustionAir: number;
-  idString: string;
-  // warnings: FanFluidWarnings;
-  constructor(private compareService: CompareService,
+  constructor(
     private fsatService: FsatService,
     private fsatFluidService: FsatFluidService,
-    private flueGasCompareService: FlueGasCompareService,
-    private gasDensityFormService: GasDensityFormService) { }
+    private flueGasCompareService: FlueGasCompareService,) { }
 
   ngOnInit() {
-    if (!this.baseline) {
-      this.idString = 'fsat_modification_' + this.modificationIndex;
-    }
-    else {
-      this.idString = 'fsat_baseline';
-    }
     this.init();
     this.getResults();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected) {
-        this.enableForm();
-      } else {
-        this.disableForm();
-      }
-    }
-    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
-      this.init();
-    }
-  }
-
-  ngOnDestroy() {
-    this.gasDensityFormService.baselinePsychrometricResults.next(undefined);
-    this.gasDensityFormService.modificationPsychrometricResults.next(undefined);
-    this.gasDensityFormService.baselineCalculationType.next(undefined);
-    this.gasDensityFormService.modificationCalculationType.next(undefined);
-  }
-
   init() {
-    this.baseGasDensity = this.flueGasCompareService.baseGasDensity;
-    this.baseGasDensity.staticPressure = 0;
-    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity, this.settings);
+    let baseGasDensityDefaults: BaseGasDensity = this.flueGasCompareService.baseGasDensity;
+    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(baseGasDensityDefaults, this.settings);
   }
 
   disableForm() {
     this.gasDensityForm.controls.gasType.disable();
     this.gasDensityForm.controls.inputType.disable();
-    // this.chargeMaterialForm.disable();
   }
 
   enableForm() {
     this.gasDensityForm.controls.gasType.enable();
     this.gasDensityForm.controls.inputType.enable();
-    // this.chargeMaterialForm.enable();
   }
 
   save() {
-    //save is always called on input so add check for warnings call here
-    this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.flueGasCompareService.setCurrentDensity(this.baseGasDensity);
-    this.updateFormValidators();
-    // this.emitSave.emit(this.baseGasDensity);
+    let baseGasDensity: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.flueGasCompareService.baseGasDensity = baseGasDensity;
+    this.updateFormValidators(baseGasDensity);
   }
 
-  updateFormValidators(){
-    if(this.baseGasDensity.inputType == 'dewPoint'){
-      let validators: GasDensityValidators = this.fsatFluidService.getValidators(this.baseGasDensity);
+  updateFormValidators(baseGasDensity: BaseGasDensity) {
+    if (baseGasDensity.inputType == 'dewPoint') {
+      let validators: GasDensityValidators = this.fsatFluidService.getValidators(baseGasDensity);
       this.gasDensityForm.controls.dewPoint.setValidators(validators.dewPointValidators);
       this.gasDensityForm.controls.dewPoint.updateValueAndValidity();
-    }else if(this.baseGasDensity.inputType == 'wetBulb'){
-      let validators: GasDensityValidators = this.fsatFluidService.getValidators(this.baseGasDensity);
+    } else if (baseGasDensity.inputType == 'wetBulb') {
+      let validators: GasDensityValidators = this.fsatFluidService.getValidators(baseGasDensity);
       this.gasDensityForm.controls.wetBulbTemp.setValidators(validators.wetBulbTempValidators);
       this.gasDensityForm.controls.wetBulbTemp.updateValueAndValidity();
     }
@@ -158,26 +110,23 @@ export class FlueGasLossesMoistureComponent implements OnInit {
           gasDensity: undefined
         });
       }
-    } 
-    
+    }
+
     if (psychrometricResults) {
       psychrometricResults.dryBulbTemp = this.gasDensityForm.controls.dryBulbTemp.value;
       psychrometricResults.barometricPressure = this.gasDensityForm.controls.barometricPressure.value;
     }
 
-    if (!this.baseline) {
-      this.gasDensityFormService.modificationPsychrometricResults.next(psychrometricResults);
-      this.gasDensityFormService.modificationCalculationType.next(this.gasDensityForm.controls.inputType.value);
-    } else {
-      this.gasDensityFormService.baselinePsychrometricResults.next(psychrometricResults);
-      this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
-    }
-    this.save();
     this.flueGasCompareService.setPsychrometricResults(psychrometricResults);
-    this.moistureInCombustionAir = psychrometricResults.humidityRatio * 100;
+    if (psychrometricResults) {
+      this.moistureInCombustionAir = psychrometricResults.humidityRatio * 100;
+    } else {
+      this.moistureInCombustionAir = 0;
+    }
   }
 
   calcPsychrometricWetBulb(): PsychrometricResults {
+    //TODO: Settings using fan units, need to set to proper units
     let psychrometricResults: PsychrometricResults;
     if (this.isWetBulbValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
@@ -196,6 +145,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   }
 
   calcPsychrometricRelativeHumidity(): PsychrometricResults {
+    //TODO: Settings using fan units, need to set to proper units
     let psychrometricResults: PsychrometricResults;
     if (this.isRelativeHumidityValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
@@ -215,6 +165,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
 
 
   calcPsychrometricDewPoint(): PsychrometricResults {
+    //TODO: Settings using fan units, need to set to proper units
     let psychrometricResults: PsychrometricResults;
     if (this.isDewPointValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
@@ -237,100 +188,6 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     this.getResults();
   }
 
-  canCompare() {
-    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && !this.inSetup) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  isDryBulbTempDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isDryBulbTempDifferent();
-    } else {
-      return false;
-    }
-  }
-  isStaticPressureDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isStaticPressureDifferent();
-    } else {
-      return false;
-    }
-  }
-  isBarometricPressureDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isBarometricPressureDifferent();
-    } else {
-      return false;
-    }
-  }
-  isGasDensityDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isGasDensityDifferent();
-    } else {
-      return false;
-    }
-  }
-  isGasTypeDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isGasTypeDifferent();
-    } else {
-      return false;
-    }
-  }
-  // isConditionLocationDifferent() {
-  //   if (this.canCompare()) {
-  //     return this.compareService.isConditionLocationDifferent();
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  isSpecificGravityDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isSpecificGravityDifferent();
-    } else {
-      return false;
-    }
-  }
-  isInputTypeDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isInputTypeDifferent();
-    } else {
-      return false;
-    }
-  }
-  isSpecificHeatRatioDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isSpecificHeatRatioDifferent();
-    } else {
-      return false;
-    }
-  }
-  isDewPointDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isDewPointDifferent();
-    } else {
-      return false;
-    }
-  }
-  isRelativeHumidityDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isRelativeHumidityDifferent();
-    } else {
-      return false;
-    }
-  }
-  isWetBulbTempDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isWetBulbTempDifferent();
-    } else {
-      return false;
-    }
-  }
-
-  
   hideMoistureModal(action: string) {
     if (action !== 'cancel') {
       this.hideModal.emit(this.moistureInCombustionAir);

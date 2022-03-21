@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
-import { BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
-import { FormGroup, Validators } from '@angular/forms';
+import { BoilerService, BoilerWarnings } from './boiler.service';
+import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
+import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
@@ -23,8 +23,6 @@ export class BoilerComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Input()
-  boilerInput: BoilerInput;
   @Output('emitSave')
   emitSave = new EventEmitter<BoilerInput>();
   @Input()
@@ -32,19 +30,23 @@ export class BoilerComponent implements OnInit {
   @Input()
   modificationIndex: number;
   @Input()
-  headerInput: HeaderInput;
-
+  ssmt: SSMT;
+  
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setBlowdownRateModalWidth();
   }
-
+  
+  headerInput: HeaderInput;
+  boilerInput: BoilerInput;
+  warnings: BoilerWarnings;
   formWidth: number;
   showBlowdownRateModal: boolean = false;
   showBoilerEfficiencyModal: boolean = false;
   boilerForm: FormGroup;
+  operationsForm: FormGroup;
   options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
@@ -54,6 +56,8 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
+    this.boilerInput = this.ssmt.boilerInput;
+    this.headerInput = this.ssmt.headerInput;
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -89,6 +93,7 @@ export class BoilerComponent implements OnInit {
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
+    this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     this.setPressureForms(this.boilerInput);
   }
 
@@ -115,36 +120,34 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
-  setPreheatMakeupWater() {
-    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
-      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
-    } else {
-      this.boilerForm.controls.approachTemperature.setValidators([]);
-    }
-    this.save();
-  }
-
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput);
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.ssmt, this.settings, boilerInput);
       }
 
       if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressureHeader) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.ssmt, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
       } else if (this.headerInput.lowPressureHeader && this.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.ssmt, this.settings, boilerInput.deaeratorPressure, undefined);
       }
     }
   }
 
   save() {
+    this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
     if (this.boilerInput) {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
-    }
+    }    
     this.emitSave.emit(tmpBoiler);
+  }
+
+  setPreheatMakeupWater() {
+    let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    this.boilerForm = this.boilerService.initFormFromObj(tmpBoiler, this.settings);
+    this.save();
   }
 
   focusField(str: string) {
@@ -172,20 +175,6 @@ export class BoilerComponent implements OnInit {
   canCompare() {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
       return true;
-    } else {
-      return false;
-    }
-  }
-  isFuelTypeDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelTypeDifferent();
-    } else {
-      return false;
-    }
-  }
-  isFuelDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isFuelDifferent();
     } else {
       return false;
     }
@@ -271,27 +260,6 @@ export class BoilerComponent implements OnInit {
   openBoilerEfficiencyModal() {
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
-    } else if (this.boilerForm.controls.fuelType.value == 0) {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByVolume: undefined,
-        flueGasByMass: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
-
-    } else {
-      this.stackLossService.stackLossInput = {
-        flueGasType: this.boilerForm.controls.fuelType.value,
-        flueGasByMass: undefined,
-        flueGasByVolume: {
-          gasTypeId: this.boilerForm.controls.fuel.value,
-          oxygenCalculationMethod: "Excess Air"
-        },
-        name: undefined
-      }
     }
     this.showBoilerEfficiencyModal = true;
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
@@ -304,7 +272,13 @@ export class BoilerComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    if (this.boilerInput && this.boilerInput.stackLossInput) {
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    } else {
+      let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+      this.boilerInput = tmpBoiler;
+      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
+    }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }

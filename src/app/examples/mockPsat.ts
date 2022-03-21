@@ -37,6 +37,19 @@ export const MockPsat: Assessment = {
             "specifiedDriveEfficiency": null,
             "implementationCosts": null,
             "whatIfScenario": true,
+            "co2SavingsData":{
+                "energyType": 'electricity',
+                "energySource": '',
+                "fuelType": '',
+                "totalEmissionOutputRate": 401.07,
+                "electricityUse": 0,
+                "eGridRegion": '',
+                "eGridSubregion": 'U.S. Average',
+                "totalEmissionOutput": 0,
+                "userEnteredBaselineEmissions": false,
+                "userEnteredModificationEmissions": true,
+                "zipcode": '00000',
+            }
         },
         "modifications": [{
             "psat": {
@@ -69,7 +82,20 @@ export const MockPsat: Assessment = {
                     "fluidType": "Water",
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
-                    "implementationCosts": null
+                    "implementationCosts": null,
+                    "co2SavingsData":{
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 401.07,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'U.S. Average',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '00000',
+                    }
                 }
             },
             "notes": {
@@ -112,6 +138,19 @@ export const MockPsat: Assessment = {
                     "implementationCosts": null,
                     "isVFD": true,
                     "whatIfScenario": true,
+                    "co2SavingsData":{
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 401.07,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'U.S. Average',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '00000',
+                    }
                 }
             },
             "notes": {
@@ -176,15 +215,14 @@ export const MockPsatSettings: Settings = {
     "steamEnergyMeasurement": "MMBtu",
     "disableTutorial": false,
     "disableDashboardTutorial": false,
-    "disablePsatSetupTutorial": false,
-    "disablePsatAssessmentTutorial": false,
-    "disablePsatReportTutorial": false,
-    "disablePhastSetupTutorial": false,
-    "disablePhastAssessmentTutorial": false,
-    "disablePhastReportTutorial": false,
-    "disableFsatSetupTutorial": false,
-    "disableFsatAssessmentTutorial": false,
-    "disableFsatReportTutorial": false,
+    "disablePsatTutorial": false,
+    "disableFansTutorial": false,
+    "disablePhastTutorial": false,
+    "disableWasteWaterTutorial": false,
+    "disableSteamTutorial": false,
+    "disableMotorInventoryTutorial": false,
+    "disableTreasureHuntTutorial": false,
+    "disableDataExplorerTutorial": false,
     "compressedAirCost": 0.022,
     "otherFuelCost": 0,
     "waterCost": 0,
@@ -212,6 +250,12 @@ export const MockPsatSettings: Settings = {
         },
         "date": "Tue Dec 04 2018"
     },
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "MWh",
+    "compressedAirRollupUnit": "MWh"
 }
 
 

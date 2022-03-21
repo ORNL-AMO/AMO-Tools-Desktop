@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { FsatReportRollupService } from '../../fsat-report-rollup.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-fsat-summary',
@@ -11,7 +13,7 @@ import { FsatReportRollupService } from '../../fsat-report-rollup.service';
 export class FsatSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
   fanSavingPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
@@ -19,7 +21,7 @@ export class FsatSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numFsats: number;
-  constructor(public fsatReportRollupService: FsatReportRollupService) { }
+  constructor(public fsatReportRollupService: FsatReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.fsatReportRollupService.fsatAssessments.subscribe(val => {
@@ -33,7 +35,13 @@ export class FsatSummaryComponent implements OnInit {
     this.selectedSub = this.fsatReportRollupService.selectedFsats.subscribe(val => {
       if (val.length != 0) {
         this.fsatReportRollupService.setFsatResultsFromSelected(val);
-        this.calcFsatSums();
+        this.fsatReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.fsatReportRollupService.totals;
+        this.fanSavingPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -42,24 +50,4 @@ export class FsatSummaryComponent implements OnInit {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
   }
-
-  calcFsatSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.fsatReportRollupService.selectedFsatResults.forEach(result => {
-      let diffCost = result.baselineResults.annualCost - result.modificationResults.annualCost;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.annualCost;
-      let diffEnergy = result.baselineResults.annualEnergy - result.modificationResults.annualEnergy;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.annualEnergy;
-    })
-    this.fanSavingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
-    this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
-  }
-
 }

@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import * as _ from 'lodash';
-import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
-import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 import { Settings } from '../../../shared/models/settings';
 
@@ -24,7 +22,7 @@ export class SystemAndEquipmentCurveGraphService {
   selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
   modifiedIntersectionIndex: number;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);

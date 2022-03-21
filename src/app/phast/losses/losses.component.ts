@@ -117,6 +117,9 @@ export class LossesComponent implements OnInit {
       }
     }
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex, this.inSetup);
+    this.phast.modifications.forEach(mod => {
+      mod.phast = this.updateModificationCO2Savings(mod.phast);
+    });
     this.saved.emit(true);
     this.toggleCalculate = !this.toggleCalculate;
     if (this.phast.modifications.length !== 0) {
@@ -124,6 +127,22 @@ export class LossesComponent implements OnInit {
     } else {
       this.modificationExists = false;
     }
+  }
+
+  updateModificationCO2Savings(modPHAST: PHAST){
+    if(this.phast.co2SavingsData){
+      if(!modPHAST.co2SavingsData){
+        modPHAST.co2SavingsData = this.phast.co2SavingsData;
+      } else {
+        modPHAST.co2SavingsData.zipcode = this.phast.co2SavingsData.zipcode;
+        modPHAST.co2SavingsData.eGridSubregion = this.phast.co2SavingsData.eGridSubregion;
+        if(!modPHAST.co2SavingsData.totalEmissionOutputRate){
+          modPHAST.co2SavingsData.totalEmissionOutputRate = this.phast.co2SavingsData.totalEmissionOutputRate;
+        }
+      }
+    }
+    return modPHAST;
+
   }
 
   addLoss() {

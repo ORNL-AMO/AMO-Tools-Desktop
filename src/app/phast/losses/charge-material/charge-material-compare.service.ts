@@ -40,7 +40,9 @@ export class ChargeMaterialCompareService {
   }
 
   compareMaterialType(index: number) {
-    return this.compare(this.baselineMaterials[index].chargeMaterialType, this.modifiedMaterials[index].chargeMaterialType);
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      return this.compare(this.baselineMaterials[index].chargeMaterialType, this.modifiedMaterials[index].chargeMaterialType);
+    }
   }
 
   //liquid
@@ -264,19 +266,20 @@ export class ChargeMaterialCompareService {
         }
       } else if (baseline.chargeMaterialType === 'Liquid') {
         if (
-          this.compare(baseline.liquidChargeMaterial.materialId, baseline.liquidChargeMaterial.materialId) ||
-          this.compare(baseline.liquidChargeMaterial.thermicReactionType, baseline.liquidChargeMaterial.thermicReactionType) ||
-          this.compare(baseline.liquidChargeMaterial.vaporizingTemperature, baseline.liquidChargeMaterial.vaporizingTemperature) ||
-          this.compare(baseline.liquidChargeMaterial.latentHeat, baseline.liquidChargeMaterial.latentHeat) ||
-          this.compare(baseline.liquidChargeMaterial.specificHeatVapor, baseline.liquidChargeMaterial.specificHeatVapor) ||
-          this.compare(baseline.liquidChargeMaterial.feedRate, baseline.liquidChargeMaterial.feedRate) ||
-          this.compare(baseline.liquidChargeMaterial.chargeFeedRate, baseline.liquidChargeMaterial.chargeFeedRate) ||
-          this.compare(baseline.liquidChargeMaterial.initialTemperature, baseline.liquidChargeMaterial.initialTemperature) ||
-          this.compare(baseline.liquidChargeMaterial.dischargeTemperature, baseline.liquidChargeMaterial.dischargeTemperature) ||
-          this.compare(baseline.liquidChargeMaterial.percentVaporized, baseline.liquidChargeMaterial.percentVaporized) ||
-          this.compare(baseline.liquidChargeMaterial.percentReacted, baseline.liquidChargeMaterial.percentReacted) ||
-          this.compare(baseline.liquidChargeMaterial.reactionHeat, baseline.liquidChargeMaterial.reactionHeat) ||
-          this.compare(baseline.liquidChargeMaterial.additionalHeat, baseline.liquidChargeMaterial.additionalHeat)
+          this.compare(baseline.liquidChargeMaterial.materialId, modification.liquidChargeMaterial.materialId) ||
+          this.compare(baseline.liquidChargeMaterial.thermicReactionType, modification.liquidChargeMaterial.thermicReactionType) ||
+          this.compare(baseline.liquidChargeMaterial.vaporizingTemperature, modification.liquidChargeMaterial.vaporizingTemperature) ||
+          this.compare(baseline.liquidChargeMaterial.latentHeat, modification.liquidChargeMaterial.latentHeat) ||
+          this.compare(baseline.liquidChargeMaterial.specificHeatVapor, modification.liquidChargeMaterial.specificHeatVapor) ||
+          this.compare(baseline.liquidChargeMaterial.feedRate, modification.liquidChargeMaterial.feedRate) ||
+          this.compare(baseline.liquidChargeMaterial.chargeFeedRate, modification.liquidChargeMaterial.chargeFeedRate) ||
+          this.compare(baseline.liquidChargeMaterial.initialTemperature, modification.liquidChargeMaterial.initialTemperature) ||
+          this.compare(baseline.liquidChargeMaterial.dischargeTemperature, modification.liquidChargeMaterial.dischargeTemperature) ||
+          this.compare(baseline.liquidChargeMaterial.percentVaporized, modification.liquidChargeMaterial.percentVaporized) ||
+          this.compare(baseline.liquidChargeMaterial.percentReacted, modification.liquidChargeMaterial.percentReacted) ||
+          this.compare(baseline.liquidChargeMaterial.reactionHeat, modification.liquidChargeMaterial.reactionHeat) ||
+          this.compare(baseline.liquidChargeMaterial.additionalHeat, modification.liquidChargeMaterial.additionalHeat) ||
+          this.compare(baseline.liquidChargeMaterial.specificHeatLiquid, modification.liquidChargeMaterial.specificHeatLiquid)
         ) {
           isDiff = true;
         }
@@ -295,7 +298,9 @@ export class ChargeMaterialCompareService {
           this.compare(baseline.solidChargeMaterial.chargeMelted, modification.solidChargeMaterial.chargeMelted) ||
           this.compare(baseline.solidChargeMaterial.chargeReacted, modification.solidChargeMaterial.chargeReacted) ||
           this.compare(baseline.solidChargeMaterial.reactionHeat, modification.solidChargeMaterial.reactionHeat) ||
-          this.compare(baseline.solidChargeMaterial.additionalHeat, modification.solidChargeMaterial.additionalHeat)
+          this.compare(baseline.solidChargeMaterial.additionalHeat, modification.solidChargeMaterial.additionalHeat) ||
+          this.compare(baseline.solidChargeMaterial.latentHeat, modification.solidChargeMaterial.latentHeat) ||
+          this.compare(baseline.solidChargeMaterial.meltingPoint, modification.solidChargeMaterial.meltingPoint)
         ) {
           isDiff = true;
         }

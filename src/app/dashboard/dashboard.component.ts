@@ -32,6 +32,9 @@ export class DashboardComponent implements OnInit {
   moveItems: boolean;
   moveItemsSub: Subscription;
 
+  copyItems: boolean;
+  copyItemsSub: Subscription;
+
   showImportModalSub: Subscription;
   showImportModal: boolean;
 
@@ -55,6 +58,10 @@ export class DashboardComponent implements OnInit {
 
     this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {
       this.moveItems = val;
+    });
+
+    this.copyItemsSub = this.dashboardService.copyItems.subscribe(val => {
+      this.copyItems = val;
     });
 
     this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
@@ -92,6 +99,7 @@ export class DashboardComponent implements OnInit {
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
     this.createInventorySub.unsubscribe();
+    this.copyItemsSub.unsubscribe();
   }
 
   ngAfterViewInit() {

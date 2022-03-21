@@ -10,7 +10,7 @@ import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 import { FormsModule } from '@angular/forms';
@@ -63,6 +63,11 @@ import { CompressedAirSummaryComponent } from './report-summary/compressed-air-s
 import { CompressedAirReportModule } from '../compressed-air-assessment/compressed-air-report/compressed-air-report.module';
 import { CompressedAirRollupComponent } from './compressed-air-rollup/compressed-air-rollup.component';
 import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compressed-air-rollup-print/compressed-air-rollup-print.component';
+import { ReportSummaryGraphsComponent } from './report-summary-graphs/report-summary-graphs.component';
+import { ReportSummaryGraphsService } from './report-summary-graphs/report-summary-graphs.service';
+import { ReportSummaryPieChartComponent } from './report-summary-graphs/report-summary-pie-chart/report-summary-pie-chart.component';
+import { ReportSummaryBarChartComponent } from './report-summary-graphs/report-summary-bar-chart/report-summary-bar-chart.component';
+import { ReportSummaryGraphsPrintComponent } from './report-summary-graphs/report-summary-graphs-print/report-summary-graphs-print.component';
 
 @NgModule({
   imports: [
@@ -123,6 +128,10 @@ import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compr
     CompressedAirSummaryComponent,
     CompressedAirRollupComponent,
     CompressedAirRollupPrintComponent,
+    ReportSummaryGraphsComponent,
+    ReportSummaryPieChartComponent,
+    ReportSummaryBarChartComponent,
+    ReportSummaryGraphsPrintComponent,
 
   ],
   providers: [
@@ -133,7 +142,8 @@ import { CompressedAirRollupPrintComponent } from './compressed-air-rollup/compr
     SsmtReportRollupService,
     TreasureHuntReportRollupService,
     WasteWaterReportRollupService,
-    CompressedAirReportRollupService
+    CompressedAirReportRollupService,
+    ReportSummaryGraphsService
   ],
   exports: [ReportRollupComponent]
 })

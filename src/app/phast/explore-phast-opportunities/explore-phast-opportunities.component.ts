@@ -23,8 +23,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   containerHeight: number;
   @Input()
   exploreModIndex: number;
-  @Output('exploreOppsToast')
-  exploreOppsToast = new EventEmitter<boolean>();
   @Output('save')
   save = new EventEmitter<boolean>();
   @Output('emitAddNewMod')
@@ -118,7 +116,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         let title: string = 'Explore Opportunities';
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
-        this.exploreOppsToast.emit(false);
       } else if (this.showToast) {
         this.hideToast();
       }

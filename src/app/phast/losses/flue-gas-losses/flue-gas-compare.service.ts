@@ -4,6 +4,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 import { PsychrometricResults } from '../../../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
 import { BaseGasDensity } from '../../../shared/models/fans';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class FlueGasCompareService {
@@ -44,6 +45,19 @@ export class FlueGasCompareService {
     this.baseGasDensity = currDensity;
   }
 
+  setFanDefaultUnits(settings: Settings): Settings {
+    if(settings.unitsOfMeasure == 'Imperial'){
+      settings.densityMeasurement = 'lbscf';
+      settings.fanPressureMeasurement = 'inH2o';
+      settings.fanBarometricPressure = 'inHg';
+    }else{
+      settings.densityMeasurement = 'kgNm3';
+      settings.fanPressureMeasurement = 'Pa';
+      settings.fanBarometricPressure = 'Pa';
+    }
+    return settings;
+  }
+
   compareAllLosses() {
     let index = 0;
     let numLoss = this.baselineFlueGasLoss.length;
@@ -79,6 +93,8 @@ export class FlueGasCompareService {
       this.compareMassExcessAirPercentage(index) ||
       this.compareMassCombustionAirTemperature(index) ||
       this.compareMassFuelTemperature(index) ||
+      this.compareMassAmbientAirTemp(index) ||
+      this.compareMassOxygenCalculationMethod(index) ||
       this.compareMassAshDischargeTemperature(index) ||
       this.compareMassMoistureInAirCombustion(index) ||
       this.compareMassUnburnedCarbonInAsh(index));
@@ -117,6 +133,7 @@ export class FlueGasCompareService {
   compareByVolumeLoss(index: number) {
     return (this.compareVolumeGasTypeId(index) ||
       this.compareVolumeFlueGasTemperature(index) ||
+      this.compareVolumeAmbientAirTemp(index) ||
       this.compareVolumeExcessAirPercentage(index) ||
       this.compareVolumeCombustionAirTemperature(index) ||
       this.compareVolumeFuelTemperature(index) ||
@@ -184,6 +201,7 @@ export class FlueGasCompareService {
           this.compare(baseline.flueGasByMass.combustionAirTemperature, modification.flueGasByMass.combustionAirTemperature) ||
           this.compare(baseline.flueGasByMass.fuelTemperature, modification.flueGasByMass.fuelTemperature) ||
           this.compare(baseline.flueGasByMass.ashDischargeTemperature, modification.flueGasByMass.ashDischargeTemperature) ||
+          this.compare(baseline.flueGasByMass.ambientAirTemp, modification.flueGasByMass.ambientAirTemp) ||
           this.compare(baseline.flueGasByMass.moistureInAirCombustion, modification.flueGasByMass.moistureInAirCombustion) ||
           this.compare(baseline.flueGasByMass.unburnedCarbonInAsh, modification.flueGasByMass.unburnedCarbonInAsh) ||
           this.compare(baseline.flueGasByMass.oxygenCalculationMethod, modification.flueGasByMass.oxygenCalculationMethod)) {

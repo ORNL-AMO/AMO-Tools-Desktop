@@ -41,6 +41,10 @@
     text-decoration: underline;
 }
 
+.prv-img-holder:hover {
+    transform: scale(1.2);
+}
+
 .outlet-temp-holder .outlet-temp{
     position: absolute;
     bottom: 0;

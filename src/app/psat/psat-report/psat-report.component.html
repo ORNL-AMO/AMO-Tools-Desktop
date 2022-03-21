@@ -13,7 +13,6 @@
     <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPsat}">
         <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
-            <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
         <div *ngIf="assessment" class="row assessment-name">
@@ -74,19 +73,19 @@
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
         <div class="input-data results scroll-item print-height"
-            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
+            *ngIf="(currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-summary [psat]="assessment.psat" [settings]="settings">
             </app-input-summary>
         </div>
         <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
+            *ngIf="(currentTab == 'results' && !showPrintView) || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-output-summary [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-output-summary>
         </div>
         <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
+            *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-psat-report-graphs [settings]="settings" [psat]="assessment.psat" [printView]="showPrintView"
                 [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">

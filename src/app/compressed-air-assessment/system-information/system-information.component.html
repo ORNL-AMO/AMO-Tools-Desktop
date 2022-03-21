@@ -143,6 +143,21 @@
             </span>
         </div>
     </form>
+
+      <div class="header mr-2 ml-2">
+        <h3>Carbon Emissions</h3>
+        <br>
+    </div>
+    
+      <div *ngIf="co2SavingsData">
+        <app-assessment-co2-savings 
+        [co2SavingsData]="co2SavingsData"
+        [isFormDisabled]="false"
+        [inBaseline]="true"
+        (emitCurrentField)="focusField($event)"
+        (emitUpdateCo2SavingsData)="save($event)"
+        ></app-assessment-co2-savings>
+      </div>
 </div>
 
 <app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings"

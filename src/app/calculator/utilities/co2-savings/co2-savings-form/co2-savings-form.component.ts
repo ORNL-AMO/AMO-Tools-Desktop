@@ -4,6 +4,7 @@ import { eGridRegion, electricityGridRegions } from './electricityGridRegions';
 import * as _ from 'lodash';
 import { Co2SavingsData } from '../co2-savings.service';
 import { Settings } from '../../../../shared/models/settings';
+import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
 @Component({
   selector: 'app-co2-savings-form',
   templateUrl: './co2-savings-form.component.html',
@@ -20,6 +21,10 @@ export class Co2SavingsFormComponent implements OnInit {
   index: number;
   @Input()
   settings: Settings;
+  @Input()
+  currentField: string;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   otherFuels: Array<OtherFuel>;
   eGridRegions: Array<eGridRegion>;
@@ -31,7 +36,10 @@ export class Co2SavingsFormComponent implements OnInit {
     subregion: string,
     outputRate: number
   }>;
-  constructor() { }
+
+  hasValidSubRegion: boolean;
+  zipCodeSubRegionData: Array<string>;
+  constructor(private egridService: EGridService) { }
 
   ngOnInit() {
     this.otherFuels = otherFuels;
@@ -56,6 +64,7 @@ export class Co2SavingsFormComponent implements OnInit {
     this.data.totalEmissionOutputRate = undefined;
     this.data.fuelType = undefined;
     this.data.energySource = undefined;
+    this.setSubRegionData();
     this.calculate();
   }
 
@@ -80,6 +89,52 @@ export class Co2SavingsFormComponent implements OnInit {
     let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion === val.subregion; });
     this.data.totalEmissionOutputRate = tmpSubRegion.outputRate;
     this.calculate();
+  }
+
+
+  setZipcode() {
+    this.setSubRegionData();
+  }
+
+  setSubRegionData() {
+    this.zipCodeSubRegionData = [];
+
+    let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.data.zipcode === val.zip);
+    if (subRegionData) {
+      subRegionData.subregions.forEach(subregion => {
+        if (subregion !== '') {
+          this.zipCodeSubRegionData.push(subregion);
+        }
+      });
+      if (!this.data.eGridSubregion) {
+        // set the first from the subregion list as default
+        this.data.eGridSubregion = this.zipCodeSubRegionData[0];
+      }
+
+      this.hasValidSubRegion = true;
+      if (this.zipCodeSubRegionData.length === 0) {
+        // none found - form select is hidden, set form val to null
+        this.data.eGridSubregion = undefined;
+      } 
+    } else {
+      this.data.eGridSubregion = undefined;
+    }
+
+    this.setSubRegionEmissionsOutput();
+  }
+
+
+  setSubRegionEmissionsOutput() {
+    let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.data.eGridSubregion);
+
+    if (subregionEmissions) {
+      this.data.totalEmissionOutputRate = subregionEmissions.co2Emissions
+      this.calculate();
+    }
+  }
+
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
   calculate() {
     this.emitCalculate.emit();

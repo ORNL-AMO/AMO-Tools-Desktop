@@ -1,8 +1,10 @@
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
+import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
@@ -19,19 +21,25 @@ export class SystemInformationComponent implements OnInit {
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;
   form: FormGroup;
+  co2SavingsData: Co2SavingsData;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private systemInformationFormService: SystemInformationFormService, private systemProfileService: SystemProfileService,
     private altitudeCorrectionService: AltitudeCorrectionService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.setCo2SavingsData(compressedAirAssessment);
     this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings);
   }
 
-  save() {
+  save(co2SavingsData?: Co2SavingsData) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemInformation: SystemInformation = this.systemInformationFormService.getObjFromForm(this.form);
+    if (co2SavingsData) {
+      systemInformation.co2SavingsData = co2SavingsData;
+    }
     compressedAirAssessment.systemInformation = systemInformation;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
@@ -93,5 +101,14 @@ export class SystemInformationComponent implements OnInit {
     atmosphericPressure = Number(atmosphericPressure.toFixed(2));
     this.form.controls.atmosphericPressure.patchValue(atmosphericPressure);
     this.save();
+  }
+
+  setCo2SavingsData(compressedAirAssessment: CompressedAirAssessment) {
+    if (compressedAirAssessment.systemInformation.co2SavingsData) {
+      this.co2SavingsData = compressedAirAssessment.systemInformation.co2SavingsData;
+    } else {
+      let co2SavingsData: Co2SavingsData = this.assessmentCo2SavingsService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
+    }
   }
 }

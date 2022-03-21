@@ -83,3 +83,26 @@
   .fa .fa-serch-plus, .fa .fa-search-minus{
       font-size: x-large;
   }
+
+  .sidebar {
+    overflow-y: auto;
+    position: sticky;
+  }
+  .collapse-option:hover {
+    cursor: pointer;
+  }
+    .sidebar ul {
+        margin: 0;
+        padding: 0;
+    }
+    .sidebar ul li {
+            list-style: none;
+            padding: 0;
+        }
+
+  .sidebar ul li.collapse-option{
+    background-color: #F39C12;
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }

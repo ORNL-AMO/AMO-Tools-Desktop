@@ -1,4 +1,13 @@
 <div class="d-flex tabs subtabs progress-tabs waste-water flex-wrap">
+    <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'operations'}">
+        <a class="nav-link small" (click)="tabChange('operations')">Operations
+            <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')"
+                class="badge gray-badge" [ngClass]="operationsBadgeClass">
+            </span>
+        </a>
+        <app-tabs-tooltip [display]="operationsHover" [reveal]="displayOperationsTooltip"
+            [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
+    </div>
     <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'activated-sludge'}">
         <a class="nav-link small" (click)="tabChange('activated-sludge')">Activated Sludge
             <span (mouseenter)="showTooltip('activated-sludge')" (mouseleave)="hideTooltip('activated-sludge')"
@@ -9,7 +18,7 @@
             [badgeClass]="activatedSludgeBadgeClass"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'aerator-performance'}">
-        <a class="nav-link small" (click)="tabChange('aerator-performance')">Aerator Performance
+        <a class="nav-link small" (click)="tabChange('aerator-performance')">Aeration Performance
             <span (mouseenter)="showTooltip('aerator-performance')" (mouseleave)="hideTooltip('aerator-performance')"
                 class="badge gray-badge" [ngClass]="aeratorPerformanceBadgeClass">
             </span>

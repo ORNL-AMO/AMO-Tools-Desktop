@@ -22,6 +22,19 @@ export const MockFsat: Assessment = {
         fsatOperations: {
             operatingHours: 8760,
             cost: 0.06,
+            cO2SavingsData: {
+                energyType: 'electricity',
+                energySource: '',
+                fuelType: '',
+                totalEmissionOutputRate: 401.07,
+                electricityUse: 0,
+                eGridRegion: '',
+                eGridSubregion: 'U.S. Average',
+                totalEmissionOutput: 0,
+                userEnteredBaselineEmissions: false,
+                userEnteredModificationEmissions: true,
+                zipcode: '00000',
+            },
         },
         fanMotor: {
             lineFrequency: 60,
@@ -104,7 +117,20 @@ export const MockFsat: Assessment = {
                     fsatOperations: {
                         operatingHours: 8760,
                         cost: 0.06,
-                    },
+                        cO2SavingsData: {
+                            energyType: 'electricity',
+                            energySource: '',
+                            fuelType: '',
+                            totalEmissionOutputRate: 401.07,
+                            electricityUse: 0,
+                            eGridRegion: '',
+                            eGridSubregion: 'U.S. Average',
+                            totalEmissionOutput: 0,
+                            userEnteredBaselineEmissions: false,
+                            userEnteredModificationEmissions: true,
+                            zipcode: '00000',
+                        },  
+                    },                  
                     fieldData: {
                         flowRate: 129691,
                         inletPressure: -16.36,
@@ -162,6 +188,19 @@ export const MockFsat: Assessment = {
                     fsatOperations: {
                         operatingHours: 8760,
                         cost: 0.06,
+                        cO2SavingsData: {
+                            energyType: 'electricity',
+                            energySource: '',
+                            fuelType: '',
+                            totalEmissionOutputRate: 401.07,
+                            electricityUse: 0,
+                            eGridRegion: '',
+                            eGridSubregion: 'U.S. Average',
+                            totalEmissionOutput: 0,
+                            userEnteredBaselineEmissions: false,
+                            userEnteredModificationEmissions: true,
+                            zipcode: '00000',
+                        },  
                     },
                     fieldData: {
                         flowRate: 86461,
@@ -244,7 +283,13 @@ export const MockFsatSettings: Settings = {
         date: "Tue Dec 04 2018"
     },
     steamPowerMeasurement: "kW",
-    steamEnergyMeasurement: "MMBtu"
+    steamEnergyMeasurement: "MMBtu",
+    commonRollupUnit: "MMBtu",
+    pumpsRollupUnit: "MWh",
+    fansRollupUnit: "MWh",
+    steamRollupUnit: "MMBtu",
+    wasteWaterRollupUnit: "MWh",
+    compressedAirRollupUnit: "MWh"
 };
 
 /*

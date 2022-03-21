@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { LogToolDbService } from '../log-tool-db.service';
 import { LogToolDbData } from '../log-tool-models';

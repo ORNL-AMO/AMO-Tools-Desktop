@@ -1,0 +1,47 @@
+.welcome-screen{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    background-color: black;
+    opacity: 0;
+    z-index: 100000;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;  
+}
+
+.welcome-screen.show{
+    opacity: .8;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s;  
+}
+
+.welcome-content{
+    color: white;
+    text-align: center;
+}
+
+.welcome-screen button.close{
+    color: white;
+    font-size: 44px;
+}
+
+.welcome-screen .banner-box{
+    height: 69px;
+}
+
+.welcome-screen nav.navbar{
+    background-color: black;
+}
+
+.welcome-screen .home-nav-item:not(.book-item){
+    opacity: 0;
+}
+
+.welcome-screen a.user-manual{
+    color: white;
+}
+
+.welcome-screen .welcome-content{
+    margin-top: 3rem;
+}

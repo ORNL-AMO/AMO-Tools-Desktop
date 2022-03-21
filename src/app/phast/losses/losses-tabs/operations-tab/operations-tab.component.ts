@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../../operations/operations.service';
 import { OperationsCompareService } from '../../operations/operations-compare.service';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class OperationsTabComponent implements OnInit {
   phast: PHAST;
   @Input()
   inSetup: boolean;
+  @Input()
+  settings: Settings;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -62,7 +65,7 @@ export class OperationsTabComponent implements OnInit {
     let missingData = false;
     let hasWarning: boolean = false;
     if (this.operationsCompareService.baseline) {
-      if (this.checkLossValid(this.operationsCompareService.baseline) === false) {
+      if (this.checkLossValid(this.operationsCompareService.baseline, this.settings) === false) {
         missingData = true;
       }
       let warnings: OperationsWarnings = this.operationsService.checkWarnings(this.operationsCompareService.baseline.operatingHours);
@@ -72,7 +75,7 @@ export class OperationsTabComponent implements OnInit {
       }
     }
     if (this.operationsCompareService.modification) {
-      if (this.checkLossValid(this.operationsCompareService.modification) === false) {
+      if (this.checkLossValid(this.operationsCompareService.modification, this.settings) === false) {
         missingData = true;
       }
     }
@@ -80,8 +83,8 @@ export class OperationsTabComponent implements OnInit {
   }
 
 
-  checkLossValid(phast: PHAST) {
-    let tmpForm: FormGroup = this.operationsService.initForm(phast);
+  checkLossValid(phast: PHAST, settings: Settings) {
+    let tmpForm: FormGroup = this.operationsService.initForm(phast, settings);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

@@ -78,6 +78,18 @@
                                 <span *ngIf="!systemInformation.isSequencerUsed">&mdash;</span>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                Total Emission Output Rate
+                            </td>
+                            <td>
+                                <span *ngIf="systemInformation.co2SavingsData.totalEmissionOutputRate">
+                                    {{systemInformation.co2SavingsData.totalEmissionOutputRate}}
+                                    kg CO<sub>2</sub>/MWh
+                                </span>
+                                <span *ngIf="!systemInformation.co2SavingsData.totalEmissionOutputRate">&mdash;</span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

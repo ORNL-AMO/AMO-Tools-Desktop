@@ -1,13 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { FlueGas, FlueGasByVolumeSuiteResults } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { FlueGasService } from '../../../calculator/furnaces/flue-gas/flue-gas.service';
 import { FlueGasFormService } from '../../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
+import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -47,7 +49,8 @@ export class FlueGasLossesComponent implements OnInit {
   constructor(private phastService: PhastService, 
               private flueGasFormService: FlueGasFormService, 
               private cd: ChangeDetectorRef,
-              private flueGasCompareService: FlueGasCompareService) { }
+              private flueGasCompareService: FlueGasCompareService,
+              private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -169,6 +172,8 @@ export class FlueGasLossesComponent implements OnInit {
         loss.availableHeat = null;
         loss.grossHeat = null;
         loss.systemLosses = null;
+        loss.calculatedExcessAir = null;
+        loss.calculatedFlueGasO2 = null;
       }
     } else if (loss.measurementType === "By Mass") {
       if (loss.formByMass.status === 'VALID') {
@@ -183,10 +188,44 @@ export class FlueGasLossesComponent implements OnInit {
         const heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
         loss.grossHeat = (heatInput / availableHeat) - sumAdditionalHeat;
         loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
+
+        let gases: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+        let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpLoss.flueGasByMass.gasTypeId });
+        if (tmpLoss.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
+          loss.calculatedExcessAir = tmpLoss.flueGasByMass.excessAirPercentage;
+          let fluGasCo2Inputs: MaterialInputProperties = {
+            carbon: selectedGas.carbon,
+            hydrogen: selectedGas.hydrogen,
+            sulphur: selectedGas.sulphur,
+            inertAsh: selectedGas.inertAsh,
+            o2: selectedGas.o2,
+            moisture: selectedGas.moisture,
+            nitrogen: selectedGas.nitrogen,
+            excessAir: tmpLoss.flueGasByMass.excessAirPercentage,
+            moistureInAirCombustion: tmpLoss.flueGasByMass.moistureInAirCombustion
+          }
+          loss.calculatedFlueGasO2 = this.phastService.flueGasByMassCalculateO2(fluGasCo2Inputs);
+        } else if (tmpLoss.flueGasByMass.oxygenCalculationMethod == 'Oxygen in Flue Gas' && selectedGas) {
+          loss.calculatedFlueGasO2 = tmpLoss.flueGasByMass.o2InFlueGas;
+          let fluGasCo2Inputs: MaterialInputProperties = {
+            carbon: selectedGas.carbon,
+            hydrogen: selectedGas.hydrogen,
+            sulphur: selectedGas.sulphur,
+            inertAsh: selectedGas.inertAsh,
+            o2: selectedGas.o2,
+            moisture: selectedGas.moisture,
+            nitrogen: selectedGas.nitrogen,
+            o2InFlueGas: tmpLoss.flueGasByMass.o2InFlueGas,
+            moistureInAirCombustion: tmpLoss.flueGasByMass.moistureInAirCombustion
+          }
+          loss.calculatedExcessAir = this.phastService.flueGasByMassCalculateExcessAir(fluGasCo2Inputs);
+        }
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
         loss.systemLosses = null;
+        loss.calculatedExcessAir = null;
+        loss.calculatedFlueGasO2 = null;
       }
     }
     this.cd.detectChanges();

@@ -155,7 +155,7 @@
 <li *ngIf="modificationData.exploreAeratorPerformance.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.Speed.invalid}">
-            <label for="baselineSpeed" class="baseline-value-label">Baseline Aerator Speed</label>
+            <label for="baselineSpeed" class="baseline-value-label">Baseline {{baselineAeratorBlowerLabel}} Speed</label>
             <div class="text-muted baseline-value-input">{{ baselineForm.controls.Speed.value }} %</div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.Speed.invalid && !baselineForm.controls.Speed.pristine">
@@ -167,7 +167,7 @@
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationForm.controls.Speed.invalid }">
-            <label for="modificationSpeed" class="mod-value-label">Modification Aerator Speed</label>
+            <label for="modificationSpeed" class="mod-value-label">Modification {{modificationAeratorBlowerLabel}} Speed</label>
             <div class="input-group mod-max-width">
                 <input name="modificationSpeed" type="number" step="0.01" min="0" max="100" id="modificationSpeed"
                     class="form-control mod-value-input" (focus)="focusField('Speed')" formControlName="Speed"
@@ -209,7 +209,7 @@
 <li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.Aerator.invalid}">
-            <label for="baselineAerator" class="baseline-value-label">Baseline Aerator</label>
+            <label for="baselineAerator" class="baseline-value-label">Baseline Aerator/Blower</label>
             <div class="text-muted baseline-value-input">
                 {{ baselineForm.controls.Aerator.value }}
             </div>
@@ -218,7 +218,7 @@
     <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': modificationForm.controls.Aerator.invalid}">
-            <label for="modificationAerator" class="mod-value-label">Modification Aerator</label>
+            <label for="modificationAerator" class="mod-value-label">Modification Aerator/Blower</label>
             <div class="input-group mod-max-width">
                 <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
                     (focus)="focusField('aerator')" id="modificationAerator">
@@ -294,7 +294,7 @@
 <li *ngIf="modificationData.exploreAeratorUpgrade.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
-            <label for="baselineTypeAerators" class="baseline-value-label">Type of Aerator</label>
+            <label for="baselineTypeAerators" class="baseline-value-label">Type of {{baselineAeratorBlowerLabel}}</label>
             <div class="text-muted baseline-value-input">
                 {{ baselineForm.controls.TypeAerators.value | wasteWaterOptionsDisplay }}
             </div>
@@ -302,7 +302,7 @@
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
-            <label for="modificationTypeAerators" class="mod-value-label">Type of Aerator</label>
+            <label for="modificationTypeAerators" class="mod-value-label">Type of {{modificationAeratorBlowerLabel}}</label>
             <div class="input-group mod-max-width">
                 <select class="form-control" formControlName="TypeAerators" (change)="save()"
                     (focus)="focusField('TypeAerators')" id="modificationTypeAerators">

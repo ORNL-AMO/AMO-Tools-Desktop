@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
 
@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs';
 export class PumpOperationsHelpComponent implements OnInit {
  
   currentField: string;
-  currentFieldSub: Subscription;
 
+  currentFieldSub: Subscription;
 
   constructor( private helpPanelService: HelpPanelService) { }
 

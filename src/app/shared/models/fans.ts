@@ -1,5 +1,6 @@
 import { OperatingHours } from "./operations";
 import { SavingsOpportunity } from "./explore-opps";
+import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
 export interface FSAT {
   name?: string;
@@ -24,9 +25,10 @@ export interface FSAT {
 }
 
 export interface FsatOperations {
-  operatingHours: number;
-  cost: number;
+  operatingHours?: number;
+  cost?: number;
   operatingFraction?: number;
+  cO2SavingsData?: Co2SavingsData;
 }
 
 
@@ -81,6 +83,8 @@ export interface FieldData {
   fanRatedInfo?: FanRatedInfo;
   planeData?: PlaneData;
   pressureCalcResultType?: string;
+  userDefinedCompressibilityFactor?: boolean;
+  userDefinedVelocityPressure?: boolean;
 }
 
 export interface FanMotor {
@@ -351,6 +355,7 @@ export interface FsatInput {
   //modified, optimal
   fanEfficiency?: number;
   fanType?: number;
+  cO2SavingsData?: Co2SavingsData;
 };
 
 
@@ -375,6 +380,8 @@ export interface FsatOutput {
   annualSavings?: number;
   planeResults?: PlaneResults;
   psychrometricResults?: PsychrometricResults;
+  co2EmissionsOutput: number;
+  emissionsSavings: number;
 }
 
 export interface InletPressureData {
@@ -496,4 +503,3 @@ export const fanChecklistQuestions =  {
   weldingDuctwork: 'Need to weld ductwork cracks regularly',
   radialFanCleanAir: 'Radial fan handling clean air',
 };
-

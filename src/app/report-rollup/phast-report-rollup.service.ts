@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastResultsService } from '../phast/phast-results.service';
-import { AllPhastResultsData, PhastCompare, PhastResultsData, ReportItem } from './report-rollup-models';
+import { AllPhastResultsData, PhastCompare, PhastResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
 import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import { ExecutiveSummary } from '../shared/models/phast/phast';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class PhastReportRollupService {
@@ -13,9 +15,11 @@ export class PhastReportRollupService {
   selectedPhasts: BehaviorSubject<Array<PhastCompare>>;
   selectedPhastResults: Array<PhastResultsData>;
   allPhastResults: Array<AllPhastResultsData>;
+  totals: ReportUtilityTotal;
   constructor(
     private executiveSummaryService: ExecutiveSummaryService,
-    private phastResultsService: PhastResultsService) {
+    private phastResultsService: PhastResultsService,
+    private convertUnitsService: ConvertUnitsService) {
     this.initSummary();
   }
 
@@ -24,6 +28,16 @@ export class PhastReportRollupService {
     this.selectedPhasts = new BehaviorSubject<Array<PhastCompare>>(new Array<PhastCompare>());
     this.selectedPhastResults = new Array<PhastResultsData>();
     this.allPhastResults = new Array<AllPhastResultsData>();
+    this.totals = {
+      totalEnergy: 0,
+      totalCost: 0,
+      savingPotential: 0,
+      energySavingsPotential: 0,
+      fuelEnergy: 0,
+      electricityEnergy: 0,
+      carbonEmissions: 0,
+      carbonSavings: 0
+    }
 
   }
 
@@ -111,5 +125,96 @@ export class PhastReportRollupService {
       });
     });
   }
+
+  setTotals(settings: Settings) {
+    let sumSavings = 0;
+    let sumEnergy = 0;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
+    let fuelEnergy = 0;
+    let electricityEnergy = 0
+    let sumCo2Emissions = 0;
+    let sumCo2Savings = 0;
+    let diffCO2: number = 0;
+    this.selectedPhastResults.forEach(result => {
+      //use copy for conversions
+      let resultCopy: PhastResultsData = JSON.parse(JSON.stringify(result))
+      let diffCost = result.modificationResults.annualCostSavings;
+      sumSavings += diffCost;
+      sumCost += result.modificationResults.annualCost;
+      let convertedEnergySavings = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+      sumEnergySavings += convertedEnergySavings;
+      
+      if (result.settings.energySourceType == 'Steam' || result.settings.energySourceType == 'Fuel') {
+        let convertedSumEnergy = this.convertUnitsService.value(resultCopy.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+        sumEnergy += convertedSumEnergy;
+        fuelEnergy += convertedSumEnergy + convertedEnergySavings;
+
+      }else if (result.settings.energySourceType == 'Electricity') {
+        let modificationElectricalEnergy: number;
+        let baselineElectricalEnergy: number;
+        let modificationFuelEnergy: number;
+        let baselineFuelEnergy: number;
+
+        if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+          modificationElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineElectricalEnergy = this.convertUnitsService.value(resultCopy.baselineResultData.annualEAFResults.electricEnergyUsed).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          
+          modificationFuelEnergy = this.convertEAFFuelEnergy(resultCopy.modificationResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
+          baselineFuelEnergy = this.convertEAFFuelEnergy(resultCopy.baselineResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, settings.phastRollupUnit);
+        } else {
+          modificationElectricalEnergy = this.convertUnitsService.value(resultCopy.modificationResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineElectricalEnergy = this.convertUnitsService.value(resultCopy.baselineResultData.electricalHeatDelivered).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          
+          modificationFuelEnergy = resultCopy.modificationResultData.energyInputHeatDelivered + resultCopy.modificationResultData.totalExhaustGas;
+          baselineFuelEnergy = resultCopy.baselineResultData.energyInputHeatDelivered + resultCopy.baselineResultData.totalExhaustGas;
+          modificationFuelEnergy = this.convertUnitsService.value(modificationFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+          baselineFuelEnergy = this.convertUnitsService.value(baselineFuelEnergy).from(result.settings.energyResultUnit).to(settings.phastRollupUnit);
+        }
+
+        electricityEnergy += modificationElectricalEnergy;
+        let fuelEnergySavings: number = baselineFuelEnergy - modificationFuelEnergy;
+        let electricalEnergySavings: number = baselineElectricalEnergy - modificationElectricalEnergy;
+        fuelEnergy += modificationFuelEnergy + fuelEnergySavings + electricalEnergySavings;
+        sumEnergy += modificationFuelEnergy + modificationElectricalEnergy;
+      }
+
+      if (result.baselineResults.co2EmissionsOutput) {
+        diffCO2 = result.baselineResults.co2EmissionsOutput.totalEmissionOutput - result.modificationResults.co2EmissionsOutput.totalEmissionOutput;
+        sumCo2Savings += diffCO2;
+      } 
+      if (result.modificationResults.co2EmissionsOutput) {
+        sumCo2Emissions += result.modificationResults.co2EmissionsOutput.totalEmissionOutput;
+      }
+    });
+    this.totals = {
+      savingPotential: sumSavings,
+      energySavingsPotential: sumEnergySavings,
+      totalCost: sumCost,
+      totalEnergy: sumEnergy,
+      electricityEnergy: electricityEnergy,
+      fuelEnergy: fuelEnergy,
+      carbonEmissions: sumCo2Emissions,
+      carbonSavings: sumCo2Savings
+    }
+  }
+
+  convertResult(val: number, settings: Settings): number {
+    if (settings.unitsOfMeasure === 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+    }
+    return val;
+  }
+
+  convertEAFFuelEnergy(fuelEnergy: number, resultSettings: Settings, conversionUnit: string) {
+    if (resultSettings.unitsOfMeasure === 'Metric') {
+      return this.convertUnitsService.value(fuelEnergy).from('GJ').to(conversionUnit);
+    } else {
+      return this.convertUnitsService.value(fuelEnergy).from('MMBtu').to(conversionUnit);
+    }
+  }
+
 
 }

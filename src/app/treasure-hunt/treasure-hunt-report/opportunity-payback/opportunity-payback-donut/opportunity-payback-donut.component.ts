@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-hunt';
-import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../../../shared/models/settings';
+import { PlotlyService } from 'angular-plotly.js';
 @Component({
   selector: 'app-opportunity-payback-donut',
   templateUrl: './opportunity-payback-donut.component.html',
@@ -17,7 +17,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('paybackDonutChart', { static: false }) paybackDonutChart: ElementRef;
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit() { }
 
@@ -39,7 +39,6 @@ export class OpportunityPaybackDonutComponent implements OnInit {
 
   createChart() {
     let valuesAndLabels = this.getValuesAndLabels();
-    Plotly.purge(this.paybackDonutChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
       labels: valuesAndLabels.labels,
@@ -65,12 +64,11 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
   }
 
   createPrintChart(){
     let valuesAndLabels = this.getValuesAndLabels();
-    Plotly.purge(this.paybackDonutChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
       labels: valuesAndLabels.labels,
@@ -101,7 +99,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
   }
 
 

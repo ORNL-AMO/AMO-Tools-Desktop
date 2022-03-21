@@ -1,5 +1,5 @@
 <!--summary-->
-<app-diagram-summary-table *ngIf="selectedTable == 'default'" [boiler]="outputData.boilerOutput"
+<app-diagram-summary-table *ngIf="selectedTable == 'default'" [co2EmissionsOutput]="outputData.co2EmissionsOutput" [boiler]="outputData.boilerOutput"
     [operationsOutput]="outputData.operationsOutput" [settings]="settings"></app-diagram-summary-table>
 <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"
     (emitCalculateMarginalCosts)="calculateResultsWithMarginalCosts()"></app-cost-table>

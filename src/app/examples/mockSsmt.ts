@@ -25,6 +25,21 @@ export const MockSsmt: Assessment = {
             "sitePowerImport": 5000,
             "makeUpWaterTemperature": 50
         },
+        "co2SavingsData": {
+            "otherFuelMixedCO2SavingsData": [],
+            "totalFuelEmissionOutputRate": 0,
+            "energyType": 'electricity',
+            "energySource": '',
+            "fuelType": '',
+            "totalEmissionOutputRate": 401.07,
+            "electricityUse": 0,
+            "eGridRegion": '',
+            "eGridSubregion": 'U.S. Average',
+            "totalEmissionOutput": 0,
+            "userEnteredBaselineEmissions": false,
+            "userEnteredModificationEmissions": true,
+            "zipcode": '00000',
+          },
         "equipmentNotes": "",
         "turbineInput": {
             "condensingTurbine": {
@@ -74,6 +89,21 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
+                        "totalFuelEmissionOutputRate": 0,
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 401.07,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'U.S. Average',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '00000',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -169,6 +199,21 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
+                        "totalFuelEmissionOutputRate": 0,
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 401.07,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'U.S. Average',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '00000',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -264,6 +309,21 @@ export const MockSsmt: Assessment = {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
+                    "co2SavingsData": {
+                        "otherFuelMixedCO2SavingsData": [],
+                        "totalFuelEmissionOutputRate": 0,
+                        "energyType": 'electricity',
+                        "energySource": '',
+                        "fuelType": '',
+                        "totalEmissionOutputRate": 401.07,
+                        "electricityUse": 0,
+                        "eGridRegion": '',
+                        "eGridSubregion": 'U.S. Average',
+                        "totalEmissionOutput": 0,
+                        "userEnteredBaselineEmissions": false,
+                        "userEnteredModificationEmissions": true,
+                        "zipcode": '00000',
+                      },
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -432,14 +492,19 @@ export const MockSsmtSettings: Settings = {
     "fanTemperatureMeasurement": "F",
     "steamEnergyMeasurement": "MMBtu",
     "disableTutorial": true,
-    "disableDashboardTutorial": true,
-    "disablePsatSetupTutorial": true,
-    "disablePsatAssessmentTutorial": true,
-    "disablePsatReportTutorial": true,
-    "disablePhastSetupTutorial": true,
-    "disablePhastAssessmentTutorial": true,
-    "disablePhastReportTutorial": true,
-    "disableFsatSetupTutorial": true,
-    "disableFsatAssessmentTutorial": true,
-    "disableFsatReportTutorial": true,
+    "disableDashboardTutorial": false,
+    "disablePsatTutorial": false,
+    "disableFansTutorial": false,
+    "disablePhastTutorial": false,
+    "disableWasteWaterTutorial": false,
+    "disableSteamTutorial": false,
+    "disableMotorInventoryTutorial": false,
+    "disableTreasureHuntTutorial": false,
+    "disableDataExplorerTutorial": false,
+    "commonRollupUnit": "MMBtu",
+    "pumpsRollupUnit": "MWh",
+    "fansRollupUnit": "MWh",
+    "steamRollupUnit": "MMBtu",
+    "wasteWaterRollupUnit": "MWh",
+    "compressedAirRollupUnit": "MWh"
 }

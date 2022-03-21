@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, HostListener } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
@@ -21,7 +21,7 @@ export class PlotlyPieChartComponent implements OnInit {
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -75,7 +75,7 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -109,6 +109,6 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    Plotly.react(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
   }
 }

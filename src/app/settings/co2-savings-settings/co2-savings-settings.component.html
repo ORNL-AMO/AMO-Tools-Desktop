@@ -1,0 +1,11 @@
+<form [formGroup]="settingsForm">
+
+  <label class="group-label">Electricity</label>
+  <app-assessment-co2-savings 
+  [co2SavingsData]="co2SavingsData"
+  [isFormDisabled]="false"
+  [inBaseline]="true"
+  (emitUpdateCo2SavingsData)="updateCo2SavingsSettings($event)"
+  ></app-assessment-co2-savings>
+
+  </form>

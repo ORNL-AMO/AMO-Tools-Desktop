@@ -1,6 +1,6 @@
 <div class="col-10 mx-auto waste-water">
     <div class="content-container calculator-list">
-        <h2 class="mb-1">Waste Water Calculators</h2>
+        <h2 class="mb-1">Wastewater Calculators</h2>
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
@@ -11,7 +11,21 @@
             <div class="d-flex flex-fill flex-column justify-content-center">
                 <a class="click-item" [routerLink]="['/calculators/o2-utilization-rate']">O<sub>2</sub> Utilization Rate</a>
                 <p>
-                    Estimates Oxygen Utilization Rate (OUR) from DO values
+                    Estimate Oxygen Utilization Rate (OUR) from DO values
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/waste-water-icons/state-point-analysis.png" class="calc-img"
+                        [routerLink]="['/calculators/state-point-analysis']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" [routerLink]="['/calculators/state-point-analysis']">State Point Analysis Tool</a>
+                <p>
+                    Use a state point analysis to assess activated sludge design, operations, and troubleshoot systems.
                 </p>
             </div>
         </div>
@@ -25,7 +39,7 @@
             <div class="d-flex flex-fill flex-column justify-content-center">
                 <a [routerLink]="['/calculators/water-reduction']">Water/Wastewater Reduction</a>
                 <p>
-                    This calculator is used to quantify the energy savings associated with reducing water usage and
+                    Quantify the energy savings associated with reducing water usage and
                     wastewater
                     disposal.
                 </p>

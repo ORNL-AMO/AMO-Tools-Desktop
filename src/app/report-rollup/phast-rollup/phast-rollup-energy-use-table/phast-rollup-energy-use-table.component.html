@@ -6,31 +6,31 @@
       </th>
       <th *ngIf="showFuel">
         Fuel Energy Used
-        <br> ({{settings.phastRollupFuelUnit}}/yr)
+        <br> ({{settings.phastRollupUnit}}/yr)
       </th>
       <th *ngIf="showFuel">
         Annual Cost
-        <br> ({{currencyUnit}}/yr)
+        <br> ({{currencyUnit}})
       </th>
       <th *ngIf="showElectricity">
         Electrical Energy Use
-        <br> ({{settings.phastRollupElectricityUnit}}/yr)
+        <br> ({{settings.phastRollupUnit}}/yr)
       </th>
       <th *ngIf="showElectricity">
         Annual Cost
-        <br> ({{currencyUnit}}/yr)
+        <br> ({{currencyUnit}})
       </th>
       <th *ngIf="showSteam">
         Steam Energy Use
-        <br> ({{settings.phastRollupSteamUnit}}/yr)
+        <br> ({{settings.phastRollupUnit}}/yr)
       </th>
       <th *ngIf="showSteam">
         Annual Cost
-        <br> ({{currencyUnit}}/yr)
+        <br> ({{currencyUnit}})
       </th>
       <th *ngIf="showTotal">
         Total Annual Cost
-        <br> ({{currencyUnit}}/yr)
+        <br> ({{currencyUnit}})
       </th>
       <th>
         % of Total Cost
@@ -42,6 +42,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of tableData">
+
+      <!-- Fuel -->
       <td class="name" [ngStyle]="{'border-left-color': data.color}">
         {{data.equipmentName}}
       </td>
@@ -51,17 +53,28 @@
       <td *ngIf="data.furnaceType == 'Fuel' && showFuel">
         ${{data.annualCost | sigFigs:'4'}}
       </td>
-      <td *ngIf="data.furnaceType != 'Fuel' && showFuel">&mdash;</td>
-      <td *ngIf="data.furnaceType != 'Fuel' && showFuel">&mdash;</td>
-      <td *ngIf="data.furnaceType == 'Electricity' && showElectricity">
-        {{data.energyUsed | sigFigs:'5'}}
+      <td *ngIf="data.furnaceType == 'Steam' && showFuel">&mdash;</td>
+      <td *ngIf="data.furnaceType == 'Steam' && showFuel">&mdash;</td>
+      
+
+     <!-- Electrotech -->
+      <td *ngIf="data.furnaceType == 'Electricity' && showFuel">
+        {{data.electrotechFuelEnergyUsed | sigFigs:'5'}}
+      </td>
+      <td *ngIf="data.furnaceType == 'Electricity' && showFuel">
+        ${{data.electrotechFuelEnergyCost | sigFigs:'4'}}
       </td>
       <td *ngIf="data.furnaceType == 'Electricity' && showElectricity">
-        ${{data.annualCost | sigFigs:'4'}}
+        {{data.electrotechElectricityEnergyUsed | sigFigs:'5'}}
+      </td>
+      <td *ngIf="data.furnaceType == 'Electricity' && showElectricity">
+        ${{data.electrotechElectricityEnergyCost | sigFigs:'4'}}
       </td>
       <td *ngIf="data.furnaceType != 'Electricity' && showElectricity">&mdash;</td>
       <td *ngIf="data.furnaceType != 'Electricity' && showElectricity">&mdash;</td>
 
+
+      <!-- Steam -->
       <td *ngIf="data.furnaceType == 'Steam' && showSteam">
         {{data.energyUsed | sigFigs:'5'}}
       </td>
@@ -86,7 +99,7 @@
       <td *ngIf="showElectricity">${{totalElectricityCost | sigFigs:'4'}}</td>
       <td *ngIf="showSteam">{{totalSteamUsage  | sigFigs:'5'}}</td>
       <td *ngIf="showSteam">${{totalSteamCost | sigFigs:'4'}}</td>
-      <td *ngIf="showTotal">${{totalFuelCost + +totalElectricityCost + totalSteamCost| sigFigs:'4'}}</td>
+      <td *ngIf="showTotal">${{totalFuelCost + totalElectricityCost + totalSteamCost| sigFigs:'4'}}</td>
     </tr>
   </tfoot>
 </table>

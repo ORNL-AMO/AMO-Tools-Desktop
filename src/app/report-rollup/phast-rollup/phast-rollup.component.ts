@@ -22,6 +22,8 @@ export class PhastRollupComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   inPrintView: boolean;
+ 
+  settings: Settings;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;
@@ -33,8 +35,7 @@ export class PhastRollupComponent implements OnInit {
   tickFormat: string;
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
-  settings: Settings;
-
+  
   constructor(private phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
     private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
@@ -212,6 +213,7 @@ export class PhastRollupComponent implements OnInit {
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
     phastResultsCpy.forEach(result => {
+      let energyUsed: number = result.baselineResults.annualEnergyUsed;
       let annualCost: number = result.baselineResults.annualCost;
       let costSavings: number = result.baselineResults.annualCost - result.modificationResults.annualCost;
       let total: number = totalCost;
@@ -220,9 +222,32 @@ export class PhastRollupComponent implements OnInit {
         costSavings = this.convertUnitsService.value(costSavings).from('$').to(this.settings.currency);
         total = this.convertUnitsService.value(total).from('$').to(this.settings.currency);
       }
+      let electrotechFuelEnergyUsed: number;
+      let electrotechFuelEnergyCost: number;
+      let electrotechElectricityEnergyUsed: number;
+      let electrotechElectricityEnergyCost: number;
+      if (result.settings.energySourceType == 'Electricity') {
+        electrotechFuelEnergyCost = result.baselineResults.annualTotalFuelCost;
+        electrotechElectricityEnergyCost = result.baselineResults.annualElectricityCost;
+        if (result.settings.furnaceType === 'Electric Arc Furnace (EAF)') {
+          electrotechFuelEnergyUsed = this.phastReportRollupService.convertEAFFuelEnergy(result.baselineResultData.annualEAFResults.totalFuelEnergyUsed, result.settings, this.settings.phastRollupUnit);
+          electrotechElectricityEnergyUsed = result.baselineResultData.annualEAFResults.electricEnergyUsed;
+        } else {
+          electrotechFuelEnergyUsed = result.baselineResultData.energyInputHeatDelivered + result.baselineResultData.totalExhaustGas;
+          electrotechFuelEnergyUsed = this.convertUnitsService.value(electrotechFuelEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+          electrotechElectricityEnergyUsed = result.baselineResultData.electricalHeatDelivered;
+        }
+
+        electrotechElectricityEnergyUsed = this.convertUnitsService.value(electrotechElectricityEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+        annualCost = electrotechElectricityEnergyCost + electrotechFuelEnergyCost;
+      }
       this.pieChartData.push({
         equipmentName: result.name,
-        energyUsed: result.baselineResults.annualEnergyUsed,
+        energyUsed: energyUsed,
+        electrotechFuelEnergyCost: electrotechFuelEnergyCost,
+        electrotechFuelEnergyUsed: electrotechFuelEnergyUsed,
+        electrotechElectricityEnergyCost: electrotechElectricityEnergyCost,
+        electrotechElectricityEnergyUsed: electrotechElectricityEnergyUsed,
         annualCost: annualCost,
         energySavings: result.baselineResults.annualEnergyUsed - result.modificationResults.annualEnergyUsed,
         costSavings: costSavings,

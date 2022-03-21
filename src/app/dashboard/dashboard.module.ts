@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from './dashboard.service';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { LandingScreenComponent } from './landing-screen/landing-screen.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { RouterModule } from '@angular/router';
 import { MeasurComponent } from './landing-screen/measur/measur.component';
 import { AboutPageComponent } from './about-page/about-page.component';
@@ -20,6 +20,7 @@ import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
 import { InventoryService } from './inventory.service';
 import { MoveItemsComponent } from './move-items/move-items.component';
+import { CopyItemsComponent } from './copy-items/copy-items.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MoveItemsComponent } from './move-items/move-items.component';
     DragBarComponent,
     CreateInventoryComponent,
     MoveItemsComponent,
+    CopyItemsComponent,
   ],
   imports: [
     CommonModule,

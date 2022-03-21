@@ -17,6 +17,8 @@ export class SystemProfilesComponent implements OnInit {
   assessmentResults: Array<CompressedAirAssessmentResult>;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
   // @Input()
   // combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
 

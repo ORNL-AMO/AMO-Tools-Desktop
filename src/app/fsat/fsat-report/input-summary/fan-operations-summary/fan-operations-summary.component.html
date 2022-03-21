@@ -46,7 +46,21 @@
                   {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
                 </td>
               </tr>  
-              
+
+
+
+
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                  Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                  {{fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
+                </td>
+                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate, mod.cO2SavingsData.totalEmissionOutputRate, 'totalEmissionOutputRateDiff', 0)}">
+                  {{mod.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

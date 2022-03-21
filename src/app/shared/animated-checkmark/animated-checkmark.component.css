@@ -1,3 +1,29 @@
-.float-right {
+/* .float-right {
     float: right;
+}
+
+svg.animated-checkbox{
+    height: 30px;
+    width: 30px;
+}
+
+svg circle{
+    cx: 15;
+    cy: 15;
+    r: 13;
+    stroke-width: 3;
+    stroke: rgb(0, 181, 45);
+    fill:
+} */
+
+.fa{
+    font-size: 24px;
+}
+
+.fa-check-square-o{
+    color: rgb(0, 181, 45);
+}
+
+.fa:hover{
+    cursor: pointer;
 }

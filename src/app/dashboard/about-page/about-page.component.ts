@@ -17,6 +17,7 @@ export class AboutPageComponent implements OnInit {
   showTreasureHunt: boolean = false;
   showDataExplorer: boolean = false;
   showInventory: boolean = false;
+  showCompressedAir: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -47,5 +48,8 @@ export class AboutPageComponent implements OnInit {
   }
   toggleInventory(){
     this.showInventory = !this.showInventory;
+  }
+  toggleCompressedAir(){
+    this.showCompressedAir = !this.showCompressedAir;
   }
 }

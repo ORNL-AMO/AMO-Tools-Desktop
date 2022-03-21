@@ -135,6 +135,31 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           {{modification.fsat.outputs.motorPower
           | number:'1.0-1'}}</td>
+      </tr>  
+      
+      <tr class="callout">
+        <th>Annual CO2 Emissions (tonne CO<sub>2</sub>)</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
+          number:'1.1-1'}}</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.fsat.outputs.co2EmissionsOutput">{{modification.fsat.outputs.co2EmissionsOutput |
+            number:'1.1-1'}}</span>
+          <span *ngIf="!modification.fsat.outputs.co2EmissionsOutput">&mdash;</span>
+        </th>
+      </tr>
+      <tr class="callout">
+        <th>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
+          <span
+            *ngIf="modification.fsat.whatIfScenario == true">
+            {{fsat.outputs.co2EmissionsOutput - modification.fsat.outputs.co2EmissionsOutput| sigFigs:'3'}}</span>
+          <span
+            *ngIf="modification.fsat.whatIfScenario == false">
+            &mdash;</span>
+        </th>
       </tr>
       <tr>
         <th>Annual Energy (MWh)</th>
@@ -208,6 +233,16 @@
         </th>
       </tr>
       <tr>
+        <th>Modification Scenario</th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <div *ngFor="let modificationScenario of getModificationScenario(modification.fsat)">
+            {{modificationScenario}}<br>
+          </div>
+        </th>
+      </tr>
+      <tr>
         <th>Modifications</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;"
@@ -255,3 +290,5 @@
     </div>   
   </div>
 </div>
+
+<!-- Scenario -->

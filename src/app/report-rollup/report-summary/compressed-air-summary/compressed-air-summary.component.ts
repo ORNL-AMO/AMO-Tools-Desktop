@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReportRollupService } from '../../compressed-air-report-rollup.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
   selector: 'app-compressed-air-summary',
@@ -19,7 +21,8 @@ export class CompressedAirSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numCompressedAir: number;
-  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService) { }
+  constructor(public compressedAirReportRollupService: CompressedAirReportRollupService,
+    private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.compressedAirReportRollupService.compressedAirAssessments.subscribe(val => {
@@ -32,7 +35,13 @@ export class CompressedAirSummaryComponent implements OnInit {
     this.selectedSub = this.compressedAirReportRollupService.selectedAssessments.subscribe(val => {
       if (val.length != 0) {
         this.compressedAirReportRollupService.setAssessmentResultsFromSelected(val);
-        this.calcTotals();
+        this.compressedAirReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.compressedAirReportRollupService.totals;
+        this.savingPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -40,31 +49,5 @@ export class CompressedAirSummaryComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
-  }
-
-  calcTotals() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.compressedAirReportRollupService.selectedAssessmentResults.forEach(result => {
-      let diffCost: number = 0;
-      let diffEnergy: number = 0;
-      if (result.modificationResults) {
-        diffCost = result.baselineResults.total.totalAnnualOperatingCost - result.modificationResults.totalAnnualOperatingCost;
-        sumCost += result.modificationResults.totalAnnualOperatingCost;
-        diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
-        sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
-      }else{
-        sumCost += result.baselineResults.total.totalAnnualOperatingCost;
-        sumEnergy += result.baselineResults.total.energyUse;
-      }
-      sumSavings += diffCost;
-      sumEnergySavings += diffEnergy;
-    })
-    this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
-    this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 }

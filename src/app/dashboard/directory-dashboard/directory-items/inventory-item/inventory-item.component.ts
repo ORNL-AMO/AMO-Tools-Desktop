@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { InventoryDbService } from '../../../../indexedDb/inventory-db.service';
 import { DashboardService } from '../../../dashboard.service';

@@ -3,7 +3,8 @@ import { PreAssessment } from '../pre-assessment';
 import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
-import * as Plotly from 'plotly.js';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -23,11 +24,14 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   resultType: string;
   @Input()
   toggleCalculate: boolean;
+  @Input()
+  resultUnit: string;
 
   @ViewChild('preAssessmentPieChart', { static: false }) preAssessmentPieChart: ElementRef;
 
   showPieChart: boolean;
-  constructor(private preAssessmentService: PreAssessmentService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private convertUnitsService: ConvertUnitsService,
+    private plotlyService: PlotlyService) { }
 
   ngOnInit() {
     if (!this.resultType) {
@@ -52,17 +56,28 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
   drawPlot() {
     let valuesAndLabels = this.getValuesAndLabels();
-    Plotly.purge(this.preAssessmentPieChart.nativeElement);
+    // Plotly.purge(this.preAssessmentPieChart.nativeElement);
     if (valuesAndLabels.length != 0) {
       let values: Array<number> = new Array();
       let textTemplate: string;
       if (this.resultType == 'value') {
-        values = valuesAndLabels.map(val => { return val.value });
-        textTemplate = '<b>%{label}: </b>%{value:,.0f}';
-        if (this.settings.unitsOfMeasure != 'Metric') {
-          textTemplate = textTemplate + ' MMBtu';
-        } else {
-          textTemplate = textTemplate + ' GJ';
+        if (this.inRollup) {
+          if (this.settings.unitsOfMeasure != 'Metric') {
+            values = valuesAndLabels.map(val => { return this.convertUnitsService.value(val.value).from('MMBtu').to(this.resultUnit) });
+          } else {
+            values = valuesAndLabels.map(val => { return this.convertUnitsService.value(val.value).from('GJ').to(this.resultUnit) });
+          }
+          textTemplate = '<b>%{label}: </b>%{value:,.0f}';
+          textTemplate = textTemplate + ' ' + this.resultUnit;
+        }
+        if (!this.inRollup) {
+          values = valuesAndLabels.map(val => { return val.value });
+          textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
+          if (this.settings.unitsOfMeasure != 'Metric') {
+            textTemplate = textTemplate + ' MMBtu';
+          } else {
+            textTemplate = textTemplate + ' GJ';
+          }
         }
       } else {
         values = valuesAndLabels.map(val => { return val.energyCost });
@@ -77,7 +92,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         type: 'pie',
         textposition: 'auto',
         insidetextorientation: "horizontal",
-        // automargin: true,
+        automargin: true,
         // textinfo: 'label+value',
         hoverformat: '.2r',
         texttemplate: textTemplate,
@@ -102,7 +117,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
     }
   }
 

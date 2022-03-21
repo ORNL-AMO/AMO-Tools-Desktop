@@ -11,12 +11,12 @@
         (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
-      <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [headerInput]="_ssmt.headerInput">
+      <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true">
       </app-boiler>
-      <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
+      <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
-        [isBaseline]="true" [boilerInput]="_ssmt.boilerInput"></app-header>
+        [isBaseline]="true"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput"
         [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true" [settings]="settings"
         (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
@@ -26,15 +26,15 @@
     </div>
   </div>
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
+  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
     [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
       [containerHeight]="containerHeight"></app-modify-conditions>
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [ssmt]="_ssmt" [assessment]="assessment"
       [settings]="settings" (emitSave)="saveSsmt($event)" [containerHeight]="containerHeight"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"
-      (exploreOppsToast)="hideToast($event)"></app-explore-opportunities>
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
+    </app-explore-opportunities>
   </div>
 
   <!--report-->
@@ -148,10 +148,10 @@
   </div>
 </div>
 
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
-  (emitDisable)="disableDisclaimer()"></app-toast>
-
 <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'ssmt'"
  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+
+ <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
+
+<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

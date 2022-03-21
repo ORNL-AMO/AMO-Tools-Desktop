@@ -85,6 +85,7 @@ export class TurbineFormComponent implements OnInit {
     let inletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.turbineForm.controls.inletQuantity.value);
     let outletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.turbineForm.controls.outletQuantity.value);
     this.turbineForm.controls.inletQuantityValue.setValidators([Validators.required, Validators.min(inletQuantityMinMax.min), Validators.max(inletQuantityMinMax.max)]);
+
     if (this.turbineForm.controls.solveFor.value === 1) {
       this.turbineForm.controls.outletQuantityValue.setValidators([Validators.required, Validators.min(outletQuantityMinMax.min), Validators.max(outletQuantityMinMax.max)]);
       this.turbineForm.controls.isentropicEfficiency.clearValidators();
@@ -100,7 +101,10 @@ export class TurbineFormComponent implements OnInit {
     if (!this.turbineForm.controls.outletQuantityValue.value) {
       this.turbineForm.controls.outletQuantityValue.setValue(0);
     }
-
+    this.turbineForm.controls.isentropicEfficiency.updateValueAndValidity();
+    this.turbineForm.controls.outletQuantityValue.updateValueAndValidity();
+    this.turbineForm.controls.inletQuantityValue.updateValueAndValidity();
+    this.turbineForm.updateValueAndValidity();
     this.calculate();
   }
 }

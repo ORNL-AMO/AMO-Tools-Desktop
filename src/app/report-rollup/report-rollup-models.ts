@@ -237,3 +237,15 @@ export interface AllCompressedAirResultsData {
     assessmentId: number;
     isBaseline?: boolean;
 }
+
+export interface ReportUtilityTotal {
+    totalEnergy: number,
+    totalCost: number,
+    steamTotalModificationCost?: number,
+    savingPotential: number,
+    energySavingsPotential: number,
+    fuelEnergy: number,
+    electricityEnergy: number,
+    carbonEmissions: number,
+    carbonSavings: number
+}

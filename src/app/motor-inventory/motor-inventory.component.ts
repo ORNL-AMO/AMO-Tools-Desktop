@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -33,12 +33,16 @@ export class MotorInventoryComponent implements OnInit {
   mainTab: string;
   mainTabSub: Subscription;
 
+  modalOpenSub: Subscription;
+  isModalOpen: boolean;
+
   motorInventoryDataSub: Subscription;
   motorInventoryItem: InventoryItem;
   batchAnalysisSettingsSub: Subscription;
+  showWelcomeScreen: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
-    private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService) { }
+    private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -65,6 +69,11 @@ export class MotorInventoryComponent implements OnInit {
     this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(batchSettings => {
       this.saveDbData();
     });
+    this.modalOpenSub = this.motorInventoryService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+      this.cd.detectChanges();
+    });
+    this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {
@@ -75,6 +84,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorCatalogService.selectedMotorItem.next(undefined);
     this.motorCatalogService.selectedDepartmentId.next(undefined);
     this.motorCatalogService.filterMotorOptions.next(undefined);
+    this.modalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -127,5 +137,19 @@ export class MotorInventoryComponent implements OnInit {
     } else if (this.setupTab == 'motor-catalog') {
       this.motorInventoryService.setupTab.next('motor-properties');
     }
+  }
+
+  checkShowWelcomeScreen() {
+    if (!this.settingsDbService.globalSettings.disableMotorInventoryTutorial) {
+      this.showWelcomeScreen = true;
+      this.motorInventoryService.modalOpen.next(true);
+    }
+  }
+
+  closeWelcomeScreen() {
+    this.settingsDbService.globalSettings.disableMotorInventoryTutorial = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings);
+    this.showWelcomeScreen = false;
+    this.motorInventoryService.modalOpen.next(false);
   }
 }

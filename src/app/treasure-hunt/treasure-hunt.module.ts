@@ -7,7 +7,7 @@ import { TreasureHuntService } from './treasure-hunt.service';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
@@ -50,6 +50,10 @@ import { OpeningTreasureHuntService } from './treasure-hunt-calculator-services/
 import { AirHeatingTreasureHuntService } from './treasure-hunt-calculator-services/air-heating-treasure-hunt.service';
 import { HeatCascadingTreasureHuntService } from './treasure-hunt-calculator-services/heat-cascading-treasure-hunt.service';
 import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-services/water-heating-treasure-hunt.service';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { MixedCo2EmissionsModule } from '../shared/mixed-co2-emissions/mixed-co2-emissions.module';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   imports: [
@@ -64,7 +68,10 @@ import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-serv
     ToastModule,
     RouterModule,
     TreasureChestMenuModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule,
+    MixedCo2EmissionsModule,
+    Co2HelpTextModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -78,7 +85,8 @@ import { WaterHeatingTreasureHuntService } from './treasure-hunt-calculator-serv
     OpportunityCardsComponent,
     SortCardsByPipe,
     UtilitySummaryComponent,
-    TreasureHuntGaugeComponent
+    TreasureHuntGaugeComponent,
+    WelcomeScreenComponent,
   ],
   providers: [ 
     TreasureHuntService, 

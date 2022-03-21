@@ -5,7 +5,7 @@ import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { PhastResultsService } from '../../phast-results.service';
+import { PhastResultsService, EnergyInputWarnings } from '../../phast-results.service';
 import { PhastService } from '../../phast.service';
 
 @Component({
@@ -38,6 +38,8 @@ export class EnergyInputComponent implements OnInit {
   phast: PHAST;
 
   _energyInputs: Array<EnInputObj>;
+  warnings: EnergyInputWarnings = {energyInputHeatDelivered: null};
+
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -133,6 +135,8 @@ export class EnergyInputComponent implements OnInit {
         energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
         grossHeatInput: tmpResults.energyInputTotal
       };
+      this.warnings.energyInputHeatDelivered = this.phastResultsService.checkEnergyInputWarnings(loss.results.energyInputHeatDelivered);
+
     } else {
       loss.results = {
         energyInputHeatDelivered: null,

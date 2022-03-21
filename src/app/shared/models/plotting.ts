@@ -97,6 +97,7 @@ export interface TraceData {
     name?: string,
     id?: string,
     showlegend?: boolean,
+    legendGroup?: string,
     hovertemplate?: string,
     textposition?: string,
     customdata?: Array<number | string>,
@@ -127,6 +128,7 @@ export interface TraceData {
         sizeref?: number,
         sizemin?: number,
         sizemode?: string,
+        symbol?: string,
     },
     line?: {
         shape?: string,
@@ -162,3 +164,21 @@ export interface DataPoint {
     x: number;
     y: number;
 }
+
+
+
+export interface WaterfallItem {
+    value: number,
+    label: string,
+    isStartValue: boolean,
+    isNetValue: boolean
+  };
+  
+  export interface WaterfallInput {
+    name: string,
+    inputObjects: Array<WaterfallItem>,
+    units: string,
+    startColor: string,
+    lossColor: string,
+    netColor: string
+  }

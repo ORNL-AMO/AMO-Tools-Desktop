@@ -17,7 +17,7 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
@@ -39,7 +39,17 @@ import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/exp
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
-
+import { WasteWaterOperationsComponent } from './waste-water-operations/waste-water-operations.component';
+import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
+import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { O2UtilizationRateModule } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.module';
+import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-analysis/state-point-analysis.module';
+import { WaterReductionModule } from '../calculator/waste-water/water-reduction/water-reduction.module';
+import { WasteWaterCalculatorTabsComponent } from './waste-water-banner/calculator-tabs/calculator-tabs.component';
+import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-water-calculators.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 
 @NgModule({
   declarations: [
@@ -65,6 +75,11 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     ExploreAeratorFormComponent,
     WasteWaterDiagramComponent,
     ExploreActivatedSludgeFormComponent,
+    WasteWaterOperationsComponent,
+    OperationsHelpComponent,
+    WasteWaterCalculatorTabsComponent,
+    WasteWaterCalculatorsComponent,
+    WelcomeScreenComponent,
   ],
   imports: [
     CommonModule,
@@ -79,7 +94,12 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     TabsTooltipModule,
     SharedPipesModule,
     ToastModule,
-    UpdateUnitsModalModule
+    UpdateUnitsModalModule,
+    AssessmentCo2SavingsModule,
+    O2UtilizationRateModule,
+    StatePointAnalysisModule,
+    WaterReductionModule,
+    Co2HelpTextModule
   ],
   providers: [
     WasteWaterService,
@@ -87,7 +107,8 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
     AeratorPerformanceFormService,
     CompareService,
     SystemBasicsService,
-    ConvertWasteWaterService
+    ConvertWasteWaterService,
+    WasteWaterOperationsService
   ]
 })
 export class WasteWaterModule { }

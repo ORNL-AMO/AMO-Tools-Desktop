@@ -6,6 +6,9 @@
                 <div class="header mr-2 ml-2">
                     <h3>Baseline</h3>
                 </div>
+                <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
+                    [selected]="baselineSelected">
+                </app-waste-water-operations>
                 <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
                     [selected]="baselineSelected">
                 </app-activated-sludge-form>
@@ -22,6 +25,9 @@
                 <div class="header mr-2 ml-2">
                     <h3>{{selectedModification.name}}</h3>
                 </div>
+                <app-waste-water-operations *ngIf="selectedTab == 'operations'" [inSetup]="false"
+                    [selected]="modificationSelected" [isModification]="true">
+                </app-waste-water-operations>
                 <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
                     [selected]="modificationSelected" [isModification]="true">
                 </app-activated-sludge-form>

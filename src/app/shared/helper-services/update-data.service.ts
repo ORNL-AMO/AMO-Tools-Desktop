@@ -3,7 +3,7 @@ import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure, TreasureHuntOpportunity } from '../models/treasure-hunt';
+import { CompressedAirPressureReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { CompressedAirPressureReductionData } from '../models/standalone';
@@ -33,8 +33,9 @@ export class UpdateDataService {
                 return this.updateSSMT(assessment);
             } else if (assessment.type === 'TreasureHunt') {
                 return this.updateTreasureHunt(assessment);
-            }
-            else {
+            } else if (assessment.type === 'WasteWater') {
+                return this.updateWasteWater(assessment);
+            } else {
                 return assessment;
             }
         }
@@ -48,11 +49,38 @@ export class UpdateDataService {
         }
     }
 
+    updateWasteWater(assessment: Assessment): Assessment {
+        //logic for updating wastewater data
+        assessment.appVersion = packageJson.version;
+        if (assessment.wasteWater.baselineData && !assessment.wasteWater.baselineData.operations) {
+            assessment.wasteWater.baselineData.operations = {
+                MaxDays: 100,
+                TimeIncrement: .5,
+                operatingMonths: 12,
+                EnergyCostUnit: 0.09
+            };
+        };
+
+        if (assessment.wasteWater.modifications) {
+            assessment.wasteWater.modifications.forEach(mod => {
+                if (!mod.operations) {
+                    mod.operations = {
+                        MaxDays: 100,
+                        TimeIncrement: .5,
+                        operatingMonths: 12,
+                        EnergyCostUnit: 0.09
+                    };
+                }
+            })
+        }
+
+        return assessment;
+    }
+
 
     updatePsat(assessment: Assessment): Assessment {
         //logic for updating psat data
         assessment.appVersion = packageJson.version;
-
         if (assessment.psat.inputs.line_frequency === 0){
             assessment.psat.inputs.line_frequency = 50;
         }         
@@ -122,7 +150,7 @@ export class UpdateDataService {
             }
             fsat.fsatOperations = {
                 operatingHours: operatingHours,
-                cost: cost
+                cost: cost,
             }
         }
         return fsat;
@@ -169,12 +197,19 @@ export class UpdateDataService {
             });
         }
 
+        assessment.phast = this.updateEnergyInputExhaustGasLoss(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateEnergyInputExhaustGasLoss(mod.phast);
+            });
+        }
+
         assessment.appVersion = packageJson.version;
         return assessment;
     }
 
     updateMoistureInAirCombustion(phast: PHAST): PHAST {
-        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+        if (phast.losses && phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
             phast.losses.flueGasLosses.forEach(fg => {
                 if (fg.flueGasByMass && fg.flueGasByMass['moistureInAirComposition']) {
                     fg.flueGasByMass.moistureInAirCombustion = fg.flueGasByMass['moistureInAirComposition'];
@@ -189,7 +224,7 @@ export class UpdateDataService {
     }
 
     updateFlueGas(phast: PHAST): PHAST {
-        if (phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
+        if (phast.losses && phast.losses.flueGasLosses && phast.losses.flueGasLosses.length > 0) {
             phast.losses.flueGasLosses.forEach(fg => {
                 if (fg.flueGasByMass && fg.flueGasByMass['ambientAirTemp'] === undefined) {
                     fg.flueGasByMass = this.setAmbientAirTemp(phast, fg.flueGasByMass);
@@ -211,6 +246,17 @@ export class UpdateDataService {
         } 
         fg.ambientAirTemp = ambientAirTemp;
         return fg;
+    }
+
+    updateEnergyInputExhaustGasLoss(phast: PHAST): PHAST{
+        if (phast.losses && phast.losses.energyInputExhaustGasLoss && phast.losses.energyInputExhaustGasLoss.length > 0) {
+            phast.losses.energyInputExhaustGasLoss.forEach(input => {
+                if(!input.availableHeat){
+                    input.availableHeat = 100;
+                }
+            });
+        }
+        return phast;
     }
 
     checkSettingsVersionDifferent(settings: Settings): boolean {

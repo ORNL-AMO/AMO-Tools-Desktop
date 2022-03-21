@@ -20,7 +20,7 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
@@ -49,7 +49,7 @@ export class DirectorySummaryComponent implements OnInit {
   settingsForm: FormGroup;
   updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
-  counter: NodeJS.Timeout;
+  counter: any;
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
@@ -185,7 +185,7 @@ export class DirectorySummaryComponent implements OnInit {
     wasteWaterAssessments.forEach(assessment => {
       if (assessment.wasteWater.setupDone) {
         let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.systemBasics, settings, false);
+        let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.baselineData.operations, assessment.wasteWater.baselineData.co2SavingsData, settings, false);
         if (results.AeEnergyAnnual != undefined) {
           totalEnergyUsed = results.AeEnergyAnnual + totalEnergyUsed;
           totalCost = results.AeCost + totalCost;

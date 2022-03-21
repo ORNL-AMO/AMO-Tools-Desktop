@@ -11,7 +11,8 @@
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
-          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" />
+          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"
+          [disabled]="fsat.modifications[exploreModIndex].fsat.whatIfScenario == false" />
         {{ fsat.modifications[exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>

@@ -32,14 +32,14 @@
                 </td>
                 <td>
                     <span *ngIf="baselineResults.AeEnergyAnnual">
-                        {{baselineResults.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
+                        {{baselineResults.AeEnergyAnnual | number:'1.0-0'}} MWh
                     </span>
                     <span *ngIf="!baselineResults.AeEnergyAnnual">
-                        &mdash; kWh/yr
+                        &mdash; kWh
                     </span>
                 </td>
                 <td>
-                    &mdash; kWh/yr
+                    &mdash; kWh
                 </td>
                 <td>
                     <span *ngIf="baselineResults.AeCost">
@@ -63,18 +63,18 @@
                 </td>
                 <td>
                     <span *ngIf="modificationResults.results.AeEnergyAnnual">
-                        {{modificationResults.results.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
+                        {{modificationResults.results.AeEnergyAnnual | number:'1.0-0'}} MWh
                     </span>
                     <span *ngIf="!modificationResults.results.AeEnergyAnnual">
-                        &mdash; MWh/yr
+                        &mdash; MWh
                     </span>
                 </td>
                 <td>
                     <span *ngIf="modificationResults.results.energySavings">
-                        {{modificationResults.results.energySavings | number:'1.0-0'}} MWh/yr
+                        {{modificationResults.results.energySavings | number:'1.0-0'}} MWh
                     </span>
                     <span *ngIf="!modificationResults.results.energySavings">
-                        &mdash; MWh/yr
+                        &mdash; MWh
                     </span>
                 </td>
                 <td>

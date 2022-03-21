@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import * as Plotly from 'plotly.js';
+import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-rollup-summary-pie-chart',
@@ -19,7 +19,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
 
   @ViewChild('rollupSummaryPieChart', { static: false }) rollupSummaryPieChart: ElementRef;
 
-  constructor() { }
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
   }
@@ -33,9 +33,6 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if(this.rollupSummaryPieChart){
-      Plotly.purge(this.rollupSummaryPieChart.nativeElement);
-    }
     if (this.rollupSummaryPieChart && !this.printView) {
       // this.setHeight();
       this.drawPlot();
@@ -80,7 +77,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
+      automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: textTemplate,
@@ -103,7 +100,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -160,13 +157,17 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    Plotly.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, modebarBtns);
   }
 }
 
 export interface PieChartDataItem {
   equipmentName: string,
   energyUsed: number,
+  electrotechFuelEnergyUsed?: number,
+  electrotechFuelEnergyCost?: number,
+  electrotechElectricityEnergyUsed?: number,
+  electrotechElectricityEnergyCost?: number,
   annualCost: number,
   energySavings: number,
   costSavings: number,
@@ -174,5 +175,6 @@ export interface PieChartDataItem {
   percentEnergy: number,
   color: string,
   furnaceType?: string
-  currencyUnit?: string
+  currencyUnit?: string,
+  carbonEmissions?: number
 }

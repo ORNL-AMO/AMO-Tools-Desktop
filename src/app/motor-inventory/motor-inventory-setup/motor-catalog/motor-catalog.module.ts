@@ -25,7 +25,7 @@ import { PurchaseInformationDataService } from './purchase-information-data/purc
 import { TorqueDataService } from './torque-data/torque-data.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data/load-characteristic-data.service';
 import { MotorBasicsService } from './motor-basics/motor-basics.service';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';

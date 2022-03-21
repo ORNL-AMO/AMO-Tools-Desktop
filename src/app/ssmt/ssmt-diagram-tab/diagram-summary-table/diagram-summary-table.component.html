@@ -27,6 +27,39 @@
         </tr>
       </tbody>
     </table>
+
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold text-center" colspan="2">CO<sub>2</sub> Emissions (<span>tonne CO<sub>2</sub>/yr</span>)</td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Emissions From Fuel</td>
+          <td class="text-center w-50">
+            {{ co2EmissionsOutput.fuelEmissionOutput | number: "1.0-2" }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Emissions From Selling Electricity</td>
+          <td class="text-center w-50">
+            {{ co2EmissionsOutput.electricityEmissionsFromSelling | number: "1.0-2" }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Emissions From Change in Electricity Imports</td>
+          <td class="text-center w-50">
+            {{ co2EmissionsOutput.electricityEmissionsFromChange | number: "1.0-2" }}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Total Emissions</td>
+          <td class="text-center w-50">
+            {{ co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
@@ -36,10 +69,8 @@
           <td class="text-center w-50">Boiler Fuel Use</td>
           <td class="text-center w-50">
             {{ operationsOutput.boilerFuelUsage | number: "1.0-2" }}
-            <span
-              [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"
-            ></span
-            >/yr
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"
+            ></span>/yr
           </td>
         </tr>
         <tr>
@@ -52,6 +83,7 @@
         </tr>
       </tbody>
     </table>
+
     <table class="table table-hover table-striped">
       <tbody>
         <tr>

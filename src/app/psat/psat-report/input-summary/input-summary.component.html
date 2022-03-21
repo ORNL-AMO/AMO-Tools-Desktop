@@ -13,6 +13,42 @@
     </thead>
     <tbody>
       <tr>
+        <th class="section-header">Operations</th>
+        <th></th>
+        <th *ngFor="let modification of psat.modifications">
+        </th>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">Operating Hours</td>
+        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">{{psat.inputs.operating_hours}}</td>
+        <td *ngFor="let modification of psat.modifications"
+          [ngClass]="{'indicate-report-field-different': modification.psat.inputs.operating_hours != psat.inputs.operating_hours}">
+          {{modification.psat.inputs.operating_hours}}</td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': costDiff == true}">Cost ($/kWh)</td>
+        <td [ngClass]="{'indicate-report-field-different': costDiff == true}">{{psat.inputs.cost_kw_hour | currency: 'USD': 'symbol' : '1.0-0'}}</td>
+        <td *ngFor="let modification of psat.modifications"
+          [ngClass]="{'indicate-report-field-different': modification.psat.inputs.cost_kw_hour != psat.inputs.cost_kw_hour}">
+          {{modification.psat.inputs.cost_kw_hour | currency: 'USD': 'symbol' : '1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': totalEmissionOutputRateDiff == true}">
+          Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': totalEmissionOutputRateDiff == true}">
+          {{psat.inputs.co2SavingsData.totalEmissionOutputRate}}
+        </td>
+        <td *ngFor="let modification of psat.modifications"
+        [ngClass]="{'indicate-report-field-different': modification.psat.inputs.co2SavingsData.totalEmissionOutputRate != psat.inputs.co2SavingsData.totalEmissionOutputRate}">
+        <span>
+          {{modification.psat.inputs.co2SavingsData.totalEmissionOutputRate}}
+        </span>
+      </td>
+      </tr>
+
+
+      <tr>
         <!-- PUMP / FLUID -->
         <th class="section-header">Pump &amp; Fluid</th>
         <th></th>
@@ -174,21 +210,6 @@
           </div>
         </th>
       </tr>
-      <tr>
-        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">Operating Hours</td>
-        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">{{psat.inputs.operating_hours}}</td>
-        <td *ngFor="let modification of psat.modifications"
-          [ngClass]="{'indicate-report-field-different': modification.psat.inputs.operating_hours != psat.inputs.operating_hours}">
-          {{modification.psat.inputs.operating_hours}}</td>
-      </tr>
-      <tr>
-        <td [ngClass]="{'indicate-report-field-different': costDiff == true}">Cost ($/kWh)</td>
-        <td [ngClass]="{'indicate-report-field-different': costDiff == true}">{{psat.inputs.cost_kw_hour | currency: 'USD': 'symbol' : '1.0-0'}}</td>
-        <td *ngFor="let modification of psat.modifications"
-          [ngClass]="{'indicate-report-field-different': modification.psat.inputs.cost_kw_hour != psat.inputs.cost_kw_hour}">
-          {{modification.psat.inputs.cost_kw_hour | currency: 'USD': 'symbol' : '1.0-0'}}</td>
-      </tr>
-
       <tr>
         <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">Flow Rate <span
             [innerHTML]="getUnit(settings.flowMeasurement)"></span></td>

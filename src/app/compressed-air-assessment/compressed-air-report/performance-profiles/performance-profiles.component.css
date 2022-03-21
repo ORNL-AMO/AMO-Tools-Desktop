@@ -1,0 +1,23 @@
+@media print {
+    .print-container {
+        page-break-before: always;
+        page-break-inside: avoid;
+        overflow: hidden;
+    }
+    .page-break-before{
+        page-break-before: auto;
+    }
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
+    .show-print{
+        display: inline !important;
+    }
+    .print-section-header {
+        font-size: 30px;
+    }
+}
+
+.show-print{
+    display: none;
+}

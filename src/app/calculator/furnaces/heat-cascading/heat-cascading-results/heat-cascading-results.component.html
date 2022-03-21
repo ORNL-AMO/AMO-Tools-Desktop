@@ -6,8 +6,7 @@
       <td *ngIf="output.baselineEnergy" class="text-center w-50">
         {{output.baselineEnergy | number:'1.0-0'}}
         <span class="input-group-addon">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span>{{settings.phastRollupUnit}}</span>
         </span>
       </td>
       <td *ngIf="!output.baselineEnergy" class="text-center w-50">
@@ -19,8 +18,7 @@
       <td *ngIf="output.modificationEnergy" class="text-center w-50">
         {{output.modificationEnergy | number:'1.0-0'}}
         <span class="input-group-addon">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span>{{settings.phastRollupUnit}}</span>
         </span>
       </td>
       <td *ngIf="!output.modificationEnergy" class="text-center w-50">
@@ -31,8 +29,7 @@
       <td class="bold w-50">Energy Savings</td>
       <td *ngIf="output.energySavings" class="text-center w-50">
         {{output.energySavings | number:'1.0-0'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
+        <span>{{settings.phastRollupUnit}}</span>
       </td>
       <td *ngIf="!output.energySavings" class="text-center w-50">
         &mdash; &mdash;
@@ -78,23 +75,21 @@
             </td>
           </tr>
           <tr>
-            <td class="bold w-50">Heat Transferred - Recovered in the Secondary Process</td>
+            <td class="bold w-50">Recovered Heat</td>
             <td *ngIf="output.hxEnergyRate" class="text-center w-50">
               {{output.hxEnergyRate | number:'1.0-2'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+              <span>{{settings.phastRollupUnit}}/hr</span>
             </td>
             <td *ngIf="!output.hxEnergyRate" class="text-center w-50">
               &mdash; &mdash;
             </td>
           </tr>
           <tr>
-            <td class="bold w-50">Equivalent Heat Input for Secondary Process</td>
+            <td class="bold w-50">Gross Heat Required for Secondary Process</td>
             <td *ngIf="output.eqEnergySupply" class="text-center w-50">
               {{output.eqEnergySupply | number:'1.0-2'}}
               <span class="input-group-addon">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+                <span>{{settings.phastRollupUnit}}/hr</span>
               </span>
             </td>
             <td *ngIf="!output.eqEnergySupply" class="text-center w-50">
@@ -102,31 +97,11 @@
             </td>
           </tr>
           <tr>
-            <td class="bold w-50">Number of Effective Operating Hours</td>
+            <td class="bold w-50">Heat Recovery Operating Hours</td>
             <td *ngIf="output.effOpHours" class="text-center w-50">
               {{output.effOpHours | number:'1.0-0'}} hrs/yr
             </td>
             <td *ngIf="!output.effOpHours" class="text-center w-50">
-              &mdash; &mdash;
-            </td>
-          </tr>
-          <tr>
-            <td class="bold w-50">Energy Savings in Secondary Process</td>
-            <td *ngIf="output.energySavings" class="text-center w-50">
-              {{output.energySavings | number:'1.0-0'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
-            </td>
-            <td *ngIf="!output.energySavings" class="text-center w-50">
-              &mdash; &mdash;
-            </td>
-          </tr>
-          <tr>
-            <td class="bold w-50">Cost Savings in Secondary Process</td>
-            <td *ngIf="output.costSavings" class="text-center w-50">
-                {{output.costSavings | currency: 'USD': 'symbol' : '1.0-0'}}
-            </td>
-            <td *ngIf="!output.costSavings" class="text-center w-50">
               &mdash; &mdash;
             </td>
           </tr>

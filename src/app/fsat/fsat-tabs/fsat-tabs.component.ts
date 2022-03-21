@@ -130,7 +130,7 @@ export class FsatTabsComponent implements OnInit {
     }
   }
 
-  changeAssessmentTab(str: string) {
+  changeAssessmentTab(str: string) {  
     this.fsatService.assessmentTab.next(str);
   }
 
@@ -154,7 +154,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.operationsTabStatus = ['success'];
     }
-    if (this.stepTab === 'operations') {
+    if (this.stepTab === 'fan-operations') {
       this.operationsTabStatus.push('active');
     }
   }

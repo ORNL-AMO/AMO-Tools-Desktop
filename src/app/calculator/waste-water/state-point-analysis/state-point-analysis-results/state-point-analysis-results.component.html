@@ -1,0 +1,109 @@
+<table #copyTable class="table mt-3">
+    <tbody>
+      <tr>
+        <td></td>
+        <td class="bold text-center">Baseline</td>
+        <td class="bold text-center">Modification</td>
+      </tr>
+      <tr>
+        <td class="bold">Total Clarifier Area 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+            (ft<sup>2</sup>)
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+            (m<sup>2</sup>)
+          </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.baseline.TotalAreaClarifier">
+            {{output.baseline.TotalAreaClarifier | number:'1.0-0'}}
+          </span>
+          <span *ngIf="!output.baseline.TotalAreaClarifier">
+            &mdash;
+          </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.modification.TotalAreaClarifier">
+            {{output.modification.TotalAreaClarifier | number:'1.0-0'}}
+        </span>
+        <span *ngIf="!output.modification.TotalAreaClarifier">
+          &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Surface Overflow Rate 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+              (gal/ft<sup>2</sup>d)
+            </span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+              (L/m<sup>2</sup>d)
+            </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.baseline.SurfaceOverflow">
+            {{output.baseline.SurfaceOverflow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!output.baseline.SurfaceOverflow">
+            &mdash;
+          </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.modification.SurfaceOverflow">
+            {{output.modification.SurfaceOverflow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!output.modification.SurfaceOverflow">
+            &mdash;
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Applied Solids Loading 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+              (lb/ft<sup>2</sup>d)
+            </span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+              (kg/m<sup>2</sup>d)
+            </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.baseline.AppliedSolidsLoading">
+            {{output.baseline.AppliedSolidsLoading | number:'1.0-4'}}
+          </span>
+          <span *ngIf="!output.baseline.AppliedSolidsLoading">
+            &mdash;
+          </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.modification.AppliedSolidsLoading">
+            {{output.modification.AppliedSolidsLoading | number:'1.0-4'}}
+          </span>
+          <span *ngIf="!output.modification.AppliedSolidsLoading">
+            &mdash;
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">RAS SS Concentration (mg/L)
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.baseline.RasConcentration">
+            {{output.baseline.RasConcentration | number:'1.0-4'}}
+          </span>
+          <span *ngIf="!output.baseline.RasConcentration">
+            &mdash;
+          </span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="output.modification.RasConcentration">
+            {{output.modification.RasConcentration | number:'1.0-4'}}
+          </span>
+          <span *ngIf="!output.modification.RasConcentration">
+            &mdash;
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"
+    (updateTableString)="updateTableString()"></app-exportable-results-table>

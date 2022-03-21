@@ -46,7 +46,7 @@ export interface FlueGasModalData {
 export interface HeatCascadingOutput {
     priFlueVolume: number,
     hxEnergyRate: number,
-    eqEnergSupply: number,
+    eqEnergySupply: number,
     effOppHours: number,
 
     priExcessAir: number,

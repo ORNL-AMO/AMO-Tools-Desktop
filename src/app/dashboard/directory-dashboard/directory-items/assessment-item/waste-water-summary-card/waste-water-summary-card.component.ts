@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { Settings } from '../../../../../shared/models/settings';
@@ -26,13 +26,13 @@ export class WasteWaterSummaryCardComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
-    this.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics).isValid;
+    this.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.baselineData.operations).isValid;
     if (this.setupDone) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
-      this.baselineResults = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, settings, false);
+      this.baselineResults = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.baselineData.operations, this.assessment.wasteWater.baselineData.co2SavingsData, settings, false);
       this.numMods = this.assessment.wasteWater.modifications.length;
       this.assessment.wasteWater.modifications.forEach(modification => {
-        let tmpResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, settings, false, this.baselineResults);
+        let tmpResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, modification.co2SavingsData, settings, false, this.baselineResults);
         if (!this.modificationResults || this.modificationResults.costSavings < tmpResults.costSavings) {
           this.modificationResults = tmpResults;
         }

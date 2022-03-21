@@ -7,10 +7,10 @@
     </div>
     <div class="col-lg-5 col-md-6">
       <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments"
-        [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
+        [directoryId]="calculator.directoryId" [inRollup]="true" [resultUnit]="rollupEnergyUnit"></app-pre-assessment-graph>
     </div>
     <div class="col-lg-7 col-md-11">
-      <app-pre-assessment-table [settings]="settings" [calculator]="calculator">
+      <app-pre-assessment-table [settings]="settings" [calculator]="calculator" [resultUnit]="rollupEnergyUnit">
       </app-pre-assessment-table>
     </div>
   </div>

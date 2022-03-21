@@ -6,7 +6,7 @@
     color: #ABB2B9;
 }
 
-.banner .home-nav-item:hover{
+.banner .home-nav-item:hover, .banner .home-nav-item:hover a{
     cursor: pointer;
     font-weight: bolder;
     color: #808B96;
@@ -139,9 +139,7 @@
   .banner .title {
     padding: 0 10px;
   }
-  .banner .title, .banner .pills-nav {
-  
-  }
+
   .banner .pills-nav {
   margin-bottom: 0px;
   }
@@ -151,16 +149,11 @@
     background: url('/assets/images/ico-psat-diagram.png') no-repeat 14px;
     background-size: 31px;
   }
-  /* .banner.phast .title {
-    color: #fff;
-    padding-left: 75px;
-    background: url('../assets/images/phast-logo.png') no-repeat 10px;
-    background-size: 60px;
-    /*background-color: #000B13;
-  } */
-  
+
   .banner-border{
     border-bottom: solid;
     border-width: 1px;
     border-color: slategray;
   }
+
+

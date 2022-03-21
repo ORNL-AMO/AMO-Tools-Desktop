@@ -61,7 +61,8 @@
   </div>
   <div class="d-flex flex-column" *ngIf="!material.collapse">
     <div class="form-section">
-      <div class="form-group">
+      <div class="form-group"
+        [ngClass]="{'indicate-different': compareMaterialType(lossIndex)}">
         <label class="small" for="{{'type_'+lossIndex+idString}}">Select Type</label>
         <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="material.chargeMaterialType"
           (change)="saveLosses()" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"

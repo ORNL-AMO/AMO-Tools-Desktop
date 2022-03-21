@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
-import { OperatingHours, OperatingCosts } from '../../../../shared/models/operations';
-import { PHAST } from '../../../../shared/models/phast/phast';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { PHAST, PhastCo2SavingsData } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Co2SavingsPhastService } from '../co2-savings-phast/co2-savings-phast.service';
 
 @Component({
   selector: 'app-operations-form',
@@ -28,6 +29,12 @@ export class OperationsFormComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  selected: boolean;
+  @Input()
+  modificationIndex: number;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @ViewChild('operatingCostsModal', { static: false }) public operatingCostsModal: ModalDirective;
@@ -40,9 +47,13 @@ export class OperationsFormComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   showOperatingCostsModal: boolean = false;
 
+  co2SavingsFormDisabled: boolean;
+  co2SavingsData: PhastCo2SavingsData;
+
   warnings: OperationsWarnings;
   idString: string;
-  constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService, private lossesService: LossesService) { }
+  constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService, private lossesService: LossesService,
+    private phastCO2SavingService: Co2SavingsPhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -51,13 +62,24 @@ export class OperationsFormComponent implements OnInit {
     else {
       this.idString = '_baseline';
     }
-    this.checkWarnings();
+    this.init();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
+  }
+
+  init(){
+    this.setCo2SavingsData();
+    this.checkWarnings();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+      this.init();
+    }
   }
 
   focusField(str: string) {
@@ -141,6 +163,31 @@ export class OperationsFormComponent implements OnInit {
       return false;
     }
   }
+
+  compareCoalCarbonCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareCoalCarbonCost();
+    } else {
+      return false;
+    }
+  }
+
+  compareElectrodeCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareElectrodeCost();
+    } else {
+      return false;
+    }
+  }
+
+  compareOtherFuelCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareOtherFuelCost();
+    } else {
+      return false;
+    }
+  }
+
   compareSteamCost(): boolean {
     if (this.canCompare()) {
       return this.operationsCompareService.compareSteamCost();
@@ -148,11 +195,30 @@ export class OperationsFormComponent implements OnInit {
       return false;
     }
   }
+  
   compareElectricityCost(): boolean {
     if (this.canCompare()) {
       return this.operationsCompareService.compareElectricityCost();
     } else {
       return false;
+    }
+  }
+
+  updateCo2SavingsData(co2SavingsData?: PhastCo2SavingsData) {
+    this.phast.co2SavingsData = co2SavingsData;
+    this.save();
+  }
+
+  setCo2SavingsData() {
+    if (this.phast.co2SavingsData) {
+      this.co2SavingsData = this.phast.co2SavingsData;
+      this.co2SavingsData.energyType = 'electricity';
+      if (this.settings.energySourceType == 'Fuel' || this.settings.energySourceType == 'Steam') {
+        this.co2SavingsData.energyType = 'fuel';
+      }
+    } else {
+      let co2SavingsData: PhastCo2SavingsData = this.phastCO2SavingService.getCo2SavingsDataFromSettingsObject(this.settings);
+      this.co2SavingsData = co2SavingsData;
     }
   }
 }

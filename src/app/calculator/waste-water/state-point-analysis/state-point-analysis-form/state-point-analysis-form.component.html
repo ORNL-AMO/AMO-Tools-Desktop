@@ -1,0 +1,174 @@
+<form [formGroup]="form">
+    <div class="form-section">
+        
+        <div class="form-group">
+            <label for="{{'sviParameter_'+idString}}">SVI Parameter</label>
+            <select class="form-control" formControlName="sviParameter" (change)="calculate()"
+                (focus)="focusField('sviParameter')">
+                <option *ngFor="let parameter of sviParameters" [ngValue]="parameter.value">{{parameter.display}}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'sviValue_'+idString}}">
+                <span *ngIf="form.controls.sviParameter.value != 4">
+                    {{sviParameters[form.controls.sviParameter.value].display}} 
+                </span>
+                <span *ngIf="form.controls.sviParameter.value == 4">
+                    K
+                </span>
+            </label>
+            <div class="input-group">
+                <input type="number" name="sviValue" class="form-control number-input-field"
+                    id="{{'sviValue_'+idString}}" (focus)="focusField('sviValue')" (input)="calculate()"
+                    formControlName="sviValue" [readonly]="!selected">
+                <span class="input-group-addon units">
+                    mL/g</span>
+            </div>
+            <span *ngIf="form.controls.sviValue.invalid && !form.controls.sviValue.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.sviValue.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.sviValue.errors.min">Value can't be negative </span>
+            </span>
+        </div>
+
+        <div *ngIf="form.controls.sviParameter.value == 4" class="form-group">
+            <label for="{{'sludgeSettlingVelocity_'+idString}}">V<sub>o</sub></label>
+            <div class="input-group">
+                <input type="number" name="sludgeSettlingVelocity" class="form-control number-input-field"
+                    id="{{'sludgeSettlingVelocity_'+idString}}" (focus)="focusField('sludgeSettlingVelocity')" (input)="calculate()"
+                    formControlName="sludgeSettlingVelocity" [readonly]="!selected">
+                    <span class="input-group-addon units">
+                        m/d</span>
+            </div>
+            <span *ngIf="form.controls.sludgeSettlingVelocity.invalid && !form.controls.sludgeSettlingVelocity.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.sludgeSettlingVelocity.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.sludgeSettlingVelocity.errors.min">Value can't be negative</span>
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'numberOfClarifiers_'+idString}}">Number of Clarifiers</label>
+            <div class="input-group">
+                <input type="number" name="numberOfClarifiers" class="form-control number-input-field"
+                    id="{{'numberOfClarifiers_'+idString}}" (focus)="focusField('numberOfClarifiers')" (input)="calculate()"
+                    formControlName="numberOfClarifiers" [readonly]="!selected">
+            </div>
+            <span *ngIf="form.controls.numberOfClarifiers.invalid && !form.controls.numberOfClarifiers.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.numberOfClarifiers.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.numberOfClarifiers.errors.min">Value can't be negative</span>
+            </span>
+        </div>
+
+        <div class="form-group" *ngIf="!this.form.controls.isUserDefinedArea.value">
+            <label>Diameter</label>
+            <div class="input-group">
+                <input class="form-control" name="diameter" id="diameter" formControlName="diameter" type="number"
+                    (input)="save()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
+                <span class="alert-danger pull-right small"
+                    *ngIf="form.controls.diameter.invalid && !form.controls.diameter.pristine">
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.diameter.errors.required">Value
+                        Required</span>
+                    <span *ngIf="form.controls.diameter.errors.min">Value can't be less than
+                        {{form.controls.diameter.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'areaOfClarifier_'+idString}}">Clarifier Area
+                <a class="click-link small form-text" (click)="showHideInputField()"
+                    *ngIf="form.controls.isUserDefinedArea.value">Auto Calculate From Diameter</a>
+                <a class="click-link small form-text" (click)="showHideInputField()"
+                    *ngIf="!form.controls.isUserDefinedArea.value">Define Clarifier Area</a>
+            </label>
+            <div class="input-group" *ngIf="this.form.controls.isUserDefinedArea.value">
+                <input type="number" name="areaOfClarifier" class="form-control number-input-field"
+                    id="{{'areaOfClarifier_'+idString}}" (focus)="focusField('areaOfClarifier')" (input)="calculate()"
+                    formControlName="areaOfClarifier" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+                    ft<sup>2</sup></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">
+                    m<sup>2</sup>
+                </span>
+            </div>
+            <span *ngIf="form.controls.areaOfClarifier.invalid && !form.controls.areaOfClarifier.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.areaOfClarifier.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.areaOfClarifier.errors.min">Value can't be
+                    negative</span>
+            </span>
+            <div class="input-group d-flex justify-content-center small bold" *ngIf="!form.controls.isUserDefinedArea.value">
+                <span class="mr-2" *ngIf="form.controls.areaOfClarifier.value">
+                    {{form.controls.areaOfClarifier.value | number:'1.0-2'}}
+                </span>
+                <span class="mr-2" *ngIf="!form.controls.areaOfClarifier.value">&mdash; &mdash;</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    ft<sup>2</sup></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    m<sup>2</sup>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'MLSS_'+idString}}">MLSS</label>
+            <div class="input-group">
+                <input type="number" name="MLSS" class="form-control number-input-field"
+                    id="{{'MLSS_'+idString}}" (focus)="focusField('MLSS')" (input)="calculate()"
+                    formControlName="MLSS" [readonly]="!selected">
+                <span class="input-group-addon units">g/L</span>
+            </div>
+            <span *ngIf="form.controls.MLSS.invalid && !form.controls.MLSS.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MLSS.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.MLSS.errors.min">Value can't be negative</span>
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'influentFlow_'+idString}}">Influent Flow</label>
+            <div class="input-group">
+                <input type="number" name="influentFlow" class="form-control number-input-field"
+                    id="{{'influentFlow_'+idString}}" (focus)="focusField('influentFlow')" (input)="calculate()"
+                    formControlName="influentFlow" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+                    Mg/d</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">
+                    m<sup>3</sup>d</span>
+            </div>
+            <span *ngIf="form.controls.influentFlow.invalid && !form.controls.influentFlow.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.influentFlow.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.influentFlow.errors.min">Value can't be negative</span>
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'rasFlow_'+idString}}">RAS Flow</label>
+            <div class="input-group">
+                <input type="number" name="rasFlow" class="form-control number-input-field"
+                    id="{{'rasFlow_'+idString}}" (focus)="focusField('rasFlow')" (input)="calculate()"
+                    formControlName="rasFlow" [readonly]="!selected">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+                    Mg/d</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">
+                    m<sup>3</sup>d</span>
+            </div>
+            <span *ngIf="form.controls.rasFlow.invalid && !form.controls.rasFlow.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.rasFlow.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.rasFlow.errors.min">Value can't be negative </span>
+            </span>
+        </div>
+
+    </div>
+</form>

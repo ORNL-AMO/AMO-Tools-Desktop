@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { AtmosphereLossesCompareService } from "./atmosphere-losses-compare.service";
 import { AtmosphereLossesService } from "./atmosphere-losses.service";

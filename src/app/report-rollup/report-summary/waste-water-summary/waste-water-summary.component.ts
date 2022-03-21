@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWaterReportRollupService } from '../../waste-water-report-rollup.service';
+import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
+import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-waste-water-summary',
@@ -18,7 +20,7 @@ export class WasteWaterSummaryComponent implements OnInit {
   assessmentSub: Subscription;
   selectedSub: Subscription;
   numWasteWater: number;
-  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService) { }
+  constructor(public wasteWaterReportRollupService: WasteWaterReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService) { }
 
   ngOnInit() {
     this.assessmentSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
@@ -31,7 +33,13 @@ export class WasteWaterSummaryComponent implements OnInit {
     this.selectedSub = this.wasteWaterReportRollupService.selectedWasteWater.subscribe(val => {
       if (val.length != 0) {
         this.wasteWaterReportRollupService.setWasteWaterResultsFromSelected(val);
-        this.calcWasteWaterSums();
+        this.wasteWaterReportRollupService.setTotals(this.settings);
+        this.reportSummaryGraphService.setRollupChartsData(this.settings);
+        let totals: ReportUtilityTotal = this.wasteWaterReportRollupService.totals;
+        this.savingPotential = totals.savingPotential;
+        this.energySavingsPotential = totals.energySavingsPotential;
+        this.totalCost = totals.totalCost;
+        this.totalEnergy = totals.totalEnergy;
       }
     });
   }
@@ -39,24 +47,5 @@ export class WasteWaterSummaryComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.selectedSub.unsubscribe();
-  }
-
-  calcWasteWaterSums() {
-    let sumSavings = 0;
-    let sumEnergy = 0;
-    let sumCost = 0;
-    let sumEnergySavings = 0;
-    this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
-      let diffCost = result.baselineResults.AeCost - result.modificationResults.AeCost;
-      sumSavings += diffCost;
-      sumCost += result.modificationResults.AeCost;
-      let diffEnergy = result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.AeEnergyAnnual;
-    })
-    this.savingPotential = sumSavings;
-    this.energySavingsPotential = sumEnergySavings;
-    this.totalCost = sumCost;
-    this.totalEnergy = sumEnergy;
   }
 }

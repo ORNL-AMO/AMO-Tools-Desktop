@@ -31,7 +31,7 @@ export class CompressedAirRollupComponent implements OnInit {
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
-    this.energyUnit = 'kWh';
+    this.energyUnit = this.settings.compressedAirRollupUnit;
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');
@@ -45,7 +45,7 @@ export class CompressedAirRollupComponent implements OnInit {
   setBarChartOption(str: string) {
     this.dataOption = str;
     if (this.dataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (kWh)';
+      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.compressedAirRollupUnit + ')';
       this.tickFormat = '.2s'
       this.barChartData = this.energyChartData;
     } else {
@@ -59,7 +59,7 @@ export class CompressedAirRollupComponent implements OnInit {
     let hoverTemplate: string = `%{y:$,.0f}<extra></extra>${this.settings.currency !== '$' ? 'k' : ''}`;
     let traceName: string = "Modification Costs";
     if (dataOption == 'energy') {
-      hoverTemplate = '%{y:,.0f}<extra></extra> kWh';
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.compressedAirRollupUnit;
       traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
@@ -109,8 +109,13 @@ export class CompressedAirRollupComponent implements OnInit {
     } else if (dataOption == 'energy') {
       this.compressedAirReportRollupService.selectedAssessmentResults.forEach(result => {
         labels.push(result.name);
-        let modEnergyUse: number = this.getModificationEnergyUse(result)
-        costSavings.push(result.baselineResults.total.energyUse - modEnergyUse);
+        let modEnergyUse: number = this.getModificationEnergyUse(result);
+        let savings: number = result.baselineResults.total.energyUse;
+        if (this.settings.compressedAirRollupUnit !== 'kWh') {
+          savings = this.convertUnitsService.value(savings).from('kWh').to(this.settings.compressedAirRollupUnit);
+          modEnergyUse = this.convertUnitsService.value(modEnergyUse).from('kWh').to(this.settings.compressedAirRollupUnit);
+        }
+        costSavings.push(savings - modEnergyUse);
         projectedCosts.push(modEnergyUse);
       })
     }
@@ -129,23 +134,39 @@ export class CompressedAirRollupComponent implements OnInit {
       let savings: number = resultItem.baselineResults.total.totalAnnualOperatingCost - this.getModificationCost(resultItem);
       let implementationCosts: number = this.getImplementationCost(resultItem);
       let currencyUnit = this.settings.currency;
+      let basePeakCost: number = resultItem.baselineResults.total.demandCost;
+      let modPeakCost: number = this.getModificationPeakCost(resultItem);
       if (this.settings.currency !== '$') {
         modificationCost = this.convertUnitsService.value(modificationCost).from('$').to(this.settings.currency);
         baselineCost = this.convertUnitsService.value(baselineCost).from('$').to(this.settings.currency);
         savings = this.convertUnitsService.value(savings).from('$').to(this.settings.currency);
         implementationCosts = this.convertUnitsService.value(implementationCosts).from('$').to(this.settings.currency);
+        basePeakCost = this.convertUnitsService.value(basePeakCost).from('$').to(this.settings.currency);
+        modPeakCost = this.convertUnitsService.value(modPeakCost).from('$').to(this.settings.currency);
+      }
+      let modEnergyUse: number = this.getModificationEnergyUse(resultItem);
+      let modPeakEnergyUse: number = this.getModificationPeakEnergy(resultItem);
+      let baseEnergyUsed: number = resultItem.baselineResults.total.energyUse;
+      let basePeakEnergy: number = resultItem.baselineResults.total.peakDemand;
+      if (this.settings.compressedAirRollupUnit !== 'kWh') {
+        baseEnergyUsed = this.convertUnitsService.value(baseEnergyUsed).from('kWh').to(this.settings.compressedAirRollupUnit);
+        modEnergyUse = this.convertUnitsService.value(modEnergyUse).from('kWh').to(this.settings.compressedAirRollupUnit);
       }
       this.rollupSummaryTableData.push({
         equipmentName: resultItem.name,
         modificationName: resultItem.modName,
-        baselineEnergyUse: resultItem.baselineResults.total.energyUse,
+        baselineEnergyUse: baseEnergyUsed,
         baselineCost: baselineCost,
-        modificationEnergyUse: this.getModificationEnergyUse(resultItem),
+        modificationEnergyUse: modEnergyUse,
         modificationCost: modificationCost,
         costSavings: savings,
         implementationCosts: implementationCosts,
         payBackPeriod: this.getPayback(resultItem),
-        currencyUnit: currencyUnit
+        currencyUnit: currencyUnit,
+        baselinePeakDemandEnergy: basePeakEnergy,
+        baselinePeakDemandCost: basePeakCost,
+        modPeakDemandEnergy: modPeakEnergyUse,
+        modPeakDemandCost: modPeakCost
       })
     });
   }
@@ -179,6 +200,22 @@ export class CompressedAirRollupComponent implements OnInit {
       return resultItem.modificationResults.allSavingsResults.paybackPeriod;
     } else {
       return 0;
+    }
+  }
+
+  getModificationPeakEnergy(resultItem: CompressedAirResultsData): number {
+    if (resultItem.modificationResults) {
+      return resultItem.modificationResults.peakDemand;
+    } else {
+      return resultItem.baselineResults.total.peakDemand;
+    }
+  }
+
+  getModificationPeakCost(resultItem: CompressedAirResultsData): number {
+    if (resultItem.modificationResults) {
+      return resultItem.modificationResults.peakDemandCost;
+    } else {
+      return resultItem.baselineResults.total.demandCost;
     }
   }
 }

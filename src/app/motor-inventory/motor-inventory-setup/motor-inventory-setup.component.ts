@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { EGridService } from '../../shared/helper-services/e-grid.service';
 
 @Component({
   selector: 'app-motor-inventory-setup',
@@ -10,15 +11,24 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 })
 export class MotorInventorySetupComponent implements OnInit {
 
+  @Input()
+  containerHeight: number;
   setupTab: string;
   setupTabSubscription: Subscription;
   tabSelect: string;
   modalOpenSub: Subscription;
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
+  initPlantSetup: boolean = false;
+  constructor(private motorInventoryService: MotorInventoryService, private egridService: EGridService,
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    this.egridService.processCSVData().then(result => {
+      this.initPlantSetup = true;
+    }).catch(err => {
+      this.initPlantSetup = false;
+    });
     this.helpPanelTabSub = this.motorInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;

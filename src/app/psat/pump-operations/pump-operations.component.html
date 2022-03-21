@@ -1,7 +1,7 @@
 <form [formGroup]="psatForm" #formElement>
     <div *ngIf="inSetup" class="d-flex flex-column">
       <div class="header mr-2 ml-2">
-        <h3>Field Data</h3>
+        <h3>Operations</h3>
       </div>
     </div>
   
@@ -13,7 +13,7 @@
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
-          <input [readonly]="!selected" name="operatingHours" type="number" min="0" max="1" step="any"
+          <input [readonly]="!selected" name="operatingHours" type="number"
             class="form-control" formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()"
             (focus)="focusField('operatingHours')" onfocus="this.select();">
           <span class="input-group-addon units">hrs/yr</span>
@@ -46,12 +46,25 @@
             {{psatForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
         </span>
       </div> 
-  
-      
     </div>
-    
   </form>
- 
+
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Carbon Emissions</h3>
+    </div>
+  </div>
+
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }"
+  *ngIf="co2SavingsData">
+    <app-assessment-co2-savings 
+    [co2SavingsData]="co2SavingsData"
+    [isFormDisabled]="co2SavingsFormDisabled"
+    [inBaseline]="baseline"
+    (emitCurrentField)="focusField($event)"
+    (emitUpdateCo2SavingsData)="updatePsatCo2SavingsData($event)" 
+    ></app-assessment-co2-savings>
+  </div>
   
   <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
     (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"

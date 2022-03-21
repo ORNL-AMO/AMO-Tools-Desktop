@@ -67,10 +67,10 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
-    } else if (assessment.type == "CompressedAir") {
-      // if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
-      //   this.tab = 'assessment';
-      // }
+    } else if (assessment.type == 'CompressedAir') {
+      if (assessment.compressedAirAssessment.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/compressed-air/' + assessment.id);
     }
   }
@@ -137,7 +137,10 @@ export class AssessmentService {
       operatingCosts: {
         electricityCost: settings.electricityCost || .066,
         steamCost: settings.steamCost || 4.69,
-        fuelCost: settings.fuelCost || 3.99
+        fuelCost: settings.fuelCost || 3.99,
+        coalCarbonCost: .06,
+        electrodeCost: 3,
+        otherFuelCost: settings.fuelCost,
       },
       modifications: new Array()
     };
@@ -169,7 +172,7 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
-  getNewFsat(): FSAT {
+  getNewFsat(settings: Settings): FSAT {
     let newFsat: FSAT = {
       fieldData: {
         
@@ -186,7 +189,7 @@ export class AssessmentService {
       },
       fsatOperations: {
         operatingHours: 8760,
-        cost: null,
+        cost: 0.06,
       },
       fanMotor: {
         lineFrequency: 60,
@@ -203,7 +206,7 @@ export class AssessmentService {
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: 68,
+        dryBulbTemp: 123,
         staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: 0.0749,
@@ -331,16 +334,18 @@ export class AssessmentService {
           OperatingTime: 24,
           TypeAerators: 2,
           Speed: 100,
-          EnergyCostUnit: settings.electricityCost,
           AnoxicZoneCondition: false
+        },
+        operations: {
+          MaxDays: 100,
+          TimeIncrement: .5,
+          operatingMonths: 12,
+          EnergyCostUnit: settings.electricityCost
         }
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: 100,
-        TimeIncrement: .5,
-        equipmentNotes: '',
-        operatingMonths: 12
+        equipmentNotes: ''
       }
     }
   }
