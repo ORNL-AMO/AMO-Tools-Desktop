@@ -1,0 +1,408 @@
+---
+code_id: 69000
+open_source: true
+repository_link: "https://github.com/ORNL-AMO/AMO-Tools-Desktop"
+accessibility: "OS"
+software_type: "S"
+developers:
+- email: "accawigk@ornl.gov"
+  orcid: "0000-0002-7259-0105"
+  first_name: "Gina"
+  last_name: "Accawi"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "mroot@intertech.com"
+  orcid: "0000-0003-0328-9172"
+  first_name: "Robert"
+  last_name: "Root"
+  middle_name: "Mark"
+  affiliations:
+  - "Intertech, Inc."
+- email: "nblondheim@intertech.com"
+  orcid: "0000-0001-8328-7024"
+  first_name: "Nick"
+  last_name: "Blondheim"
+  middle_name: ""
+  affiliations:
+  - "Intertech, Inc."
+- email: ""
+  orcid: ""
+  first_name: "Dmitry"
+  last_name: "Howard"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: "0000-0002-2593-3363"
+  first_name: "Rachel"
+  last_name: "Hernandez"
+  middle_name: ""
+  affiliations:
+  - "Intertech, Inc."
+- email: "armstrongko@ornl.gov"
+  orcid: "0000-0003-2977-0618"
+  first_name: "Kristina"
+  last_name: "Armstrong"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "cranfillkd@ornl.gov"
+  orcid: ""
+  first_name: "Kita"
+  last_name: "Cranfill"
+  middle_name: "Dawn"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "shirespw@ornl.gov"
+  orcid: ""
+  first_name: "Preston"
+  last_name: "Shires"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: ""
+  orcid: ""
+  first_name: "Michal"
+  last_name: "Kaminski"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Jon"
+  last_name: "Hadden"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Josh"
+  last_name: "DePauw"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: "0000-0003-4074-0524"
+  first_name: "Yevi"
+  last_name: "Sakovets"
+  middle_name: ""
+  affiliations:
+  - "Intertech, Inc."
+- email: ""
+  orcid: ""
+  first_name: "Colin"
+  last_name: "Causey"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Kyle"
+  last_name: "Beanblossom"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Michael"
+  last_name: "Whitmer"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Allie"
+  last_name: "Ledbetter"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Ben"
+  last_name: "Rappoport"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Shiva"
+  last_name: "Saravanan"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Charlotte"
+  last_name: "Merchant"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Shubham"
+  last_name: "Kokul"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Zach"
+  last_name: "Fontenot"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "David"
+  last_name: "Vance"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: ""
+  orcid: ""
+  first_name: "Andrew"
+  last_name: "Worley"
+  middle_name: ""
+  affiliations: []
+- email: "omerb@ornl.gov"
+  orcid: "0000-0002-9078-3971"
+  first_name: "Omer"
+  last_name: "Aziz"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: ""
+  orcid: ""
+  first_name: "Autumn"
+  last_name: "Ferree"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Noah"
+  last_name: "Rosser"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Jeff"
+  last_name: "Jensen"
+  middle_name: ""
+  affiliations: []
+- email: ""
+  orcid: ""
+  first_name: "Mark"
+  last_name: "Adams"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: ""
+  orcid: ""
+  first_name: "Raul"
+  last_name: "Rios"
+  middle_name: ""
+  affiliations: []
+contributors:
+- email: "wenningtj@ornl.gov"
+  orcid: "0000-0002-7232-6822"
+  first_name: "Thomas"
+  last_name: "Wenning"
+  middle_name: ""
+  contributor_type: "ProjectLeader"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "armstrongko@ornl.gov"
+  orcid: "0000-0003-2977-0618"
+  first_name: "Kristina"
+  last_name: "Armstrong"
+  middle_name: ""
+  contributor_type: "ProjectLeader"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "nimbalkarsu@ornl.gov"
+  orcid: "0000-0002-0826-9720"
+  first_name: "Sachin"
+  last_name: "Nimbalkar"
+  middle_name: ""
+  contributor_type: "Supervisor"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "accawigk@ornl.gov"
+  orcid: "0000-0002-7259-0105"
+  first_name: "Gina"
+  last_name: "Accawi"
+  middle_name: ""
+  contributor_type: "ProjectManager"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "abbasai@ornl.gov"
+  orcid: "0000-0002-6977-5248"
+  first_name: "Ahmad"
+  last_name: "Abbas"
+  middle_name: ""
+  contributor_type: "Researcher"
+  affiliations: []
+- email: "chaudharisa@ornl.gov"
+  orcid: "0000-0001-8624-8354"
+  first_name: "Subodh"
+  last_name: "Chaudhari"
+  middle_name: ""
+  contributor_type: "Researcher"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "sundaramoors@ornl.gov"
+  orcid: "0000-0003-0565-847X"
+  first_name: "Senthil"
+  last_name: "Sundaramoorthy"
+  middle_name: "Kumar"
+  contributor_type: "Researcher"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "bottsam@ornl.gov"
+  orcid: "0000-0003-1989-8861"
+  first_name: "Alex"
+  last_name: "Botts"
+  middle_name: ""
+  contributor_type: "Researcher"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "coxdf@ornl.gov"
+  orcid: "0000-0002-3148-6459"
+  first_name: "Daryl"
+  last_name: "Cox"
+  middle_name: ""
+  contributor_type: "Researcher"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+- email: "doncasada@diagsol.com"
+  orcid: ""
+  first_name: "Don"
+  last_name: "Casada"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "athekdi@e3minc.com"
+  orcid: ""
+  first_name: "Arvind"
+  last_name: "Thekdi"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "vern.martin@flowcare.com"
+  orcid: ""
+  first_name: "Vern"
+  last_name: "Martin"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "donovan.martin@flowcare.com"
+  orcid: ""
+  first_name: "Donovan"
+  last_name: "Martin"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "mats.falk@flowcare.com"
+  orcid: ""
+  first_name: "Mats"
+  last_name: "Falk"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "ron@productiveenergy.com"
+  orcid: ""
+  first_name: "Ron"
+  last_name: "Wroblewski"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "gsharrell@milligan.edu"
+  orcid: ""
+  first_name: "Greg"
+  last_name: "Harrell"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "GCunningham@tntech.edu"
+  orcid: ""
+  first_name: "Glenn"
+  last_name: "Cunningham"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "riyazpapar@gmail.com"
+  orcid: ""
+  first_name: "Riyaz"
+  last_name: "Papar"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "wfbrocks@gmail.com"
+  orcid: ""
+  first_name: "Walt"
+  last_name: "Brockway"
+  middle_name: ""
+  contributor_type: "ResearchGroup"
+  affiliations: []
+- email: "guow@ornl.gov"
+  orcid: "0000-0002-3899-8174"
+  first_name: "Wei"
+  last_name: "Guo"
+  middle_name: ""
+  contributor_type: "Researcher"
+  affiliations:
+  - "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States)"
+sponsoring_organizations:
+- organization_name: "USDOE Office of Energy Efficiency and Renewable Energy (EERE),\
+    \ Energy Efficiency Office. Advanced Manufacturing Office"
+  funding_identifiers:
+  - identifier_type: "BRCode"
+    identifier_value: "ED2001000"
+  primary_award: "AC05-00OR22725"
+  DOE: true
+contributing_organizations: []
+research_organizations:
+- organization_name: "Oak Ridge National Laboratory (ORNL), Oak Ridge, TN (United\
+    \ States)"
+  DOE: true
+related_identifiers: []
+award_dois: []
+release_date: "2022-03-22"
+software_title: "MEASUR - Manufacturing Energy Assessment Software for Utility Reduction"
+acronym: "MEASUR"
+doi: "10.11578/dc.20220107.3"
+description: "MEASUR your energy savings with the free DOE MEASUR software The Department\
+  \ of Energy (DOE), with Oak Ridge National Laboratory (ORNL), released version 1.0\
+  \ of their energy efficiency software tool MEASUR (Manufacturing Energy Assessment\
+  \ Software for Utility Reduction). MEASUR has been available for several years as\
+  \ a beta version, being tested by industry experts and real users, and will continue\
+  \ to be updated and improved in the coming years. It is an integrated suite of tools\
+  \ to aid manufacturers in improving the efficiency of energy systems and equipment\
+  \ within a plant, including motors, pumps, fans, process heating, steam, and compressed\
+  \ air. Additionally, there are modules for wastewater energy analysis and to help\
+  \ perform energy treasure hunts. Several calculators are also included, allowing\
+  \ users to independently perform smaller calculations and analyses (such as estimating\
+  \ pump head, performing a fan traverse analysis, estimating waste heat recovery\
+  \ potential, and cataloging compressed air leaks). The MEASUR modules are based\
+  \ on previous DOE software tools that have been used by industry since the early\
+  \ 2000s (such as MotorMaster, AirMaster+, PSAT, PHAST, and FSAT). The original tools\
+  \ only ran on Windows operating systems, and by Windows 10, most of them were inoperable.\
+  \ DOE started their energy efficiency software tool revitalization effort in 2016,\
+  \ first with PSAT (for pumps), then began to integrate the other tools and expand\
+  \ their functionality and utility. The new MEASUR suite provides an extensively\
+  \ more user-friendly, modern, and versatile set of tools. All the assessment modules\
+  \ and most of the calculators have several visual components and graphs and detailed\
+  \ help text for every user input. To help reach international users, the tool utilizes\
+  \ Google translate and users can easily change unit systems, even converting existing\
+  \ user inputs if desired. The assessment files can be organized within the internal\
+  \ file system and easily shared to other users, regardless of their operating system.\
+  \ The entire suite is free, open-source, and can be downloaded on Windows, Mac,\
+  \ or Linux operating systems."
+programming_languages:
+- "TypeScript"
+- "CSS"
+- "HTML"
+- "Node.js"
+- "Angular8"
+- "Electron"
+documentation_url: "https://ornl-amo.github.io/docs/html/index.html"
+country_of_origin: "United States"
+keywords: "manufacturing"
+licenses:
+- "Other"
+proprietary_url: "https://github.com/ORNL-AMO/AMO-Tools-Desktop/blob/develop/LICENSE"
+recipient_org: "Oak Ridge National Laboratory"
+date_record_added: "2022-01-07"
+date_record_updated: "2022-03-22"
+links:
+- rel: "citation"
+  href: "https://www.osti.gov/doecode/biblio/69000"
+is_migration: false
