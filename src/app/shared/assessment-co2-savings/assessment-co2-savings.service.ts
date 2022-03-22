@@ -135,4 +135,3 @@ export class AssessmentCo2SavingsService {
     return totalEmissionsResult;
   }
 }
-
