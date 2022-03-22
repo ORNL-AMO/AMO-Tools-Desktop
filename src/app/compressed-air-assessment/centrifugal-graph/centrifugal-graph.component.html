@@ -1,1 +1,12 @@
-<p>centrifugal-graph works!</p>
+<div *ngIf="showGraph" class="group-label">
+    <span *ngIf="inReport"> Baseline Centrifugal Graphs </span>
+    <span *ngIf="!inReport"> Centrifugal Graph </span>
+    <span *ngIf="selectedCompressor && !inReport"> ({{selectedCompressor.name}}) </span>
+    <div class="input-group checkbox" *ngIf="!printView && !inReport">
+        <label class="p-2">
+            <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
+            Graph All Centrifugal Compressors
+        </label>
+    </div>
+</div>
+<div [ngStyle]="{'display': !this.showGraph? 'none' : ''}" #centrifugalGraph id="centrifugalGraph"></div>
